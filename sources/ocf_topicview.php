@@ -760,6 +760,7 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 	}
 	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])) && (has_privilege($_postdetails['poster'],'use_points')))
 	{
+		require_css('points');
 		$action_url=build_url(array('page'=>'points','type'=>'member','id'=>$_postdetails['poster']),get_module_zone('points'));
 		$_title=do_lang_tempcode('__POINTS_THANKS');
 		$_title_full=do_lang_tempcode('POINTS_THANKS');

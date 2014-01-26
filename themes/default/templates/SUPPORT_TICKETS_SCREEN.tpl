@@ -27,7 +27,10 @@
 			<thead>
 				<tr>
 					<th>
-						{!SUPPORT_ISSUE}
+						{!SUPPORT_TICKET}
+					</th>
+					<th>
+						{!TICKET_TYPE}
 					</th>
 					{+START,IF,{$NOT,{$MOBILE}}}
 						<th>

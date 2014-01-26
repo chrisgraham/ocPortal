@@ -74,7 +74,7 @@
 			<th class="de_th">
 				<span class="field_name">{!TICKET_STAFF_ONLY}:</span>
 			</th>
-			<td>
+			<td class="one_line">
 				<label for="staff_only"><input type="checkbox" id="staff_only" name="staff_only" value="1" /> {!TICKET_STAFF_ONLY_DESCRIPTION}</label>
 			</td>
 		</tr>
@@ -85,7 +85,7 @@
 			<th class="de_th">
 				<span class="field_name">{!CLOSE_TICKET}:</span>
 			</th>
-			<td>
+			<td class="one_line">
 				<label for="close"><input type="checkbox" id="close" name="close" value="1" /> {!DESCRIPTION_CLOSE_TICKET}</label>
 			</td>
 		</tr>
@@ -98,6 +98,8 @@
 	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type']) || (check_field_for_blankness(this.elements['ticket_type'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
 		{COMMENT_FORM}
 	</form>
+
+	<hr class="spaced_rule" />
 {+END}
 
 <div class="buttons_group">
@@ -112,7 +114,7 @@
 	{+START,IF_PASSED,TOGGLE_TICKET_CLOSED_URL}
 		{+START,INCLUDE,BUTTON_SCREEN}
 			TITLE={$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}
-			IMG={$?,{CLOSED},closed,close}
+			IMG={$?,{CLOSED},buttons__closed,buttons__clear}
 			IMMEDIATE=1
 			URL={TOGGLE_TICKET_CLOSED_URL}
 		{+END}
@@ -129,7 +131,10 @@
 		<thead>
 			<tr>
 				<th>
-					{!SUPPORT_ISSUE}
+					{!SUPPORT_TICKET}
+				</th>
+				<th>
+					{!TICKET_TYPE}
 				</th>
 				{+START,IF,{$NOT,{$MOBILE}}}
 					<th>
@@ -148,4 +153,23 @@
 			{OTHER_TICKETS}
 		</tbody>
 	</table></div>
+{+END}
+
+{+START,IF,{$IS_STAFF}}
+	{+START,IF_NON_EMPTY,{TYPE_ACTIVITY_OVERVIEW}}
+		<p>
+			{!TICKET_ACTIVITY_OVERVIEW,{USERNAME*}}
+		</p>
+
+		<dl class="compact_list">
+			{+START,LOOP,TYPE_ACTIVITY_OVERVIEW}
+				<dt>
+					{OVERVIEW_TYPE*}
+				</dt>
+				<dd>
+					{$NUMBER_FORMAT*,{OVERVIEW_COUNT}}
+				</dd>
+			{+END}
+		</dl>
+	{+END}
 {+END}

@@ -176,6 +176,8 @@ class Hook_addon_registry_tickets
 				'CLOSED'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
+				'TICKET_TYPE'=>lorem_phrase(),
+				'TICKET_TYPE_ID'=>placeholder_id(),
 				'FIRST_DATE'=>placeholder_date(),
 				'FIRST_DATE_RAW'=>placeholder_date_raw(),
 				'FIRST_POSTER_PROFILE_URL'=>placeholder_url(),
@@ -214,22 +216,6 @@ class Hook_addon_registry_tickets
 		require_javascript('javascript_ajax');
 		require_lang('ocf');
 
-		$other_tickets=new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$other_tickets->attach(do_lorem_template('SUPPORT_TICKET_LINK',array(
-				'NUM_POSTS'=>placeholder_number(),
-				'CLOSED'=>lorem_phrase(),
-				'URL'=>placeholder_url(),
-				'TITLE'=>lorem_phrase(),
-				'DATE'=>placeholder_date(),
-				'DATE_RAW'=>placeholder_date_raw(),
-				'PROFILE_URL'=>placeholder_url(),
-				'LAST_POSTER'=>lorem_phrase(),
-				'UNCLOSED'=>lorem_word()
-			)));
-		}
-
 		$comments=new ocp_tempcode();
 
 		$comment_form=do_lorem_template('COMMENTS_POSTING_FORM',array(
@@ -253,11 +239,28 @@ class Hook_addon_registry_tickets
 			'CREATE_TICKET_MAKE_POST'=>true
 		));
 
+		$other_tickets=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
+		{
+			$other_tickets->attach(do_lorem_template('SUPPORT_TICKET_LINK',array(
+				'NUM_POSTS'=>placeholder_number(),
+				'CLOSED'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'TITLE'=>lorem_phrase(),
+				'TICKET_TYPE'=>lorem_phrase(),
+				'TICKET_TYPE_ID'=>placeholder_id(),
+				'DATE'=>placeholder_date(),
+				'DATE_RAW'=>placeholder_date_raw(),
+				'PROFILE_URL'=>placeholder_url(),
+				'LAST_POSTER'=>lorem_phrase(),
+				'UNCLOSED'=>lorem_word()
+			)));
+		}
+
 		return array(
 			lorem_globalise(do_lorem_template('SUPPORT_TICKET_SCREEN',array(
 				'TOGGLE_TICKET_CLOSED_URL'=>placeholder_url(),
 				'CLOSED'=>lorem_phrase(),
-				'OTHER_TICKETS'=>$other_tickets,
 				'USERNAME'=>lorem_word(),
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
@@ -273,7 +276,14 @@ class Hook_addon_registry_tickets
 				'COMMENT_FORM'=>$comment_form,
 				'STAFF_DETAILS'=>placeholder_url(),
 				'URL'=>placeholder_url(),
-				'ADD_TICKET_URL'=>placeholder_url()
+				'ADD_TICKET_URL'=>placeholder_url(),
+				'OTHER_TICKETS'=>$other_tickets,
+				'TYPE_ACTIVITY_OVERVIEW'=>array(
+					array(
+						'OVERVIEW_TYPE'=>lorem_phrase(),
+						'OVERVIEW_COUNT'=>placeholder_number(),
+					),
+				),
 			)),NULL,'',true)
 		);
 	}

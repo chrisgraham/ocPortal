@@ -52,7 +52,7 @@ When editing theme CSS we recommend you comment out code you're removing and hea
 {$THEME_WIZARD_COLOR,#fffcc4,floating_alert_background,100% fffcc4}
 
 /* Colours to mirror human understandings (i.e. non-thematic) */
-{$THEME_WIZARD_COLOR,#ffffaa,yellow_highlight_background,100% #FFFFAA}
+{$THEME_WIZARD_COLOR,#ffffc9,yellow_highlight_background,100% #FFFFC9}
 {$THEME_WIZARD_COLOR,#ff8888,red_highlight_background,100% FF8888}
 {$THEME_WIZARD_COLOR,#ff8888,light_error_border,100% FF8888}
 {$THEME_WIZARD_COLOR,#fff2f2,light_error_background,95% WB + 5% FF0000}
@@ -2512,9 +2512,12 @@ div.wysiwyg_toolbar_color_finder {
 	{+END}
 }
 
+.comments_posting_form_inner th, .comments_posting_form_inner td.one_line {
+	padding: {$?,{$MOBILE},0.5em 0.5em 0.5em 0,0.5em 1.5em 0.5em 0.5em};
+}
+
 .comments_posting_form_inner th {
 	font-weight: bold !important;
-	padding: {$?,{$MOBILE},0.5em 0.5em 0.5em 0,0.5em 1.5em 0.5em 0.5em};
 	border-right: 1px solid {$GET,pale_border};
 	text-align: right;
 	{+START,IF,{$MOBILE}}
@@ -2794,6 +2797,10 @@ dl.meta_details_list>dt, dl.meta_details_list>dd {
 
 .associated_minor_button_action, .associated_details {
 	font-size: 0.9em;
+}
+
+.associated_details_smaller {
+	font-size: 0.8em;
 }
 
 .global_side_panel .associated_minor_button_action, .global_side_panel .associated_details, .associated_link {

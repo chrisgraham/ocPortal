@@ -166,7 +166,7 @@ class Module_tickets
 			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
 		}
 
-		if ($type=='do_update_ticket')
+		if ($type=='post')
 		{
 			$this->title=get_screen_title('SUPPORT_TICKETS');
 		}
@@ -252,7 +252,9 @@ class Module_tickets
 				{
 					if (($topic['closed']) && (has_privilege(get_member(),'support_operator')) && (count($tickets)>3)) continue; // Staff don't see closed tickets
 
-					$links->attach($this->_render_ticket_row($topic));
+					list($ticket_type_tpl)=$this->_render_ticket_row($topic);
+
+					$links->attach($ticket_type_tpl);
 				}
 			}
 		} else
@@ -277,7 +279,7 @@ class Module_tickets
 	 * Render a ticket link row.
 	 *
 	 * @param  array			Ticket details (from forum API)
-	 * @return tempcode		Ticket row
+	 * @return array			A tuple: Ticket row (Tempcode), Ticket type (ID), Ticket type (String)
 	 */
 	function _render_ticket_row($topic)
 	{
@@ -285,7 +287,7 @@ class Module_tickets
 
 		$url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$ticket_id),'_SELF');
 
-		$_title=$topic['firsttitle'];
+		$title=$topic['firsttitle'];
 
 		$first_date=get_timezoned_date($topic['firsttime']);
 		$first_poster_id=isset($topic['firstmemberid'])?$topic['firstmemberid']:$GLOBALS['FORUM_DRIVER']->get_member_from_username($topic['firstusername']);
@@ -308,12 +310,16 @@ class Module_tickets
 		}
 
 		$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
-		$title=do_lang('_VIEW_SUPPORT_TICKET',$_title,is_null($ticket_type_id)?do_lang('UNKNOWN'):get_translated_text($ticket_type_id));
+		$ticket_type=is_null($ticket_type_id)?do_lang('UNKNOWN'):get_translated_text($ticket_type_id);
 
-		return do_template('SUPPORT_TICKET_LINK',array('_GUID'=>'4a39a6b5a7d56ead2d9c20b8a7a71398','NUM_POSTS'=>integer_format($topic['num']-1),
+		$tpl=do_template('SUPPORT_TICKET_LINK',array(
+			'_GUID'=>'4a39a6b5a7d56ead2d9c20b8a7a71398',
+			'NUM_POSTS'=>integer_format($topic['num']-1),
 			'CLOSED'=>strval($topic['closed']),
 			'URL'=>$url,
 			'TITLE'=>$title,
+			'TICKET_TYPE'=>$ticket_type,
+			'TICKET_TYPE_ID'=>is_null($ticket_type_id)?'':strval($ticket_type_id),
 			'FIRST_DATE'=>$first_date,
 			'FIRST_DATE_RAW'=>strval($topic['firsttime']),
 			'FIRST_POSTER_PROFILE_URL'=>$first_poster_profile_url,
@@ -325,6 +331,8 @@ class Module_tickets
 			'LAST_POSTER'=>$last_poster,
 			'LAST_POSTER_ID'=>strval($last_poster_id),
 		));
+
+		return array($tpl,$ticket_type_id,$ticket_type);
 	}
 
 	/**
@@ -523,6 +531,7 @@ class Module_tickets
 			list($warning_details,$ping_url)=handle_conflict_resolution(NULL,true);
 			$other_tickets=new ocp_tempcode();
 			$our_topic=NULL;
+			$type_activity_overview=array();
 			if (!is_guest($ticket_owner))
 			{
 				$tickets_of_member=get_tickets($ticket_owner,NULL,true);
@@ -532,14 +541,26 @@ class Module_tickets
 					{
 						$ticket_id=extract_topic_identifier($topic['description']);
 
+						list($other_ticket_tpl,$ticket_type_id,$ticket_type_str)=$this->_render_ticket_row($topic);
+
+						if (!isset($type_activity_overview[$ticket_type_id]))
+						{
+							$type_activity_overview[$ticket_type_id]=array(
+								'OVERVIEW_TYPE'=>$ticket_type_str,
+								'OVERVIEW_COUNT'=>'0',
+							);
+						}
+						$type_activity_overview[$ticket_type_id]['OVERVIEW_COUNT']=intval($type_activity_overview[$ticket_type_id]['OVERVIEW_COUNT'])+1;
+
 						if ($id!=$ticket_id)
 						{
-							$other_tickets->attach($this->_render_ticket_row($topic));
+							$other_tickets->attach($other_ticket_tpl);
 						} else
 						{
 							$our_topic=$topic;
 						}
 					}
+					sort_maps_by($type_activity_overview,'OVERVIEW_TYPE');
 				}
 			}
 
@@ -594,6 +615,7 @@ class Module_tickets
 				'URL'=>$post_url,
 				'ADD_TICKET_URL'=>$add_ticket_url,
 				'PAGINATION'=>$pagination,
+				'TYPE_ACTIVITY_OVERVIEW'=>$type_activity_overview,
 			));
 
 			require_code('templates_internalise_screen');

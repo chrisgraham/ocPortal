@@ -26,6 +26,9 @@ body table.results_table tbody tr.unclosed_ticket td {
 	font-weight: bold;
 }
 
+.ticket_type {
+}
+
 .ticket_num_posts {
 }
 
