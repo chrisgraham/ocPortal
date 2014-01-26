@@ -53,6 +53,7 @@ class sitemap_test_set extends ocp_test_case
 		$children=isset($sitemap['children'])?$sitemap['children']:NULL;
 		unset($sitemap['children']);
 		$ret=array($sitemap['page_link']=>$sitemap);
+
 		if (!is_null($children))
 		{
 			foreach ($children as $c)

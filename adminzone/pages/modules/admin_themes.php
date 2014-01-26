@@ -948,11 +948,13 @@ class Module_admin_themes
 		$form=do_template('FORM_SINGLE_FIELD',array(
 			'_GUID'=>'26dfd6f0d77889f2438c2371e90738ag',
 			'GET'=>true,
+			'NAME'=>'file',
+			'LABEL'=>do_lang_tempcode('FILE'),
 			'SKIP_VALIDATION'=>true,
 			'HIDDEN'=>'',
 			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>do_lang_tempcode('EDIT'),
-			'FIELDS'=>$fields,
+			'FIELD'=>$fields,
 			'URL'=>$post_url,
 			'TEXT'=>do_lang_tempcode('CSS_CHOOSE_TO_EDIT'),
 		));
@@ -1342,7 +1344,16 @@ class Module_admin_themes
 		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,NULL,true));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme),'_SELF');
-		$edit_form=do_template('FORM_SINGLE_FIELD',array('_GUID'=>'b26747b4a29281baf83b31167c63582a','GET'=>true,'HIDDEN'=>'','TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
+		$edit_form=do_template('FORM_SINGLE_FIELD',array(
+			'_GUID'=>'b26747b4a29281baf83b31167c63582a',
+			'GET'=>true,
+			'HIDDEN'=>'',
+			'TEXT'=>'',
+			'URL'=>$post_url,
+			'FIELD'=>$fields,
+			'SUBMIT_ICON'=>'buttons__proceed',
+			'SUBMIT_NAME'=>do_lang_tempcode('EDIT'),
+		));
 
 		list($warning_details,$ping_url)=handle_conflict_resolution(''); // Intentionally blank, because only one person should edit any of all templates at any time (because they depend on each other)
 
@@ -2024,7 +2035,16 @@ class Module_admin_themes
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'edit_image','lang'=>$lang),'_SELF');
 
-		$edit_form=do_template('FORM_SINGLE_FIELD',array('_GUID'=>'48b3218750fcea21e0bf3be31ae58296','HIDDEN'=>$hidden,'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),'GET'=>true,'URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>do_lang_tempcode('EDIT')));
+		$edit_form=do_template('FORM_SINGLE_FIELD',array(
+			'_GUID'=>'48b3218750fcea21e0bf3be31ae58296',
+			'HIDDEN'=>$hidden,
+			'TEXT'=>do_lang_tempcode('CHOOSE_EDIT_LIST'),
+			'GET'=>true,
+			'URL'=>$post_url,
+			'FIELD'=>$fields,
+			'SUBMIT_ICON'=>'buttons__proceed',
+			'SUBMIT_NAME'=>do_lang_tempcode('EDIT'),
+		));
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'add_image','theme'=>$theme,'lang'=>$lang),'_SELF');
 

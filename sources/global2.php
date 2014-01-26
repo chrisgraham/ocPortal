@@ -709,7 +709,8 @@ function catch_fatal_errors()
 			case E_COMPILE_ERROR:
 			case E_USER_ERROR:
 				$GLOBALS['SUPPRESS_ERROR_DEATH']=false; // We can't recover as we've lost our execution track. Force a nice death rather than trying to display a recoverable error.
-				$GLOBALS['DYING_BADLY']=true; // Does not actually work unfortunately. @'d calls never get here at all.
+				$GLOBALS['DYING_BADLY']=true; // Tells ocportal_error_handler to roll through, definitely an error.
+				$GLOBALS['EXITING']=2; // Fudge to force a critical error, we're too desparate to show a Tempcode stack trace.
 				ocportal_error_handler($error['type'],$error['message'],$error['file'],$error['line']);
 		}
 	}

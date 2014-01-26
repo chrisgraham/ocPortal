@@ -1467,18 +1467,17 @@ function is_valid_ip($ip)
 }
 
 /**
- * Attempt to get the IP address of the current user
+ * Attempt to get the clean IP address of the current user
  *
  * @param  integer		The number of groups to include in the IP address (rest will be replaced with *'s). For IP6, this is doubled.
  * @set    1 2 3 4
+ * @param  ?IP				IP address to use, normally left NULL (NULL: current user's)
  * @return IP				The users IP address (blank: could not find a valid one)
  */
-function get_ip_address($amount=4)
+function get_ip_address($amount=4,$ip=NULL)
 {
 	static $ip_cache=array();
 	if (isset($ip_cache[$amount])) return $ip_cache[$amount];
-
-	//	return strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)).'.'.strval(mt_rand(0,255)); // Nice little test for if sessions break
 
 	if ((get_value('cloudflare_workaround')==='1') && (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) && (isset($_SERVER['REMOTE_ADDR'])))
 	{
@@ -1490,10 +1489,13 @@ function get_ip_address($amount=4)
 	   }
 	}
 
-	/*$fw=ocp_srv('HTTP_X_FORWARDED_FOR');	Presents too many security and maintenance problems. Can easily be faked, or changed.
-	if (ocp_srv('HTTP_CLIENT_IP')!='') $fw=ocp_srv('HTTP_CLIENT_IP');
-	if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
-	else */$ip=ocp_srv('REMOTE_ADDR');
+	if ($ip===NULL)
+	{
+		/*$fw=ocp_srv('HTTP_X_FORWARDED_FOR');	Presents too many security and maintenance problems. Can easily be faked, or changed.
+		if (ocp_srv('HTTP_CLIENT_IP')!='') $fw=ocp_srv('HTTP_CLIENT_IP');
+		if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
+		else */$ip=ocp_srv('REMOTE_ADDR');
+	}
 
 	if (!is_valid_ip($ip))
 	{
@@ -1511,9 +1513,11 @@ function get_ip_address($amount=4)
 	$pos=strpos($ip,',');
 	if ($pos!==false) $ip=substr($ip,0,$pos);
 
+	// ...and another
 	$ip=preg_replace('#%14$#','',$ip);
 
-	if (strpos($ip,':')!==false)
+	// Normalise
+	if (strpos($ip,':')!==false) // IPv6
 	{
 		if (substr_count($ip,':')<7)
 		{
@@ -1530,7 +1534,7 @@ function get_ip_address($amount=4)
 		}
 		$ip_cache[$amount]=implode(':',$parts);
 		return $ip_cache[$amount];
-	} else
+	} else // IPv4
 	{
 		$parts=explode('.',$ip);
 		for ($i=0;$i<$amount;$i++)

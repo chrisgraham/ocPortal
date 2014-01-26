@@ -403,6 +403,10 @@ function ocp_mb_chunk_split($str,$len=76,$glue="\r\n")
  */
 function prevent_double_submit($type,$a=NULL,$b=NULL)
 {
+	if ($GLOBALS['IN_MINIKERNEL_VERSION']) return;
+
+	if (strpos(ocp_srv('SCRIPT_NAME'),'_tests')!==false) return;
+
 	$where=array(
 		'the_type'=>$type,
 		'member_id'=>get_member(),

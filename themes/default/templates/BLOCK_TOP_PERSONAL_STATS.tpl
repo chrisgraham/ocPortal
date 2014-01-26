@@ -19,4 +19,4 @@
 		{+END}
 	</div></div></div>
 </div>
-<a title="{!LOGGED_IN_AS,{USERNAME*}}" id="top_personal_stats_button" onclick="return toggle_top_personal_stats(event);" href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img alt="" src="{$IMG*,icons/24x24/tabs/member_account/profile2}" srcset="{$IMG*,icons/48x48/tabs/member_account/profile2} 2x" /></a>
+<a title="{$STRIP_TAGS,{!LOGGED_IN_AS,{USERNAME*}}}" id="top_personal_stats_button" onclick="return toggle_top_personal_stats(event);" href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img alt="" src="{$IMG*,icons/24x24/tabs/member_account/profile2}" srcset="{$IMG*,icons/48x48/tabs/member_account/profile2} 2x" /></a>

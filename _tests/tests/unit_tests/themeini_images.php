@@ -25,7 +25,7 @@ class themeini_images_test_set extends ocp_test_case
 		{
 			if (strpos($theme_image,'*')===false)
 			{
-				$this->assertTrue(find_theme_image($theme_image,true)!='','Missing but reference in theme.ini: '.$theme_image);
+				$this->assertTrue(find_theme_image($theme_image,true)!='','Missing but referenced in theme.ini: '.$theme_image);
 			} else // This code branch is assumptive (that the '*' goes on the end), but it works with the current theme.ini...
 			{
 				$x=str_replace('/*','',$theme_image);

@@ -29,7 +29,7 @@
 		</ul>
 	</nav>
 
-	<p class="right">
+	<p class="installer_done_thanks">
 		<em>{!THANKS}</em>
 	</p>
 </div>

@@ -6264,7 +6264,7 @@ session_start
 session_unset
 session_write_close
 
-Not yet in our compatibility list (<=PHP5), but would be disabled if they were...
+Not yet in our compatibility list (<=PHP5.1), but would be disabled if they were...
 
 gethostname (Google AppEngine disallows)
 

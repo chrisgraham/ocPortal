@@ -467,7 +467,7 @@ function init__validation2()
 		'img.ismap'=>'ismap',
 		'img.longdesc'=>'.+',
 		'img.src'=>$enforce_link,
-		'img.srcset'=>'('.$enforce_link.' \d+x ( |$))*',
+		'img.srcset'=>'('.$enforce_link.' \d+x( |$))*',
 		'img.usemap'=>'.+',
 		'img.width'=>$enforce_inumber,
 		'embed.type'=>'.*',
@@ -847,7 +847,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 	global $XML_CONSTRAIN,$TAG_STACK,$ATT_STACK,$TABS_SEEN,$KEYS_SEEN,$IDS_SO_FAR,$ANCESTER_BLOCK,$ANCESTER_INLINE,$EXPECTING_TAG,$OUT,$POS,$LAST_A_TAG,$TAG_RANGES;
 
 	// Dodgy mouse events.
-	if ((isset($attributes['onclick'])) && (strpos($attributes['onclick'],'/*Access-note: code has other activation*/')===false) && (!isset($attributes['onkeypress'])) && (!isset($attributes['onkeydown'])) && (!isset($attributes['onkeyup'])) && (!in_array($tag,array('a','input','textarea','select','button'))))
+	if ((isset($attributes['onclick'])) && (strpos($attributes['onclick'],'/*Access-note: code has other activation*/')===false) && ((!isset($attributes['onmouseover'])) || (strpos($attributes['onmouseover'],'activate_rich_semantic_tooltip')===false)) && (!isset($attributes['onkeypress'])) && (!isset($attributes['onkeydown'])) && (!isset($attributes['onkeyup'])) && (!in_array($tag,array('a','input','textarea','select','button'))))
 		$errors[]=array('WCAG_MOUSE_EVENT_UNMATCHED');
 	if ($GLOBALS['VALIDATION_MANUAL'])
 	{

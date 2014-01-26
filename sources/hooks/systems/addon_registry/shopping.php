@@ -723,7 +723,7 @@ class Hook_addon_registry_shopping
 		);
 		$entry=do_lorem_template('CATALOGUE_products_GRID_ENTRY_WRAP', $map);
 
-		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
+		$entries=do_lorem_template('CATALOGUE_products_CATEGORY_EMBED',array(
 			'DISPLAY_TYPE'=>'FIELDMAPS',
 			'ENTRIES'=>$entry,
 			'ROOT'=>placeholder_id(),

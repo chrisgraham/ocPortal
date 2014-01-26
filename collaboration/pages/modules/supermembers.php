@@ -116,7 +116,7 @@ class Module_supermembers
 
 		// Calculate
 		$groups=new ocp_tempcode();
-		$groups_current=new ocp_tempcode();
+		$groups_current=array();
 		$old_group=mixed();
 		foreach ($rows as $r)
 		{
@@ -130,7 +130,7 @@ class Module_supermembers
 			{
 				$group_name=$all_usergroups[$old_group];
 				$groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP',array('_GUID'=>'32c8427ff18523fcd6b89fb5df365a88','ENTRIES'=>$groups_current,'GROUP_NAME'=>$group_name)));
-				$groups_current=new ocp_tempcode();
+				$groups_current=array();
 			}
 
 			if (addon_installed('authors'))
@@ -153,11 +153,20 @@ class Module_supermembers
 			$profile_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
 
 			// Template
-			$groups_current->attach(do_template('SUPERMEMBERS_SCREEN_ENTRY',array('_GUID'=>'7fdddfe09a33a36762c281e8993327e3','USERNAME'=>$username,'DAYS'=>integer_format($days),'PROFILE_URL'=>$profile_url,'AUTHOR_URL'=>$author_url,'POINTS_URL'=>$points_url,'PM_URL'=>$pm_url,'SKILLS'=>$skills)));
+			$groups_current[]=array(
+				'_GUID'=>'7fdddfe09a33a36762c281e8993327e3',
+				'USERNAME'=>$username,
+				'DAYS'=>integer_format($days),
+				'PROFILE_URL'=>$profile_url,
+				'AUTHOR_URL'=>$author_url,
+				'POINTS_URL'=>$points_url,
+				'PM_URL'=>$pm_url,
+				'SKILLS'=>$skills,
+			);
 
 			$old_group=$current_group;
 		}
-		if (!$groups_current->is_empty())
+		if (count($groups_current)!=0)
 		{
 			$group_name=$all_usergroups[$old_group];
 			$groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP',array('_GUID'=>'d2cbe67dafa0dc9872f90fc8834d21ca','ENTRIES'=>$groups_current,'GROUP_NAME'=>$group_name)));

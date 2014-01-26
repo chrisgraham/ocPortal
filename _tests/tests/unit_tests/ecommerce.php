@@ -150,12 +150,6 @@ class ecommerce_test_set extends ocp_test_case
 		return $this->admin_orders->show_orders();
 	}	
 
-	function testundispatchedOrders()
-	{
-		$_GET['filter']='undispatched';
-		return $this->admin_orders->show_orders();
-	}
-
 	function testOrderDetails()
 	{
 		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());

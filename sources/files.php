@@ -286,6 +286,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'tcd'=>'themes/[^/]*/templates_cached/.*',
 		'css'=>'themes/[^/]*/templates_cached/.*',
 		'js'=>'themes/[^/]*/templates_cached/.*',
+		'gz'=>'themes/[^/]*/templates_cached/.*',
 
 		// Logs
 		'log'=>'.*',

@@ -253,7 +253,7 @@ class Hook_addon_registry_core_themeing
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
 				'REVISION_HISTORY'=>placeholder_table(),
-				'SWITCH_ICON'=>'page/'.placeholder_img_code('page'),
+				'SWITCH_ICON'=>'buttons__proceed',
 				'SWITCH_STRING'=>lorem_phrase(),
 				'SWITCH_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),

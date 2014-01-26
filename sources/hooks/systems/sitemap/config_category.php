@@ -29,7 +29,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 	function handles_page_link($page_link)
 	{
 		$matches=array();
-		if (preg_match('#^([^:]*):admin_config(:misc)?(:|$)#',$page_link,$matches)!=0)
+		if (preg_match('#^([^:]*):admin_config(:misc|$)#',$page_link,$matches)!=0)
 		{
 			$zone=$matches[1];
 			$page='admin_config';
@@ -38,6 +38,7 @@ class Hook_sitemap_config_category extends Hook_sitemap_base
 			$test=_request_page($page,$zone);
 			if (($test!==false) && (($test[0]=='MODULES_CUSTOM') || ($test[0]=='MODULES'))) // Ensure the relevant module really does exist in the given zone
 			{
+				if ($matches[0]!=$page_link) return SITEMAP_NODE_HANDLED;
 				return SITEMAP_NODE_HANDLED_VIRTUALLY;
 			}
 		}

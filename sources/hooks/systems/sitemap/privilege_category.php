@@ -38,6 +38,7 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
 			$test=_request_page($page,$zone);
 			if (($test!==false) && (($test[0]=='MODULES_CUSTOM') || ($test[0]=='MODULES'))) // Ensure the relevant module really does exist in the given zone
 			{
+				if ($matches[0]!=$page_link) return SITEMAP_NODE_HANDLED;
 				return SITEMAP_NODE_HANDLED_VIRTUALLY;
 			}
 		}

@@ -30,8 +30,14 @@ function init__lang()
 
 	global $LANG_LOADED,$LANG_LOADED_LANG,$LANG_REQUESTED_LANG,$LANGS_REQUESTED;
 	// Tracks what has already been require'd, although loading may have been deferred.
-	$LANG_REQUESTED_LANG=array(); // By lang pack and lang file
-	$LANGS_REQUESTED=array(); // Just by lang file
+	/** What language packs ^ files have been requested.
+	 * @global boolean $LANG_REQUESTED_LANG
+	 */
+	$LANG_REQUESTED_LANG=array();
+	/** What language files have been requested.
+	 * @global boolean $LANGS_REQUESTED
+	 */
+	$LANGS_REQUESTED=array();
 	// Tracks what has already been require'd and not deferred. This will not track all require_lang calls, as ocPortal will try and use the page's own lang cache first.
 	$LANG_LOADED_LANG=array(); // By lang pack and lang file
 	$LANG_LOADED=array(); // Just by lang file

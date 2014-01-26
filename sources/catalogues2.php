@@ -619,8 +619,11 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 		generate_resourcefs_moniker('catalogue_category',strval($id),NULL,NULL,true);
 	}
 
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('catalogue_category',strval($id),get_member());
+	if (function_exists('get_member'))
+	{
+		require_code('member_mentions');
+		dispatch_member_mention_notifications('catalogue_category',strval($id),get_member());
+	}
 
 	return $id;
 }

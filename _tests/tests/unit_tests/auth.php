@@ -22,6 +22,8 @@ class auth_test_set extends ocp_test_case
 	{
 		require_code('users');
 
+		$GLOBALS['SITE_DB']->query_delete('sessions');
+
 		parent::setUp();
 	}
 
@@ -72,7 +74,10 @@ class auth_test_set extends ocp_test_case
 		$fake_session_id=1234543;
 
 		$ips=array();
-		$ips[preg_replace('#\.\d+$#','.*',ocp_srv('SERVER_ADDR'))]=true;
+		$server_addr=get_ip_address(3,ocp_srv('SERVER_ADDR'));
+		if (($server_addr=='0000:0000:0000:0000:0000:0000:*:*') && (ocp_srv('HTTP_HOST')=='localhost'))
+			$server_addr='127.0.0.*'; // DNS will resolve localhost using ipv4, regardless of what Apache self-reports, at least on my current dev machine -- ChrisG
+		$ips[$server_addr]=true;
 		$ips['1.2.3.4']=false;
 
 		foreach ($ips as $ip=>$pass_expected) // We actually test both pass and fail, to help ensure our test is actually not somehow getting a failure from something else

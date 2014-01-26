@@ -431,7 +431,7 @@ $(function() {
 				{
 					attributes :
 					{
-						src : '{$IMG;,blank}',
+						src : '{$IMG;,blank}'.replace(/^http:/,window.location.protocol),
 						width : 0,
 						height : 0
 					}

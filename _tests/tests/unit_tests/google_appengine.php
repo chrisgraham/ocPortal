@@ -104,7 +104,7 @@ class google_appengine_test_set extends ocp_test_case
 			$this->assertTrue($count<=1000,'Must be less than 1000 files in any directory (except templates, which is checked separately): '.$dir);
 		}
 
-		// The user is advised they must take one big away and one small (or another big)
+		// The user is advised they must take one big away and two small (or another big)
 		$set_big=array(
 			'calendar',
 			'chat',
@@ -125,14 +125,25 @@ class google_appengine_test_set extends ocp_test_case
 		);
 		foreach ($set_big as $big)
 		{
-			foreach ($set_small as $small)
+			foreach ($set_small as $small1)
 			{
-				$custom_tpl_total=$tpl_total-$tpl_counts[$big]-$tpl_counts[$small];
-				$custom_file_total=$file_total-$file_counts[$big]-$file_counts[$small];
+				foreach ($set_small as $small2)
+				{
+					foreach ($set_small as $small3)
+					{
+						foreach ($set_small as $small4)
+						{
+							if (count(array_unique(array($small1,$small2,$small3,$small4)))<4) continue;
 
-				$this->assertTrue($custom_tpl_total<=1000,'Must be less than 1000 templates for given addon advice (removing unsupported and also '.$big.'&'.$small.')');
+							$custom_tpl_total=$tpl_total-$tpl_counts[$big]-$tpl_counts[$small1]-$tpl_counts[$small2]-$tpl_counts[$small3]-$tpl_counts[$small4];
+							$custom_file_total=$file_total-$file_counts[$big]-$file_counts[$small1]-$file_counts[$small2]-$file_counts[$small3]-$file_counts[$small4];
 
-				$this->assertTrue($custom_file_total<=10000,'Must be less than 10000 files for given addon advice (removing unsupported and also '.$big.'&'.$small.')');
+							$this->assertTrue($custom_tpl_total<=1000,'Must be less than 1000 templates for given addon advice (removing unsupported and also '.$big.'&'.$small1.'&'.$small2.'&'.$small3.'&'.$small4.') ['.strval($custom_tpl_total).']');
+
+							$this->assertTrue($custom_file_total<=10000,'Must be less than 10000 files for given addon advice (removing unsupported and also '.$big.'&'.$small1.'&'.$small2.'&'.$small3.'&'.$small4.') ['.strval($custom_file_total).']');
+						}
+					}
+				}
 			}
 		}
 	}

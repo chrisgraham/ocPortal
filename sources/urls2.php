@@ -658,7 +658,7 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL,
 			$dupe_sql.=' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\'';
 		}
 		$dupe_sql.=')';
-		$test=$GLOBALS['SITE_DB']->query_value_if_there($dupe_sql);
+		$test=$GLOBALS['SITE_DB']->query_value_if_there($dupe_sql,false,true);
 		if (!is_null($test)) // Oh dear, will pass to next iteration, but trying a new moniker
 		{
 			$next_num++;

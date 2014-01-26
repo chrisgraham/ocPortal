@@ -62,6 +62,7 @@ class addon_screenshots_test_set extends ocp_test_case
 					'twitter_support',
 					'usergroup_field_match',
 					'newsletter_no_members',
+					'wiki_sync',
 				))) continue;
 
 				$exists=false;

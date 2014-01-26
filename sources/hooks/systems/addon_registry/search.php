@@ -172,7 +172,7 @@ class Hook_addon_registry_search
 	function tpl_preview__block_main_search()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('BLOCK_TOP_SEARCH',array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH',array(
 				'TITLE'=>lorem_phrase(),
 				'INPUT_FIELDS'=>placeholder_array(),
 				'EXTRA'=>placeholder_array(),

@@ -237,3 +237,10 @@ textarea.mono_textbox {
 	margin-top: 1em;
 	font-size: 1.1em;
 }
+
+/* Step 10 */
+
+.installer_done_thanks {
+	float: right;
+	margin-right: 0.5em;
+}

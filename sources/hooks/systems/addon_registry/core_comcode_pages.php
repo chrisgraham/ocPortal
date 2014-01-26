@@ -148,17 +148,18 @@ class Hook_addon_registry_core_comcode_pages
 	function tpl_preview__administrative__comcode_page_manage_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_MANAGE_SCREEN', array(
+			lorem_globalise(do_lorem_template('COMCODE_PAGE_MANAGE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TABLE'=>placeholder_table(),
 				'SUBMIT_NAME'=>lorem_word(),
 				'POST_URL'=>placeholder_url(),
-				'LINKS'=>array(
+				'TEXT'=>lorem_paragraph_html(),
+				'LINKS'=>array(array(
 					'LINK_IMAGE'=>placeholder_image_url(),
 					'LINK_URL'=>placeholder_url(),
 					'LINK_TEXT'=>lorem_phrase(),
-				),
-			)), NULL, '', true)
+				)),
+			)),NULL,'',true)
 		);
 
 	}

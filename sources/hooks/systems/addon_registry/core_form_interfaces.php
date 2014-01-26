@@ -560,8 +560,10 @@ class Hook_addon_registry_core_form_interfaces
 				'GET'=>NULL,
 				'HIDDEN'=>'',
 				'TITLE'=>lorem_title(),
+				'LABEL'=>lorem_phrase(),
+				'NAME'=>$name,
 				'URL'=>placeholder_url(),
-				'FIELDS'=>$fields,
+				'FIELD'=>$fields,
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
 				'TEXT'=>lorem_sentence_html()

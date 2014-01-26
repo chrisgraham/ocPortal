@@ -32,6 +32,7 @@ class Hook_upon_login_external_db
 		require_code('external_db');
 
 		$db=external_db();
+		if (is_null($db)) return;
 
 		$table=get_long_value('external_db_login__table');
 		$username_field=get_long_value('external_db_login__username_field');

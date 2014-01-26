@@ -39,21 +39,6 @@ class Block_main_image_slider
 	}
 
 	/**
-	 * Standard modular cache function.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
-	 */
-	function cacheing_environment()
-	{
-		return NULL; // Not being decached anywhere, so don't cache
-
-		$info=array();
-		$info['cache_on']='((addon_installed(\'content_privacy\')) && (!(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false)))?NULL:array(empty($map[\'width\'])?750:intval($map[\'width\']),empty($map[\'height\'])?300:intval($map[\'height\']),array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,array_key_exists(\'order\',$map)?$map[\'order\']:\'\',array_key_exists(\'time\',$map)?intval($map[\'time\']):8000,array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'galleries\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'transitions\',$map)?$map[\'transitions\']:\'<default>\')';
-		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60;
-		return $info;
-	}
-
-	/**
 	 * Standard modular run function.
 	 *
 	 * @param  array		A map of parameters.

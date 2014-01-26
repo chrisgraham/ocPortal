@@ -19,9 +19,11 @@
 				{+END}
 
 				<thead>
-					<th colspan="2">
-						{!DETAILS}
-					</th>
+					<tr>
+						<th colspan="2">
+							{!DETAILS}
+						</th>
+					</tr>
 				</thead>
 
 				<tbody>

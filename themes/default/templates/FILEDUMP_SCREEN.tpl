@@ -68,7 +68,7 @@
 			<label for="action_{$GET*,i}">{!ACTION}:</label>
 			<select id="action_{$GET*,i}" name="action">
 				{+START,IF,{$EQ,{$GET,i},1}}
-					<option value=""></option>
+					<option value="">---</option>
 				{+END}
 				{+START,IF,{$EQ,{$GET,i},2}}
 					<option value="edit">{!EDIT_DESCRIPTIONS}</option>
@@ -120,7 +120,7 @@
 				//]]></script>
 			{+END}
 
-			<form action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
+			<form title="{!ACTION}" action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
 				{+START,IF_NON_EMPTY,{THUMBNAILS}}
 					<div class="float_surrounder filedump_thumbnails">
 						{+START,LOOP,THUMBNAILS}
@@ -164,7 +164,7 @@
 			{$SET,i,2}
 			{$GET,file_dump_search,1}
 
-			<form action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
+			<form title="{!ACTION}" action="{POST_URL*}" method="post" onsubmit="return check_filedump_selections(this);">
 				{+START,IF_NON_EMPTY,{LISTING}}
 					{LISTING}
 				{+END}

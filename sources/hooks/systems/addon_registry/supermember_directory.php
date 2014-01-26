@@ -102,7 +102,6 @@ class Hook_addon_registry_supermember_directory
 			'sources/hooks/systems/addon_registry/supermember_directory.php',
 			'lang/EN/supermembers.ini',
 			'themes/default/templates/SUPERMEMBERS_SCREEN.tpl',
-			'themes/default/templates/SUPERMEMBERS_SCREEN_ENTRY.tpl',
 			'themes/default/templates/SUPERMEMBERS_SCREEN_GROUP.tpl',
 			'collaboration/pages/modules/supermembers.php',
 			'sources/hooks/systems/page_groupings/supermember_directory.php',
@@ -119,7 +118,6 @@ class Hook_addon_registry_supermember_directory
 	{
 		return array(
 			'SUPERMEMBERS_SCREEN_GROUP.tpl'=>'supermembers_screen',
-			'SUPERMEMBERS_SCREEN_ENTRY.tpl'=>'supermembers_screen',
 			'SUPERMEMBERS_SCREEN.tpl'=>'supermembers_screen'
 		);
 	}
@@ -135,18 +133,19 @@ class Hook_addon_registry_supermember_directory
 	{
 		require_lang('authors');
 		require_lang('points');
-		$groups_current=do_lorem_template('SUPERMEMBERS_SCREEN_ENTRY',array(
-			'USERNAME'=>lorem_phrase(),
-			'DAYS'=>placeholder_number(),
-			'PROFILE_URL'=>placeholder_url(),
-			'AUTHOR_URL'=>placeholder_url(),
-			'POINTS_URL'=>placeholder_url(),
-			'PM_URL'=>placeholder_url(),
-			'SKILLS'=>lorem_phrase()
-		));
 
 		$groups=do_lorem_template('SUPERMEMBERS_SCREEN_GROUP',array(
-			'ENTRIES'=>$groups_current,
+			'ENTRIES'=>array(
+				array(
+					'USERNAME'=>lorem_phrase(),
+					'DAYS'=>placeholder_number(),
+					'PROFILE_URL'=>placeholder_url(),
+					'AUTHOR_URL'=>placeholder_url(),
+					'POINTS_URL'=>placeholder_url(),
+					'PM_URL'=>placeholder_url(),
+					'SKILLS'=>lorem_phrase()
+				),
+			),
 			'GROUP_NAME'=>lorem_phrase()
 		));
 

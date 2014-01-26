@@ -46,8 +46,6 @@ class lang_test_set extends ocp_test_case
 
 			foreach ($input as $key=>$string)
 			{
-				$output2='';
-
 				if ($this->str_ipos($string,'thankyou')!==false) $this->assertTrue(false,'The word \'thankyou\' was used in '.$file.'. This should be changed to \'thank you\'.');
 				if ($this->str_ipos($string,'unvalidated')!==false) $this->assertTrue(false,'The word \'unvalidated\' was used in '.$file.'. This should be changed to \'non-validated\'.');
 				if ($this->str_ipos($string,'add-on')!==false) $this->assertTrue(false,'The word \'add-on\' was used in '.$file.'. This should be changed to \'addon\'.');
@@ -64,9 +62,11 @@ class lang_test_set extends ocp_test_case
 				if ($this->str_ipos($string,'web site')!==false) $this->assertTrue(false,'The phrase \'web site\' was used in '.$file.'. This should be changed to \'website\'.');
 				if ($this->str_ipos($string,'ID\'s')!==false) $this->assertTrue(false,'The term \'ID\'s\' was used in '.$file.'. This should be changed to \'IDs\'.');
 				if ($this->str_ipos($string,'comma separated')!==false) $this->assertTrue(false,'The phrase \'comma separated\' was used in '.$file.'. This should be changed to \'comma-separated\'.');
+
 				//if ($this->str_ipos($string,'center')!==false) $this->assertTrue(false,'The word \'center\' was used in '.$file.'. This should be changed to \'centre\'.');
-				if ($file!='upgrade.ini' && $key!='NO_PHP_IN_TEMPLATES' && $key!='WHAT_TO_EXPECT' && $key!='DESCRIPTION_INCLUDE_OCP_ADVERT' && $key!='INCLUDE_OCP_ADVERT' && $key!='UNINSTALL_WARNING' && $key!='SOFTWARE_CHAT_EXTRA' && (strpos($key,'SETUPWIZARD')===false) && $key!='CANNOT_CONNECT_HOME' && $file!='lang.ini' && $file!='version.ini' && $file!='debrand.ini' && $file!='import.ini' && $file!='installer.ini' && $file!='occle.ini' && $file!='addons.ini' && strpos($string,'ocPortal')!==false)
-					$this->assertTrue(false,'The word \'ocPortal\' was used in '.$file.'. This should probably be changed to \'the software\'.');
+
+				if ($file!='upgrade.ini' && $key!='NO_PHP_IN_TEMPLATES' && $key!='WHAT_TO_EXPECT' && $key!='DESCRIPTION_INCLUDE_OCP_ADVERT' && $key!='INCLUDE_OCP_ADVERT' && $key!='UNINSTALL_WARNING' && $key!='SOFTWARE_CHAT_EXTRA' && (strpos($key,'SETUPWIZARD')===false) && $key!='CANNOT_CONNECT_HOME' && $key!='NO_GD_ON_SERVER' && $key!='MYSQL_TOO_OLD' && $key!='LOW_MEMORY_LIMIT' && $key!='NO_ZIP_ON_SERVER' && $key!='WARNING_MBSTRING_FUNC_OVERLOAD' && $key!='DISABLED_FUNCTION' && $file!='lang.ini' && $file!='version.ini' && $file!='debrand.ini' && $file!='import.ini' && $file!='installer.ini' && $file!='occle.ini' && $file!='addons.ini' && strpos($string,'ocPortal')!==false)
+					$this->assertTrue(false,'The word \'ocPortal\' was used in '.$file.' ('.$key.'). This should probably be changed to \'the software\'.');
 
 				if (preg_match('#([^A-Za-z"\_<]+)comcode([^A-Za-z"]+)#',$string)!=0) $this->assertTrue(false,'The term \'comcode\' was used in '.$file.'. This should be changed to \'Comcode\'.');
 

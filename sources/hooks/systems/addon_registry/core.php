@@ -456,12 +456,6 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/resource_meta_aware/index.html',
 			'sources/hooks/systems/occle_fs_extended_config/privilege.php',
 			'sources/block_add.php',
-			'themes/default/css/menu__dropdown.css',
-			'themes/default/css/menu__popup.css',
-			'themes/default/css/menu__sitemap.css',
-			'themes/default/css/menu__embossed.css',
-			'themes/default/css/menu__select.css',
-			'themes/default/css/menu__tree.css',
 			'themes/default/css/carousels.css',
 			'themes/default/css/adminzone.css',
 			'themes/default/templates/BLOCK_MAIN_CONTENT.tpl',
@@ -500,8 +494,11 @@ class Hook_addon_registry_core
 			'themes/default/css/install.css',
 			'lang/EN/installer.ini',
 			'lang/EN/encryption.ini',
-			'sources/group_member_timeouts.php',
 			'sources/hooks/systems/cron/group_member_timeouts.php',
+			'sources/group_member_timeouts.php',
+			'adminzone/pages/modules/admin_group_member_timeouts.php',
+			'lang/EN/group_member_timeouts.ini',
+			'themes/default/templates/GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN.tpl',
 			'sources/inst_special.php',
 			'sources/actionlog.php',
 			'sources/hooks/systems/config/fixed_width.php',
@@ -1077,6 +1074,7 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/checks/unzip.php',
 			'sources/hooks/systems/checks/xml.php',
 			'sources/failure.php',
+			'sources/failure_spammers.php',
 			'sources/images.php',
 			'sources/images_png.php',
 			'sources/exif.php',
@@ -1209,8 +1207,6 @@ class Hook_addon_registry_core
 			'themes/default/images/.htaccess',
 			'themes/default/images/favicon.ico',
 			'themes/default/images/webclipicon.png',
-			'themes/default/images/mobile_menu.png',
-			'themes/default/css/menu__mobile.css',
 			'themes/default/templates/JAVASCRIPT_MENU_MOBILE.tpl',
 			'adminzone/pages/modules/admin_email_log.php',
 			'sources/hooks/systems/cron/mail_queue.php',
@@ -1236,10 +1232,6 @@ class Hook_addon_registry_core
 			'themes/default/images/EN/1x/index.html',
 			'themes/default/images/EN/2x/index.html',
 			'themes/default/images/icons/16x16/index.html',
-			'sources/group_member_timeouts.php',
-			'adminzone/pages/modules/admin_group_member_timeouts.php',
-			'lang/EN/group_member_timeouts.ini',
-			'GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN.tpl',
 
 			// Admin theme
 			'themes/admin/css/index.html',
@@ -1827,7 +1819,8 @@ class Hook_addon_registry_core
 				'AVATAR_URL'=>placeholder_avatar(),
 				'LINKS'=>$links,
 				'DETAILS'=>$details,
-				'USERNAME'=>lorem_word()
+				'USERNAME'=>lorem_word(),
+				'MEMBER_ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}

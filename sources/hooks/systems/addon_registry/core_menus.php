@@ -102,8 +102,15 @@ class Hook_addon_registry_core_menus
 			'themes/default/css/menu_editor.css',
 			'sources/hooks/systems/addon_registry/core_menus.php',
 			'themes/admin/templates/MENU_mobile.tpl',
+			'themes/default/images/mobile_menu.png',
+			'themes/default/css/menu__mobile.css',
+			'themes/default/css/menu__sitemap.css',
+			'themes/default/css/menu__dropdown.css',
+			'themes/default/css/menu__popup.css',
+			'themes/default/css/menu__embossed.css',
+			'themes/default/css/menu__select.css',
+			'themes/default/css/menu__tree.css',
 			'themes/admin/css/menu__dropdown.css',
-			'themes/admin/css/menu__sitemap.css',
 			'themes/admin/templates/MENU_BRANCH_dropdown.tpl',
 			'themes/admin/templates/MENU_dropdown.tpl',
 			'themes/default/templates/MENU_dropdown.tpl',
@@ -297,6 +304,7 @@ class Hook_addon_registry_core_menus
 			$child->attach(do_lorem_template('MENU_BRANCH_mobile',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -320,6 +328,7 @@ class Hook_addon_registry_core_menus
 			$content->attach(do_lorem_template('MENU_BRANCH_mobile',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -380,6 +389,7 @@ class Hook_addon_registry_core_menus
 			$child->attach(do_lorem_template('MENU_BRANCH_tree',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -403,6 +413,7 @@ class Hook_addon_registry_core_menus
 			$content->attach(do_lorem_template('MENU_BRANCH_tree',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -463,6 +474,7 @@ class Hook_addon_registry_core_menus
 			$child->attach(do_lorem_template('MENU_BRANCH_dropdown',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -492,6 +504,7 @@ class Hook_addon_registry_core_menus
 			$content->attach(do_lorem_template('MENU_BRANCH_dropdown',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -538,6 +551,7 @@ class Hook_addon_registry_core_menus
 			$child->attach(do_lorem_template('MENU_BRANCH_embossed',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -561,6 +575,7 @@ class Hook_addon_registry_core_menus
 			$content->attach(do_lorem_template('MENU_BRANCH_embossed',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -621,6 +636,7 @@ class Hook_addon_registry_core_menus
 			$child->attach(do_lorem_template('MENU_BRANCH_popup',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -644,6 +660,7 @@ class Hook_addon_registry_core_menus
 			$content->attach(do_lorem_template('MENU_BRANCH_popup',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -704,6 +721,7 @@ class Hook_addon_registry_core_menus
 			$child->attach(do_lorem_template('MENU_BRANCH_select',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -727,6 +745,7 @@ class Hook_addon_registry_core_menus
 			$content->attach(do_lorem_template('MENU_BRANCH_select',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -787,6 +806,7 @@ class Hook_addon_registry_core_menus
 			$child->attach(do_lorem_template('MENU_BRANCH_sitemap',array(
 				'CAPTION'=>lorem_word(),
 				'IMG'=>'',
+				'IMG_2X'=>'',
 				'URL'=>placeholder_url(),
 				'PAGE_LINK'=>placeholder_link(),
 				'ACCESSKEY'=>'',
@@ -819,6 +839,7 @@ class Hook_addon_registry_core_menus
 				$content->attach(do_lorem_template('MENU_BRANCH_sitemap',array(
 					'CAPTION'=>lorem_word(),
 					'IMG'=>'',
+					'IMG_2X'=>'',
 					'URL'=>placeholder_url(),
 					'PAGE_LINK'=>placeholder_link(),
 					'ACCESSKEY'=>'',

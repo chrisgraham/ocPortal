@@ -1,10 +1,7 @@
 {$REQUIRE_CSS,menu__mobile}
 {$REQUIRE_JAVASCRIPT,javascript_menu_mobile}
 
-<a href="{$PAGE_LINK*,:sitemap}" class="mobile_menu_button" onclick="return mobile_menu_button('{MENU|;*}');">
-	<img src="{$IMG*,mobile_menu}" alt="{!MENU}" />
-	<span>{!MENU}</span>
-</a>
+<a href="{$PAGE_LINK*,:sitemap}" class="mobile_menu_button" onclick="return mobile_menu_button('{MENU|;*}');"><img src="{$IMG*,mobile_menu}" alt="{!MENU}" /> <span>{!MENU}</span></a>
 
 {+START,IF_NON_EMPTY,{CONTENT}}
 	<nav class="menu_type__mobile" role="navigation" style="display: none" aria-expanded="false">

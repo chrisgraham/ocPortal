@@ -305,6 +305,7 @@ function get_relation_map()
 		'f_read_logs.l_topic_id'=>'f_topics.id',
 		'f_forum_tracking.r_forum_id'=>'f_forums.id',
 		'f_topic_tracking.r_topic_id'=>'f_topics.id',
+		'f_usergroup_sub_mails.m_usergroup_sub_id'=>'f_usergroup_subs.id',
 		'menu_items.i_parent'=>'menu_items.id',
 		'translate_history.lang_id'=>'translate.id',
 		'messages_to_render.r_session_id'=>'sessions.the_session',
@@ -396,7 +397,7 @@ function get_relation_map()
 	return $relation_map;
 }
 
-function get_code_to_fix_foreign_keys() //Temp code to help fixup AUTO/AUTO_LINK key consistency so that FOREIGN KEY constraints may be added to an InnoDB database
+function get_code_to_fix_foreign_keys() // Temporary code to help fixup AUTO/AUTO_LINK key consistency so that FOREIGN KEY constraints may be added to an InnoDB database
 {
 	$out='';
 
@@ -442,23 +443,23 @@ function get_code_to_fix_foreign_keys() //Temp code to help fixup AUTO/AUTO_LINK
 
 	The following do not work without fiddling, mostly due to allowed NULL's, so some manual changes need doing too.
 
-	ALTER TABLE ocp4_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp4_galleries (name);
-	ALTER TABLE ocp4_stats ADD FOREIGN KEY `stats.member_id` (member_id) REFERENCES ocp4_f_members (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option3` (option3) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option4` (option4) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option5` (option5) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option6` (option6) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option7` (option7) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option8` (option8) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option9` (option9) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_poll ADD FOREIGN KEY `poll.option10` (option10) REFERENCES ocp4_translate (id);
-	ALTER TABLE ocp4_group_category_access ADD FOREIGN KEY `group_category_access.category_name` (category_name) REFERENCES ocp4_anything (id);
-	ALTER TABLE ocp4_group_privileges ADD FOREIGN KEY `group_privileges.category_name` (category_name) REFERENCES ocp4_anything (id);
-	ALTER TABLE ocp4_group_privileges ADD FOREIGN KEY `group_privileges.the_page` (the_page) REFERENCES ocp4_modules (module_the_name);
-	ALTER TABLE ocp4_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp4_f_members (id);
-	ALTER TABLE ocp4_seo_meta ADD FOREIGN KEY `seo_meta.meta_for_id` (meta_for_id) REFERENCES ocp4_anything (id);
-	ALTER TABLE ocp4_url_id_monikers ADD FOREIGN KEY `url_id_monikers.m_resource_id` (m_resource_id) REFERENCES ocp4_anything (id);
-	ALTER TABLE ocp4_import_id_remap ADD FOREIGN KEY `import_id_remap.id_new` (id_new) REFERENCES ocp4_anything (id);
+	ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp_galleries (name);
+	ALTER TABLE ocp_stats ADD FOREIGN KEY `stats.member_id` (member_id) REFERENCES ocp_f_members (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option3` (option3) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option4` (option4) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option5` (option5) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option6` (option6) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option7` (option7) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option8` (option8) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option9` (option9) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option10` (option10) REFERENCES ocp_translate (id);
+	ALTER TABLE ocp_group_category_access ADD FOREIGN KEY `group_category_access.category_name` (category_name) REFERENCES ocp_anything (id);
+	ALTER TABLE ocp_group_privileges ADD FOREIGN KEY `group_privileges.category_name` (category_name) REFERENCES ocp_anything (id);
+	ALTER TABLE ocp_group_privileges ADD FOREIGN KEY `group_privileges.the_page` (the_page) REFERENCES ocp_modules (module_the_name);
+	ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+	ALTER TABLE ocp_seo_meta ADD FOREIGN KEY `seo_meta.meta_for_id` (meta_for_id) REFERENCES ocp_anything (id);
+	ALTER TABLE ocp_url_id_monikers ADD FOREIGN KEY `url_id_monikers.m_resource_id` (m_resource_id) REFERENCES ocp_anything (id);
+	ALTER TABLE ocp_import_id_remap ADD FOREIGN KEY `import_id_remap.id_new` (id_new) REFERENCES ocp_anything (id);
 
 	*/
 }

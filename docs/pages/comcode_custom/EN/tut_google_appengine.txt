@@ -159,7 +159,7 @@ Remove one or two of the following addons (your choice which):
  - Shopping
  - Galleries
  - Pointstore
-If you only removed one of the above, also remove one of the following:
+Also remove four of the following:
  - Authors
  - Banners
  - Downloads

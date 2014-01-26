@@ -1,7 +1,7 @@
 <div>
 	<h2>
 		<a class="toggleable_tray_button" href="#" onclick="return toggleable_tray(this.parentNode.parentNode);"><img alt="{!EXPAND}: {!MODULE_TRANS_NAME_subscriptions}" title="{!CONTRACT}" src="{$IMG*,1x/trays/contract}" srcset="{$IMG*,2x/trays/contract} 2x" /></a>
-		<span onclick="return toggleable_tray(this.parentNode.parentNode);">{!MODULE_TRANS_NAME_subscriptions}</span>
+		<span onclick="/*Access-note: code has other activation*/ return toggleable_tray(this.parentNode.parentNode);">{!MODULE_TRANS_NAME_subscriptions}</span>
 	</h2>
 
 	<div class="toggleable_tray" style="display: block" aria-expanded="true">

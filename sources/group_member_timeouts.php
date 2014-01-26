@@ -90,14 +90,11 @@ function set_member_group_timeout($member_id,$group_id,$timestamp,$prefer_for_pr
 		'member_id'=>$member_id,
 		'group_id'=>$group_id,
 	),'',1);
-	if ($timestamp>time())
-	{
-		$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_insert('f_group_member_timeouts',array(
-			'member_id'=>$member_id,
-			'group_id'=>$group_id,
-			'timeout'=>$timestamp,
-		));
-	}
+	$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_insert('f_group_member_timeouts',array(
+		'member_id'=>$member_id,
+		'group_id'=>$group_id,
+		'timeout'=>$timestamp,
+	));
 
 	global $USERS_GROUPS_CACHE,$GROUP_MEMBERS_CACHE;
 	$USERS_GROUPS_CACHE=array();

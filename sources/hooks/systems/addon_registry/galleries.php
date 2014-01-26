@@ -816,7 +816,7 @@ class Hook_addon_registry_galleries
 			lorem_globalise(
 				do_lorem_template('GALLERY_ENTRY_SCREEN',array(
 					'CAT'=>placeholder_id(),
-					'MEDIA_TYPE'=>'image',
+					'MEDIA_TYPE'=>'video',
 					'ID'=>placeholder_id(),
 					'SLIDESHOW'=>false,
 					'TRUE_GALLERY_TITLE'=>lorem_phrase(),

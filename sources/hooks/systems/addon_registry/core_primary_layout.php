@@ -200,7 +200,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MESSAGE',array(
-				'TYPE'=>placeholder_img_code('messageicons'),
+				'TYPE'=>placeholder_img_code('icons/24x24/status'),
 				'MESSAGE'=>lorem_phrase()
 			)),NULL,'',true)
 		);
