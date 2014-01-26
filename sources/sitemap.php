@@ -150,7 +150,7 @@ function sitemap_script()
 	// Mark parent nodes for pre-expansion
 	if ((!is_null($default)) && ($default!='') && (strpos($default,':')!==false))
 	{
-		$parts==explode(':',$default);
+		$parts=explode(':',$default);
 		echo "\n".'<expand>'.$parts[0].':</expand>';
 		$buildup=array_shift($parts);
 		foreach ($parts as $part)

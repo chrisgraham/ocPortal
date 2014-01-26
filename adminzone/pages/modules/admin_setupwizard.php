@@ -934,7 +934,7 @@ class Module_admin_setupwizard
 					$installing[]=$addon_info['name'];
 				}
 
-				$addons_installed[$i]=$addon_row;
+				$addons_installed[$i]=$addon_info;
 			}
 			do
 			{

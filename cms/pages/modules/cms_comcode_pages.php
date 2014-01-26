@@ -555,7 +555,7 @@ class Module_cms_comcode_pages
 		}
 
 		$tpl=do_template('COMCODE_PAGE_MANAGE_SCREEN',array(
-			'TITLE'=>$title,
+			'TITLE'=>$this->title,
 			'TEXT'=>$text,
 			'TABLE'=>$table,
 			'FIELDS'=>$fields,

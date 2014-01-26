@@ -41,7 +41,7 @@ class Hook_worldpay
 	/**
 	 * Get the IPN URL.
 	 *
-	 * @return URLPATH		The IPN url.
+	 * @return URLPATH		The IPN URL.
 	 */
 	function get_ipn_url()
 	{
@@ -80,7 +80,7 @@ class Hook_worldpay
 	 * @param  ID_TEXT		The purchase ID.
 	 * @param  float			A transaction amount.
 	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button
+	 * @return tempcode		The button.
 	 */
 	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
@@ -127,7 +127,7 @@ class Hook_worldpay
 	 * @param  ID_TEXT		The length units.
 	 * @set    d w m y
 	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button
+	 * @return tempcode		The button.
 	 */
 	function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
 	{
@@ -189,7 +189,7 @@ class Hook_worldpay
 	 * Make a subscription cancellation button.
 	 *
 	 * @param  ID_TEXT	The purchase ID.
-	 * @return tempcode	The button
+	 * @return tempcode	The button.
 	 */
 	function make_cancel_button($purchase_id)
 	{
@@ -198,9 +198,9 @@ class Hook_worldpay
 	}
 
 	/**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-id).
+	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
 	 *
-	 * @param  string		Transaction ID to cancel
+	 * @param  string		Transaction ID to cancel.
 	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
 	 */
 	function auto_cancel($trans_id)
@@ -212,7 +212,7 @@ class Hook_worldpay
 	 * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
 	 *
 	 * @param  float	A transaction amount.
-	 * @return float	The fee
+	 * @return float	The fee.
 	 */
 	function get_transaction_fee($amount)
 	{
@@ -283,10 +283,10 @@ class Hook_worldpay
 	}
 
 	/**
-	 * Store shipping address for orders
+	 * Store shipping address for orders.
 	 *
 	 * @param  AUTO_LINK		Order ID
-	 * @return ?mixed			Address ID (NULL: No address record found)
+	 * @return ?mixed			Address ID (NULL: No address record found).
 	 */
 	function store_shipping_address($order_id)
 	{

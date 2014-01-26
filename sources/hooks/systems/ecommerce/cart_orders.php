@@ -59,7 +59,7 @@ function handle_product_orders($purchase_id,$details,$type_code,$payment_status,
 
 		if ($details['ORDER_STATUS']=='ORDER_STATUS_payment_received')
 		{	
-			purchase_done_staff_mail($purchase_id);
+			purchase_done_staff_mail(intval($purchase_id));
 		}
 	}
 }

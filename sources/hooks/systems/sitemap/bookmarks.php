@@ -142,6 +142,8 @@ class Hook_sitemap_bookmarks extends Hook_sitemap_base
 	 */
 	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
 	{
+		$nodes=($callback===NULL || $return_anyway)?array():mixed();
+
 		if (($valid_node_types!==NULL) && (!in_array('_bookmark',$valid_node_types)))
 		{
 			return $nodes;

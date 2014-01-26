@@ -485,7 +485,15 @@ class Module_purchase
 	 */
 	function finish()
 	{
-		$message=get_param('message',NULL,true);
+		$via=get_option('payment_gateway');
+		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
+		$object=object_factory('Hook_'.$via);
+
+		$message=mixed();
+		if (method_exists($object,'get_callback_url_message'))
+		{
+			$message=$object->get_callback_url_message();
+		}
 
 		if (get_param_integer('cancel',0)==0)
 		{
@@ -498,10 +506,6 @@ class Module_purchase
 				$amount=$transaction_row['e_amount'];
 				$length=$transaction_row['e_length'];
 				$length_units=$transaction_row['e_length_units'];
-
-				$via=get_option('payment_gateway');
-				require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
-				$object=object_factory('Hook_'.$via);
 
 				$name=post_param('name');
 				$card_number=post_param('card_number');
@@ -538,9 +542,10 @@ class Module_purchase
 				attach_message(do_lang_tempcode('SUCCESS'),'inform');
 
 				$object=find_product($type_code);
-				if (method_exists($object,'get_finish_url'))
+
+				if (method_exists($product_object,'get_finish_url'))
 				{
-					return redirect_screen($this->title,$object->get_finish_url($type_code),$message);
+					return redirect_screen($this->title,$product_object->get_finish_url($type_code),$message);
 				}
 			}
 

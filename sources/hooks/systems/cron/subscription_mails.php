@@ -25,7 +25,7 @@ class Hook_cron_subscription_mails
 	 */
 	function run()
 	{
-		if (get_forum_type()!='ocf') return array();
+		if (get_forum_type()!='ocf') return;
 
 		$time=time();
 		$last_time=intval(get_long_value('last_subscription_mail_send'));

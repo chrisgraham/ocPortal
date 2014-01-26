@@ -181,7 +181,7 @@ class Module_admin_ecommerce extends standard_crud_module
 	 * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is start (NULL: default)
 	 * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is ended (NULL: default)
 	 * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (NULL: default)
-	 * @param  array			Other e-mails to send (NULL: none)
+	 * @param  ?array			Other e-mails to send (NULL: none)
 	 * @param  ?AUTO_LINK	ID of existing subscription (NULL: new)
 	 * @return array			Tuple: The input fields, The hidden fields, The delete fields
 	 */

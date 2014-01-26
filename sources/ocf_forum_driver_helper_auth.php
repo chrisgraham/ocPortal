@@ -113,10 +113,10 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 			require_code('hooks/systems/login_providers_direct_auth/'.filter_naughty($hook));
 			$ob=object_factory('Hook_login_providers_direct_auth_'.filter_naughty($hook),true);
 			if (is_null($ob)) continue;
-			$test=$ob->try_login($username,$userid,$password_hashed,$password_raw,$cookie_login=false);
-			if (!is_null($test))
+			$try_login=$ob->try_login($username,$userid,$password_hashed,$password_raw,$cookie_login);
+			if (!is_null($try_login))
 			{
-				return $test;
+				return $try_login;
 			}
 		}
 

@@ -439,8 +439,11 @@ bar
 		$this->assertTrue($ok);
 		if (!$ok)
 		{
-			require_code('diff');
-			echo diff_simple_2($got,$expected,true);
+			if (function_exists('diff_simple_2'))
+			{
+				require_code('diff');
+				echo diff_simple_2($got,$expected,true);
+			}
 		}
 	}
 }

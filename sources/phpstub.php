@@ -1235,6 +1235,21 @@ function imagecolorallocate($image,$red,$green,$blue)
 }
 
 /**
+ * Allocate a color for an image, with an alpha-component.
+ *
+ * @param  resource  The image handle.
+ * @param  integer	Red component (0-255).
+ * @param  integer	Green component (0-255).
+ * @param  integer	Blue component (0-255).
+ * @param  integer	Alpha component (0-127).
+ * @return integer	Combined colour identifier.
+ */
+function imagecolorallocatealpha($image,$red,$green,$blue,$alpha)
+{
+	return 0;
+}
+
+/**
  * Define a color as transparent.
  *
  * @param  resource  The image handle.
@@ -1346,11 +1361,22 @@ function imagecreatefromjpeg($path)
 }
 
 /**
- * Create a new true color image.
+ * Finds whether an image is a truecolor image.
+ *
+ * @param  resource	The image handle.
+ * @return boolean	Whether the image is truecolor.
+ */
+function imageistruecolor($image)
+{
+	return true;
+}
+
+/**
+ * Create a new truecolor image.
  *
  * @param  integer	Width.
  * @param  integer	Height.
- * @return resource  The image handle.
+ * @return resource	The image handle.
  */
 function imagecreatetruecolor($x,$y)
 {
@@ -1835,7 +1861,7 @@ function imagesettile($image,$tile)
 }
 
 /**
- * Convert a true color image to a palette image.
+ * Convert a truecolor image to a palette image.
  *
  * @param  resource  The image involved.
  * @param  boolean	Whether to use dithering.

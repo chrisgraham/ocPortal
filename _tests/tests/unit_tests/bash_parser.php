@@ -13,7 +13,7 @@
  * @package		unit_testing
  */
 
-/*EXTRA FUNCTIONS: shell_exec*/
+/*EXTRA FUNCTIONS: shell_exec|escapeshellarg*/
 
 /**
  * ocPortal test case class (unit testing).

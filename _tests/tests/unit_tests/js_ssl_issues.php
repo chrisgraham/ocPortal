@@ -34,6 +34,7 @@ class js_ssl_issues_test_set extends ocp_test_case
 			{
 				$file=file_get_contents($path.'/'.$f);
 
+				$matches=array();
 				$num_matches=preg_match_all('#\{\$IMG[;\*]+,(\w+)\}(?!.*protocol.*$)(.*)$#m',$file,$matches);
 				for ($i=0;$i<$num_matches;$i++)
 				{

@@ -33,7 +33,7 @@ class Hook_secpay
 	/**
 	 * Get the IPN URL.
 	 *
-	 * @return URLPATH		The IPN url.
+	 * @return URLPATH		The IPN URL.
 	 */
 	function get_ipn_url()
 	{
@@ -58,7 +58,7 @@ class Hook_secpay
 	 * @param  ID_TEXT		The purchase ID.
 	 * @param  float			A transaction amount.
 	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button
+	 * @return tempcode		The button.
 	 */
 	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
@@ -99,7 +99,7 @@ class Hook_secpay
 	 * @param  integer	The subscription length in the units.
 	 * @param  ID_TEXT	The length units.
 	 * @set    d w m y
-	 * @return array		A tuple: the period in secpay units, the date of the first repeat
+	 * @return array		A tuple: the period in secpay units, the date of the first repeat.
 	 */
 	function _translate_subscription_details($length,$length_units)
 	{
@@ -143,7 +143,7 @@ class Hook_secpay
 	 * @param  ID_TEXT		The length units.
 	 * @set    d w m y
 	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button
+	 * @return tempcode		The button.
 	 */
 	function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
 	{
@@ -186,7 +186,7 @@ class Hook_secpay
 	 * Make a subscription cancellation button.
 	 *
 	 * @param  ID_TEXT		The purchase ID.
-	 * @return tempcode		The button
+	 * @return tempcode		The button.
 	 */
 	function make_cancel_button($purchase_id)
 	{
@@ -195,9 +195,9 @@ class Hook_secpay
 	}
 
 	/**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-id).
+	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
 	 *
-	 * @param  string		Transaction ID to cancel
+	 * @param  string		Transaction ID to cancel.
 	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
 	 */
 	/*function auto_cancel($trans_id)		Not currently implemented
@@ -215,7 +215,7 @@ class Hook_secpay
 	 * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
 	 *
 	 * @param  float	A transaction amount.
-	 * @return float	The fee
+	 * @return float	The fee.
 	 */
 	function get_transaction_fee($amount)
 	{
@@ -225,8 +225,8 @@ class Hook_secpay
 	/**
 	 * Get a list of card types.
 	 *
-	 * @param  ?string	The card type to select by default (NULL: don't care)
-	 * @return tempcode	The list
+	 * @param  ?string	The card type to select by default (NULL: don't care).
+	 * @return tempcode	The list.
 	 */
 	function create_selection_list_card_types($it=NULL)
 	{
@@ -242,20 +242,20 @@ class Hook_secpay
 	/**
 	 * Perform a transaction.
 	 *
-	 * @param  ?ID_TEXT		The transaction ID (NULL: generate one)
-	 * @param  SHORT_TEXT	Cardholder name
-	 * @param  SHORT_TEXT	Card number
-	 * @param  SHORT_TEXT	Transaction amount
-	 * @param  SHORT_TEXT	Card Expiry date
-	 * @param  integer		Card Issue number
-	 * @param  SHORT_TEXT	Card Start date
-	 * @param  SHORT_TEXT	Card Type
+	 * @param  ?ID_TEXT		The transaction ID (NULL: generate one).
+	 * @param  SHORT_TEXT	Cardholder name.
+	 * @param  SHORT_TEXT	Card number.
+	 * @param  SHORT_TEXT	Transaction amount.
+	 * @param  SHORT_TEXT	Card Expiry date.
+	 * @param  integer		Card Issue number.
+	 * @param  SHORT_TEXT	Card Start date.
+	 * @param  SHORT_TEXT	Card Type.
 	 * @set    "Visa" "Master Card" "Switch" "UK Maestro" "Maestro" "Solo" "Delta" "American Express" "Diners Card" "JCB"
-	 * @param  SHORT_TEXT	Card CV2 number (security number)
+	 * @param  SHORT_TEXT	Card CV2 number (security number).
 	 * @param  ?integer		The subscription length in the units. (NULL: not a subscription)
 	 * @param  ?ID_TEXT		The length units. (NULL: not a subscription)
 	 * @set    d w m y
-	 * @return array			A tuple: success (boolean), trans-id (string), message (string), raw message (string)
+	 * @return array			A tuple: success (boolean), trans-ID (string), message (string), raw message (string).
 	 */
 	function do_transaction($trans_id,$name,$card_number,$amount,$expiry_date,$issue_number,$start_date,$card_type,$cv2,$length=NULL,$length_units=NULL)
 	{
@@ -437,10 +437,10 @@ class Hook_secpay
 	}
 
 	/**
-	 * Store shipping address for orders
+	 * Store shipping address for orders.
 	 *
-	 * @param  AUTO_LINK		Order ID
-	 * @return ?mixed			Address ID (NULL: No address record found)
+	 * @param  AUTO_LINK		Order ID.
+	 * @return ?mixed			Address ID (NULL: No address record found).
 	 */
 	function store_shipping_address($order_id)
 	{

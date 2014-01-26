@@ -767,7 +767,7 @@ class Module_admin_ecommerce_logs
 		if (($repost_id!==NULL) && ($repost_id==$id))
 		{
 			require_code('ecommerce');
-			handle_confirmed_transaction(strval($id),'','SCancelled','','','','','','','manual'); // Runs a cancel
+			handle_confirmed_transaction(strval($id),'','SCancelled','','','','','','','','','manual'); // Runs a cancel
 			return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 		}
 

@@ -33,7 +33,7 @@ class Hook_paypal
 	/**
 	 * Get the PayPal IPN URL.
 	 *
-	 * @return URLPATH		The IPN url.
+	 * @return URLPATH		The IPN URL.
 	 */
 	function get_ipn_url()
 	{
@@ -48,7 +48,7 @@ class Hook_paypal
 	 * @param  ID_TEXT		The purchase ID.
 	 * @param  float			A transaction amount.
 	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button
+	 * @return tempcode		The button.
 	 */
 	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
@@ -91,7 +91,7 @@ class Hook_paypal
 	 * @param  ID_TEXT		The length units.
 	 * @set    d w m y
 	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button
+	 * @return tempcode		The button.
 	 */
 	function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
 	{
@@ -125,9 +125,9 @@ class Hook_paypal
 	}
 
 	/**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-id).
+	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
 	 *
-	 * @param  string		Transaction ID to cancel
+	 * @param  string		Transaction ID to cancel.
 	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
 	 */
 	function auto_cancel($trans_id)
@@ -344,12 +344,12 @@ class Hook_paypal
 	}
 
 	/**
-	 * Make a transaction (payment) button for multiple shopping cart items
+	 * Make a transaction (payment) button for multiple shopping cart items.
 	 *
-	 * @param  array			Items array
-	 * @param  tempcode		Currency symbol
-	 * @param  AUTO_LINK		Order Id
-	 * @return tempcode		The button
+	 * @param  array			Items array.
+	 * @param  tempcode		Currency symbol.
+	 * @param  AUTO_LINK		Order ID.
+	 * @return tempcode		The button.
 	 */
 	function make_cart_transaction_button($items,$currency,$order_id)
 	{
@@ -385,10 +385,10 @@ class Hook_paypal
 	}
 
 	/**
-	 * Store shipping address for orders
+	 * Store shipping address for orders.
 	 *
-	 * @param  AUTO_LINK		Order ID
-	 * @return ?mixed			Address ID (NULL: No address record found)
+	 * @param  AUTO_LINK		Order ID.
+	 * @return ?mixed			Address ID (NULL: No address record found).
 	 */
 	function store_shipping_address($order_id)
 	{
@@ -414,6 +414,15 @@ class Hook_paypal
 
 		return NULL;
 	}
-}
 
+	/**
+	 * Get the status message after a URL callback.
+	 *
+	 * @return ?string		Message (NULL: none).
+	 */
+	function get_callback_url_message()
+	{
+		return get_param('message',NULL,true);
+	}
+}
 

@@ -568,7 +568,15 @@ class Module_shopping
 	 */
 	function finish()
 	{
-		$message=get_param('message',NULL,true); // TODO: Assumption, needs to really go through the payment gateway API			#145 on tracker
+		$via=get_option('payment_gateway');
+		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
+		$object=object_factory('Hook_'.$via);
+
+		$message=mixed();
+		if (method_exists($object,'get_callback_url_message'))
+		{
+			$message=$object->get_callback_url_message();
+		}
 
 		if (get_param_integer('cancel',0)==0)
 		{
@@ -598,10 +606,6 @@ class Module_shopping
 				$amount=$transaction_row['e_amount'];
 				$length=$transaction_row['e_length'];
 				$length_units=$transaction_row['e_length_units'];
-
-				$via=get_option('payment_gateway');
-				require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
-				$object=object_factory('Hook_'.$via);
 
 				$name=post_param('name');
 				$card_number=post_param('card_number');
@@ -634,11 +638,11 @@ class Module_shopping
 			{
 				$order_id=handle_transaction_script();
 
-				$object=find_product(do_lang('CART-ORDER',$order_id));
+				$product_object=find_product(do_lang('CART_ORDER',$order_id));
 
-				if (method_exists($object,'get_finish_url'))
+				if (method_exists($product_object,'get_finish_url'))
 				{
-					return redirect_screen($this->title,$object->get_finish_url(),$message);
+					return redirect_screen($this->title,$product_object->get_finish_url(),$message);
 				}
 			}
 

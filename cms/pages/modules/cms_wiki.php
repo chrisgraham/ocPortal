@@ -296,7 +296,8 @@ class Module_cms_wiki
 		require_code('content2');
 		$meta_data=actual_meta_data_get_fields('wiki_page',NULL);
 
-		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),(get_option('wiki_enable_content_posts')=='1')?post_param_integer('hide_posts',0):1,$meta_data['submitter'],$meta_data['add_time'],$meta_data['views'],false);
+		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),(get_option('wiki_enable_content_posts')=='1')?post_param_integer('hide_posts',0):1,$meta_data['submitter'],$meta_data['add_time'],$meta_data['views'],$meta_data['meta_keywords'],$meta_data['meta_description'],NULL,false);
+
 		require_code('permissions2');
 		set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');
 
@@ -599,18 +600,18 @@ class Module_cms_wiki
 		for ($i=0;$i<$no_children;$i++)
 		{
 			$length=strpos($childlinks,"\n",$start)-$start;
-			$newlink=trim(substr($childlinks,$start,$length));
+			$new_link=trim(substr($childlinks,$start,$length));
 			$start=$start+$length+1;
-			if ($newlink!='')
+			if ($new_link!='')
 			{
 				// Find ID and title
-				$q_pos=strpos($newlink,'=');
-				$child_id_on_start=(($q_pos!==false) && ($q_pos>0) && (is_numeric(substr($newlink,0,$q_pos))));
+				$q_pos=strpos($new_link,'=');
+				$child_id_on_start=(($q_pos!==false) && ($q_pos>0) && (is_numeric(substr($new_link,0,$q_pos))));
 
 				if ($child_id_on_start) // Existing
 				{
-					$title=substr($newlink,$q_pos+1);
-					$child_id=intval(substr($newlink,0,$q_pos));
+					$title=substr($new_link,$q_pos+1);
+					$child_id=intval(substr($new_link,0,$q_pos));
 					if ($child_id==$id) continue;
 					$title_id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id'=>$child_id));
 					if (is_null($title_id))
@@ -633,8 +634,8 @@ class Module_cms_wiki
 				}
 				else // New
 				{
-					$title=$newlink;
-					$child_id=wiki_add_page($title,'','',$hide_posts,NULL,false);
+					$title=$new_link;
+					$child_id=wiki_add_page($title,'','',$hide_posts,NULL,NULL,0,'','',NULL,false);
 					$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 					$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 					foreach (array_keys($groups) as $group_id)
