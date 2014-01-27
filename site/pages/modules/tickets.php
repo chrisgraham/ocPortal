@@ -550,7 +550,7 @@ class Module_tickets
 								'OVERVIEW_COUNT'=>'0',
 							);
 						}
-						$type_activity_overview[$ticket_type_id]['OVERVIEW_COUNT']=intval($type_activity_overview[$ticket_type_id]['OVERVIEW_COUNT'])+1;
+						$type_activity_overview[$ticket_type_id]['OVERVIEW_COUNT']=strval(intval($type_activity_overview[$ticket_type_id]['OVERVIEW_COUNT'])+1);
 
 						if ($id!=$ticket_id)
 						{

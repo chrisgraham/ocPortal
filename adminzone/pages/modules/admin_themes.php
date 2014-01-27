@@ -1905,7 +1905,7 @@ class Module_admin_themes
 		require_code('form_templates');
 		$hidden->attach(form_input_hidden('theme',$theme));
 		$hidden->attach(form_input_hidden('lang',$lang));
-		$fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_NAME'),'id',$id,true));
+		$fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_NAME'),'id',$id,true,NULL,NULL,'text','some/path/name'));
 
 		/*$list=combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images/',get_file_base().'/themes/'.filter_naughty($theme).'/images/');		Actually we don't want to allow selection from existing -- too weird, creating these cross-links
 		$list->attach(combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images_custom/',get_file_base().'/themes/'.filter_naughty($theme).'/images_custom/'));
@@ -2043,7 +2043,7 @@ class Module_admin_themes
 			'URL'=>$post_url,
 			'FIELD'=>$fields,
 			'SUBMIT_ICON'=>'buttons__proceed',
-			'SUBMIT_NAME'=>do_lang_tempcode('EDIT'),
+			'SUBMIT_NAME'=>has_js()?new ocp_tempcode():do_lang_tempcode('EDIT'), // We don't want a button if JS is on because clicking on images takes you through
 		));
 
 		$add_url=build_url(array('page'=>'_SELF','type'=>'add_image','theme'=>$theme,'lang'=>$lang),'_SELF');

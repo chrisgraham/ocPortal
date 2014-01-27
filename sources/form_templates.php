@@ -488,9 +488,10 @@ function get_field_restrict_property($property,$field,$page=NULL,$type=NULL)
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?integer		The maximum length of the field (NULL: default 80)
  * @param  ?array			List of extra characters to allow (NULL: none)
+ * @param  ?string		The placeholder value for this input field (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$extra_chars=NULL)
+function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$extra_chars=NULL,$placeholder=NULL)
 {
 	if (is_null($default)) $default='';
 
@@ -503,7 +504,7 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
 	$_required=($required)?'_required':'';
 	$maxlength=get_field_restrict_property('maxlength',$name);
 	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_CODENAME',array('_GUID'=>'4b1a3a3ebe6ac85c7c14bcec9d8ab88d','MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'EXTRA_CHARS'=>$extra_chars));
+	$input=do_template('FORM_SCREEN_INPUT_CODENAME',array('_GUID'=>'4b1a3a3ebe6ac85c7c14bcec9d8ab88d','PLACEHOLDER'=>$placeholder,'MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'EXTRA_CHARS'=>$extra_chars));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
@@ -518,9 +519,10 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?integer		The maximum length of the field (NULL: default 255)
  * @param  string			The input type
+ * @param  ?string		The placeholder value for this input field (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text')
+function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text',$placeholder=NULL)
 {
 	if (is_null($default)) $default='';
 
@@ -531,7 +533,7 @@ function form_input_line($pretty_name,$description,$name,$default,$required,$tab
 	$_required=($required)?'_required':'';
 	$maxlength=get_field_restrict_property('maxlength',$name);
 	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_LINE',array('_GUID'=>'02789c9af25cbc971e86bfcc0ad322d5','MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type));
+	$input=do_template('FORM_SCREEN_INPUT_LINE',array('_GUID'=>'02789c9af25cbc971e86bfcc0ad322d5','PLACEHOLDER'=>$placeholder,'MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 

@@ -8,7 +8,7 @@
 
 {FORM}
 
-<h2>{!ADD} ({!ADVANCED})</h2>
+<h2 class="force_margin">{!ADD} ({!ADVANCED})</h2>
 
 <p>{!ADDING_THEME_IMAGE}</p>
 
