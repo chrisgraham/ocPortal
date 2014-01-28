@@ -111,6 +111,7 @@ class rss
 				$parser_charset='UTF-8';
 
 			// Create and setup our parser
+			if (function_exists('libxml_disable_entity_loader')) libxml_disable_entity_loader();
 			$xml_parser=function_exists('xml_parser_create_ns')?@xml_parser_create_ns($GLOBALS['HTTP_CHARSET']):@xml_parser_create($GLOBALS['HTTP_CHARSET']);
 			if ($xml_parser===false)
 			{

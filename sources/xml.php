@@ -104,6 +104,7 @@ class ocp_simple_xml_reader
 			$parser_charset='UTF-8';
 
 		// Create and setup our parser
+		if (function_exists('libxml_disable_entity_loader')) libxml_disable_entity_loader();
 		$xml_parser=function_exists('xml_parser_create_ns')?@xml_parser_create_ns($parser_charset):@xml_parser_create($parser_charset);
 		if ($xml_parser===false)
 		{

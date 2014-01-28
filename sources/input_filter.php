@@ -300,6 +300,7 @@ class field_restriction_loader
 		$this->field_qualification_stack=array('*');
 
 		// Create and setup our parser
+		if (function_exists('libxml_disable_entity_loader')) libxml_disable_entity_loader();
 		$xml_parser=@xml_parser_create();
 		if ($xml_parser===false)
 		{

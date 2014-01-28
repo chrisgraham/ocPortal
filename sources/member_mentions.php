@@ -38,7 +38,9 @@ function dispatch_member_mention_notifications($content_type,$content_id,$submit
 	require_code('content');
 	require_code('feedback');
 
-	foreach (array_unique($MEMBER_MENTIONS_IN_COMCODE) as $member_id)
+	$mentions=array_unique($MEMBER_MENTIONS_IN_COMCODE);
+	$MEMBER_MENTIONS_IN_COMCODE=array(); // Reset
+	foreach ($mentions as $member_id)
 	{
 		if (!may_view_content_behind($member_id,$content_type,$content_id)) continue;
 
@@ -71,6 +73,4 @@ function dispatch_member_mention_notifications($content_type,$content_id,$submit
 
 		dispatch_notification('member_mention','',$subject,$message,array($member_id),get_member());
 	}
-
-	$MEMBER_MENTIONS_IN_COMCODE=array(); // Reset
 }
