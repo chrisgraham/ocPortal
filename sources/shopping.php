@@ -128,7 +128,16 @@ function remove_from_cart($product_to_remove)
  */
 function log_cart_actions($action)
 {
-	$id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_logging','id',array('e_member_id'=>get_member(),'session_id'=>get_session_id()));
+	$where=array();
+	if (is_guest())
+	{
+		$where['session_id']=get_session_id();
+	} else
+	{
+		$where['e_member_id']=get_member();
+	}
+
+	$id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_logging','id',$where);
 
 	if (is_null($id))
 	{

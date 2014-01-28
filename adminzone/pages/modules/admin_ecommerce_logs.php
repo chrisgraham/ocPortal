@@ -440,7 +440,7 @@ class Module_admin_ecommerce_logs
 
 		if ($products[$type_code][0]==PRODUCT_SUBSCRIPTION)
 		{
-			if ($purchase_id=='')
+			if (($purchase_id=='') || (post_param('username','')!=''))
 			{
 				$member_id=get_member();
 				$username=post_param('username','');

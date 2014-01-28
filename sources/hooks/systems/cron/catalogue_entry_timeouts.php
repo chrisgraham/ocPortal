@@ -27,6 +27,10 @@ class Hook_cron_catalogue_entry_timeouts
 	{
 		if (!addon_installed('catalogues')) return;
 
+		$time=time();
+		$last_time=get_long_value('last_catalogue_entry_timeouts_calc');
+		if ($last_time>$time-6*60*60) return; // Every 6 hours
+
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
 		$catalogue_categories=$GLOBALS['SITE_DB']->query('SELECT id,cc_move_target,cc_move_days_lower,cc_move_days_higher FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_categories WHERE cc_move_target IS NOT NULL');
@@ -41,11 +45,11 @@ class Hook_cron_catalogue_entry_timeouts
 				foreach ($entries as $entry)
 				{
 					$higher=has_privilege($entry['ce_submitter'],'high_catalogue_entry_timeout');
-					$time_diff=time()-$entry['ce_last_moved'];
+					$time_diff=$time-$entry['ce_last_moved'];
 					$move_days=$higher?$row['cc_move_days_higher']:$row['cc_move_days_lower'];
 					if ($time_diff/(60*60*24)>$move_days)
 					{
-						$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_last_moved'=>time(),'cc_id'=>$row['cc_move_target']),array('id'=>$entry['id']),'',1);
+						$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_last_moved'=>$time,'cc_id'=>$row['cc_move_target']),array('id'=>$entry['id']),'',1);
 						$changed=true;
 					}
 				}
@@ -61,6 +65,8 @@ class Hook_cron_catalogue_entry_timeouts
 			}
 		}
 	}
+
+	set_long_value('last_catalogue_entry_timeouts_calc',strval($time));
 }
 
 

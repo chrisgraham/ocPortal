@@ -317,7 +317,7 @@ class Module_shopping
 
 		log_cart_actions('View cart');
 
-		$where=array('ordered_by'=>get_member(),'is_deleted'=>0);
+		$where=array('is_deleted'=>0);
 		if (is_guest())
 		{
 			$where['session_id']=get_session_id();

@@ -73,17 +73,22 @@ class Hook_task_download_member_csv
 
 		// Subscription types
 		$subscription_types=array();
-		$usergroup_subscription_rows=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title'));
-		foreach ($usergroup_subscription_rows as $usergroup_subscription_row)
+		if (addon_installed('ecommerce'))
 		{
-			$item_name=get_translated_text($usergroup_subscription_row['s_title']);
-			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_START_TIME').')']=NULL;
-			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_START_TIME').')']=NULL;
-			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_END_TIME').')']=NULL;
-			$headings[$item_name.' ('.do_lang('SUBSCRIPTION_EXPIRY_TIME').')']=NULL;
-			$headings[$item_name.' ('.do_lang('PAYMENT_GATEWAY').')']=NULL;
-			$headings[$item_name.' ('.do_lang('STATUS').')']=NULL;
-			$subscription_types['USERGROUP'.strval($usergroup_subscription_row['id'])]=$item_name;
+			require_lang('ecommerce');
+
+			$usergroup_subscription_rows=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title'));
+			foreach ($usergroup_subscription_rows as $usergroup_subscription_row)
+			{
+				$item_name=get_translated_text($usergroup_subscription_row['s_title']);
+				$headings[$item_name.' ('.do_lang('SUBSCRIPTION_START_TIME').')']=NULL;
+				$headings[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_START_TIME').')']=NULL;
+				$headings[$item_name.' ('.do_lang('SUBSCRIPTION_TERM_END_TIME').')']=NULL;
+				$headings[$item_name.' ('.do_lang('SUBSCRIPTION_EXPIRY_TIME').')']=NULL;
+				$headings[$item_name.' ('.do_lang('PAYMENT_GATEWAY').')']=NULL;
+				$headings[$item_name.' ('.do_lang('STATUS').')']=NULL;
+				$subscription_types['USERGROUP'.strval($usergroup_subscription_row['id'])]=$item_name;
+			}
 		}
 
 		// Output headings

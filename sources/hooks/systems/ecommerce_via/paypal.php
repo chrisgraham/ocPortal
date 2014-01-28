@@ -242,7 +242,7 @@ class Hook_paypal
 						if (post_param_integer('recurring')!=1) fatal_ipn_exit(do_lang('IPN_SUB_RECURRING_WRONG'));
 
 						// SECURITY: Check user is not giving themselves a free trial (we don't support trials)
-						if ((post_param('amount1')!='') || (post_param('amount2')!='') || (post_param('mc_amount1')!='') || (post_param('mc_amount2')!='') || (post_param('period1')!='') || (post_param('period2')!=''))
+						if ((post_param('amount1','')!='') || (post_param('amount2','')!='') || (post_param('mc_amount1','')!='') || (post_param('mc_amount2','')!='') || (post_param('period1','')!='') || (post_param('period2','')!=''))
 							fatal_ipn_exit(do_lang('IPN_BAD_TRIAL'));
 
 						$payment_status='Completed';
