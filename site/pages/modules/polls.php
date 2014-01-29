@@ -344,7 +344,7 @@ class Module_polls
 			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),
 			$_title,
 			find_overridden_comment_forum('polls'),
-			$myrow['add_date']
+			$myrow['add_time']
 		);
 
 		if ((has_actual_page_access(NULL,'cms_polls',NULL,NULL)) && (has_edit_permission('high',get_member(),$myrow['submitter'],'cms_polls')))
