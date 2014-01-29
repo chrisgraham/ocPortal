@@ -132,13 +132,13 @@ class Block_main_gallery_embed
 			{
 				if ((mt_rand(0,1)==0) || ($total_videos-count($rows_videos)==0))
 				{
-					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$image_select.$where_sup.' AND '.$done_images,1,mt_rand(0,$total_images-count($rows_images)-1));
+					$rows=$GLOBALS['SITE_DB']->query('SELECT *'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$image_select.$where_sup.' AND '.$done_images,1,mt_rand(0,$total_images-count($rows_images)-1));
 					$rows_images[]=$rows[0];
 					$done_images.=' AND ';
 					$done_images.='id<>'.strval($rows[0]['id']);
 				} else
 				{
-					$rows=$GLOBALS['SITE_DB']->query('SELECT *.'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$video_select.$where_sup.' AND '.$done_videos,1,mt_rand(0,$total_videos-count($rows_videos)-1));
+					$rows=$GLOBALS['SITE_DB']->query('SELECT *'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.' WHERE '.$cat_select.' AND '.$video_select.$where_sup.' AND '.$done_videos,1,mt_rand(0,$total_videos-count($rows_videos)-1));
 					$rows_videos[]=$rows[0];
 					$done_videos.=' AND ';
 					$done_videos.='id<>'.strval($rows[0]['id']);
