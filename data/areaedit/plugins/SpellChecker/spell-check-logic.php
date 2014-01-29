@@ -161,7 +161,7 @@ function aspell_init()
 
 		// Our temporary spell check file
 		$temptext=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
-		if ($temptext===false)
+		if (($temptext===false) || ($temptext=='')/*Should not be blank, but seen in the wild*/)
 			$temptext=tempnam(get_custom_file_base().'/safe_mode_temp/','spell_');
 
 		// Find aspell
@@ -313,7 +313,7 @@ function utf8_ord($chr)
  *
  * @param  string			aSpell command to get dictionaries
  * @param  mixed			aSpell call command
- * @param  string			Temporary file name
+ * @param  PATH			Temporary file name
  * @param  string			Language being used
  * @param  ?string		The text to check (NULL: look from params)
  * @param  ?array			Words to skip (NULL: none)

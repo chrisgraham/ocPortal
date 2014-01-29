@@ -381,7 +381,17 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$forum_id=get_option('intro_forum_id');
 		if ($forum_id!='')
 		{
-			if (!is_numeric($forum_id)) $forum_id=strval($GLOBALS['FORUM_DB']->query_value('f_forums','id',array('f_name'=>$forum_id)));
+			if (!is_numeric($forum_id))
+			{
+				$_forum_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array('f_name'=>$forum_id));
+				if (is_null($_forum_id))
+				{
+					$forum_id=strval(db_get_first_id());
+				} else
+				{
+					$forum_id=strval($_forum_id);
+				}
+			}
 
 			$intro_title=post_param('intro_title','');
 			$intro_post=post_param('intro_post','');

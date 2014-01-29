@@ -195,6 +195,17 @@ class Module_cms_ocf_groups extends standard_aed_module
 	}
 
 	/**
+	 * Standard aed_module delete possibility checker.
+	 *
+	 * @param  ID_TEXT		The entry being potentially deleted
+	 * @return boolean		Whether it may be deleted
+	 */
+	function may_delete_this($id)
+	{
+		return ((intval($id)!=db_get_first_id()+0) && (intval($id)!=db_get_first_id()+1) && (intval($id)!=db_get_first_id()+8));
+	}
+
+	/**
 	 * Standard aed_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited

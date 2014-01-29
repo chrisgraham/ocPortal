@@ -1476,12 +1476,14 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry being edited
 	 * @return string			The cat
 	 */
 	function get_cat($id)
 	{
-		return $GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$id));
+		$c_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>intval($id)));
+		if (is_null($c_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		return $c_name;
 	}
 
 	/**

@@ -636,7 +636,7 @@ function fast_spider_cache($bot=true)
 	$fast_cache_path.='.gcd';
 	if (is_file($fast_cache_path))
 	{
-		$expires=(60.0*60.0*floatval($SITE_INFO['fast_spider_cache']));
+		$expires=intval(60.0*60.0*floatval($SITE_INFO['fast_spider_cache']));
 		$mtime=filemtime($fast_cache_path);
 		if ($mtime>time()-$expires)
 		{
@@ -1763,7 +1763,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 		js_compile($j,$js_cache_path,$minify);
 	}
 
-	if (filesize($js_cache_path)==0) return '';
+	if (@filesize($js_cache_path)==0/*Race condition?*/) return '';
 
 	return $js_cache_path;
 }
@@ -1950,7 +1950,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 		css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify);
 	}
 
-	if (filesize($css_cache_path)==0) return '';
+	if (@filesize($css_cache_path)==0/*Race condition?*/) return '';
 
 	return $css_cache_path;
 }

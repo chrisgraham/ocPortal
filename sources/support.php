@@ -659,7 +659,7 @@ function ocp_tempnam($prefix)
 	$server_path='/tmp/';
 	$tmp_path=$problem_saving?$local_path:$server_path;
 	$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
-	if (($tempnam===false) && (!$problem_saving))
+	if ((($tempnam===false) || ($tempnam==''/*Should not be blank, but seen in the wild*/)) && (!$problem_saving))
 	{
 		$problem_saving=true;
 		$tempnam=tempnam($local_path,$prefix);

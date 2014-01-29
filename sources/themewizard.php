@@ -742,7 +742,7 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					foreach ($needed as $colour_needed)
 					{
 						if (!array_key_exists($colour_needed,$colours))
-							fatal_exit(do_lang_tempcode('UNRESOLVABLE_COLOURS',escape_html($colour_needed)));
+							warn_exit(do_lang_tempcode('UNRESOLVABLE_COLOURS',escape_html($colour_needed)));
 					}
 
 					if ($show=='gradient')
@@ -905,7 +905,7 @@ function calculate_dynamic_css_colours($colours,$source_theme)
 				if ($_landscape!='') $_landscape.='; ';
 				$_landscape.=$x[2];
 			}
-			fatal_exit(do_lang_tempcode('UNRESOLVABLE_COLOURS',escape_html($_landscape)));
+			warn_exit(do_lang_tempcode('UNRESOLVABLE_COLOURS',escape_html($_landscape)));
 		}
 	}
 

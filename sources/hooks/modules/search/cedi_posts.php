@@ -28,6 +28,8 @@ class Hook_search_cedi_posts
 	 */
 	function info()
 	{
+		if (!module_installed('cedi')) return NULL; // TODO: Update in v10
+
 		if (!has_actual_page_access(get_member(),'cedi')) return NULL;
 		if ($GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)')==0) return NULL;
 

@@ -31,6 +31,8 @@ function init__captcha()
  */
 function captcha_script()
 {
+	if (!function_exists('imagecreatefromstring')) warn_exit(do_lang_tempcode('GD_NEEDED'));
+
 	$_code_needed=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',array('si_session_id'=>get_session_id()));
 	if (is_null($_code_needed))
 	{

@@ -631,7 +631,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 }
 
 /**
- * See whether the current member can submit to the named member gallery. Note - this function assumes that members have general submit permission, and does not check for gallery read access.
+ * See whether the current member can submit to the named *member* gallery. Note - this function assumes that members have general submit permission, and does not check for gallery read access.
  *
  * @param  ID_TEXT			The gallery name
  * @return ~integer			The owner of the gallery (false: we aren't allowed to submit to it) (-2: not a member gallery)
@@ -641,7 +641,11 @@ function can_submit_to_gallery($name)
 	if (substr($name,0,7)!='member_')
 	{
 		if ($name=='root') return (-2);
-		return can_submit_to_gallery($GLOBALS['SITE_DB']->query_value('galleries','parent_id',array('name'=>$name)));
+
+		$parent_id=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','parent_id',array('name'=>$name));
+		if (is_null($parent_id)) return false; // No, does not even exist (probably a block was given a bad parameter)
+
+		return can_submit_to_gallery($parent_id);
 	}
 
 	$parts=explode('_',$name);

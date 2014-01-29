@@ -31,6 +31,9 @@ if (!function_exists('critical_error'))
 	{
 		error_reporting(0);
 
+		if ((!is_null($relay)) && (function_exists('_sanitise_error_msg')))
+			$relay=_sanitise_error_msg($relay);
+
 		if (!headers_sent())
 		{
 			if ((function_exists('browser_matches')) && ((is_null($relay)) || (strpos($relay,'Allowed memory')===false)))

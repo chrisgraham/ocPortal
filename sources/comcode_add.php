@@ -647,7 +647,7 @@ function comcode_helper_script()
 		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
 		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'d5d5888d89b764f81769823ac71d0827','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
-	}
+	} else warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 	$content->handle_symbol_preprocessing();
 	$echo=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
