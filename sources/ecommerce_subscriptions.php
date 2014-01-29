@@ -180,6 +180,6 @@ function prepare_templated_subscription($subscription)
 		'TERM_START_TIME'=>get_timezoned_date($subscription['term_start_time'],false,false,false,true),
 		'TERM_END_TIME'=>get_timezoned_date($subscription['term_end_time'],false,false,false,true),
 		'EXPIRY_TIME'=>is_null($subscription['expiry_time'])?'':get_timezoned_date($subscription['expiry_time'],false,false,false,true),
-		'CANCEL_BUTTON'=>make_cancel_button($subscription['auto_fund_key'],$subscription['via']),
+		'CANCEL_BUTTON'=>($subscription['state']=='active')?make_cancel_button($subscription['auto_fund_key'],$subscription['via']):new ocp_tempcode(),
 	);
 }
