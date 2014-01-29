@@ -274,7 +274,8 @@ function init__global2()
 	require_code_no_override('version');
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0))
 	{
-		@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.phpversion().')');
+		//@header('X-Powered-By: ocPortal '.ocp_version_pretty().' (PHP '.phpversion().')');
+		@header('X-Powered-By: ocPortal'); // Better to keep it vague, for security reasons
 
 		$QUERY_LOG=false;
 		if ((isset($_REQUEST['special_page_type'])) && ($_REQUEST['special_page_type']=='query'))
