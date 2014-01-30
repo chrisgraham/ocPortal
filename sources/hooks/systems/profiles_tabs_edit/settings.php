@@ -239,6 +239,9 @@ class Hook_Profiles_Tabs_Edit_settings
 			$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_join_time');
 
 			// NB: Same mail also sent in ocf_members_action2.php (validate upon full edit)
+			require_code('mail');
+			$_login_url=build_url(array('page'=>'login'),get_module_zone('login'),NULL,false,false,true);
+			$login_url=$_login_url->evaluate();
 			mail_wrap(do_lang('VALIDATED_MEMBER_SUBJECT',get_site_name(),NULL,get_lang($member_id_of)),do_lang('MEMBER_VALIDATED',get_site_name(),$username,$login_url,get_lang($member_id_of)),array($email_address),$username,'','',3,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$join_time);
 
 			attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');

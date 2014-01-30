@@ -151,9 +151,30 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 		{
 			afm_make_file($zone.'/'.$i.'/index.html','',false);
 		}
-		afm_make_file($zone.'/pages/comcode_custom/EN/panel_left.txt','',true);
+		afm_make_file($zone.'/pages/comcode_custom/EN/panel_right.txt','',true);
+		$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+			'the_zone'=>$zone,
+			'the_page'=>'panel_right',
+			'p_parent_page'=>'',
+			'p_validated'=>1,
+			'p_edit_date'=>NULL,
+			'p_add_date'=>time(),
+			'p_submitter'=>get_member(),
+			'p_show_as_edit'=>0
+		));
 	}
+
 	afm_make_file($zone.'/pages/comcode_custom/EN/'.filter_naughty($default_page).'.txt','[title]'.do_lang('YOUR_NEW_ZONE').'[/title]'."\n\n".do_lang('YOUR_NEW_ZONE_PAGE',$zone.':'.$default_page)."\n\n".'[block]main_comcode_page_children[/block]',true);
+	$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
+		'the_zone'=>$zone,
+		'the_page'=>$default_page,
+		'p_parent_page'=>'',
+		'p_validated'=>1,
+		'p_edit_date'=>NULL,
+		'p_add_date'=>time(),
+		'p_submitter'=>get_member(),
+		'p_show_as_edit'=>0
+	));
 
 	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($title,1),'zone_default_page'=>$default_page,'zone_header_text'=>insert_lang($header_text,1),'zone_theme'=>$theme,'zone_require_session'=>$require_session));
 

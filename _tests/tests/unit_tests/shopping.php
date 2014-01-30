@@ -55,7 +55,7 @@ class shopping_test_set extends ocp_test_case
 		$fields=array(
 			//		Name							 Description			Type			  Defines order  Required  Visible  Searchable
 			array('ECOM_CAT_product_title','DESCRIPTION_TITLE','short_trans',1,1,1,1),
-			array('ECOM_CAT_item_code','ECOM_CATD_item_code','random',0,1,1,1),
+			array('ECOM_CAT_sku','ECOM_CATD_sku','random',0,1,1,1),
 			array('ECOM_CAT_price_pre_tax','ECOM_CATD_price_pre_tax','float',0,1,1,1),
 			array('ECOM_CAT_stock_level','ECOM_CATD_stock_level','integer',0,0,1,0),
 			array('ECOM_CAT_stock_level_warn_at','ECOM_CATD_stock_level_warn_at','integer',0,0,0,0),
