@@ -252,23 +252,25 @@ $(function() {
 		} else {
 			var _this = this;
 
-			var editor = CKEDITOR.instances[this.element.name];
-			if (editor.document) {
-				editor.document.on('keyup', function(e) {
-					_this.onKeyUp.call(_this, e);
-				});
-				editor.document.on('keydown', function(e) {
-					_this.onKeyDown.call(_this, e);
-				});
-				editor.document.on('focus', function(e) {
-					_this.renderElements.call(_this, _this.options.values);
-				});
-				editor.document.on('blur', function(e) {
-					_this.remove.call(_this);
-				});
-				editor.document.on('click', function(e) {
-					_this.remove.call(_this);
-				});
+			if (typeof window.CKEDITOR != 'undefined') {
+				var editor = CKEDITOR.instances[this.element.name];
+				if (editor.document) {
+					editor.document.on('keyup', function(e) {
+						_this.onKeyUp.call(_this, e);
+					});
+					editor.document.on('keydown', function(e) {
+						_this.onKeyDown.call(_this, e);
+					});
+					editor.document.on('focus', function(e) {
+						_this.renderElements.call(_this, _this.options.values);
+					});
+					editor.document.on('blur', function(e) {
+						_this.remove.call(_this);
+					});
+					editor.document.on('click', function(e) {
+						_this.remove.call(_this);
+					});
+				}
 			}
 		}
 	};
@@ -619,7 +621,7 @@ $(function() {
 
 	$.fn[pluginName] = function (options) {
 		return this.each(function () {
-			if(!$.data(this, 'plugin_' + pluginName) || is_wysiwyg_field(this)) {
+			if(!$.data(this, 'plugin_' + pluginName) || is_wysiwyg_field(this.element)) {
 				$.data(this, 'plugin_' + pluginName, new Plugin(this, options));
 			}
 		});

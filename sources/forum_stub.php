@@ -421,6 +421,7 @@ class forum_driver_base
 				global $ZONE;
 				$zone_theme=($ZONE===NULL)?$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name'=>get_zone_name())):$ZONE['zone_theme'];
 
+				require_code('permissions');
 				if (($USER_THEME_CACHE=='default') || ($USER_THEME_CACHE==$zone_theme) || (has_category_access(get_member(),'theme',$USER_THEME_CACHE)))
 				{
 					return $USER_THEME_CACHE;

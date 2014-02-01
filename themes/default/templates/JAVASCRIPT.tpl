@@ -2043,6 +2043,7 @@ function activate_tooltip(ac,event,tooltip,width,pic,height,bottom,no_delay,ligh
 
 		ac.tooltip_on=true;
 		tooltip_element.style.display='block';
+		tooltip_element.style.width=find_width(tooltip_element)+'px'; // Fix it, to stop the browser retroactively reflowing ambiguous layer widths on mouse movement
 
 		if (!no_delay)
 		{
