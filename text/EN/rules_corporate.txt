@@ -1,4 +1,4 @@
-[block=":rules,cms:cms_comcode_pages,site:rules" caption="[title]{$SITE_NAME} Rules[/title]"]main_only_if_match[/block]
+[block=":rules,cms:cms_comcode_pages,site:rules,forum:rules" caption="[title]{$SITE_NAME} Rules[/title]"]main_only_if_match[/block]
 
 [title="2"]Usage[/title]
 

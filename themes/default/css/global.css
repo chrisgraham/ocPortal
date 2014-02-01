@@ -911,7 +911,7 @@ footer .global_minilinks .horizontal_links {
 	font-size: 1.1em;
 }
 
-footer .global_minilinks a {
+footer .global_minilinks a, footer .global_minilinks .button_hyperlink {
 	white-space: nowrap !important; /* So works on mobiles */
 	{+START,IF,{$MOBILE}}
 		padding: 4px;
