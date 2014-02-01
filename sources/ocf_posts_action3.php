@@ -60,6 +60,12 @@ function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$
 	$_url=build_url(array('page'=>'topicview','id'=>$topic_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();
 
+	if (!is_null($forum_id))
+	{
+		$post_counts=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_post_count_increment',array('id'=>$forum_id));
+		if ($post_counts===1) ocf_force_update_member_post_count($poster,1);
+	}
+
 	ocf_send_topic_notification($url,$topic_id,$forum_id,$poster,$is_starter,$post,$topic_info[0]['t_cache_first_title'],NULL,!is_null($topic_info[0]['t_pt_from']));
 
 	if (!is_null($forum_id))
