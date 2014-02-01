@@ -1160,6 +1160,13 @@ function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
 			$result=$_result[0];
+
+			if (get_value('really_want_highlighting')==='1')
+			{
+				require_code('comcode_from_html');
+				$result['text_original']=force_clean_comcode($result['text_original']); // Highlighting only works with pure Comcode
+			}
+
 			$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
 			$LAX_COMCODE=$temp;
 			return $ret;

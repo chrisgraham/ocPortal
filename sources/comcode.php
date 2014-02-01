@@ -222,4 +222,3 @@ function strip_comcode($text)
 
 	return $text;
 }
-

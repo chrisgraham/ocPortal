@@ -271,6 +271,28 @@ function convert_html_headers_to_titles($semihtml)
 }
 
 /**
+ * Convert HTML-filled Comcode to cleaner Comcode.
+ *
+ * @param  LONG_TEXT		The messy Comcode.
+ * @return LONG_TEXT		The cleaned Comcode.
+ */
+function force_clean_comcode($comcode)
+{
+	$matches=array();
+	if (preg_match('#^\[semihtml\](.*)\[/semihtml\]$#s',$comcode,$matches)!=0)
+	{
+		if ((strpos($matches[1],'[semihtml]')===false) && (strpos($matches[1],'[html]')===false))
+			return semihtml_to_comcode($matches[1],true);
+	}
+	if (preg_match('#^\[html\](.*)\[/html\]$#s',$comcode,$matches)!=0)
+	{
+		if ((strpos($matches[1],'[semihtml]')===false) && (strpos($matches[1],'[html]')===false))
+			return html_to_comcode($matches[1],true);
+	}
+	return $comcode;
+}
+
+/**
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
  * @param  LONG_TEXT		The Semi-HTML to converted
