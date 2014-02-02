@@ -146,17 +146,17 @@ function update_ticket_type_lead_times()
  */
 function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=false,$silent_error_handling=false)
 {
-	if ((!is_null($ticket_type)) && (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type))))
-		return array();
-
 	$restrict='';
 	$restrict_description='';
 	$view_others_tickets=(!$override_view_others_tickets) && (has_specific_permission($member,'view_others_tickets'));
-
 	if (!$view_others_tickets)
 	{
 		$restrict=strval($member).'\_%';
 		$restrict_description=do_lang('SUPPORT_TICKET').': #'.$restrict;
+	} else
+	{
+		if ((!is_null($ticket_type)) && (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type))))
+			return array();
 	}
 
 	if ((get_option('ticket_member_forums')=='1') || (get_option('ticket_type_forums')=='1'))
@@ -187,7 +187,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 
 	if ((count($forums)==1) && (array_key_exists(0,$forums)) && (is_null($forums[0]))) return array();
 	$max_rows=0;
-	$topics=$GLOBALS['FORUM_DRIVER']->show_forum_topics(array_flip($forums),100,0,$max_rows,$restrict,true,'lasttime',false,$restrict_description);
+	$topics=$GLOBALS['FORUM_DRIVER']->show_forum_topics(array_flip($forums),$view_others_tickets?100:500,0,$max_rows,$restrict,true,'lasttime',false,$restrict_description);
 	if (is_null($topics)) return array();
 	$filtered_topics=array();
 	foreach ($topics as $topic)
@@ -220,8 +220,12 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$
 	if (count($ticket)==1) // We know about it, so grab details from tickets table
 	{
 		$ticket_type=$ticket[0]['ticket_type'];
-		if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type)))
-			access_denied('CATEGORY_ACCESS_LEVEL');
+
+		if (has_specific_permission($member,'view_others_tickets'))
+		{
+			if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type)))
+				access_denied('CATEGORY_ACCESS_LEVEL');
+		}
 
 		$forum=$ticket[0]['forum_id'];
 		$topic_id=$ticket[0]['topic_id'];
