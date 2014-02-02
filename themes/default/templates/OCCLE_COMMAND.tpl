@@ -5,7 +5,7 @@
 		</div>
 	{+END}
 
-	<p class="past_command_prompt">{METHOD*}:</p>
+	<p class="past_command_prompt">{METHOD*} &rarr;</p>
 	<div class="past_command">
 		{+START,IF_NON_EMPTY,{STDOUT}}<p class="text_output">{STDOUT*}</p>{+END}
 		{STDHTML}
