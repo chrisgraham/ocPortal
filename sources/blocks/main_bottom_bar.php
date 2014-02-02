@@ -51,6 +51,7 @@ class Block_main_bottom_bar
 		require_code('ocf_general');
 		require_code('ocf_groups');
 		require_css('ocf');
+		require_css('ocf_footer');
 
 		require_lang('ocf');
 

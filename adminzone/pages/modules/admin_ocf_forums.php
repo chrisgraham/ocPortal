@@ -85,6 +85,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 		$type=get_param('type','misc');
 
 		require_lang('ocf');
+		require_css('ocf_admin');
 
 		inform_non_canonical_parameter('parent_forum');
 		inform_non_canonical_parameter('forum_grouping_id');

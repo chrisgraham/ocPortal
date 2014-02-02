@@ -49,6 +49,7 @@ class Block_main_member_bar
 		if (get_forum_type()!='ocf') return new ocp_tempcode();
 
 		require_css('ocf');
+		require_css('ocf_header');
 		require_lang('ocf');
 
 		$member_id=get_member();

@@ -69,6 +69,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 		$type=get_param('type','misc');
 
 		require_lang('ocf');
+		require_css('ocf_admin');
 
 		set_helper_panel_tutorial('tut_forum_helpdesk');
 

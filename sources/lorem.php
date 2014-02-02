@@ -617,7 +617,6 @@ function placeholder_img_code($type='')
  */
 function placeholder_pagination()
 {
-	//pagination starts
 	$selectors=new ocp_tempcode();
 	foreach (placeholder_array() as $k => $v)
 	{
