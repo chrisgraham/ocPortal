@@ -72,7 +72,7 @@ class Block_main_members
 			((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),
 			get_param($block_id.\'_sort\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'m_join_time DESC\'),
 			array_key_exists(\'parent_gallery\',$map)?$map[\'parent_gallery\']:\'\',
-			array_key_exists(\'per_row\',$map)?intval($map[\'per_row\']):6,
+			array_key_exists(\'per_row\',$map)?intval($map[\'per_row\']):0,
 			array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',
 		)';
 		$info['ttl']=60;
@@ -103,15 +103,20 @@ class Block_main_members
 
 		$where='id<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id());
 
+		$usergroup=array_key_exists('usergroup',$map)?$map['usergroup']:'';
+
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
-		if (!empty($map['filters_row_a']))
+		if ((!empty($map['filters_row_a'])) || (!empty($map['filters_row_b'])))
 		{
 			$filters_row_a=$map['filters_row_a'];
+			$filters_row_b=array_key_exists('filters_row_b',$map)?$map['filters_row_b']:'';
 		} else
 		{
-			$filters_row_a='m_username='.php_addslashes(do_lang('USERNAME')).',m_primary_group='.php_addslashes(do_lang('GROUP'));
+			$filters_row_a='m_username='.php_addslashes(do_lang('USERNAME')).',usergroup='.php_addslashes(do_lang('GROUP'));
+			$filters_row_b='';
 			$cpfs=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(),1,1,NULL,NULL,1,NULL);
 			$_filters_row_a=2;
+			$_filters_row_b=0;
 			foreach ($cpfs as $cpf)
 			{
 				$cf_name=get_translated_text($cpf['cf_name']);
@@ -120,24 +125,32 @@ class Block_main_members
 					$filter_term=str_replace(',','\,',$cf_name).'='.str_replace(',','\,',$cf_name);
 					if ($_filters_row_a<6)
 					{
-						$filters_row_a.=','.$filter_term;
+						if ($filters_row_a!='') $filters_row_a.=',';
+						$filters_row_a.=$filter_term;
+						$_filters_row_a++;
 					} else
 					{
-						$filters_row_b.=','.$filter_term;
+						if ($filters_row_b!='') $filters_row_b.=',';
+						$filters_row_b.=$filter_term;
+						$_filters_row_b++;
 					}
-					$_filters_row_a++;
 				}
 			}
 		}
-		$filters_row_b=array_key_exists('filters_row_b',$map)?$map['filters_row_b']:'';
 		foreach (array($filters_row_a,$filters_row_b) as $filters_row)
 		{
 			foreach (array_keys(block_params_str_to_arr($filters_row)) as $filter_term)
 			{
 				if ($filter_term!='')
 				{
-					if ($ocselect!='') $ocselect.=',';
-					$ocselect.=$filter_term.'~<'.$block_id.'_filter_'.$filter_term.'>';
+					if ($filter_term=='usergroup')
+					{
+						$usergroup=either_param('filter_'.$block_id.'_'.$filter_term,$usergroup);
+					} else
+					{
+						if ($ocselect!='') $ocselect.=',';
+						$ocselect.=$filter_term.'~=<'.$block_id.'_'.$filter_term.'>';
+					}
 				}
 			}
 		}
@@ -145,7 +158,7 @@ class Block_main_members
 		{
 			require_code('ocselect');
 			$content_type='member';
-			list($ocselect_extra_select,$ocselect_extra_join,$ocselect_extra_where)=ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($ocselect),$content_type,'');
+			list($ocselect_extra_select,$ocselect_extra_join,$ocselect_extra_where)=ocselect_to_sql($GLOBALS['FORUM_DB'],parse_ocselect($ocselect),$content_type,'');
 			$extra_select_sql=implode('',$ocselect_extra_select);
 			$extra_join_sql=implode('',$ocselect_extra_join);
 		} else
@@ -159,7 +172,6 @@ class Block_main_members
 		$filter=array_key_exists('filter',$map)?$map['filter']:'*';
 		$where.=' AND ('.ocfilter_to_sqlfragment($filter,'id').')';
 
-		$usergroup=array_key_exists('usergroup',$map)?$map['usergroup']:'';
 		if ($usergroup!='')
 		{
 			if (is_numeric($usergroup))
@@ -229,7 +241,8 @@ class Block_main_members
 		$parent_gallery=array_key_exists('parent_gallery',$map)?$map['parent_gallery']:'';
 		if ($parent_gallery=='') $parent_gallery='%';
 
-		$per_row=array_key_exists('per_row',$map)?intval($map['per_row']):6;
+		$per_row=array_key_exists('per_row',$map)?intval($map['per_row']):0;
+		if ($per_row==0) $per_row=NULL;
 
 		inform_non_canonical_parameter($block_id.'_sort');
 		$sort=get_param($block_id.'_sort',array_key_exists('sort',$map)?$map['sort']:'m_join_time DESC');
@@ -296,16 +309,6 @@ class Block_main_members
 
 		$max_rows=$GLOBALS['FORUM_DB']->query_value_if_there($count_sql);
 
-		$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
-		if ($do_pagination)
-		{
-			require_code('templates_pagination');
-			$pagination=pagination(do_lang_tempcode('MEMBERS'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,true);
-		} else
-		{
-			$pagination=new ocp_tempcode();
-		}
-
 		$rows=$GLOBALS['FORUM_DB']->query($sql,($display_mode=='media')?($max+$start):$max,($display_mode=='media')?NULL:$start);
 		$rows=remove_duplicate_rows($rows,'id');
 
@@ -349,18 +352,19 @@ class Block_main_members
 				$galleries=$GLOBALS['SITE_DB']->query($gallery_sql);
 				foreach ($galleries as $gallery)
 				{
-					$num_images=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)',array('cat'=>$gallery['name'],'validated'=>1));
-					$num_videos=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)',array('cat'=>$gallery['name'],'validated'=>1));
+					$num_images=$GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)',array('cat'=>$gallery['name'],'validated'=>1));
+					$num_videos=$GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat'=>$gallery['name'],'validated'=>1));
 					if (($num_images>0) || ($num_videos>0))
 					{
 						if ($cnt>=$start)
 						{
 							$member_boxes[]=array(
 								'I'=>strval($cnt-$start+1),
-								'BREAK'=>(($cnt-$start+1)%$per_row==0),
+								'BREAK'=>(!is_null($per_row)) && (($cnt-$start+1)%$per_row==0),
 								'BOX'=>$box,
 								'MEMBER_ID'=>strval($member_id),
 								'GALLERY_NAME'=>$gallery['name'],
+								'GALLERY_TITLE'=>get_translated_text($gallery['fullname']),
 							);
 						}
 
@@ -370,12 +374,13 @@ class Block_main_members
 				}
 			} else
 			{
-				$member_boxes[]=array(
+				$member_boxes[$member_id]=array(
 					'I'=>strval($cnt+1),
-					'BREAK'=>(($cnt+1)%$per_row==0),
+					'BREAK'=>(!is_null($per_row)) && (($cnt+1)%$per_row==0),
 					'BOX'=>$box,
 					'MEMBER_ID'=>strval($member_id),
 					'GALLERY_NAME'=>'',
+					'GALLERY_TITLE'=>'',
 				);
 
 				$cnt++;
@@ -383,10 +388,12 @@ class Block_main_members
 			}
 		}
 
+		require_code('templates_results_table');
+
 		if (($display_mode=='listing') && (count($rows)>0))
 		{
 			$results_entries=new ocp_tempcode();
-			require_code('templates_results_table');
+
 			$_fields_title=array();
 			$_fields_title[]=(get_option('display_name_generator')=='')?do_lang_tempcode('USERNAME'):do_lang_tempcode('NAME');
 			$_fields_title[]=do_lang_tempcode('PRIMARY_GROUP');
@@ -412,6 +419,7 @@ class Block_main_members
 					'PHOTO_THUMB_URL'=>$row['m_photo_thumb_url'],
 					'VALIDATED'=>($row['m_validated']==1),
 					'CONFIRMED'=>($row['m_validated_email_confirm_code']==''),
+					'BOX'=>$member_boxes[$row['id']]['BOX'],
 				));
 
 				$member_primary_group=ocf_get_member_primary_group($row['id']);
@@ -436,9 +444,23 @@ class Block_main_members
 				$results_entries->attach(results_entry($_entry));
 			}
 			$results_table=results_table(do_lang_tempcode('MEMBERS'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,$fields_title,$results_entries,$sortables,$sortable,$sort_order,$block_id.'_sort');
+
+			$sorting=new ocp_tempcode();
 		} else
 		{
 			$results_table=new ocp_tempcode();
+
+			$do_pagination=((array_key_exists('pagination',$map)?$map['pagination']:'0')=='1');
+			if ($do_pagination)
+			{
+				require_code('templates_pagination');
+				$pagination=pagination(do_lang_tempcode('MEMBERS'),$start,$block_id.'_start',$max,$block_id.'_max',$max_rows,true);
+			} else
+			{
+				$pagination=new ocp_tempcode();
+			}
+
+			$sorting=results_sorter($sortables,$sortable,$sort_order,$block_id.'_sort');
 		}
 
 		$_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false);
@@ -488,15 +510,16 @@ class Block_main_members
 			'SORT_ORDER'=>$sort_order,
 			'FILTERS_ROW_A'=>$filters_row_a,
 			'FILTERS_ROW_B'=>$filters_row_b,
-			'ITEM_WIDTH'=>float_to_raw_string(floor(100.0*100.0/floatval($per_row))/100.0).'%',
-			'PER_ROW'=>strval($per_row),
+			'ITEM_WIDTH'=>is_null($per_row)?'':float_to_raw_string(floor(100.0*100.0/floatval($per_row))/100.0).'%',
+			'PER_ROW'=>is_null($per_row)?'':strval($per_row),
 			'DISPLAY_MODE'=>$display_mode,
 			'MEMBER_BOXES'=>$member_boxes,
-			'PAGINATION'=>$pagination,
+			'PAGINATION'=>new ocp_tempcode(),
 			'RESULTS_TABLE'=>$results_table,
 			'USERGROUPS'=>$usergroups,
 			'SYMBOLS'=>$symbols,
 			'HAS_ACTIVE_FILTER'=>$has_active_filter,
+			'SORT'=>$sorting,
 		));
 	}
 

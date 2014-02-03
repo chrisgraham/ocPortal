@@ -213,9 +213,9 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	float: right;
 	text-align: right;
 	width: 120px;
-	height: 100px;
-	position: relative;
-	top: 10px;
+	height: 50px;
+	margin-top: 10px;
+	margin-right: 10px;
 }
 .innocuous_fieldset .preview img {
 	border: 1px solid {$GET,pale_border};
@@ -323,7 +323,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 }
 
 .various_ticks .input_individual_tick, .various_ticks .input_other_tick {
-	padding: 1em; /* Designed to make it fill whole box, i.e. equalise against the th's (to the left) height */
+	padding: 1em 1em 1em 0.5em; /* Designed to make it fill whole box, i.e. equalise against the th's (to the left) height */
 	float: {!en_left};
 	font-size: 0.9em;
 	vertical-align: middle;

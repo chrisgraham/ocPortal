@@ -162,7 +162,8 @@ function db_encode_like($pattern)
 	if ($GLOBALS['DEV_MODE'])
 	{
 		require_code('database_security_filter');
-		$GLOBALS['DB_ESCAPE_STRING_LIST'][trim($GLOBALS['DB_STATIC_OBJECT']->db_escape_string($pattern),' %')]=true;
+		$GLOBALS['DB_ESCAPE_STRING_LIST'][$GLOBALS['DB_STATIC_OBJECT']->db_encode_like($pattern)]=true;
+		$GLOBALS['DB_ESCAPE_STRING_LIST'][trim($GLOBALS['DB_STATIC_OBJECT']->db_encode_like($pattern),' %')]=true;
 	}
 
 	return $GLOBALS['DB_STATIC_OBJECT']->db_encode_like($pattern);

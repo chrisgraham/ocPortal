@@ -123,7 +123,7 @@ function update_ajax_member_list_response(result,list_contents)
 		item.value=list_contents.childNodes[i].getAttribute('value');
 		displaytext=item.value;
 		if (list_contents.childNodes[i].getAttribute('displayname')!='')
-			displaytext+=' ('+list_contents.childNodes[i].getAttribute('displayname')+')';
+			displaytext=list_contents.childNodes[i].getAttribute('displayname');
 		item.text=displaytext;
 		item.innerText=displaytext;
 		list.appendChild(item);

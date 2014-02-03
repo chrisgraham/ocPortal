@@ -348,7 +348,7 @@ function closure_loop($param,$args,$main_function)
 	if (isset($param[0]))
 	{
 		$array_key=$param[0];
-		if ((is_numeric($array_key)) || (strpos($array_key,',')!==false))
+		if ((is_numeric($array_key)) || (strpos($array_key,',')!==false) || (strpos($array_key,'=')!==false))
 		{
 			$array=array();
 			foreach (explode(',',$array_key) as $x)

@@ -7,41 +7,41 @@
 {$REQUIRE_JAVASCRIPT,javascript_ajax}
 {$REQUIRE_JAVASCRIPT,javascript_ajax_people_lists}
 
-<div class="box advanced_member_search"><div class="box_inner">
-	<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}" target="_self" method="get">
-		{$HIDDENS_FOR_GET_FORM,{$SELF_URL},{BLOCK_ID}_start,{BLOCK_ID}_max,{BLOCK_ID}_sort,{BLOCK_ID}_filter_*}
+{+START,IF_NON_EMPTY,{FILTERS_ROW_A}{FILTERS_ROW_B}}
+	<div class="box advanced_member_search"><div class="box_inner">
+		<form title="{!SEARCH}" action="{$URL_FOR_GET_FORM*,{$SELF_URL}}" target="_self" method="get">
+			{$HIDDENS_FOR_GET_FORM,{$SELF_URL},{BLOCK_ID}_start,{BLOCK_ID}_max,{BLOCK_ID}_sort,{BLOCK_ID}_filter_*}
 
-		{+START,SET,active_filter}{+START,LOOP,{FILTERS_ROW_A}\,{FILTERS_ROW_B}}{_loop_key}{$?,{$IS_EMPTY,{$CPF_LIST,{_loop_var}}},~=,=}<{$FIX_ID,{_loop_key}}>,{+END}{+END}
+			<div class="search_fields float_surrounder">
+				<div class="search_button">
+					<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__filter button_screen_item" type="submit" value="{!FILTER}" />
+				</div>
 
-		<div class="search_fields float_surrounder">
-			<div class="search_button">
-				<input onclick="disable_button_just_clicked(this);" accesskey="u" class="buttons__filter button_screen_item" type="submit" value="{!FILTER}" />
+				{+START,LOOP,{FILTERS_ROW_A}}
+					{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
+						NAME={$FIX_ID,{_loop_key}}
+						LABEL={_loop_var}
+					{+END}
+				{+END}
 			</div>
 
-			{+START,LOOP,{FILTERS_ROW_A}}
-				{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
-					NAME={$FIX_ID,{_loop_key}}
-					LABEL={_loop_var}
-				{+END}
-			{+END}
-		</div>
+			{+START,IF_NON_EMPTY,{FILTERS_ROW_B}}
+				<div class="search_fields float_surrounder">
+					<div class="search_button">
+						<input onclick="window.location.href='{$PAGE_LINK;*,_SELF:_SELF}';" class="buttons__clear button_screen_item" type="button" value="{!RESET_FILTER}" />
+					</div>
 
-		<div class="search_fields float_surrounder">
-			{+START,IF_NON_EMPTY,{$_GET,active_filter}}
-				<div class="search_button">
-					<input onclick="window.location.href='{$PAGE_LINK;*,_SELF:_SELF}';" class="buttons__clear button_screen_item" type="button" value="{!RESET_FILTER}" />
+					{+START,LOOP,{FILTERS_ROW_B}}
+						{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
+							NAME={$FIX_ID,{_loop_key}}
+							LABEL={_loop_var}
+						{+END}
+					{+END}
 				</div>
 			{+END}
-
-			{+START,LOOP,{FILTERS_ROW_B}}
-				{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
-					NAME={$FIX_ID,{_loop_key}}
-					LABEL={_loop_var}
-				{+END}
-			{+END}
-		</div>
-	</form>
-</div></div>
+		</form>
+	</div></div>
+{+END}
 
 {+START,IF,{$NOT,{HAS_ACTIVE_FILTER}}}
 	{+START,IF_NON_EMPTY,{MEMBER_BOXES}}
@@ -49,7 +49,7 @@
 	{+END}
 
 	{+START,IF_EMPTY,{MEMBER_BOXES}}
-		<p class="nothing_here">{!MEMBER_DIRECTORY_UNFILTERED_NO_RESULTS,{$SITE_NAME*}}</p>
+		<p class="nothing_here">{$?,{$EQ,{DISPLAY_MODE},media},{!MEMBER_DIRECTORY_UNFILTERED_NO_RESULTS_GALLERIES,{$SITE_NAME*}},{!MEMBER_DIRECTORY_UNFILTERED_NO_RESULTS,{$SITE_NAME*}}}</p>
 	{+END}
 {+END}
 {+START,IF,{HAS_ACTIVE_FILTER}}
@@ -67,9 +67,17 @@
 	<div class="block_main_members block_main_members__{DISPLAY_MODE%} float_surrounder">
 		{+START,LOOP,MEMBER_BOXES}
 			{+START,IF,{$EQ,{DISPLAY_MODE},avatars,photos}}
-				<div style="{ITEM_WIDTH*}" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX;^*}','auto');">
+				<div{+START,IF_NON_EMPTY,{ITEM_WIDTH}} style="width: {ITEM_WIDTH*}"{+END} onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX;^*}','auto');">
 					<p>
-						<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img alt="" src="{$?*,{$EQ,{DISPLAY_MODE},avatars},{$AVATAR,{MEMBER_ID}},{$PHOTO,{MEMBER_ID}}}"></a>
+						{+START,IF,{$EQ,{DISPLAY_MODE},avatars}}
+							{$SET,image,{$THUMBNAIL,{$?,{$IS_EMPTY,{$AVATAR,{MEMBER_ID}}},{$IMG,ocf_default_avatars/default},{$AVATAR,{MEMBER_ID}}},80x80,,,,pad,both,FFFFFF00}}
+						{+END}
+
+						{+START,IF,{$EQ,{DISPLAY_MODE},photos}}
+							{$SET,image,{$THUMBNAIL,{$?,{$IS_EMPTY,{$PHOTO,{MEMBER_ID}}},{$IMG,no_image},{$PHOTO,{MEMBER_ID}}},{$CONFIG_OPTION,thumb_width}x{$CONFIG_OPTION,thumb_width},,,,pad,both,FFFFFF00}}
+						{+END}
+
+						<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}"><img alt="" src="{$GET*,image}"></a>
 					</p>
 
 					<p>
@@ -83,14 +91,18 @@
 			{+END}
 
 			{+START,IF,{$EQ,{DISPLAY_MODE},media}}
-				<div style="{ITEM_WIDTH*}" class="image_fader_item" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX;^*}','auto');">
+				<div{+START,IF_NON_EMPTY,{ITEM_WIDTH}} style="width: {ITEM_WIDTH*}"{+END} class="image_fader_item">
 					{+START,NO_PREPROCESSING}
 						<div class="box"><div class="box_inner">
-							<h3>{$USERNAME*,{MEMBER_ID}}</h3>
+							<h3>{GALLERY_TITLE*}</h3>
 
 							{$BLOCK,block=main_image_fader,param={GALLERY_NAME}}
 
-							<a href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}" onfocus="this.parentNode.onmouseover(event);" onblur="this.parentNode.onmouseout(event);">{$USERNAME*,{MEMBER_ID}}</a>
+							<ul class="horizontal_links associated_links_block_group">
+								<li>
+									<a onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{BOX;^*}','auto');" href="{$MEMBER_PROFILE_URL*,{MEMBER_ID}}" onfocus="this.parentNode.onmouseover(event);" onblur="this.parentNode.onmouseout(event);">{$USERNAME*,{MEMBER_ID}}</a>
+								</li>
+							</ul>
 						</div></div>
 					{+END}
 				</div>
@@ -101,9 +113,9 @@
 			{+END}
 
 			{+START,IF,{$EQ,{DISPLAY_MODE},boxes}}
-				<div style="{ITEM_WIDTH*}">
+				<div{+START,IF_NON_EMPTY,{ITEM_WIDTH}} style="width: {ITEM_WIDTH*}"{+END} class="box"><div class="box_inner">
 					{BOX}
-				</div>
+				</div></div>
 
 				{+START,IF,{BREAK}}
 					<br />
@@ -112,12 +124,18 @@
 		{+END}
 	</div>
 	{$SET,fancy_screen,0}
+
+	<div class="box results_table_under"><div class="box_inner float_surrounder">
+		{+START,IF_NON_EMPTY,{SORT}}
+			<div class="results_table_sorter">
+				{SORT}
+			</div>
+		{+END}
+
+		{PAGINATION}
+	</div></div>
 {+END}
 
 {+START,IF,{$EQ,{DISPLAY_MODE},listing}}
 	{RESULTS_TABLE}
 {+END}
-
-<div class="float_surrounder">
-	{PAGINATION}
-</div>

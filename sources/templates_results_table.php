@@ -73,35 +73,7 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 	// Sorting
 	if (!is_null($sortables))
 	{
-		$selectors=new ocp_tempcode();
-		foreach ($sortables as $_sortable=>$text)
-		{
-			$text_ascending=new ocp_tempcode();
-			$text_ascending->attach($text);
-			if ($_sortable!='random')
-				$text_ascending->attach(do_lang_tempcode('_ASCENDING'));
-			$text_descending=new ocp_tempcode();
-			$text_descending->attach($text);
-			$text_descending->attach(do_lang_tempcode('_DESCENDING'));
-			$selector_value=$_sortable.' ASC';
-			$selected=(($sortable.' '.$sort_order)==$selector_value);
-			$selectors->attach(do_template('PAGINATION_SORTER',array('_GUID'=>'6a57bbaeed04743ba2cafa2d262a1c98','SELECTED'=>$selected,'NAME'=>$text_ascending,'VALUE'=>$selector_value)));
-			$selector_value=$_sortable.' DESC';
-			if ($_sortable!='random')
-			{
-				$selected=(($sortable.' '.$sort_order)==$selector_value);
-				$selectors->attach(do_template('PAGINATION_SORTER',array('_GUID'=>'bbf97817fa4f5e744a414b303a3d21fe','SELECTED'=>$selected,'NAME'=>$text_descending,'VALUE'=>$selector_value)));
-			}
-		}
-		$sort_url=get_self_url();
-		if ($selectors->is_empty())
-		{
-			$sort=new ocp_tempcode();
-		} else
-		{
-			$sort=do_template('PAGINATION_SORT',array('_GUID'=>'4afa1bae0f447b68e60192c515b13ca2','HASH'=>$hash,'SORT'=>$sort_name,'URL'=>$sort_url,'SELECTORS'=>$selectors));
-		}
-		$GLOBALS['INCREMENTAL_ID_GENERATOR']++;
+		$sort=results_sorter($sortables,$sortable,$sort_order,$sort_name,$hash);
 	} else $sort=new ocp_tempcode();
 
 	// Pagination
@@ -123,6 +95,51 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
 		false,
 		'RESULTS_TABLE'
 	);
+}
+
+/**
+ * Get the tempcode for a results sorter.
+ *
+ * @param  ?array			A map of sortable code (usually, db field names), to strings giving the human name for the sort order (NULL: no sortables)
+ * @param  ?ID_TEXT		The current sortable (NULL: none)
+ * @param  ?ID_TEXT		The order we are sorting in (NULL: none)
+ * @set    ASC DESC
+ * @param  ?ID_TEXT		The parameter name used to store our sortable (usually 'sort') (NULL: none)
+ * @param  ?ID_TEXT		URL hash component (NULL: none)
+ * @return tempcode		The results sorter
+ */
+function results_sorter($sortables,$sortable=NULL,$sort_order=NULL,$sort_name='sort',$hash='')
+{
+	$selectors=new ocp_tempcode();
+	foreach ($sortables as $_sortable=>$text)
+	{
+		$text_ascending=new ocp_tempcode();
+		$text_ascending->attach($text);
+		if ($_sortable!='random')
+			$text_ascending->attach(do_lang_tempcode('_ASCENDING'));
+		$text_descending=new ocp_tempcode();
+		$text_descending->attach($text);
+		$text_descending->attach(do_lang_tempcode('_DESCENDING'));
+		$selector_value=$_sortable.' ASC';
+		$selected=(($sortable.' '.$sort_order)==$selector_value);
+		$selectors->attach(do_template('PAGINATION_SORTER',array('_GUID'=>'6a57bbaeed04743ba2cafa2d262a1c98','SELECTED'=>$selected,'NAME'=>$text_ascending,'VALUE'=>$selector_value)));
+		$selector_value=$_sortable.' DESC';
+		if ($_sortable!='random')
+		{
+			$selected=(($sortable.' '.$sort_order)==$selector_value);
+			$selectors->attach(do_template('PAGINATION_SORTER',array('_GUID'=>'bbf97817fa4f5e744a414b303a3d21fe','SELECTED'=>$selected,'NAME'=>$text_descending,'VALUE'=>$selector_value)));
+		}
+	}
+	$sort_url=get_self_url(false,false,array($sort_name=>NULL));
+	if ($selectors->is_empty())
+	{
+		$sort=new ocp_tempcode();
+	} else
+	{
+		$sort=do_template('PAGINATION_SORT',array('_GUID'=>'4afa1bae0f447b68e60192c515b13ca2','HASH'=>$hash,'SORT'=>$sort_name,'URL'=>$sort_url,'SELECTORS'=>$selectors));
+	}
+	$GLOBALS['INCREMENTAL_ID_GENERATOR']++;
+	return $sort;
 }
 
 /**

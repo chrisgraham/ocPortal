@@ -809,10 +809,10 @@ class Hook_addon_registry_core_ocf
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__ocf_member_directory_screen_filter()
+	function tpl_preview__ocf_member_directory_username()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN_FILTER',array(
+			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_USERNAME',array(
 				'ID'=>placeholder_id(),
 				'USERNAME'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
@@ -820,6 +820,7 @@ class Hook_addon_registry_core_ocf
 				'PHOTO_THUMB_URL'=>placeholder_image_url(),
 				'VALIDATED'=>true,
 				'CONFIRMED'=>true,
+				'BOX'=>lorem_paragraph_html(),
 			)),NULL,'',true)
 		);
 	}
@@ -834,7 +835,7 @@ class Hook_addon_registry_core_ocf
 	function tpl_preview__ocf_member_directory_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN_FILTER',array(
+			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN',array(
 				'TITLE'=>lorem_title(),
 			)),NULL,'',true)
 		);
@@ -878,6 +879,7 @@ class Hook_addon_registry_core_ocf
 				'BOX'=>$box,
 				'MEMBER_ID'=>placeholder_id(),
 				'GALLERY_NAME'=>'',
+				'GALLERY_TITLE'=>'',
 			),
 		);
 
@@ -917,6 +919,7 @@ class Hook_addon_registry_core_ocf
 				'USERGROUPS'=>$usergroups,
 				'SYMBOLS'=>$symbols,
 				'HAS_ACTIVE_FILTER'=>true,
+				'SORT'=>'',
 			)),NULL,'',true)
 		);
 	}

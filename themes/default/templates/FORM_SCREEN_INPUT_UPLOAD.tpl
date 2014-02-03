@@ -1,4 +1,4 @@
-<div class="vertical_alignment">
+<div class="vertical_alignment inline_block">
 	<input tabindex="{TABINDEX*}" class="input_upload{REQUIRED*}" type="file" id="{NAME*}" name="{NAME*}" />
 	{+START,IF,{EDIT}}
 		<input type="checkbox" id="i_{NAME*}_unlink" name="{NAME*}_unlink" value="1" />

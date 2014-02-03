@@ -194,7 +194,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 				'list',
 				$field_name,
 				$field_title,
-				post_param('filter_'.$field_name,'~='),
+				either_param('filter_'.$field_name,'~='),
 				array(
 					'<'=>do_lang_tempcode('OCSELECT_OP_LT'),
 					'>'=>do_lang_tempcode('OCSELECT_OP_GT'),
@@ -959,15 +959,6 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 							$alt.='(';
 							if ($is_join)
 							{
-								$alt.=$filter_key.' LIKE \''.db_encode_like($it_value.',%').'\'';
-								$alt.=' OR ';
-								$alt.=$filter_key.' LIKE \''.db_encode_like('%,'.$it_value).'\'';
-								$alt.=' OR ';
-								$alt.=$filter_key.' LIKE \''.db_encode_like('%,'.$it_value.',%').'\'';
-								$alt.=' OR ';
-								$alt.=db_string_equal_to($filter_key,$it_value);
-							} else
-							{
 								$alt.=$filter_key.' LIKE CONCAT('.$it_value.',\',%\')';
 								$alt.=' OR ';
 								$alt.=$filter_key.' LIKE CONCAT(\'%,\','.$it_value.')';
@@ -975,6 +966,15 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 								$alt.=$filter_key.' LIKE CONCAT(\'%,\','.$it_value.',\',%\')';
 								$alt.=' OR ';
 								$alt.=$filter_key.'='.$it_value;
+							} else
+							{
+								$alt.=$filter_key.' LIKE \''.db_encode_like($it_value.',%').'\'';
+								$alt.=' OR ';
+								$alt.=$filter_key.' LIKE \''.db_encode_like('%,'.$it_value).'\'';
+								$alt.=' OR ';
+								$alt.=$filter_key.' LIKE \''.db_encode_like('%,'.$it_value.',%').'\'';
+								$alt.=' OR ';
+								$alt.=db_string_equal_to($filter_key,$it_value);
 							}
 							$alt.=')';
 						}
@@ -992,10 +992,10 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 							if ($it_id!=0) $alt.=' OR ';
 							if ($is_join)
 							{
-								$alt.=$filter_key.' LIKE \''.db_encode_like('%'.$it_value.'%').'\'';
+								$alt.=$filter_key.' LIKE CONCAT(\'%\','.$it_value.',\'%\')';
 							} else
 							{
-								$alt.=$filter_key.' LIKE CONCAT(\'%\','.$it_value.',\'%\')';
+								$alt.=$filter_key.' LIKE \''.db_encode_like('%'.$it_value.'%').'\'';
 							}
 						}
 						$alt.=')';

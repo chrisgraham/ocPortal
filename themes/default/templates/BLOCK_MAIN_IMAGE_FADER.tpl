@@ -19,9 +19,10 @@
 					</div>
 				</div>
 
-				<h2>{!MEDIA}</h2>
+				<h2 id="image_fader_title_{$GET,RAND}">{!MEDIA}</h2>
 
 				<div class="gallery_tease_pic_teaser" id="image_fader_scrolling_text_{$GET,RAND}">
+					<span aria-busy="true"><img id="loading_image" alt="" src="{$IMG*,loading}" /></span>
 				</div>
 			</div>
 		</div></div>
@@ -38,6 +39,7 @@
 	add_event_listener_abstract(window,'load',function () {
 		var fp_animation=document.getElementById('image_fader_{$GET,RAND}');
 		var fp_animation_fader=document.createElement('img');
+		var tease_title=document.getElementById('image_fader_title_{$GET,RAND}');
 		var tease_scrolling_text=document.getElementById('image_fader_scrolling_text_{$GET,RAND}');
 		fp_animation_fader.className='img_thumb';
 		fp_animation.parentNode.insertBefore(fp_animation_fader,fp_animation);
@@ -46,10 +48,16 @@
 		fp_animation_fader.style.position='absolute';
 		fp_animation_fader.src='{$IMG;,blank}';
 
+		{+START,LOOP,TITLES}
+			var title{_loop_key%}='{_loop_var;^}';
+			{+START,IF,{$EQ,{_loop_key},0}}
+				if (tease_scrolling_text) set_inner_html(tease_title,title{_loop_key%});
+			{+END}
+		{+END}
 		{+START,LOOP,HTML}
 			var html{_loop_key%}='{_loop_var;^}';
 			{+START,IF,{$EQ,{_loop_key},0}}
-				if (tease_scrolling_text) set_inner_html(tease_scrolling_text,html{_loop_key%});
+				if (tease_scrolling_text) set_inner_html((tease_scrolling_text,html{_loop_key%}=='')?'{!MEDIA;}':tease_scrolling_text,html{_loop_key%});
 			{+END}
 		{+END}
 		{+START,LOOP,IMAGES}

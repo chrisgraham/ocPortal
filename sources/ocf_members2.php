@@ -107,7 +107,13 @@ function render_member_box($poster_details,$preview=false,$hooks=NULL,$hook_obje
 		$primary_group=ocf_get_member_primary_group($poster_details);
 		if (is_null($primary_group)) return new ocp_tempcode();
 		require_code('ocf_groups');
-		$poster_details=array('poster'=>$poster_details,'poster_posts'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_cache_num_posts'),'poster_join_date'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time'),'poster_join_date_string'=>get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time')),'primary_group_name'=>ocf_get_group_name($primary_group));
+		$poster_details=array(
+			'poster'=>$poster_details,
+			'poster_posts'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_cache_num_posts'),
+			'poster_join_date'=>$GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time'),
+			'poster_join_date_string'=>get_timezoned_date($GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details,'m_join_time'),false),
+			'primary_group_name'=>ocf_get_group_name($primary_group),
+		);
 		$poster_details['custom_fields']=ocf_get_all_custom_fields_match_member(
 			$poster_details['poster'],
 			((get_member()!=$poster_details['poster']) && (!has_privilege(get_member(),'view_any_profile_field')))?1:NULL, // public view
