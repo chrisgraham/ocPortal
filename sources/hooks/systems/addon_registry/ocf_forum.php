@@ -1693,7 +1693,6 @@ class Hook_addon_registry_ocf_forum
 				'NAME'=>lorem_phrase(),
 				'VALUE'=>placeholder_ip()
 			));
-
 			$poster_details=do_lorem_template('OCF_GUEST_DETAILS',array(
 				'CUSTOM_FIELDS'=>$custom_fields
 			));

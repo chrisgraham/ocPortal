@@ -279,6 +279,9 @@ function install_ocf($upgrade_from=NULL)
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{
+		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_profile_views','UINTEGER');
+		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_total_sessions','UINTEGER');
+
 		if (strpos(get_db_type(),'mysql')!==false)
 		{
 			$GLOBALS['FORUM_DB']->query('ALTER TABLE '.get_table_prefix().'f_poll_votes ADD COLUMN id int NOT NULL AUTO_INCREMENT, DROP PRIMARY KEY, ADD PRIMARY KEY (id)');
@@ -437,7 +440,9 @@ function install_ocf($upgrade_from=NULL)
 			'm_max_email_attach_size_mb'=>'INTEGER',
 			'm_password_change_code'=>'SHORT_TEXT',
 			'm_password_compat_scheme'=>'ID_TEXT',
-			'm_on_probation_until'=>'?TIME'
+			'm_on_probation_until'=>'?TIME',
+			'm_profile_views'=>'UINTEGER',
+			'm_total_sessions'=>'UINTEGER',
 		));
 		$GLOBALS['FORUM_DB']->create_index('f_members','#search_user',array('m_username'));
 		$GLOBALS['FORUM_DB']->create_index('f_members','user_list',array('m_username'));

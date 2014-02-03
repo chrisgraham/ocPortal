@@ -304,7 +304,6 @@ We also have the following which are either unlikely to be useful, or potentiall
  - Performance tuning (positive) [not official options as will break normal expectations of how the system will behave / complicate things]
   - [tt]lots_of_data_in_*[/tt] -- set this to '1', with '*' replaced with a database table name, if you want the ocFilter mechanism to work with recursive db lookups rather than one huge flat lookup
   - [tt]disable_cat_cat_perms[/tt] -- set this to '1' if you want to disable catalogue category permissions
-  - [tt]max_rows_to_preload[/tt] -- set this to the number of rows the search system may load up, to get optimum sorting and result summarisation. Default is 500. Each record usually takes around 3kb
   - [tt]catalogue_limit_cat_field_load__<cataloguename>[/tt] -- set this to '1' if you want that catalogue to not have all fields loaded on category views, an optimisation that reduces templating flexibility
   - [tt]no_catalogue_field_assembly[/tt] -- set this to '1' if you want catalogue entries to be 100% hand-templated; removing this will improve performance but remove pre-assembly
   - [tt]no_catalogue_field_assembly_fieldmaps[/tt] -- see above, but only if fieldmap assembly not required

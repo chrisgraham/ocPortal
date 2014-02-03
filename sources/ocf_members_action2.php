@@ -1012,6 +1012,8 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		require_code('resource_fs');
 		generate_resourcefs_moniker('member',strval($member_id));
 	}
+
+	decache('main_members');
 }
 
 /**
@@ -1087,6 +1089,8 @@ function ocf_delete_member($member_id)
 		require_code('resource_fs');
 		expunge_resourcefs_moniker('member',strval($member_id));
 	}
+
+	decache('main_members');
 }
 
 /**
@@ -1108,6 +1112,8 @@ function ocf_ban_member($member_id)
 
 	$mail=do_lang('BAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
 	mail_wrap(do_lang('BAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$join_time);
+
+	decache('main_members');
 }
 
 /**
@@ -1129,6 +1135,8 @@ function ocf_unban_member($member_id)
 
 	$mail=do_lang('UNBAN_MEMBER_MAIL',$username,get_site_name(),array(),get_lang($member_id));
 	mail_wrap(do_lang('UNBAN_MEMBER_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($email_address),$username,'','',2,NULL,false,NULL,false,false,false,'MAIL',false,NULL,NULL,$join_time);
+
+	decache('main_members');
 }
 
 /**
@@ -1202,6 +1210,8 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 	}
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
+
+	decache('main_members');
 }
 
 /**
@@ -1237,6 +1247,8 @@ function ocf_delete_custom_field($id)
 		require_code('resource_fs');
 		expunge_resourcefs_moniker('cpf',strval($id));
 	}
+
+	decache('main_members');
 }
 
 /**
@@ -1328,6 +1340,8 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$change,array('mf_member_id'=>$member_id),'',1);
 		return $change;
 	}
+
+	decache('main_members');
 
 	return NULL;
 }
@@ -1486,6 +1500,8 @@ function ocf_member_choose_title($new_title,$member_id=NULL)
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
+
+	decache('main_members');
 }
 
 /**
@@ -1611,6 +1627,8 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 
 	decache('main_friends_list');
+
+	decache('main_members');
 }
 
 /**
@@ -1664,6 +1682,8 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	if (((get_base_url()!=get_forum_base_url()) || ((array_key_exists('on_msn',$GLOBALS['SITE_INFO'])) && ($GLOBALS['SITE_INFO']['on_msn']=='1'))) && ($urls[1]!='') && (url_is_local($urls[1]))) $urls[1]=get_base_url().'/'.$urls[1];
 
 	ocf_member_choose_photo_concrete($urls[0],$urls[1],$member_id);
+
+	decache('main_members');
 }
 
 /**
@@ -1722,6 +1742,8 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
 	unset($GLOBALS['MEMBER_CACHE_FIELD_MAPPINGS'][$member_id]);
 
 	decache('main_friends_list');
+
+	decache('main_members');
 }
 
 /**

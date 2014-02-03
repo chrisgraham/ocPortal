@@ -1,0 +1,54 @@
+/*
+ {$BRAND_NAME`}
+ Copyright (c) ocProducts, 2004-2014
+*/
+
+/*
+=========================
+======Post history=======
+=========================
+*/
+
+.ocf_post_history_header {
+	margin-top: 1em;
+	text-align: {!en_left} !important;
+}
+
+.ocf_post_history_header span {
+	color: {$GET,box_title_text};
+}
+
+.ocf_history_post_meta {
+}
+
+.ocf_history_post_meta .field_name {
+	display: block;
+}
+
+.ocf_history_post_head {
+	font-style: italic;
+	margin-top: 0;
+}
+
+h2.ocf_post_history_header {
+	color: {$GET,slightly_seeded_text};
+}
+
+.ocf_history_post_links {
+	text-align: {!en_right};
+	padding: 0.5em;
+	font-style: italic;
+}
+
+.ocf_history_post_buttons {
+	padding-bottom: 1.5em !important;
+}
+
+.ocf_history_post {
+	width: 62%;
+}
+
+.ocf_history_post textarea {
+	border: 0;
+	padding-{!en_left}: 1em;
+}

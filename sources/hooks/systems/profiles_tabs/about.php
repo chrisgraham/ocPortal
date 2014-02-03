@@ -46,6 +46,9 @@ class Hook_Profiles_Tabs_about
 
 		$order=10;
 
+		if (!$GLOBALS['FORUM_DB']->table_is_locked('f_members'))
+			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_profile_views=m_profile_views+1 WHERE id='.strval($member),'',1);
+
 		$privacy_ok=true;
 		if (addon_installed('content_privacy'))
 		{

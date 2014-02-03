@@ -559,9 +559,9 @@ function ensure_true_id(element,field_name) // Works around IE bug
 	return element;
 }
 
-function is_wysiwyg_field(theElement)
+function is_wysiwyg_field(the_element)
 {
-	return ((typeof window.wysiwyg_editors!='undefined') && (theElement.id!='length') && (typeof wysiwyg_editors[theElement.id]!='undefined'));
+	return ((typeof window.wysiwyg_editors!='undefined') && (the_element.id!='length') && (typeof wysiwyg_editors[the_element.id]=='object'));
 }
 
 function get_textbox(element)

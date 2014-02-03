@@ -119,7 +119,11 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 			'the_id'=>substr(either_param('id',''),0,80),
 		);
 		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) // Better to have no session than a 5+ second loading page
+		{
 			$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row,false,true);
+			if ((get_forum_type()=='ocf') && (!$GLOBALS['FORUM_DB']->table_is_locked('f_members')))
+				$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_total_sessions=m_total_sessions+1 WHERE id='.strval($member),1,NULL,true);
+		}
 
 		$SESSION_CACHE[$new_session]=$new_session_row;
 

@@ -53,4 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$GLOBALS['FORUM_DB']->add_table_field('f_members','m_profile_views','UINTEGER');
+	$GLOBALS['FORUM_DB']->add_table_field('f_members','m_total_sessions','UINTEGER');
 }

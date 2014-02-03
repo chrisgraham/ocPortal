@@ -397,6 +397,16 @@ class Hook_addon_registry_core_ocf
 			'sources/hooks/systems/tasks/download_member_csv.php',
 			'sources/hooks/systems/tasks/ocf_members_recache.php',
 			'sources/hooks/systems/tasks/import_member_csv.php',
+			'sources/blocks/main_members.php',
+			'themes/default/templates/BLOCK_MAIN_MEMBERS.tpl',
+			'themes/default/templates/OCF_MEMBER_DIRECTORY_SCREEN_FILTER.tpl',
+			'themes/default/templates/OCF_MEMBER_DIRECTORY_USERNAME.tpl',
+			'sources/hooks/systems/symbols/CPF_LIST.php',
+			'themes/default/css/ocf_member_profiles.css',
+			'themes/default/css/ocf_member_directory.css',
+			'themes/default/css/ocf_admin.css',
+			'themes/default/css/ocf_header.css',
+			'themes/default/css/ocf_footer.css',
 		);
 	}
 
@@ -428,7 +438,10 @@ class Hook_addon_registry_core_ocf
 			'OCF_VIEW_GROUP_MEMBER.tpl'=>'ocf_view_group_screen',
 			'OCF_VIEW_GROUP_MEMBER_PROSPECTIVE.tpl'=>'ocf_view_group_screen',
 			'OCF_VIEW_GROUP_MEMBER_SECONDARY.tpl'=>'ocf_view_group_screen',
-			'OCF_VIEW_GROUP_SCREEN.tpl'=>'ocf_view_group_screen'
+			'OCF_VIEW_GROUP_SCREEN.tpl'=>'ocf_view_group_screen',
+			'BLOCK_MAIN_MEMBERS.tpl'=>'block_main_members',
+			'OCF_MEMBER_DIRECTORY_SCREEN_FILTER.tpl'=>'ocf_member_directory_screen_filter',
+			'OCF_MEMBER_DIRECTORY_USERNAME.tpl'=>'ocf_member_directory_username',
 		);
 	}
 
@@ -778,34 +791,132 @@ class Hook_addon_registry_core_ocf
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
+	function tpl_preview__ocf_member_directory_screen_filter()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN_FILTER',array(
+				'NAME'=>lorem_word(),
+				'LABEL'=>lorem_phrase(),
+				'BLOCK_ID'=>'',
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__ocf_member_directory_screen_filter()
+	{
+		return array(
+			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN_FILTER',array(
+				'ID'=>placeholder_id(),
+				'USERNAME'=>lorem_phrase(),
+				'URL'=>placeholder_url(),
+				'AVATAR_URL'=>placeholder_image_url(),
+				'PHOTO_THUMB_URL'=>placeholder_image_url(),
+				'VALIDATED'=>true,
+				'CONFIRMED'=>true,
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
 	function tpl_preview__ocf_member_directory_screen()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN',array(
-				'USERGROUPS'=>lorem_phrase(),
-				'HIDDEN'=>'',
-				'MAX'=>'30',
-				'SYMBOLS'=>array(
-					array(
-						'START'=>'0',
-						'SYMBOL'=>'a'
-					),
-					array(
-						'START'=>'1',
-						'SYMBOL'=>'b'
-					),
-					array(
-						'START'=>'3',
-						'SYMBOL'=>'c'
-					)
-				),
-				'SEARCH'=>lorem_phrase(),
-				'GET_URL'=>placeholder_url(),
+			lorem_globalise(do_lorem_template('OCF_MEMBER_DIRECTORY_SCREEN_FILTER',array(
 				'TITLE'=>lorem_title(),
-				'OTHER_IDS'=>placeholder_array(),
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__block_main_members()
+	{
+		$custom_fields=do_lorem_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array(
+			'NAME'=>lorem_phrase(),
+			'VALUE'=>placeholder_ip()
+		));
+		$poster_details=do_lorem_template('OCF_GUEST_DETAILS',array(
+			'CUSTOM_FIELDS'=>$custom_fields
+		));
+		$box=do_lorem_template('OCF_MEMBER_BOX',array(
+			'AVATAR_URL'=>placeholder_image_url(),
+			'ONLINE'=>false,
+			'POSTS'=>placeholder_number(),
+			'POINTS'=>placeholder_number(),
+			'JOIN_DATE_RAW'=>placeholder_date_raw(),
+			'MEMBER_ID'=>placeholder_id(),
+			'JOIN_DATE'=>placeholder_time(),
+			'PRIMARY_GROUP_NAME'=>lorem_phrase(),
+			'CUSTOM_FIELDS'=>lorem_phrase(),
+			'CUSTOM_FIELDS_FULL'=>lorem_phrase(),
+			'GIVE_CONTEXT'=>false,
+		));
+
+		$member_boxes=array();
+		$member_boxes[]=array(
+			array(
+				'I'=>'0',
+				'BREAK'=>false,
+				'BOX'=>$box,
+				'MEMBER_ID'=>placeholder_id(),
+				'GALLERY_NAME'=>'',
+			),
+		);
+
+		$per_row=6;
+
+		$usergroups=array();
+		$usergroups[placeholder_id()]=array('USERGROUP'=>lorem_phrase(),'NUM'=>strval(placeholder_number()));
+
+		$symbols=array(
+			array(
+				'START'=>'0',
+				'SYMBOL'=>'a'
+			),
+			array(
+				'START'=>'1',
+				'SYMBOL'=>'b'
+			),
+			array(
+				'START'=>'3',
+				'SYMBOL'=>'c'
+			)
+		);
+
+		return array(
+			lorem_globalise(do_lorem_template('BLOCK_MAIN_MEMBERS',array(
+				'BLOCK_ID'=>'',
+				'START'=>strval(0),
+				'MAX'=>strval(30),
+				'SORTABLE'=>'m_join_time',
+				'SORT_ORDER'=>'DESC',
+				'ITEM_WIDTH'=>float_to_raw_string(floor(100.0*100.0/floatval($per_row))/100.0).'%',
+				'PER_ROW'=>strval($per_row),
+				'DISPLAY_MODE'=>'avatars',
+				'MEMBER_BOXES'=>$member_boxes,
+				'PAGINATION'=>placeholder_pagination(),
 				'RESULTS_TABLE'=>placeholder_table(),
-				'MEMBER_BOXES'=>array(),
-				'PAGINATION'=>''
+				'USERGROUPS'=>$usergroups,
+				'SYMBOLS'=>$symbols,
+				'HAS_ACTIVE_FILTER'=>true,
 			)),NULL,'',true)
 		);
 	}
@@ -1022,6 +1133,7 @@ class Hook_addon_registry_core_ocf
 		foreach ($_primary_members as $i=>$primary_member)
 		{
 			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER',array(
+				'ID'=>placeholder_id(),
 				'NAME'=>$primary_member,
 				'URL'=>placeholder_url()
 			));
@@ -1057,6 +1169,7 @@ class Hook_addon_registry_core_ocf
 		foreach (placeholder_array() as $i=>$v)
 		{
 			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_SECONDARY',array(
+				'ID'=>placeholder_id(),
 				'URL'=>placeholder_url(),
 				'REMOVE_URL'=>placeholder_url(),
 				'NAME'=>$v
@@ -1088,6 +1201,7 @@ class Hook_addon_registry_core_ocf
 		foreach (placeholder_array() as $i=>$v)
 		{
 			$temp=do_lorem_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE',array(
+				'ID'=>placeholder_id(),
 				'ACCEPT_URL'=>placeholder_url(),
 				'DECLINE_URL'=>placeholder_url(),
 				'NAME'=>lorem_word(),

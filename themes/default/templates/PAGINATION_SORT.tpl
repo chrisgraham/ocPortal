@@ -1,5 +1,5 @@
 <form title="{!SORT_BY}" action="{$URL_FOR_GET_FORM*,{URL}}{+START,IF_PASSED,HASH}#{HASH*}{+END}" method="get" target="_self" class="inline">
-	{$HIDDENS_FOR_GET_FORM,{URL}}
+	{$HIDDENS_FOR_GET_FORM,{URL},{SORT}}
 
 	{$SET,RAND,{$RAND}}
 

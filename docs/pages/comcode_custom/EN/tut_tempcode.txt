@@ -1042,6 +1042,10 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 		<td>{$FIND_ID_VIA_OCCLEFS_FILENAME,<resource-type>,<filename>}</td>
 		<td>Find the resource ID from the OcCLE-fs (repository) filename</td>
 	</tr>
+	<tr style="background: #DDFFDD">
+		<td>{$CPF_LIST,<field-title>}</td>
+		<td>Find all the possible values for a custom profile field in a loop-iterable string</td>
+	</tr>
 </tbody></table>
 [/html]
 
