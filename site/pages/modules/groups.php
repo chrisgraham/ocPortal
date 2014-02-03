@@ -453,7 +453,7 @@ class Module_groups
 			foreach ($_primary_members as $i=>$primary_member)
 			{
 				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($primary_member['gm_member_id'],false,true);
-				$temp=do_template('OCF_VIEW_GROUP_MEMBER',array('_GUID'=>'b96b674ac713e9790ecb78c15af1baab','NAME'=>$primary_member['m_username'],'URL'=>$url));
+				$temp=do_template('OCF_VIEW_GROUP_MEMBER',array('_GUID'=>'b96b674ac713e9790ecb78c15af1baab','ID'=>strval($primary_member['gm_member_id']),'NAME'=>$primary_member['m_username'],'URL'=>$url));
 				$primary_members->attach(results_entry(array($temp)));
 			}
 			$fields_title=results_field_title(array(do_lang_tempcode('PRIMARY_MEMBERS')),$sortables,'p_sort',$sortable.' '.$sort_order);
@@ -479,14 +479,14 @@ class Module_groups
 				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($secondary_member['gm_member_id'],false,true);
 				$remove_url=build_url(array('page'=>'_SELF','type'=>'remove_from','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
 				$may_control=(ocf_may_control_group($id,get_member()) && (!$secondary_member['implicit']));
-				$temp=do_template('OCF_VIEW_GROUP_MEMBER'.($may_control?'_SECONDARY':''),array('REMOVE_URL'=>$remove_url,'NAME'=>$m_username,'URL'=>$url));
+				$temp=do_template('OCF_VIEW_GROUP_MEMBER'.($may_control?'_SECONDARY':''),array('ID'=>strval($secondary_member['gm_member_id']),'REMOVE_URL'=>$remove_url,'NAME'=>$m_username,'URL'=>$url));
 				$secondary_members->attach(results_entry(array($temp)));
 			} elseif (!$add_url->is_empty())
 			{
 				$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($secondary_member['gm_member_id'],false,true);
 				$accept_url=build_url(array('page'=>'_SELF','type'=>'accept','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
 				$decline_url=build_url(array('page'=>'_SELF','type'=>'decline','id'=>$id,'member_id'=>$secondary_member['gm_member_id']),'_SELF');
-				$temp=do_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE',array('_GUID'=>'16e93cf50a14e3b6a3bdf31525fd5e7f','ACCEPT_URL'=>$accept_url,'DECLINE_URL'=>$decline_url,'NAME'=>$m_username,'URL'=>$url));
+				$temp=do_template('OCF_VIEW_GROUP_MEMBER_PROSPECTIVE',array('_GUID'=>'16e93cf50a14e3b6a3bdf31525fd5e7f','ID'=>strval($secondary_member['gm_member_id']),'ACCEPT_URL'=>$accept_url,'DECLINE_URL'=>$decline_url,'NAME'=>$m_username,'URL'=>$url));
 				$prospective_members->attach(results_entry(array($temp)));
 			}
 		}
