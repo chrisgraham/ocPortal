@@ -3,7 +3,7 @@
 echo 'Make sure data/ckeditor/plugins/ocportal is preserved'
 
 echo "Removing unneeded files"
-rm -rf skins/office2003 skins/v2 INSTALL.html ckeditor.asp CHANGES.html _samples _source ckeditor.pack config.js ckeditor_source.js ckeditor_basic.js ckeditor_basic_source.js ckeditor_php4.php ckeditor_php5.php ckeditor.php adapters plugins/adobeair plugins/ajax plugins/bbcode plugins/devtools plugins/docprops plugins/placeholder plugins/smiley plugins/wsc plugins/uicolor plugins/xml
+rm -rf CHANGES.md samples _source ckeditor.pack config.js adapters
 
 echo "Patching..."
 
