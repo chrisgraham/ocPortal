@@ -308,7 +308,24 @@ function wysiwyg_editor_init_for(element)
 	{
 		css+=get_inner_html(linked_sheets[counter]);
 	}
-	editor.addCss(css);
+	CKEDITOR.addCss(css);
+
+	// Change some CKEditor defaults
+	CKEDITOR.on('dialogDefinition',function(ev) {
+		var dialogName=ev.data.name;
+		var dialogDefinition=ev.data.definition;
+
+		if (dialogName=='table') {
+			var info=dialogDefinition.getContents('info');
+
+			info.get('txtWidth')['default']='100%';
+			info.get('txtBorder')['default']='0';
+			info.get('txtBorder')['default']='0';
+			info.get('txtCellSpace')['default']='0';
+			info.get('txtCellPad')['default']='0';
+		}
+	});
+	window.lang_PREFER_OCP_ATTACHMENTS='{!javascript:PREFER_OCP_ATTACHMENTS;}';
 
 	/*window.setTimeout( function() {
 		window.scrollTo(0,0); // Otherwise jumps to last editor

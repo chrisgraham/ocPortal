@@ -503,3 +503,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	border: 1px solid {$GET,standard_border};
 	padding: 0.2em;
 }
+
+/* Extra stuff for CKEditor */
+
+.cke_button__ocportal_image_icon { background: url('{$BASE_URL;}/data/ckeditor/skins/kama/icons.png') no-repeat 0 -288px !important; }
