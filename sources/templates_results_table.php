@@ -110,6 +110,8 @@ function results_table($text_id,$start,$start_name,$max,$max_name,$max_rows,$fie
  */
 function results_sorter($sortables,$sortable=NULL,$sort_order=NULL,$sort_name='sort',$hash='')
 {
+	require_code('templates_pagination'); // Required because INCREMENTAL_ID_GENERATOR defined there
+
 	$selectors=new ocp_tempcode();
 	foreach ($sortables as $_sortable=>$text)
 	{

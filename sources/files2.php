@@ -423,7 +423,8 @@ function get_directory_size($path,$recurse=true)
 {
 	$size=0;
 
-	$d=opendir($path);
+	$d=@opendir($path);
+	if ($d===false) return 0;
 	while (($e=readdir($d))!==false)
 	{
 		if (($e=='.') || ($e=='..')) continue;

@@ -621,7 +621,7 @@ $(function() {
 
 	$.fn[pluginName] = function (options) {
 		return this.each(function () {
-			if(!$.data(this, 'plugin_' + pluginName) || is_wysiwyg_field(this.element)) {
+			if(!$.data(this, 'plugin_' + pluginName) || this.element && is_wysiwyg_field(this.element)) {
 				$.data(this, 'plugin_' + pluginName, new Plugin(this, options));
 			}
 		});
