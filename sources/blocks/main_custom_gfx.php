@@ -83,7 +83,7 @@ class Block_main_custom_gfx
 			$_color=array_key_exists('color',$map)?$map['color']:'FFFFFF';
 			if (substr($_color,0,1)=='#') $_color=substr($_color,1);
 			$font=array_key_exists('font',$map)?$map['font']:'Vera';
-			$center=((array_key_exists('center',$map)?$map['center']:'0')=='1');
+			$center=((array_key_exists('center',$map)?$map['center']:'1')=='1');
 
 			$file_base=get_custom_file_base().'/data_custom/fonts/';
 			if (!file_exists($file_base.'/'.$font.'.ttf')) $file_base=get_file_base().'/data/fonts/';

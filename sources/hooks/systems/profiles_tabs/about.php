@@ -47,7 +47,7 @@ class Hook_Profiles_Tabs_about
 		$order=10;
 
 		if (!$GLOBALS['FORUM_DB']->table_is_locked('f_members'))
-			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_profile_views=m_profile_views+1 WHERE id='.strval($member),'',1);
+			$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_profile_views=m_profile_views+1 WHERE id='.strval($member_id_of),1);
 
 		$privacy_ok=true;
 		if (addon_installed('content_privacy'))
@@ -200,6 +200,7 @@ class Hook_Profiles_Tabs_about
 		$custom_fields=array();
 		require_code('encryption');
 		$value=mixed();
+		$fields_map=array();
 		foreach ($_custom_fields as $name=>$_value)
 		{
 			$value=$_value['RAW'];
@@ -232,6 +233,10 @@ class Hook_Profiles_Tabs_about
 				if ($name==do_lang('KEYWORDS')) $GLOBALS['SEO_KEYWORDS']=is_object($value)?$value->evaluate():$value;
 				if ($name==do_lang('DESCRIPTION')) $GLOBALS['SEO_DESCRIPTION']=is_object($value)?$value->evaluate():$value;
 			}
+
+			$field_codename=strtoupper(trim(preg_replace('#[^\w]+#','_',$name),'_'));
+			$fields_map['FIELD__'.$field_codename.'__RENDERED']=$rendered_value;
+			$fields_map['FIELD__'.$field_codename.'__RAW']=$value;
 		}
 
 		// Birthday
@@ -429,7 +434,9 @@ class Hook_Profiles_Tabs_about
 			'ON_PROBATION'=>$on_probation,
 			'EXTRA_INFO_DETAILS'=>$info_details,
 			'EXTRA_SECTIONS'=>$extra_sections,
-		));
+			'VIEWS'=>strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_profile_views')),
+			'TOTAL_SESSIONS'=>strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_total_sessions')),
+		)+$fields_map);
 
 		return array($title,$content,$order,'tabs/member_account/profile');
 	}

@@ -34,6 +34,7 @@ class Block_main_members
 			'display_mode',
 			'must_have_avatar',
 			'must_have_photo',
+			'include_form',
 			'filter',
 			'filters_row_a',
 			'filters_row_b',
@@ -62,6 +63,7 @@ class Block_main_members
 			array_key_exists(\'display_mode\',$map)?$map[\'display_mode\']:\'avatars\',
 			array_key_exists(\'must_have_avatar\',$map)?($map[\'must_have_avatar\']==\'1\'):false,
 			array_key_exists(\'must_have_photo\',$map)?($map[\'must_have_photo\']==\'1\'):false,
+			array_key_exists(\'include_form\',$map)?($map[\'include_form\']==\'1\'):true,
 			array_key_exists(\'filter\',$map)?$map[\'filter\']:\'*\',
 			array_key_exists(\'filters_row_a\',$map)?$map[\'filters_row_a\']:\'\',
 			array_key_exists(\'filters_row_b\',$map)?$map[\'filters_row_b\']:\'\',
@@ -196,6 +198,8 @@ class Block_main_members
 
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND m_validated=1';
 
+		$include_form=array_key_exists('include_form',$map)?($map['include_form']=='1'):true;
+
 		$must_have_avatar=array_key_exists('must_have_avatar',$map)?($map['must_have_avatar']=='1'):false;
 		if ($must_have_avatar)
 		{
@@ -258,6 +262,7 @@ class Block_main_members
 		{
 			$sortables['m_total_sessions']=do_lang_tempcode('LOGIN_FREQUENCY');
 		}
+		if (strpos($sort,' ')===false) $sort.=' ASC';
 		list($sortable,$sort_order)=explode(' ',$sort,2);
 		if (isset($map['sort']))
 		{
@@ -292,10 +297,6 @@ class Block_main_members
 		{
 			$main_sql.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members g ON (r.id=g.gm_member_id AND gm_validated=1)';
 		}
-		if ($filter!='')
-		{
-			$main_sql.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f ON r.id=f.mf_member_id';
-		}
 		$main_sql.=' WHERE '.$where;
 		$sql.=$main_sql;
 		$sql.=(can_arbitrary_groupby()?' GROUP BY r.id':'');
@@ -304,6 +305,7 @@ class Block_main_members
 
 		inform_non_canonical_parameter($block_id.'_max');
 		$max=get_param_integer($block_id.'_max',array_key_exists('max',$map)?intval($map['max']):30);
+		if ($max==0) $max=30;
 		inform_non_canonical_parameter($block_id.'_start');
 		$start=get_param_integer($block_id.'_start',array_key_exists('start',$map)?intval($map['start']):0);
 
@@ -510,7 +512,7 @@ class Block_main_members
 			'SORT_ORDER'=>$sort_order,
 			'FILTERS_ROW_A'=>$filters_row_a,
 			'FILTERS_ROW_B'=>$filters_row_b,
-			'ITEM_WIDTH'=>is_null($per_row)?'':float_to_raw_string(floor(100.0*100.0/floatval($per_row))/100.0).'%',
+			'ITEM_WIDTH'=>is_null($per_row)?'':float_to_raw_string(99.0/*avoid possibility of rounding issues as pixels won't divide perfectly*//floatval($per_row)).'%',
 			'PER_ROW'=>is_null($per_row)?'':strval($per_row),
 			'DISPLAY_MODE'=>$display_mode,
 			'MEMBER_BOXES'=>$member_boxes,
@@ -519,6 +521,7 @@ class Block_main_members
 			'USERGROUPS'=>$usergroups,
 			'SYMBOLS'=>$symbols,
 			'HAS_ACTIVE_FILTER'=>$has_active_filter,
+			'INCLUDE_FORM'=>$include_form,
 			'SORT'=>$sorting,
 		));
 	}

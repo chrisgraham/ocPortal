@@ -910,7 +910,7 @@ class Hook_addon_registry_core_ocf
 				'MAX'=>strval(30),
 				'SORTABLE'=>'m_join_time',
 				'SORT_ORDER'=>'DESC',
-				'ITEM_WIDTH'=>float_to_raw_string(floor(100.0*100.0/floatval($per_row))/100.0).'%',
+				'ITEM_WIDTH'=>is_null($per_row)?'':float_to_raw_string(99.0/*avoid possibility of rounding issues as pixels won't divide perfectly*//floatval($per_row)).'%',
 				'PER_ROW'=>strval($per_row),
 				'DISPLAY_MODE'=>'avatars',
 				'MEMBER_BOXES'=>$member_boxes,
@@ -919,6 +919,7 @@ class Hook_addon_registry_core_ocf
 				'USERGROUPS'=>$usergroups,
 				'SYMBOLS'=>$symbols,
 				'HAS_ACTIVE_FILTER'=>true,
+				'INCLUDE_FORM'=>false,
 				'SORT'=>'',
 			)),NULL,'',true)
 		);
@@ -1006,6 +1007,8 @@ class Hook_addon_registry_core_ocf
 			'ON_PROBATION'=>lorem_phrase(),
 			'USERGROUP'=>lorem_word(),
 			'CLUBS'=>lorem_phrase()
+			'VIEWS'=>placeholder_number(),
+			'TOTAL_SESSIONS'=>placeholder_number(),
 		));
 		$tabs[]=array(
 			'TAB_CODE'=>placeholder_id().'0',

@@ -544,6 +544,18 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 				$exif=false;
 			} else
 			{
+				if (!file_exists(dirname($to)))
+				{
+					if (@mkdir(dirname($to),0777))
+					{
+						fix_permissions(dirname($to),0777);
+						sync_file(dirname($to));
+					} else
+					{
+						intelligent_write_error(dirname($to));
+					}
+				}
+
 				$myfile=fopen($to,'wb');
 				fwrite($myfile,$from_file);
 				fclose($myfile);

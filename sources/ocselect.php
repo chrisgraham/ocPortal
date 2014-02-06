@@ -185,7 +185,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 
 		// Operator
 		$matches=array();
-		if (preg_match('#^<([\w\_\-]+)>$#',$filter_op,$matches)!=0)
+		if (preg_match('#^<([^<>]+)>$#',$filter_op,$matches)!=0)
 		{
 			$field_name=filter_naughty_harsh($matches[1]);
 			$field_title=array_key_exists($field_name,$labels)?make_string_tempcode($labels[$field_name]):do_lang_tempcode('OPERATOR_FOR',escape_html(titleify(preg_replace('#^filter\_#','',preg_replace('#\_op$#','',$field_name)))));
@@ -213,7 +213,7 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 
 		// Filter inputter
 		$matches=array();
-		if (preg_match('#^<([\w\_\-]+)>$#',$filter_val,$matches)!=0)
+		if (preg_match('#^<([^<>]+)>$#',$filter_val,$matches)!=0)
 		{
 			$field_name=filter_naughty_harsh($matches[1]);
 
@@ -807,11 +807,11 @@ function ocselect_to_sql($db,$filters,$content_type='',$context='',$table_join_c
 
 		// Allow specification of reading from the environment
 		$matches=array();
-		if (preg_match('#^<([\w\_\-]+)>$#',$filter_op,$matches)!=0)
+		if (preg_match('#^<([^<>]+)>$#',$filter_op,$matches)!=0)
 		{
 			$filter_op=either_param($matches[1],'~=');
 		}
-		if (preg_match('#^<([\w\_\-]+)>$#',$filter_val,$matches)!=0)
+		if (preg_match('#^<([^<>]+)>$#',$filter_val,$matches)!=0)
 		{
 			$filter_val=read_ocselect_parameter_from_env($matches[1]);
 		}
@@ -1030,7 +1030,7 @@ function prepare_ocselect_merger_link($_link_filter)
 
 		// Propagate/inject in filter value
 		$matches=array();
-		if (preg_match('#^<([\w\_\-]+)>$#',$filter_val,$matches)!=0)
+		if (preg_match('#^<([^<>]+)>$#',$filter_val,$matches)!=0)
 		{
 			$filter_val=read_ocselect_parameter_from_env($matches[1]);
 			$extra_params['filter_'.$matches[1]]=$filter_val;

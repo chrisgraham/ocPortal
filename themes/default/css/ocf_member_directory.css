@@ -24,6 +24,18 @@
 .block_main_members__media .gallery_tease_pic_wrap {
 	text-align: left;
 }
+.block_main_members__media.has_item_width .img_thumb_wrap {
+	width: 100% !important;
+	height: auto !important;
+	max-width: none !important;
+	max-height: none !important;
+	display: inline-block;
+}
+.block_main_members__media.has_item_width .img_thumb {
+	width: 100% !important;
+	max-width: none !important;
+	max-height: none !important;
+}
 
 .block_main_members__avatars img, .block_main_members__photos img {
 	width: 100%;

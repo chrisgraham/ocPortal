@@ -50,11 +50,11 @@ class Hook_main_custom_gfx_rollover_button
 		$comb_id='rollover_'.uniqid('',true);
 
 		$ret='<img id="'.php_addslashes($comb_id).'" class="gfx_text_overlay" alt="'.str_replace("\n",' ',escape_html($map['data'])).'" src="'.escape_html($url_1).'" />';
-		$ret.='
+		$ret.=trim('
 			<script>// <![CDATA[
 				create_rollover("'.php_addslashes($comb_id).'","'.php_addslashes($url_2).'");
 			//]]></script>
-		';
+		');
 
 		if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($ret);
 		return make_string_tempcode($ret);

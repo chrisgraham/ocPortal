@@ -177,7 +177,11 @@ class Block_main_include_module
 			if (substr($url_from,-4)=='.htm') $url_from=substr($url_from,0,strlen($url_from)-4);
 			$url_to=static_evaluate_tempcode(build_url(array('page'=>get_page_name()),get_zone_name(),NULL,false,false,true));
 			if (substr($url_to,-4)=='.htm') $url_to=substr($url_to,0,strlen($url_to)-4);
-			$_out=str_replace($url_from,$url_to,$_out);
+			if (strpos($_out,$attributes['page'])!==false)
+			{
+				$_out=str_replace($url_from,$url_to,$_out);
+				$out=make_string_tempcode($_out);
+			}
 			if ($use_breadcrumbs)
 			{
 				if ($GLOBALS['BREADCRUMB_EXTRA_SEGMENTS']!==NULL)
@@ -188,8 +192,7 @@ class Block_main_include_module
 		}
 
 		// Done
-		$ret=make_string_tempcode($_out);
-		return $ret;
+		return $out;
 	}
 }
 
