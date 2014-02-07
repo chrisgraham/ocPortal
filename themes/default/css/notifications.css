@@ -48,6 +48,7 @@
 
 .notification {
 	margin: 0.5em 0;
+	overflow: hidden;
 }
 
 .notification_subject {

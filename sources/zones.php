@@ -750,7 +750,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 		push_output_state(false,true);
 
 	$object=NULL;
-	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)) && (strpos(get_param('special_page_type',''),'t')===false))
+	if (((get_option('is_on_block_cache')=='1') && (strpos(get_param('special_page_type',''),'t')===false) || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1) || (get_param_integer('cache_blocks',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache_blocks',NULL)!==0) && (get_param_integer('cache',NULL)!==0)))
 	{
 		// See if the block may be cached (else cannot, or is yet unknown)
 		if ($map['cache']=='0')

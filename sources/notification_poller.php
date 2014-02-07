@@ -149,7 +149,14 @@ function notification_poller_script()
 			';
 		}
 
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'digestives_tin WHERE d_frequency='.strval(A_WEB_NOTIFICATION).' AND d_date_and_time<'.strval(time()-60*60*24*intval(get_option('notification_keep_days')))); // Only keep around for X days
+		// Only keep around for X days
+		$sql='d_frequency='.strval(A_WEB_NOTIFICATION).' AND d_date_and_time<'.strval(time()-60*60*24*intval(get_option('notification_keep_days')));
+		$rows=$GLOBALS['SITE_DB']->query('SELECT d_message FROM '.get_table_prefix().'digestives_tin WHERE '.$sql);
+		foreach ($rows as $row)
+		{
+			delete_lang($row['d_message']);
+		}
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'digestives_tin WHERE '.$sql);
 	}
 
 	// Private topics

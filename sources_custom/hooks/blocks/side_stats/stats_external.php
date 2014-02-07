@@ -42,6 +42,12 @@ class Hook_stats_external
 
 function getAlexaRank($url)
 {
+	$test=get_long_value_newer_than('alexa__'.md5($url),time()-60*60*24*31);
+	if ($test!==NULL)
+	{
+		return unserialize($test);
+	}
+
 	require_code('files');
 	$p=array();
 	$result=http_download_file('http://data.alexa.com/data?cli=10&dat=s&url='.urlencode($url),NULL,false);
@@ -63,7 +69,11 @@ function getAlexaRank($url)
 		audience (i.e. what country views the site most)
 	 */
 
-	return array($rank,$links,$speed);
+	$ret=array($rank,$links,$speed);
+
+	set_long_value('alexa__'.md5($url),serialize($ret));
+
+	return $ret;
 }
 
 
@@ -183,10 +193,19 @@ function getpr($url)
 //return the pagerank figure
 function getPageRank($url)
 {
+	$test=get_long_value_newer_than('pr__'.md5($url),time()-60*60*24*31);
+	if ($test!==NULL)
+	{
+		return unserialize($test);
+	}
+
 	if (preg_match('/^(http:\/\/)?([^\/]+)/i',$url)==0)
 	{
 		$url='http://'.$url;
 	}
 	$pr=getpr($url);
+
+	set_long_value('pr__'.md5($url),serialize($pr));
+
 	return $pr;
 }
