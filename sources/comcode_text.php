@@ -1111,7 +1111,15 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 										$link_end_pos=strpos($comcode,' ',$pos-1);
 										$link_end_pos_2=strpos($comcode,chr(10),$pos-1);
 										$link_end_pos_3=strpos($comcode,'[',$pos-1);
-										$link_end_pos_4=strpos($comcode,')',$pos-1);
+										$link_end_pos_4_a=strpos($comcode,'(',$pos-1);
+										$link_end_pos_4_b=strpos($comcode,')',$pos-1);
+										if (($link_end_pos_4_a===false) || ($link_end_pos_4_b===false) || ($link_end_pos_4_a>$link_end_pos_4_b))
+										{
+											$link_end_pos_4=$link_end_pos_4_b;
+										} else
+										{
+											$link_end_pos_4=false;
+										}
 										$link_end_pos_5=strpos($comcode,'"',$pos-1);
 										$link_end_pos_6=strpos($comcode,'>',$pos-1);
 										$link_end_pos_7=strpos($comcode,'<',$pos-1);

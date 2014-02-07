@@ -84,8 +84,14 @@ class Hook_fields_upload
 		if (strpos($ev,'::')!==false)
 		{
 			list($file,$original_filename)=explode('::',$ev);
-			$keep=symbol_tempcode('KEEP');
-			$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($file)).$keep->evaluate();
+			if (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/)
+			{
+				$keep=symbol_tempcode('KEEP');
+				$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($file)).$keep->evaluate();
+			} else
+			{
+				$download_url=get_custom_file_base().'/uploads/catalogues/'.$file;
+			}
 		}
 
 		return hyperlink($download_url,$original_filename,true,true);

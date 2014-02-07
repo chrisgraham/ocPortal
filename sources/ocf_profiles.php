@@ -47,6 +47,10 @@ function render_profile_tabset($member_id_of,$member_id_viewing=NULL,$username=N
 		if ($ob->is_active($member_id_of,$member_id_viewing))
 		{
 			$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing,!browser_matches('ie6') && !browser_matches('ie7') && has_js());
+			if (isset($tabs[$hook][1]))
+			{
+				$tabs[$hook][1]=$tabs[$hook][1]->evaluate(); // So that SETs run early, thus things can be moved outside tabs
+			}
 		}
 	}
 
