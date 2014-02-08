@@ -50,5 +50,6 @@ var editor_settings={
 	{+START,IF,{$NOT,{$VALUE_OPTION,commercial_spellchecker}}}
 		disableNativeSpellChecker : false,
 	{+END}
-	toolbar : toolbar
+	toolbar : toolbar,
+	allowedContent: true
 };
