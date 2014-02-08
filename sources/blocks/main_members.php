@@ -416,7 +416,7 @@ class Block_main_members
 				$_entry[]=do_template('OCF_MEMBER_DIRECTORY_USERNAME',array(
 					'ID'=>strval($row['id']),
 					'USERNAME'=>$row['m_username'],
-					'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'],true),
+					'URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'],true,true),
 					'AVATAR_URL'=>addon_installed('ocf_member_avatars')?$row['m_avatar_url']:$row['m_photo_thumb_url'],
 					'PHOTO_THUMB_URL'=>$row['m_photo_thumb_url'],
 					'VALIDATED'=>($row['m_validated']==1),
