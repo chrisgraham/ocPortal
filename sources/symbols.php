@@ -1867,7 +1867,19 @@ function ecv_CPF_VALUE($lang,$escaped,$param)
 			$_value=$GLOBALS['FORUM_DRIVER']->get_member_row_field(isset($param[1])?intval($param[1]):get_member(),$param[0]);
 		} else
 		{
-			$_value=get_ocp_cpf($param[0],isset($param[1])?intval($param[1]):NULL);
+			if (preg_match('#^[a-z\_\d]*$#',$param[0])!=0)
+			{
+				$_value=get_ocp_cpf($param[0],isset($param[1])?intval($param[1]):NULL);
+			} else
+			{
+				$cpf_id=find_cpf_field_id($param[0]);
+				if (!is_null($cpf_id))
+				{
+					require_code('ocf_members');
+					$fields=ocf_get_custom_fields_member(isset($param[1])?intval($param[1]):get_member());
+					if (array_key_exists($cpf_id,$fields)) $_value=$fields[$cpf_id];
+				} else $_value='';
+			}
 		}
 
 		if (!is_string($_value))
