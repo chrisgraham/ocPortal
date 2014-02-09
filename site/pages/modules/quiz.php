@@ -191,7 +191,7 @@ class Module_quiz
 	}
 
 	var $title;
-	var $id;
+	var $quiz_id;
 	var $quiz;
 	var $quiz_name;
 	var $title_to_use;
@@ -207,6 +207,7 @@ class Module_quiz
 		$type=get_param('type','misc');
 
 		require_lang('quiz');
+		require_code('quiz');
 		require_css('quizzes');
 
 		if ($type=='misc')
@@ -216,25 +217,25 @@ class Module_quiz
 
 		if ($type=='do')
 		{
-			$id=get_param_integer('id');
+			$quiz_id=get_param_integer('id');
 
 			// Check access
-			if (!has_category_access(get_member(),'quiz',strval($id))) access_denied('CATEGORY_ACCESS');
+			if (!has_category_access(get_member(),'quiz',strval($quiz_id))) access_denied('CATEGORY_ACCESS');
 
-			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
+			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$quiz_id),'',1);
 			if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$quiz=$quizzes[0];
 
 			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
 			{
 				require_code('awards');
-				$awards=find_awards_for('quiz',strval($id));
+				$awards=find_awards_for('quiz',strval($quiz_id));
 			} else $awards=array();
 
 			$quiz_name=get_translated_text($quiz['q_name']);
-			$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$id,$quiz_name));
+			$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$quiz_id,$quiz_name));
 			$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
-			seo_meta_load_for('quiz',strval($id),$title_to_use_2);
+			seo_meta_load_for('quiz',strval($quiz_id),$title_to_use_2);
 
 			breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))));
 
@@ -261,12 +262,12 @@ class Module_quiz
 				'modified'=>'',
 				'type'=>$type,
 				'title'=>get_translated_text($quiz['q_name']),
-				'identifier'=>'_SEARCH:quiz:do:'.strval($id),
+				'identifier'=>'_SEARCH:quiz:do:'.strval($quiz_id),
 				'description'=>get_translated_text($quiz['q_start_text']),
 				'image'=>find_theme_image('icons/48x48/menu/rich_content/quiz'),
 			));
 
-			$this->id=$id;
+			$this->quiz_id=$quiz_id;
 			$this->quiz=$quiz;
 			$this->quiz_name=$quiz_name;
 			$this->title_to_use=$title_to_use;
@@ -279,22 +280,22 @@ class Module_quiz
 
 		if ($type=='_do')
 		{
-			$id=get_param_integer('id');
+			$quiz_id=get_param_integer('id');
 
 			// Check access
-			if (!has_category_access(get_member(),'quiz',strval($id))) access_denied('CATEGORY_ACCESS');
+			if (!has_category_access(get_member(),'quiz',strval($quiz_id))) access_denied('CATEGORY_ACCESS');
 
-			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
+			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$quiz_id),'',1);
 			if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$quiz=$quizzes[0];
 			$this->enforcement_checks($quiz);
 
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('QUIZZES')),array('_SELF:_SELF:do:'.strval($id),make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('QUIZZES')),array('_SELF:_SELF:do:'.strval($quiz_id),make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
 
 			$this->title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 
-			$this->id=$id;
+			$this->quiz_id=$quiz_id;
 			$this->quiz=$quiz;
 		}
 
@@ -324,8 +325,6 @@ class Module_quiz
 	 */
 	function archive()
 	{
-		require_code('quiz');
-
 		$start=get_param_integer('quizzes_start',0);
 		$max=get_param_integer('quizzes_max',20);
 
@@ -403,7 +402,7 @@ class Module_quiz
 	 */
 	function do_quiz()
 	{
-		$id=$this->id;
+		$quiz_id=$this->quiz_id;
 		$quiz=$this->quiz;
 		$quiz_name=$this->quiz_name;
 		$title_to_use=$this->title_to_use;
@@ -411,7 +410,7 @@ class Module_quiz
 
 		$this->enforcement_checks($quiz);
 
-		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
+		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$quiz_id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (!is_null($last_visit_time)) // Refresh / new attempt
 		{
 			$timer_offset=time()-$last_visit_time;
@@ -419,10 +418,10 @@ class Module_quiz
 			{
 				$GLOBALS['SITE_DB']->query_delete('quiz_member_last_visit',array(
 					'v_member_id'=>get_member(),
-					'v_quiz_id'=>$id,
+					'v_quiz_id'=>$quiz_id,
 				));
 				$GLOBALS['SITE_DB']->query_insert('quiz_member_last_visit',array(
-					'v_quiz_id'=>$id,
+					'v_quiz_id'=>$quiz_id,
 					'v_time'=>time(),
 					'v_member_id'=>get_member(),
 				));
@@ -431,14 +430,14 @@ class Module_quiz
 		} else
 		{
 			$GLOBALS['SITE_DB']->query_insert('quiz_member_last_visit',array( // First attempt
-				'v_quiz_id'=>$id,
+				'v_quiz_id'=>$quiz_id,
 				'v_time'=>time(),
 				'v_member_id'=>get_member(),
 			));
 			$timer_offset=0;
 		}
 
-		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
+		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
 		if ($quiz['q_shuffle_questions']==1) shuffle($questions);
 		foreach ($questions as $i=>$question)
 		{
@@ -447,7 +446,6 @@ class Module_quiz
 			$questions[$i]['answers']=$answers;
 		}
 
-		require_code('quiz');
 		$fields=render_quiz($questions);
 
 		// Validation
@@ -460,19 +458,19 @@ class Module_quiz
 		} else $warning_details=new ocp_tempcode();
 
 		$edit_url=new ocp_tempcode();
-		if ((has_actual_page_access(NULL,'cms_quiz',NULL,NULL)) && (has_edit_permission('mid',get_member(),$quiz['q_submitter'],'cms_quiz',array('quiz',$id))))
+		if ((has_actual_page_access(NULL,'cms_quiz',NULL,NULL)) && (has_edit_permission('mid',get_member(),$quiz['q_submitter'],'cms_quiz',array('quiz',$quiz_id))))
 		{
-			$edit_url=build_url(array('page'=>'cms_quiz','type'=>'_ed','id'=>$id),get_module_zone('cms_quiz'));
+			$edit_url=build_url(array('page'=>'cms_quiz','type'=>'_ed','id'=>$quiz_id),get_module_zone('cms_quiz'));
 		}
 
 		// Display UI: start text, questions. Including timeout
 		$start_text=get_translated_tempcode($quiz['q_start_text']);
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_do','id'=>$id),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'_do','id'=>$quiz_id),'_SELF');
 		return do_template('QUIZ_SCREEN',array(
 			'_GUID'=>'f390877672938ba62f79f9528bef742f',
 			'EDIT_URL'=>$edit_url,
 			'TAGS'=>get_loaded_tags('quiz'),
-			'ID'=>strval($id),
+			'ID'=>strval($quiz_id),
 			'WARNING_DETAILS'=>$warning_details,
 			'URL'=>$post_url,
 			'TITLE'=>$this->title,
@@ -489,129 +487,47 @@ class Module_quiz
 	 */
 	function _do_quiz()
 	{
-		$id=$this->id;
+		$quiz_id=$this->quiz_id;
 		$quiz=$this->quiz;
 		$quiz_name=get_translated_text($quiz['q_name']);
 
-		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
+		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$quiz_id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (is_null($last_visit_time)) warn_exit(do_lang_tempcode('QUIZ_TWICE'));
 		if (!is_null($quiz['q_timeout']))
 		{
 			if (time()-$last_visit_time>$quiz['q_timeout']*60+10) warn_exit(do_lang_tempcode('TOO_LONG_ON_SCREEN')); // +10 is for page load time, worst case scenario to be fair
 		}
 
-		// Our entry
+		// Save our entry
 		$entry_id=$GLOBALS['SITE_DB']->query_insert('quiz_entries',array(
 			'q_time'=>time(),
 			'q_member'=>get_member(),
-			'q_quiz'=>$id,
+			'q_quiz'=>$quiz_id,
 			'q_results'=>0,
 		),true);
-
-		$GLOBALS['SITE_DB']->query_update('quiz_member_last_visit',array( // Say quiz was completed on time limit, to force next attempt to be considered a re-do
-			'v_time'=>time()-(is_null($quiz['q_timeout'])?0:$quiz['q_timeout'])*60,
-		),array('v_member_id'=>get_member(),'v_quiz_id'=>$id),'',1);
-
-		// Calculate results and store
-		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
+		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
 		foreach ($questions as $i=>$question)
 		{
 			$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$question['id']),'ORDER BY id');
 			$questions[$i]['answers']=$answers;
 		}
-		$marks=0.0;
-		$potential_extra_marks=0;
-		$out_of=0;
-		$given_answers=array();
-		$corrections=array();
-		$unknowns=array();
 		foreach ($questions as $i=>$question)
 		{
-			if ($question['q_marked']==0) continue;
-
-			$question_text=get_translated_text($question['q_question_text']);
-
-			$name='q_'.strval($question['id']);
 			if ($question['q_num_choosable_answers']==0) // Text box ("free question"). May be an actual answer, or may not be
 			{
-				$given_answer=post_param($name);
-
-				$correct_answer=new ocp_tempcode();
-				$correct_explanation=mixed();
-				if (count($question['answers'])==0)
-				{
-					$potential_extra_marks++;
-					$unknowns[]=array($question_text,$given_answer);
-					$was_correct=mixed();
-				} else
-				{
-					$was_correct=false;
-					foreach ($question['answers'] as $a)
-					{
-						if ($a['q_is_correct']==1)
-						{
-							$correct_answer=make_string_tempcode(get_translated_text($a['q_answer_text']));
-						}
-						if (($a['q_is_correct']==1) && (get_translated_text($a['q_answer_text'])==$given_answer))
-						{
-							$marks++;
-							$was_correct=true;
-							break;
-						}
-						if (get_translated_text($a['q_answer_text'])==$given_answer)
-						{
-							$correct_explanation=get_translated_text($a['q_explanation']);
-						}
-					}
-					if (!$was_correct)
-					{
-						$correction=array($question['id'],$question_text,$correct_answer,$given_answer);
-						if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
-							$correction[]=$correct_explanation;
-						$corrections[]=$correction;
-					}
-				}
-
 				$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 					'q_entry'=>$entry_id,
 					'q_question'=>$question['id'],
-					'q_answer'=>$given_answer
+					'q_answer'=>post_param('q_'.strval($question['id']))
 				));
-
-				$given_answers[]=array(
-					'QUESTION'=>$question_text,
-					'GIVEN_ANSWER'=>$given_answer,
-					'WAS_CORRECT'=>$was_correct,
-					'CORRECT_ANSWER'=>$correct_answer,
-					'CORRECT_EXPLANATION'=>$correct_explanation,
-				);
 			}
 			elseif ($question['q_num_choosable_answers']>1) // Check boxes
 			{
-				// Vector distance
-				$wrongness=0.0;
 				$accum=new ocp_tempcode();
-				$correct_answer=new ocp_tempcode();
-				$correct_explanation=NULL;
 				foreach ($question['answers'] as $a)
 				{
-					$for_this=post_param_integer($name.'_'.strval($a['id']),0);
-					$should_be_this=$a['q_is_correct'];
-					$dist=$for_this-$should_be_this;
-					$wrongness+=$dist*$dist;
-
-					if ($should_be_this==1)
+					if (post_param_integer($name.'_'.strval($a['id']),0)==1)
 					{
-						if (!$correct_answer->is_empty()) $correct_answer->attach(do_lang_tempcode('LIST_SEP'));
-						$correct_answer->attach(get_translated_text($a['q_answer_text']));
-						$correct_explanation=get_translated_text($a['q_explanation']);
-					}
-
-					if ($for_this==1)
-					{
-						if (!$accum->is_empty()) $accum->attach(do_lang_tempcode('LIST_SEP'));
-						$accum->attach(get_translated_text($a['q_answer_text']));
-
 						$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 							'q_entry'=>$entry_id,
 							'q_question'=>$question['id'],
@@ -619,135 +535,40 @@ class Module_quiz
 						));
 					}
 				}
-				$wrongness=sqrt($wrongness);
-				// Normalise it
-				$wrongness/=count($question['answers']);
-				// And get our complement
-				$correctness=1.0-$wrongness;
-
-				$marks+=$correctness;
-
-				if ($correctness!=1.0)
-				{
-					$correction=array($question['id'],$question_text,$correct_answer,$accum);
-					if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
-						$correction[]=$correct_explanation;
-					$corrections[]=$correction;
-				}
-
-				$given_answer=$accum->evaluate();
-
-				$given_answers[]=array(
-					'QUESTION'=>$question_text,
-					'GIVEN_ANSWER'=>$given_answer,
-					'WAS_CORRECT'=>$correctness==1.0,
-					'CORRECT_ANSWER'=>$correct_answer,
-					'CORRECT_EXPLANATION'=>$correct_explanation,
-				);
 			} else // Radio buttons
 			{
-				$was_correct=false;
-				$correct_answer=new ocp_tempcode();
-				$correct_explanation=NULL;
-				$given_answer='';
-				foreach ($question['answers'] as $a)
-				{
-					if ($a['q_is_correct']==1)
-					{
-						$correct_answer=make_string_tempcode(get_translated_text($a['q_answer_text']));
-					}
-
-					if (post_param_integer($name,-1)==$a['id'])
-					{
-						$given_answer=get_translated_text($a['q_answer_text']);
-
-						if ($a['q_is_correct']==1)
-						{
-							$was_correct=true;
-
-							$marks++;
-							break;
-						}
-
-						$correct_explanation=get_translated_text($a['q_explanation']);
-					}
-				}
-
 				$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 					'q_entry'=>$entry_id,
 					'q_question'=>$question['id'],
-					'q_answer'=>post_param($name,'')
+					'q_answer'=>post_param('q_'.strval($question['id']),'')
 				));
-
-				if (!$was_correct)
-				{
-					$correction=array($question['id'],$question_text,$correct_answer,$given_answer);
-					if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
-						$correction[]=$correct_explanation;
-					$corrections[]=$correction;
-				}
-
-				$given_answers[]=array(
-					'QUESTION'=>$question_text,
-					'GIVEN_ANSWER'=>$given_answer,
-					'WAS_CORRECT'=>$was_correct,
-					'CORRECT_ANSWER'=>$correct_answer,
-					'CORRECT_EXPLANATION'=>$correct_explanation,
-				);
 			}
+		}
+		$GLOBALS['SITE_DB']->query_update('quiz_member_last_visit',array( // Say quiz was completed on time limit, to force next attempt to be considered a re-do
+			'v_time'=>time()-(is_null($quiz['q_timeout'])?0:$quiz['q_timeout'])*60,
+		),array('v_member_id'=>get_member(),'v_quiz_id'=>$quiz_id),'',1);
 
-			$out_of++;
-		}
-		if ($out_of==0) $out_of=1;
-
-		// Prepare results for display
-		$corrections_to_staff=new ocp_tempcode();
-		$corrections_to_member=new ocp_tempcode();
-		foreach ($corrections as $correction)
-		{
-			if ((array_key_exists(4,$correction)) || ($quiz['q_reveal_answers']==1))
-			{
-				$__correction=do_lang_tempcode(
-					array_key_exists(4,$correction)?'QUIZ_MISTAKE_EXPLAINED_HTML':'QUIZ_MISTAKE_HTML',
-					escape_html(is_object($correction[1])?$correction[1]->evaluate():$correction[1]),
-					escape_html(is_object($correction[3])?$correction[3]->evaluate():$correction[3]),
-					array(
-						escape_html(is_object($correction[2])?$correction[2]->evaluate():$correction[2]),
-						escape_html(array_key_exists(4,$correction)?$correction[4]:''),
-					)
-				);
-				$corrections_to_member->attach($__correction);
-			}
-			$_correction=do_lang(
-				array_key_exists(4,$correction)?'QUIZ_MISTAKE_EXPLAINED_COMCODE':'QUIZ_MISTAKE_COMCODE',
-				comcode_escape(is_object($correction[1])?$correction[1]->evaluate():$correction[1]),
-				comcode_escape(is_object($correction[3])?$correction[3]->evaluate():$correction[3]),
-				array(
-					comcode_escape(is_object($correction[2])?$correction[2]->evaluate():$correction[2]),
-					comcode_escape(array_key_exists(4,$correction)?$correction[4]:''),
-				)
-			);
-			$corrections_to_staff->attach($_correction);
-		}
-		$unknowns_to_staff=new ocp_tempcode();
-		foreach ($unknowns as $unknown)
-		{
-			$_unknown=do_lang('QUIZ_UNKNOWN',comcode_escape($unknown[0]),comcode_escape($unknown[1]));
-			$unknowns_to_staff->attach($_unknown);
-		}
-		$given_answers_to_staff=new ocp_tempcode();
-		foreach ($given_answers as $given_answer)
-		{
-			$_given_answer=do_lang('QUIZ_RESULT',comcode_escape($given_answer['QUESTION']),comcode_escape($given_answer['GIVEN_ANSWER']));
-			$given_answers_to_staff->attach($_given_answer);
-		}
-		// NB: We don't have a list of what was correct because it's not interesting, only corrections/unknowns/everything.
+		// Calculate results
+		list(
+			$marks,
+			$potential_extra_marks,
+			$out_of,
+			$given_answers,
+			$corrections,
+			$unknowns,
+			$minimum_percentage,
+			$maximum_percentage,
+			$marks_range,
+			$percentage_range,
+			$corrections_to_staff,
+			$corrections_to_member,
+			$unknowns_to_staff,
+			$given_answers_to_staff,
+			$passed,
+		)=score_quiz($entry_id,$quiz_id,$quiz,$questions);
 
 		// Award points?
-		if ($out_of==0) $out_of=1;
-		$minimum_percentage=intval(round(100.0*$marks/$out_of));
-		$maximum_percentage=intval(round(100.0*($marks+$potential_extra_marks)/$out_of));
-		if ((addon_installed('points')) && ($quiz['q_points_for_passing']!=0) && (($quiz['q_type']!='TEST') || ($minimum_percentage>=$quiz['q_percentage'])))
+		if ((addon_installed('points')) && ($quiz['q_points_for_passing']!=0) && (($quiz['q_type']!='TEST') || ($passed===true)))
 		{
 			require_code('points2');
 			$points_difference=$quiz['q_points_for_passing'];
@@ -773,18 +594,16 @@ class Module_quiz
 		{
 			// Show results if a test
 			case 'TEST':
-				$marks_range=float_format($marks,2,true).(($potential_extra_marks==0)?'':('-'.float_format($marks+$potential_extra_marks,2,true)));
-				$percentage_range=strval($minimum_percentage).(($potential_extra_marks==0)?'':('-'.strval($maximum_percentage)));
-				if ($minimum_percentage>=$quiz['q_percentage']) // Passed
+				if ($passed===true) // Passed
 				{
 					$result_to_member=do_lang_tempcode('TEST_PASS',escape_html($marks_range),escape_html(integer_format($out_of)),escape_html($percentage_range));
 					$result_to_staff=do_lang('MAIL_TEST_PASS',comcode_escape($marks_range),comcode_escape(integer_format($out_of)),comcode_escape($percentage_range));
 
 					// Syndicate because passed
 					require_code('activities');
-					syndicate_described_activity('quiz:ACTIVITY_PASSED_TEST',$quiz_name,'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
+					syndicate_described_activity('quiz:ACTIVITY_PASSED_TEST',$quiz_name,'','','_SEARCH:quiz:do:'.strval($quiz_id),'','','quizzes');
 				}
-				elseif ($maximum_percentage<$quiz['q_percentage']) // Failed
+				elseif ($passed===false) // Failed
 				{
 					$result_to_member=do_lang_tempcode('TEST_FAIL',escape_html($marks_range),escape_html(integer_format($out_of)),escape_html($percentage_range));
 					$result_to_staff=do_lang('MAIL_TEST_FAIL',comcode_escape($marks_range),comcode_escape(integer_format($out_of)),comcode_escape($percentage_range));
@@ -806,7 +625,7 @@ class Module_quiz
 					'RESULT'=>$result_to_staff,
 					'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member()),
 				));
-				dispatch_notification('quiz_results',strval($id),$notification_title,$mail->evaluate(get_site_default_lang()));
+				dispatch_notification('quiz_results',strval($quiz_id),$notification_title,$mail->evaluate(get_site_default_lang()));
 
 				break;
 
@@ -818,7 +637,7 @@ class Module_quiz
 
 				// Syndicate
 				require_code('activities');
-				syndicate_described_activity('quiz:ACTIVITY_ENTERED_COMPETITION',$quiz_name,'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
+				syndicate_described_activity('quiz:ACTIVITY_ENTERED_COMPETITION',$quiz_name,'','','_SEARCH:quiz:do:'.strval($quiz_id),'','','quizzes');
 
 				break;
 
@@ -837,11 +656,11 @@ class Module_quiz
 				));
 
 				// Send notification of answers to the staff
-				dispatch_notification('quiz_results',strval($id),$notification_title,$given_answers_to_staff->evaluate(get_site_default_lang()));
+				dispatch_notification('quiz_results',strval($quiz_id),$notification_title,$given_answers_to_staff->evaluate(get_site_default_lang()));
 
 				// Syndicate
 				require_code('activities');
-				syndicate_described_activity('quiz:ACTIVITY_FILLED_SURVEY',$quiz_name,'','','_SEARCH:quiz:do:'.strval($id),'','','quizzes');
+				syndicate_described_activity('quiz:ACTIVITY_FILLED_SURVEY',$quiz_name,'','','_SEARCH:quiz:do:'.strval($quiz_id),'','','quizzes');
 
 				break;
 
@@ -855,7 +674,6 @@ class Module_quiz
 
 		// Show completion summary / results
 		$fail_text=get_translated_tempcode($quiz['q_end_text_fail']);
-		$passed=$minimum_percentage>=$quiz['q_percentage'];
 		$message=(($quiz['q_type']!='TEST') || ($passed) || ($fail_text->is_empty()))?get_translated_tempcode($quiz['q_end_text']):$fail_text;
 		$reveal_answers=($quiz['q_reveal_answers']==1) && ($quiz['q_type']=='TEST');
 		return do_template('QUIZ_DONE_SCREEN',array(
@@ -868,9 +686,15 @@ class Module_quiz
 			'PASSED'=>$passed,
 			'POINTS_DIFFERENCE'=>strval($points_difference),
 			'RESULT'=>$result_to_member,
-			'TYPE'=>$quiz['q_type'],
+			'TYPE'=>do_lang($quiz['q_type']),
+			'_TYPE'=>$quiz['q_type'],
 			'MESSAGE'=>$message,
 			'REVEAL_ANSWERS'=>$reveal_answers,
+			'MARKS'=>strval($marks),
+			'POTENTIAL_EXTRA_MARKS'=>strval($potential_extra_marks),
+			'OUT_OF'=>strval($out_of),
+			'MARKS_RANGE'=>$marks_range,
+			'PERCENTAGE_RANGE'=>$percentage_range,
 		));
 	}
 }

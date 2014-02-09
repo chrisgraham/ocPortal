@@ -169,11 +169,15 @@ class Module_cms_quiz extends standard_crud_module
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
 
-		$header_row=results_field_title(array(
+		$_header_row=array(
 			do_lang_tempcode('TITLE'),
 			do_lang_tempcode('TYPE'),
-			do_lang_tempcode('ACTIONS'),
-		),$sortables,'sort',$sortable.' '.$sort_order);
+			do_lang_tempcode('DATE'),
+		);
+		if (addon_installed('points'))
+			$_header_row[]=do_lang_tempcode('POINTS');
+		$_header_row[]=do_lang_tempcode('ACTIONS');
+		$header_row=results_field_title($_header_row,$sortables,'sort',$sortable.' '.$sort_order);
 
 		$fields=new ocp_tempcode();
 
@@ -185,7 +189,16 @@ class Module_cms_quiz extends standard_crud_module
 
 			$type=do_lang_tempcode($row['q_type']);
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz')),get_translated_text($row['q_name']))),$type,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
+			$results_entry=array(
+				protect_from_escaping(hyperlink(build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),get_module_zone('quiz')),get_translated_text($row['q_name']))),
+				$type,
+				get_timezoned_date($row['q_add_date'],false),
+			);
+			if (addon_installed('points'))
+				$results_entry[]=integer_format($row['q_points_for_passing']);
+			$results_entry[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id'])));
+
+			$fields->attach(results_entry($results_entry),true);
 		}
 
 		$search_url=build_url(array('page'=>'search','id'=>'quiz'),get_module_zone('search'));

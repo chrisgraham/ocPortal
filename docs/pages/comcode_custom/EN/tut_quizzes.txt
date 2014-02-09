@@ -6,21 +6,25 @@
 
 [contents]decimal,lower-alpha[/contents]
 
-[title="2"]Competitive/game quizzes[/title]
+[title="2"]Types of quiz[/title]
+
+[title="3"]Competitive[/title]
 
 Competitions are entered by members and marked; winners may then be chosen from the Admin Zone.
 
 Example:
 [indent]The website of a computer games studio could run a competition asking questions about their latest game. The top entrant would win a tour of the games studio headquarters, and three runner ups could win a copy of any game of their choice from their back catalogue.[/indent]
 
-[title="2"]Tests[/title]
+[title="3"]Tests[/title]
 
 Tests are marked as they're completed, and the results sent out as a staff notification.
 
 Example:
 [indent]The Mensa website could run a quiz to help determine if candidates have a high enough IQ to join Mensa. The quizzes would be automatically marked and the result given to both the visitor and the Mensa staff.[/indent]
 
-[title="2"]Surveys[/title]
+Completed tests are shown on member profiles.
+
+[title="3"]Surveys[/title]
 
 Survey results are collected and available from the Admin Zone, and also staff notifications are sent. As survey results are stored in the database, experts may use [concept]SQL[/concept] to make statistical calculations on data.
 
@@ -28,6 +32,10 @@ Example:
 [indent]A teen community could make a survey to find out teen attitudes on various social issues, to help them write a report to the government lobbying for changes to policy.[/indent]
 
 Multiple-choice/single-choice inputs are collected under a statistics heading. Full responses (including free-input text fields) may be viewed individually.
+
+[title="2"]Input syntax[/title]
+
+The method of inputting quiz questions may seem a bit fiddly at first, but you'll find it is actually fairly straight-forward and makes it really quick to input new sets of questions.
 
 [title="2"]Time limits[/title]
 
@@ -40,6 +48,27 @@ Note that if you change the time limit whilst someone is using the quiz then the
 [title="2"]Adding to menus[/title]
 
 To add your quiz to a menu, use the Sitemap tool within the menu editor. You will find your quiz is available as a link underneath the Site\Quiz module.
+
+[title="2"]Scoring[/title]
+
+There are a number of features for scoring and rewarding members, and for using quizzes as an educational tool.
+
+You can mark which answers are correct (not applicable to surveys), and write out custom explanations for why incorrect responses are incorrect.
+
+You can reward members with points for passing a test.
+
+[title="2"]Security[/title]
+
+You can determine the level of security or difficulty on quizzes:
+ - Restrict them only to newsletter subscribers
+ - Restrict them by usergroup
+ - Randomly shuffle questions and/or answers, to make copying from a cheat-sheet harder
+ - Time limits (explained above)
+
+[title="2"]Exporting to CSV[/title]
+
+You can export quiz results to a CSV file which is very useful for data analysis purposes. In particular, if some test/competition questions need to be manually marked, doing so in spreadsheet software works well.
+Many marketing agencies prefer to pick competition winners from raw CSV data, as well as processing the data for further marketing purposes.
 
 [title="2"]See also[/title]
 

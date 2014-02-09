@@ -56,10 +56,10 @@ function render_quiz_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 }
 
 /**
- * Get quiz data for exporting it as a CSV
+ * Get quiz data for exporting it as a CSV.
  *
  * @param	AUTO_LINK	Quiz ID
- * @return	array			Quiz data array	
+ * @return	array			Quiz data array
  */
 function get_quiz_data_for_csv($quiz_id)
 {
@@ -68,14 +68,14 @@ function get_quiz_data_for_csv($quiz_id)
 	$csv_data=array();
 
 	// Create header array
-	$header=array(do_lang('MEMBER_NAME'),do_lang('MEMBER_EMAIL'));
+	$header=array(do_lang('MEMBER'),do_lang('EMAIL'));
 
 	// Get all entries and member answers of this quiz in to an array
-	$member_answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_entry_answer t1 JOIN '.get_table_prefix().'quiz_entries t2 ON t2.id=t1.q_entry JOIN '.get_table_prefix().'quiz_questions t3 ON t3.id=t1.q_question',array('t2.id AS entry_id','q_question','q_member','q_answer'),array('t2.q_quiz'=>$quiz_id),'ORDER BY q_order');
+	$member_answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_entry_answer t1 JOIN '.get_table_prefix().'quiz_entries t2 ON t2.id=t1.q_entry JOIN '.get_table_prefix().'quiz_questions t3 ON t3.id=t1.q_question',array('t2.id AS entry_id','q_question','q_member','q_answer','q_results'),array('t2.q_quiz'=>$quiz_id),'ORDER BY q_order');
 	$member_answers=array();
 	foreach ($member_answer_rows as $id=>$answer_entry)
 	{
-		$member_entry_key=strval($answer_entry['q_member']).'_'.strval($answer_entry['entry_id']);
+		$member_entry_key=strval($answer_entry['q_member']).'_'.strval($answer_entry['entry_id']).'_'.strval($answer_entry['q_results']);
 		$question_id=$answer_entry['q_question'];
 		if (!isset($member_answers[$member_entry_key][$question_id])) $member_answers[$member_entry_key][$question_id]=array();
 		$member_answers[$member_entry_key][$question_id]=$answer_entry['q_answer'];
@@ -87,14 +87,15 @@ function get_quiz_data_for_csv($quiz_id)
 	// Loop over it all
 	foreach ($member_answers as $member_bits=>$member_answers)
 	{
-		list($member,)=explode('_',$member_bits);
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$member_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
+		list($member,,$result)=explode('_',$member_bits,3);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username(intval($member));
+		$member_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(intval($member));
 
 		$member_answers_csv=array();
 		$member_answers_csv[do_lang('IDENTIFIER')]=$member;
 		$member_answers_csv[do_lang('USERNAME')]=$username;
 		$member_answers_csv[do_lang('EMAIL')]=$member_email;
+		$member_answers_csv[do_lang('MARKS')]=$result;
 		foreach ($questions_rows as $i=>$question_row)
 		{
 			$member_answer=array_key_exists($question_row['id'],$member_answers)?$member_answers[$question_row['id']]:'';
@@ -120,10 +121,10 @@ function get_quiz_data_for_csv($quiz_id)
 }
 
 /**
- * Get quiz data for exporting it as csv
+ * Get quiz data for exporting it as CSV.
  *
  * @param	array			The quiz questions
- * @return	tempcode		The rendered quiz	
+ * @return	tempcode		The rendered quiz
  */
 function render_quiz($questions)
 {
@@ -171,3 +172,277 @@ function render_quiz($questions)
 	return $fields;
 }
 
+/**
+ * Score a particular quiz entry.
+ *
+ * @param	AUTO_LINK	Entry ID
+ * @param	?AUTO_LINK	Quiz ID (NULL: look up from entry ID)
+ * @param	?array		Quiz row (NULL: look up from entry ID)
+ * @param	?array		Question rows (NULL: look up from entry ID)
+ * @param	boolean		Whether to show answers, regardless of whether the quiz is set to do so
+ * @return	array			A tuple of quiz result details
+ */
+function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_all=false)
+{
+	if (is_null($quiz_id))
+	{
+		$quiz_id=$GLOBALS['SITE_DB']->query_select_value('quiz_entries','q_quiz',array('id'=>$entry_id));
+	}
+	if (is_null($quiz_id))
+	{
+		$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$quiz_id),'',1);
+		if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$quiz=$quizzes[0];
+	}
+
+	$__given_answers=$GLOBALS['SITE_DB']->query_select('quiz_entry_answer',array('q_question','q_answer'),array('q_entry'=>$entry_id));
+	$_given_answers=array();
+	foreach ($__given_answers as $_given_answer)
+	{
+		if (!isset($_given_answers[$_given_answer['q_question']])) $_given_answers[$_given_answer['q_question']]=array();
+		$_given_answers[$_given_answer['q_question']][]=$_given_answer['q_answer'];
+	}
+
+	if (is_null($questions))
+	{
+		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
+		foreach ($questions as $i=>$question)
+		{
+			$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$question['id']),'ORDER BY id');
+			$questions[$i]['answers']=$answers;
+		}
+	}
+
+	$marks=0.0;
+	$potential_extra_marks=0;
+	$out_of=0;
+	$given_answers=array();
+	$corrections=array();
+	$unknowns=array();
+	foreach ($questions as $i=>$question)
+	{
+		if (!array_key_exists($question['id'],$_given_answers)) continue; // Question did not exist when this quiz entry was filled
+		if ($question['q_marked']==0) continue; // Don't count non-marked questions
+
+		$question_text=get_translated_text($question['q_question_text']);
+
+		if ($question['q_num_choosable_answers']==0) // Text box ("free question"). May be an actual answer, or may not be
+		{
+			$given_answer=$_given_answers[$question['id']][0];
+
+			$correct_answer=new ocp_tempcode();
+			$correct_explanation=mixed();
+			if (count($question['answers'])==0)
+			{
+				$potential_extra_marks++;
+				$unknowns[]=array($question_text,$given_answer);
+				$was_correct=mixed();
+			} else
+			{
+				$was_correct=false;
+				foreach ($question['answers'] as $a)
+				{
+					if ($a['q_is_correct']==1)
+					{
+						$correct_answer=make_string_tempcode(get_translated_text($a['q_answer_text']));
+					}
+					if (($a['q_is_correct']==1) && (get_translated_text($a['q_answer_text'])==$given_answer))
+					{
+						$marks++;
+						$was_correct=true;
+						break;
+					}
+					if (get_translated_text($a['q_answer_text'])==$given_answer)
+					{
+						$correct_explanation=get_translated_text($a['q_explanation']);
+					}
+				}
+				if (!$was_correct)
+				{
+					$correction=array($question['id'],$question_text,$correct_answer,$given_answer);
+					if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
+						$correction[]=$correct_explanation;
+					$corrections[]=$correction;
+				}
+			}
+
+			$given_answers[]=array(
+				'QUESTION'=>$question_text,
+				'GIVEN_ANSWER'=>$given_answer,
+				'WAS_CORRECT'=>$was_correct,
+				'CORRECT_ANSWER'=>$correct_answer,
+				'CORRECT_EXPLANATION'=>$correct_explanation,
+			);
+		}
+		elseif ($question['q_num_choosable_answers']>1) // Check boxes
+		{
+			// Vector distance
+			$wrongness=0.0;
+			$accum=new ocp_tempcode();
+			$correct_answer=new ocp_tempcode();
+			$correct_explanation=NULL;
+			foreach ($question['answers'] as $a)
+			{
+				$for_this=in_array(strval($a['id']),$_given_answers[$question['id']]);
+				$should_be_this=($a['q_is_correct']==1);
+
+				$dist=($for_this?1:0)-($should_be_this?1:0);
+				$wrongness+=$dist*$dist;
+
+				if ($should_be_this)
+				{
+					if (!$correct_answer->is_empty()) $correct_answer->attach(do_lang_tempcode('LIST_SEP'));
+					$correct_answer->attach(get_translated_text($a['q_answer_text']));
+					$correct_explanation=get_translated_text($a['q_explanation']);
+				}
+
+				if ($for_this)
+				{
+					if (!$accum->is_empty()) $accum->attach(do_lang_tempcode('LIST_SEP'));
+					$accum->attach(get_translated_text($a['q_answer_text']));
+				}
+			}
+			$wrongness=sqrt($wrongness);
+			// Normalise it
+			$wrongness/=count($question['answers']);
+			// And get our complement
+			$correctness=1.0-$wrongness;
+
+			$marks+=$correctness;
+
+			if ($correctness!=1.0)
+			{
+				$correction=array($question['id'],$question_text,$correct_answer,$accum);
+				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
+					$correction[]=$correct_explanation;
+				$corrections[]=$correction;
+			}
+
+			$given_answer=$accum->evaluate();
+
+			$given_answers[]=array(
+				'QUESTION'=>$question_text,
+				'GIVEN_ANSWER'=>$given_answer,
+				'WAS_CORRECT'=>$correctness==1.0,
+				'CORRECT_ANSWER'=>$correct_answer,
+				'CORRECT_EXPLANATION'=>$correct_explanation,
+			);
+		} else // Radio buttons
+		{
+			$was_correct=false;
+			$correct_answer=new ocp_tempcode();
+			$correct_explanation=NULL;
+			$given_answer='';
+			foreach ($question['answers'] as $a)
+			{
+				if ($a['q_is_correct']==1)
+				{
+					$correct_answer=make_string_tempcode(get_translated_text($a['q_answer_text']));
+				}
+
+				if ($_given_answers[$question['id']][0]==strval($a['id']))
+				{
+					$given_answer=get_translated_text($a['q_answer_text']);
+
+					if ($a['q_is_correct']==1)
+					{
+						$was_correct=true;
+
+						$marks++;
+						break;
+					}
+
+					$correct_explanation=get_translated_text($a['q_explanation']);
+				}
+			}
+
+			if (!$was_correct)
+			{
+				$correction=array($question['id'],$question_text,$correct_answer,$given_answer);
+				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
+					$correction[]=$correct_explanation;
+				$corrections[]=$correction;
+			}
+
+			$given_answers[]=array(
+				'QUESTION'=>$question_text,
+				'GIVEN_ANSWER'=>$given_answer,
+				'WAS_CORRECT'=>$was_correct,
+				'CORRECT_ANSWER'=>$correct_answer,
+				'CORRECT_EXPLANATION'=>$correct_explanation,
+			);
+		}
+
+		$out_of++;
+	}
+	if ($out_of==0) $out_of=1;
+	$minimum_percentage=intval(round(100.0*$marks/$out_of));
+	$maximum_percentage=intval(round(100.0*($marks+$potential_extra_marks)/$out_of));
+	$marks_range=float_format($marks,2,true).(($potential_extra_marks==0)?'':('-'.float_format($marks+$potential_extra_marks,2,true)));
+	$percentage_range=strval($minimum_percentage).(($potential_extra_marks==0)?'':('-'.strval($maximum_percentage)));
+
+	// Prepare results for display
+	$corrections_to_staff=new ocp_tempcode();
+	$corrections_to_member=new ocp_tempcode();
+	foreach ($corrections as $correction)
+	{
+		if ((array_key_exists(4,$correction)) || ($quiz['q_reveal_answers']==1) || ($reveal_all))
+		{
+			$__correction=do_lang_tempcode(
+				array_key_exists(4,$correction)?'QUIZ_MISTAKE_EXPLAINED_HTML':'QUIZ_MISTAKE_HTML',
+				escape_html(is_object($correction[1])?$correction[1]->evaluate():$correction[1]),
+				escape_html(is_object($correction[3])?$correction[3]->evaluate():$correction[3]),
+				array(
+					escape_html(is_object($correction[2])?$correction[2]->evaluate():$correction[2]),
+					escape_html(array_key_exists(4,$correction)?$correction[4]:''),
+				)
+			);
+			$corrections_to_member->attach($__correction);
+		}
+		$_correction=do_lang(
+			array_key_exists(4,$correction)?'QUIZ_MISTAKE_EXPLAINED_COMCODE':'QUIZ_MISTAKE_COMCODE',
+			comcode_escape(is_object($correction[1])?$correction[1]->evaluate():$correction[1]),
+			comcode_escape(is_object($correction[3])?$correction[3]->evaluate():$correction[3]),
+			array(
+				comcode_escape(is_object($correction[2])?$correction[2]->evaluate():$correction[2]),
+				comcode_escape(array_key_exists(4,$correction)?$correction[4]:''),
+			)
+		);
+		$corrections_to_staff->attach($_correction);
+	}
+	$unknowns_to_staff=new ocp_tempcode();
+	foreach ($unknowns as $unknown)
+	{
+		$_unknown=do_lang('QUIZ_UNKNOWN',comcode_escape($unknown[0]),comcode_escape($unknown[1]));
+		$unknowns_to_staff->attach($_unknown);
+	}
+	$given_answers_to_staff=new ocp_tempcode();
+	foreach ($given_answers as $given_answer)
+	{
+		$_given_answer=do_lang('QUIZ_RESULT',comcode_escape($given_answer['QUESTION']),comcode_escape($given_answer['GIVEN_ANSWER']));
+		$given_answers_to_staff->attach($_given_answer);
+	}
+	// NB: We don't have a list of what was correct because it's not interesting, only corrections/unknowns/everything.
+
+	$passed=mixed();
+	if ($minimum_percentage>=$quiz['q_percentage']) $passed=true;
+	elseif ($maximum_percentage<$quiz['q_percentage']) $passed=false;
+
+	return array(
+		$marks,
+		$potential_extra_marks,
+		$out_of,
+		$given_answers,
+		$corrections,
+		$unknowns,
+		$minimum_percentage,
+		$maximum_percentage,
+		$marks_range,
+		$percentage_range,
+		$corrections_to_staff,
+		$corrections_to_member,
+		$unknowns_to_staff,
+		$given_answers_to_staff,
+		$passed,
+	);
+}

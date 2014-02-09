@@ -95,9 +95,9 @@ class Hook_addon_registry_quizzes
 	{
 		return array(
 			'themes/default/images/icons/24x24/menu/cms/quiz/find_winners.png',
-			'themes/default/images/icons/24x24/menu/cms/quiz/survey_results.png',
+			'themes/default/images/icons/24x24/menu/cms/quiz/quiz_results.png',
 			'themes/default/images/icons/48x48/menu/cms/quiz/find_winners.png',
-			'themes/default/images/icons/48x48/menu/cms/quiz/survey_results.png',
+			'themes/default/images/icons/48x48/menu/cms/quiz/quiz_results.png',
 			'themes/default/images/icons/24x24/menu/rich_content/quiz.png',
 			'themes/default/images/icons/48x48/menu/rich_content/quiz.png',
 			'themes/default/images/icons/24x24/menu/cms/quiz/index.html',
@@ -116,8 +116,11 @@ class Hook_addon_registry_quizzes
 			'sources/hooks/modules/admin_import_types/quizzes.php',
 			'themes/default/templates/QUIZ_BOX.tpl',
 			'themes/default/templates/QUIZ_SCREEN.tpl',
+			'themes/default/templates/QUIZ_RESULTS.tpl',
 			'themes/default/templates/QUIZ_DONE_SCREEN.tpl',
-			'themes/default/templates/SURVEY_RESULTS_SCREEN.tpl',
+			'themes/default/templates/QUIZ_RESULT_SCREEN.tpl',
+			'themes/default/templates/QUIZ_RESULTS_SCREEN.tpl',
+			'themes/default/templates/MEMBER_QUIZ_ENTRIES.tpl',
 			'adminzone/pages/modules/admin_quiz.php',
 			'cms/pages/modules/cms_quiz.php',
 			'lang/EN/quiz.ini',
@@ -126,6 +129,7 @@ class Hook_addon_registry_quizzes
 			'sources/hooks/modules/admin_newsletter/quiz.php',
 			'sources/hooks/modules/admin_unvalidated/quiz.php',
 			'sources/hooks/modules/search/quiz.php',
+			'sources/hooks/modules/members/quiz.php',
 			'sources/hooks/systems/page_groupings/quiz.php',
 			'sources/quiz.php',
 			'sources/quiz2.php',
@@ -143,13 +147,16 @@ class Hook_addon_registry_quizzes
 	function tpl_previews()
 	{
 		return array(
-			'SURVEY_RESULTS_SCREEN.tpl'=>'survey_results_screen',
+			'QUIZ_RESULTS_SCREEN.tpl'=>'administrative__quiz_results_screen',
+			'QUIZ_RESULT_SCREEN.tpl'=>'administrative__quiz_result_screen',
+			'QUIZ_RESULTS.tpl'=>'quiz_results',
 			'QUIZ_BOX.tpl'=>'quiz_archive_screen',
 			'QUIZ_ARCHIVE_SCREEN.tpl'=>'quiz_archive_screen',
 			'QUIZ_SCREEN.tpl'=>'quiz_screen',
 			'QUIZ_SURVEY_ANSWERS_MAIL.tpl'=>'quiz_survey_answers_mail',
 			'QUIZ_TEST_ANSWERS_MAIL.tpl'=>'quiz_test_answers_mail',
-			'QUIZ_DONE_SCREEN.tpl'=>'quiz_done_screen'
+			'QUIZ_DONE_SCREEN.tpl'=>'quiz_done_screen',
+			'MEMBER_QUIZ_ENTRIES.tpl'=>'member_quiz_entries',
 		);
 	}
 
@@ -160,7 +167,7 @@ class Hook_addon_registry_quizzes
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__survey_results_screen()
+	function tpl_preview__administrative__quiz_results_screen()
 	{
 		$fields=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
@@ -177,10 +184,81 @@ class Hook_addon_registry_quizzes
 		));
 
 		return array(
-			lorem_globalise(do_lorem_template('SURVEY_RESULTS_SCREEN',array(
+			lorem_globalise(do_lorem_template('QUIZ_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'SUMMARY'=>$summary,
 				'RESULTS'=>placeholder_table(),
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__administrative__quiz_result_screen()
+	{
+		$given_answers_arr=array();
+		foreach (array(true,false,NULL) as $was_correct)
+		{
+			$given_answers_arr[]=array(
+				'QUESTION'=>lorem_phrase(),
+				'GIVEN_ANSWER'=>lorem_phrase(),
+				'WAS_CORRECT'=>$was_correct,
+				'CORRECT_ANSWER'=>lorem_phrase(),
+				'CORRECT_EXPLANATION'=>lorem_paragraph_html(),
+			);
+		}
+
+		return array(
+			lorem_globalise(do_lorem_template('QUIZ_RESULTS_SCREEN',array(
+				'TITLE'=>lorem_title(),
+				'USERNAME'=>lorem_phrase(),
+				'MEMBER_URL'=>placeholder_url(),
+				'DATE'=>placeholder_date(),
+				'_DATE'=>placeholder_date_raw(),
+				'ENTRY_ID'=>placeholder_id(),
+				'QUIZ_NAME'=>lorem_phrase(),
+				'GIVEN_ANSWERS_ARR'=>$given_answers_arr,
+				'PASSED'=>true,
+				'TYPE'=>lorem_phrase(),
+				'_TYPE'=>'TEST',
+				'MARKS'=>placeholder_number(),
+				'POTENTIAL_EXTRA_MARKS'=>placeholder_number(),
+				'OUT_OF'=>placeholder_number(),
+				'MARKS_RANGE'=>placeholder_number(),
+				'PERCENTAGE_RANGE'=>placeholder_number(),
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__quiz_results()
+	{
+		$given_answers_arr=array();
+		foreach (array(true,false,NULL) as $was_correct)
+		{
+			$given_answers_arr[]=array(
+				'QUESTION'=>lorem_phrase(),
+				'GIVEN_ANSWER'=>lorem_phrase(),
+				'WAS_CORRECT'=>$was_correct,
+				'CORRECT_ANSWER'=>lorem_phrase(),
+				'CORRECT_EXPLANATION'=>lorem_paragraph_html(),
+			);
+		}
+
+		return array(
+			lorem_globalise(do_lorem_template('QUIZ_RESULTS',array(
+				'GIVEN_ANSWERS_ARR'=>$given_answers_arr,
 			)),NULL,'',true)
 		);
 	}
@@ -382,9 +460,47 @@ class Hook_addon_registry_quizzes
 				'PASSED'=>true,
 				'POINTS_DIFFERENCE'=>placeholder_number(),
 				'RESULT'=>lorem_phrase(),
-				'TYPE'=>lorem_phrase(),
+				'TYPE'=>do_lang($quiz['q_type']),
+				'_TYPE'=>$quiz['q_type'],
 				'MESSAGE'=>lorem_phrase(),
 				'REVEAL_ANSWERS'=>true,
+				'MARKS'=>placeholder_number(),
+				'POTENTIAL_EXTRA_MARKS'=>placeholder_number(),
+				'OUT_OF'=>placeholder_number(),
+				'MARKS_RANGE'=>placeholder_number(),
+				'PERCENTAGE_RANGE'=>placeholder_number(),
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__member_quiz_entries()
+	{
+		$_entries=array();
+		$_entries[]=array(
+			'QUIZ_NAME'=>lorem_phrase(),
+			'QUIZ_START_TEXT'=>lorem_paragraph_html(),
+			'QUIZ_ID'=>placeholder_id(),
+			'QUIZ_URL'=>placeholder_url(),
+			'ENTRY_ID'=>placeholder_id(),
+			'ENTRY_DATE'=>placeholder_date(),
+			'_ENTRY_DATE'=>placeholder_date_raw(),
+			'OUT_OF'=>placeholder_number(),
+			'MARKS_RANGE'=>placeholder_number(),
+			'PERCENTAGE_RANGE'=>placeholder_number(),
+			'PASSED'=>true,
+		);
+
+		return array(
+			lorem_globalise(do_lorem_template('MEMBER_QUIZ_ENTRIES',array(
+				'ENTRIES'=>$_entries,
+				'MEMBER_ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}

@@ -54,7 +54,7 @@ class Module_admin_quiz
 		return array(
 			'misc'=>array('MANAGE_QUIZZES','menu/rich_content/quiz'),
 			'find_winner'=>array('FIND_WINNER','menu/cms/quiz/find_winners'),
-			'survey_results'=>array('SURVEY_RESULTS','menu/cms/quiz/survey_results'),
+			'quiz_results'=>array('QUIZ_RESULTS','menu/cms/quiz/quiz_results'),
 			'export'=>array('EXPORT_QUIZ','menu/_generic_admin/export'),
 		);
 	}
@@ -72,14 +72,9 @@ class Module_admin_quiz
 		$type=get_param('type','misc');
 
 		require_lang('quiz');
+		require_css('quizzes');
 
 		set_helper_panel_tutorial('tut_quizzes');
-
-		if ($type=='survey_results' || $type=='_survey_results' || $type=='__survey_results')
-		{
-		} else
-		{
-		}
 
 		if ($type=='misc')
 		{
@@ -98,24 +93,24 @@ class Module_admin_quiz
 			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:find_winner',do_lang_tempcode('CHOOSE'))));
 		}
 
-		if ($type=='survey_results')
+		if ($type=='quiz_results')
 		{
 			breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 		}
 
-		if ($type=='_survey_results')
+		if ($type=='_quiz_results')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES'))));
 		}
 
-		if ($type=='__survey_results')
+		if ($type=='__quiz_results')
 		{
 			$id=get_param_integer('id'); // entry ID
 			$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('*'),array('id'=>$id),'',1);
 			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$row=$rows[0];
 
-			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:_survey_results:'.strval($row['q_quiz']),do_lang_tempcode('SURVEY_RESULTS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF',do_lang_tempcode('MANAGE_QUIZZES')),array('_SELF:_SELF:_quiz_results:'.strval($row['q_quiz']),do_lang_tempcode('QUIZ_RESULTS'))));
 			breadcrumb_set_self(do_lang_tempcode('RESULT'));
 
 			$this->row=$row;
@@ -126,14 +121,19 @@ class Module_admin_quiz
 			$this->title=get_screen_title('EXPORT_QUIZ');
 		}
 
+		if ($type=='_export')
+		{
+			$GLOBALS['OUTPUT_STREAMING']=false;
+		}
+
 		if ($type=='find_winner' || $type=='_find_winner')
 		{
 			$this->title=get_screen_title('FIND_WINNERS');
 		}
 
-		if ($type=='survey_results' || $type=='_survey_results' || $type=='__survey_results')
+		if ($type=='quiz_results' || $type=='_quiz_results' || $type=='__quiz_results')
 		{
-			$this->title=get_screen_title('SURVEY_RESULTS');
+			$this->title=get_screen_title('QUIZ_RESULTS');
 		}
 
 		return NULL;
@@ -153,9 +153,9 @@ class Module_admin_quiz
 		if ($type=='misc') return $this->misc();
 		if ($type=='find_winner') return $this->find_winner();
 		if ($type=='_find_winner') return $this->_find_winner();
-		if ($type=='survey_results') return $this->survey_results();
-		if ($type=='_survey_results') return $this->_survey_results();
-		if ($type=='__survey_results') return $this->__survey_results();
+		if ($type=='quiz_results') return $this->quiz_results();
+		if ($type=='_quiz_results') return $this->_quiz_results();
+		if ($type=='__quiz_results') return $this->__quiz_results();
 		if ($type=='export') return $this->export_quiz();	
 		if ($type=='_export') return $this->_export_quiz();
 
@@ -175,7 +175,7 @@ class Module_admin_quiz
 		return do_next_manager(get_screen_title('MANAGE_QUIZZES'),comcode_lang_string('DOC_QUIZZES'),
 			array(
 				array('menu/cms/quiz/find_winners',array('_SELF',array('type'=>'find_winner'),'_SELF'),do_lang('FIND_WINNERS')),
-				array('menu/cms/quiz/survey_results',array('_SELF',array('type'=>'survey_results'),'_SELF'),do_lang('SURVEY_RESULTS')),
+				array('menu/cms/quiz/quiz_results',array('_SELF',array('type'=>'quiz_results'),'_SELF'),do_lang('QUIZ_RESULTS')),
 				array('menu/_generic_admin/export',array('_SELF',array('type'=>'export'),'_SELF'),do_lang('EXPORT_QUIZ')),
 			),
 			do_lang('MANAGE_QUIZZES')
@@ -354,39 +354,43 @@ class Module_admin_quiz
 	}
 
 	/**
-	 * Choose survey to view results of.
+	 * Choose quiz to view results of.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function survey_results()
+	function quiz_results()
 	{
 		require_code('form_templates');
 
-		$_m=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('q_type'=>'SURVEY'),'ORDER BY q_validated DESC,q_add_date DESC',300);
+		$where=array();
+		$type=get_param('q_type',NULL);
+		if (!is_null($type)) $where['q_type']=$type;
+
+		$_m=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),$where,'ORDER BY q_validated DESC,q_add_date DESC',300);
 		$entries=new ocp_tempcode();
 		foreach ($_m as $m)
 		{
-			$entries->attach(form_input_list_entry(strval($m['id']),false,get_translated_text($m['q_name'])));
+			$entries->attach(form_input_list_entry(strval($m['id']),false,get_translated_text($m['q_name']).' ('.do_lang($m['q_type']).')'));
 		}
 		if ($entries->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_list(do_lang_tempcode('SURVEY'),'','id',$entries,NULL,true));
+		$fields->attach(form_input_list(do_lang_tempcode('QUIZ'),'','id',$entries,NULL,true));
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_survey_results'),'_SELF',NULL,false,true);
-		$submit_name=do_lang_tempcode('SURVEY_RESULTS');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'_quiz_results'),'_SELF',NULL,false,true);
+		$submit_name=do_lang_tempcode('QUIZ_RESULTS');
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'03f611727000c1cb1c40780773bb8ebd','SKIP_VALIDATION'=>true,'HIDDEN'=>'','GET'=>true,'TITLE'=>$this->title,'TEXT'=>'','URL'=>$post_url,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 	}
 
 	/**
-	 * View survey results.
+	 * View quiz results.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function _survey_results()
+	function _quiz_results()
 	{
-		$id=get_param_integer('id'); // quiz ID
+		$id=get_param_integer('id',NULL); // quiz ID
 
 		$fields=new ocp_tempcode();
 
@@ -394,33 +398,36 @@ class Module_admin_quiz
 		require_code('templates_map_table');
 
 		// Show summary
-		$question_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY id');
-		foreach ($question_rows as $q)
+		if (!is_null($id))
 		{
-			$question=get_translated_text($q['q_question_text']);
-
-			$answers=new ocp_tempcode();
-			$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY id');
-			$all_answers=array();
-			foreach ($answer_rows as $i=>$a)
+			$question_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY id');
+			foreach ($question_rows as $q)
 			{
-				$answer=get_translated_text($a['q_answer_text']);
-				$count=$GLOBALS['SITE_DB']->query_select_value('quiz_entry_answer','COUNT(*)',array('q_answer'=>strval($a['id'])));
+				$question=get_translated_text($q['q_question_text']);
 
-				$all_answers[serialize(array($answer,$i))]=$count;
+				$answers=new ocp_tempcode();
+				$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY id');
+				$all_answers=array();
+				foreach ($answer_rows as $i=>$a)
+				{
+					$answer=get_translated_text($a['q_answer_text']);
+					$count=$GLOBALS['SITE_DB']->query_select_value('quiz_entry_answer','COUNT(*)',array('q_answer'=>strval($a['id'])));
+
+					$all_answers[serialize(array($answer,$i))]=$count;
+				}
+				arsort($all_answers);
+				foreach ($all_answers as $bits=>$count)
+				{
+					list($answer,$i)=unserialize($bits);
+
+					$answers->attach(paragraph(do_lang_tempcode('QUIZ_ANSWER_RESULT',escape_html($answer),integer_format($count),integer_format($i+1))));
+				}
+				if ($answers->is_empty()) $answers=do_lang_tempcode('FREE_ENTRY_ANSWER');
+
+				$fields->attach(map_table_field($question,$answers,true));
 			}
-			arsort($all_answers);
-			foreach ($all_answers as $bits=>$count)
-			{
-				list($answer,$i)=unserialize($bits);
-
-				$answers->attach(paragraph(do_lang_tempcode('SURVEY_ANSWER_RESULT',escape_html($answer),integer_format($count),integer_format($i+1))));
-			}
-			if ($answers->is_empty()) $answers=do_lang_tempcode('FREE_ENTRY_ANSWER');
-
-			$fields->attach(map_table_field($question,$answers,true));
-		}
-		$summary=do_template('MAP_TABLE',array('_GUID'=>'2b0c2ba0070ba810c5e4b5b4aedcb15f','WIDTH'=>'300','FIELDS'=>$fields));
+			$summary=do_template('MAP_TABLE',array('_GUID'=>'2b0c2ba0070ba810c5e4b5b4aedcb15f','WIDTH'=>'300','FIELDS'=>$fields));
+		} else $summary=new ocp_tempcode();
 
 		// Show results table
 		$start=get_param_integer('start',0);
@@ -431,63 +438,83 @@ class Module_admin_quiz
 		list($sortable,$sort_order)=$test;
 		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
 			log_hack_attack_and_exit('ORDERBY_HACK');
-		$max_rows=$GLOBALS['SITE_DB']->query_select_value('quiz_entries','COUNT(*)');
-		$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('id','q_time','q_member'),array('q_quiz'=>$id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$where=array();
+		if (!is_null($id)) $where['q_quiz']=$id;
+		$member_id=get_param_integer('member_id',NULL);
+		if (!is_null($member_id)) $where['q_member']=$member_id;
+		$max_rows=$GLOBALS['SITE_DB']->query_select_value('quiz_entries','COUNT(*)',$where);
+		$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries e JOIN '.get_table_prefix().'quizzes q ON q.id=e.q_quiz',array('e.id AS e_id','e.q_time','e.q_member','e.q_results','q.*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
 		{
 			return inform_screen($this->title,do_lang_tempcode('NO_ENTRIES'));
 		}
 		$fields=new ocp_tempcode();
-		$fields_title=results_field_title(array(do_lang_tempcode('DATE'),do_lang_tempcode('USERNAME')),$sortables,'sort',$sortable.' '.$sort_order);
+		$_fields_title=array();
+		$_fields_title[]=do_lang_tempcode('DATE');
+		if (is_null($id))
+		{
+			$_fields_title[]=do_lang_tempcode('NAME');
+			$_fields_title[]=do_lang_tempcode('TYPE');
+		} else
+		{
+			$_fields_title[]=do_lang_tempcode('USERNAME');
+		}
+		$_fields_title[]=do_lang_tempcode('MARKS');
+		$fields_title=results_field_title($_fields_title,$sortables,'sort',$sortable.' '.$sort_order);
 		foreach ($rows as $myrow)
 		{
-			$date_link=hyperlink(build_url(array('page'=>'_SELF','type'=>'__survey_results','id'=>$myrow['id']),'_SELF'),escape_html(get_timezoned_date($myrow['q_time'])));
-			$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['q_member'],false,'',false);
+			$results_entry=array();
 
-			$fields->attach(results_entry(array($date_link,$member_link),false));
+			$date_link=hyperlink(build_url(array('page'=>'_SELF','type'=>'__quiz_results','id'=>$myrow['e_id']),'_SELF'),escape_html(get_timezoned_date($myrow['q_time'])));
+			$results_entry[]=$date_link;
+
+			if (is_null($id))
+			{
+				$results_entry[]=get_translated_text($myrow['q_name']);
+				$results_entry[]=do_lang($myrow['q_type']);
+			} else
+			{
+				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['q_member'],false,'',false);
+				$results_entry[]=$member_link;
+			}
+			$results_entry[]=($myrow['q_type']=='SURVEY')?'':integer_format($myrow['q_results']);
+
+			$fields->attach(results_entry($results_entry,false));
 		}
 		if ($fields->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
-		$results=results_table(do_lang_tempcode('SURVEY_RESULTS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
+		$results=results_table(do_lang_tempcode('QUIZ_RESULTS'),$start,'start',$max,'max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		$tpl=do_template('SURVEY_RESULTS_SCREEN',array('_GUID'=>'3f38ac1b94fb4de8219b8f7108c7b0a3','TITLE'=>$this->title,'SUMMARY'=>$summary,'RESULTS'=>$results));
+		$tpl=do_template('QUIZ_RESULTS_SCREEN',array(
+			'_GUID'=>'3f38ac1b94fb4de8219b8f7108c7b0a3',
+			'TITLE'=>$this->title,
+			'SUMMARY'=>$summary,
+			'RESULTS'=>$results,
+		));
 
 		require_code('templates_internalise_screen');
 		return internalise_own_screen($tpl);
 	}
 
 	/**
-	 * View a single filled-in survey.
+	 * View a single filled-in quiz.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function __survey_results()
+	function __quiz_results()
 	{
 		require_code('templates_map_table');
 
 		$id=get_param_integer('id'); // entry ID
 
-		$fields=new ocp_tempcode();
-
 		$row=$this->row;
+
+		$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$row['q_quiz']),'',1);
+		if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		$quiz=$quizzes[0];
 
 		$member_id=$row['q_member'];
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 		if (is_null($username)) $username=do_lang('UNKNOWN');
-		$date=get_timezoned_date($row['q_time']);
-
-		$question_rows=$GLOBALS['SITE_DB']->query_select('quiz_questions q LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'quiz_entry_answer a ON q.id=a.q_question',array('q.id','q_question_text','q_answer','q_quiz'),array('q_entry'=>$id),'ORDER BY q.id');
-		foreach ($question_rows as $q)
-		{
-			$quiz_id=$q['q_quiz'];
-			$answer=$q['q_answer'];
-			if (is_numeric($answer))
-			{
-				$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('q_answer_text'),array('q_question'=>$q['id'],'id'=>intval($answer)),'ORDER BY id');
-				if (array_key_exists(0,$answer_rows)) $answer=get_translated_text($answer_rows[0]['q_answer_text']);
-			}
-			$fields->attach(map_table_field(get_translated_text($q['q_question_text']),$answer));
-		}
-
 		$member_url=get_base_url();
 		if (!is_guest($member_id))
 		{
@@ -495,7 +522,44 @@ class Module_admin_quiz
 			if (is_object($member_url)) $member_url=$member_url->evaluate();
 		}
 
-		return do_template('MAP_TABLE_SCREEN',array('_GUID'=>'02b4dd6d52feaf3844e631e56395c4da','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('SURVEY_WAS_ENTERED_AS_FOLLOWS',escape_html($username),escape_html($member_url),escape_html($date)),'FIELDS'=>$fields));
+		$date=get_timezoned_date($row['q_time']);
+
+		list(
+			$marks,
+			$potential_extra_marks,
+			$out_of,
+			$given_answers,
+			,
+			,
+			,
+			,
+			$marks_range,
+			$percentage_range,
+			,
+			,
+			,
+			,
+			$passed,
+		)=score_quiz($id,NULL,NULL,NULL,true);
+
+		return do_template('QUIZ_RESULT_SCREEN',array(
+			'TITLE'=>$this->title,
+			'USERNAME'=>$username,
+			'MEMBER_URL'=>$member_url,
+			'DATE'=>$date,
+			'_DATE'=>strval($row['q_time']),
+			'ENTRY_ID'=>strval($id),
+			'QUIZ_NAME'=>get_translated_text($quiz['q_name']),
+			'GIVEN_ANSWERS_ARR'=>$given_answers,
+			'PASSED'=>$passed,
+			'TYPE'=>do_lang($quiz['q_type']),
+			'_TYPE'=>$quiz['q_type'],
+			'MARKS'=>strval($marks),
+			'POTENTIAL_EXTRA_MARKS'=>strval($potential_extra_marks),
+			'OUT_OF'=>strval($out_of),
+			'MARKS_RANGE'=>$marks_range,
+			'PERCENTAGE_RANGE'=>$percentage_range,
+		));
 	}
 }
 

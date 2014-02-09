@@ -1,8 +1,5 @@
 {!HERE_TEST_RESULTS,\{\{{USERNAME@}\}\}}
 
-{RESULT}
+{RESULT}{CORRECTIONS}{UNKNOWNS}
 
-{CORRECTIONS}
-
-{UNKNOWNS}
-
+{!VIEW_FULL_QUIZ_RESULTS,adminzone:admin_quiz:__quiz_results:{ENTRY_ID&}}
