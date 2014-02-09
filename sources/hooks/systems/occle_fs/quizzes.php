@@ -77,6 +77,9 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 			'submitter'=>'member',
 			'points_for_passing'=>'INTEGER',
 			//'tied_newsletter'=>'?newsletter',
+			'reveal_answers'=>'BINARY',
+			'shuffle_questions'=>'BINARY',
+			'shuffle_answers'=>'BINARY',
 			'add_date'=>'?TIME',
 			'meta_keywords'=>'LONG_TRANS',
 			'meta_description'=>'LONG_TRANS',
@@ -128,10 +131,13 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$points_for_passing=$this->_default_property_int($properties,'points_for_passing');
 		$tied_newsletter=NULL;//$this->_default_property_int_null($properties,'tied_newsletter');
+		$reveal_answers=$this->_default_property_int($properties,'reveal_answers');
+		$shuffle_questions=$this->_default_property_int($properties,'shuffle_questions');
+		$shuffle_answers=$this->_default_property_int($properties,'shuffle_answers');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
-		$id=add_quiz($label,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter,$points_for_passing,$tied_newsletter,$add_time,$meta_keywords,$meta_description);
+		$id=add_quiz($label,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter,$points_for_passing,$tied_newsletter,$reveal_answers,$shuffle_questions,$shuffle_answers,$add_time,$meta_keywords,$meta_description);
 		return strval($id);
 	}
 
@@ -173,6 +179,9 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 			'submitter'=>$row['q_submitter'],
 			'points_for_passing'=>$row['q_points_for_passing'],
 			//'tied_newsletter'=>$row['q_tied_newsletter'],
+			'reveal_answers'=>$row['q_reveal_answers'],
+			'shuffle_questions'=>$row['q_shuffle_questions'],
+			'shuffle_answers'=>$row['q_shuffle_answers'],
 			'add_date'=>$row['q_add_date'],
 			'meta_keywords'=>$meta_keywords,
 			'meta_description'=>$meta_description,
@@ -214,11 +223,14 @@ class Hook_occle_fs_quizzes extends resource_fs_base
 		$submitter=$this->_default_property_int_null($properties,'submitter');
 		$points_for_passing=$this->_default_property_int($properties,'points_for_passing');
 		$tied_newsletter=NULL;//$this->_default_property_int_null($properties,'tied_newsletter');
+		$reveal_answers=$this->_default_property_int($properties,'reveal_answers');
+		$shuffle_questions=$this->_default_property_int($properties,'shuffle_questions');
+		$shuffle_answers=$this->_default_property_int($properties,'shuffle_answers');
 		$add_time=$this->_default_property_int_null($properties,'add_date');
 		$meta_keywords=$this->_default_property_str($properties,'meta_keywords');
 		$meta_description=$this->_default_property_str($properties,'meta_description');
 
-		edit_quiz(intval($resource_id),$label,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing,$tied_newsletter,$add_time,$submitter,true);
+		edit_quiz(intval($resource_id),$label,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing,$tied_newsletter,$reveal_answers,$shuffle_questions,$shuffle_answers,$add_time,$submitter,true);
 
 		return $resource_id;
 	}

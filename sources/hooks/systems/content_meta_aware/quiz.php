@@ -42,7 +42,7 @@ class Hook_content_meta_aware_quiz
 			'is_category'=>false,
 			'is_entry'=>true,
 			'category_field'=>'q_type', // For category permissions
-			'category_type'=>NULL, // For category permissions
+			'category_type'=>'quiz', // For category permissions
 			'parent_spec__table_name'=>NULL,
 			'parent_spec__parent_name'=>NULL,
 			'parent_spec__field_name'=>NULL,

@@ -28,6 +28,9 @@ class Module_cms_quiz extends standard_crud_module
 	var $lang_type='QUIZ';
 	var $select_name='NAME';
 	var $permissions_require='high';
+	var $permissions_cat_require='quiz';
+	var $permission_module='quiz';
+	var $permissions_cat_name=NULL;
 	var $user_facing=true;
 	var $seo_type='quiz';
 	var $content_type='quiz';
@@ -49,7 +52,7 @@ class Module_cms_quiz extends standard_crud_module
 	function get_privilege_overrides()
 	{
 		require_lang('quiz');
-		return array('submit_highrange_content'=>array(1,'ADD_QUIZ'),'bypass_validation_highrange_content'=>array(1,'BYPASS_VALIDATION_QUIZ'),'edit_own_highrange_content'=>array(1,'EDIT_OWN_QUIZ'),'edit_highrange_content'=>array(1,'EDIT_QUIZ'),'delete_own_highrange_content'=>array(1,'DELETE_OWN_QUIZ'),'delete_highrange_content'=>array(1,'DELETE_QUIZ'));
+		return array('submit_highrange_content'=>array(0,'ADD_QUIZ'),'bypass_validation_highrange_content'=>array(0,'BYPASS_VALIDATION_QUIZ'),'edit_own_highrange_content'=>array(0,'EDIT_OWN_QUIZ'),'edit_highrange_content'=>array(0,'EDIT_QUIZ'),'delete_own_highrange_content'=>array(0,'DELETE_OWN_QUIZ'),'delete_highrange_content'=>array(0,'DELETE_QUIZ'));
 	}
 
 	/**
@@ -209,6 +212,17 @@ class Module_cms_quiz extends standard_crud_module
 	}
 
 	/**
+	 * Standard crud_module cat getter.
+	 *
+	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @return mixed			The cat
+	 */
+	function get_cat($id)
+	{
+		return $id;
+	}
+
+	/**
 	 * Get tempcode for a adding/editing form.
 	 *
 	 * @param  ?AUTO_LINK	The quiz ID (NULL: new)
@@ -229,9 +243,12 @@ class Module_cms_quiz extends standard_crud_module
 	 * @param  ?string		Text for questions (NULL: default)
 	 * @param  integer		The number of points awarded for completing/passing the quiz/test
 	 * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
+	 * @param  BINARY			Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
+	 * @param  BINARY			Whether to shuffle questions, to make cheating a bit harder
+	 * @param  BINARY			Whether to shuffle multiple-choice answers, to make cheating a bit harder
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($id=NULL,$name='',$timeout=NULL,$start_text='',$end_text='',$end_text_fail='',$notes='',$percentage=70,$open_time=NULL,$close_time=NULL,$num_winners=2,$redo_time=NULL,$type='COMPETITION',$validated=1,$text=NULL,$points_for_passing=0,$tied_newsletter=NULL)
+	function get_form_fields($id=NULL,$name='',$timeout=NULL,$start_text='',$end_text='',$end_text_fail='',$notes='',$percentage=70,$open_time=NULL,$close_time=NULL,$num_winners=2,$redo_time=NULL,$type='SURVEY',$validated=1,$text=NULL,$points_for_passing=0,$tied_newsletter=NULL,$reveal_answers=0,$shuffle_questions=0,$shuffle_answers=0)
 	{
 		if (is_null($open_time)) $open_time=time();
 
@@ -248,6 +265,8 @@ class Module_cms_quiz extends standard_crud_module
 		$list->attach(form_input_list_entry('COMPETITION',$type=='COMPETITION',do_lang_tempcode('COMPETITION')));
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_QUIZ_TYPE'),'type',$list,NULL,true));
 		$fields->attach(form_input_huge(do_lang_tempcode('QUESTIONS'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_START_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_START_TEXT'),'start_text',$start_text,false));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT'),'end_text',$end_text,false));
 		if ($validated==0)
 		{
 			$validated=get_param_integer('validated',0);
@@ -256,14 +275,11 @@ class Module_cms_quiz extends standard_crud_module
 		if (addon_installed('unvalidated'))
 			$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED_SIMPLE'),'validated',$validated==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'43499b3d39e5743f27852e84cd6d3296','TITLE'=>do_lang_tempcode('TEST'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'43499b3d39e5743f27852e84cd6d3296','TITLE'=>do_lang_tempcode('TEST'),'SECTION_HIDDEN'=>$type!='TEST')));
 		$fields->attach(form_input_integer(do_lang_tempcode('COMPLETION_PERCENTAGE'),do_lang_tempcode('DESCRIPTION_COMPLETION_PERCENTAGE'),'percentage',$percentage,true));
+		$fields->attach(form_input_tick(do_lang_tempcode('REVEAL_ANSWERS'),do_lang_tempcode('DESCRIPTION_REVEAL_ANSWERS'),'reveal_answers',$reveal_answers==1));
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'9df4bf6d913b68f9c80312df875367d7','TITLE'=>do_lang_tempcode('TEXT'),'SECTION_HIDDEN'=>$start_text=='' && $end_text=='')));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_START_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_START_TEXT'),'start_text',$start_text,false));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT'),'end_text',$end_text,false));
-
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'40f0d67ae21fd3768cc7688d90c99d6e','TITLE'=>do_lang_tempcode('COMPETITION'))));
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'40f0d67ae21fd3768cc7688d90c99d6e','TITLE'=>do_lang_tempcode('COMPETITION'),'SECTION_HIDDEN'=>$type!='COMPETITION')));
 		$fields->attach(form_input_integer(do_lang_tempcode('NUM_WINNERS'),do_lang_tempcode('DESCRIPTION_NUM_WINNERS'),'num_winners',$num_winners,true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT_FAIL'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT_FAIL'),'end_text_fail',$end_text_fail,false));
 
@@ -272,6 +288,8 @@ class Module_cms_quiz extends standard_crud_module
 			'SECTION_HIDDEN'=>is_null($redo_time) && is_null($timeout) && ((is_null($open_time)) || ($open_time<=time())) && is_null($close_time) && $points_for_passing==0 && is_null($tied_newsletter) && $notes=='',
 			'TITLE'=>do_lang_tempcode('ADVANCED'),
 		)));
+		$fields->attach(form_input_tick(do_lang_tempcode('SHUFFLE_QUESTIONS'),do_lang_tempcode('DESCRIPTION_SHUFFLE_QUESTIONS'),'shuffle_questions',$shuffle_questions==1));
+		$fields->attach(form_input_tick(do_lang_tempcode('SHUFFLE_ANSWERS'),do_lang_tempcode('DESCRIPTION_SHUFFLE_ANSWERS'),'shuffle_answers',$shuffle_answers==1));
 		$fields->attach(form_input_integer(do_lang_tempcode('REDO_TIME'),do_lang_tempcode('DESCRIPTION_REDO_TIME'),'redo_time',$redo_time,false));
 		$fields->attach(form_input_integer(do_lang_tempcode('TIMEOUT'),do_lang_tempcode('DESCRIPTION_QUIZ_TIMEOUT'),'timeout',$timeout,false));
 		$fields->attach(form_input_date(do_lang_tempcode('OPEN_TIME'),do_lang_tempcode('DESCRIPTION_OPEN_TIME'),'open_time',false,false,true,$open_time,2));
@@ -301,6 +319,9 @@ class Module_cms_quiz extends standard_crud_module
 
 		if (addon_installed('content_reviews'))
 			$fields->attach(content_review_get_fields('quiz',is_null($id)?NULL:strval($id)));
+
+		// Permissions
+		$fields->attach($this->get_permission_fields(($id===NULL)?NULL:strval($id),NULL,($id===NULL)));
 
 		return array($fields,new ocp_tempcode());
 	}
@@ -337,7 +358,28 @@ class Module_cms_quiz extends standard_crud_module
 
 		$text=load_quiz_questions_to_string($id);
 
-		return $this->get_form_fields($myrow['id'],get_translated_text($myrow['q_name']),$myrow['q_timeout'],get_translated_text($myrow['q_start_text']),get_translated_text($myrow['q_end_text']),get_translated_text($myrow['q_end_text_fail']),$myrow['q_notes'],$myrow['q_percentage'],$myrow['q_open_time'],$myrow['q_close_time'],$myrow['q_num_winners'],$myrow['q_redo_time'],$myrow['q_type'],$myrow['q_validated'],$text,$myrow['q_points_for_passing'],$myrow['q_tied_newsletter']);
+		return $this->get_form_fields(
+			$myrow['id'],
+			get_translated_text($myrow['q_name']),
+			$myrow['q_timeout'],
+			get_translated_text($myrow['q_start_text']),
+			get_translated_text($myrow['q_end_text']),
+			get_translated_text($myrow['q_end_text_fail']),
+			$myrow['q_notes'],
+			$myrow['q_percentage'],
+			$myrow['q_open_time'],
+			$myrow['q_close_time'],
+			$myrow['q_num_winners'],
+			$myrow['q_redo_time'],
+			$myrow['q_type'],
+			$myrow['q_validated'],
+			$text,
+			$myrow['q_points_for_passing'],
+			$myrow['q_tied_newsletter'],
+			$myrow['q_reveal_answers'],
+			$myrow['q_shuffle_questions'],
+			$myrow['q_shuffle_answers']
+		);
 	}
 
 	/**
@@ -358,7 +400,31 @@ class Module_cms_quiz extends standard_crud_module
 
 		$meta_data=actual_meta_data_get_fields('quiz',NULL);
 
-		$id=add_quiz($name,post_param_integer('timeout',NULL),post_param('start_text'),post_param('end_text'),post_param('end_text_fail'),post_param('notes',''),post_param_integer('percentage',0),$open_time,$close_time,post_param_integer('num_winners',0),post_param_integer('redo_time',NULL),post_param('type'),$validated,post_param('text'),NULL,post_param_integer('points_for_passing',0),$tied_newsletter,$meta_data['add_time']);
+		$id=add_quiz(
+			$name,
+			post_param_integer('timeout',NULL),
+			post_param('start_text'),
+			post_param('end_text'),
+			post_param('end_text_fail'),
+			post_param('notes',''),
+			post_param_integer('percentage',0),
+			$open_time,
+			$close_time,
+			post_param_integer('num_winners',0),
+			post_param_integer('redo_time',NULL),
+			post_param('type'),
+			$validated,
+			post_param('text'),
+			NULL,
+			post_param_integer('points_for_passing',0),
+			$tied_newsletter,
+			post_param_integer('reveal_answers',0),
+			post_param_integer('shuffle_questions',0),
+			post_param_integer('shuffle_answers',0),
+			$meta_data['add_time']
+		);
+
+		$this->set_permissions(strval($id));
 
 		if (($validated==1) || (!addon_installed('unvalidated')))
 		{
@@ -427,10 +493,18 @@ class Module_cms_quiz extends standard_crud_module
 			post_param('meta_description',fractional_edit()?STRING_MAGIC_NULL:''),
 			post_param_integer('points_for_passing',fractional_edit()?INTEGER_MAGIC_NULL:0),
 			$tied_newsletter,
+			post_param_integer('reveal_answers',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('shuffle_questions',fractional_edit()?INTEGER_MAGIC_NULL:0),
+			post_param_integer('shuffle_answers',fractional_edit()?INTEGER_MAGIC_NULL:0),
 			$meta_data['add_time'],
 			$meta_data['submitter'],
 			true
 		);
+
+		if (!fractional_edit())
+		{
+			$this->set_permissions(strval($id));
+		}
 
 		if (addon_installed('content_reviews'))
 			content_review_set('quiz',strval($id));

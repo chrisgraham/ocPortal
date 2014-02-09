@@ -274,12 +274,15 @@ function _save_available_quiz_answers($id,$text,$type)
  * @param  ?MEMBER		The member adding it (NULL: current member)
  * @param  integer		The number of points awarded for completing/passing the quiz/test
  * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
+ * @param  BINARY			Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
+ * @param  BINARY			Whether to shuffle questions, to make cheating a bit harder
+ * @param  BINARY			Whether to shuffle multiple-choice answers, to make cheating a bit harder
  * @param  ?TIME			The add time (NULL: now)
  * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID
  */
-function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL,$add_time=NULL,$meta_keywords='',$meta_description='')
+function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter=NULL,$points_for_passing=0,$tied_newsletter=NULL,$reveal_answers=0,$shuffle_questions=0,$shuffle_answers=0,$add_time=NULL,$meta_keywords='',$meta_description='')
 {
 	require_code('global4');
 	prevent_double_submit('ADD_QUIZ',NULL,$name);
@@ -306,6 +309,9 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 		'q_add_date'=>$add_time,
 		'q_points_for_passing'=>$points_for_passing,
 		'q_tied_newsletter'=>$tied_newsletter,
+		'q_reveal_answers'=>$reveal_answers,
+		'q_shuffle_questions'=>$shuffle_questions,
+		'q_shuffle_answers'=>$shuffle_answers,
 	),true);
 
 	_save_available_quiz_answers($id,$text,$type);
@@ -352,12 +358,16 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
  * @param  SHORT_TEXT	Meta keywords
  * @param  LONG_TEXT		Meta description
  * @param  integer		The number of points awarded for completing/passing the quiz/test
+ * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
+ * @param  BINARY			Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
+ * @param  BINARY			Whether to shuffle questions, to make cheating a bit harder
+ * @param  BINARY			Whether to shuffle multiple-choice answers, to make cheating a bit harder
  * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
  * @param  ?TIME			Add time (NULL: do not change)
  * @param  ?MEMBER		Submitter (NULL: do not change)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing=0,$tied_newsletter=NULL,$add_time=NULL,$submitter=NULL,$null_is_literal=false)
+function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing=0,$tied_newsletter=NULL,$reveal_answers=0,$shuffle_questions=0,$shuffle_answers=0,$add_time=NULL,$submitter=NULL,$null_is_literal=false)
 {
 	$rows=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
 	if (!array_key_exists(0,$rows))
@@ -394,6 +404,9 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		'q_validated'=>$validated,
 		'q_points_for_passing'=>$points_for_passing,
 		'q_tied_newsletter'=>$tied_newsletter,
+		'q_reveal_answers'=>$reveal_answers,
+		'q_shuffle_questions'=>$shuffle_questions,
+		'q_shuffle_answers'=>$shuffle_answers,
 	);
 
 	if (!is_null($add_time))
@@ -463,6 +476,8 @@ function delete_quiz($id)
 	$GLOBALS['SITE_DB']->query_delete('quiz_entries',array('q_quiz'=>$id));
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'quiz'));
+
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'quiz','category_name'=>strval($id)));
 
 	log_it('DELETE_QUIZ',strval($id),$name);
 

@@ -35,7 +35,7 @@ class Module_quiz
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -70,6 +70,28 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_required','BINARY');
 		}
 
+		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_reveal_answers','BINARY');
+			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_shuffle_questions','BINARY');
+			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_shuffle_answers','BINARY');
+
+			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
+			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+
+			// Save in permissions for event type
+			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('id'));
+			foreach ($quizzes as $quiz)
+			{
+				foreach (array_keys($groups) as $group_id)
+				{
+					if (in_array($group_id,$admin_groups)) continue;
+
+					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'quiz','category_name'=>strval($quiz['id']),'group_id'=>$group_id));
+				}
+			}
+		}
+
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('quiz_member_last_visit',array(
@@ -100,6 +122,9 @@ class Module_quiz
 				'q_points_for_passing'=>'INTEGER',
 				'q_tied_newsletter'=>'?AUTO_LINK',
 				'q_end_text_fail'=>'LONG_TRANS',
+				'q_reveal_answers'=>'BINARY',
+				'q_shuffle_questions'=>'BINARY',
+				'q_shuffle_answers'=>'BINARY',
 			));
 			$GLOBALS['SITE_DB']->create_index('quizzes','q_validated',array('q_validated'));
 
@@ -190,6 +215,9 @@ class Module_quiz
 		{
 			$id=get_param_integer('id');
 
+			// Check access
+			if (!has_category_access(get_member(),'quiz',strval($id))) access_denied('CATEGORY_ACCESS');
+
 			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
 			if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$quiz=$quizzes[0];
@@ -246,15 +274,18 @@ class Module_quiz
 
 		if ($type=='_do')
 		{
-			breadcrumb_set_self(do_lang_tempcode('DONE'));
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
-
 			$id=get_param_integer('id');
+
+			// Check access
+			if (!has_category_access(get_member(),'quiz',strval($id))) access_denied('CATEGORY_ACCESS');
 
 			$quizzes=$GLOBALS['SITE_DB']->query_select('quizzes',array('*'),array('id'=>$id),'',1);
 			if (!array_key_exists(0,$quizzes)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$quiz=$quizzes[0];
 			$this->enforcement_checks($quiz);
+
+			breadcrumb_set_self(do_lang_tempcode('DONE'));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
 
 			$this->title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 
@@ -301,6 +332,9 @@ class Module_quiz
 		$content_surveys=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
+			// Check access
+			if (!has_category_access(get_member(),'quiz',strval($myrow['id']))) continue;
+
 			$link=render_quiz_box($myrow,'_SEARCH',false);
 
 			switch ($myrow['q_type'])
@@ -329,7 +363,7 @@ class Module_quiz
 	/**
 	 * Make sure the entry rules of a quiz are not being broken. Exits when they may not enter.
 	 *
-	 * @param  array	The db row of the quiz
+	 * @param  array	The DB row of the quiz
 	 */
 	function enforcement_checks($quiz)
 	{
@@ -400,13 +434,11 @@ class Module_quiz
 		}
 
 		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
-		// If a test/quiz, randomly order questions
-		//if ($quiz['q_type']!='SURVEY') shuffle($questions);			No, could cause problems
+		if ($quiz['q_shuffle_questions']==1) shuffle($questions);
 		foreach ($questions as $i=>$question)
 		{
 			$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$question['id']),'ORDER BY q_order');
-			// If a test/quiz, randomly order answers
-			if ($quiz['q_type']!='SURVEY') shuffle($answers);
+			if ($quiz['q_shuffle_answers']==1) shuffle($answers);
 			$questions[$i]['answers']=$answers;
 		}
 
@@ -652,7 +684,7 @@ class Module_quiz
 		{
 			$this_correction=new ocp_tempcode();
 			$this_correction->attach(do_lang('QUIZ_MISTAKE',is_object($correction[1])?$correction[1]->evaluate():$correction[1],is_object($correction[3])?$correction[3]->evaluate():$correction[3],array(is_object($correction[2])?$correction[2]->evaluate():$correction[2],array_key_exists(4,$correction)?$correction[4]:'')));
-			if (array_key_exists(4,$correction))
+			if ((array_key_exists(4,$correction)) || ($quiz['q_reveal_answers']==1))
 				$_corrections_to_show->attach($this_correction);
 			$_corrections->attach($this_correction);
 		}

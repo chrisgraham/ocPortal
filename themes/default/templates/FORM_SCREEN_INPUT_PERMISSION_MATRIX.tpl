@@ -20,9 +20,11 @@
 					</th>
 				{+END}
 
-				{+START,IF,{$JS_ON}}
-					<th>
-					</th>
+				{+START,IF,{$IS_NON_EMPTY,{OVERRIDES}}}
+					{+START,IF,{$JS_ON}}
+						<th>
+						</th>
+					{+END}
 				{+END}
 			</tr>
 		</thead>
@@ -44,9 +46,11 @@
 					</td>
 				{+END}
 
-				{+START,IF,{$JS_ON}}
-					<td class="form_table_field_input">
-					</td>
+				{+START,IF,{$IS_NON_EMPTY,{OVERRIDES}}}
+					{+START,IF,{$JS_ON}}
+						<td class="form_table_field_input">
+						</td>
+					{+END}
 				{+END}
 			</tr>
 		</tbody>

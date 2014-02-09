@@ -113,7 +113,7 @@ class Hook_search_quiz
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('quiz','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'quizzes r',array('','r.q_start_text'),$where_clause,$content_where,$remapped_orderer,'r.*');
+		$rows=get_search_rows('quiz','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'quizzes r',array('','r.q_start_text'),$where_clause,$content_where,$remapped_orderer,'r.*',array(),'quiz','id');
 
 		$out=array();
 		foreach ($rows as $i=>$row)
