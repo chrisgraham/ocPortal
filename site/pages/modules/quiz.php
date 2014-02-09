@@ -75,6 +75,7 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_reveal_answers','BINARY');
 			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_shuffle_questions','BINARY');
 			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_shuffle_answers','BINARY');
+			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_marked','BINARY',1);
 
 			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -136,6 +137,7 @@ class Module_quiz
 				'q_question_text'=>'LONG_TRANS',
 				'q_order'=>'INTEGER',
 				'q_required'=>'BINARY',
+				'q_marked'=>'BINARY',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('quiz_question_answers',array(
@@ -519,13 +521,14 @@ class Module_quiz
 		}
 		$marks=0.0;
 		$potential_extra_marks=0;
-		$out_of=count($questions);
-		if ($out_of==0) $out_of=1;
+		$out_of=0;
 		$given_answers=array();
 		$corrections=array();
 		$unknowns=array();
 		foreach ($questions as $i=>$question)
 		{
+			if ($question['q_marked']==0) continue;
+
 			$question_text=get_translated_text($question['q_question_text']);
 
 			$name='q_'.strval($question['id']);
@@ -692,7 +695,10 @@ class Module_quiz
 					'CORRECT_EXPLANATION'=>$correct_explanation,
 				);
 			}
+
+			$out_of++;
 		}
+		if ($out_of==0) $out_of=1;
 
 		// Prepare results for display
 		$corrections_to_staff=new ocp_tempcode();

@@ -31,7 +31,12 @@ function load_quiz_questions_to_string($id)
 	foreach ($question_rows as $q)
 	{
 		$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY q_order');
-		$text.=get_translated_text($q['q_question_text']).(($q['q_long_input_field']==1)?' [LONG]':'').(($q['q_required']==1)?' [REQUIRED]':'').((($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0))?' [*]':'')."\n";
+		$text.=get_translated_text($q['q_question_text']);
+		if ($q['q_long_input_field']==1) $text.=' [LONG]';
+		if ($q['q_required']==1) $text.=' [REQUIRED]';
+		if ($q['q_marked']==0) $text.=' [UNMARKED]';
+		if (($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0)) $text.=' [*]';
+		$text.="\n";
 		foreach ($answer_rows as $a)
 		{
 			$text.=get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'')."\n";
@@ -140,6 +145,8 @@ function _save_available_quiz_answers($id,$text,$type)
 		$question=str_replace(' [*]','',$question);
 		$required=(strpos($question,' [REQUIRED]')!==false)?1:0;
 		$question=str_replace(' [REQUIRED]','',$question);
+		$marked=(strpos($question,' [UNMARKED]')!==false)?0:1;
+		$question=str_replace(' [UNMARKED]','',$question);
 
 		if (is_null($existing[$i])) // We're adding a new question on the end
 		{
@@ -150,6 +157,7 @@ function _save_available_quiz_answers($id,$text,$type)
 				'q_question_text'=>insert_lang($question,2),
 				'q_order'=>$i,
 				'q_required'=>$required,
+				'q_marked'=>$marked,
 			),true);
 
 			// Now we add the answers
@@ -177,6 +185,7 @@ function _save_available_quiz_answers($id,$text,$type)
 				'q_question_text'=>lang_remap($existing[$i]['q_question_text'],$question),
 				'q_order'=>$i,
 				'q_required'=>$required,
+				'q_marked'=>$marked,
 			),array('id'=>$existing[$i]['id']));
 
 			// Now we add the answers
