@@ -1,4 +1,4 @@
-{!HERE_QUIZ_RESULTS,\{\{{USERNAME}\}\}}
+{!HERE_TEST_RESULTS,\{\{{USERNAME@}\}\}}
 
 {RESULT}
 

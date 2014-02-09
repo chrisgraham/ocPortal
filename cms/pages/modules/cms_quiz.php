@@ -278,10 +278,10 @@ class Module_cms_quiz extends standard_crud_module
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'43499b3d39e5743f27852e84cd6d3296','TITLE'=>do_lang_tempcode('TEST'),'SECTION_HIDDEN'=>$type!='TEST')));
 		$fields->attach(form_input_integer(do_lang_tempcode('COMPLETION_PERCENTAGE'),do_lang_tempcode('DESCRIPTION_COMPLETION_PERCENTAGE'),'percentage',$percentage,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('REVEAL_ANSWERS'),do_lang_tempcode('DESCRIPTION_REVEAL_ANSWERS'),'reveal_answers',$reveal_answers==1));
+		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT_FAIL'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT_FAIL'),'end_text_fail',$end_text_fail,false));
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'40f0d67ae21fd3768cc7688d90c99d6e','TITLE'=>do_lang_tempcode('COMPETITION'),'SECTION_HIDDEN'=>$type!='COMPETITION')));
 		$fields->attach(form_input_integer(do_lang_tempcode('NUM_WINNERS'),do_lang_tempcode('DESCRIPTION_NUM_WINNERS'),'num_winners',$num_winners,true));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT_FAIL'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT_FAIL'),'end_text_fail',$end_text_fail,false));
 
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
 			'_GUID'=>'00b9a6a21eab07864d41d5465d9569cd',

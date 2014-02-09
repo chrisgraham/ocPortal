@@ -211,7 +211,7 @@ class Module_admin_quiz
 		$fields=new ocp_tempcode();
 		$quiz_list=$this->create_selection_list_entries();
 
-		$fields->attach(form_input_list(do_lang_tempcode('QUIZZES_EXPORT'),do_lang_tempcode('DESCRIPTION_QUIZZES_EXPORT'),'quiz_id',$quiz_list));
+		$fields->attach(form_input_list(do_lang_tempcode('QUIZ'),do_lang_tempcode('DESCRIPTION_QUIZZES_EXPORT'),'quiz_id',$quiz_list));
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_export'),'_SELF');
 		$submit_name=do_lang_tempcode('EXPORT_QUIZ');

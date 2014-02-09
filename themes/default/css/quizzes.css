@@ -3,6 +3,8 @@
  Copyright (c) ocProducts, 2004-2014
 */
 
+/* Form */
+
 .quiz_form table {
 	counter-reset: quiz_num;
 }
@@ -15,13 +17,17 @@
 	width: 100%;
 }
 
-.quiz_form th, .quiz_form td {
-	padding: 0.5em 2em 5em 4em;
+.quiz_form th {
+	padding: 0.5em 2em 0.5em 4em;
 }
 
-.quiz_form th>span {
+.quiz_form td {
+	padding: 0.5em 2em 0.5em 1.5em;
+}
+
+.quiz_form th>span.field_name {
 	position: relative;
-	display: block;
+	display: inline-block;
 	padding-left: 60px;
 	z-index: 10;
 }
@@ -30,11 +36,10 @@
 	content: counter(quiz_num);
 	counter-increment: quiz_num;
 	z-index: 5;
-	line-height: 1.8em;
 	font-size: 3.5em;
 	position: absolute;
-	margin-left: -1em;
 	color: {$GET,th_secondary_text};
+	line-height: 0.8em;
 }
 
 .quiz_form .filledin th:before {
@@ -86,7 +91,6 @@
 
 .quiz_form tr.field_input th, .quiz_form tr.field_input td {
 	{$BETA_CSS_PROPERTY,opacity: 0.8;}
-	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 }
 
 .quiz_form tr.field_input:hover th, .quiz_form tr.field_input:hover td, body.touch_enabled .quiz_form tr.field_input th, body.touch_enabled .quiz_form tr.field_input td {
@@ -104,4 +108,27 @@
 
 .quiz_form tr.field_input .constrain_field {
 	margin-right: 35px;
+	display: block;
+}
+
+/* Results */
+
+.quiz_done_results_col_was_correct {
+	width: 24px;
+}
+
+.quiz_done_results_col_question {
+	width: 40%;
+}
+
+.quiz_done_results_col_given_answer {
+	width: 30%;
+}
+
+.quiz_done_results_col_correct_answer {
+	width: 30%;
+}
+
+.quiz_answer_status {
+	text-align: center;
 }

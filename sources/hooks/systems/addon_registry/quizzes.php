@@ -107,8 +107,8 @@ class Hook_addon_registry_quizzes
 			'sources/hooks/systems/config/quiz_show_stats_count_total_open.php',
 			'sources/hooks/systems/meta/quiz.php',
 			'sources/hooks/blocks/side_stats/stats_quiz.php',
-			'themes/default/templates/QUIZ_ANSWERS_MAIL.tpl',
 			'themes/default/templates/QUIZ_ARCHIVE_SCREEN.tpl',
+			'themes/default/templates/QUIZ_SURVEY_ANSWERS_MAIL.tpl',
 			'themes/default/templates/QUIZ_TEST_ANSWERS_MAIL.tpl',
 			'sources/hooks/systems/content_meta_aware/quiz.php',
 			'sources/hooks/systems/occle_fs/quizzes.php',
@@ -147,8 +147,8 @@ class Hook_addon_registry_quizzes
 			'QUIZ_BOX.tpl'=>'quiz_archive_screen',
 			'QUIZ_ARCHIVE_SCREEN.tpl'=>'quiz_archive_screen',
 			'QUIZ_SCREEN.tpl'=>'quiz_screen',
+			'QUIZ_SURVEY_ANSWERS_MAIL.tpl'=>'quiz_survey_answers_mail',
 			'QUIZ_TEST_ANSWERS_MAIL.tpl'=>'quiz_test_answers_mail',
-			'QUIZ_ANSWERS_MAIL.tpl'=>'quiz_answers_mail',
 			'QUIZ_DONE_SCREEN.tpl'=>'quiz_done_screen'
 		);
 	}
@@ -265,26 +265,35 @@ class Hook_addon_registry_quizzes
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__quiz_test_answers_mail()
+	function tpl_preview__quiz_survey_answers_mail()
 	{
-		$_unknowns=new ocp_tempcode();
+		$given_answers=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$_unknowns->attach(lorem_phrase());
+			$given_answers->attach(lorem_phrase());
 		}
 
-		$_corrections=new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
+		$given_answers_arr=array();
+		foreach (array(true,false,NULL) as $was_correct)
 		{
-			$_corrections->attach(lorem_phrase());
+			$given_answers_arr[]=array(
+				'QUESTION'=>lorem_phrase(),
+				'GIVEN_ANSWER'=>lorem_phrase(),
+				'WAS_CORRECT'=>$was_correct,
+				'CORRECT_ANSWER'=>lorem_phrase(),
+				'CORRECT_EXPLANATION'=>lorem_paragraph_html(),
+			);
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_TEST_ANSWERS_MAIL',array(
-				'UNKNOWNS'=>$_unknowns,
-				'CORRECTIONS'=>$_corrections,
-				'RESULT'=>lorem_phrase(),
-				'USERNAME'=>lorem_phrase()
+			lorem_globalise(do_lorem_template('QUIZ_SURVEY_ANSWERS_MAIL',array(
+				'ENTRY_ID'=>placeholder_id(),
+				'QUIZ_NAME'=>lorem_phrase(),
+				'GIVEN_ANSWERS_ARR'=>$given_answers_arr,
+				'GIVEN_ANSWERS'=>$given_answers,
+				'MEMBER_PROFILE_URL'=>placeholder_url(),
+				'USERNAME'=>lorem_phrase(),
+				'FORUM_DRIVER'=>NULL,
 			)),NULL,'',true)
 		);
 	}
@@ -296,20 +305,48 @@ class Hook_addon_registry_quizzes
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__quiz_answers_mail()
+	function tpl_preview__quiz_test_answers_mail()
 	{
-		$_answers=new ocp_tempcode();
+		$unknowns=new ocp_tempcode();
 		foreach (placeholder_array() as $k=>$v)
 		{
-			$_answers->attach(lorem_phrase());
+			$unknowns->attach(lorem_phrase());
+		}
+
+		$corrections=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
+		{
+			$corrections->attach(lorem_phrase());
+		}
+
+		$given_answers=new ocp_tempcode();
+		foreach (placeholder_array() as $k=>$v)
+		{
+			$given_answers->attach(lorem_phrase());
+		}
+
+		$given_answers_arr=array();
+		foreach (array(true,false,NULL) as $was_correct)
+		{
+			$given_answers_arr[]=array(
+				'QUESTION'=>lorem_phrase(),
+				'GIVEN_ANSWER'=>lorem_phrase(),
+				'WAS_CORRECT'=>$was_correct,
+				'CORRECT_ANSWER'=>lorem_phrase(),
+				'CORRECT_EXPLANATION'=>lorem_paragraph_html(),
+			);
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_ANSWERS_MAIL',array(
-				'ANSWERS'=>$_answers,
-				'MEMBER_PROFILE_URL'=>placeholder_url(),
+			lorem_globalise(do_lorem_template('QUIZ_TEST_ANSWERS_MAIL',array(
+				'ENTRY_ID'=>placeholder_id(),
+				'QUIZ_NAME'=>lorem_phrase(),
+				'GIVEN_ANSWERS_ARR'=>$given_answers_arr,
+				'GIVEN_ANSWERS'=>$given_answers,
+				'UNKNOWNS'=>$unknowns,
+				'CORRECTIONS'=>$corrections,
+				'RESULT'=>lorem_phrase(),
 				'USERNAME'=>lorem_phrase(),
-				'FORUM_DRIVER'=>NULL
 			)),NULL,'',true)
 		);
 	}
@@ -323,14 +360,31 @@ class Hook_addon_registry_quizzes
 	 */
 	function tpl_preview__quiz_done_screen()
 	{
+		$given_answers_arr=array();
+		foreach (array(true,false,NULL) as $was_correct)
+		{
+			$given_answers_arr[]=array(
+				'QUESTION'=>lorem_phrase(),
+				'GIVEN_ANSWER'=>lorem_phrase(),
+				'WAS_CORRECT'=>$was_correct,
+				'CORRECT_ANSWER'=>lorem_phrase(),
+				'CORRECT_EXPLANATION'=>lorem_paragraph_html(),
+			);
+		}
+
 		return array(
 			lorem_globalise(do_lorem_template('QUIZ_DONE_SCREEN',array(
-				'RESULT'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
+				'ENTRY_ID'=>placeholder_id(),
+				'QUIZ_NAME'=>lorem_phrase(),
+				'GIVEN_ANSWERS_ARR'=>$given_answers_arr,
+				'CORRECTIONS'=>lorem_phrase(),
+				'PASSED'=>true,
+				'POINTS_DIFFERENCE'=>placeholder_number(),
+				'RESULT'=>lorem_phrase(),
 				'TYPE'=>lorem_phrase(),
 				'MESSAGE'=>lorem_phrase(),
-				'CORRECTIONS_TO_SHOW'=>lorem_phrase(),
-				'POINTS_DIFFERENCE'=>placeholder_number()
+				'REVEAL_ANSWERS'=>true,
 			)),NULL,'',true)
 		);
 	}
