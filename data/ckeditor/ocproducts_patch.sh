@@ -12,6 +12,7 @@ find . -name "*.js" -exec dos2unix {} \;
 find . -name "*.css" -exec dos2unix {} \;
 find . -name "*.html" -exec dos2unix {} \;
 find . -name "*.txt" -exec dos2unix {} \;
+find . -name "*.md" -exec dos2unix {} \;
 dos2unix .htaccess
 
 echo "Done!"
