@@ -5,7 +5,7 @@ Base64Image Plugin for CKEditor - Adds images from local client as base64
 string into the source without server side processing. You can also add
 external image urls into the source.
 
-Created by ALL-INKL.COM - Neue Medien Münnich - 27. Jan 2014
+Created by ALL-INKL.COM - Neue Medien Münnich - 04. Feb 2014
 
 Licensed under the terms of any of the following licenses at your
 choice:
