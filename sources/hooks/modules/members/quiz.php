@@ -50,6 +50,8 @@ class Hook_members_quiz
 	{
 		if (!addon_installed('quizzes')) return array();
 
+		if (($member_id!=get_member()) && (!has_privilege(get_member(),'view_others_quiz_results'))) return array();
+
 		require_css('quizzes');
 		require_lang('quiz');
 		require_code('quiz');

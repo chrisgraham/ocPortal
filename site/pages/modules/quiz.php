@@ -93,6 +93,11 @@ class Module_quiz
 			}
 		}
 
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			add_privilege('QUIZZES','view_others_quiz_results',false);
+		}
+
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('quiz_member_last_visit',array(
@@ -275,7 +280,7 @@ class Module_quiz
 
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('QUIZZES'))));
 
-			$this->title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
+			$this->title=get_screen_title(do_lang_tempcode('QUIZ_THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 		}
 
 		if ($type=='_do')
