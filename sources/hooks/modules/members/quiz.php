@@ -60,7 +60,7 @@ class Hook_members_quiz
 			array('q_member'=>$member_id,'q_type'=>'TEST','q_validated'=>1),
 			'ORDER BY e.q_time DESC'
 		);
-		$has_points=($GLOBALS['SITE_DB']->query_select_value('quizzes','SUM(q_points_for_passing)',array('q_type'=>'TEST','q_validated'=>1))>0.0);
+		//$has_points=($GLOBALS['SITE_DB']->query_select_value('quizzes','SUM(q_points_for_passing)',array('q_type'=>'TEST','q_validated'=>1))>0.0);
 		$categories=array();
 		foreach ($entries as $entry)
 		{
@@ -101,6 +101,12 @@ class Hook_members_quiz
 					'RUNNING_MARKS'=>0.0,
 					'RUNNING_OUT_OF'=>0,
 					'RUNNING_PERCENTAGE'=>0.0,
+
+					// These are not in the template by default. It is used if you are fudging the q_points_for_passing as a credit for full passing of the test.
+					//  That's not very normal, but works for people who need more complex course-wide score reporting.
+					'RUNNING_MARKS__CREDIT'=>0.0,
+					'RUNNING_OUT_OF__CREDIT'=>0,
+					'RUNNING_PERCENTAGE__CREDIT'=>0.0,
 				);
 			}
 			$categories[$category_title]['QUIZZES'][$entry['id']]=array(
@@ -115,20 +121,31 @@ class Hook_members_quiz
 				'MARKS_RANGE'=>$marks_range,
 				'PERCENTAGE_RANGE'=>$percentage_range,
 				'PASSED'=>$passed,
+				'POINTS'=>strval($entry['q_points_for_passing']),
 			);
-			if (!$has_points)
+			/*if (!$has_points)
 			{
 				$entry['q_points_for_passing']=$out_of;
-			}
-			$categories[$category_title]['RUNNING_MARKS']+=floatval($entry['q_points_for_passing'])*$marks/floatval($out_of-$potential_extra_marks/*manually marking discounted to limit us to certainties*/);
-			$categories[$category_title]['RUNNING_OUT_OF']+=$entry['q_points_for_passing'];
+			}*/
+			$categories[$category_title]['RUNNING_MARKS']+=$marks;
+			$categories[$category_title]['RUNNING_OUT_OF']+=$out_of-$potential_extra_marks; /*manually marking discounted to limit us to certainties*/
+			$categories[$category_title]['RUNNING_MARKS__CREDIT']+=floatval($entry['q_points_for_passing'])*$marks/floatval($out_of-$potential_extra_marks);
+			$categories[$category_title]['RUNNING_OUT_OF__CREDIT']+=$entry['q_points_for_passing'];
 		}
 		foreach ($categories as &$category)
 		{
-			if ($category['RUNNING_OUT_OF']==0) $category['RUNNING_OUT_OF']=1;
 			$category['RUNNING_PERCENTAGE']=float_to_raw_string(100.0*$category['RUNNING_MARKS']/floatval($category['RUNNING_OUT_OF']));
 			$category['RUNNING_MARKS']=float_to_raw_string($category['RUNNING_MARKS']);
 			$category['RUNNING_OUT_OF']=strval($category['RUNNING_OUT_OF']);
+			if ($category['RUNNING_OUT_OF__CREDIT']==0)
+			{
+				$category['RUNNING_PERCENTAGE__CREDIT']='0.0';
+			} else
+			{
+				$category['RUNNING_PERCENTAGE__CREDIT']=float_to_raw_string(100.0*$category['RUNNING_MARKS__CREDIT']/floatval($category['RUNNING_OUT_OF__CREDIT']));
+			}
+			$category['RUNNING_MARKS__CREDIT']=float_to_raw_string($category['RUNNING_MARKS__CREDIT']);
+			$category['RUNNING_OUT_OF__CREDIT']=strval($category['RUNNING_OUT_OF__CREDIT']);
 		}
 
 		return array(do_template('MEMBER_QUIZ_ENTRIES',array('CATEGORIES'=>$categories,'MEMBER_ID'=>strval($member_id))));

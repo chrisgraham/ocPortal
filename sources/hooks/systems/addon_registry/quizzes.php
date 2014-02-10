@@ -488,6 +488,9 @@ class Hook_addon_registry_quizzes
 			'RUNNING_MARKS'=>placeholder_number(),
 			'RUNNING_OUT_OF'=>placeholder_number(),
 			'RUNNING_PERCENTAGE'=>placeholder_number(),
+			'RUNNING_MARKS__CREDIT'=>placeholder_number(),
+			'RUNNING_OUT_OF__CREDIT'=>placeholder_number(),
+			'RUNNING_PERCENTAGE__CREDIT'=>placeholder_number(),
 		);
 		$categories[do_lang('OTHER')]['QUIZZES'][]=array(
 			'QUIZ_NAME'=>lorem_phrase(),
@@ -501,6 +504,7 @@ class Hook_addon_registry_quizzes
 			'MARKS_RANGE'=>placeholder_number(),
 			'PERCENTAGE_RANGE'=>placeholder_number(),
 			'PASSED'=>true,
+			'POINTS'=>placeholder_number(),
 		);
 
 		return array(
