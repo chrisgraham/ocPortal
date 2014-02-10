@@ -33,7 +33,6 @@
 	line-height: 1.8em;
 	font-size: 3.5em;
 	position: absolute;
-	margin-left: -1em;
 	color: {$GET,th_secondary_text};
 }
 
@@ -103,4 +102,5 @@
 
 .quiz_form tr.field_input .constrain_field {
 	margin-right: 35px;
+	display: inline-block;
 }

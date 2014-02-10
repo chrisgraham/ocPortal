@@ -28,7 +28,7 @@
 	</p>
 {+END}
 
-<form title="{!SAVE}" class="quiz_form" method="post" onsubmit="return check_form(this);" action="{URL*}">
+<form title="{!SAVE}" id="quiz_form" class="quiz_form" method="post" onsubmit="return check_form(this);" action="{URL*}">
 	<div>
 		<div class="wide_table_wrap"><table summary="{!MAP_TABLE}" class="form_table wide_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
@@ -50,7 +50,7 @@
 </form>
 
 <script type="text/javascript">// <![CDATA[
-	var e=get_elements_by_class_name(document.getElementById('survey'),'field_input');
+	var e=get_elements_by_class_name(document.getElementById('quiz_form'),'field_input');
 	for (var i=0;i<e.length;i++)
 		set_up_change_monitor(e[i].childNodes[0]);
 //]]></script>

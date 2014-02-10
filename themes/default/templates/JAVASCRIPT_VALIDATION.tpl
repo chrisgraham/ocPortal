@@ -933,7 +933,7 @@ function _set_up_change_monitor(container,input,container2)
 	for (var i=0;i<elements.length;i++)
 	{
 		if (!elements[i]) continue;
-		if ((typeof elements[0]!='undefined') || (elements[0].id.indexOf('choose_')!=-1)) continue;
+		if ((typeof elements[0]=='undefined') || (elements[0].id.indexOf('choose_')!=-1)) continue;
 		var func=function () {
 			if (find_if_children_set(input?document.getElementById(input).parentNode:container))
 			{

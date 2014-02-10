@@ -459,8 +459,8 @@ function get_quiz_data_for_csv($quiz_id)
 	foreach ($member_answers as $member_bits=>$member_answers)
 	{
 		list($member,)=explode('_',$member_bits);
-		$member_name=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$member_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
+		$member_name=$GLOBALS['FORUM_DRIVER']->get_username(intval($member));
+		$member_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(intval($member));
 
 		$member_answers_csv=array('Member'=>$member_name,'Email'=>$member_email);
 		foreach ($questions_rows as $i=>$question_row)

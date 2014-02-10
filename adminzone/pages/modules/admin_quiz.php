@@ -379,7 +379,7 @@ class Module_admin_quiz
 			log_hack_attack_and_exit('ORDERBY_HACK');
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='sort';
-		$max_rows=$GLOBALS['SITE_DB']->query_value('quiz_entries','COUNT(*)');
+		$max_rows=$GLOBALS['SITE_DB']->query_value('quiz_entries','COUNT(*)',array('q_quiz'=>$id));
 		$rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('id','q_time','q_member'),array('q_quiz'=>$id),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		if (count($rows)==0)
 		{
