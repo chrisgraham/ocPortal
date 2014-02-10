@@ -7,7 +7,9 @@
 {+START,INCLUDE,QUIZ_RESULTS}{+END}
 
 {+START,IF,{$NEQ,{_TYPE},SURVEY}}
-	<br />
+	<p class="lonely_label">
+		{!QUIZ_RESULTS}:
+	</p>
 
 	<dl class="compact_list">
 		<dt>{!MARKS}</dt>

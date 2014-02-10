@@ -201,7 +201,7 @@ class Module_admin
 			array('license','licence'),
 			array('search','find'),
 			array('recommend','refer'),
-			array('quizzes','surveys','tests','competitions'),
+			array('quizzes','surveys','tests','competitions','questionnaires','prize-draw','exam','assessment'),
 			array('securitylogging','audit'),
 			array('content reviews','audit'),
 			array('award','highlight','feature'),

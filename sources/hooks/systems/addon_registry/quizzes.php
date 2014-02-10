@@ -482,8 +482,14 @@ class Hook_addon_registry_quizzes
 	 */
 	function tpl_preview__member_quiz_entries()
 	{
-		$_entries=array();
-		$_entries[]=array(
+		$categories=array();
+		$categories[do_lang('OTHER')]=array(
+			'QUIZZES'=>array(),
+			'RUNNING_MARKS'=>placeholder_number(),
+			'RUNNING_OUT_OF'=>placeholder_number(),
+			'RUNNING_PERCENTAGE'=>placeholder_number(),
+		);
+		$categories[do_lang('OTHER')]['QUIZZES'][]=array(
 			'QUIZ_NAME'=>lorem_phrase(),
 			'QUIZ_START_TEXT'=>lorem_paragraph_html(),
 			'QUIZ_ID'=>placeholder_id(),
@@ -499,7 +505,7 @@ class Hook_addon_registry_quizzes
 
 		return array(
 			lorem_globalise(do_lorem_template('MEMBER_QUIZ_ENTRIES',array(
-				'ENTRIES'=>$_entries,
+				'CATEGORIES'=>$categories,
 				'MEMBER_ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);

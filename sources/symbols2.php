@@ -1383,7 +1383,7 @@ function ecv2_FLOAT_FORMAT($lang,$escaped,$param)
 
 	if (isset($param[0]))
 	{
-		$value=float_format(floatval($param[0]),isset($param[1])?intval($param[1]):2);
+		$value=float_format(floatval($param[0]),isset($param[1])?intval($param[1]):2,array_key_exists(2,$param) && $param[2]=='1');
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);

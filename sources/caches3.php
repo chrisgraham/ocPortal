@@ -287,7 +287,7 @@ function erase_cached_templates($preserve_some=false)
 	}
 
 	// Often the back button will be used to return to a form, so we need to ensure we have not broken the Javascript
-	if (function_exists('get_member'))
+	if ((function_exists('get_member')) && ($GLOBALS['BOOTSTRAPPING']==0))
 	{
 		javascript_enforce('javascript_validation');
 		javascript_enforce('javascript_editing');

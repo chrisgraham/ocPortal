@@ -30,6 +30,8 @@ class Hook_members_quiz
 	{
 		if (!addon_installed('quizzes')) return array();
 
+		$modules=array();
+
 		if (has_actual_page_access(get_member(),'admin_quiz',get_page_zone('admin_quiz')))
 		{
 			$modules[]=array('audit',do_lang_tempcode('QUIZ_RESULTS'),build_url(array('page'=>'admin_quiz','type'=>'_quiz_results','member_id'=>$member_id),get_module_zone('admin_quiz')),'menu/cms/quiz/quiz_results');
@@ -52,13 +54,19 @@ class Hook_members_quiz
 		require_lang('quiz');
 		require_code('quiz');
 
-		$entries=$GLOBALS['SITE_DB']->query_select('quiz_entries e JOIN '.get_table_prefix().'quizzes q ON q.id=e.q_quiz',array('e.id AS e_id','e.q_time','q.*'),array('q_member'=>$member_id,'q_type'=>'TEST','q_validated'=>1),'ORDER BY e.q_time ASC');
-		$_entries=array();
+		$entries=$GLOBALS['SITE_DB']->query_select(
+			'quiz_entries e JOIN '.get_table_prefix().'quizzes q ON q.id=e.q_quiz',
+			array('e.id AS e_id','e.q_time','q.*'),
+			array('q_member'=>$member_id,'q_type'=>'TEST','q_validated'=>1),
+			'ORDER BY e.q_time DESC'
+		);
+		$has_points=($GLOBALS['SITE_DB']->query_select_value('quizzes','SUM(q_points_for_passing)',array('q_type'=>'TEST','q_validated'=>1))>0.0);
+		$categories=array();
 		foreach ($entries as $entry)
 		{
 			list(
-				,
-				,
+				$marks,
+				$potential_extra_marks,
 				$out_of,
 				,
 				,
@@ -74,8 +82,29 @@ class Hook_members_quiz
 				$passed,
 			)=score_quiz($entry['e_id'],$entry['id'],$entry);
 
-			$_entries[$entry['id']]=array(
-				'QUIZ_NAME'=>get_translated_text($entry['q_name']),
+			$quiz_name=get_translated_text($entry['q_name']);
+
+			if (strpos($quiz_name,': ')!==false)
+			{
+				list($category_title,$quiz_name)=explode(': ',$quiz_name,2);
+			} else
+			{
+				$category_title=do_lang('OTHER');
+			}
+
+			if (isset($categories[$category_title]['QUIZZES'][$entry['id']])) continue;
+
+			if (!isset($categories[$category_title]))
+			{
+				$categories[$category_title]=array(
+					'QUIZZES'=>array(),
+					'RUNNING_MARKS'=>0.0,
+					'RUNNING_OUT_OF'=>0,
+					'RUNNING_PERCENTAGE'=>0.0,
+				);
+			}
+			$categories[$category_title]['QUIZZES'][$entry['id']]=array(
+				'QUIZ_NAME'=>$quiz_name,
 				'QUIZ_START_TEXT'=>get_translated_tempcode($entry['q_start_text']),
 				'QUIZ_ID'=>strval($entry['id']),
 				'QUIZ_URL'=>build_url(array('page'=>'quiz','type'=>'do','id'=>$entry['id']),get_module_zone('quiz')),
@@ -87,9 +116,22 @@ class Hook_members_quiz
 				'PERCENTAGE_RANGE'=>$percentage_range,
 				'PASSED'=>$passed,
 			);
+			if (!$has_points)
+			{
+				$entry['q_points_for_passing']=$out_of;
+			}
+			$categories[$category_title]['RUNNING_MARKS']+=floatval($entry['q_points_for_passing'])*$marks/floatval($out_of-$potential_extra_marks/*manually marking discounted to limit us to certainties*/);
+			$categories[$category_title]['RUNNING_OUT_OF']+=$entry['q_points_for_passing'];
+		}
+		foreach ($categories as &$category)
+		{
+			if ($category['RUNNING_OUT_OF']==0) $category['RUNNING_OUT_OF']=1;
+			$category['RUNNING_PERCENTAGE']=float_to_raw_string(100.0*$category['RUNNING_MARKS']/floatval($category['RUNNING_OUT_OF']));
+			$category['RUNNING_MARKS']=float_to_raw_string($category['RUNNING_MARKS']);
+			$category['RUNNING_OUT_OF']=strval($category['RUNNING_OUT_OF']);
 		}
 
-		return array(do_template('MEMBER_QUIZ_ENTRIES',array('ENTRIES'=>$_entries,'MEMBER_ID'=>strval($member_id))));
+		return array(do_template('MEMBER_QUIZ_ENTRIES',array('CATEGORIES'=>$categories,'MEMBER_ID'=>strval($member_id))));
 	}
 }
 

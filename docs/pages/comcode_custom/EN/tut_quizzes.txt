@@ -62,8 +62,18 @@ You can reward members with points for passing a test.
 You can determine the level of security or difficulty on quizzes:
  - Restrict them only to newsletter subscribers
  - Restrict them by usergroup
- - Randomly shuffle questions and/or answers, to make copying from a cheat-sheet harder
+ - Randomly shuffle questions and/or answers, to make copying from a cheat-sheet (or thoughtless answering) less likely
  - Time limits (explained above)
+ - Limiting open time range
+ - Validation (to hide quizzes that are not yet ready)
+
+[title="2"]Quiz sets[/title]
+
+If you prefix quiz names with "Example: " then you can create quiz sets.
+
+This is mainly just a convention and won't affect how the system works. However, for tests, it will result in running scoring/percentages for the whole test, when viewing past results on a member's profile screen.
+
+Often surveyors will want to create long multi-part questionnaires. You could link parts together in a chain by putting a follow-up link in each quizzes end-text. Use of the naming convention will help you (and users) intuitively recognise that particular quizzes are designed to go together.
 
 [title="2"]Exporting to CSV[/title]
 
