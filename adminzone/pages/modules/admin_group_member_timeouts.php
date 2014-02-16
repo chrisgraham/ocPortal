@@ -107,6 +107,8 @@ class Module_admin_group_member_timeouts
 		$max=get_param_integer('max',100);
 		$max_rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_group_member_timeouts','COUNT(*)');
 
+		single_field__start();
+
 		$rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select('f_group_member_timeouts',array('member_id','group_id','timeout'),NULL,'',$max,$start);
 		$timeouts=array();
 		foreach ($rows as $i=>$row)
@@ -115,7 +117,7 @@ class Module_admin_group_member_timeouts
 				'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']),
 				'MEMBER_ID'=>strval($row['member_id']),
 				'GROUP_ID'=>strval($row['group_id']),
-				'DATE_INPUT'=>_form_input_date('gmt_time_'.strval($i),false,false,true,$row['timeout'],10,NULL,NULL,true),
+				'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_'.strval($i),false,false,true,$row['timeout'],10,NULL,NULL,true),
 			);
 		}
 
@@ -147,16 +149,20 @@ class Module_admin_group_member_timeouts
 		require_code('form_templates');
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 
-		return do_template('GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN',array(
+		$ret=do_template('GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN',array(
 			'TITLE'=>$this->title,
 			'TIMEOUTS'=>$timeouts,
 			'GROUPS'=>$usergroups,
-			'DATE_INPUT'=>_form_input_date('gmt_time_new',false,false,true,NULL,10,NULL,NULL,true),
+			'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_new',false,false,true,NULL,10,NULL,NULL,true),
 			'URL'=>$url,
 			'PAGINATION'=>$pagination,
 			'PING_URL'=>$ping_url,
 			'WARNING_DETAILS'=>$warning_details,
 		));
+
+		single_field__end();
+
+		return $ret;
 	}
 
 	/**

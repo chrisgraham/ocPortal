@@ -166,7 +166,7 @@
 <![endif]-->
 
 {$,jQuery fan? Just uncomment the below and start using all the jQuery plugins you love in the normal way}
-{$,<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>}
+{$,{$REQUIRE_JAVASCRIPT,javascript_jquery}}
 
 {$,If the page is doing a refresh include the markup for that}
 {$REFRESH}

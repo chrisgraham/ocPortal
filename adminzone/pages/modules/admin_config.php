@@ -489,7 +489,7 @@ class Module_admin_config
 						break;
 
 					case 'colour':
-						$out.=static_evaluate_tempcode(form_input_colour($human_name,$explanation,$name,get_option($name),$required,NULL,true));
+						$out.=static_evaluate_tempcode(form_input_colour($human_name,$explanation,$name,get_option($name),$required));
 						break;
 
 					case 'date':

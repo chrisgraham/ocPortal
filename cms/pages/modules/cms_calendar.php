@@ -420,7 +420,7 @@ class Module_cms_calendar extends standard_crud_module
 
 			// Get a nice default title for the event
 			$calendar_member_id=is_null($member_calendar)?get_member():$member_calendar;
-			$index=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'calendar_events WHERE e_member_calendar IS NULL AND e_submitter='.strval($calendar_member_id).' OR e_member_calendar='.strval($calendar_member_id))+1;
+			$index=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'calendar_events WHERE e_submitter='.strval($calendar_member_id).' OR e_member_calendar='.strval($calendar_member_id))+1;
 			$calendar_username=$GLOBALS['FORUM_DRIVER']->get_username($calendar_member_id,true);
 			$abbreviation=get_ordinal_suffix($index);
 			$title=do_lang('AUTO_EVENT_TITLE',$calendar_username,strval($index),$abbreviation);

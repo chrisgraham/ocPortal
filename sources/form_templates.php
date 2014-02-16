@@ -661,10 +661,9 @@ function form_input_email($pretty_name,$description,$name,$default,$required,$ta
  * @param  ?string		The default value for this input field (NULL: blank)
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether to display as a true/standard ocPortal input field, neatly along other different kinds of input fields
  * @return tempcode		The input field
  */
-function form_input_colour($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$true_field=false)
+function form_input_colour($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
 {
 	if (!has_js())
 	{
@@ -680,7 +679,7 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_COLOUR',array('_GUID'=>'9a1a8061cebd717ea98522984d9465af','TRUE_FIELD'=>$true_field,'REQUIRED'=>$required,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'TABINDEX'=>strval($tabindex),'_REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
+	$input=do_template('FORM_SCREEN_INPUT_COLOUR',array('_GUID'=>'9a1a8061cebd717ea98522984d9465af','RAW_FIELD'=>false,'REQUIRED'=>$required,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'TABINDEX'=>strval($tabindex),'_REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
 	if ($true_field) $input=_form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 	return $input;
 }
@@ -1982,7 +1981,7 @@ function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$
 }
 
 /**
- * Start serving single field.
+ * Start serving single field. This is used if you just need the raw widget, not the label (etc).
  */
 function single_field__start()
 {
