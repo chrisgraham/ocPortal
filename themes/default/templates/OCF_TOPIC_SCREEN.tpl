@@ -87,7 +87,7 @@
 					{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
 
 					<div class="inline">
-						<label for="tma_type">{!TOPIC_ACTIONS}:</label>
+						<label for="tma_type" class="accessibility_hidden">{!TOPIC_ACTIONS}:</label>
 						<select class="dropdown_actions" id="tma_type" name="type">
 							<option value="misc">-</option>
 							{MODERATOR_ACTIONS}
@@ -103,7 +103,7 @@
 							{$HIDDENS_FOR_GET_FORM,{ACTION_URL}}
 
 							<div class="inline horiz_field_sep_rightward">
-								<label for="mpa_type">{!MARKED_POST_ACTIONS}:</label>
+								<label for="mpa_type">{!_MARKED_POST_ACTIONS}:</label>
 								<select id="mpa_type" name="type">
 									{+START,IF,{$GT,{$SUBSTR_COUNT,{MARKED_POST_ACTIONS},<option},1}}
 										<option value="misc">-</option>
@@ -127,7 +127,7 @@
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},average_rating}}selected="selected" {+END}value="average_rating">{!RATING}</option>
 							<option {+START,IF,{$EQ,{$_POST,comments_sort,oldest},compound_rating}}selected="selected" {+END}value="compound_rating">{!POPULARITY}</option>
 						</select>
-						<input type="submit" value="{!SORT}" class="buttons__sort button_screen_item" />
+						<input type="submit" value="{!SORT}" class="buttons__sort button_micro" />
 					</div>
 				</form>
 			{+END}

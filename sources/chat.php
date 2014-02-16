@@ -629,7 +629,7 @@ function _chat_messages_script_ajax($room_id,$backlog=false,$message_id=NULL,$ev
 
 	$last_msg=$GLOBALS['SITE_DB']->query_select_value('chat_messages','MAX(id)');
 	$last_event=$GLOBALS['SITE_DB']->query_select_value('chat_events','MAX(id)');
-	$tracking_output='<chat_tracking last_msg="'.strval($last_msg).'" last_event="'.strval($last_event).'">'.strval($room_id).'</chat_tracking>'."\n";
+	$tracking_output='<chat_tracking last_msg="'.(is_null($last_msg)?'':strval($last_msg)).'" last_event="'.(is_null($last_event)?'':strval($last_event)).'">'.strval($room_id).'</chat_tracking>'."\n";
 
 	header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past

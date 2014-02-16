@@ -437,16 +437,12 @@ hr.ocf_sig_barrier {
 
 .ocf_topic_control_functions {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		font-size: 0.85em;
+		font-size: 0.9em;
 	{+END}
-	margin: 0.5em 0 0 0;
-}
-
-.ocf_topic_control_functions {
 	margin: 0.25em 0;
 }
 
-.ocf_topic_control_functions label, .ocf_topic_control_functions span, .ocf_topic_control_functions input {
+.ocf_topic_control_functions label, .ocf_topic_control_functions span, .ocf_topic_control_functions input, .ocf_topic_control_functions select {
 	vertical-align: middle;
 }
 
