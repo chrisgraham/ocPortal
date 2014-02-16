@@ -88,7 +88,7 @@ function init__tempcode()
 	 * @global boolean $OUTPUT_STREAMING
 	 */
 	global $OUTPUT_STREAMING;
-	$OUTPUT_STREAMING=(function_exists('get_option')) && (get_option('output_streaming')=='1');
+	$OUTPUT_STREAMING=(function_exists('get_option')) && (get_option('output_streaming')=='1') && (get_param_integer('keep_no_output_streaming',0)==0);
 	if (get_param('special_page_type','view')!='view') $OUTPUT_STREAMING=false;
 	if (get_param_integer('keep_markers',0)==1) $OUTPUT_STREAMING=false;
 	if (get_param_integer('show_edit_links',0)==1) $OUTPUT_STREAMING=false;

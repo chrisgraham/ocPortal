@@ -1,5 +1,5 @@
 {+START,IF_NON_PASSED_OR_FALSE,WYSIWYG_EDITABLE}
-	{+START,IF_EMPTY,{$META_DATA,image}}
+	{+START,IF,{$OR,{$IN_STR,{$META_DATA,image},/icons/},{$IS_EMPTY,{$META_DATA,image}}}}
 		{$META_DATA,image,{THUMB_URL}}
 	{+END}
 {+END}

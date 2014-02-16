@@ -732,9 +732,10 @@ class OCP_Topic
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  array			Review ratings rows
 	 * @param  AUTO_LINK		ID of forum this topic in in
+	 * @param  integer		The recursion depth
 	 * @return tempcode		Rendered tree structure
 	 */
-	function _render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id)
+	function _render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$depth=0)
 	{
 		list($rendered,)=$tree;
 		$sequence=new ocp_tempcode();
@@ -900,7 +901,7 @@ class OCP_Topic
 				}
 				if ($this->is_threaded)
 				{
-					$children=$this->_render_post_tree($num_to_show_limit,$post['children'],$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id);
+					$children=$this->_render_post_tree($num_to_show_limit,$post['children'],$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$depth+1);
 				}
 			}
 
@@ -918,6 +919,12 @@ class OCP_Topic
 			{
 				decache('side_ocf_personal_topics',array(get_member()));
 				decache('_new_pp',array(get_member()));
+			}
+
+			// Make sure that pre-processing happens to pick up meta data 'image' for post attachment -- but only for the first post
+			if (($depth==0) && ($sequence->is_empty_shell()))
+			{
+				$post['message']->evaluate();
 			}
 
 			// Render
