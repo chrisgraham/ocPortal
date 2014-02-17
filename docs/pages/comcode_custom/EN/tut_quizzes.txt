@@ -37,6 +37,11 @@ Multiple-choice/single-choice inputs are collected under a statistics heading. F
 
 The method of inputting quiz questions may seem a bit fiddly at first, but you'll find it is actually fairly straight-forward and makes it really quick to input new sets of questions.
 
+Comcode is supported, so you could include images using code such as:
+[code]
+[url="/example.png" target="_blank"][img]/example_thumb.png[/img][/url]
+[/code]
+
 [title="2"]Time limits[/title]
 
 You can set time limits, and also how frequently quizzes can be reattempted.
