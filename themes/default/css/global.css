@@ -1524,6 +1524,10 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 
 /* Expanding and contracting, mostly for boxes but not necessarily always */
 
+.toggleable_tray_title_heading {
+	min-height: 20px;
+}
+
 .toggleable_tray_title {
 	font-size: 1.1em;
 	font-weight: bold;

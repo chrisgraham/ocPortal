@@ -141,14 +141,14 @@
 	}
 {+END}
 
-.ocf_table_footer {
+div.ocf_table_footer {
 	display: {$?,{$MOBILE},none,table};
 	width: 100%;
 }
-.ocf_table_footer>div {
+div.ocf_table_footer>div {
 	display: table-row-group;
 }
-.ocf_table_footer>div>div {
+div.ocf_table_footer>div>div {
 	display: table-row;
 }
 
