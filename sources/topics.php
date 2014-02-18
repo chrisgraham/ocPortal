@@ -924,7 +924,17 @@ class OCP_Topic
 			// Make sure that pre-processing happens to pick up meta data 'image' for post attachment -- but only for the first post
 			if (($depth==0) && ($sequence->is_empty_shell()))
 			{
-				$post['message']->evaluate();
+				$message_eval=$post['message']->evaluate();
+
+				// Also scan for <img> tag, in case it was put in manually
+				if ($GLOBALS['META_DATA']['image']==find_theme_image('icons/48x48/menu/social/forum/forums'))
+				{
+					$matches=array();
+					if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$message_eval,$matches)!=0)
+					{
+						$GLOBALS['META_DATA']['image']=html_entity_decode($matches[1],ENT_QUOTES,get_charset());
+					}
+				}
 			}
 
 			// Render

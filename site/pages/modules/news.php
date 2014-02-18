@@ -358,7 +358,7 @@ class Module_news
 				$matches=array();
 				if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$news_full_eval,$matches)!=0)
 				{
-					$og_img=$matches[1];
+					$og_img=html_entity_decode($matches[1],ENT_QUOTES,get_charset());
 				}
 			}
 

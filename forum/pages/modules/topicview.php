@@ -193,6 +193,16 @@ class Module_topicview
 					// NB: A side-effect of this is that the Tempcode is evaluated, causing the 'image' meta-data for an attachment (in MEDIA_WEBSAFE.tpl) to fill. We want this.
 					$truncated=symbol_truncator(array($_postdetails['post'],'200','0','1','0.2'),'left'); // HACKHACK: Should we hard-code this?
 					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags($truncated),ENT_QUOTES,get_charset());
+
+					// Also scan for <img> tag, in case it was put in manually
+					if ($GLOBALS['META_DATA']['image']==find_theme_image('icons/48x48/menu/social/forum/forums'))
+					{
+						$matches=array();
+						if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$_postdetails['post'],$matches)!=0)
+						{
+							$GLOBALS['META_DATA']['image']=html_entity_decode($matches[1],ENT_QUOTES,get_charset());
+						}
+					}
 				}
 			}
 		} else
