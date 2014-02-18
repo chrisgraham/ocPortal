@@ -65,10 +65,10 @@ function check_posted_field($name,$val)
 		if (!in_array($name,array('login_username','password','remember','login_invisible')))
 		{
 			$allowed_partners=explode("\n",get_option('allowed_post_submitters'));
-			foreach ($GLOBALS['SITE_INFO'] as $key=>$val)
+			foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
 			{
 				if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
-					$allowed_partners[]=$val[0];
+					$allowed_partners[]=$_val[0];
 			}
 
 			$found=false;

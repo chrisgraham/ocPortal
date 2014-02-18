@@ -19,6 +19,15 @@
  */
 
 /**
+ * Standard code module initialisation function.
+ */
+function init__global4()
+{
+	global $ADMIN_LOGGING_ON;
+	$ADMIN_LOGGING_ON=true;
+}
+
+/**
  * Attach a message mentioning how the site is closed.
  *
  * @param  tempcode			Where to place the message.
@@ -456,8 +465,12 @@ function _log_it($type,$a=NULL,$b=NULL)
 		$ob->run($type,$a,$b);
 	}
 
-	$ip=get_ip_address();
-	$GLOBALS['SITE_DB']->query_insert('adminlogs',array('the_type'=>$type,'param_a'=>is_null($a)?'':substr($a,0,80),'param_b'=>is_null($b)?'':substr($b,0,80),'date_and_time'=>time(),'member_id'=>get_member(),'ip'=>$ip));
+	global $ADMIN_LOGGING_ON;
+	if ($ADMIN_LOGGING_ON)
+	{
+		$ip=get_ip_address();
+		$GLOBALS['SITE_DB']->query_insert('adminlogs',array('the_type'=>$type,'param_a'=>is_null($a)?'':substr($a,0,80),'param_b'=>is_null($b)?'':substr($b,0,80),'date_and_time'=>time(),'member_id'=>get_member(),'ip'=>$ip));
+	}
 
 	static $logged=0;
 	$logged++;
@@ -472,7 +485,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 		decache('menu'); // Due to the content counts in the CMS/Admin Zones, and Sitemap menus
 	}
 
-	if ((get_page_name()!='admin_themewizard') && (get_page_name()!='admin_import'))
+	if ((get_page_name()!='admin_themewizard') && (get_page_name()!='admin_import') && ($ADMIN_LOGGING_ON))
 	{
 		if ($logged<10) // Be extra sure it's not some kind of import, causing spam
 		{

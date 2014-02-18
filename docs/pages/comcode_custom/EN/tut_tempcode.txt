@@ -1092,7 +1092,13 @@ Understanding of these symbols requires an understanding of basic boolean operat
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$?,1,shows if true,shows if not true}</td>
-		<td>Do an inline IF test, outputting the second parameter if the first evaluates to true and the third (optional parameter) if it does not</td>
+		<td>
+			Do an inline IF test, outputting the second parameter if the first evaluates to true and the third (optional parameter) if it does not<br /><br />
+			<kbd>{$?,0,yes,no}</kbd> &rarr; <kbd>no</kbd><br />
+			<kbd>{$?,1,yes,no}</kbd> &rarr; <kbd>yes</kbd><br />
+			<kbd>{$?,0,yes}</kbd> &rarr; (blank)<br />
+			<kbd>{$?,1,yes}</kbd> &rarr; <kbd>yes</kbd>
+		</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$NOT,1}</td>
@@ -1373,6 +1379,8 @@ You can store and retrieve values in Tempcode variables. These work across templ
 [/html]
 
 [title="2"]Directives[/title]
+
+Note that you cannot use directives for symbol parameters because directives control code flow rather than inline calculations. The way Tempcode logic is internally structured cannot parse/hold it. You can almost always use the <kbd>?</kbd> symbol to guide inline calculations instead.
 
 [html]
 <table class="columned_table results_table wide_table autosized_table"><tbody>

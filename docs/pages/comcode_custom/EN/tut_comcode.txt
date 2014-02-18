@@ -134,6 +134,10 @@ ocPortal provides a [concept]WYSIWYG[/concept] editor for those who would rather
 
 The HTML produced by the WYSIWYG editor is normally automatically converted back into Comcode (unless the "Convert HTML to Comcode" option is disabled). However, if a full conversion is not possible, the Comcode 'semihtml' tag is used in order to allow a partial conversion. If this is the case, the remaining HTML would then be subjected to the whitelist/blacklist filter (see the "Security" section of the "Advanced Comcode" tutorial), unless the Comcode was submitted by staff in which case it would not be filtered.
 
+[title="2"]Code formatting[/title]
+
+If you are using a lot of complex code, it is nice to be able to use white-space (e.g. indentation) to lay it all out. The 'semihtml' tag will allow you to do this, as white-space will be collapsed just like it is in normal HTML.
+
 [title="2"]Tag reference[/title]
 
 Tags may be easily added via the "Comcode Tag Assistant" feature in ocPortal, which lists all tags and provides an input mechanism for each. In addition, new tags may be created (discussed in the 'Advanced Comcode' tutorial).

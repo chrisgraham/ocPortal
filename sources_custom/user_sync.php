@@ -56,6 +56,9 @@ function user_sync__inbound($since=NULL)
 	require_code('notifications');
 	global $NOTIFICATIONS_ON;
 	$NOTIFICATIONS_ON=false;
+	require_code('global4');
+	global $ADMIN_LOGGING_ON;
+	$ADMIN_LOGGING_ON=false;
 
 	@ignore_user_abort(false);
 
