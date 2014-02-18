@@ -1966,7 +1966,9 @@ function activate_tooltip(ac,event,tooltip,width,pic,height,bottom,no_delay,ligh
 		tooltip_element=win.document.getElementById(ac.tooltip_id);
 		tooltip_element.style.display='none';
 		set_inner_html(tooltip_element,'');
-		reposition_tooltip(ac,event,bottom,true,tooltip_element,force_width);
+		window.setTimeout(function() {
+			reposition_tooltip(ac,event,bottom,true,tooltip_element,force_width);
+		},0);
 	} else
 	{
 		tooltip_element=win.document.createElement('div');
@@ -2107,6 +2109,10 @@ function reposition_tooltip(ac,event,bottom,starting,tooltip_element,force_width
 
 		// Work out which direction to render in
 		var width=find_width(tooltip_element);
+		if (tooltip_element.style.width=='auto')
+		{
+			if (width<200) width=200; // Give some breathing room, as might already have painfully-wrapped when it found there was not much space
+		}
 		var height=find_height(tooltip_element);
 		var x_excess=x-get_window_width(win)-get_window_scroll_x(win)+width;
 		if (x_excess>0) // Either we explicitly gave too much width, or the width auto-calculated exceeds what we THINK is the maximum width in which case we have to re-compensate with an extra contingency to stop CSS/JS vicious disagreement cycles
