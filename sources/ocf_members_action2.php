@@ -1327,10 +1327,10 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 					$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
 					break;
 				case 'integer':
-					$value=intval($value);
+					$value=($value=='')?NULL:intval($value);
 					break;
 				case 'float':
-					$value=floatval($value);
+					$value=($value=='')?NULL:floatval($value);
 					break;
 			}
 		}

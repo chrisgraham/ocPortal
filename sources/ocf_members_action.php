@@ -293,10 +293,10 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 					$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
 					break;
 				case 'integer':
-					$value=intval($value);
+					$value=($value=='')?NULL:intval($value);
 					break;
 				case 'float':
-					$value=floatval($value);
+					$value=($value=='')?NULL:floatval($value);
 					break;
 			}
 		}
@@ -431,10 +431,10 @@ function get_cpf_storage_for($type)
 			$_type='LONG_TEXT';
 			break;
 		case 'integer':
-			$_type='INTEGER';
+			$_type='?INTEGER';
 			break;
 		case 'float':
-			$_type='REAL';
+			$_type='?REAL';
 			break;
 	}
 

@@ -1570,16 +1570,26 @@ function version_specific()
 			}
 			$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'adminzone'),'',1);
 			$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'cms'),'',1);
+
+			set_value('version',float_to_raw_string($version_files,10,true));
+			delete_value('last_implicit_sync');
+			delete_value('last_newsletter_drip_send');
+			delete_value('last_confirm_reminder_time');
+			delete_value('oracle_index_cleanup_last_time');
+			delete_value('last_sitemap_time_calc');
+			delete_value('last_ticket_lead_time_calc');
+			set_long_value('last_welcome_mail_time',get_value('last_welcome_mail_time'));
+			delete_value('last_welcome_mail_time');
+
+			foreach (array('INTEGER','REAL') as $bad_type)
+			{
+				$bad_fields=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_name'),array('m_type'=>$bad_type,'m_table'=>'f_member_custom_fields'));
+				foreach ($bad_fields as $bad_field)
+				{
+					$GLOBALS['SITE_DB']->alter_table_field('f_member_custom_fields',$bad_field['m_name'],'?'.$bad_type);
+				}
+			}
 		}
-		set_value('version',float_to_raw_string($version_files,10,true));
-		delete_value('last_implicit_sync');
-		delete_value('last_newsletter_drip_send');
-		delete_value('last_confirm_reminder_time');
-		delete_value('oracle_index_cleanup_last_time');
-		delete_value('last_sitemap_time_calc');
-		delete_value('last_ticket_lead_time_calc');
-		set_long_value('last_welcome_mail_time',get_value('last_welcome_mail_time'));
-		delete_value('last_welcome_mail_time');
 
 		return true;
 	}
