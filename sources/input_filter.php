@@ -64,12 +64,7 @@ function check_posted_field($name,$val)
 	{
 		if (!in_array($name,array('login_username','password','remember','login_invisible')))
 		{
-			$allowed_partners=explode("\n",get_option('allowed_post_submitters'));
-			foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
-			{
-				if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
-					$allowed_partners[]=$_val[0];
-			}
+			$allowed_partners=get_allowed_partner_sites();
 
 			$found=false;
 			foreach ($allowed_partners as $partner)
@@ -93,6 +88,22 @@ function check_posted_field($name,$val)
 	$val=filter_form_field_default($name,$val);
 
 	return $val;
+}
+
+/**
+ * Find partner sites allowed to do cross-domain requests to us.
+ *
+ * @return array			Partner domain names
+ */
+function get_allowed_partner_sites()
+{
+	$allowed_partners=(trim(get_option('allowed_post_submitters'))=='')?array():explode("\n",trim(get_option('allowed_post_submitters'))));
+	foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
+	{
+		if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
+			$allowed_partners[]=$_val[0];
+	}
+	return $allowed_partners;
 }
 
 /**

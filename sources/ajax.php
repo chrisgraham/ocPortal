@@ -25,12 +25,8 @@
  */
 function cor_prepare()
 {
-	$allowed_partners=explode("\n",get_option('allowed_post_submitters'));
-	foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
-	{
-		if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
-			$allowed_partners[]=$_val[0];
-	}
+	require_code('input_filter');
+	$allowed_partners=get_allowed_partner_sites();
 	if (in_array(preg_replace('#^.*://([^:/]*).*$#','${1}',$_SERVER['HTTP_ORIGIN']),$allowed_partners))
 	{
 		header('Access-Control-Allow-Origin: '.str_replace("\n",'',str_replace("\r",'',$_SERVER['HTTP_ORIGIN'])));
@@ -66,19 +62,14 @@ function crossdomain_script()
 	echo '<'.'?xml version="1.0"?'.'>
 <!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
 <cross-domain-policy>';
-	foreach (explode("\n",get_option('allowed_post_submitters')) as $post_submitter)
+	require_code('input_filter');
+	$allowed_partners=get_allowed_partner_sites();
+	foreach ($allowed_partners as $post_submitter)
 	{
 		$post_submitter=trim($post_submitter);
 		if ($post_submitter!='')
 		{
 			echo '<allow-access-from domain="'.xmlentities($post_submitter).'" />';
-		}
-	}
-	foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
-	{
-		if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
-		{
-			echo '<allow-access-from domain="'.xmlentities($_val[0]).'" />';
 		}
 	}
 	echo '
