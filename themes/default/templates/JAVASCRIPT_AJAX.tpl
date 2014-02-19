@@ -500,7 +500,14 @@ function do_ajax_request(url,callback__method,post) // Note: 'post' is not an ar
 	var index=window.AJAX_REQUESTS.length;
 	window.AJAX_METHODS[index]=callback__method;
 
-	window.AJAX_REQUESTS[index]=new XMLHttpRequest();
+	var base=window.location.protocol+'//'+window.location.host+'/';
+	if ((url.substr(0,base.length)!=base) && (typeof window.XDomainRequest!='undefined') && ((typeof window.XMLHttpRequest!='undefined') && (typeof (new XMLHttpRequest().responseType)=='undefined')))
+	{
+		window.AJAX_REQUESTS[index]=new XDomainRequest(); // <IE10
+	} else
+	{
+		window.AJAX_REQUESTS[index]=new XMLHttpRequest();
+	}
 	if (!synchronous) window.AJAX_REQUESTS[index].onreadystatechange=process_request_changes;
 	if (post)
 	{
@@ -615,12 +622,12 @@ function process_request_change(ajax_result_frame,i)
 
 	if (ajax_result_frame.getElementsByTagName('message')[0])
 	{
-		//Either an error or a message was returned. :(
+		// Either an error or a message was returned. :(
 		var message=ajax_result_frame.getElementsByTagName('message')[0].firstChild.data;
 
 		if (ajax_result_frame.getElementsByTagName('error')[0])
 		{
-			//It's an error :|
+			// It's an error :|
 			window.fauxmodal_alert('An error ('+ajax_result_frame.getElementsByTagName('error')[0].firstChild.data+') message was returned by the server: '+message);
 			return null;
 		}

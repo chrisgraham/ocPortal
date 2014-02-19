@@ -567,6 +567,7 @@ class Hook_addon_registry_core
 			'sources/hooks/systems/login_providers/index.html',
 			'sources/hooks/systems/login_providers/httpauth.php',
 			'data/question_ui.php',
+			'data/crossdomain.php',
 			'data/.htaccess',
 			'data_custom/.htaccess',
 			'sources/firephp.php',

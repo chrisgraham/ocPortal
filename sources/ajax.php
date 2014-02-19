@@ -21,6 +21,71 @@
 /*EXTRA FUNCTIONS: simplexml_load_string*/
 
 /**
+ * Prepare to inject COR headers.
+ */
+function cor_prepare()
+{
+	$allowed_partners=explode("\n",get_option('allowed_post_submitters'));
+	foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
+	{
+		if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
+			$allowed_partners[]=$_val[0];
+	}
+	if (in_array(preg_replace('#^.*://([^:/]*).*$#','${1}',$_SERVER['HTTP_ORIGIN']),$allowed_partners))
+	{
+		header('Access-Control-Allow-Origin: '.str_replace("\n",'',str_replace("\r",'',$_SERVER['HTTP_ORIGIN'])));
+
+		if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD']=='OPTIONS'))
+		{
+			header('Access-Control-Allow-Credentials: true');
+
+			// Send pre-flight response
+			if (isset($_SERVER['ACCESS_CONTROL_REQUEST_HEADERS']))
+				header('Access-Control-Allow-Headers: '.str_replace("\n",'',str_replace("\r",'',$_SERVER['ACCESS_CONTROL_REQUEST_HEADERS'])));
+			$methods='GET,POST,PUT,HEAD,OPTIONS';
+			if (isset($_SERVER['ACCESS_CONTROL_REQUEST_HEADERS']))
+				$methods.=str_replace("\n",'',str_replace("\r",'',$_SERVER['ACCESS_CONTROL_REQUEST_METHOD']));
+			header('Access-Control-Allow-Methods: '.$methods);
+
+			exit();
+		}
+	}
+}
+
+/**
+ * Script to generate a Flash crossdomain file.
+ */
+function crossdomain_script()
+{
+	prepare_for_known_ajax_response();
+
+	require_code('xml');
+
+	header('Content-Type: text/xml');
+
+	echo '<'.'?xml version="1.0"?'.'>
+<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
+<cross-domain-policy>';
+	foreach (explode("\n",get_option('allowed_post_submitters')) as $post_submitter)
+	{
+		$post_submitter=trim($post_submitter);
+		if ($post_submitter!='')
+		{
+			echo '<allow-access-from domain="'.xmlentities($post_submitter).'" />';
+		}
+	}
+	foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
+	{
+		if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
+		{
+			echo '<allow-access-from domain="'.xmlentities($_val[0]).'" />';
+		}
+	}
+	echo '
+</cross-domain-policy>';
+}
+
+/**
  * AJAX script for checking if a new username is valid.
  */
 function username_check_script()

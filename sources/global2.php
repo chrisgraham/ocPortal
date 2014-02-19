@@ -220,6 +220,8 @@ function init__global2()
 	require_code('config'); // Config is needed for much active stuff
 	if ((!isset($SITE_INFO['known_suexec'])) || ($SITE_INFO['known_suexec']=='0'))
 		if (ip_banned(get_ip_address())) critical_error('BANNED');
+
+	// Member startup takes some time
 	if (!$MICRO_BOOTUP)
 	{
 		load_user_stuff();
@@ -288,6 +290,13 @@ function init__global2()
 		}
 	}
 	require_code('urls'); // URL building is crucial
+
+	// Set cross-domain headers (COR)
+	if (isset($_SERVER['HTTP_ORIGIN']))
+	{
+		require_code('ajax');
+		cor_prepare();
+	}
 
 	// Register Internationalisation settings
 	@header('Content-type: text/html; charset='.get_charset());

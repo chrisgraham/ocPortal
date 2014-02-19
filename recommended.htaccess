@@ -83,6 +83,9 @@ RewriteCond %{DOCUMENT_ROOT}/$1 -l [OR]
 RewriteCond %{DOCUMENT_ROOT}/$1 -d
 RewriteRule (.*) - [L]
 
+# crossdomain.xml is actually ocPortal-driven
+RewriteRule ^crossdomain.xml data/crossdomain.php
+
 # WebDAV implementation (requires the non-bundled WebDAV addon)
 RewriteRule ^webdav(/.*|$) data_custom/webdav.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
