@@ -19,6 +19,25 @@
  */
 
 /**
+ * Update a config option that references something, reflecting a new reference.
+ *
+ * @param  ID_TEXT		The old setting
+ * @param  ID_TEXT		The new setting
+ * @param  ID_TEXT		The config option type - presumably a type that holds references (e.g. "forum")
+ */
+function update_config_option_reference($old_setting,$new_setting,$type)
+{
+	$options=$GLOBALS['SITE_DB']->query_select('config',array('the_name'),array('the_type'=>$type));
+	foreach ($options as $option)
+	{
+		if (get_option($option['the_name'])==$old_setting)
+		{
+			set_option($option['the_name'],$new_setting);
+		}
+	}
+}
+
+/**
  * An option has dissappeared somehow - find it via searching our code-base for it's install code. It doesn't get returned, just loaded up. This function will produce a fatal error if we cannot find it.
  *
  * @param  ID_TEXT		The name of the value

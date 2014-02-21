@@ -770,8 +770,8 @@ function do_site()
 		// Security feature admins can turn on
 		require_code('notifications');
 		$current_username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',$current_username,get_site_name());
-		$mail=do_lang('AFA_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($current_username));
+		$subject=do_lang('AFA_NOTIFICATION_MAIL_SUBJECT',$current_username,get_site_name(),get_ip_address());
+		$mail=do_lang('AFA_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($current_username),comcode_escape(get_ip_address()));
 
 		dispatch_notification('adminzone_frontpage_accessed',NULL,$subject,$mail);
 

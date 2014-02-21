@@ -40,7 +40,10 @@ function ocf_edit_category($category_id,$title,$description,$expanded_by_default
 	{
 		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_categories','c_title',array('c_title'=>$old_title));
 		if (is_null($test)) // Ok, so we know there was only 1 forum named that and now it is gone
-			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$title),array('the_type'=>'category','config_value'=>$old_title));
+		{
+			require_code('config2');
+			update_config_option_reference($old_title,$title,'category');
+		}
 	}
 
 	log_it('EDIT_FORUM_CATEGORY',strval($category_id),$title);
@@ -128,7 +131,10 @@ function ocf_edit_forum($forum_id,$name,$description,$category_id,$new_parent,$p
 	{
 		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_name',array('f_name'=>$old_name));
 		if (is_null($test)) // Ok, so we know there was only 1 forum named that and now it is gone
-			$GLOBALS['FORUM_DB']->query_update('config',array('config_value'=>$name),array('the_type'=>'forum','config_value'=>$old_name));
+		{
+			require_code('config2');
+			update_config_option_reference($old_name,$name,'forum');
+		}
 	}
 
 	if (($old_parent!=$new_parent) && ($new_parent!=INTEGER_MAGIC_NULL))
