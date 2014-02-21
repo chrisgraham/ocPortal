@@ -927,7 +927,7 @@ class OCP_Topic
 				$message_eval=$post['message']->evaluate();
 
 				// Also scan for <img> tag, in case it was put in manually
-				if ($GLOBALS['META_DATA']['image']==find_theme_image('icons/48x48/menu/social/forum/forums'))
+				if ((!isset($GLOBALS['META_DATA']['image'])) || ($GLOBALS['META_DATA']['image']==find_theme_image('icons/48x48/menu/social/forum/forums')))
 				{
 					$matches=array();
 					if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$message_eval,$matches)!=0)

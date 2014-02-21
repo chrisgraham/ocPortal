@@ -1074,6 +1074,6 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$outr
 		}
 	}
 
-	mail_wrap($subject,$message_raw,array($to_email),$to_name,$from_email,$from_name,3,$attachments);
+	mail_wrap($subject,$message_raw,array($to_email),$to_name,$from_email,$from_name,3,$attachments,false,NULL,false,false,false,'MAIL',count($attachments)!=0);
 }
 

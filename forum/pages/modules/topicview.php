@@ -195,7 +195,7 @@ class Module_topicview
 					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags($truncated),ENT_QUOTES,get_charset());
 
 					// Also scan for <img> tag, in case it was put in manually
-					if ($GLOBALS['META_DATA']['image']==find_theme_image('icons/48x48/menu/social/forum/forums'))
+					if ((!isset($GLOBALS['META_DATA']['image'])) || ($GLOBALS['META_DATA']['image']==find_theme_image('icons/48x48/menu/social/forum/forums')))
 					{
 						$matches=array();
 						if (preg_match('#<img\s[^<>]*src="([^"]*)"#',$_postdetails['post'],$matches)!=0)

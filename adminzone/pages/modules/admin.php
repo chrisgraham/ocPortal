@@ -190,6 +190,7 @@ class Module_admin
 			array('dob','date of birth'),
 			array('sef','seo','google','search engine','search-engine-friendly','search-engine-optimisation'),
 			array('ban','suspend','suspension','probation','warn','punish','punitive'),
+			array('crash','warn','error','fatal','falt'),
 			array('staff','moderator','admin', 'administrator','operator','webmaster'),
 			array('open','closed','live','activate','activation',/*'enable',*/'turn'),
 			array('import','convert','migrate','upload'),

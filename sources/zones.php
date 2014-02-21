@@ -78,7 +78,7 @@ function init__zones()
 				unset($MODULES_ZONES_CACHE_DEFAULT[$key]);
 			}
 		}
-		$MODULES_ZONES_CACHE=$MODULES_ZONES_CACHE_DEFAULT;
+		$MODULES_ZONES_CACHE=array(get_zone_name()=>$MODULES_ZONES_CACHE_DEFAULT);
 	}
 
 	global $ALL_ZONES_CACHE,$ALL_ZONES_TITLED_CACHE;
@@ -206,18 +206,19 @@ function get_zone_name()
  */
 function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$error=true)
 {
+	$zone=get_zone_name();
+
 	global $MODULES_ZONES_CACHE;
-	if ((isset($MODULES_ZONES_CACHE[$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES_CACHE)) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
+	if ((isset($MODULES_ZONES_CACHE[$zone][$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES_CACHE[$zone])) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
 	{
-		return $MODULES_ZONES_CACHE[$module_name];
+		return $MODULES_ZONES_CACHE[$zone][$module_name];
 	}
 
 	$error=false; // hack for now
 
-	$zone=get_zone_name();
 	if (($module_name==get_page_name()) && (running_script('index')) && ($module_name!='login'))
 	{
-		$MODULES_ZONES_CACHE[$module_name]=$zone;
+		$MODULES_ZONES_CACHE[$zone][$module_name]=$zone;
 		return $zone;
 	}
 
@@ -226,13 +227,13 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 		if (($type=='modules') && (substr($module_name,0,6)=='admin_'))
 		{
 			$zone='adminzone';
-			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			$MODULES_ZONES_CACHE[$zone][$module_name]=$zone;
 			return $zone;
 		}
 		if (($type=='modules') && (substr($module_name,0,4)=='cms_'))
 		{
 			$zone='cms';
-			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			$MODULES_ZONES_CACHE[$zone][$module_name]=$zone;
 			return $zone;
 		}
 	}
@@ -250,9 +251,9 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	if (($zone!='site') && (get_option('collapse_user_zones')!='1')/* && (is_file(get_file_base().'/site/index.php'))*/) $first_zones[]='site';
 	foreach ($first_zones as $zone)
 	{
-		if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1)) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)
+		if (($check_redirects) && ((isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1) || (isset($REDIRECT_CACHE['*'][$module_name])) && ($REDIRECT_CACHE['*'][$module_name]['r_is_transparent']==1))) // Only needs to actually look for redirections in first zones until end due to the way precedences work (we know the current zone will be in the first zones)
 		{
-			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			$MODULES_ZONES_CACHE[$zone][$module_name]=$zone;
 			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 			return $zone;
 		}
@@ -261,7 +262,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 			|| (is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'_custom/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype))))
 		{
 			if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
-			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			$MODULES_ZONES_CACHE[$zone][$module_name]=$zone;
 			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 			return $zone;
 		}
@@ -276,7 +277,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 				|| (is_file(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$type.'_custom/'.(($dir2===NULL)?'':($dir2.'/')).$module_name.'.'.$ftype))))
 			{
 				if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==0) && ($REDIRECT_CACHE[$zone][$module_name]['r_to_page']==$module_name)) $zone=$REDIRECT_CACHE[$zone][$module_name]['r_to_zone'];
-				$MODULES_ZONES_CACHE[$module_name]=$zone;
+				$MODULES_ZONES_CACHE[$zone][$module_name]=$zone;
 				if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 				return $zone;
 			}
@@ -287,7 +288,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	{
 		if (($check_redirects) && (isset($REDIRECT_CACHE[$zone][$module_name])) && ($REDIRECT_CACHE[$zone][$module_name]['r_is_transparent']==1))
 		{
-			$MODULES_ZONES_CACHE[$module_name]=$zone;
+			$MODULES_ZONES_CACHE[$zone][$module_name]=$zone;
 			if (function_exists('persistent_cache_set')) persistent_cache_set('MODULES_ZONES',$MODULES_ZONES_CACHE);
 			return $zone;
 		}
@@ -295,7 +296,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 
 	if (!$error)
 	{
-		$MODULES_ZONES_CACHE[$module_name]=NULL;
+		$MODULES_ZONES_CACHE[$zone][$module_name]=NULL;
 		return NULL;
 	}
 	warn_exit(do_lang_tempcode('MISSING_MODULE_REFERENCED',$module_name));

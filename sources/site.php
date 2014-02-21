@@ -124,6 +124,9 @@ function init__site()
 		}
 	}
 
+	if (running_script('index'))
+		process_url_monikers(get_page_name());
+
 	// The most important security check
 	global $SESSION_CONFIRMED_CACHE;
 	get_member(); // Make sure we've loaded our backdoor if installed
@@ -783,8 +786,6 @@ function process_url_monikers($page,$redirect_if_non_canonical=true)
  */
 function do_site()
 {
-	process_url_monikers(get_page_name());
-
 	// Any messages to output?
 	if (get_param_integer('redirected',0)==1)
 	{
