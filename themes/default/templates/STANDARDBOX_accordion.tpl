@@ -20,7 +20,7 @@
 	{+END}
 	<div class="toggleable_tray"{+START,IF_NOT_IN_ARRAY,OPTIONS,tray_open}{+START,IF,{$JS_ON}} style="display: none" aria-expanded="false"{+END}{+END}>
 		{+START,IF_NON_EMPTY,{META}}
-			<div class="meta_details" role="contentinfo">
+			<div class="meta_details" role="note">
 				<dl class="meta_details_list">
 					{+START,LOOP,META}
 						<dt class="field_name">{KEY}:</dt> <dd>{VALUE}</dd>

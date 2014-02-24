@@ -9,7 +9,7 @@
 		{+END}
 	</h3>
 
-	<div class="meta_details" role="contentinfo">
+	<div class="meta_details" role="note">
 		<dl class="meta_details_list">
 			{+START,IF_NON_EMPTY,{TIMEOUT}}
 				<dt class="field_name">{!TIMEOUT}:</dt> <dd>{TIMEOUT*}</dd>

@@ -11,7 +11,7 @@
 		{FIRST_UNREAD}
 	</div>
 
-	<div class="ocf_forum_box_right ocf_post_details" role="contentinfo">
+	<div class="ocf_forum_box_right ocf_post_details" role="note">
 		<div class="ocf_post_details_date">
 			{$SET,post_date,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{POST_DATE_RAW}}">{POST_DATE*}</time>}
 			{$?,{$MOBILE},{$GET,post_date},{!POST_DATE,{$GET,post_date}}}
@@ -52,7 +52,7 @@
 {+END}
 
 <div>
-	<div class="ocf_topic_post_member_details" role="contentinfo">
+	<div class="ocf_topic_post_member_details" role="note">
 		{+START,IF_NON_EMPTY,{POSTER}}
 			<div class="ocf_topic_poster_name">
 				{POSTER}

@@ -14,7 +14,7 @@
 		{+END}
 	</h3>
 
-	<div class="meta_details" role="contentinfo">
+	<div class="meta_details" role="note">
 		<dl class="meta_details_list">
 			{+START,IF_NON_EMPTY,{AUTHOR}}
 				<dt class="field_name">{!BY}:</dt> <dd>{AUTHOR*}</dd>

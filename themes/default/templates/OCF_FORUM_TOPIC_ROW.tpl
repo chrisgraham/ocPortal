@@ -45,7 +45,7 @@
 				<div class="ocf_forum_topic_description">{DESCRIPTION*}</div>
 			{+END}{+END}
 
-			<ul class="horizontal_meta_details associated_details" role="contentinfo">
+			<ul class="horizontal_meta_details associated_details" role="note">
 				<li><span class="field_name">{!COUNT_POSTS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_POSTS*}}</li>
 				<li><span class="field_name">{!COUNT_VIEWS}:</span> {$PREG_REPLACE,\,\d\d\d$,k,{NUM_VIEWS*}}</li>
 			</ul>

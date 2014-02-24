@@ -4,6 +4,7 @@
 	<input type="hidden" name="_comment_form_post" value="1" />
 {+END}
 
+	{+START,IF_PASSED,HIDDEN}{HIDDEN}{+END}
 	<input type="hidden" name="_validated" value="1" />
 	<input type="hidden" name="comcode__post" value="1" />
 	<input type="hidden" name="stub" value="" />

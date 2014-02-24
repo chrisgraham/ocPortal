@@ -5,7 +5,7 @@
 		{WARNING_DETAILS}
 	{+END}
 
-	<div class="meta_details" role="contentinfo">
+	<div class="meta_details" role="note">
 		<ul class="meta_details_list">
 			{+START,IF,{$INLINE_STATS}}<li>{!VIEWS_SIMPLE,{VIEWS*}}</li>{+END}
 			<li>{!ADDED_SIMPLE,<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{ADD_DATE_RAW}}" pubdate="pubdate" itemprop="datePublished">{DATE*}</time>}</li>

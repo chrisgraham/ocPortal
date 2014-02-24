@@ -113,7 +113,7 @@ function handle_permission_check_logging($member,$op,$params,$result)
  * @param  string			The parameteter given to the error message
  * @param  boolean		Force the user to login (even if perhaps they are logged in already)
  */
-function access_denied($class,$param='',$force_login=false)
+function access_denied($class='ACCESS_DENIED',$param='',$force_login=false)
 {
 	require_code('failure');
 	_access_denied($class,$param,$force_login);

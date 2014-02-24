@@ -1,7 +1,7 @@
 {$REQUIRE_CSS,do_next}
 
 <tr{+START,IF,{$GET,done_one_theme}} class="thick_border"{+END}>
-	<td role="contentinfo">
+	<td role="note">
 		{+START,SET,TOOLTIP}
 			<kbd>{NAME*}</kbd>, {!BY_SIMPLE,<em>{AUTHOR`}</em>}
 			{+START,IF,{$NEQ,{DATE},{!NA_EM}}}

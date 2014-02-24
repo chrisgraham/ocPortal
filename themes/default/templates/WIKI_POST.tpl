@@ -1,5 +1,5 @@
 <div>
-	<div class="ocf_forum_box_left ocf_forum_box_right ocf_post_details" role="contentinfo">
+	<div class="ocf_forum_box_left ocf_forum_box_right ocf_post_details" role="note">
 		<a id="post_{ID*}"></a>
 
 		<div class="wiki_topic_poster_name">

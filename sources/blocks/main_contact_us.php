@@ -65,7 +65,9 @@ class Block_main_contact_us
 
 		$box_title=array_key_exists('title',$map)?$map['title']:do_lang('CONTACT_US');
 
-		if ((post_param_integer('_comment_form_post',0)==1) && ($post!=''))
+		$block_id=md5(serialize($map));
+
+		if ((post_param_integer('_comment_form_post',0)==1) && (post_param('_block_id','')==$block_id) && ($post!=''))
 		{
 			$message=new ocp_tempcode();/*Used to be written out here*/ attach_message(do_lang_tempcode('MESSAGE_SENT'),'inform');
 
@@ -135,6 +137,9 @@ class Block_main_contact_us
 				if ($redirect!='')
 					$default_text=do_lang('COMMENTS_DEFAULT_TEXT',$redirect);
 
+				$hidden=new ocp_tempcode();
+				$hidden->attach(form_input_hidden('_block_id',$block_id));
+
 				$comment_details=do_template('COMMENTS_POSTING_FORM',array(
 					'_GUID'=>'31fe96c5ec3b609fbf19595a1de3886f',
 					'DEFAULT_TEXT'=>$default_text,
@@ -151,6 +156,7 @@ class Block_main_contact_us
 					'DISPLAY'=>'block',
 					'COMMENT_URL'=>$comment_url,
 					'TITLE'=>$box_title,
+					'HIDDEN'=>$hidden,
 				));
 
 				$notifications_enabled=NULL;

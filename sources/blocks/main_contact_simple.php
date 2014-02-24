@@ -56,8 +56,10 @@ class Block_main_contact_simple
 		$subject_prefix=array_key_exists('subject_prefix',$map)?$map['subject_prefix']:'';
 		$subject_suffix=array_key_exists('subject_suffix',$map)?$map['subject_suffix']:'';
 
+		$block_id=md5(serialize($map));
+
 		$post=post_param('post','');
-		if ((post_param_integer('_comment_form_post',0)==1) && ($post!=''))
+		if ((post_param_integer('_comment_form_post',0)==1) && (post_param('_block_id','')==$block_id) && ($post!=''))
 		{
 			if (addon_installed('captcha'))
 			{
@@ -118,6 +120,9 @@ class Block_main_contact_simple
 			}
 		} else $use_captcha=false;
 
+		$hidden=new ocp_tempcode();
+		$hidden->attach(form_input_hidden('_block_id',$block_id));
+
 		$comment_details=do_template('COMMENTS_POSTING_FORM',array(
 			'_GUID'=>'d35227903b5f786331f6532bce1765e4',
 			'JOIN_BITS'=>'',
@@ -133,6 +138,7 @@ class Block_main_contact_simple
 			'DISPLAY'=>'block',
 			'TITLE'=>$box_title,
 			'COMMENT_URL'=>$comment_url,
+			'HIDDEN'=>$hidden,
 		));
 
 		$out=do_template('BLOCK_MAIN_CONTACT_SIMPLE',array('_GUID'=>'298a357f442f440c6b42e58d6717e57c','EMAIL_OPTIONAL'=>true,'COMMENT_DETAILS'=>$comment_details,'MESSAGE'=>$message));

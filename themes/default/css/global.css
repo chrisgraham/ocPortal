@@ -2707,7 +2707,7 @@ It may be displayed using:
  - horizontal_meta_details (usually used on blocks where the meta details are important to encourage a click through)
  - a table (usually used where the content defines its own meta data beyond what all ocPortal content has, such as a length or resolution)
  - a tooltip (good for tucking it away, although it's not touch friendly so should only be used if non-important)
-But it should always have role="contentinfo" on it (ARIA)
+But it should always have role="note" on it (ARIA)
 */
 
 ul.meta_details_list {

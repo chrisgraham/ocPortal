@@ -97,7 +97,7 @@ function check_posted_field($name,$val)
  */
 function get_allowed_partner_sites()
 {
-	$allowed_partners=(trim(get_option('allowed_post_submitters'))=='')?array():explode("\n",trim(get_option('allowed_post_submitters'))));
+	$allowed_partners=(trim(get_option('allowed_post_submitters'))=='')?array():explode("\n",trim(get_option('allowed_post_submitters')));
 	foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
 	{
 		if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')

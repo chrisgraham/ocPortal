@@ -43,7 +43,7 @@
 			{+START,SET,layout}
 				<h3><a href="{URL*}">{TITLE}</a></h3>
 
-				<div class="meta_details" role="contentinfo">
+				<div class="meta_details" role="note">
 					<ul class="meta_details_list">
 						<li>{!POSTED_TIME_SIMPLE,{DATE*}}</li>
 						{+START,SET,author_details}

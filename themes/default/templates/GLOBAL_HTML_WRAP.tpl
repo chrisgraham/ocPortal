@@ -15,7 +15,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 <body class="website_body zone_running_{$ZONE*} page_running_{$PAGE*}" id="main_website" itemscope="itemscope" itemtype="http://schema.org/WebPage">
 	<div id="main_website_inner">
 		{+START,IF,{$SHOW_HEADER}}
-			<header itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+			<header itemscope="itemscope" itemtype="http://schema.org/WPHeader" role="banner">
 				{$,This allows screen-reader users (e.g. blind users) to jump past the panels etc to the main content}
 				<a accesskey="s" class="accessibility_hidden" href="#maincontent">{!SKIP_NAVIGATION}</a>
 
@@ -90,7 +90,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 					</div>
 				{+END}
 
-				<article class="global_middle">
+				<article class="global_middle" role="main">
 					{$,Breadcrumbs}
 					{+START,IF,{$IN_STR,{$BREADCRUMBS},<a}}{+START,IF,{$SHOW_HEADER}}
 						<nav class="global_breadcrumbs breadcrumbs" itemprop="breadcrumb" role="navigation">
@@ -141,7 +141,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 
 		{$,This is the main site footer}
 		{+START,IF,{$SHOW_FOOTER}}
-			<footer class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+			<footer class="float_surrounder" itemscope="itemscope" itemtype="http://schema.org/WPFooter" role="contentinfo">
 				<div class="global_footer_left">
 					{+START,SET,FOOTER_BUTTONS}
 						{+START,IF,{$CONFIG_OPTION,bottom_show_top_button}}

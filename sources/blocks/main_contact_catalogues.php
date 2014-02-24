@@ -77,7 +77,9 @@ class Block_main_contact_catalogues
 		$subject_prefix=array_key_exists('subject_prefix',$map)?$map['subject_prefix']:'';
 		$subject_suffix=array_key_exists('subject_suffix',$map)?$map['subject_suffix']:'';
 
-		if (post_param('subject','')!='')
+		$block_id=md5(serialize($map));
+
+		if (post_param('_block_id','')==$block_id)
 		{
 			if ($use_captcha)
 			{
@@ -189,9 +191,10 @@ class Block_main_contact_catalogues
 		url_default_parameters__disable();
 
 		$hidden->attach(form_input_hidden('subject',$subject));
+		$hidden->attach(form_input_hidden('_block_id',$block_id));
 
 		$url=get_self_url();
 
-		return do_template('FORM',array('_GUID'=>'7dc3957edf3b47399b688d72fae54128','FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'buttons__send','SUBMIT_NAME'=>do_lang_tempcode('SEND'),'URL'=>$url,'TEXT'=>$text));
+		return do_template('FORM',array('_GUID'=>'7dc3957edf3b47399b688d72fae54128','FIELDS'=>$fields,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'buttons__send','SUBMIT_NAME'=>do_lang_tempcode('SEND'),'URL'=>$url,'TEXT'=>$text,'SECONDARY_FORM'=>true));
 	}
 }

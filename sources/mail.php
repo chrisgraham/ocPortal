@@ -1045,8 +1045,10 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$outr
 	}
 	if ($outro!='') $message_raw.="\n\n------------\n\n".$outro;
 
-	$to_name=mixed();
+	if ($from_email=='') $from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 	$from_name=post_param('name',$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
+
+	$to_name=mixed();
 	if (is_null($to_email))
 	{
 		$to=post_param_integer('to_members_email',NULL);

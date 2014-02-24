@@ -1,7 +1,7 @@
 <div itemscope="itemscope" itemtype="http://schema.org/ItemPage" class="catalogue_entry_screen">
 	{TITLE}
 
-	<div class="meta_details" role="contentinfo">
+	<div class="meta_details" role="note">
 		<ul class="meta_details_list">
 			<li>
 				{!BY_SIMPLE,<a rel="author" href="{$MEMBER_PROFILE_URL*,{SUBMITTER}}" itemprop="author">{$USERNAME*,{SUBMITTER},1}}</a>

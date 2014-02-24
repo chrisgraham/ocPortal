@@ -155,9 +155,10 @@ function is_swf_upload($fake_prepopulation=false)
  * @param  ?MEMBER		Member ID to run permissions with (NULL: current member)
  * @param  ?PATH			Full path to upload folder, in case it is not relative to the base directory (NULL: work out)
  * @param  ?PATH			Full path to thumb folder, in case it is not relative to the base directory (NULL: work out)
+ * @param  ?string		Filename to use (NULL: choose one)
  * @return array			An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
  */
-function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=15,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false,$member_id=NULL,$upload_folder_full=NULL,$thumb_folder_full=NULL)
+function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=15,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false,$member_id=NULL,$upload_folder_full=NULL,$thumb_folder_full=NULL,$filename=NULL)
 {
 	require_code('files2');
 
@@ -265,7 +266,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			}
 		}
 
-		$url=_get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_full,$enforce_type,$obfuscate,$accept_errors);
+		$url=_get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_full,$enforce_type,$obfuscate,$accept_errors,$filename);
 		if ($url==array('','')) return array('','','','');
 
 		$is_image=is_image($_FILES[$attach_name]['name']);
@@ -328,21 +329,27 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 					warn_exit(do_lang_tempcode('CANNOT_COPY_TO_SERVER'));
 				}
 			}
-			if (($obfuscate!=0) && ($obfuscate!=3))
+			if (is_null($filename))
 			{
-				$ext=(($obfuscate==2) && (!is_image($HTTP_FILENAME)))?'dat':get_file_extension($HTTP_FILENAME);
-
-				$_file=preg_replace('#\..*\.#','.',$HTTP_FILENAME).((substr($HTTP_FILENAME,-strlen($ext)-1)=='.'.$ext)?'':('.'.$ext));
-				$place=$upload_folder_full.'/'.$_file;
-				while (file_exists($place))
+				if (($obfuscate!=0) && ($obfuscate!=3))
 				{
-					$_file=uniqid('',true).'.'.$ext;
-					$place=$upload_folder_full.'/'.$_file;
+					$ext=(($obfuscate==2) && (!is_image($HTTP_FILENAME)))?'dat':get_file_extension($HTTP_FILENAME);
+
+					$filename=preg_replace('#\..*\.#','.',$HTTP_FILENAME).((substr($HTTP_FILENAME,-strlen($ext)-1)=='.'.$ext)?'':('.'.$ext));
+					$place=$upload_folder_full.'/'.$filename;
+					while (file_exists($place))
+					{
+						$filename=uniqid('',true).'.'.$ext;
+						$place=$upload_folder_full.'/'.$filename;
+					}
+				} else
+				{
+					$filename=$HTTP_FILENAME;
+					$place=$upload_folder_full.'/'.$filename;
 				}
 			} else
 			{
-				$_file=$HTTP_FILENAME;
-				$place=$upload_folder_full.'/'.$_file;
+				$place=$upload_folder_full.'/'.$filename;
 			}
 			if (!has_privilege($member_id,'exceed_filesize_limit'))
 			{
@@ -377,7 +384,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			fix_permissions($place);
 			sync_file($place);
 
-			$url[0]=$upload_folder.'/'.$_file;
+			$url[0]=$upload_folder.'/'.$filename;
 			if (strpos($HTTP_FILENAME,'/')===false) $url[1]=$HTTP_FILENAME;
 		}
 	} else // Uh oh
@@ -453,21 +460,20 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			if (function_exists('imagetypes'))
 			{
 				if ((!is_saveable_image($url[0])) && (get_file_extension($url[0])!='svg')) $ext='.png'; else $ext='';
-				$file=basename($url[0]);
-				$_file=$file;
-				$place=$thumb_folder_full.'/'.$_file.$ext;
+				$thumb_filename=basename($url[0]);
+				$place=$thumb_folder_full.'/'.$thumb_filename.$ext;
 				$i=2;
 				while (file_exists($place))
 				{
-					$_file=strval($i).$file;
-					$place=$thumb_folder_full.'/'.$_file.$ext;
+					$thumb_filename=strval($i).$file;
+					$place=$thumb_folder_full.'/'.$thumb_filename.$ext;
 					$i++;
 				}
 				$url_full=url_is_local($url[0])?get_custom_base_url().'/'.$url[0]:$url[0];
 
 				convert_image($url_full,$place,-1,-1,intval(get_option('thumb_width')),true,NULL,false,$only_make_smaller);
 
-				$thumb=$thumb_folder.'/'.rawurlencode($_file).$ext;
+				$thumb=$thumb_folder.'/'.rawurlencode($thumb_filename).$ext;
 			} else
 			{
 				if ($accept_errors)
@@ -724,6 +730,7 @@ function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_error
  * @param  integer		Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well)
  * @set    0 1 2
  * @param  boolean		Whether to accept upload errors
+ * @param  ?string		Filename to use (NULL: choose one)
  * @return array			A pair: the URL and the filename
  */
 function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_full,$enforce_type=15,$obfuscate=0,$accept_errors=false)
@@ -748,32 +755,38 @@ function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_f
 
 	if (!_check_enforcement_of_type($member_id,$file,$enforce_type,$accept_errors)) return array('','');
 
-	// If we are not obfuscating then we will need to search for an available filename
-	if (($obfuscate==0) || ($obfuscate==3))
+	if (is_null($filename))
 	{
-		$_file=preg_replace('#\..*\.#','.',$file);
-		$place=$upload_folder_full.'/'.$_file;
-		$i=2;
-		// Hunt with sensible names until we don't get a conflict
-		while (file_exists($place))
+		// If we are not obfuscating then we will need to search for an available filename
+		if (($obfuscate==0) || ($obfuscate==3))
 		{
-			$_file=strval($i).preg_replace('#\..*\.#','.',$file);
-			$place=$upload_folder_full.'/'.$_file;
-			$i++;
+			$filename=preg_replace('#\..*\.#','.',$file);
+			$place=$upload_folder_full.'/'.$filename;
+			$i=2;
+			// Hunt with sensible names until we don't get a conflict
+			while (file_exists($place))
+			{
+				$filename=strval($i).preg_replace('#\..*\.#','.',$file);
+				$place=$upload_folder_full.'/'.$filename;
+				$i++;
+			}
 		}
-	}
-	else // A result of some randomness
-	{
-		$ext=get_file_extension($file);
-		$ext=(($obfuscate==2) && (!is_image($file)))?'dat':get_file_extension($file);
+		else // A result of some randomness
+		{
+			$ext=get_file_extension($file);
+			$ext=(($obfuscate==2) && (!is_image($file)))?'dat':get_file_extension($file);
 
-		$_file=uniqid('',true).'.'.$ext;
-		$place=$upload_folder_full.'/'.$_file;
-		while (file_exists($place))
-		{
-			$_file=uniqid('',true).'.'.$ext;
-			$place=$upload_folder_full.'/'.$_file;
+			$filename=uniqid('',true).'.'.$ext;
+			$place=$upload_folder_full.'/'.$filename;
+			while (file_exists($place))
+			{
+				$filename=uniqid('',true).'.'.$ext;
+				$place=$upload_folder_full.'/'.$filename;
+			}
 		}
+	} else
+	{
+		$place=$upload_folder_full.'/'.$filename;
 	}
 
 	check_shared_space_usage($_FILES[$attach_name]['size']);
@@ -809,7 +822,7 @@ function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_f
 	}
 
 	$url=array();
-	$url[0]=$upload_folder.'/'.rawurlencode($_file);
+	$url[0]=$upload_folder.'/'.rawurlencode($filename);
 	$url[1]=$file;
 	return $url;
 }
