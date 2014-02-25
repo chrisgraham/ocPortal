@@ -523,7 +523,7 @@ class Module_quiz
 				$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 					'q_entry'=>$entry_id,
 					'q_question'=>$question['id'],
-					'q_answer'=>post_param('q_'.strval($question['id']))
+					'q_answer'=>post_param('q_'.strval($question['id']),'')
 				));
 			}
 			elseif ($question['q_num_choosable_answers']>1) // Check boxes

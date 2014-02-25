@@ -606,8 +606,14 @@ class Module_admin_orders
 		$res=$GLOBALS['SITE_DB']->query_select('shopping_order',array('*'),array('id'=>$order_id),'',1);
 		$order_det=$res[0];
 
-		require_code('notifications');
-		dispatch_notification('order_dispatched',NULL,do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_lang($order_det['c_member'])),$message,array($order_det['c_member']),A_FROM_SYSTEM_PRIVILEGED);
+		if (is_guest($order_det['c_member']))
+		{
+			attach_message(do_lang_tempcode('NO_NOTE_GUEST'),'warn');
+		} else
+		{
+			require_code('notifications');
+			dispatch_notification('order_dispatched',NULL,do_lang('ORDER_DISPATCHED_MAIL_SUBJECT',get_site_name(),strval($order_id),NULL,get_lang($order_det['c_member'])),$message,array($order_det['c_member']),A_FROM_SYSTEM_PRIVILEGED);
+		}
 	}
 
 	/**

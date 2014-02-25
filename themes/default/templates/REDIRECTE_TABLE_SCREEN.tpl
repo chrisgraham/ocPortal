@@ -12,7 +12,7 @@
 <form title="{!PRIMARY_PAGE_FORM}" method="post" action="{URL*}">
 	<h2>{!EXISTING_REDIRECTS}</h2>
 
-	<div class="wide_table_wrap"><table class="columned_table wide_table redirect_table">
+	<div class="wide_table_wrap"><table class="columned_table wide_table redirect_table results_table">
 		<colgroup>
 			<col class="redirect_table_input_column" />
 			<col class="redirect_table_input_column" />
@@ -23,7 +23,7 @@
 		</colgroup>
 
 		<thead>
-			<tr class="results_table">
+			<tr>
 				<th>
 					{!REDIRECT_FROM_ZONE}
 				</th>
@@ -50,7 +50,7 @@
 
 	<h2>{!NEW_REDIRECT}</h2>
 
-	<div class="wide_table_wrap"><table class="columned_table wide_table redirect_table">
+	<div class="wide_table_wrap"><table class="columned_table wide_table redirect_table results_table">
 		<colgroup>
 			<col class="redirect_table_input_column" />
 			<col class="redirect_table_input_column" />
@@ -61,7 +61,7 @@
 		</colgroup>
 
 		<thead>
-			<tr class="results_table">
+			<tr>
 				<th>
 					{!REDIRECT_FROM_ZONE}
 				</th>

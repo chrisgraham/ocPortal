@@ -787,7 +787,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 
 										if (!$explicit_username)
 										{
-											$parts=preg_split('#[^\w]#',$username,-1,PREG_SPLIT_DELIM_CAPTURE);
+											$parts=preg_split('#([^\w])#',$username,-1,PREG_SPLIT_DELIM_CAPTURE);
 											$username_part='';
 											$username_sql='1=0';
 											for ($i=0;$i<count($parts);$i+=2)

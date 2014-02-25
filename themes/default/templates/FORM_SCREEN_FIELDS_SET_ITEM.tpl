@@ -11,12 +11,6 @@
 
 		{INPUT}
 
-		{+START,IF_NON_EMPTY,{NAME}}
-			<script type="text/javascript">// <![CDATA[
-				{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
-			//]]></script>
-		{+END}
-
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}
 			<input type="hidden" name="label_for__{NAME*}" value="{$STRIP_HTML*,{PRETTY_NAME}}" />
 		{+END}

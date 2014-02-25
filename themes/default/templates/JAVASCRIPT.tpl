@@ -2887,6 +2887,7 @@ function apply_rating_highlight_and_ajax_code(likes,initial_rating,content_type,
 				return function(event)	{
 					if (typeof event=='undefined') var event=window.event;
 					event.returnValue=false;
+					if (typeof event.preventDefault!='undefined') event.preventDefault();
 
 					// Find where the rating replacement will go
 					var template='';

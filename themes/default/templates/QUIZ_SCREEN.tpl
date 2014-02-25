@@ -10,8 +10,6 @@
 			{START_TEXT}
 		</div>
 	</div></div>
-
-	<hr class="spaced_rule" />
 {+END}
 
 {$SET,bound_catalogue_entry,{$CATALOGUE_ENTRY_FOR,quiz,{ID}}}
@@ -23,7 +21,7 @@
 		setInterval(function() { var st=document.getElementById('quiz_timer'); var new_value=window.parseInt(get_inner_html(st))-1; if (new_value>=0) set_inner_html(st,new_value); }, 1000);
 	//]]></script>
 
-	<p>
+	<p class="quiz_timer">
 		{!TIME_REMAINING,<strong><span id="quiz_timer">{TIMEOUT*}</span></strong>}
 	</p>
 {+END}
