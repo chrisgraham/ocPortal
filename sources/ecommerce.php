@@ -366,7 +366,7 @@ function perform_local_payment()
  * Useful for making one ocP site (caller site) pretend to be PayPal, when talking to another (target site).
  * Make sure the target site has the caller site listed as the backdoor_ip in the base config, or the verification will happen and fail.
  *
- * @param   URL		URL to send IPN to
+ * @param   URLPATH	URL to send IPN to
  * @param   string	Post parameters to send, in query string format
  * @return  string	Output
  */

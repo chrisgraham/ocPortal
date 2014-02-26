@@ -237,7 +237,7 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline)
  * Do a terminal execution on a defined page type
  *
  * @param  string			The error message
- * @param  ID_TEXT		Sanitised error message
+ * @return string			Sanitised error message
  */
 function _sanitise_error_msg($text)
 {
