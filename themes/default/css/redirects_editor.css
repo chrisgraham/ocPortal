@@ -12,5 +12,9 @@
 }
 
 .redirect_table_sup_column {
-	width: 4em;
+	width: 3em;
+}
+
+.redirect_table td:last-child {
+	text-align: center;
 }

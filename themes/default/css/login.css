@@ -70,7 +70,7 @@ table.login_page_form {
 
 .login_page_options .associated_details {
 	{+START,IF,{$NOT,{$MOBILE}}}
-		padding-left: 2.5em;
+		padding-left: 2em;
 	{+END}
 	display: inline-block;
 }

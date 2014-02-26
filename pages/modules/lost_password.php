@@ -292,7 +292,8 @@ class Module_lost_password
 		if (get_option('password_reset_process')=='ultra')
 		{
 			list($correct_code,$correct_session)=explode('__',$correct_code);
-			if (intval($correct_session)!=get_session_id()) warn_exit(do_lang_tempcode('WRONG_RESET_SESSION'));
+			if (intval($correct_session)!=get_session_id())
+				warn_exit(do_lang_tempcode('WRONG_RESET_SESSION',escape_html(display_time_period(60*60*intval(get_option('session_expiry_time'))))));
 		}
 		if ($code!=$correct_code)
 		{
@@ -303,6 +304,7 @@ class Module_lost_password
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
 
 		require_code('crypt');
 		$new_password=get_rand_password();
@@ -314,7 +316,7 @@ class Module_lost_password
 			// Send password in mail
 			$_login_url=build_url(array('page'=>'login','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('login'),NULL,false,false,true);
 			$login_url=$_login_url->evaluate();
-			$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,get_site_name());
+			$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,comcode_escape(get_site_name()),comcode_escape($username));
 			require_code('mail');
 			mail_wrap(do_lang('LOST_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true,NULL,NULL,$join_time);
 		}
