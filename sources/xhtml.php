@@ -172,7 +172,6 @@ function xhtmlise_html($html,$definitely_want=false)
 		{
 			$treat_as_cdata=in_array('style',$TAG_STACK)?'style':'script';
 			$temp='';
-			$temp.=$INBETWEEN_TEXT;
 			while (true)
 			{
 				$token=_get_next_tag();
