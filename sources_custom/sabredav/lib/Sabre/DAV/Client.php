@@ -314,7 +314,7 @@ class Client {
             CURLOPT_RETURNTRANSFER => true,
             // Return headers as part of the response
             CURLOPT_HEADER => true,
-            CURLOPT_POSTFIELDS => $body,
+            CURLOPT_POSTFIELDS => (string)$body,
             // Automatically follow redirects
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_MAXREDIRS => 5,
@@ -526,10 +526,12 @@ class Client {
 
         $body = XMLUtil::convertDAVNamespace($body);
 
+        $previous = libxml_disable_entity_loader(true);
         $responseXML = simplexml_load_string($body, null, LIBXML_NOBLANKS | LIBXML_NOCDATA);
         if ($responseXML===false) {
             throw new \InvalidArgumentException('The passed data is not valid XML');
         }
+        libxml_disable_entity_loader($previous);
 
         $responseXML->registerXPathNamespace('d', 'urn:DAV');
 

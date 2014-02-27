@@ -1037,10 +1037,12 @@ function _parse_expression_inner()
 				$expression=array('EMBEDDED_ASSIGNMENT','EQUAL',$target,$_expression,$GLOBALS['I']);
 				pparse__parser_expect('BRACKET_CLOSE');
 			}
-			elseif (in_array($next_2,array('INTEGER','BOOLEAN','FLOAT','ARRAY','OBJECT','STRING')))
+			elseif (in_array($next_2,array('INTEGER','INT','BOOL','FLOAT','ARRAY','OBJECT','STRING')))
 			{
 				pparse__parser_next();
 				pparse__parser_next();
+				if ($next_2=='INT') $next_2='INTEGER';
+				if ($next_2=='BOOL') $next_2='BOOLEAN';
 				$expression=array('CASTED',$next_2,_parse_expression_inner(),$GLOBALS['I']);
 			} else
 			{

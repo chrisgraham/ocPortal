@@ -72,6 +72,8 @@ $PTOKENS['DO']='do';
 // Casts
 $PTOKENS['INTEGER']='integer';
 $PTOKENS['BOOLEAN']='boolean';
+$PTOKENS['INT']='int';
+$PTOKENS['BOOL']='bool';
 $PTOKENS['FLOAT']='float';
 $PTOKENS['ARRAY']='array';
 $PTOKENS['OBJECT']='object';
