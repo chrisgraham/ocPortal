@@ -59,33 +59,38 @@ function radio_value(radios)
 	return '';
 }
 
+function get_errormsg_element(id)
+{
+	var errormsg_element=document.getElementById('error_'+id);
+	if (!errormsg_element)
+	{
+		errormsg_element=document.getElementById('error_'+id.replace(/\_day$/,'').replace(/\_month$/,'').replace(/\_year$/,'').replace(/\_hour$/,'').replace(/\_minute$/,''));
+	}
+	return errormsg_element;
+}
+
 function set_field_error(the_element,error_msg)
 {
-	var error_element=null;
 	if (typeof the_element.name!='undefined')
 	{
 		var id=the_element.name;
-		error_element=document.getElementById('error_'+id);
-		if (!error_element)
-		{
-			if ((error_msg=='') && (id.indexOf('_hour')!=-1) || (id.indexOf('_minute')!=-1)) return; // Do not blank out as day/month/year (which comes first) would have already done it
-			error_element=document.getElementById('error_'+id.replace(/\_day$/,'').replace(/\_month$/,'').replace(/\_year$/,'').replace(/\_hour$/,'').replace(/\_minute$/,''));
-		}
-		if (error_element)
+		var errormsg_element=get_errormsg_element(id)
+		if ((error_msg=='') && (id.indexOf('_hour')!=-1) || (id.indexOf('_minute')!=-1)) return; // Do not blank out as day/month/year (which comes first) would have already done it
+		if (errormsg_element)
 		{
 			// Make error message visible, if there's an error
-			error_element.style.display=(error_msg=='')?'none':'block';
+			errormsg_element.style.display=(error_msg=='')?'none':'block';
 
 			// Changed error message
-			if (get_inner_html(error_element)!=escape_html(error_msg))
+			if (get_inner_html(errormsg_element)!=escape_html(error_msg))
 			{
-				set_inner_html(error_element,'');
+				set_inner_html(errormsg_element,'');
 				if (error_msg!='') // If there actually an error
 				{
 					the_element.setAttribute('aria-invalid','true');
 
 					// Need to switch tab?
-					var p=error_element;
+					var p=errormsg_element;
 					while (p!==null)
 					{
 						p=p.parentNode;
@@ -98,19 +103,19 @@ function set_field_error(the_element,error_msg)
 
 					// Set error message
 					var msg_node=document.createTextNode(error_msg);
-					error_element.appendChild(msg_node);
-					error_element.setAttribute('role','alert');
+					errormsg_element.appendChild(msg_node);
+					errormsg_element.setAttribute('role','alert');
 
 					// Fade in
 					if (typeof window.fade_transition!='undefined')
 					{
-						set_opacity(error_element,0.0);
-						fade_transition(error_element,100,30,4);
+						set_opacity(errormsg_element,0.0);
+						fade_transition(errormsg_element,100,30,4);
 					}
 				} else
 				{
 					the_element.setAttribute('aria-invalid','false');
-					error_element.setAttribute('role','');
+					errormsg_element.setAttribute('role','');
 				}
 			}
 		}
@@ -332,8 +337,9 @@ function clever_find_value(the_form,the_element)
 
 function check_field(the_element,the_form,for_preview)
 {
-	var i,the_class,required,my_value,erroneous=false,error_msg='',regexp,total_file_size=0,alerted=false,error_element=null;
+	var i,the_class,required,my_value,erroneous=false,error_msg='',regexp,total_file_size=0,alerted=false;
 
+	// No validation for hidden elements
 	if (((the_element.type=='hidden') || ((the_element.style.display=='none') && ((typeof window.is_wysiwyg_field=='undefined') || (!is_wysiwyg_field(the_element))))) && ((!the_element.className) || (element_has_class(the_element,'hidden_but_needed'))==-1))
 	{
 		return null;
@@ -374,8 +380,10 @@ function check_field(the_element,the_form,for_preview)
 		}
 	}
 
+	// Class name
 	the_class=first_class_name(the_element.className);
 
+	// Deleting?
 	if ((!for_preview) && (the_element.name=='delete') && (((the_class=='input_radio') && (the_element.value!='0')) || (the_class=='input_tick')) && (the_element.checked))
 	{
 		return [false,the_element,0,true]; // Because we're deleting, errors do not matter
@@ -391,11 +399,18 @@ function check_field(the_element,the_form,for_preview)
 	}
 	my_value=clever_find_value(the_form,the_element);
 
-	if ((required) && ((my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')=='') || (my_value=='****')))
+	// Prepare for custom error messages, stored as HTML5 data on the error message display element
+	var errormsg_element=get_errormsg_element(the_element.name);
+
+	// Blank?
+	if ((required) && (my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')==''))
 	{
 		error_msg='{!REQUIRED_NOT_FILLED_IN;^}';
+		if ((errormsg_element) && (errormsg_element.getAttribute('data-errorUnfilled')!=''))
+			error_msg=errormsg_element.getAttribute('data-errorUnfilled');
 	} else
 	{
+		// Standard field-type validations
 		if ((the_element.className.indexOf('date')!=-1) && (the_element.name.match(/\_(day|month|year)$/)) && (my_value!=''))
 		{
 			var day=the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_day')].options[the_form.elements[the_element.name.replace(/\_(day|month|year)$/,'_day')].selectedIndex].value;
@@ -406,36 +421,53 @@ function check_field(the_element,the_form,for_preview)
 			if (month!=source_date.getMonth()+1) error_msg='{!NOT_A_DATE;^}';
 			if (day!=source_date.getDate()) error_msg='{!NOT_A_DATE;^}';
 		}
-		if (((the_class=='input_email') || (the_class=='input_email_required')) && (my_value!='') && (my_value!='****') && (!my_value.match(/^[a-zA-Z0-9\._\-\+]+@[a-zA-Z0-9\._\-]+$/)))
+		if (((the_class=='input_email') || (the_class=='input_email_required')) && (my_value!='') && (!my_value.match(/^[a-zA-Z0-9\._\-\+]+@[a-zA-Z0-9\._\-]+$/)))
 		{
-			error_msg='{!NOT_A_EMAIL;^}'.replace('xxx',my_value);
+			error_msg='{!NOT_A_EMAIL;^}'.replace('\{1}',my_value);
 		}
-		if (((the_class=='input_username') || (the_class=='input_username_required')) && (my_value!='') && (my_value!='****') && (window.do_ajax_field_test) && (!do_ajax_field_test('{$FIND_SCRIPT_NOHTTP;,username_exists}?username='+encodeURIComponent(my_value))))
+		if (((the_class=='input_username') || (the_class=='input_username_required')) && (my_value!='') && (window.do_ajax_field_test) && (!do_ajax_field_test('{$FIND_SCRIPT_NOHTTP;,username_exists}?username='+encodeURIComponent(my_value))))
 		{
-			error_msg='{!NOT_USERNAME;^}'.replace('xxx',my_value);
+			error_msg='{!NOT_USERNAME;^}'.replace('\{1}',my_value);
 		}
-		if (((the_class=='input_codename') || (the_class=='input_codename_required')) && (my_value!='') && (my_value!='****') && (!my_value.match(/^[a-zA-Z0-9\-\.\_]*$/)))
+		if (((the_class=='input_codename') || (the_class=='input_codename_required')) && (my_value!='') && (!my_value.match(/^[a-zA-Z0-9\-\.\_]*$/)))
 		{
-			error_msg='{!NOT_CODENAME;^}'.replace('xxx',my_value);
+			error_msg='{!NOT_CODENAME;^}'.replace('\{1}',my_value);
 		}
-		if (((the_class=='input_integer') || (the_class=='input_integer_required')) && (my_value!='') && (my_value!='****') && (parseInt(my_value,10)!=my_value-0))
+		if (((the_class=='input_integer') || (the_class=='input_integer_required')) && (my_value!='') && (parseInt(my_value,10)!=my_value-0))
 		{
-			error_msg='{!NOT_INTEGER;^}'.replace('xxx',my_value);
+			error_msg='{!NOT_INTEGER;^}'.replace('\{1}',my_value);
 		}
-		if (((the_class=='input_float') || (the_class=='input_float_required')) && (my_value!='') && (my_value!='****') && (parseFloat(my_value)!=my_value-0))
+		if (((the_class=='input_float') || (the_class=='input_float_required')) && (my_value!='') && (parseFloat(my_value)!=my_value-0))
 		{
-			error_msg='{!NOT_FLOAT;^}'.replace('xxx',my_value);
+			error_msg='{!NOT_FLOAT;^}'.replace('\{1}',my_value);
+		}
+
+		// shim for HTML5 regexp patterns
+		if (the_element.getAttribute('pattern'))
+		{
+			if ((my_value!='') && (!my_value.match(new RegExp(the_element.getAttribute('pattern')))))
+			{
+				error_msg='{!PATTERN_NOT_MATCHED;^}'.replace('\{1}',my_value);
+			}
+		}
+
+		// Custom error messages
+		if (error_msg!='')
+		{
+			if ((errormsg_element) && (errormsg_element.getAttribute('data-errorRegexp')!=''))
+				error_msg=errormsg_element.getAttribute('data-errorRegexp');
 		}
 	}
 
+	// Show error?
 	set_field_error(the_element,error_msg);
+
 	if ((error_msg!='') && (!erroneous))
 	{
 		erroneous=true;
-		error_element=the_element;
 	}
 
-	return [erroneous,error_element,total_file_size,alerted];
+	return [erroneous,total_file_size,alerted];
 }
 
 function check_form(the_form,for_preview)
@@ -453,9 +485,9 @@ function check_form(the_form,for_preview)
 		if (check_result!=null)
 		{
 			erroneous=check_result[0] || erroneous;
-			if (!error_element) error_element=check_result[1];
-			total_file_size+=check_result[2];
-			alerted=check_result[3] || alerted;
+			if (!error_element && erroneous) error_element=the_element;
+			total_file_size+=check_result[1];
+			alerted=check_result[2] || alerted;
 
 			if (check_result[0])
 			{
