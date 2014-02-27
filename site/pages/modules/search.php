@@ -276,6 +276,8 @@ class Module_search
 	{
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
+		breadcrumb_set_parents(array(array('_SEARCH:search',do_lang_tempcode('SEARCH'))));
+
 		require_code('templates_results_table');
 
 		$title=get_screen_title('SAVED_SEARCHES');
@@ -294,7 +296,7 @@ class Module_search
 		$fields=new ocp_tempcode();
 		foreach ($rows as $row)
 		{
-			$post_url=build_url(array('page'=>'_SELF','type'=>'_delete'),'_SELF');
+			$post_url=build_url(array('page'=>'_SELF','type'=>'_delete','wide_high'=>get_param_integer('wide_high',NULL),'overlay'=>get_param_integer('overlay',NULL)),'_SELF');
 			$deletion_button=do_template('SEARCH_SAVED_DELETION_BUTTON',array('_GUID'=>'ac55dd5cd40e2ee09f5ac48110ee7215','NAME'=>$row['s_title'],'URL'=>$post_url,'ID'=>strval($row['id'])));
 
 			$post_url=build_url(array('page'=>'_SELF','type'=>'results'),'_SELF',NULL,false,true);
@@ -332,7 +334,7 @@ class Module_search
 
 		$GLOBALS['SITE_DB']->query_delete('searches_saved',array('id'=>post_param_integer('id'),'s_member_id'=>get_member()),'',1);
 
-		$url=build_url(array('page'=>'_SELF','type'=>'my'),'_SELF');
+		$url=build_url(array('page'=>'_SELF','type'=>'my','wide_high'=>get_param_integer('wide_high',NULL),'overlay'=>get_param_integer('overlay',NULL)),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('SUCCESS'));
 	}
 
@@ -625,16 +627,21 @@ class Module_search
 		}
 		$max=get_param_integer('max',$default_max);  // Also see get_search_rows
 
-		$save_title=post_param('save_title','');
+		$save_title=get_param('save_title','');
 		if ((!is_guest()) && ($save_title!='') && ($start==0))
 		{
-			$GLOBALS['SITE_DB']->query_insert('searches_saved',array(
-				's_title'=>$save_title,
-				's_member_id'=>get_member(),
-				's_time'=>time(),
-				's_primary'=>$content,
-				's_auxillary'=>serialize(array_merge($_POST,$_GET)),
-			));
+			static $saved_search=false;
+			if (!$saved_search)
+			{
+				$GLOBALS['SITE_DB']->query_insert('searches_saved',array(
+					's_title'=>$save_title,
+					's_member_id'=>get_member(),
+					's_time'=>time(),
+					's_primary'=>$content,
+					's_auxillary'=>serialize(array_merge($_POST,$_GET)),
+				));
+				$saved_search=true;
+			}
 		}
 
 		$boolean_operator=get_param('conjunctive_operator','OR');

@@ -44,7 +44,7 @@
 				<div class="accessibility_hidden"><label for="save_title">{!TITLE}</label></div>
 				<input maxlength="255" type="text" size="48" value="" id="save_title" name="save_title" />
 				<ul class="actions_list" role="navigation">
-					<a href="{$PAGE_LINK*,_SELF:_SELF:my}">{!SAVED_SEARCHES}</a>
+					<a onclick="return open_link_as_overlay(this);" href="{$PAGE_LINK*,_SELF:_SELF:my}">{!SAVED_SEARCHES}</a>
 				</ul>
 			</td>
 		</tr>
