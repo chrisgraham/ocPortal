@@ -522,7 +522,7 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
  * @param  ?string		The placeholder value for this input field (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text',$placeholder=NULL)
+function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text',$placeholder=NULL,$pattern=NULL,$pattern_error=NULL)
 {
 	if (is_null($default)) $default='';
 
@@ -533,8 +533,8 @@ function form_input_line($pretty_name,$description,$name,$default,$required,$tab
 	$_required=($required)?'_required':'';
 	$maxlength=get_field_restrict_property('maxlength',$name);
 	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_LINE',array('_GUID'=>'02789c9af25cbc971e86bfcc0ad322d5','PLACEHOLDER'=>$placeholder,'MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+	$input=do_template('FORM_SCREEN_INPUT_LINE',array('_GUID'=>'02789c9af25cbc971e86bfcc0ad322d5','PLACEHOLDER'=>$placeholder,'MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type,'PATTERN'=>$pattern));
+	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,false,'',$pattern_error);
 }
 
 /**
@@ -755,7 +755,7 @@ function form_input_line_comcode($pretty_name,$description,$name,$default,$requi
  * @set    line email
  * @return tempcode		The input field
  */
-function form_input_line_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex=NULL,$class='line')
+function form_input_line_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex=NULL,$class='line',$pattern=NULL,$pattern_error=NULL)
 {
 	require_javascript('javascript_multi');
 
@@ -780,6 +780,7 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
 			'I'=>strval($i),
 			'REQUIRED'=>$_required,
 			'DEFAULT'=>$default,
+			'PATTERN'=>$pattern,
 		)));
 		$i++;
 	}
@@ -796,9 +797,10 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
 			'I'=>strval($i),
 			'REQUIRED'=>($i>=$num_required)?'':'_required',
 			'DEFAULT'=>'',
+			'PATTERN'=>$pattern,
 		)));
 	}
-	return _form_input(preg_replace('#\[\]$#','',$name),$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true);
+	return _form_input(preg_replace('#\[\]$#','',$name),$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true,'',$pattern_error);
 }
 
 /**
@@ -810,9 +812,10 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
  * @param  array			An array of texts to use as default (at least this many textareas, filled by this array, will be presented by default)
  * @param  integer		The minimum number of textareas allowed.
  * @param  ?integer		The tab index of the field (NULL: not specified)
+ * @param  ?integer		The maximum length of the field (NULL: unlimited)
  * @return tempcode		The input field
  */
-function form_input_text_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex=NULL)
+function form_input_text_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex=NULL,$maxlength=NULL)
 {
 	require_javascript('javascript_multi');
 
@@ -827,13 +830,13 @@ function form_input_text_multi($pretty_name,$description,$name,$default_array,$n
 	foreach ($default_array as $default)
 	{
 		$_required=($i<$num_required)?'_required':'';
-		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'0d9e3c073d09d1ce3725f47813375c28','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default)));
+		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'0d9e3c073d09d1ce3725f47813375c28','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default,'MAXLENGTH'=>is_null($maxlength)?NULL:strval($maxlength))));
 		$i++;
 	}
 	if (!has_js()) $num_required=max($num_required,10);
 	for (;$i<$num_required;$i++)
 	{
-		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'2e816a71ef5a9ac9e1aac4bd1c13b5bd','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>'_required','DEFAULT'=>'')));
+		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'2e816a71ef5a9ac9e1aac4bd1c13b5bd','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>'_required','DEFAULT'=>'','MAXLENGTH'=>is_null($maxlength)?NULL:strval($maxlength))));
 	}
 	return _form_input($name,$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true);
 }
@@ -893,9 +896,10 @@ function form_input_username_multi($pretty_name,$description,$name,$default_arra
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether the field scrolls
+ * @param  ?integer		The maximum length of the field (NULL: unlimited)
  * @return tempcode		The input field
  */
-function form_input_text($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$scrolls=false)
+function form_input_text($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$scrolls=false,$maxlength=NULL)
 {
 	$tabindex=get_form_field_tabindex($tabindex);
 
@@ -905,7 +909,7 @@ function form_input_text($pretty_name,$description,$name,$default,$required,$tab
 
 	$_required=($required)?'_required':'';
 
-	$input=do_template('FORM_SCREEN_INPUT_TEXT',array('_GUID'=>'01626015c6ae36b1027e35e66a8b5d0b','RAW'=>true,'SCROLLS'=>$scrolls,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
+	$input=do_template('FORM_SCREEN_INPUT_TEXT',array('_GUID'=>'01626015c6ae36b1027e35e66a8b5d0b','RAW'=>true,'SCROLLS'=>$scrolls,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'MAXLENGTH'=>is_null($maxlength)?NULL:strval($maxlength)));
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,true);
 }
 
@@ -2023,9 +2027,10 @@ function form_input_na($pretty_name,$tabindex=NULL)
  * @param  boolean		Whether it is a textarea field
  * @param  boolean		Whether to skip displaying a label for the field
  * @param  mixed			A secondary side description for this input field
+ * @param  ?string		Custom regex pattern validation error (NULL: none)
  * @return tempcode		The field
  */
-function _form_input($name,$pretty_name,$description,$input,$required,$comcode=false,$tabindex=NULL,$w=false,$skip_label=false,$description_side='')
+function _form_input($name,$pretty_name,$description,$input,$required,$comcode=false,$tabindex=NULL,$w=false,$skip_label=false,$description_side='',$pattern_error=NULL)
 {
 	check_suhosin_request_quantity(2,($name=='')?20:strlen($name));
 
@@ -2061,7 +2066,7 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode=f
 		return $tpl;
 	}
 
-	$tpl=do_template('FORM_SCREEN_FIELD',array('_GUID'=>'fa1402b7ad8319372f4bb5b152be7852','REQUIRED'=>$required,'SKIP_LABEL'=>$skip_label,'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'DESCRIPTION_SIDE'=>$description_side,'INPUT'=>$input,'COMCODE'=>$_comcode));
+	$tpl=do_template('FORM_SCREEN_FIELD',array('_GUID'=>'fa1402b7ad8319372f4bb5b152be7852','REQUIRED'=>$required,'SKIP_LABEL'=>$skip_label,'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'DESCRIPTION_SIDE'=>$description_side,'INPUT'=>$input,'COMCODE'=>$_comcode,'PATTERN_ERROR'=>$pattern_error));
 	return $tpl;
 }
 

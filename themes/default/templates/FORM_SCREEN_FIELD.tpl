@@ -46,7 +46,7 @@
 			{+START,INCLUDE,FORM_SCREEN_FIELD_DESCRIPTION}{+END}
 		{+END}
 
-		<div id="error_{$GET,randomised_id}" style="display: none" class="input_error_here"></div>
+		<div id="error_{$GET,randomised_id}" style="display: none" class="input_error_here"{+START,IF_PASSED,PATTERN_ERROR} data-errorRegexp="{PATTERN_ERROR*}"{+END}></div>
 
 		{+START,IF_NON_EMPTY,{NAME}}
 			<input type="hidden" id="required_posted__{$GET,randomised_id}" name="require__{NAME*}" value="{$?,{REQUIRED*},1,0}" />
