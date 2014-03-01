@@ -13,9 +13,9 @@
  * @package		oc_banter
  */
 
-class upon_query_insults
+class Hook_upon_query_insults
 {
-	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
+	function run_post($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (!isset($GLOBALS['FORUM_DB'])) return;
 		if ($GLOBALS['IN_MINIKERNEL_VERSION']) return;

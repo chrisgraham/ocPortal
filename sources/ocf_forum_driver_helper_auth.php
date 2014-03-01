@@ -73,14 +73,14 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 		$test=ocf_is_on_ldap($username);
 		if (!$test)
 		{
-			$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
+			$out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
 			return $out;
 		}
 
 		$test_auth=ocf_ldap_authorise_login($username,$password_raw);
 		if ($test_auth['m_pass_hash_salted']=='!!!')
 		{
-			$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
+			$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 			return $out;
 		}
 
@@ -120,7 +120,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 			}
 		}
 
-		$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
+		$out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
 		return $out;
 	}
 	$row=$rows[0];
@@ -133,7 +133,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 		// Doesn't exist any more? This is a special case - the 'LDAP member' exists in our DB, but not LDAP. It has been deleted from LDAP or LDAP server has jumped
 		/*if (is_null($rows[0]['m_pass_hash_salted']))
 		{
-			$out['error']=(do_lang_tempcode('_MEMBER_NO_EXIST',$username));
+			$out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',$username);
 			return $out;
 		} No longer appropriate with new authentication mode - instead we just have to give an invalid password message  */
 
@@ -144,18 +144,18 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 	{
 		if ($row['m_validated']==0)
 		{
-			$out['error']=(do_lang_tempcode('MEMBER_NOT_VALIDATED_STAFF'));
+			$out['error']=do_lang_tempcode('MEMBER_NOT_VALIDATED_STAFF');
 			return $out;
 		}
 	}
 	if ($row['m_validated_email_confirm_code']!='')
 	{
-		$out['error']=(do_lang_tempcode('MEMBER_NOT_VALIDATED_EMAIL'));
+		$out['error']=do_lang_tempcode('MEMBER_NOT_VALIDATED_EMAIL');
 		return $out;
 	}
 	if ($this_ref->is_banned($row['id'])) // All hands to the guns
 	{
-		$out['error']=(do_lang_tempcode('MEMBER_BANNED'));
+		$out['error']=do_lang_tempcode('MEMBER_BANNED');
 		return $out;
 	}
 
@@ -174,14 +174,14 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 					if ($password_hashed!=$row['m_pass_hash_salted'])
 					{
 						require_code('tempcode'); // This can be incidental even in fast AJAX scripts, if an old invalid cookie is present, so we need tempcode for do_lang_tempcode
-						$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
+						$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 						return $out;
 					}
 				} else
 				{
 					if (md5($row['m_pass_salt'].$password_hashed)!=$row['m_pass_hash_salted'])
 					{
-						$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
+						$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 						return $out;
 					}
 				}
@@ -189,14 +189,14 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 			case 'plain':
 				if ($password_hashed!=md5($row['m_pass_hash_salted']))
 				{
-					$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
+					$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 					return $out;
 				}
 				break;
 			case 'md5': // Old style plain md5		(also works if both are unhashed: used for LDAP)
 				if (($password_hashed!=$row['m_pass_hash_salted']) && ($password_hashed!='!!!')) // The !!! bit would never be in a hash, but for plain text checks using this same code, we sometimes use '!!!' to mean 'Error'.
 				{
-					$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
+					$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 					return $out;
 				}
 				break;
@@ -206,7 +206,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 			case 'ldap':
 				if ($password_hashed!=$row['m_pass_hash_salted'])
 				{
-					$out['error']=(do_lang_tempcode('MEMBER_BAD_PASSWORD'));
+					$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 					return $out;
 				}
 				break;
@@ -215,7 +215,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 				if (!file_exists($path)) $path=get_file_base().'/sources/hooks/systems/ocf_auth/'.$password_compatibility_scheme.'.php';
 				if (!file_exists($path))
 				{
-					$out['error']=(do_lang_tempcode('UNKNOWN_AUTH_SCHEME_IN_DB'));
+					$out['error']=do_lang_tempcode('UNKNOWN_AUTH_SCHEME_IN_DB');
 					return $out;
 				}
 				require_code('hooks/systems/ocf_auth/'.$password_compatibility_scheme);

@@ -13,9 +13,9 @@
  * @package		user_sync
  */
 
-class upon_query_user_sync
+class Hook_upon_query_user_sync
 {
-	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
+	function run_post($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (get_value('user_sync_enabled')==='1')
 		{

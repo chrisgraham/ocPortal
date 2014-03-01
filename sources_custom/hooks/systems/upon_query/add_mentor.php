@@ -7,9 +7,9 @@
 
 */
 
-class upon_query_add_mentor
+class Hook_upon_query_add_mentor
 {
-	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
+	function run_post($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (get_mass_import_mode()) return;
 

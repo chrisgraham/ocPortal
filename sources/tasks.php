@@ -167,6 +167,8 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$r
 	{
 		if ($run_at_end_of_script)
 		{
+			@ignore_user_abort(true); // Must keep going till completion
+
 			register_shutdown_function('call_user_func_array__long_task',$plain_title,$title,$hook,$args,false,$force_immediate,$send_notification);
 			return new ocp_tempcode();
 		}

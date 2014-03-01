@@ -665,6 +665,8 @@ class Module_tickets
 	 */
 	function do_update_ticket()
 	{
+		@ignore_user_abort(true); // Must keep going till completion
+
 		$id=get_param('id');
 		$_title=post_param('title');
 		$post=post_param('post');

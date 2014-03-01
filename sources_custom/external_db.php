@@ -166,8 +166,6 @@ function external_db_user_add($record)
 		}
 	}
 
-	$email_address=$record[$email_address_field];
-
 	// Ask ocP to finish off the profile
 	require_lang('ocf');
 	require_code('ocf_members');

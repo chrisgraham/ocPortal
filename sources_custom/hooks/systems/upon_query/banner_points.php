@@ -7,9 +7,9 @@
 
 */
 
-class upon_query_banner_points
+class Hook_upon_query_banner_points
 {
-	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
+	function run_post($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (strpos($query,'INTO '.get_table_prefix().'banner_clicks')!==false)
 		{

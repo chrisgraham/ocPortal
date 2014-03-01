@@ -7,7 +7,7 @@
 
 */
 
-class upon_query_user_export
+class Hook_upon_query_user_export
 {
 	var $member_rows_old=array();
 
@@ -40,7 +40,7 @@ class upon_query_user_export
 		}
 	}
 
-	function run($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
+	function run_post($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
 		if (!isset($GLOBALS['FORUM_DB'])) return;
 

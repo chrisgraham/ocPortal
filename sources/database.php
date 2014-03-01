@@ -1033,7 +1033,7 @@ class database_driver
 				foreach (array_keys($hooks) as $hook)
 				{
 					require_code('hooks/systems/upon_query/'.filter_naughty($hook));
-					$UPON_QUERY_HOOKS_CACHE[$hook]=object_factory('upon_query_'.filter_naughty($hook),true);
+					$UPON_QUERY_HOOKS_CACHE[$hook]=object_factory('Hook_upon_query_'.filter_naughty($hook),true);
 				}
 			}
 		}
@@ -1062,7 +1062,7 @@ class database_driver
 			foreach ($UPON_QUERY_HOOKS_CACHE as $ob)
 			{
 				if (($ob!==NULL) && (method_exists($ob,'run')))
-					$ob->run($this,$query,$max,$start,$fail_ok,$get_insert_id,$ret);
+					$ob->run_post($this,$query,$max,$start,$fail_ok,$get_insert_id,$ret);
 			}
 		}
 
