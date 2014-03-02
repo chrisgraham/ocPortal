@@ -2322,7 +2322,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				if (defined($name))
 				{
-					$value=constant($name);
+					$value=@strval(constant($name));
 					break;
 				}
 				$value='';
