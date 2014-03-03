@@ -268,7 +268,8 @@ class Block_main_members
 		{
 			switch ($map['sort'])
 			{
-				case 'random':
+				case 'random ASC':
+				case 'random DESC':
 					$sort='RAND() ASC';
 					break;
 				case 'm_total_sessions ASC':
