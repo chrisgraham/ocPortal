@@ -110,7 +110,7 @@ class Block_main_members
 		$ocselect=array_key_exists('ocselect',$map)?$map['ocselect']:'';
 		if ((!empty($map['filters_row_a'])) || (!empty($map['filters_row_b'])))
 		{
-			$filters_row_a=$map['filters_row_a'];
+			$filters_row_a=array_key_exists('filters_row_a',$map)?$map['filters_row_a']:'';
 			$filters_row_b=array_key_exists('filters_row_b',$map)?$map['filters_row_b']:'';
 		} else
 		{

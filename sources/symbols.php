@@ -1872,10 +1872,10 @@ function ecv_CPF_VALUE($lang,$escaped,$param)
 				$_value=get_ocp_cpf($param[0],isset($param[1])?intval($param[1]):NULL);
 			} else
 			{
+				require_code('ocf_members');
 				$cpf_id=find_cpf_field_id($param[0]);
 				if (!is_null($cpf_id))
 				{
-					require_code('ocf_members');
 					$fields=ocf_get_custom_fields_member(isset($param[1])?intval($param[1]):get_member());
 					if (array_key_exists($cpf_id,$fields)) $_value=$fields[$cpf_id];
 				} else $_value='';

@@ -42,7 +42,7 @@ class Hook_stats_external
 
 function getAlexaRank($url)
 {
-	$test=get_long_value_newer_than('alexa__'.md5($url),time()-60*60*24*31);
+	$test=get_long_value_newer_than('alexa__'.md5($url),time()-60*60*24*5);
 	if ($test!==NULL)
 	{
 		return unserialize($test);
@@ -193,7 +193,7 @@ function getpr($url)
 //return the pagerank figure
 function getPageRank($url)
 {
-	$test=get_long_value_newer_than('pr__'.md5($url),time()-60*60*24*31);
+	$test=get_long_value_newer_than('pr__'.md5($url),time()-60*60*24*5);
 	if ($test!==NULL)
 	{
 		return unserialize($test);
