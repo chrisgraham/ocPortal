@@ -70,7 +70,7 @@ function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=t
 		if ($test==1)
 		{
 			$groups=ocf_get_all_default_groups(false);
-			$hidden=form_input_hidden('primary_group',strval($primary_group));
+			$hidden->attach(form_input_hidden('primary_group',strval($primary_group)));
 			$groups[]=$primary_group;
 		}
 	}

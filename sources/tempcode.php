@@ -851,7 +851,8 @@ function handle_symbol_preprocessing($seq_part,&$children)
 
 			if (in_array('defer=1',$param))
 			{
-				// Nothing has to be done here
+				// Nothing has to be done here, except preparing for AJAX
+				require_javascript('javascript_ajax');
 			} else
 			{
 				global $BLOCKS_CACHE;

@@ -1,5 +1,3 @@
-{$REQUIRE_JAVASCRIPT,javascript_ajax}
-
 {$SET,js_block_id,js_block_{$RAND%}}
 
 <div id="{$GET%,js_block_id}" aria-busy="true">

@@ -1061,7 +1061,7 @@ class database_driver
 		{
 			foreach ($UPON_QUERY_HOOKS_CACHE as $ob)
 			{
-				if (($ob!==NULL) && (method_exists($ob,'run')))
+				if (($ob!==NULL) && (method_exists($ob,'run_post')))
 					$ob->run_post($this,$query,$max,$start,$fail_ok,$get_insert_id,$ret);
 			}
 		}
