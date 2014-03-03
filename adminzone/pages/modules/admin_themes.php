@@ -1050,13 +1050,15 @@ class Module_admin_themes
 		$out=array();
 		if (($theme=='default') || (!$this_theme_only))
 		{
-			$out=array_merge($out,$this->get_template_revisions(get_file_base(),'default/templates',$find_for));
-			$out=array_merge($out,$this->get_template_revisions(get_custom_file_base(),'default/templates_custom',$find_for));
+			if ($find_for=='')
+				$out=array_merge($out,$this->_get_template_files_array(get_file_base(),'default/templates',$find_for));
+			$out=array_merge($out,$this->_get_template_files_array(get_custom_file_base(),'default/templates_custom',$find_for));
 		}
 		if ($theme!='default')
 		{
-			$out=array_merge($out,$this->get_template_revisions(get_custom_file_base(),$theme.'/templates',$find_for));
-			$out=array_merge($out,$this->get_template_revisions(get_custom_file_base(),$theme.'/templates_custom',$find_for));
+			if ($find_for=='')
+				$out=array_merge($out,$this->_get_template_files_array(get_custom_file_base(),$theme.'/templates',$find_for));
+			$out=array_merge($out,$this->_get_template_files_array(get_custom_file_base(),$theme.'/templates_custom',$find_for));
 		}
 		ksort($out);
 
@@ -1064,14 +1066,14 @@ class Module_admin_themes
 	}
 
 	/**
-	 * Get all the revisions for a template file in a certain directory.
+	 * Get all the template files / revisions for a template file, in a certain directory.
 	 *
 	 * @param  PATH			The path to search relative to
 	 * @param  PATH			The subdirectory to search
 	 * @param  string			The file to find revisions of
 	 * @return array			A map of the revisions (file=>timestamp)
 	 */
-	function get_template_revisions($base_dir,$subdir,$find_for)
+	function _get_template_files_array($base_dir,$subdir,$find_for)
 	{
 		$_dir=@opendir($base_dir.'/themes/'.$subdir);
 		if ($_dir!==false)
@@ -1088,9 +1090,7 @@ class Module_admin_themes
 					}
 				} else
 				{
-					//$current=$subdir.'/'.$file;
 					if (((substr($file,0,strlen($find_for)+1)==$find_for.'.') || ($file==$find_for)) && (substr($file,-9)!='.editfrom'))
-					//if (substr($current,0,strlen($find_for)+1)==$find_for.'.')
 					{
 						$temp=explode('.',$file,3);
 						if (array_key_exists(2,$temp))

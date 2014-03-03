@@ -42,7 +42,7 @@ class Hook_comcode_link_handler_mp3
 			if (!$IMPORTED_CUSTOM_COMCODE)
 				_custom_comcode_import($connection);
 
-			return _do_tags_comcode('flash',array('param'=>'400x60'),make_string_tempcode($link.'#.mp4'),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
+			return _do_tags_comcode('flash',array('param'=>'400x60'),make_string_tempcode($link),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$wml,$structure_sweep,$semiparse_mode,$highlight_bits);
 		}
 
 		return NULL;
