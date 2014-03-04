@@ -678,7 +678,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			}
 			if (($row===NULL) && (isset($map['quick_cache'])) && ($map['quick_cache']=='1'))
 			{
-				$row=array('cached_for'=>$codename,'cache_on'=>'$map','cache_ttl'=>60);
+				$row=array('cached_for'=>$codename,'cache_on'=>'array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))','cache_ttl'=>60);
 			}
 		}
 		if ($row!==NULL)

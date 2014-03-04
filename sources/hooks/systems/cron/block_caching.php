@@ -90,7 +90,7 @@ class Hook_cron_block_caching
 					} else
 					{
 						$info=array();
-						$info['cache_on']='array($map)';
+						$info['cache_on']='array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))';
 						$info['ttl']=60*24;
 					}
 					$ttl=$info['ttl'];

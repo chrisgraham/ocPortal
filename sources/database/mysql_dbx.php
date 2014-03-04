@@ -243,9 +243,9 @@ class Database_Static_mysql_dbx extends Database_super_mysql
 				}
 				elseif (($type=='unknown') && (is_string($v)))
 				{
-					if ((strlen($v)==1) && (($v[0]==chr(0)) || ($v[0]==chr(0))))
+					if ((strlen($v)==1) && (ord($v[0])<=1))
 					{
-						if (!is_null($v)) $newrow[$name]=ord($v); else $newrow[$name]=NULL; // 0/1 char for BIT field
+						$newrow[$name]=ord($v); // 0/1 char for BIT field
 					} else
 					{
 						$newrow[$name]=intval($v);
