@@ -46,7 +46,7 @@ The menus themselves aren't saved against how the data is to be used, but for us
 [title="2"]Panel pages[/title]
 
 [exp_thumb="Links to edit a panel page and to edit managed menus" float="right"]menus_edit_links[/exp_thumb]
-Please see the 'site structure' tutorial for more information on panel pages. This section is only intended to provide a brief orientation to help further clarify the menu relationship. Basically panel pages are pages beginning with the name 'panel_' in the zone of the page being viewed.
+Please see the [page="_SEARCH:tut_structure"]ocPortal site structure[/page] tutorial for more information on panel pages. This section is only intended to provide a brief orientation to help further clarify the menu relationship. Basically panel pages are pages beginning with the name 'panel_' in the zone of the page being viewed.
 
 Your panel pages by default are just Comcode pages that use the block tag for arrangement of blocks such as the 'login/personal-stats block' (side_personal_stats), and the managed menu block, 'side_stored_menu'. Blocks are described in the 'Advanced custom pages of information (via Comcode)' tutorial, but basically, you can use any of the blocks that begin with the name 'side_' on your panel pages to add dynamic elements, as well as any Comcode (Comcode menus are actually created using the Comcode 'menu' tag). To edit a panel page, make sure you are logged in as a staff member and click the 'edit page' link underneath the pages as they are seen.
 
@@ -98,13 +98,17 @@ In the form part of the interface there are the following fields:
  - a check-box to determine if the link opens in a new window
  - a check-box to determine whether the link will be shown only if there is permission to actually view the page (slight efficiency hit)
 
-[title="2"]The site-tree tool[/title]
+[title="2"]Entry points[/title]
 
-Entry points are described in full in the 'Site structure' tutorial, but basically they are ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=ad[/tt]' is the entry point to a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
+Entry points are used in the site-tree tool in the menu editor.
 
-Don't worry too much about entry point syntax as ocPortal will automatically convert any local URLs that you paste.
+Entry points are basically ocPortal links that are robust to changes in your website and are of the syntax, '[tt]<zone>:<page>[:<param>=<val>...][/tt]'. In other words, they all have at least a zone and a page, and may also specify additional parameters: for example, '[tt]site:downloads:type=ad[/tt]' is the entry point to add a download. If you do not want to hard-code what zone a page is in (perhaps because you might move it in the future), you may specify '_SEARCH' (do a search, which is slightly inefficient) or '_SELF' (the zone the menu is being displayed in).
 
-To copy an entry point to a branch you need to:
+Entry points are the subset of all "page links" that point to specific parts of the software, rather than some content that you have added. Page links are described in full in the [page="_SEARCH:tut_structure"]ocPortal site structure[/page] tutorial.
+
+Don't worry too much about entry point syntax as ocPortal will automatically convert any local URLs that you paste into the menu editor's URL field.
+
+To copy an entry point to a branch in the menu editor you need to:
  - select the caption field of an item in the menu (this will cause an editing form to become available for that menu item)
  - click the entry point in the site-tree tool
 You will then see the URL has been changed to the entry point you want. Do not be alarmed that this was placed in the 'URL' field, as the field also supports page links (of which entry points are a type of).
@@ -118,27 +122,32 @@ The simple way to add them if you don't want to use the theme image management t
 
 [title="2"]Match-keys[/title]
 
-[concept]Match-key[/concept]s are basically page links (entry points are a type of page link) that are used for matching against the URL the menu is being viewed from, to determine whether a branch will be shown. If the URL matches against one of the match-keys for a branch, then the branch will be shown, otherwise it won't. Note that if you leave the 'match-keys' field blank, none of this checking happens, and the branch is shown.
+The menu system can use match-keys for matching against the URL the menu is being viewed from, to determine whether a branch will be shown. If the URL matches against one of the match-keys for a branch, then the branch will be shown, otherwise it won't. Note that if you leave the "Restrict link visibility" field blank, none of this checking happens, and the branch is shown.
 
-Match-keys are entered into the field with commas to separate them. The only differences between a page link and a match-key are:
- - Match-keys may use '_WILD' as the zone in order to skip checking against zone
- - Match-keys may use '_WILD' as the page in order to skip checking against page
- - The additional '<key>=<value>' parts of the match-key enforce a match from the URL the menu is being viewed from, but the URL may also have additional parameters and the match-key does not need to state them
- - It makes no sense to use '_SEARCH' or '_SELF' in a match-key
+Match-keys may also be used in other places in ocPortal, for other kinds of matching purposes.
 
-An example match-key list is '_WILD:downloads:type=ad,adminzone:admin_downloads:type=ed'. This would match URLs that were generated from the following page links (whether these page links points themselves actually work is irrelevant):
- - [tt]site:downloads:type=ad[/tt]
- - [tt]randomzone:downloads:type=ad[/tt]
- - [tt]:downloads:type=ad:wide=1[/tt]
- - [tt]adminzone:admin_downloads:type=ed[/tt]
- - [tt]adminzone:admin_downloads:type=ed:keep_novalidate=1[/tt]
+[concept]Match-key[/concept]s are usually written exactly like page links, but are instead used only for matching. They do not need to point to anything, unlike page links which are actually convertible into real URLs.
+
+For an explanation of page links and entry points, see the [page="_SEARCH:tut_structure"]ocPortal site structure[/page] tutorial.
+
+The only differences between a page link and a match-key are:
+ - Match-keys may use '_WILD' as the zone or page in order to skip checking against zone/page
+ - Related to the above, it makes no sense to use '_SEARCH' or '_SELF' as the zone/page in a match-key
+ - While all specified components of a match-key enforce a match, the URL may also have additional parameters and the match-key does not need to state them -- i.e. the match-key may specify a subset of the parameters of a URL, broadening the match
+
+An example match-key list is '_WILD:cms_downloads:type=ad,_WILD:cms_galleries:type=ed'. This would match URLs that were generated from the following page links (whether these page links points themselves actually work is irrelevant):
+ - [tt]cms:cms_downloads:type=ad[/tt]
+ - [tt]randomzone:cms_downloads:type=ad[/tt]
+ - [tt]:cms_downloads:type=ad:wide=1[/tt]
+ - [tt]cms:cms_galleries:type=ed[/tt]
+ - [tt]adminzone:cms_galleries:type=ed:keep_novalidate=1[/tt]
 
 It would not match URLs generated from the following page links:
- - [tt]site:galleries:type=ad[/tt]
- - [tt]randomzone:downloads[/tt]
- - [tt]:downloads:type=ed:wide=1[/tt]
- - [tt]adminzone:admin_downloads:type=ad[/tt]
- - [tt]adminzone:admin_downloads:type=ad:keep_novalidate=1[/tt]
+ - [tt]site:cms_galleries:type=ad[/tt]
+ - [tt]randomzone:cms_example[/tt]
+ - [tt]:cms_downloads:type=ed:wide=1[/tt]
+
+In the menu editor, multiple match-keys may be entered in the "Restrict link visibility" field with commas to separate them.
 
 [title="2"]Indicating of the current page[/title]
 
