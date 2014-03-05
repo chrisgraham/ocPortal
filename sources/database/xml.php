@@ -2415,20 +2415,40 @@ class Database_Static_xml
 						$token=array('COALESCE',$expr1,$expr2);
 						break;
 					case 'DISTINCT':
+						$token=array('DISTINCT');
 						$d=$this->_parsing_read($at,$tokens,$query);
 						if ($d=='(')
 						{
 							$d=$this->_parsing_read($at,$tokens,$query);
 							if (!$this->_parsing_expects($at,$tokens,')',$query)) return NULL;
+							$token[]=$d;
+						} else
+						{
+							$at--;
+							do
+							{
+								$d=$this->_parsing_read($at,$tokens,$query);
+								$token[]=$d;
+								$_token=$this->_parsing_read($at,$tokens,$query);
+							}
+							while ($_token==',');
+							$at--;
 						}
-						$token=array('DISTINCT',$d);
 						break;
 					case 'COUNT':
 						if (!$this->_parsing_expects($at,$tokens,'(',$query)) return NULL;
 						$token=array($token,$this->_parsing_read($at,$tokens,$query));
 						if ($token[1]=='DISTINCT')
 						{
-							$token[1]=array('DISTINCT',$this->_parsing_read($at,$tokens,$query));
+							$token[1]=array('DISTINCT');
+							do
+							{
+								$d=$this->_parsing_read($at,$tokens,$query);
+								$token[1][]=$d;
+								$_token=$this->_parsing_read($at,$tokens,$query);
+							}
+							while ($_token==',');
+							$at--;
 						}
 						if (!$this->_parsing_expects($at,$tokens,')',$query)) return NULL;
 						break;
@@ -2716,8 +2736,12 @@ class Database_Static_xml
 								$index=array();
 								foreach ($records as $set_item)
 								{
-									$val=$set_item[$s_term[1]];
-									$index[$val]=$set_item;
+									$val=array();
+									for ($di=1;$di<count($s_term);$di++)
+									{
+										$val[]=$set_item[$s_term[$di]];
+									}
+									$index[serialize($val)]=$set_item;
 								}
 								$records=array_values($index);
 								break;
@@ -2815,14 +2839,31 @@ class Database_Static_xml
 
 					case 'SIMPLE':
 						$param=is_array($want[1])?$want[1][0]:$want[1];
-						if ($param=='DISTINCT') $param=is_array($want[1])?$want[1][1]:$want[1];
-
-						if (strpos($param,'.')===false)
+						if ($param=='DISTINCT')
 						{
-							$_record[$param]=$record[$param];
+							$val=array();
+							$s_term=$want[1];
+							for ($di=1;$di<count($s_term);$di++)
+							{
+								$param=$s_term[$di];
+
+								if (strpos($param,'.')===false)
+								{
+									$_record[$param]=$record[$param];
+								} else
+								{
+									$_record[preg_replace('#^.*\.#','',$param)]=$record[$param];
+								}
+							}
 						} else
 						{
-							$_record[preg_replace('#^.*\.#','',$param)]=$record[$param];
+							if (strpos($param,'.')===false)
+							{
+								$_record[$param]=$record[$param];
+							} else
+							{
+								$_record[preg_replace('#^.*\.#','',$param)]=$record[$param];
+							}
 						}
 
 						break;
@@ -2959,8 +3000,12 @@ class Database_Static_xml
 								$index=array();
 								foreach ($set as $set_item)
 								{
-									$val=$set_item[$s_term[1][1]];
-									$index[$val]=true;
+									$val=array();
+									for ($di=1;$di<count($s_term[1]);$di++)
+									{
+										$val[]=$set_item[$s_term[1][$di]];
+									}
+									$index[serialize($val)]=true;
 								}
 								$rep[$chosen_param_name]=count($index);
 							} else
