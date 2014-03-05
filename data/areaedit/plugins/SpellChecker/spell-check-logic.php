@@ -95,7 +95,7 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 		}
 	}
 
-	list($aspelldictionaries,$aspellcommand,$temptext,$lang)=aspell_init();
+	list($aspelldictionaries,$aspellcommand,$tempnam,$lang)=aspell_init();
 
 	if (is_null($type)) $type=array_key_exists('type',$_REQUEST)?$_REQUEST['type']:((array_key_exists('to_p_dict',$_REQUEST)?'save':'check'));
 	if (is_null($text))
@@ -107,12 +107,12 @@ function spellchecklogic($type=NULL,$text=NULL,$words_skip=NULL,$ret=false)
 	switch ($type)
 	{
 		case 'check':
-			return aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$words_skip,$ret);
+			return aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$words_skip,$ret);
 		case 'save':
-			aspell_save($aspellcommand,$temptext);
+			aspell_save($aspellcommand,$tempnam);
 			break;
 	}
-	if (!is_null($temptext)) unlink($temptext);
+	if (!is_null($tempnam)) unlink($tempnam);
 	return array(array(),array());
 }
 
@@ -160,9 +160,9 @@ function aspell_init()
 		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) exit('Spell Checker does not work on systems with shell_exec disabled that do not have direct pspell support into PHP');
 
 		// Our temporary spell check file
-		$temptext=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
-		if (($temptext===false) || ($temptext=='')/*Should not be blank, but seen in the wild*/)
-			$temptext=tempnam(get_custom_file_base().'/safe_mode_temp/','spell_');
+		$tempnam=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'spell_');
+		if (($tempnam===false) || ($tempnam=='')/*Should not be blank, but seen in the wild*/)
+			$tempnam=tempnam(get_custom_file_base().'/safe_mode_temp/','spell_');
 
 		// Find aspell
 		$aspell='aspell';
@@ -227,12 +227,12 @@ function aspell_init()
 		}
 
 		$aspelldictionaries=$aspell.' dump dicts';
-		$aspellcommand=$aspell.' '.$aspell_args.' < '.$temptext;
+		$aspellcommand=$aspell.' '.$aspell_args.' < '.$tempnam;
 	} else
 	{
 		//list($lang,$spelling)=explode('_',$lang);
 		$spelling='';
-		$temptext=NULL;
+		$tempnam=NULL;
 		$aspelldictionaries=NULL;
 	}
 
@@ -248,7 +248,7 @@ function aspell_init()
 		mkdir($p_dict_path,02770);
 	}
 
-	if (is_null($temptext))
+	if (is_null($tempnam))
 	{
 		list($lang_stub,)=explode('_',$lang);
 
@@ -269,7 +269,7 @@ function aspell_init()
 		if (is_null($aspellcommand)) exit();
 	}
 
-	return array($aspelldictionaries,$aspellcommand,$temptext,$lang);
+	return array($aspelldictionaries,$aspellcommand,$tempnam,$lang);
 }
 
 /**
@@ -320,7 +320,7 @@ function utf8_ord($chr)
  * @param  boolean		Whether to return data, instead of output
  * @return array			A map, possibly mispelled words, to suggestions
  */
-function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$words_skip=NULL,$ret=false)
+function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$words_skip=NULL,$ret=false)
 {
 	if (is_null($words_skip)) $words_skip=array();
 
@@ -349,9 +349,9 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 		$suggest_count=0;
 		$textarray=array();
 
-		if (!is_integer($aspellcommand))
+		if (is_string($aspellcommand))
 		{
-			$fd=fopen($temptext,'wb');
+			$fd=fopen($tempnam,'wb');
 			if ($fd!==false)
 			{
 				$textarray=explode("\n",$text);
@@ -362,13 +362,13 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 					fwrite($fd,"^$value\n");
 				}
 				fclose($fd);
-				chmod($temptext,0777);
-				//echo file_get_contents($temptext);
+				chmod($tempnam,0777);
+				//echo file_get_contents($tempnam);
 
 				// next run aspell
 				$return=wrap_exec($aspellcommand.' 2>&1');
 				//exit($aspellcommand.' 2>&1 > output.log');
-				//echo file_get_contents($temptext);
+				//echo file_get_contents($tempnam);
 				//exit($aspellcommand);
 				$returnarray=explode("\n",$return);
 				//$returnlines=count($returnarray);
@@ -419,7 +419,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 						//$niceposition=strval($lineindex).','.strval($absposition);
 						$beforeword=substr($textarray[$lineindex],0,$position);
 						$afterword=substr($textarray[$lineindex],$position+strlen($word));
-	//						$textarray[$lineindex]=$beforeword.$word.$afterword;
+						//$textarray[$lineindex]=$beforeword.$word.$afterword;
 						$textarray[$lineindex]=$beforeword.'<span class="HA-spellcheck-error">'.$word.'</span><span class="HA-spellcheck-suggestions">'.$word.'</span>'.$afterword;
 						$poscorrect=$poscorrect+88+strlen($word);
 					} else
@@ -487,7 +487,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 		$infolines.='"Language Used":"'.$lang.'",';
 		$infolines.='"Mispelled words":"'.strval($counter).'",';
 		$infolines.='"Total words suggested":"'.strval($suggest_count).'"';
-	//	$infolines.=',"Total Lines Checked":"'.strval($returnlines).'"';	Who cares?
+		//$infolines.=',"Total Lines Checked":"'.strval($returnlines).'"';	Who cares?
 		$infolines.='};';
 		$varlines=substr($varlines,0,strlen($varlines)-1);
 		if (!$ret)
@@ -509,7 +509,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
 			}
 		}
 
-		if (!is_integer($aspellcommand))
+		if (is_string($aspellcommand))
 		{
 			$dictionaries=str_replace(chr(10),",",wrap_exec($aspelldictionaries));
 			if (!$ret)
@@ -534,7 +534,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$temptext,$lang,$text,$
  * @param  mixed		aSpell call command
  * @param  string		Temporary file name
  */
-function aspell_save($aspellcommand,$temptext)
+function aspell_save($aspellcommand,$tempnam)
 {
 	$to_p_dict=isset($_REQUEST['to_p_dict'])?(is_array($_REQUEST['to_p_dict'])?$_REQUEST['to_p_dict']:explode(',',$_REQUEST['to_p_dict'])):array(); // List of words to add to personal dictionary.
 	$to_r_list=isset($_REQUEST['to_r_list'])?(is_array($_REQUEST['to_r_list'])?$_REQUEST['to_r_list']:explode(',',$_REQUEST['to_r_list'])):array(); // List of words to add to replacement list.
@@ -542,9 +542,9 @@ function aspell_save($aspellcommand,$temptext)
 	//print_r($to_r_list);
 	if ((count($to_p_dict)>0) || (count($to_r_list)>0))
 	{
-		if (!is_integer($aspellcommand))
+		if (is_string($aspellcommand))
 		{
-			$fh=fopen($temptext,'wb');
+			$fh=fopen($tempnam,'wb');
 			if ($fh!==false)
 			{
 				foreach ($to_p_dict as $personal_word)

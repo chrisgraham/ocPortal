@@ -272,7 +272,7 @@ function get_directory_size($path,$recurse=true)
 		if (is_file($path.'/'.$e))
 		{
 			$size+=filesize($path.'/'.$e);
-		} else
+		} elseif (is_dir($path.'/'.$e))
 		{
 			if ($recurse)
 			{
