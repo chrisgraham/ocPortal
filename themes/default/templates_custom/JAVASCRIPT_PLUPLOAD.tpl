@@ -5212,6 +5212,7 @@ function plUploadLoaded(ob) {
 
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	var old_onclick=btnSubmit.onclick;
+	if (!old_onclick) old_onclick=function() {};
 	ob.originalClickHandler = old_onclick;
 	btnSubmit.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob,recurse); };
 

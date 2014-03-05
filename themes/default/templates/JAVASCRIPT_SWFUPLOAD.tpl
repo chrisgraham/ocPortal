@@ -1164,6 +1164,7 @@ function swfUploadLoaded(ob) {
 
 	var btnSubmit = document.getElementById(ob.settings.btnSubmitID);
 	var old_onclick=btnSubmit.onclick;
+	if (!old_onclick) old_onclick=function() {};
 	ob.originalClickHandler = old_onclick;
 	btnSubmit.onclick = function(event,_ob,form,recurse) { if (typeof event=='undefined') var event=window.event; ob.originalClickHandler = old_onclick; return doSubmit(event,ob,recurse); };
 
@@ -1626,29 +1627,33 @@ function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,fil
 	// Link for the simpler uploader
 	if (get_inner_html(maindiv.parentNode).indexOf('keep_no_swfupload=1')==-1)
 	{
-		var disable_link=document.createElement('a');
-		set_inner_html(disable_link,'{!SWITCH_TO_REGULAR_UPLOADER;}');
-		disable_link.setAttribute('href',window.location+(((window.location+'').indexOf('?')==-1)?'?':'&')+'keep_no_swfupload=1');
-		disable_link.className='associated_details';
-		disable_link.target='_blank';
-		disable_link.onclick=function(e) {
-			if ((window.handle_form_saving) && document.getElementById(posting_field_name)) handle_form_saving(e,document.getElementById(posting_field_name),true);
+		var switch_lng='{!SWITCH_TO_REGULAR_UPLOADER;}';
+		if (switch_lng!='')
+		{
+			var disable_link=document.createElement('a');
+			set_inner_html(disable_link,switch_lng);
+			disable_link.setAttribute('href',window.location+(((window.location+'').indexOf('?')==-1)?'?':'&')+'keep_no_swfupload=1');
+			disable_link.className='associated_details';
+			disable_link.target='_blank';
+			disable_link.onclick=function(e) {
+				if ((window.handle_form_saving) && document.getElementById(posting_field_name)) handle_form_saving(e,document.getElementById(posting_field_name),true);
 
-			window.fauxmodal_confirm(
-				'{!DISABLE_SWFUPLOAD_CONFIRM;}',
-				function(proceeding)
-				{
-					if (proceeding)
-						click_link(disable_link);
-				},
-				'{!Q_SURE;}'
-			);
+				window.fauxmodal_confirm(
+					'{!DISABLE_SWFUPLOAD_CONFIRM;}',
+					function(proceeding)
+					{
+						if (proceeding)
+							click_link(disable_link);
+					},
+					'{!Q_SURE;}'
+				);
 
-			return false;
+				return false;
+			}
+			disable_link.style.display='block';
+			disable_link.style.margin='1em 0';
+			maindiv.appendChild(disable_link);
 		}
-		disable_link.style.display='block';
-		disable_link.style.margin='1em 0';
-		maindiv.appendChild(disable_link);
 	}
 
 	// Replace old upload field with text field that holds a "1" indicating upload has happened (and telling ocP to check the hidFileID value for more details)
