@@ -250,6 +250,9 @@ function generate_captcha()
 	$GLOBALS['SITE_DB']->query_insert('security_images',$insert_map+array('si_code'=>333333333333),false,true);
 	$test=$GLOBALS['SITE_DB']->query_value_null_ok('security_images','si_code',$insert_map);
 
+	// Clear out old codes
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'security_images WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
+
 	// Create code
 	$numbers_only=($test!==333333333333);
 	$code=mixed();
@@ -266,9 +269,6 @@ function generate_captcha()
 			$code.=strval(ord($choices[$choice])); // NB: In ASCII code all the chars in $choices are 10-99 (i.e. 2 digit)
 		}
 	}
-
-	// Clear out old codes
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'security_images WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
 
 	// Store code
 	$si_code=mixed();
