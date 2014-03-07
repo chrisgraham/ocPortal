@@ -559,6 +559,7 @@ function step_3()
 	ksort($databases);
 	$database_names=better_parse_ini_file(get_file_base().'/sources/database/database.ini');
 	$tdatabase=new ocp_tempcode();
+	$dbs_found=0;
 	foreach (array_keys($databases) as $database)
 	{
 		if (!GOOGLE_APPENGINE)
@@ -581,8 +582,11 @@ function step_3()
 
 		if (array_key_exists($database,$database_names)) $mapped_name=$database_names[$database]; else $mapped_name=$database;
 		$tdatabase->attach(do_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('SELECTED'=>$database=='mysql','DISABLED'=>false,'NAME'=>$database,'CLASS'=>'','TEXT'=>$mapped_name)));
+
+		if ($database!='xml') $dbs_found++;
 	}
-	if ($tdatabase->is_empty()) warn_exit(do_lang_tempcode('NO_PHP_DB'));
+	if ($tdatabase->is_empty() || $dbs_found==0/* Better to provide no option, than just the XML option - confuses users*/)
+		warn_exit(do_lang_tempcode('NO_PHP_DB'));
 
 	$js=do_template('JAVASCRIPT');
 	$js->attach("\n");
