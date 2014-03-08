@@ -3320,8 +3320,9 @@ ul.nl, .nl ul {
 }
 
 {+START,IF,{$NEQ,{$LANG},EN}}
+	/* This is fairly arbitrary, but non-EN languages often have longer words, so we will use smaller text to fit */
 	.menu_type__embossed a, .menu_type__top a, .menu_type__dropdown a.toplevel_link {
-		font-size: 0.72em;
+		font-size: 0.85em;
 	}
 {+END}
 
@@ -3410,6 +3411,7 @@ ul.nl, .nl ul {
 }
 
 {+START,IF,{$NEQ,{$LANG},EN}}
+	/* This is fairly arbitrary, but non-EN languages often have longer words, so we will use smaller text to fit */
 	.menu_type__zone ul {
 		font-size: 0.85em;
 	}
