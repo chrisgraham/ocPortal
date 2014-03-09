@@ -52,6 +52,10 @@ foreach ($categories_default as $category)
 	{
 		$id=add_news_category($category,'','');
 		$categories_existing[$id]=$category;
+
+		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+		foreach (array_keys($groups) as $group_id)
+			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($id),'group_id'=>$group_id));
 	}
 }
 
@@ -91,6 +95,10 @@ while (($r=fgetcsv($csvfile,1024000))!==false)
 		$id=add_news_category($r[0],'','');
 		$categories_existing[$id]=$r[0];
 		$main_news_category=$id;
+
+		$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+		foreach (array_keys($groups) as $group_id)
+			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($id),'group_id'=>$group_id));
 	}
 	$author=$r[2];
 	$title=$r[3];
