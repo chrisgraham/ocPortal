@@ -908,7 +908,7 @@ class Module_admin_themes
 			{
 				$rendered_diff=diff_simple($old_file,$last_path);
 				$last_path=$old_file;
-				$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'dba0110692775615152be1da850bc1d4','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>$time,'RESTORE_URL'=>$restore_url,'URL'=>$url2,'SIZE'=>clean_file_size($size))));
+				$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'dba0110692775615152be1da850bc1d4','RENDERED_DIFF'=>$rendered_diff,'REFERENCE_POINT_EXACT'=>true,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>$time,'RESTORE_URL'=>$restore_url,'URL'=>$url2,'SIZE'=>clean_file_size($size))));
 				$i++;
 			}
 
@@ -1367,7 +1367,7 @@ class Module_admin_themes
 				{
 					$rendered_diff=is_null($last_path)?'':diff_simple($old_file,$last_path);
 					$last_path=$old_file;
-					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'f0cb02bfa3692ed431b69b8d9dc0b2f8','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
+					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'f0cb02bfa3692ed431b69b8d9dc0b2f8','RENDERED_DIFF'=>$rendered_diff,'REFERENCE_POINT_EXACT'=>true,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
 					$j++;
 				}
 
@@ -1383,14 +1383,12 @@ class Module_admin_themes
 			{
 				$restore_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>basename($file),'restore_from'=>$orig_version),'_SELF');
 				$url=get_base_url().'/themes/'.$orig_version;
-				$date=do_lang_tempcode('ORIGINAL_EM');
 				$size=filesize(get_custom_file_base().'/themes/'.$file);
-				$editor=do_lang('UNKNOWN');
 				require_code('diff');
 				if (function_exists('diff_simple'))
 				{
 					$rendered_diff=diff_simple(get_file_base().'/themes/'.$orig_version,$last_path);
-					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'7ba03fe98a20330fc64ad742d2fb74fa','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>'0','RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
+					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'7ba03fe98a20330fc64ad742d2fb74fa','RENDERED_DIFF'=>$rendered_diff,'REFERENCE_POINT_EXACT'=>true,'RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
 					$j++;
 				}
 			}

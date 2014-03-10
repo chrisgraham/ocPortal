@@ -3,7 +3,7 @@
 
 	// Replace Comcode
 	var old_comcode=window.parent.get_textbox(post);
-	window.parent.set_textbox(post,'{NEW_POST_VALUE;^/}','{NEW_POST_VALUE_HTML;^/}');
+//	window.parent.set_textbox(post,'{NEW_POST_VALUE;^/}','{NEW_POST_VALUE_HTML;^/}');
 
 	// Remove attachment uploads
 	var inputs=post.form.elements,btn;

@@ -153,8 +153,9 @@ class Module_cms_calendar extends standard_aed_module
 				{
 					if (form.elements['end_day'].selectedIndex!=0)
 					{
-						var start=new Date(form.elements['start_year'].value,form.elements['start_month'].value,form.elements['start_day'].value,form.elements['start_hour'].value,form.elements['start_minute'].value);
-						var end=new Date(form.elements['end_year'].value,form.elements['end_month'].value,form.elements['end_day'].value,form.elements['end_hour'].value,form.elements['end_minute'].value);
+						var start=new Date(window.parseInt(form.elements['start_year'].value),window.parseInt(form.elements['start_month'].value)-1,window.parseInt(form.elements['start_day'].value),window.parseInt(form.elements['start_hour'].value),window.parseInt(form.elements['start_minute'].value));
+						var end=new Date(window.parseInt(form.elements['end_year'].value),window.parseInt(form.elements['end_month'].value)-1,window.parseInt(form.elements['end_day'].value),window.parseInt(form.elements['end_hour'].value),window.parseInt(form.elements['end_minute'].value));
+
 						if (start>end)
 						{
 							window.fauxmodal_alert('".php_addslashes(do_lang('EVENT_CANNOT_AROUND'))."');

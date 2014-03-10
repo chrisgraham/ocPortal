@@ -715,7 +715,7 @@ class Module_cms_comcode_pages
 						$rendered_diff=diff_simple($old_file,$last_path);
 						$last_path=$old_file;
 						if (($rendered_diff=='') && ($iterator==0)) continue; // the version records are often saved on create not replace
-						$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'57e2c81fd621d1c8d6e283a5a4991001','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
+						$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'57e2c81fd621d1c8d6e283a5a4991001','REFERENCE_POINT_EXACT'=>true,'RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
 						$i++;
 					}
 
@@ -731,7 +731,7 @@ class Module_cms_comcode_pages
 				if (function_exists('diff_simple'))
 				{
 					$rendered_diff=diff_simple(zone_black_magic_filterer(get_file_base().'/'.$zone.'/'.'pages/comcode/'.$lang.'/'.$file.'.txt'),$last_path);
-					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'ed0b29f26cf93d4d6e0348a7e75d259d','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>do_lang_tempcode('UNKNOWN'),'DATE'=>do_lang_tempcode('ORIGINAL'),'DATE_RAW'=>'0','RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
+					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'ed0b29f26cf93d4d6e0348a7e75d259d','REFERENCE_POINT_EXACT'=>true,'RENDERED_DIFF'=>$rendered_diff,'RESTORE_URL'=>$restore_url,'URL'=>$url,'SIZE'=>clean_file_size($size))));
 					$i++;
 				}
 			}

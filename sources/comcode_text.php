@@ -586,7 +586,10 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 							$tag_output->attach($tab_tpl);
 						} else
 						{
-							if (($next==' ') || ($next=="\t") || ($just_ended)) $none_wrap_length=0; else
+							if (($next==' ') || ($next=="\t") || ($just_ended))
+							{
+								$none_wrap_length=0;
+							} else
 							{
 								if ((!is_null($wrap_pos)) && ($none_wrap_length>=$wrap_pos) && ((strtolower(get_charset())!='utf-8') || (preg_replace(array('#[\x09\x0A\x0D\x20-\x7E]#','#[\xC2-\xDF][\x80-\xBF]#','#\xE0[\xA0-\xBF][\x80-\xBF]#','#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','#\xED[\x80-\x9F][\x80-\xBF]#','#\xF0[\x90-\xBF][\x80-\xBF]{2}#','#[\xF1-\xF3][\x80-\xBF]{3}#','#\xF4[\x80-\x8F][\x80-\xBF]{2}#'),array('','','','','','','',''),$continuation)=='')) && ($textual_area) && (!$in_semihtml))
 								{

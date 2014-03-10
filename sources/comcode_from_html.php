@@ -731,9 +731,12 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<span style="font-family: monospace;  font-size: 1.2em;">(.*)</span>$#siU',"[tt]\${1}[/tt]");
 		$semihtml2=array_html_preg_replace('span',$array_html_preg_replace,$semihtml2);
-		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<pre>(.*)</pre>$#siU',"[code]\${1}[/code]");
-		$semihtml2=array_html_preg_replace('pre',$array_html_preg_replace,$semihtml2);
+		if (strpos($semihtml,'[code')===false)
+		{
+			$array_html_preg_replace=array();
+			$array_html_preg_replace[]=array('#^<pre>(.*)</pre>$#siU',"[code]\${1}[/code]");
+			$semihtml2=array_html_preg_replace('pre',$array_html_preg_replace,$semihtml2);
+		}
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',"<table class=\"bordered_table\">\${2}</table>");
 		$semihtml=array_html_preg_replace('table',$array_html_preg_replace,$semihtml);
@@ -817,7 +820,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
  */
 function comcode_strip_html_tags($matches)
 {
-	return $matches[1].strip_tags($matches[2],'<p><br><div>').$matches[3];
+	return $matches[1].strip_tags($matches[2],'<p><br><div><CDATA__space><CDATA__tab><CDATA__nl><CDATA__lf><CDATA__amp>').$matches[3];
 }
 
 /**
