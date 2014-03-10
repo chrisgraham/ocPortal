@@ -477,6 +477,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$sending_message.='Content-Transfer-Encoding: 8bit'.$line_term.$line_term; // Requires RFC 1652
 		$sending_message.=wordwrap(str_replace(chr(10),$line_term,unixify_line_format($html_evaluated)).$line_term,988,$line_term,true);
 	}
+	$total_filesize=0;
 	foreach ($CID_IMG_ATTACHMENT as $id=>$img)
 	{
 		$sending_message.='--'.$boundary3.$line_term;
@@ -485,7 +486,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$filename=basename($img);
 		if (!is_null($file_path_stub))
 		{
-			if (@filesize($file_path_stub)>1024*1024*5) continue; // Too large to process into an email
+			$total_filesize+=@filesize($file_path_stub);
+			if ($total_filesize>1024*1024*5) continue; // Too large to process into an email
 
 			$file_contents=@file_get_contents($file_path_stub);
 		} else
@@ -516,7 +518,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 						{
 							$filename=$myrow['a_original_filename'];
 							require_code('mime_types');
-							if (filesize($_full)>1024*1024*5) continue; // Too large to process into an email
+							$total_filesize+=@filesize($_full);
+							if ($total_filesize>1024*1024*5) continue; // Too large to process into an email
 							$file_contents=file_get_contents($_full);
 							$mime_type=get_mime_type(get_file_extension($filename));
 						}
@@ -527,7 +530,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			{
 				$file_contents=http_download_file($img,1024*1024*5,false);
 				if (is_null($file_contents)) continue;
-				if (strlen($file_contents)>=1024*1024*5) continue; // Too large to process into an email
+				$total_filesize+=strlen($file_contents);
+				if ($total_filesize>1024*1024*5) continue; // Too large to process into an email
 				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
 				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
 			}
