@@ -264,31 +264,28 @@ class Block_main_members
 		}
 		if (strpos($sort,' ')===false) $sort.=' ASC';
 		list($sortable,$sort_order)=explode(' ',$sort,2);
-		if (isset($map['sort']))
+		switch ($sort)
 		{
-			switch ($map['sort'])
-			{
-				case 'random ASC':
-				case 'random DESC':
-					$sort='RAND() ASC';
-					break;
-				case 'm_total_sessions ASC':
-					$sort='m_total_sessions/(UNIX_TIMESTAMP()-m_join_time) ASC';
-					break;
-				case 'm_total_sessions DESC':
-					$sort='m_total_sessions/(UNIX_TIMESTAMP()-m_join_time) DESC';
-					break;
-				case 'm_join_time':
-				case 'm_last_visit_time':
-					$sort.=','.'id '.$sort_order; // Also order by ID, in case lots joined at the same time
-					break;
-				default:
-					if (!isset($sortables[preg_replace('# (ASC|DESC)$#','',$sort)]))
-					{
-						$sort='m_join_time DESC';
-					}
-					break;
-			}
+			case 'random ASC':
+			case 'random DESC':
+				$sort='RAND() ASC';
+				break;
+			case 'm_total_sessions ASC':
+				$sort='m_total_sessions/(UNIX_TIMESTAMP()-m_join_time) ASC';
+				break;
+			case 'm_total_sessions DESC':
+				$sort='m_total_sessions/(UNIX_TIMESTAMP()-m_join_time) DESC';
+				break;
+			case 'm_join_time':
+			case 'm_last_visit_time':
+				$sort.=','.'id '.$sort_order; // Also order by ID, in case lots joined at the same time
+				break;
+			default:
+				if (!isset($sortables[preg_replace('# (ASC|DESC)$#','',$sort)]))
+				{
+					$sort='m_join_time DESC';
+				}
+				break;
 		}
 
 		$sql='SELECT r.*'.$extra_select_sql.' FROM ';
