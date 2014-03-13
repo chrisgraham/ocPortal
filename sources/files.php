@@ -294,7 +294,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 	$ignore_extensions=array( // Case insensitive, define in lower case
 		// Exports (effectively these are like temporary files - only intended for file transmission)
 		'tar'=>'(imports|exports)/.*',
-		'gz'=>'(imports|exports)/.*',
+		'gz'=>'(imports|exports|themes/[^/]*/templates_cached/.*)/.*',
 		'txt'=>'(imports|exports)/.*',
 
 		// Cache files

@@ -277,6 +277,8 @@ function get_timezoned_date($timestamp,$include_time=true,$verbose=false,$utc_ti
 {
 	if (is_null($member)) $member=get_member();
 
+	if (gmdate('H:i',$timestamp)=='00:00') $include_time=false; // Probably means no time is known
+
 	// Work out timezone
 	$usered_timestamp=$utc_time?$timestamp:utctime_to_usertime($timestamp,$member);
 	$usered_now_timestamp=$utc_time?time():utctime_to_usertime(time(),$member);

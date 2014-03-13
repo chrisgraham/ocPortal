@@ -112,9 +112,9 @@ tree_list.prototype.response=function(ajax_result_frame,ajax_result,expanding_id
 function attributes_full_fixup(xml)
 {
 	var node,i;
-	if (typeof window.attributes_full=='undefined') window.attributes_full=[];
+	if (typeof window.attributes_full=='undefined') window.attributes_full={};
 	var id=xml.getAttribute('id');
-	if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]=[];
+	if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]={};
 	for (i=0;i<xml.attributes.length;i++)
 	{
 		window.attributes_full[id][xml.attributes[i].name]=xml.attributes[i].value;
@@ -231,6 +231,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			expand_button.oncontextmenu=function() { return false; };
 			expand_button.object=this;
 			expand_button.onclick=function(expand_button) { return function(event,automated) {
+				if (document.getElementById('choose_url')) click_link(document.getElementById('choose_'+_this.name));
 				if (!event) var event=window.event;
 				if (event)
 				{

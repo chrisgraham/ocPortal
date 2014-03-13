@@ -31,7 +31,7 @@
 								} );
 
 								// Self destruct loader after this first run
-								delete window['load_tab__{TAB_CODE*}'];
+								try { delete window['load_tab__{TAB_CODE*}']; } catch (e) {};
 							}
 						//]]></script>
 					{+END}

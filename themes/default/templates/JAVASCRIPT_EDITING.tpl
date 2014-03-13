@@ -177,8 +177,8 @@ function disable_wysiwyg(forms,so,so2,discard)
 	window.wysiwyg_on=function() { return false; };
 }
 
-window.wysiwyg_editors=[];
-window.wysiwyg_original_comcode=[];
+window.wysiwyg_editors={};
+window.wysiwyg_original_comcode={};
 function load_html_edit(posting_form,ajax_copy)
 {
 	if ((!posting_form.method) || (posting_form.method.toLowerCase()!='post')) return;
@@ -272,13 +272,13 @@ function load_html_edit(posting_form,ajax_copy)
 
 function wysiwyg_editor_init_for(element)
 {
-	var pageStyleSheets=[];
+	var page_stylesheets=[];
 	if (!document) return;
 	var linked_sheets=document.getElementsByTagName('link');
 	for (var counter=0;counter<linked_sheets.length;counter++)
 	{
 		if (linked_sheets[counter].getAttribute('rel')=='stylesheet')
-			pageStyleSheets.push(linked_sheets[counter].getAttribute('href'));
+			page_stylesheets.push(linked_sheets[counter].getAttribute('href'));
 	}
 
 	// Fiddly procedure to find our colour
@@ -614,7 +614,7 @@ function ensure_true_id(element,field_name) // Works around IE bug
 
 function is_wysiwyg_field(theElement)
 {
-	return ((typeof window.wysiwyg_editors!='undefined') && (theElement.id!='length') && (typeof wysiwyg_editors[theElement.id]!='undefined'));
+	return ((typeof window.wysiwyg_editors!='undefined') && (typeof wysiwyg_editors[theElement.id]!='undefined'));
 }
 
 function get_textbox(element)
