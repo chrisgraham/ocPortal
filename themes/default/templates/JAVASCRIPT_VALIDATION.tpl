@@ -400,7 +400,7 @@ function check_field(the_element,the_form,for_preview)
 	my_value=clever_find_value(the_form,the_element);
 
 	// Prepare for custom error messages, stored as HTML5 data on the error message display element
-	var errormsg_element=get_errormsg_element(the_element.name);
+	var errormsg_element=(typeof the_element.name=='undefined')?null:get_errormsg_element(the_element.name);
 
 	// Blank?
 	if ((required) && (my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')==''))
