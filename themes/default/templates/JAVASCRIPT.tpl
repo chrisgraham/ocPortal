@@ -1818,7 +1818,7 @@ function activate_tooltip(ac,myevent,tooltip,width,pic,height,bottom,no_delay,li
 		tooltip_element=win.document.createElement('div');
 		tooltip_element.role='tooltip';
 		tooltip_element.style.display='none';
-		tooltip_element.className="tooltip";
+		tooltip_element.className='tooltip boxless_space';
 		if (ac.className.substr(0,3)=='tt_')
 		{
 			tooltip_element.className+=' '+ac.className;

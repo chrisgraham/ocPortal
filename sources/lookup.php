@@ -37,6 +37,8 @@ function init__lookup()
  */
 function lookup_member_page($member,&$name,&$id,&$ip)
 {
+	if (!addon_installed('stats')) return array();
+
 	if (is_numeric($member))
 	{
 		// From member ID

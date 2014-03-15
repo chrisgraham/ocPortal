@@ -39,7 +39,7 @@ var editor_settings={
 	imageShowLinkTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	imageShowSizing : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	autoUpdateElement : true,
-	contentsCss : pageStyleSheets,
+	contentsCss : page_stylesheets,
 	cssStatic : css,
 	startupOutlineBlocks : true,
 	language : (window.ocp_lang)?ocp_lang.toLowerCase():'en',

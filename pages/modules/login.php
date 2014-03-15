@@ -111,6 +111,7 @@ class Module_login
 		global $ZONE;
 
 		// Where we will be redirected to after login
+		// It's intentional that we will only go to the zone-default page if an explicitly blank redirect URL is given. If not we go to the given redirect URL or to the made-safe current URL (made-safe=zone root if we posted as we do not want to re-post). Note that 'redirect_passon' is simulated by injecting the self-URL as a URL parameter by access_denied() - as we want re-post in this case.
 		$redirect_default=get_self_url(true,true); // Still won't redirect to root if we have $_POST, because we relay $_POST values and have intelligence later on
 		$redirect=get_param('redirect',$redirect_default);
 		if (($redirect!='') && (strpos($redirect,'page=logout')===false) && (strpos($redirect,'page=login')===false) && (strpos($redirect,'/login.htm')===false) && (strpos($redirect,'/login/misc.htm')===false) && (strpos($redirect,'/pg/login')===false))
@@ -125,22 +126,18 @@ class Module_login
 
 		$login_url=build_url(array('page'=>'_SELF','type'=>'login'),'_SELF');
 
-		// It's intentional that we will only go to the zone-default page if an explicitly blank redirect URL is given. If not we go to the given redirect URL or to the made-safe current URL (made-safe=zone root if we posted as we do not want to re-post). Note that 'redirect_passon' is simulated by injecting the self-URL as a URL parameter by access_denied() - as we want re-post in this case.
-		// If this is a new install test to see if we have any redirect issue that blocks form submissions
-		if (get_option('site_closed')=='1')
+		// Test to see if we have any redirect issue that blocks form submissions
+		$this_proper_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+		$_login_url=$this_proper_url->evaluate();
+		$test=http_download_file($_login_url,0,false,true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
+		if ((is_null($test)) && ($GLOBALS['HTTP_MESSAGE']!=='200') && ($GLOBALS['HTTP_MESSAGE']!=='401') && ((!is_file(get_file_base().'/install.php')) || ($GLOBALS['HTTP_MESSAGE']!=='500')))
 		{
-			$this_proper_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			$_login_url=$this_proper_url->evaluate();
-			$test=http_download_file($_login_url,0,false,true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
-			if ((is_null($test)) && ($GLOBALS['HTTP_MESSAGE']!=='200') && ($GLOBALS['HTTP_MESSAGE']!=='401') && ((!is_file(get_file_base().'/install.php')) || ($GLOBALS['HTTP_MESSAGE']!=='500')))
+			if (($GLOBALS['HTTP_MESSAGE']=='no-data') && (get_option('ip_forwarding')=='0'))
 			{
-				if ($GLOBALS['HTTP_MESSAGE']=='no-data')
-				{
-					attach_message(do_lang_tempcode('config:ENABLE_IP_FORWARDING',do_lang('config:IP_FORWARDING')),'warn');
-				} else
-				{
-					attach_message(do_lang_tempcode((substr(get_base_url(),0,11)=='http://www.')?'HTTP_REDIRECT_PROBLEM_WITHWWW':'HTTP_REDIRECT_PROBLEM_WITHOUTWWW',escape_html(get_base_url().'/config_editor.php')),'warn');
-				}
+				attach_message(do_lang_tempcode('config:ENABLE_IP_FORWARDING',do_lang('config:IP_FORWARDING')),'warn');
+			} else
+			{
+				attach_message(do_lang_tempcode((substr(get_base_url(),0,11)=='http://www.')?'HTTP_REDIRECT_PROBLEM_WITHWWW':'HTTP_REDIRECT_PROBLEM_WITHOUTWWW',escape_html(get_base_url().'/config_editor.php')),'warn');
 			}
 		}
 

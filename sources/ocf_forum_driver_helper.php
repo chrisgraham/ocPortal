@@ -85,12 +85,14 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
  * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
  * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
  * @param  ?TIME			The post time (NULL: use current time)
+ * @param  ?MEMBER		Owner of comment topic (NULL: Guest)
  * @return array			Topic ID (may be NULL), and whether a hidden post has been made
  */
-function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category,$time_post)
+function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category,$time_post,$spacer_post_member_id)
 {
 	if (is_null($time)) $time=time();
 	if (is_null($ip)) $ip=get_ip_address();
+	if (is_null($spacer_post_member_id)) $spacer_post_member_id=$this_ref->get_guest_id();
 
 	require_code('comcode_check');
 	check_comcode($post,NULL,false,NULL,true);
@@ -150,10 +152,11 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
 		// Make spacer post
 		if (!is_null($content_url))
 		{
-			$spacer_title=$content_title;
+			$spacer_post_title=$content_title;
 			$home_link=hyperlink($content_url,escape_html($content_title));
 			$spacer_post='[semihtml]'.do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
-			ocf_make_post($topic_id,$spacer_title,$spacer_post,0,true,1,0,do_lang('SYSTEM'),$ip,$time,db_get_first_id(),NULL,NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,false,false,false,NULL,false);
+			$spacer_post_username=($spacer_post_member_id==($this_ref->get_guest_id())?do_lang('SYSTEM'):$this_ref->get_username($spacer_post_member_id));
+			ocf_make_post($topic_id,$spacer_post_title,$spacer_post,0,true,1,0,$spacer_post_username,$ip,$time,$spacer_post_member_id,NULL,NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,false,false,false,NULL,false);
 			$is_starter=false;
 		}
 

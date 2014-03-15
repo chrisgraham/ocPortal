@@ -757,6 +757,8 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 	$_parent_id=post_param('parent_id','');
 	$parent_id=($_parent_id=='')?NULL:intval($_parent_id);
 
+	list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
+
 	$poster_name_if_guest=post_param('poster_name_if_guest','');
 	list($topic_id,$is_hidden)=$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
 		// Define scope
@@ -785,7 +787,10 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
 		// Do not send notifications to someone also getting one defined by the following
 		((!$private) && ($post!=''))?'comment_posted':NULL,
-		((!$private) && ($post!=''))?($content_type.'_'.$content_id):NULL
+		((!$private) && ($post!=''))?($content_type.'_'.$content_id):NULL,
+
+		NULL, // current time
+		$submitter
 	);
 
 	if (!is_null($topic_id))
@@ -832,8 +837,6 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
 	if ((!$private) && ($post!=''))
 	{
-		list(,$submitter,,$safe_content_url,$cma_info)=get_details_behind_feedback_code($content_type,$content_id);
-
 		$content_type_title=$content_type;
 		if ((!is_null($cma_info)) && (isset($cma_info['content_type_label'])))
 		{

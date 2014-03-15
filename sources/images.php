@@ -333,7 +333,7 @@ function do_image_thumb($url,$caption,$js_tooltip=false,$is_thumbnail_already=tr
  *
  * @param  URLPATH		The full URL to the image which will-be/is thumbnailed
  * @param  URLPATH		The URL to the thumbnail (blank: no thumbnail yet)
- * @param  ID_TEXT		The directory, relative to the ocPortal install, where the thumbnails are stored. MINUS "_thumbs"
+ * @param  ID_TEXT		The directory, relative to the ocPortal uploads directory, where the thumbnails are stored. MINUS "_thumbs"
  * @param  ID_TEXT		The name of the table that is storing what we are doing the thumbnail for
  * @param  AUTO_LINK		The ID of the table record that is storing what we are doing the thumbnail for
  * @param  ID_TEXT		The name of the table field where thumbnails are saved

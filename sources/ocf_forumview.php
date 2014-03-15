@@ -578,7 +578,7 @@ function ocf_render_topic($topic,$has_topic_marking,$pt=false,$show_forum=NULL)
 										/*'COLOUR'=>$colour,*/
 										'PROFILE_URL'=>$poster_profile_url,
 										'USERNAME'=>$topic['first_username'],
-										'MEMBER_ID'=>strval($topic['first_member_id'])
+										'MEMBER_ID'=>is_null($topic['first_member_id'])?'':strval($topic['first_member_id'])
 									));
 	} else
 	{
