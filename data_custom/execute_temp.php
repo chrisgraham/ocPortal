@@ -53,6 +53,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$_SERVER['HTTP_ORIGIN']='http://news.bbc.co.uk/foo';
-	@print(preg_replace('#^.*://([^:/]*).*$#','xxx${1}',$_SERVER['HTTP_ORIGIN']));
 }

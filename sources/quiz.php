@@ -139,33 +139,34 @@ function render_quiz($questions)
 		$name='q_'.strval($question['id']);
 		$text=protect_from_escaping(is_string($question['q_question_text'])?comcode_to_tempcode($question['q_question_text']):get_translated_tempcode($question['q_question_text']));
 
-		if ($question['q_num_choosable_answers']==0) // Text box ("free question"). May be an actual answer, or may not be: but regardless, the user cannot see it
+		switch ($question['q_type'])
 		{
-			if ($question['q_long_input_field']==1) // Big field
-			{
+			case 'MULTIPLECHOICE':
+				$radios=new ocp_tempcode();
+				foreach ($question['answers'] as $a)
+				{
+					$answer_text=is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text']);
+					$radios->attach(form_input_radio_entry($name,strval($a['id']),false,protect_from_escaping($answer_text)));
+				}
+				$fields->attach(form_input_radio($text,'',$name,$radios));
+				break;
+
+			case 'MULTIMULTIPLE':
+				$content=array();
+				foreach ($question['answers'] as $a)
+				{
+					$content[]=array(protect_from_escaping(is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text'])),$name.'_'.strval($a['id']),false,'');
+				}
+				$fields->attach(form_input_various_ticks($content,'',NULL,$text,true));
+				break;
+
+			case 'LONG':
 				$fields->attach(form_input_text($text,'',$name,'',$question['q_required']==1));
-			} else // Small field
-			{
+				break;
+
+			case 'SHORT':
 				$fields->attach(form_input_line($text,'',$name,'',$question['q_required']==1));
-			}
-		}
-		elseif ($question['q_num_choosable_answers']>1) // Check boxes
-		{
-			$content=array();
-			foreach ($question['answers'] as $a)
-			{
-				$content[]=array(protect_from_escaping(is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text'])),$name.'_'.strval($a['id']),false,'');
-			}
-			$fields->attach(form_input_various_ticks($content,'',NULL,$text,true));
-		} else // Radio buttons
-		{
-			$radios=new ocp_tempcode();
-			foreach ($question['answers'] as $a)
-			{
-				$answer_text=is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text']);
-				$radios->attach(form_input_radio_entry($name,strval($a['id']),false,protect_from_escaping($answer_text)));
-			}
-			$fields->attach(form_input_radio($text,'',$name,$radios));
+				break;
 		}
 	}
 
@@ -226,7 +227,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 
 		$question_text=get_translated_text($question['q_question_text']);
 
-		if ($question['q_num_choosable_answers']==0) // Text box ("free question"). May be an actual answer, or may not be
+		if ($question['q_type']=='SHORT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
 		{
 			$given_answer=$_given_answers[$question['id']][0];
 
@@ -246,18 +247,16 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 					{
 						$correct_answer=make_string_tempcode(get_translated_text($a['q_answer_text']));
 					}
-					if (($a['q_is_correct']==1) && (get_translated_text($a['q_answer_text'])==$given_answer))
-					{
-						$marks++;
-						$was_correct=true;
-						break;
-					}
 					if (get_translated_text($a['q_answer_text'])==$given_answer)
 					{
 						$correct_explanation=get_translated_text($a['q_explanation']);
 					}
 				}
-				if (!$was_correct)
+				$was_correct=typed_answer_is_correct($given_answer,$question['answers']);
+				if ($was_correct)
+				{
+					$marks++;
+				} else
 				{
 					$correction=array($question['id'],$question_text,$correct_answer,$given_answer);
 					if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
@@ -274,7 +273,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 				'CORRECT_EXPLANATION'=>$correct_explanation,
 			);
 		}
-		elseif ($question['q_num_choosable_answers']>1) // Check boxes
+		elseif ($question['q_type']=='MULTIMULTIPLE') // Check boxes
 		{
 			// Vector distance
 			$wrongness=0.0;
@@ -327,7 +326,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 				'CORRECT_ANSWER'=>$correct_answer,
 				'CORRECT_EXPLANATION'=>$correct_explanation,
 			);
-		} else // Radio buttons
+		} elseif ($question['q_type']=='MULTIPLECHOICE') // Radio buttons
 		{
 			$was_correct=false;
 			$correct_answer=new ocp_tempcode();
@@ -445,4 +444,37 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 		$given_answers_to_staff,
 		$passed,
 	);
+}
+
+/**
+ * Is a typed quiz answer correct?
+ *
+ * @param  string			The given (typed) answer
+ * @param  array			Answer rows
+ * @return boolean		Whether it is correct
+ */
+function typed_answer_is_correct($given_answer,$all_answers)
+{
+	$filtered_given_answer=preg_replace('#[^\d\w]#','',strtolower($given_answer));
+
+	$has_correct=false;
+	$has_incorrect=false;
+	foreach ($all_answers as $a)
+	{
+		$filtered_answer=preg_replace('#[^\d\w]#','',strtolower(get_translated_text($a['q_answer_text'])));
+
+		if (get_translated_text($a['q_answer_text'])==$given_answer) return ($a['q_is_correct']==1); // Match exactly
+
+		if (strpos($filtered_answer,$filtered_given_answer)!==false) // Matches inexactly
+		{
+			if ($a['q_is_correct']==1)
+			{
+				$has_correct=true;
+			} else
+			{
+				$has_incorrect=true;
+			}
+		}
+	}
+	return $has_correct && !$has_incorrect;
 }
