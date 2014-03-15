@@ -15,7 +15,7 @@
 				{+START,IF,{$MOBILE}}
 					<div class="login_page_form">
 						<p class="constrain_field">
-							<label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label>
+							<label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / <span class="must_show_together">{!EMAIL_ADDRESS}</span>{+END}</label>
 							<input maxlength="80" class="wide_field" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
 						</p>
 
@@ -30,7 +30,7 @@
 					<table class="map_table autosized_table login_page_form">
 						<tbody>
 							<tr>
-								<th class="de_th"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / {!EMAIL_ADDRESS}{+END}</label>:</th>
+								<th class="de_th"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / <span class="must_show_together">{!EMAIL_ADDRESS}</span>{+END}</label>:</th>
 								<td>
 									<input maxlength="80" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
 								</td>
