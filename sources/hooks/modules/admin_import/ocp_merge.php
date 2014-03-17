@@ -357,6 +357,7 @@ class Hook_ocp_merge
 				'q_type'=>$row['q_type'],
 				'q_quiz'=>$quiz,
 				'q_question_text'=>insert_lang($this->get_lang_string($db,$row['q_question_text']),2),
+				'q_question_extra_text'=>insert_lang($this->get_lang_string($db,$row['q_question_extra_text']),2),
 				'q_required'=>array_key_exists('q_required',$row)?$row['q_required']:0,
 			),true);
 

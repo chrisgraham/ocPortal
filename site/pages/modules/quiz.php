@@ -102,6 +102,7 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'quiz_questions SET q_type=\'MULTIMULTI\' WHERE q_num_choosable_answers>0');
 			$GLOBALS['SITE_DB']->delete_table_field('quiz_questions','q_long_input_field');
 			$GLOBALS['SITE_DB']->delete_table_field('quiz_questions','q_num_choosable_answers');
+			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_question_extra_text','LONG_TRANS');
 		}
 
 		if (is_null($upgrade_from))
@@ -145,6 +146,7 @@ class Module_quiz
 				'q_type'=>'ID_TEXT',
 				'q_quiz'=>'AUTO_LINK',
 				'q_question_text'=>'LONG_TRANS',
+				'q_question_extra_text'=>'LONG_TRANS',
 				'q_order'=>'INTEGER',
 				'q_required'=>'BINARY',
 				'q_marked'=>'BINARY',

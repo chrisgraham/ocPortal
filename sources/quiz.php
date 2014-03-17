@@ -52,6 +52,7 @@ function render_quiz_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 		'URL'=>$url,
 		'NAME'=>$name,
 		'START_TEXT'=>$start_text,
+		'ID'=>strval($row['id']),
 	));
 }
 
@@ -134,39 +135,43 @@ function render_quiz($questions)
 
 	// Sort out qa input
 	$fields=new ocp_tempcode();
-	foreach ($questions as $i=>$question)
+	foreach ($questions as $i=>$q)
 	{
-		$name='q_'.strval($question['id']);
-		$text=protect_from_escaping(is_string($question['q_question_text'])?comcode_to_tempcode($question['q_question_text']):get_translated_tempcode($question['q_question_text']));
+		$name='q_'.strval($q['id']);
+		$question=protect_from_escaping(is_string($q['q_question_text'])?comcode_to_tempcode($q['q_question_text']):get_translated_tempcode($q['q_question_text']));
+		$description=protect_from_escaping(is_string($q['q_question_extra_text'])?comcode_to_tempcode($q['q_question_extra_text']):get_translated_tempcode($q['q_question_extra_text']));
 
-		switch ($question['q_type'])
+		switch ($q['q_type'])
 		{
 			case 'MULTIPLECHOICE':
 				$radios=new ocp_tempcode();
-				foreach ($question['answers'] as $a)
+				foreach ($q['answers'] as $a)
 				{
 					$answer_text=is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text']);
 					$radios->attach(form_input_radio_entry($name,strval($a['id']),false,protect_from_escaping($answer_text)));
 				}
-				$fields->attach(form_input_radio($text,'',$name,$radios));
+				$fields->attach(form_input_radio($question,$description,$name,$radios));
 				break;
 
 			case 'MULTIMULTIPLE':
 				$content=array();
-				foreach ($question['answers'] as $a)
+				foreach ($q['answers'] as $a)
 				{
 					$content[]=array(protect_from_escaping(is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text'])),$name.'_'.strval($a['id']),false,'');
 				}
-				$fields->attach(form_input_various_ticks($content,'',NULL,$text,true));
+				$fields->attach(form_input_various_ticks($content,$description,NULL,$question,true));
 				break;
 
 			case 'LONG':
-				$fields->attach(form_input_text($text,'',$name,'',$question['q_required']==1));
+				$fields->attach(form_input_text($question,$description,$name,'',$q['q_required']==1));
 				break;
 
 			case 'SHORT':
-				$fields->attach(form_input_line($text,'',$name,'',$question['q_required']==1));
+				$fields->attach(form_input_line($question,$description,$name,'',$q['q_required']==1));
 				break;
+
+			default:
+				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		}
 	}
 

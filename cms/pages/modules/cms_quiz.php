@@ -277,7 +277,7 @@ class Module_cms_quiz extends standard_crud_module
 		$list->attach(form_input_list_entry('TEST',$type=='TEST',do_lang_tempcode('TEST')));
 		$list->attach(form_input_list_entry('COMPETITION',$type=='COMPETITION',do_lang_tempcode('COMPETITION')));
 		$fields->attach(form_input_list(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_QUIZ_TYPE'),'type',$list,NULL,true));
-		$fields->attach(form_input_huge(do_lang_tempcode('QUESTIONS'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true));
+		$fields->attach(form_input_huge(do_lang_tempcode('QUESTIONS'),do_lang_tempcode('IMPORT_QUESTIONS_TEXT'),'text',$text,true,NULL,20,'',true));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_START_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_START_TEXT'),'start_text',$start_text,false));
 		$fields->attach(form_input_text_comcode(do_lang_tempcode('QUIZ_END_TEXT'),do_lang_tempcode('DESCRIPTION_QUIZ_END_TEXT'),'end_text',$end_text,false));
 		if ($validated==0)

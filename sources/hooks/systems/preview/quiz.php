@@ -63,25 +63,33 @@ class Hook_Preview_quiz
 			$as=array();
 			foreach ($_as as $a)
 			{
-				if ($a!='') $as[]=$a;
+				if ($a!='')
+				{
+					if (substr($a,0,1)==':') // Is an explanation
+					{
+						if (count($as)!=0)
+							$as[count($as)-1][1]=trim($as[count($as)-1][1]."\n".trim(substr($a,1)));
+					} else
+					{
+						$as[]=array($a,'');
+					}
+				}
 			}
 
-			$q=array_shift($as);
-			$matches=array();
-			preg_match('#^(.*)#',$q,$matches);
-			list($question,$type,$required,$marked)=parse_quiz_question_line($matches[1],$as);
+			$_q=array_shift($as);
+			$question=$_q[0];
+			$question_extra_text=$_q[1];
+			list($question,$type,$required,$marked,$question_extra_text)=parse_quiz_question_line($question,$as,$question_extra_text);
 
 			// Now we add the answers
 			$answers=array();
 			foreach ($as as $x=>$a)
 			{
-				if (substr($a,0,1)==':') continue;
-
-				$a=str_replace(' [*]','',$a);
+				$a[0]=str_replace(' [*]','',$a[0]);
 
 				$answers[]=array(
 					'id'=>$x,
-					'q_answer_text'=>$a,
+					'q_answer_text'=>$a[0],
 					'q_is_correct'=>1,
 				);
 			}
@@ -90,6 +98,7 @@ class Hook_Preview_quiz
 				'id'=>$i,
 				'q_type'=>$type,
 				'q_question_text'=>$question,
+				'q_question_extra_text'=>$question_extra_text,
 				'answers'=>$answers,
 				'q_required'=>$required,
 			);

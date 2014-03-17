@@ -230,6 +230,8 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 
 	if (!file_exists($upload_folder_full))
 	{
+		@mkdir(get_custom_file_base().'/uploads',0777);
+
 		require_code('files2');
 		make_missing_directory($upload_folder_full);
 	}
