@@ -238,16 +238,13 @@ function generate_captcha()
 {
 	$session=get_session_id();
 
-	// Clear out old codes
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval(time()-60*30).' OR si_session_id='.strval($session));
-
 	// FUDGE Run a test to see if large numbers are supported
 	$insert_map=array('si_time'=>time(),'si_session_id'=>$session);
 	$GLOBALS['SITE_DB']->query_insert('captchas',$insert_map+array('si_code'=>333333333333),false,true);
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',$insert_map);
 
 	// Clear out old codes
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'security_images WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval(time()-60*30).' OR si_session_id='.strval($session));
 
 	// Create code
 	$numbers_only=($test!==333333333333);

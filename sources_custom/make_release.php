@@ -541,6 +541,8 @@ function make_files_manifest() // Builds files.dat, the ocPortal file manifest (
 {
 	global $MAKE_INSTALLERS__FILE_ARRAY;
 
+	disable_php_memory_limit();
+
 	require_code('version2');
 
 	if (count($MAKE_INSTALLERS__FILE_ARRAY)==0) populate_build_files_array();

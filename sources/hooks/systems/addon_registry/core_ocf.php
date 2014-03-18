@@ -357,6 +357,7 @@ class Hook_addon_registry_core_ocf
 			'themes/default/templates/OCF_GROUP_DIRECTORY_SCREEN.tpl',
 			'themes/default/css/ocf.css',
 			'themes/default/css/ocf_editor.css',
+			'lang/EN/ocf_member_directory.ini',
 			'data/username_check.php',
 			'sources/hooks/systems/ocf_auth/aef.php',
 			'sources/hooks/systems/ocf_auth/converge.php',
@@ -873,14 +874,12 @@ class Hook_addon_registry_core_ocf
 
 		$member_boxes=array();
 		$member_boxes[]=array(
-			array(
-				'I'=>'0',
-				'BREAK'=>false,
-				'BOX'=>$box,
-				'MEMBER_ID'=>placeholder_id(),
-				'GALLERY_NAME'=>'',
-				'GALLERY_TITLE'=>'',
-			),
+			'I'=>'0',
+			'BREAK'=>false,
+			'BOX'=>$box,
+			'MEMBER_ID'=>placeholder_id(),
+			'GALLERY_NAME'=>'',
+			'GALLERY_TITLE'=>'',
 		);
 
 		$per_row=6;
@@ -1006,7 +1005,7 @@ class Hook_addon_registry_core_ocf
 			'VIEW_PROFILES'=>true,
 			'ON_PROBATION'=>lorem_phrase(),
 			'USERGROUP'=>lorem_word(),
-			'CLUBS'=>lorem_phrase()
+			'CLUBS'=>lorem_phrase(),
 			'VIEWS'=>placeholder_number(),
 			'TOTAL_SESSIONS'=>placeholder_number(),
 		));

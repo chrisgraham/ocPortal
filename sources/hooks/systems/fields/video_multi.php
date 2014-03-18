@@ -124,7 +124,7 @@ class Hook_fields_video_multi
 				list($width,$height,$length)=get_video_details(get_custom_file_base().'/'.rawurldecode($stripped_ev),basename($stripped_ev));
 			}
 
-			if (url_is_local($ev))
+			if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/))
 			{
 				$keep=symbol_tempcode('KEEP');
 				$download_url=find_script('catalogue_file').'?file='.urlencode(basename($ev)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();

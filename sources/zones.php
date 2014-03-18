@@ -209,7 +209,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	$zone=get_zone_name();
 
 	global $MODULES_ZONES_CACHE;
-	if ((isset($MODULES_ZONES_CACHE[$zone][$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES_CACHE[$zone])) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
+	if ((isset($MODULES_ZONES_CACHE[$zone][$module_name])) || ((!$error) && (isset($MODULES_ZONES_CACHE[$zone])) && (array_key_exists($module_name,$MODULES_ZONES_CACHE[$zone])) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
 	{
 		return $MODULES_ZONES_CACHE[$zone][$module_name];
 	}

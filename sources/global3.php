@@ -924,7 +924,7 @@ function float_to_raw_string($num,$decs_wanted=2,$only_needed_decs=false)
  * @param  boolean		Whether to trim trailing zeros
  * @return string			Nicely formatted string
  */
-function float_format($val,$frac_digits=2,$only_needed_decs=false)
+function float_format($val,$decs_wanted=2,$only_needed_decs=false)
 {
 	$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
 	if ($locale['thousands_sep']=='') $locale['thousands_sep']=',';

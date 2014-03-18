@@ -214,7 +214,7 @@ class Hook_addon_registry_quizzes
 		}
 
 		return array(
-			lorem_globalise(do_lorem_template('QUIZ_RESULTS_SCREEN',array(
+			lorem_globalise(do_lorem_template('QUIZ_RESULT_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'USERNAME'=>lorem_phrase(),
 				'MEMBER_URL'=>placeholder_url(),
@@ -460,8 +460,8 @@ class Hook_addon_registry_quizzes
 				'PASSED'=>true,
 				'POINTS_DIFFERENCE'=>placeholder_number(),
 				'RESULT'=>lorem_phrase(),
-				'TYPE'=>do_lang($quiz['q_type']),
-				'_TYPE'=>$quiz['q_type'],
+				'TYPE'=>do_lang('SURVEY'),
+				'_TYPE'=>'SURVEY',
 				'MESSAGE'=>lorem_phrase(),
 				'REVEAL_ANSWERS'=>true,
 				'MARKS'=>placeholder_number(),

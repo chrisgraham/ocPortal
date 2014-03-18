@@ -98,16 +98,16 @@ class Block_menu
  */
 function block_menu__cache_on($map)
 {
-	+	/*
-	 +	Menu caching is problematic. "Is active" caching theoretically would need doing against each URL.
-	 +	 (or to use Javascript, or Tempcode pre-processing, to implement that -- but that would be messy)
-	 +	We therefore assume that menu links are maximally distinguished by zone&page&type parameters.
-	 +	 (special case -- catalogue index screens are also distinguished by ID, as catalogues vary a lot)
-	 +
-	 +	There is a simple workaround if our assumptions don't hold up. Just turn off cacheing for the
-	 +	particular menu block instance. cache="0". It won't hurt very much, menus are relatively fast.
-	 +	*/
-	 +
+	/*
+	Menu caching is problematic. "Is active" caching theoretically would need doing against each URL.
+	 (or to use Javascript, or Tempcode pre-processing, to implement that -- but that would be messy)
+	We therefore assume that menu links are maximally distinguished by zone&page&type parameters.
+	 (special case -- catalogue index screens are also distinguished by ID, as catalogues vary a lot)
+
+	There is a simple workaround if our assumptions don't hold up. Just turn off cacheing for the
+	particular menu block instance. cache="0". It won't hurt very much, menus are relatively fast.
+	*/
+
 	$menu=array_key_exists('param',$map)?$map['param']:'';
 	$page=get_page_name();
 	$url_type=get_param('type','misc');

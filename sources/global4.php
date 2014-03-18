@@ -238,10 +238,10 @@ function member_personal_links_and_details($member_id)
 		$last_visit=$GLOBALS['FORUM_DRIVER']->mrow_lastvisit($row);
 		if (get_forum_type()=='ocf')
 		{
-			$last_visit=intval(ocp_admirecookie('last_visit',strval($GLOBALS['FORUM_DRIVER']->pnamelast_visit($row))));
+			$last_visit=intval(ocp_admirecookie('last_visit',strval($GLOBALS['FORUM_DRIVER']->mrow_lastvisit($row))));
 		} else
 		{
-			$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
+			$last_visit=$GLOBALS['FORUM_DRIVER']->mrow_lastvisit($row);
 		}
 		$_last_visit=get_timezoned_date($last_visit);
 		$details->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));

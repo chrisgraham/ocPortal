@@ -450,7 +450,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				}
 			}
 
-			$_thumb=_get_upload_url($member_id,$thumb_attach_name,$thumb_folder,OCP_UPLOAD_IMAGE,0,$accept_errors);
+			$_thumb=_get_upload_url($member_id,$thumb_attach_name,$thumb_folder,$upload_folder_full,OCP_UPLOAD_IMAGE,0,$accept_errors);
 			$thumb=$_thumb[0];
 		}
 		elseif (array_key_exists($thumb_specify_name,$_POST)) // If we specified
@@ -507,7 +507,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				}
 			}
 
-			$_thumb=_get_upload_url($member_id,$thumb_attach_name,$thumb_folder,OCP_UPLOAD_IMAGE,0,$accept_errors);
+			$_thumb=_get_upload_url($member_id,$thumb_attach_name,$thumb_folder,$upload_folder_full,OCP_UPLOAD_IMAGE,0,$accept_errors);
 			$thumb=$_thumb[0];
 		}
 		elseif (array_key_exists($thumb_specify_name,$_POST))
@@ -735,7 +735,7 @@ function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_error
  * @param  ?string		Filename to use (NULL: choose one)
  * @return array			A pair: the URL and the filename
  */
-function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_full,$enforce_type=15,$obfuscate=0,$accept_errors=false)
+function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_full,$enforce_type=15,$obfuscate=0,$accept_errors=false,$filename=NULL)
 {
 	$file=$_FILES[$attach_name]['name'];
 	if (get_magic_quotes_gpc()) $file=stripslashes($file);
@@ -819,7 +819,7 @@ function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_f
 	// Special code to re-orientate JPEG images if required (browsers cannot do this)
 	if ((($enforce_type & OCP_UPLOAD_ANYTHING)==0) && (($enforce_type & OCP_UPLOAD_IMAGE)!=0) && (is_image($place)))
 	{
-		if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring'))) // TODO: No is_on_gd in v10
+		if (function_exists('imagecreatefromstring'))
 		{
 			require_code('images');
 			convert_image($place,$place,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);

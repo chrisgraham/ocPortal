@@ -32,7 +32,7 @@ class Hook_check_max_input_vars
 		{
 			if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))>10))
 			{
-				$this_setting_value=intval(ini_get($setting_value));
+				$this_setting_value=intval(ini_get($setting));
 				if ($this_setting_value<1000)
 				{
 					$warning[]=do_lang_tempcode('__SUHOSIN_MAX_VARS_TOO_LOW',escape_html($setting));

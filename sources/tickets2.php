@@ -247,7 +247,7 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$
 	{
 		$ticket_type=$ticket[0]['ticket_type'];
 
-		if (has_specific_permission(get_member(),'view_others_tickets'))
+		if (has_privilege(get_member(),'view_others_tickets'))
 		{
 			if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type)))
 				access_denied('CATEGORY_ACCESS_LEVEL');

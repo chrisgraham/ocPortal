@@ -418,7 +418,6 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
  * @param  BINARY			Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
  * @param  BINARY			Whether to shuffle questions, to make cheating a bit harder
  * @param  BINARY			Whether to shuffle multiple-choice answers, to make cheating a bit harder
- * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
  * @param  ?TIME			Add time (NULL: do not change)
  * @param  ?MEMBER		Submitter (NULL: do not change)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'

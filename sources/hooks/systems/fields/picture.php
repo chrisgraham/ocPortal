@@ -108,7 +108,6 @@ class Hook_fields_picture
 			'image'=>$img_url,
 		));
 
-		// TODO: On v10, needs applying for video_multi too?
 		if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/))
 		{
 			$keep=symbol_tempcode('KEEP');

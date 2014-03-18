@@ -119,7 +119,6 @@ class Hook_fields_video
 			list($width,$height,$length)=get_video_details(get_custom_file_base().'/'.rawurldecode($stripped_ev),basename($stripped_ev));
 		}
 
-		// TODO: On v10, needs applying for video_multi too?
 		if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/))
 		{
 			$keep=symbol_tempcode('KEEP');

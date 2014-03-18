@@ -29,7 +29,10 @@ class Hook_cron_catalogue_entry_timeouts
 
 		$time=time();
 		$last_time=get_long_value('last_catalogue_entry_timeouts_calc');
-		if ($last_time>$time-6*60*60) return; // Every 6 hours
+		if (!is_null($last_time))
+		{
+			if (intval($last_time)>$time-6*60*60) return; // Every 6 hours
+		}
 
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -64,9 +67,9 @@ class Hook_cron_catalogue_entry_timeouts
 				calculate_category_child_count_cache($row['id']);
 			}
 		}
-	}
 
-	set_long_value('last_catalogue_entry_timeouts_calc',strval($time));
+		set_long_value('last_catalogue_entry_timeouts_calc',strval($time));
+	}
 }
 
 
