@@ -240,7 +240,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 			$fields->attach(results_entry(array(get_translated_text($row['mm_name'],$GLOBALS['FORUM_DB']),$destination,$pin_state,$open_state,$sink_state,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
 		}
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),either_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**

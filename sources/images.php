@@ -571,7 +571,7 @@ function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=tru
 	}
 	if ($from_file===false)
 	{
-		if ($exit_on_error) fatal_exit(do_lang_tempcode('UPLOAD_PERMISSION_ERROR',escape_html($from)));
+		if ($exit_on_error) warn_exit(do_lang_tempcode('UPLOAD_PERMISSION_ERROR',escape_html($from)));
 		require_code('site');
 		if (!file_exists(get_custom_file_base().'/uploads/missing_ok'))
 			attach_message(do_lang_tempcode('UPLOAD_PERMISSION_ERROR',escape_html($from)),'warn');

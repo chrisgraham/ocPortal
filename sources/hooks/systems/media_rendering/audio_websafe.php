@@ -55,6 +55,7 @@ class Hook_media_rendering_audio_websafe
 
 		// Sometimes an mp3 is put in an mp4 container
 		if ($mime_type=='video/mp4') return MEDIA_RECOG_PRECEDENCE_MEDIUM;
+		if ($mime_type=='video/3gpp') return MEDIA_RECOG_PRECEDENCE_MEDIUM;
 
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}

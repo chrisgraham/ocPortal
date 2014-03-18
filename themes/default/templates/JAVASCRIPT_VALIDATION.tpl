@@ -121,12 +121,10 @@ function set_field_error(the_element,error_msg)
 		}
 	}
 	if ((typeof window.is_wysiwyg_field!='undefined') && (is_wysiwyg_field(the_element))) the_element=the_element.parentNode;
+	the_element.className=the_element.className.replace(/( input_erroneous($| ))+/g,' ');
 	if (error_msg!='')
 	{
 		the_element.className=the_element.className+' input_erroneous';
-	} else
-	{
-		the_element.className=the_element.className.replace(/( input_erroneous($| ))+/g,' ');
 	}
 }
 
@@ -745,13 +743,14 @@ function __standard_alternate_field_update_editability(field,chosen_field,is_loc
 	if ((!field) || (typeof field.nodeName!='undefined'))
 	{
 		___standard_alternate_field_update_editability(field,chosen_field,is_locked,is_chosen,something_required);
-	} else // Radio list
+	} else // List of fields (e.g. radio list, or just because standard_alternate_fields_within was used)
 	{
 		for (var i=0;i<field.length;i++)
 		{
 			if (typeof field[i].name!='undefined') // If it is an object, as opposed to some string in the collection
 			{
 				___standard_alternate_field_update_editability(field[i],chosen_field,is_locked,is_chosen,something_required);
+				something_required=false; // Only the first will be required
 			}
 		}
 	}

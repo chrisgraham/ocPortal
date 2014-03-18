@@ -1,4 +1,4 @@
-[block=":rules,cms:cms_comcode_pages,site:rules" caption="[title]{$SITE_NAME} Rules[/title]"]main_only_if_match[/block]
+[block=":rules,cms:cms_comcode_pages,site:rules,forum:rules" caption="[title]{$SITE_NAME} Rules[/title]"]main_only_if_match[/block]
 
 [title="2"]Liability[/title]
 
@@ -20,7 +20,7 @@ Do not repeatedly use strong/harsh swearing or sexual references.
 
 Do not be too sexually graphic. Do not link to or post pornography, and only mild and non-sexually motivated nudity is allowed.
 
-Staff have the right to edit, censor, delete or otherwise modify any content message they feel is inapproriate, without any warning given to the poster.
+Staff have the right to edit, censor, delete or otherwise modify any content message they feel is inappropriate, without any warning given to the poster.
 
 Do not submit any content that you know to contain viruses or commonly exploited security holes.
 
@@ -38,13 +38,13 @@ Do not spam this website:
  - you must be moderately confident that anything posted will interest at least a minority of the members.
  - you must not post material more than once unless there is good reason, from the point of view of other members.
 
-Do not intentionally disrupt the enjoyment of this website by other users. 'Enjoyment' has a general meaning for the purposes of this rule - for example, robust argument in a debate forum would be considered 'enjoyable', as debators would wish for it.
+Do not intentionally disrupt the enjoyment of this website by other users. 'Enjoyment' has a general meaning for the purposes of this rule - for example, robust argument in a debate forum would be considered 'enjoyable', as debaters would wish for it.
 
 This website is private properly and hence any form of censorship is allowed at the discretion of the staff - you agree not to consider this website a forum for free speech if the staff consider it breaks the rules.
 
 [title="2"]Forum and Chat[/title]
 
-Be respectful of the opinions of other members, and do not discrimate it based on nationality, sexuality, gender, religion or race. Do not flame or degrade other members. If you have a problem with another members actions, contact a member of staff.
+Be respectful of the opinions of other members, and do not discriminate it based on nationality, sexuality, gender, religion or race. Do not flame or degrade other members. If you have a problem with another members actions, contact a member of staff.
 
 [title="2"]Forum[/title]
 
@@ -58,10 +58,6 @@ Do not complain in-topic about the subject being too far off-topic or otherwise 
 [title="2"]Chat[/title]
 
 In no circumstances may you use the chat rooms to start or continue sexually suggestive dialogue with any member under the age of consent (whichever age is highest between any geographic region where the hypothetical parties are located).
-
-[title="2"]Feedback[/title]
-
-The feedback forum and page were created so members may contact staff on matters that require attention. Please make an extra effort to not go off-topic in these areas, and use the most appropriate channels when communicating with staff. Our staff must read every last post of feedback, so off-topic messages will annoy them.
 
 [title="2"]Signatures[/title]
 

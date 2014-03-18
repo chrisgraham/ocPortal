@@ -313,7 +313,7 @@ class Module_admin_orders
 
 			$submitted_by=$GLOBALS['FORUM_DRIVER']->get_username($row['c_member']);
 			$member_url=build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
-			$member=hyperlink($member_url,$submitted_by,false,false,do_lang('INDEX'));
+			$member=hyperlink($member_url,$submitted_by,false,false,do_lang('CUSTOMER'));
 
 			$order_date=hyperlink($view_url,get_timezoned_date($row['add_date'],true,false,true,true));
 
@@ -329,7 +329,7 @@ class Module_admin_orders
 			$order_entries->attach(results_entry(
 				array(
 					escape_html($order_title),
-					ecommerce_get_currency_symbol().escape_html(strval($row['tot_price'])),
+					ecommerce_get_currency_symbol().escape_html(float_format($row['tot_price'],2)),
 					escape_html(is_null($row['tax'])?'':float_format($row['tax'],2)),
 					$order_date,
 					$member,
@@ -409,13 +409,13 @@ class Module_admin_orders
 
 			$product_name=$row['p_name'];
 
-			$product=hyperlink($product_info_url,$product_name,false,false,do_lang('INDEX'));
+			$product=hyperlink($product_info_url,$product_name,false,false,do_lang('VIEW'));
 
 			$product_entries->attach(results_entry(
 				array(
 					escape_html(strval($row['p_id'])),
 					$product,
-					ecommerce_get_currency_symbol().escape_html(strval($row['p_price'])),
+					ecommerce_get_currency_symbol().escape_html(float_format($row['p_price'],2)),
 					escape_html(strval($row['p_quantity'])),
 					do_lang($row['dispatch_status'])
 				),false,NULL)
@@ -480,7 +480,7 @@ class Module_admin_orders
 			'ORDER_NUMBER'=>strval($id),
 			'ADD_DATE'=>get_timezoned_date($data['add_date'],true,false,true,true),
 			'CURRENCY'=>get_option('currency'),
-			'TOTAL_PRICE'=>strval($data['tot_price']),
+			'TOTAL_PRICE'=>float_format($data['tot_price'],2),
 			'ORDERED_BY_MEMBER_ID'=>strval($ordered_by_member_id),
 			'ORDERED_BY_USERNAME'=>$ordered_by_username,
 			'ORDER_STATUS'=>do_lang($data['order_status']),
@@ -752,7 +752,7 @@ class Module_admin_orders
 			$orders[do_lang('ORDER_PRICE')]=$order['tot_price'];
 			$orders[do_lang('ORDER_STATUS')]=do_lang($order['order_status']);
 			$orders[do_lang('ORDER_TAX_OPT_OUT')]=($order['tax_opted_out'])? do_lang('YES'):do_lang('NO');
-			$orders[do_lang('TOTAL_TAX_PAID')]=is_null($order['tax_amt'])?float_format(0.0):float_format($order['tax_amt']);
+			$orders[do_lang('TOTAL_TAX_PAID')]=is_null($order['tax_amt'])?float_format(0.0,2):float_format($order['tax_amt'],2);
 			$orders[do_lang('ORDERED_PRODUCTS')]=get_ordered_product_list_string($order['id']);
 			$orders[do_lang('ORDERED_BY')]=$GLOBALS['FORUM_DRIVER']->get_username($order['c_member']);
 

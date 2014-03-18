@@ -204,7 +204,7 @@ class Module_cms_quiz extends standard_crud_module
 		$search_url=build_url(array('page'=>'search','id'=>'quiz'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'quiz'),get_module_zone('quiz'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**

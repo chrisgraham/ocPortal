@@ -108,7 +108,8 @@ class Hook_fields_picture
 			'image'=>$img_url,
 		));
 
-		if (url_is_local($ev))
+		// TODO: On v10, needs applying for video_multi too?
+		if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/))
 		{
 			$keep=symbol_tempcode('KEEP');
 			$download_url=find_script('catalogue_file').'?file='.urlencode(basename($img_url)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();

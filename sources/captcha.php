@@ -31,6 +31,8 @@ function init__captcha()
  */
 function captcha_script()
 {
+	if (!function_exists('imagecreatefromstring')) warn_exit(do_lang_tempcode('GD_NEEDED'));
+
 	$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 	if (is_null($_code_needed))
 	{
@@ -238,10 +240,14 @@ function generate_captcha()
 
 	// Clear out old codes
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval(time()-60*30).' OR si_session_id='.strval($session));
+
 	// FUDGE Run a test to see if large numbers are supported
 	$insert_map=array('si_time'=>time(),'si_session_id'=>$session);
 	$GLOBALS['SITE_DB']->query_insert('captchas',$insert_map+array('si_code'=>333333333333),false,true);
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',$insert_map);
+
+	// Clear out old codes
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'security_images WHERE si_time<'.strval((integer)time()-60*30).' OR si_session_id='.strval((integer)$session));
 
 	// Create code
 	$numbers_only=($test!==333333333333);
@@ -259,9 +265,6 @@ function generate_captcha()
 			$code.=strval(ord($choices[$choice])); // NB: In ASCII code all the chars in $choices are 10-99 (i.e. 2 digit)
 		}
 	}
-
-	// Clear out old codes
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval(time()-60*30).' OR si_session_id='.strval($session));
 
 	// Store code
 	$si_code=mixed();

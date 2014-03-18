@@ -819,8 +819,11 @@ function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_f
 	// Special code to re-orientate JPEG images if required (browsers cannot do this)
 	if ((($enforce_type & OCP_UPLOAD_ANYTHING)==0) && (($enforce_type & OCP_UPLOAD_IMAGE)!=0) && (is_image($place)))
 	{
-		require_code('images');
-		convert_image($place,$place,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);
+		if ((get_option('is_on_gd')=='1') && (function_exists('imagecreatefromstring'))) // TODO: No is_on_gd in v10
+		{
+			require_code('images');
+			convert_image($place,$place,-1,-1,100000/*Impossibly large size, so no resizing happens*/,false,NULL,true,true);
+		}
 	}
 
 	$url=array();

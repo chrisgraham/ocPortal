@@ -467,16 +467,21 @@ class Module_search
 		}
 		$max=get_param_integer('search_max',$default_max);  // Also see get_search_rows
 
-		$save_title=post_param('save_title','');
+		$save_title=get_param('save_title','');
 		if ((!is_guest()) && ($save_title!='') && ($start==0))
 		{
-			$GLOBALS['SITE_DB']->query_insert('searches_saved',array(
-				's_title'=>$save_title,
-				's_member_id'=>get_member(),
-				's_time'=>time(),
-				's_primary'=>$content,
-				's_auxillary'=>serialize(array_merge($_POST,$_GET)),
-			));
+			static $saved_search=false;
+			if (!$saved_search)
+			{
+				$GLOBALS['SITE_DB']->query_insert('searches_saved',array(
+					's_title'=>$save_title,
+					's_member_id'=>get_member(),
+					's_time'=>time(),
+					's_primary'=>$content,
+					's_auxillary'=>serialize(array_merge($_POST,$_GET)),
+				));
+				$saved_search=true;
+			}
 		}
 
 		$boolean_operator=get_param('conjunctive_operator','OR');

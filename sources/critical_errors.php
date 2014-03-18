@@ -69,6 +69,9 @@ if (!function_exists('critical_error'))
 		@ob_end_clean(); // Emergency output so kill off any active buffer
 		ob_start();
 
+		if ((!is_null($relay)) && (function_exists('_sanitise_error_msg')))
+			$relay=_sanitise_error_msg($relay);
+
 		if (!headers_sent())
 		{
 			if ((function_exists('browser_matches')) && ((is_null($relay)) || (strpos($relay,'Allowed memory')===false)))

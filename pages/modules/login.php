@@ -228,13 +228,16 @@ class Module_login
 				$passion->attach(form_input_hidden('redirect_passon',$redirect_passon)); // redirect_passon is used when there are POST fields, as it says what the redirect will be on the post-login-check hop (post fields prevent us doing an immediate HTTP-level redirect).
 		}
 
-		// If this is a new install test to see if we have any redirect issue that blocks form submissions
-		if (get_option('site_closed')=='1')
+		// Test to see if we have any redirect issue that blocks form submissions
+		$this_proper_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+		$_login_url=$this_proper_url->evaluate();
+		$test=http_download_file($_login_url,0,false,true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
+		if ((is_null($test)) && ($GLOBALS['HTTP_MESSAGE']!=='200') && ($GLOBALS['HTTP_MESSAGE']!=='401') && ((!is_file(get_file_base().'/install.php')) || ($GLOBALS['HTTP_MESSAGE']!=='500')))
 		{
-			$this_proper_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-			$_login_url=$this_proper_url->evaluate();
-			$test=http_download_file($_login_url,0,false,true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
-			if ((is_null($test)) && ($GLOBALS['HTTP_MESSAGE']!=='200') && ($GLOBALS['HTTP_MESSAGE']!=='401') && ((!is_file(get_file_base().'/install.php')) || ($GLOBALS['HTTP_MESSAGE']!=='500')))
+			if (($GLOBALS['HTTP_MESSAGE']=='no-data') && (get_option('ip_forwarding')=='0'))
+			{
+				attach_message(do_lang_tempcode('config:ENABLE_IP_FORWARDING',do_lang('config:IP_FORWARDING')),'warn');
+			} else
 			{
 				attach_message(do_lang_tempcode((substr(get_base_url(),0,11)=='http://www.')?'HTTP_REDIRECT_PROBLEM_WITHWWW':'HTTP_REDIRECT_PROBLEM_WITHOUTWWW',escape_html(get_base_url().'/config_editor.php')),'warn');
 			}

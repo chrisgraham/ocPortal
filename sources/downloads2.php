@@ -1045,7 +1045,7 @@ function delete_download($id,$leave=false)
 		// Delete gallery
 		$name='download_'.strval($id);
 		require_code('galleries2');
-		$test=$GLOBALS['SITE_DB']->query_select_value('galleries','parent_id',array('name'=>'download_'.strval($id)));
+		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>'download_'.strval($id)));
 		if (!is_null($test))
 			delete_gallery($name);
 	}

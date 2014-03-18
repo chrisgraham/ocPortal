@@ -93,10 +93,22 @@ class Hook_fields_upload
 
 				$field['effective_value_pure']=$file;
 
-				$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($file)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+				if (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/)
+				{
+					$download_url=find_script('catalogue_file').'?original_filename='.urlencode($original_filename).'&file='.urlencode(basename($file)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+				} else
+				{
+					$download_url=get_custom_file_base().'/uploads/catalogues/'.$file;
+				}
 			} else
 			{
-				$download_url=find_script('catalogue_file').'?file='.urlencode(basename($ev)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+				if (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/)
+				{
+					$download_url=find_script('catalogue_file').'?file='.urlencode(basename($ev)).'&table='.urlencode($table).'&id='.urlencode(strval($id)).'&id_field='.urlencode($id_field).'&url_field='.urlencode($url_field).$keep->evaluate();
+				} else
+				{
+					$download_url=get_custom_file_base().'/uploads/catalogues/'.urlencode(basename($ev));
+				}
 			}
 		} else
 		{

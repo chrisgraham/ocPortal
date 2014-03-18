@@ -899,7 +899,7 @@ function addon_installed($addon,$non_bundled_too=false)
  */
 function float_to_raw_string($num,$decs_wanted=2,$only_needed_decs=false)
 {
-	$str=number_format($num,5,'.','');
+	$str=number_format($num,$decs_wanted,'.','');
 	$decs_here=strlen($str)-strpos($str,'.')-1;
 	if ($decs_here<$decs_wanted)
 	{
@@ -927,9 +927,20 @@ function float_to_raw_string($num,$decs_wanted=2,$only_needed_decs=false)
 function float_format($val,$frac_digits=2,$only_needed_decs=false)
 {
 	$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
-	//$frac_digits=$locale['frac_digits']; // This seems to not work on all PHP configurations
 	if ($locale['thousands_sep']=='') $locale['thousands_sep']=',';
-	$str=number_format($val,$frac_digits,$locale['decimal_point'],$locale['thousands_sep']);
+	$str=number_format($val,$decs_wanted,$locale['decimal_point'],$locale['thousands_sep']);
+	$decs_here=strlen($str)-strpos($str,'.')-1;
+	if ($decs_here<$decs_wanted)
+	{
+		for ($i=0;$i<$decs_wanted-$decs_here;$i++)
+		{
+			$str.='0';
+		}
+	} else
+	{
+		$str=substr($str,0,strlen($str)-$decs_here+$decs_wanted);
+		if ($decs_wanted==0) $str=rtrim($str,'.');
+	}
 	if ($only_needed_decs) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
 	return $str;
 }
@@ -1500,6 +1511,13 @@ function get_ip_address($amount=4,$ip=NULL)
 		else */$ip=ocp_srv('REMOTE_ADDR');
 	}
 
+	// Bizarro-filter (found "in the wild")
+	$pos=strpos($ip,',');
+	if ($pos!==false) $ip=substr($ip,0,$pos);
+
+	// ...and another
+	$ip=preg_replace('#%14$#','',$ip);
+
 	if (!is_valid_ip($ip))
 	{
 		$ip_cache[$amount]='';
@@ -1512,15 +1530,8 @@ function get_ip_address($amount=4,$ip=NULL)
 		$amount=4;
 	}
 
-	// Bizarro-filter (found "in the wild")
-	$pos=strpos($ip,',');
-	if ($pos!==false) $ip=substr($ip,0,$pos);
-
-	// ...and another
-	$ip=preg_replace('#%14$#','',$ip);
-
 	// Normalise
-	if (strpos($ip,':')!==false) // IPv6
+	if (strpos($ip,'.')===false) // IPv6
 	{
 		if (substr_count($ip,':')<7)
 		{

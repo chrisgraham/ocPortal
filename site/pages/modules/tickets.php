@@ -233,12 +233,29 @@ class Module_tickets
 
 		$message=new ocp_tempcode();
 		$links=new ocp_tempcode();
+		$existing_ticket_types=array();
 
 		if (!is_guest())
 		{
 			// Our tickets
 			$ticket_type=$this->ticket_type;
 			$tickets=get_tickets(get_member(),$ticket_type);
+
+			// Find all ticket types used
+			if (is_null($ticket_type))
+			{
+				$all_tickets=$tickets;
+			} else
+			{
+				$all_tickets=get_tickets(get_member(),NULL);
+			}
+			foreach ($all_tickets as $topic)
+			{
+				$ticket_id=extract_topic_identifier($topic['description']);
+				$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+				if (!is_null($ticket_type_id))
+					$existing_ticket_types[]=$ticket_type_id;
+			}
 
 			// List (our?) tickets
 			if (!is_null($tickets))
@@ -339,15 +356,20 @@ class Module_tickets
 	 * Build a list of ticket types.
 	 *
 	 * @param  ?AUTO_LINK	The current selected ticket type (NULL: none)
+	 * @param  ?array			List of ticket types to show regardless of access permissions (NULL: none)
 	 * @return array			A map between ticket types, and template-ready details about them
 	 */
-	function build_types_list($selected_ticket_type)
+	function build_types_list($selected_ticket_type,$ticket_types_to_let_through=NULL)
 	{
+		if (is_null($ticket_types_to_let_through)) $ticket_types_to_let_through=array();
+
 		$_types=$GLOBALS['SITE_DB']->query_select('ticket_types LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate ON id=ticket_type',array('ticket_type','text_original','cache_lead_time'),NULL,'ORDER BY text_original');
 		$types=array();
 		foreach ($_types as $type)
 		{
-			if (!has_category_access(get_member(),'tickets',$type['text_original'])) continue;
+			if ((!has_category_access(get_member(),'tickets',$type['text_original'])) && (!in_array($type['ticket_type'],$ticket_types_to_let_through)))
+				continue;
+
 			if (is_null($type['cache_lead_time'])) $lead_time=do_lang('UNKNOWN');
 			else $lead_time=display_time_period($type['cache_lead_time']);
 			$types[$type['ticket_type']]=array('TICKET_TYPE'=>strval($type['ticket_type']),'SELECTED'=>($type['ticket_type']===$selected_ticket_type),'NAME'=>$type['text_original'],'LEAD_TIME'=>$lead_time);
@@ -681,7 +703,7 @@ class Module_tickets
 		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id,'redirect'=>NULL),'_SELF',NULL,false,true,true);
 		$home_url=$_home_url->evaluate();
 		$email='';
-		if ($ticket_type!=-1)
+		if ($ticket_type!=-1) // New ticket
 		{
 			$type_string=get_translated_text($ticket_type);
 			$ticket_type_details=get_ticket_type($ticket_type);

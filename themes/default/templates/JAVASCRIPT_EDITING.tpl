@@ -179,8 +179,8 @@ function disable_wysiwyg(forms,so,so2,discard)
 
 if (typeof window.wysiwyg_editors=='undefined')
 {
-	window.wysiwyg_editors=[];
-	window.wysiwyg_original_comcode=[];
+	window.wysiwyg_editors={};
+	window.wysiwyg_original_comcode={};
 }
 function load_html_edit(posting_form,ajax_copy)
 {
@@ -275,13 +275,13 @@ function load_html_edit(posting_form,ajax_copy)
 
 function wysiwyg_editor_init_for(element,id)
 {
-	var pageStyleSheets=[];
+	var page_stylesheets=[];
 	if (!document) return;
 	var linked_sheets=document.getElementsByTagName('link');
 	for (var counter=0;counter<linked_sheets.length;counter++)
 	{
 		if (linked_sheets[counter].getAttribute('rel')=='stylesheet')
-			pageStyleSheets.push(linked_sheets[counter].getAttribute('href'));
+			page_stylesheets.push(linked_sheets[counter].getAttribute('href'));
 	}
 
 	// Fiddly procedure to find our colour
@@ -312,7 +312,24 @@ function wysiwyg_editor_init_for(element,id)
 	{
 		css+=get_inner_html(linked_sheets[counter]);
 	}
-	editor.addCss(css);
+	CKEDITOR.addCss(css);
+
+	// Change some CKEditor defaults
+	CKEDITOR.on('dialogDefinition',function(ev) {
+		var dialogName=ev.data.name;
+		var dialogDefinition=ev.data.definition;
+
+		if (dialogName=='table') {
+			var info=dialogDefinition.getContents('info');
+
+			info.get('txtWidth')['default']='100%';
+			info.get('txtBorder')['default']='0';
+			info.get('txtBorder')['default']='0';
+			info.get('txtCellSpace')['default']='0';
+			info.get('txtCellPad')['default']='0';
+		}
+	});
+	window.lang_PREFER_OCP_ATTACHMENTS='{!javascript:PREFER_OCP_ATTACHMENTS;}';
 
 	/*window.setTimeout( function() {
 		window.scrollTo(0,0); // Otherwise jumps to last editor
@@ -561,7 +578,7 @@ function ensure_true_id(element,field_name) // Works around IE bug
 
 function is_wysiwyg_field(the_element)
 {
-	return ((typeof window.wysiwyg_editors!='undefined') && (the_element.id!='length') && (typeof wysiwyg_editors[the_element.id]=='object'));
+	return ((typeof window.wysiwyg_editors!='undefined') && (typeof wysiwyg_editors[theElement.id]=='object'));
 }
 
 function get_textbox(element)
