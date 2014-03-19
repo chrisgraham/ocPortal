@@ -278,7 +278,8 @@ function init__global2()
 	require_code_no_override('version');
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0))
 	{
-		@header('X-Powered-By: ocPortal '.ocp_version_full().' (PHP '.phpversion().')');
+		//@header('X-Powered-By: ocPortal '.ocp_version_full().' (PHP '.phpversion().')');
+		@header('X-Powered-By: ocPortal'); // Better to keep it vague, for security reasons
 
 		$QUERY_LOG=false;
 		if ((isset($_REQUEST['special_page_type'])) && ($_REQUEST['special_page_type']=='query'))
@@ -1695,7 +1696,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 		js_compile($j,$js_cache_path,$minify);
 	}
 
-	if (filesize($js_cache_path)==0) return '';
+	if (@filesize($js_cache_path)==0/*Race condition?*/) return '';
 
 	return $js_cache_path;
 }
@@ -1887,7 +1888,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 		css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify);
 	}
 
-	if (filesize($css_cache_path)==0) return '';
+	if (@filesize($css_cache_path)==0/*Race condition?*/) return '';
 
 	return $css_cache_path;
 }

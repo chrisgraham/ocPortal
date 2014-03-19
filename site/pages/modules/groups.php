@@ -282,12 +282,22 @@ class Module_groups
 		$max=get_param_integer('others_max',20);
 		$map=has_specific_permission(get_member(),'see_hidden_groups')?array('g_is_private_club'=>1):array('g_is_private_club'=>1,'g_hidden'=>0);
 		$max_rows=count($_others);
-		if ($start>count($_others)) $_others=array();
-		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.*','text_original'),$map,'ORDER BY g_order,g.id',$max,max(0,$start-$max_rows)));
+		for ($i=0;$i<$start;$i++)
+		{
+			array_shift($_others);
+		}
+		$query_max=$max-count($_others);
+		$query_start=$start-$max_rows;
+		if ($query_start<0)
+		{
+			$query_max+=$query_start;
+			$query_start=0;
+		}
+		if ($query_max<0) $query_max=0;
+		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.*','text_original'),$map,'ORDER BY g_order,g.id',$query_max,$query_start));
 		$max_rows+=$GLOBALS['FORUM_DB']->query_value('f_groups g','COUNT(*)',$map);
 		$fields_title=results_field_title(array(do_lang_tempcode('NAME'),do_lang_tempcode('COUNT_MEMBERS')),$sortables);
 		$others=new ocp_tempcode();
-		$i=0;
 		foreach ($_others as $row)
 		{
 			$row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);

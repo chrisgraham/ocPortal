@@ -123,8 +123,9 @@ class Module_cms_calendar extends standard_aed_module
 				{
 					if (form.elements['end_day'].selectedIndex!=0)
 					{
-						var start=new Date(form.elements['start_year'].value,form.elements['start_month'].value,form.elements['start_day'].value,form.elements['start_hour'].value,form.elements['start_minute'].value);
-						var end=new Date(form.elements['end_year'].value,form.elements['end_month'].value,form.elements['end_day'].value,form.elements['end_hour'].value,form.elements['end_minute'].value);
+						var start=new Date(window.parseInt(form.elements['start_year'].value),window.parseInt(form.elements['start_month'].value)-1,window.parseInt(form.elements['start_day'].value),window.parseInt(form.elements['start_hour'].value),window.parseInt(form.elements['start_minute'].value));
+						var end=new Date(window.parseInt(form.elements['end_year'].value),window.parseInt(form.elements['end_month'].value)-1,window.parseInt(form.elements['end_day'].value),window.parseInt(form.elements['end_hour'].value),window.parseInt(form.elements['end_minute'].value));
+
 						if (start>end)
 						{
 							window.fauxmodal_alert('".php_addslashes(do_lang('EVENT_CANNOT_AROUND'))."');
@@ -249,7 +250,7 @@ class Module_cms_calendar extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'calendar'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'calendar'),get_module_zone('calendar'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
@@ -1096,7 +1097,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 		$search_url=NULL;
 		$archive_url=NULL;
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**

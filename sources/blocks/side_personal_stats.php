@@ -119,7 +119,13 @@ class Block_side_personal_stats
 			if (get_option('ocp_show_personal_last_visit')=='1')
 			{
 				$row=$GLOBALS['FORUM_DRIVER']->pget_row($username);
-				$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
+				if (get_forum_type()=='ocf')
+				{
+					$last_visit=intval(ocp_admirecookie('last_visit',strval($GLOBALS['FORUM_DRIVER']->pnamelast_visit($row))));
+				} else
+				{
+					$last_visit=$GLOBALS['FORUM_DRIVER']->pnamelast_visit($row);
+				}
 				$_last_visit=get_timezoned_date($last_visit,false);
 				$content->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array('_GUID'=>'sas41eddsdsdsdsdsa2618fd7fff','KEY'=>do_lang_tempcode('LAST_HERE'),'RAW_KEY'=>strval($last_visit),'VALUE'=>$_last_visit)));
 			}

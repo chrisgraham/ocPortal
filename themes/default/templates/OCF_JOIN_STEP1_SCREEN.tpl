@@ -14,8 +14,8 @@
 	</p>
 
 	{+START,IF_NON_EMPTY,{GROUP_SELECT}}
-		<label for="additional_group">{!CHOOSE_JOIN_USERGROUP}
-			<select id="additional_group" name="additional_group">
+		<label for="primary_group">{!CHOOSE_JOIN_USERGROUP}
+			<select id="primary_group" name="primary_group">
 				{GROUP_SELECT}
 			</select>
 		</label>

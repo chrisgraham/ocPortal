@@ -9,8 +9,8 @@
 <script type="text/javascript">// <![CDATA[
 if (typeof window.shocker_parts=='undefined')
 {
-	window.shocker_parts=[];
-	window.shocker_pos=[];
+	window.shocker_parts={};
+	window.shocker_pos={};
 }
 window.shocker_parts['{$GET%,RAND_ID_SHOCKER}']=[{PARTS/}''];
 window.shocker_pos['{$GET%,RAND_ID_SHOCKER}']=0;

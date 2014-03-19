@@ -44,7 +44,7 @@
 					var site_tree=new tree_list('tree_list','data/site_tree.php?start_links=1&get_perms=1{$KEEP;}','','',true);
 					var column_color='{COLOR*;}';
 
-					window.usergroup_titles=[];
+					window.usergroup_titles={};
 					{+START,LOOP,USERGROUPS}
 						window.usergroup_titles[{_loop_key}]='{_loop_var;}';
 					{+END}

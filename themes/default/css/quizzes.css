@@ -95,4 +95,5 @@
 
 #survey tr.field_input .constrain_field {
 	margin-right: 35px;
+	display: inline-block;
 }

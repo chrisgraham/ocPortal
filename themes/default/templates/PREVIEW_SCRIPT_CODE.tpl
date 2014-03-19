@@ -2,7 +2,7 @@
 	var post=window.parent.document.getElementById('post');
 
 	// Replace Comcode
-	top.setTextbox(post,'{NEW_POST_VALUE/^;}','{NEW_POST_VALUE_HTML/^;}');
+	window.parent.setTextbox(post,'{NEW_POST_VALUE/^;}','{NEW_POST_VALUE_HTML/^;}');
 
 	// Remove attachment uploads
 	var inputs=post.form.elements,btn;
@@ -24,7 +24,7 @@
 					inputs[i].swfob.setButtonDisabled(false);
 				} else
 				{
-					top.document.getElementById('uploadButton_'+inputs[i].name).disabled=true;
+					window.parent.document.getElementById('uploadButton_'+inputs[i].name).disabled=true;
 				}
 				inputs[i].value='-1';
 			} else

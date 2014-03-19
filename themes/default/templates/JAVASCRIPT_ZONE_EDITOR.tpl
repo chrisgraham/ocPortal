@@ -141,8 +141,8 @@ function ze_ie6(element)
 	}
 }
 
-var ze_timer=[];
-var ze_delay_function=[];
+var ze_timer={};
+var ze_delay_function={};
 function ze_animate_to(ob,amount,towards_expanded,now)
 {
 	if (browser_matches('ie6')) // Slow

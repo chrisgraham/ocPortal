@@ -33,7 +33,13 @@ class Hook_fields_content_link
 		foreach (array_keys($hooks) as $hook)
 		{
 			if ((substr($hook,0,7)=='choose_') && ($hook!='catalogue_entry'/*got a better field hook specifically for catalogue entries*/))
-				$ret['at_'.$hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html(preg_replace('#^choose_#','',$hook)));
+			{
+				$_hook=preg_replace('#^choose_#','',$hook);
+				if (($_hook=='forum_topic') || (is_file(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.$_hook.'.php')) || (is_file(get_file_base().'/sources/hooks/systems/content_meta_aware/'.$_hook.'.php')))
+				{
+					$ret['at_'.$hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html($_hook));
+				}
+			}
 		}
 		return $ret;
 	}

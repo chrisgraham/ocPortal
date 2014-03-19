@@ -991,6 +991,7 @@ class Module_admin_ocf_join
 					{
 						$join_time=mktime(0,0,0,intval($parts[1]),intval($parts[0]),intval($parts[2])); // dd-mm-yyyy
 					}
+					if ($join_time>time()) $join_time=time(); // Fixes MySQL out of range error that could happen
 				} else
 				{
 					$join_time=NULL;

@@ -15,9 +15,9 @@ function hexToDec(number)
 	return parseInt(number,16);
 }
 
-var names_to_numbers=[];
-var last_cc=[];
-var last_cc_i=[];
+var names_to_numbers={};
+var last_cc={};
+var last_cc_i={};
 function doColorChange(e)
 {
 	// Find our colour element we clicked on

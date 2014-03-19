@@ -144,6 +144,8 @@ class Module_admin_addons
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/addons';
 		$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_adv_configuration';
 
+		if (function_exists('set_time_limit')) @set_time_limit(180); // So it can scan inside addons
+
 		$title=get_page_title('ADDONS');
 
 		$addons_installed=find_installed_addons();
@@ -242,6 +244,9 @@ class Module_admin_addons
 		if (is_numeric($url))
 		{
 			$_POST['url']='http://ocportal.com/site/dload.php?id='.$url;
+		} else
+		{
+			$_POST['url']=$url; // In case it was submitted in array form, which is possible on some UAs (based on an automated bug report)
 		}
 
 //		if ($url=='')

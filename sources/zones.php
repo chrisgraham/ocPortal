@@ -676,7 +676,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			}
 			if (($row===NULL) && (isset($map['quick_cache'])) && ($map['quick_cache']=='1'))
 			{
-				$row=array('cached_for'=>$codename,'cache_on'=>'$map','cache_ttl'=>60);
+				$row=array('cached_for'=>$codename,'cache_on'=>'array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))','cache_ttl'=>60);
 			}
 		}
 		if ($row!==NULL)
@@ -1089,7 +1089,15 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 		return $ret;
 	}
 
-	if (!is_file($path)) return array(NULL);
+	if (!is_file($path))
+	{
+		$ret=array();
+		foreach ($functions as $function)
+		{
+			$ret[]=NULL;
+		}
+		return $ret;
+	}
 	$file=unixify_line_format(file_get_contents($path),NULL,false,true);
 
 	if (strpos($file,'class Mx_')!==false)

@@ -437,7 +437,7 @@ class Database_Static_sqlserver
 		{
 			if (function_exists('sqlsrv_errors'))
 			{
-				$err=sqlsrv_errors();
+				$err=serialize(sqlsrv_errors());
 			} else
 			{
 				$_error_msg=array_pop($GLOBALS['ATTACHED_MESSAGES_RAW']);
@@ -533,9 +533,18 @@ class Database_Static_sqlserver
 			}
 		} else
 		{
-			while (($row=function_exists('sqlsrv_fetch_array')?sqlsrv_fetch_array($results,SQLSRV_FETCH_ASSOC):mssql_fetch_row($results))!==false)
+			if (function_exists('sqlsrv_fetch_array'))
 			{
-				$out[]=$row;
+				while (($row=sqlsrv_fetch_array($results,SQLSRV_FETCH_ASSOC))!==NULL)
+				{
+					$out[]=$row;
+				}
+			} else
+			{
+				while (($row=mssql_fetch_row($results))!==false)
+				{
+					$out[]=$row;
+				}
 			}
 		}
 

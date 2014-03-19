@@ -175,7 +175,7 @@ class tempcode_test_set extends ocp_test_case
 	</tr>
 	<tr>
 		<td>$TRUNCATE_LEFT,i love to eat cheese,5</td>
-		<td>i &hellip;</td>
+		<td>i&hellip;</td>
 	</tr>
 	<tr>
 		<td>$TRUNCATE_RIGHT,i love to eat cheese,5</td>

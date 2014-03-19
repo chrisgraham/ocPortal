@@ -105,12 +105,10 @@ function setFieldError(theElement,errorMsg)
 		}
 	}
 	if ((typeof window.isWYSIWYGField!='undefined') && (isWYSIWYGField(theElement))) theElement=theElement.parentNode;
+	the_element.className=the_element.className.replace(/( input_erroneous($| ))+/g,' ');
 	if (errorMsg!='')
 	{
 		theElement.className=theElement.className+' input_erroneous';
-	} else
-	{
-		theElement.className=theElement.className.replace(/( input_erroneous($| ))+/g,' ');
 	}
 }
 

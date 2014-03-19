@@ -270,7 +270,7 @@ class Module_cms_catalogues extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_entries','catalogue_name'=>$catalogue_name),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('news'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
@@ -1096,7 +1096,7 @@ class Module_cms_catalogues_cat extends standard_aed_module
 		$search_url=build_url(array('page'=>'search','id'=>'catalogue_categories'),get_module_zone('search'));
 		$archive_url=build_url(array('page'=>'catalogues','type'=>'index','id'=>$catalogue_name),get_module_zone('catalogues'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
 	}
 
 	/**
@@ -1188,12 +1188,14 @@ class Module_cms_catalogues_cat extends standard_aed_module
 	/**
 	 * Standard aed_module cat getter.
 	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
+	 * @param  ID_TEXT		The entry being edited
 	 * @return string			The cat
 	 */
 	function get_cat($id)
 	{
-		return $GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('id'=>$id));
+		$c_name=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','c_name',array('id'=>intval($id)));
+		if (is_null($c_name)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+		return $c_name;
 	}
 
 	/**

@@ -260,7 +260,7 @@ function get_directory_size($path)
 		if (is_file($path.'/'.$e))
 		{
 			$size+=filesize($path.'/'.$e);
-		} else
+		} elseif (is_dir($path.'/'.$e))
 		{
 			$size+=get_directory_size($path.'/'.$e);
 		}
@@ -644,8 +644,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 				if ((!is_null($cookies)) && (count($cookies)!=0)) curl_setopt($ch,CURLOPT_COOKIE,$_cookies);
 				$crt_path=get_file_base().'/data/curl-ca-bundle.crt';
-				curl_setopt($ch,CURLOPT_CAINFO,$crt_path);
-				curl_setopt($ch,CURLOPT_CAPATH,$crt_path);
+				if (ini_get('curl.cainfo')=='')
+				{
+					curl_setopt($ch,CURLOPT_CAINFO,$crt_path);
+					curl_setopt($ch,CURLOPT_CAPATH,$crt_path);
+				}
 				//if (!$no_redirect) @curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true); // May fail with safe mode, meaning we can't follow Location headers. But we can do better ourselves anyway and protect against file:// exploits.
 				curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,intval($timeout));
 				curl_setopt($ch,CURLOPT_TIMEOUT,intval($timeout));

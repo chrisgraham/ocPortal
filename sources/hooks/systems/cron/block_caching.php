@@ -84,7 +84,15 @@ class Hook_cron_block_caching
 				$cache->handle_symbol_preprocessing();
 				if (!$DO_NOT_CACHE_THIS)
 				{
-					$info=$object->cacheing_environment();
+					if (method_exists($object,'cacheing_environment'))
+					{
+						$info=$object->cacheing_environment();
+					} else
+					{
+						$info=array();
+						$info['cache_on']='array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))';
+						$info['ttl']=60*24;
+					}
 					$ttl=$info['ttl'];
 
 					$_cache_identifier=array();

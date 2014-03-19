@@ -726,7 +726,7 @@ class forum_driver_ocf extends forum_driver_base
 			$_groups.='gm_group_id='.strval((integer)$group);
 		}
 		if ($_groups=='') return array();
-		$a=$this->connection->query('SELECT u.* FROM '.$this->connection->get_table_prefix().'f_group_members g LEFT JOIN '.$this->connection->get_table_prefix().'f_members u ON u.id=g.gm_member_id WHERE ('.$_groups.') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start);
+		$a=$this->connection->query('SELECT u.* FROM '.$this->connection->get_table_prefix().'f_group_members g JOIN '.$this->connection->get_table_prefix().'f_members u ON u.id=g.gm_member_id WHERE ('.$_groups.') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start);
 		$_groups='';
 		foreach ($groups as $group)
 		{

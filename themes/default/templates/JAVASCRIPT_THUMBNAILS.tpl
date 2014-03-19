@@ -1,6 +1,6 @@
 "use strict";
 
-var thumbFadeTimers=[];
+var thumbFadeTimers={};
 
 /* Originally based on a Dynamic Drive Script [with this function name], but no original code remaining */
 function nereidFade(fadeElement,destPercentOpacity,periodInMsecs,increment,destroyAfter)

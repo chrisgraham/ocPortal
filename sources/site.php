@@ -1446,7 +1446,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		} else $pcache=NULL;
 		if ($pcache===NULL)
 		{
-			$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('*'),array('a.the_page'=>$codename,'a.the_zone'=>$zone,'the_theme'=>$theme),'',1,NULL,false,array('string_index','cc_page_title'));
+			$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('*'),array('a.the_page'=>$codename,'a.the_zone'=>$zone,'the_theme'=>$theme),'',1,NULL,false,array('string_index','cc_page_title'));
 			if (array_key_exists(0,$comcode_page))
 			{
 				if ($support_smart_decaching)
@@ -1609,11 +1609,11 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 	global $PT_PAIR_CACHE_CP;
 	if (!array_key_exists($the_page,$PT_PAIR_CACHE_CP))
 	{
-		$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index','cc_page_title'));
+		$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index','cc_page_title'));
 		if (!array_key_exists(0,$page_rows))
 		{
 			request_page($the_page,false,$the_zone,NULL,true); // It's not cached, force the issue and then try again...
-			$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index','cc_page_title'));
+			$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index','cc_page_title'));
 			if (!array_key_exists(0,$page_rows)) // Oh well, fallback (maybe page doesn't exist yet, ?)...
 			{
 				$_title=$the_page;

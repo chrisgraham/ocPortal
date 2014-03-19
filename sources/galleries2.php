@@ -929,7 +929,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 	if (is_null($add_date)) $add_date=time();
 
 	require_code('type_validation');
-	if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+	if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 	if (!$skip_exists_check)
 	{
@@ -1006,7 +1006,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	if ($old_name!=$name)
 	{
 		require_code('type_validation');
-		if (!is_alphanumeric($name)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+		if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$name));
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
@@ -1015,10 +1015,13 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 		$GLOBALS['SITE_DB']->query_update('images',array('cat'=>$name),array('cat'=>$old_name));
 		$GLOBALS['SITE_DB']->query_update('videos',array('cat'=>$name),array('cat'=>$old_name));
 		$GLOBALS['SITE_DB']->query_update('galleries',array('parent_id'=>$name),array('parent_id'=>$old_name));
-		$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'gallery'));
-		foreach ($types as $type)
+		if (addon_installed('awards'))
 		{
-			$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
+			$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'gallery'));
+			foreach ($types as $type)
+			{
+				$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
+			}
 		}
 	}
 

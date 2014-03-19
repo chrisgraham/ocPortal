@@ -67,7 +67,7 @@ class Hook_catalogue_items
 			{
 				$map=get_catalogue_entry_field_values($ecomm_item['c_name'],$ecomm_item['id'],NULL,NULL,true);
 
-				$product_title=$map[0]['effective_value_pure'];
+				$product_title=array_key_exists('effective_value_pure',$map[0])?$map[0]['effective_value_pure']:$map[0]['effective_value'];
 
 				if ((!is_null($search)) && ($search_titles_not_ids))
 				{

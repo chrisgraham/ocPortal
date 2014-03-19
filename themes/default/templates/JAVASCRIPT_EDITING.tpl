@@ -177,8 +177,8 @@ function disable_wysiwyg(forms,so,so2,discard)
 	window.wysiwyg_on=function() { return false; };
 }
 
-var areaedit_editors=[];
-var areaedit_original_comcode=[];
+var areaedit_editors={};
+var areaedit_original_comcode={};
 function load_html_edit(posting_form,ajax_copy)
 {
 	if (typeof window._editor_url=='undefined') return; {$,Probably caused by a JS error during initialisation}
@@ -650,7 +650,7 @@ function ensure_true_id(element,field_name) // Works around IE bug
 
 function isWYSIWYGField(theElement)
 {
-	return ((typeof window.areaedit_editors!='undefined') && (theElement.id!='length') && (typeof areaedit_editors[theElement.id]!='undefined'));
+	return ((typeof window.areaedit_editors!='undefined') && (typeof areaedit_editors[theElement.id]!='undefined'));
 }
 
 function getTextbox(element)

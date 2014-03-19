@@ -208,7 +208,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$tree=NULL,$title=
 	$children[0]['tree']=$tree;
 
 	// Children of this category
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'',300/*reasonable limit*/);
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.category AND '.db_string_equal_to('language',user_lang()),array('c.id','c.category'),array('parent_id'=>$category_id),'ORDER BY text_original',300/*reasonable limit*/);
 	if (count($rows)==300) $rows=array();
 	$where=array('category_id'=>$category_id);
 	if (!is_null($submitter)) $where['submitter']=$submitter;

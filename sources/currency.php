@@ -127,7 +127,8 @@ function currency_convert($amount,$from_currency,$to_currency=NULL,$string=false
 		{
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'long_values WHERE the_name LIKE \''.db_encode_like('currency_%').'\' AND date_and_time<'.strval(time()-60*60*24*2)); // Cleanup
 
-			$result=http_download_file('http://www.google.com/ig/calculator?hl=en&q='.(is_float($amount)?float_to_raw_string($amount):strval($amount)).'+'.$from_currency.'+in+'.strtoupper($to_currency),NULL,false);
+			$google_url='http://www.google.com/finance/converter?a='.(is_float($amount)?float_to_raw_string($amount):strval($amount)).'&from='.$from_currency.'&to='.strtoupper($to_currency);
+			$result=http_download_file($google_url,NULL,false);
 			if (is_string($result))
 			{
 				$matches=array();
@@ -136,11 +137,14 @@ function currency_convert($amount,$from_currency,$to_currency=NULL,$string=false
 				{
 					if (ord($result[$i])>127) $result[$i]=' ';
 				}
-				if (preg_match('#,rhs: "([\d\., ]+) [^=<]*"#',$result,$matches)!=0)	// e.g. <b>1400 British pounds = 2 024.4 U.S. dollars</b>
+				if (preg_match('#<span class=bld>([\d\., ]+) [A-Z]+</span>#U',$result,$matches)!=0)	// e.g. <b>1400 British pounds = 2 024.4 U.S. dollars</b>
 				{
 					$new_amount=floatval(str_replace(',','',str_replace(' ','',$matches[1])));
 
 					set_long_value($cache_key,float_to_raw_string($new_amount));
+				} else
+				{
+					return NULL;
 				}
 			} else // no-can-do
 			{

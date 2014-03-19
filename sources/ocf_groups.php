@@ -69,22 +69,37 @@ function get_first_default_group()
 /**
  * Get a list of the default usergroups (the usergroups a member is put in when they join).
  *
- * @param  boolean	Whether to include the default primary.
+ * @param  boolean	Whether to include the default primary (at the end of the list).
+ * @param  boolean	The functionality does not usually consider configured default groups [unless there's just one], because this is a layer of uncertainity (the user PICKS one of these). If you want to return all configured default groups, set this parameter to true.
  * @return array 		The list of default IDs.
  */
-function ocf_get_all_default_groups($include_primary=false)
+function ocf_get_all_default_groups($include_primary=false,$include_all_configured_default_groups=false)
 {
+	if ((!$include_primary) && ($include_all_configured_default_groups))
+		warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
 	global $ALL_DEFAULT_GROUPS;
 	if (array_key_exists($include_primary?1:0,$ALL_DEFAULT_GROUPS)) return $ALL_DEFAULT_GROUPS[$include_primary?1:0];
 
 	$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_default'=>1,'g_is_presented_at_install'=>0),'ORDER BY g_order');
 	$groups=collapse_1d_complexity('id',$rows);
+
 	if ($include_primary)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array('id'=>db_get_first_id()+8));
-		if (!is_null($test))
-			$groups[]=db_get_first_id()+8;
+		$rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_presented_at_install'=>1),'ORDER BY g_order');
+		if (($include_all_configured_default_groups) || (count($rows)==1))
+		{
+			$groups=array_merge($groups,collapse_1d_complexity('id',$rows));
+		}
+
+		if (count($rows)==0)
+		{
+			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array('id'=>db_get_first_id()+8));
+			if (!is_null($test))
+				$groups[]=db_get_first_id()+8;
+		}
 	}
+
 	$ALL_DEFAULT_GROUPS[$include_primary?1:0]=$groups;
 	return $groups;
 }

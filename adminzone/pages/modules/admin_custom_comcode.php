@@ -210,7 +210,7 @@ class Module_admin_custom_comcode extends standard_aed_module
 			$fields->attach(results_entry(array($row['tag_tag'],get_translated_text($row['tag_title']),($row['tag_dangerous_tag']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($row['tag_block_tag']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($row['tag_textual_tag']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($row['tag_enabled']==1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#'.$row['tag_tag'])))),true);
 		}
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
 	}
 
 	/**
@@ -272,6 +272,9 @@ class Module_admin_custom_comcode extends standard_aed_module
 	{
 		$tag=post_param('tag');
 
+		require_code('type_validation');
+		if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 		global $VALID_COMCODE_TAGS;
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$tag));
 		if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
@@ -302,6 +305,9 @@ class Module_admin_custom_comcode extends standard_aed_module
 	function edit_actualisation($id)
 	{
 		$tag=post_param('tag');
+
+		require_code('type_validation');
+		if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		global $VALID_COMCODE_TAGS;
 		$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$tag));

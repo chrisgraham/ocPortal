@@ -415,6 +415,7 @@ class Module_news
 						$_img=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($category['nc_owner']);
 						if ($_img!='') $img=$_img;
 					}
+					if ($img=='') $img=NULL;
 					$_content[]=do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'a15a56dd19bc66e4738fb7cff31137a1','OWNER'=>is_null($category['nc_owner'])?'':strval($category['nc_owner']),'IMG'=>$img,'TITLE'=>'','URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description));
 				}
 			}

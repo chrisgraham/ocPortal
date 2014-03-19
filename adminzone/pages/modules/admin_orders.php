@@ -219,7 +219,7 @@ class Module_admin_orders
 
 			$url		=	build_url(array('page'=>'members','type'=>'view','id'=>$row['c_member']),get_module_zone('members'));
 
-			$member		=	hyperlink($url,$submitted_by,false,false,do_lang('INDEX'));
+			$member		=	hyperlink($url,$submitted_by,false,false,do_lang('CUSTOMER'));
 
 			$view_url	=	build_url(array('page'=>'_SELF','type'=>'order_det','id'=>$row['id']),'_SELF');
 
@@ -239,7 +239,7 @@ class Module_admin_orders
 			$order_entries->attach(results_entry(
 						array(
 							escape_html($order_title),
-							ecommerce_get_currency_symbol().escape_html(strval($row['tot_price'])),
+							ecommerce_get_currency_symbol().escape_html(float_format($row['tot_price'],2)),
 							escape_html(float_format($row['tax'],2)),
 							$order_date,
 							$member,
@@ -320,13 +320,13 @@ class Module_admin_orders
 
 			$product_name	=	$row['p_name'];
 
-			$product	=	hyperlink($product_info_url,$product_name,false,false,do_lang('INDEX'));
+			$product	=	hyperlink($product_info_url,$product_name,false,false,do_lang('VIEW'));
 
 			$product_entries->attach(results_entry(
 					array(
 						escape_html(strval($row['p_id'])),
 						$product,
-						ecommerce_get_currency_symbol().escape_html(strval($row['p_price'])),
+						ecommerce_get_currency_symbol().escape_html(float_format($row['p_price'],2)),
 						escape_html(strval($row['p_quantity'])),
 						do_lang($row['dispatch_status'])
 					),false,NULL
@@ -366,7 +366,7 @@ class Module_admin_orders
 		else
 			$shipping_address	=	new ocp_tempcode();
 
-		return do_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'CURRENCY'=>get_option('currency'),'RESULT_TABLE'=>$results_table,'RESULTS_BROWSER'=>$results_browser,'ORDER_NUMBER'=>strval($id),'ADD_DATE'=>get_timezoned_date($data['add_date'],true,false,true,true),'TOTAL_PRICE'=>strval($data['tot_price']),'ORDERED_BY_MEMBER_ID'=>strval($ordered_by_member_id),'ORDERED_BY_USERNAME'=>$ordered_by_username,'ORDER_STATUS'=>do_lang($data['order_status']),'NOTES'=>$data['notes'],'PURCHASED_VIA'=>$data['purchase_through'],'ORDER_ACTIONS'=>$order_actions,'SHIPPING_ADDRESS'=>$shipping_address));	
+		return do_template('ECOM_ADMIN_ORDERS_DETAILS_SCREEN',array('TITLE'=>$title,'TEXT'=>$text,'CURRENCY'=>get_option('currency'),'RESULT_TABLE'=>$results_table,'RESULTS_BROWSER'=>$results_browser,'ORDER_NUMBER'=>strval($id),'ADD_DATE'=>get_timezoned_date($data['add_date'],true,false,true,true),'TOTAL_PRICE'=>float_format($data['tot_price'],2),'ORDERED_BY_MEMBER_ID'=>strval($ordered_by_member_id),'ORDERED_BY_USERNAME'=>$ordered_by_username,'ORDER_STATUS'=>do_lang($data['order_status']),'NOTES'=>$data['notes'],'PURCHASED_VIA'=>$data['purchase_through'],'ORDER_ACTIONS'=>$order_actions,'SHIPPING_ADDRESS'=>$shipping_address));	
 	}
 
 	/**
@@ -638,7 +638,7 @@ class Module_admin_orders
 			$orders[do_lang('ORDER_PRICE')]			=	$order['tot_price'];
 			$orders[do_lang('ORDER_STATUS')]			=	do_lang($order['order_status']);
 			$orders[do_lang('ORDER_TAX_OPT_OUT')]	=	($order['tax_opted_out'])? do_lang('YES'):do_lang('NO');
-			$orders[do_lang('TOTAL_TAX_PAID')]		=	is_null($order['tax_amt'])?float_format(0.0):float_format($order['tax_amt']);
+			$orders[do_lang('TOTAL_TAX_PAID')]		=	is_null($order['tax_amt'])?float_format(0.0,2):float_format($order['tax_amt'],2);
 			$orders[do_lang('ORDERED_PRODUCTS')]	=	get_ordered_product_list_string($order['id']);
 			$orders[do_lang('ORDERED_BY')]			=	$GLOBALS['FORUM_DRIVER']->get_username($order['c_member']);
 

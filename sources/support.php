@@ -409,21 +409,25 @@ function addon_installed($addon)
  *
  * @param  float			The number
  * @param  integer		The number of decimals to keep
+ * @param  boolean		Whether to trim trailing zeros
  * @return string			The string converted
  */
-function float_to_raw_string($num,$dec_keep=0)
+function float_to_raw_string($num,$decs_wanted=2,$only_needed_decs=false)
 {
-	$str=number_format($num,5,'.','');
-	if (strpos($str,'.')!==false)
+	$str=number_format($num,$decs_wanted,'.','');
+	$decs_here=strlen($str)-strpos($str,'.')-1;
+	if ($decs_here<$decs_wanted)
 	{
-		$str=rtrim($str,'0');
-		if ($dec_keep==0) $str=rtrim($str,'.');
-		$decs=strlen($str)-strpos($str,'.')-1;
-		for ($i=0;$i<$dec_keep-$decs;$i++)
+		for ($i=0;$i<$decs_wanted-$decs_here;$i++)
 		{
 			$str.='0';
 		}
+	} else
+	{
+		$str=substr($str,0,strlen($str)-$decs_here+$decs_wanted);
+		if ($decs_wanted==0) $str=rtrim($str,'.');
 	}
+	if ($only_needed_decs) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
 	return $str;
 }
 
@@ -432,14 +436,28 @@ function float_to_raw_string($num,$dec_keep=0)
  *
  * @param  float			The value to format
  * @param  integer		The number of fractional digits
+ * @param  boolean		Whether to trim trailing zeros
  * @return string			Nicely formatted string
  */
-function float_format($val,$frac_digits=2)
+function float_format($val,$decs_wanted=2,$only_needed_decs=false)
 {
 	$locale=function_exists('localeconv')?localeconv():array('decimal_point'=>'.','thousands_sep'=>',');
-	//$frac_digits=$locale['frac_digits']; // This seems to not work on all PHP configurations
 	if ($locale['thousands_sep']=='') $locale['thousands_sep']=',';
-	return number_format($val,$frac_digits,$locale['decimal_point'],$locale['thousands_sep']);
+	$str=number_format($val,$decs_wanted,$locale['decimal_point'],$locale['thousands_sep']);
+	$decs_here=strlen($str)-strpos($str,'.')-1;
+	if ($decs_here<$decs_wanted)
+	{
+		for ($i=0;$i<$decs_wanted-$decs_here;$i++)
+		{
+			$str.='0';
+		}
+	} else
+	{
+		$str=substr($str,0,strlen($str)-$decs_here+$decs_wanted);
+		if ($decs_wanted==0) $str=rtrim($str,'.');
+	}
+	if ($only_needed_decs) $str=preg_replace('#\.$#','',preg_replace('#0+$#','',$str));
+	return $str;
 }
 
 /**
@@ -611,7 +629,7 @@ function ocp_tempnam($prefix)
 	$server_path='/tmp/';
 	$tmp_path=$problem_saving?$local_path:$server_path;
 	$tempnam=tempnam($tmp_path,$prefix);
-	if (($tempnam===false) && (!$problem_saving))
+	if ((($tempnam===false) || ($tempnam==''/*Should not be blank, but seen in the wild*/)) && (!$problem_saving))
 	{
 		$problem_saving=true;
 		$tempnam=tempnam($local_path,$prefix);
@@ -922,15 +940,15 @@ function get_ip_address($amount=4)
 	if (($fw!='') && ($fw!='127.0.0.1') && (substr($fw,0,8)!='192.168.') && (substr($fw,0,3)!='10.') && (is_valid_ip($fw)) && ($fw!=ocp_srv('SERVER_ADDR'))) $ip=$fw;
 	else $ip=ocp_srv('REMOTE_ADDR');
 
-	if (!is_valid_ip($ip)) return '';
-
 	// Bizarro-filter (found "in the wild")
 	$pos=strpos($ip,',');
 	if ($pos!==false) $ip=substr($ip,0,$pos);
 
 	$ip=preg_replace('#%14$#','',$ip);
 
-	if (strpos($ip,':')!==false)
+	if (!is_valid_ip($ip)) return '';
+
+	if (strpos($ip,'.')===false)
 	{
 		if (substr_count($ip,':')<7)
 		{

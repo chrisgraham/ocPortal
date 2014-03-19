@@ -132,9 +132,9 @@ tree_list.prototype.response=function(ajax_result_frame,ajax_result,expanding_id
 function attributesFullFixup(xml)
 {
 	var node,i;
-	if (typeof window.attributes_full=='undefined') window.attributes_full=[];
+	if (typeof window.attributes_full=='undefined') window.attributes_full={};
 	var id=xml.getAttribute('id');
-	if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]=[];
+	if (typeof window.attributes_full[id]=='undefined') window.attributes_full[id]={};
 	for (i=0;i<xml.attributes.length;i++)
 	{
 		window.attributes_full[id][xml.attributes[i].name]=xml.attributes[i].value;

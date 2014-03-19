@@ -46,13 +46,13 @@ class Hook_rss_ocf_topicview
 		if (!is_guest()) $filters.=' AND (p_poster<>'.strval(get_member()).')';
 
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE p_time>'.strval($cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND p_validated=1 ':'').' AND '.$filters.' ORDER BY p_time DESC,id DESC',$max);
-		$categories=collapse_2d_complexity('id','t_cache_first_title',$GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval((integer)$cutoff)));
+		$categories=list_to_map('id',$GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title,t_pt_from,t_pt_to FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval((integer)$cutoff)));
 
 		$content=new ocp_tempcode();
 		foreach ($rows as $row)
 		{
 			if (!array_key_exists($row['p_topic_id'],$categories)) continue;
-			$category=$categories[$row['p_topic_id']];
+			$category=$categories[$row['p_topic_id']]['t_cache_first_title'];
 			if (((!is_null($row['p_cache_forum_id'])) || ($category['t_pt_from']==get_member()) || ($category['t_pt_to']==get_member())) && ((is_null($row['p_intended_solely_for']) || ($row['p_intended_solely_for']==get_member()))) && (has_category_access(get_member(),'forums',strval($row['p_cache_forum_id']))))
 			{
 				$id=strval($row['id']);

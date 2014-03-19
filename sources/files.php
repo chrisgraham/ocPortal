@@ -300,7 +300,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=1536)
 
 	$ignore_extensions=array(
 		'tar'=>'(imports|exports)/.*',
-		'gz'=>'(imports|exports)/.*',
+		'gz'=>'(imports|exports|themes/[^/]*/templates_cached)/.*',
 		'lcd'=>'(lang_cached|caches)(/.*)?', // TODO Future proof (v10)
 		'gcd'=>'persistent_cache|persistant_cache|caches/.*', // LEGACY (persistant_cache) TODO Future proof (v10)
 		'tcp'=>'themes/[^/]*/templates_cached/.*',

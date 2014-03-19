@@ -159,11 +159,12 @@ function js_compile($j,$js_cache_path,$minify=true)
 	{
 		$contents='/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.'.chr(10).'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */'.chr(10).chr(10).$out;
 	}
-	$js_file=@fopen($js_cache_path,'wt');
-	if ($js_file===false) intelligent_write_error($js_cache_path);
+	$js_file=@fopen($js_cache_path.'.tmp','wt');
+	if ($js_file===false) intelligent_write_error($js_cache_path.'.tmp');
 	if (fwrite($js_file,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($js_file);
-	fix_permissions($js_cache_path);
+	fix_permissions($js_cache_path.'.tmp');
+	@rename($js_cache_path.'.tmp',$js_cache_path);
 	sync_file($js_cache_path);
 	if (!$success_status)
 	{
@@ -184,11 +185,12 @@ function js_compile($j,$js_cache_path,$minify=true)
 function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=true)
 {
 	list($success_status,$out)=_css_compile($active_theme,$theme,$c,$fullpath,$minify);
-	$css_file=@fopen($css_cache_path,'wt');
-	if ($css_file===false) intelligent_write_error($css_cache_path);
+	$css_file=@fopen($css_cache_path.'.tmp','wt');
+	if ($css_file===false) intelligent_write_error($css_cache_path.'.tmp');
 	if (fwrite($css_file,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	fclose($css_file);
-	fix_permissions($css_cache_path);
+	fix_permissions($css_cache_path.'.tmp');
+	@rename($css_cache_path.'.tmp',$css_cache_path);
 	sync_file($css_cache_path);
 	if (!$success_status)
 	{

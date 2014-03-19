@@ -392,6 +392,7 @@ class forum_driver_base
 				{
 					$theme=$CACHED_THEME;
 					$CACHED_THEME='default';
+					require_code('site');
 					attach_message(do_lang_tempcode('NO_THEME_PERMISSION',escape_html($theme)),'warn');
 					$CACHED_THEME=NULL;
 				}

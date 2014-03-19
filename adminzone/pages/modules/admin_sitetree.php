@@ -197,7 +197,7 @@ class Module_admin_sitetree
 		breadcrumb_set_self(do_lang_tempcode('DETAILS'));
 
 		require_code('type_validation');
-		if (!is_alphanumeric(str_replace(':','',post_param('name')))) warn_exit(do_lang('BAD_CODENAME'));
+		if (!is_alphanumeric(str_replace(':','',post_param('name')),true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
 
 		$zones=find_all_zones(false,true);
 		$pages=array();

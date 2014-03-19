@@ -245,6 +245,28 @@ function debuttonise($matches)
 }
 
 /**
+ * Convert HTML-filled Comcode to cleaner Comcode.
+ *
+ * @param  LONG_TEXT		The messy Comcode.
+ * @return LONG_TEXT		The cleaned Comcode.
+ */
+function force_clean_comcode($comcode)
+{
+	$matches=array();
+	if (preg_match('#^\[semihtml\](.*)\[/semihtml\]$#s',$comcode,$matches)!=0)
+	{
+		if ((strpos($matches[1],'[semihtml]')===false) && (strpos($matches[1],'[html]')===false))
+			return semihtml_to_comcode($matches[1],true);
+	}
+	if (preg_match('#^\[html\](.*)\[/html\]$#s',$comcode,$matches)!=0)
+	{
+		if ((strpos($matches[1],'[semihtml]')===false) && (strpos($matches[1],'[html]')===false))
+			return html_to_comcode($matches[1]);
+	}
+	return $comcode;
+}
+
+/**
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
  * @param  LONG_TEXT		The Semi-HTML to converted
@@ -285,7 +307,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 		if ($count2==$count) // All HTML or attachments or headers, so we can encode mostly as 'html' (as opposed to 'semihtml')
 		{
 			if ($semihtml!='') $semihtml='[html]'.$semihtml.'[/html]';
-			$semihtml=preg_replace('#<h1[^>]*><span class="inner">(.*)</span></h1>#Us','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
+			$semihtml=preg_replace('#<h1[^>]*>\s*<span class="inner">(.*)</span>\s*</h1>#Us','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
 			$semihtml=preg_replace('#<h1[^>]*>(.*)</h1>#Us','[/html][semihtml][title]${1}[/title][/semihtml][html]',$semihtml);
 			$semihtml=str_replace('[attachment','[/html][semihtml][attachment',str_replace('[/attachment]','[/attachment][/semihtml][html]',$semihtml));
 			$semihtml=str_replace('[/html][html]','',$semihtml);
@@ -293,7 +315,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 			return $semihtml;
 		}
 		if ($semihtml!='') $semihtml='[semihtml]'.$semihtml.'[/semihtml]';
-		$semihtml=preg_replace('#<h1[^>]*><span class="inner">(.*)</span></h1>#Us','[title]${1}[/title]',$semihtml);
+		$semihtml=preg_replace('#<h1[^>]*>\s*<span class="inner">(.*)</span>\s*</h1>#Us','[title]${1}[/title]',$semihtml);
 		$semihtml=preg_replace('#<h1[^>]*>(.*)</h1>#Us','[title]${1}[/title]',$semihtml);
 		return $semihtml;
 	}
@@ -409,9 +431,9 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 
 	// Perform lots of conversions. We can't convert everything. Sometimes we reverse-convert what Comcode forward-converts; sometimes we match generic HTML; sometimes we match Microsoft Word or Open Office; sometimes we do lossy match
 	$array_html_preg_replace=array();
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
-	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title"><span class="inner">(.*)</span></h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title">\s*<span class="inner">(.*)</span>\s*</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 class="screen_title">\s*<span class="inner">(.*)</span>\s*</h1>$#siU','[title="1"]${1}[/title]');
+	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title">\s*<span class="inner">(.*)</span>\s*</h1>$#siU','[title="1"]${1}[/title]');
 	$array_html_preg_replace[]=array('#^<h1 id="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
 	$array_html_preg_replace[]=array('#^<h1 class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
 	$array_html_preg_replace[]=array('#^<h1 id="screen_title" class="screen_title">(.*)</h1>$#siU','[title="1"]${1}[/title]');
@@ -708,9 +730,12 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<span style="font-family: monospace;  font-size: 1.2em;">(.*)</span>$#siU',"[tt]\${1}[/tt]");
 		$semihtml2=array_html_preg_replace('span',$array_html_preg_replace,$semihtml2);
-		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<pre>(.*)</pre>$#siU',"[code]\${1}[/code]");
-		$semihtml2=array_html_preg_replace('pre',$array_html_preg_replace,$semihtml2);
+		if (strpos($semihtml,'[code')===false)
+		{
+			$array_html_preg_replace=array();
+			$array_html_preg_replace[]=array('#^<pre>(.*)</pre>$#siU',"[code]\${1}[/code]");
+			$semihtml2=array_html_preg_replace('pre',$array_html_preg_replace,$semihtml2);
+		}
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',"<table class=\"bordered_table\">\${2}</table>");
 		$semihtml=array_html_preg_replace('table',$array_html_preg_replace,$semihtml);
@@ -794,7 +819,7 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
  */
 function comcode_strip_html_tags($matches)
 {
-	return $matches[1].strip_tags($matches[2],'<p><br><div>').$matches[3];
+	return $matches[1].strip_tags($matches[2],'<p><br><div><CDATA__space><CDATA__tab><CDATA__nl><CDATA__lf><CDATA__amp>').$matches[3];
 }
 
 /**

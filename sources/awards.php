@@ -79,7 +79,7 @@ function give_award($award_id,$content_id,$time=NULL)
 	$object=object_factory('Hook_awards_'.$awards[0]['a_content_type']);
 	$info=$object->info();
 	if (is_null($info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	if ((array_key_exists('submitter_field',$info)) && (!is_null($info['submitter_field'])))
+	if ((array_key_exists('submitter_field',$info)) && ($awards[0]['a_content_type']!='author'/*TODO: Remove on v10*/) && (!is_null($info['submitter_field'])))
 	{
 		require_code('content');
 		list($content_title,$member_id,,$content)=content_get_details($awards[0]['a_content_type'],$content_id);

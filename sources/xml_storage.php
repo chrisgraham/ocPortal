@@ -263,7 +263,16 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type'=>$seo_type_code,'meta_for_id'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]),'',1);
 		if (array_key_exists(0,$rows))
-			$xml_data.=_tab(_export_xml_row('seo_meta',array('meta_for_id'=>'LAST_INSERT_ID_'.$table)+$rows[0],$db_fields,NULL,NULL,NULL,$comcode_xml));
+		{
+			if (is_integer($rows[0]['meta_for_id']))
+			{
+				$export_row=array('meta_for_id'=>'LAST_INSERT_ID_'.$table)+$rows[0];
+			} else
+			{
+				$export_row=$rows[0];
+			}
+			$xml_data.=_tab(_export_xml_row('seo_meta',$export_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+		}
 	}
 
 	// Permissions
@@ -271,10 +280,28 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 	{
 		$rows=$GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name'=>$permissions_type_code,'category_name'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
 		foreach ($rows as $_row)
-			$xml_data.=_tab(_export_xml_row('group_category_access',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+		{
+			if (is_integer($_row['category_name']))
+			{
+				$export_row=array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row;
+			} else
+			{
+				$export_row=$_row;
+			}
+			$xml_data.=_tab(_export_xml_row('group_category_access',$export_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+		}
 		$rows=$GLOBALS['SITE_DB']->query_select('gsp',array('*'),array('module_the_name'=>$permissions_type_code,'category_name'=>is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
 		foreach ($rows as $_row)
-			$xml_data.=_tab(_export_xml_row('gsp',array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+		{
+			if (is_integer($_row['category_name']))
+			{
+				$export_row=array('category_name'=>'LAST_INSERT_ID_'.$table)+$_row;
+			} else
+			{
+				$export_row=$_row;
+			}
+			$xml_data.=_tab(_export_xml_row('gsp',$export_row,$db_fields,NULL,NULL,NULL,$comcode_xml));
+		}
 	}
 
 	if ($include_end) $xml_data.='</'.$table.'>';

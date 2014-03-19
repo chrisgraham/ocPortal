@@ -196,6 +196,9 @@ class Module_admin_menus
 		if ($id=='') $id=get_param('id_new');
 		if (substr($id,0,1)=='_') warn_exit(do_lang_tempcode('MENU_UNDERSCORE_RESERVED'));
 
+		require_code('type_validation');
+		if (!is_alphanumeric($id,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+
 		if (($id=='zone_menu') && (get_option('use_custom_zone_menu')=='0'))
 		{
 			$config_url=build_url(array('page'=>'admin_config','type'=>'category','id'=>'THEME'),get_module_zone('admin_config'));

@@ -229,7 +229,7 @@ jwplayer.utils.hasFlash = function() {
         var m = [];
         if (e.utils.isIE()) {
             var l = o.nextSibling;
-            if (l !== undefined) {
+            if (l) {
                 while (l.nodeName.toLowerCase() == "source") {
                     m.push(a(l));
                     l = l.nextSibling

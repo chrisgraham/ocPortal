@@ -1036,7 +1036,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ((array_key_exists('number',$attributes)) && ($level>=$base))
 			{
 				$list_types=($attributes['number']=='')?array():explode(',',$attributes['number']);
-				$list_types+=array('decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','disc');
+				$list_types=array_merge($list_types,array('decimal','lower-alpha','lower-roman','upper-alpha','upper-roman','disc'));
 				$numerals=array('i','ii','iii','iv','v','vi','viii','ix','x','xi','xii','xiii','xiv','xv','xvi','xvii','xviii','xix','xx');
 				$symbol_lookup=array('decimal'=>range(1,100),'lower-alpha'=>range('a','z'),'lower-roman'=>$numerals,'upper-alpha'=>range('A','Z'),'upper-roman'=>str_replace('i','I',str_replace('v','V',str_replace('x','X',$numerals))));
 
@@ -1057,7 +1057,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						if ($STRUCTURE_LIST[$i][0]==$j) $num_before++;
 					}
 
-					$level_number=strval($symbol_lookup[$list_types[$j-$base]][$num_before]);
+					$level_number=@strval($symbol_lookup[$list_types[$j-$base]][$num_before]);
 					$level_text=$level_number.(($level_text!='')?'.':'').$level_text;
 				}
 
@@ -2448,7 +2448,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					comcode_text_to_tempcode($comcode,$source_member,$as_admin,60,NULL,$connection,false,false,false,true,false,NULL,$on_behalf_of_member);
 				}
 
-				$base=array_key_exists('base',$attributes)?intval($attributes['base']):2;
+				$base=array_key_exists('base',$attributes)?intval($attributes['base']):1;
 			}
 
 			$list_types=($embed->evaluate()=='')?array():explode(',',$embed->evaluate());
@@ -2510,7 +2510,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			}
 
 			// Now we have the structure to display
-			$levels_t=_do_contents_level($subtree_stack[0],$list_types,$base-1);
+			$levels_t=_do_contents_level($subtree_stack[0],$list_types,$base);
 
 			$temp_tpl=do_template('COMCODE_CONTENTS',array('_GUID'=>'ca2f5320fa930e2257a2e74e4f98e5a0','LEVELS'=>$levels_t));
 
@@ -2567,7 +2567,7 @@ function _do_contents_level($tree_structure,$list_types,$base,$the_level=0)
 		{
 			$_line=do_template('COMCODE_CONTENTS_LINE_FINAL',array('_GUID'=>'a3dd1bf2e16080993cf72edccb7f3608','URL'=>$level[0][2],'LINE'=>$level[0][1],'ID'=>$level[0][0]));
 			$under=_do_contents_level($level[1],$list_types,$base,$the_level+1);
-			if ($the_level+1==$base-1) return $under; // Top level not assembled because it has top level title, above contents
+			if ($the_level<$base-1) return $under; // Top level not assembled because it has top level title, above contents
 			$_line->attach($under);
 		} else
 		{
@@ -2577,7 +2577,7 @@ function _do_contents_level($tree_structure,$list_types,$base,$the_level=0)
 		$lines->attach(do_template('COMCODE_CONTENTS_LINE',array('_GUID'=>'f6891cb85d93facbc37f7fd3ef403950','LINE'=>$_line)));
 	}
 
-	return do_template('COMCODE_CONTENTS_LEVEL',array('_GUID'=>'cd2811bf69387ca05bf9612319db956b','TYPE'=>$list_types[max($the_level-$base,0)],'LINES'=>$lines));
+	return do_template('COMCODE_CONTENTS_LEVEL',array('_GUID'=>'cd2811bf69387ca05bf9612319db956b','TYPE'=>$list_types[max($the_level-$base+1/*because $base counts from 1 not 0*/,0)],'LINES'=>$lines));
 }
 
 /**

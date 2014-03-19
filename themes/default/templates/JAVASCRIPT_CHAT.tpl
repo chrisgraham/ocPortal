@@ -6,7 +6,7 @@ var last_event_id=0;
 var message_checking=false;
 var no_im_html;
 var picker,picker_node,text_colour;
-var opened_popups=[];
+var opened_popups={};
 var topZIndex=800;
 var load_from_room_id;
 

@@ -678,7 +678,7 @@ class Module_admin_zones
 			)),true);
 		}
 
-		$table=results_table(do_lang('ZONES'),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);
+		$table=results_table(do_lang('ZONES'),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);
 
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
 		breadcrumb_set_self(do_lang_tempcode('CHOOSE'));

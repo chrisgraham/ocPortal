@@ -569,7 +569,7 @@ function _check_enforcement_of_type($file,$enforce_type,$accept_errors=false)
 //		else
 			warn_exit(do_lang_tempcode('NOT_VIDEO'));
 	}
-	if (($enforce_type==OCP_UPLOAD_MP3) && (get_file_extension($file)!='mp3'))
+	if (($enforce_type==OCP_UPLOAD_MP3) && (get_file_extension($file)!='mp3') && (get_file_extension($file)!='mp4') && (get_file_extension($file)!='3gp'))
 	{
 		warn_exit(do_lang_tempcode('NOT_FILE_TYPE','.mp3'));
 	}

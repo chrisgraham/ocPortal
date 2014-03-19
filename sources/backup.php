@@ -137,7 +137,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 	fwrite($logfile,'This is a log file for an ocPortal backup. The backup is not complete unless this log terminates with a completion message.'."\n\n");
 
 	require_code('tar');
-	$myfile=tar_open(get_custom_file_base().'/exports/backups/'.$file,'wb');
+	$myfile=tar_open(get_custom_file_base().'/exports/backups/'.filter_naughty($file),'wb');
 
 	// Write readme.txt file
 	tar_add_file($myfile,'readme.txt',do_lang('BACKUP_README',get_timezoned_date(time())),0664,time());
@@ -199,6 +199,7 @@ function make_backup_2($file=NULL,$b_type=NULL,$max_size=NULL) // This is called
 		set_value('last_backup',strval(time()));
 	}
 	tar_close($myfile);
+	if (!file_exists(get_custom_file_base().'/exports/backups/'.filter_naughty($file))) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	rename(get_custom_file_base().'/exports/backups/'.filter_naughty($file),get_custom_file_base().'/exports/backups/'.filter_naughty($file).'.tar');
 	sync_file('exports/backups/'.filter_naughty($file).'.tar');
 	fix_permissions('exports/backups/'.filter_naughty($file).'.tar');

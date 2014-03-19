@@ -605,7 +605,7 @@ function get_gallery_tree($category_id='root',$tree='',$gallery_info=NULL,$do_st
 }
 
 /**
- * See whether the current member can submit to the named member gallery. Note - this function assumes that members have general submit permission, and does not check for gallery read access.
+ * See whether the current member can submit to the named *member* gallery. Note - this function assumes that members have general submit permission, and does not check for gallery read access.
  *
  * @param  ID_TEXT			The gallery name
  * @return ~integer			The owner of the gallery (false: we aren't allowed to submit to it) (-2: not a member gallery)

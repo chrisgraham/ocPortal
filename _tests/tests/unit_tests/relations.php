@@ -27,6 +27,12 @@ class relations_test_set extends ocp_test_case
 	{
 		require_code('relations');
 
+		if (in_safe_mode())
+		{
+			$this->assertTrue(false,'Cannot work in safe mode');
+			return;
+		}
+
 		/* Actually only done for complex ones
 		$all_tables=$GLOBALS['SITE_DB']->query('SELECT DISTINCT m_table FROM '.get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%AUTO_LINK%').'\' ORDER BY m_table');
 		$table_descriptions=get_table_descriptions();
