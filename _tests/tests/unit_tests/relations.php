@@ -20,6 +20,12 @@ class relations_test_set extends ocp_test_case
 {
 	function testRelationsdefined()
 	{
+		if (in_safe_mode())
+		{
+			$this->assertTrue(false,'Cannot work in safe mode');
+			return;
+		}
+
 		require_code('relations');
 
 		/* Actually only done for complex ones

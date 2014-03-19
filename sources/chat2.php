@@ -84,6 +84,8 @@ function friend_add($likes,$liked,$time=NULL)
 	// Send a notification
 	if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','date_and_time',array('member_likes'=>$liked,'member_liked'=>$likes))))
 	{
+		require_lang('chat');
+
 		require_code('notifications');
 		$to_username=$GLOBALS['FORUM_DRIVER']->get_username($liked);
 		$from_username=$GLOBALS['FORUM_DRIVER']->get_username($likes);

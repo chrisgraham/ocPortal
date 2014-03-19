@@ -6,6 +6,11 @@
 // HTML EDITOR
 // ===========
 
+if (typeof window.CKEDITOR=='undefined')
+{
+	window.CKEDITOR=null;
+}
+
 function wysiwyg_cookie_says_on()
 {
 	var cookie=read_cookie('use_wysiwyg');
@@ -163,11 +168,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'<img src="{$IMG*;^,icons/16x16/editor/wysiwyg_on}" srcset="{$IMG;^,icons/16x16/editor/wysiwyg_on} 2x" alt="{!comcode:ENABLE_WYSIWYG;^}" title="{!comcode:ENABLE_WYSIWYG;^}" class="vertical_alignment" />');
 
 				// Unload editor
-				window.wysiwyg_editors[id].elementMode=window.CKEDITOR.ELEMENT_MODE_NONE;
-				window.CKEDITOR.remove(window.wysiwyg_editors[id]);
-				delete window.wysiwyg_editors[id];
-				var wysiwyg_node=document.getElementById('cke_'+id);
-				wysiwyg_node.parentNode.removeChild(wysiwyg_node);
+				window.wysiwyg_editors[id].destroy();
 			}
 		}
 	}
@@ -312,10 +313,10 @@ function wysiwyg_editor_init_for(element,id)
 	{
 		css+=get_inner_html(linked_sheets[counter]);
 	}
-	CKEDITOR.addCss(css);
+	window.CKEDITOR.addCss(css);
 
 	// Change some CKEditor defaults
-	CKEDITOR.on('dialogDefinition',function(ev) {
+	window.CKEDITOR.on('dialogDefinition',function(ev) {
 		var dialogName=ev.data.name;
 		var dialogDefinition=ev.data.definition;
 

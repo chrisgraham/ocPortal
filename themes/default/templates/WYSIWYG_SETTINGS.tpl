@@ -26,7 +26,7 @@ if (use_ocportal_toolbar)
 	toolbar.push(['ocportal_block','ocportal_comcode',precision_editing?'ocportal_page':null,'ocportal_quote',precision_editing?'ocportal_box':null,'ocportal_code']);
 
 var editor_settings={
-	enterMode : CKEDITOR.ENTER_BR,
+	enterMode : window.CKEDITOR.ENTER_BR,
 	uiColor : wysiwyg_color,
 	fontSize_sizes : '0.6em;0.85em;1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;2em',
 	removePlugins: '',

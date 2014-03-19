@@ -393,13 +393,14 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	$page=$pages[0];
 	$_description=$page['description'];
 	$_title=$page['title'];
+	$original_poster=$page['submitter'];
 
 	require_code('attachments2');
 	require_code('attachments3');
 
 	$update_map=array(
 		'hide_posts'=>$hide_posts,
-		'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true),
+		'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true,$original_poster),
 		'notes'=>$notes,
 		'title'=>lang_remap($_title,$title),
 	);
