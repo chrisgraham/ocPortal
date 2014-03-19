@@ -143,6 +143,8 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 	$remap=array('text_original'=>$_info['comcode'],'text_parsed'=>$text2);
 	if (((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($member,'allow_html')) || (!has_specific_permission($member,'use_very_dangerous_comcode')))
 		$remap['source_user']=$member;
+	elseif (!is_null($for_member))
+		$remap['source_user']=$for_member; // Reset to latest submitter for main record
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
 		$connection->query_update('translate',$remap,array('id'=>$lang_id,'language'=>user_lang()));

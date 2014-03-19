@@ -271,10 +271,11 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	$page=$pages[0];
 	$_description=$page['description'];
 	$_title=$page['title'];
+	$original_poster=$page['submitter'];
 
 	require_code('attachments2');
 	require_code('attachments3');
-	$GLOBALS['SITE_DB']->query_update('seedy_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'cedi_page',strval($id),NULL,true),'notes'=>$notes,'title'=>lang_remap($_title,$title)),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('seedy_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'cedi_page',strval($id),NULL,true,$original_poster),'notes'=>$notes,'title'=>lang_remap($_title,$title)),array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
 
 	require_code('seo2');

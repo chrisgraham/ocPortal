@@ -264,7 +264,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
  * @param  boolean		Whether to backup the language string before changing it
  * @return integer		The language entries id
  */
-function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_member=NULL,$as_admin=false,$backup_string=false)
+function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false)
 {
 	if ($id==0) return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
 
@@ -300,15 +300,18 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$so
 
 	if ($comcode)
 	{
-		$_text2=comcode_to_tempcode($text,$source_member,$as_admin,60,$pass_id,$connection);
+		$_text2=comcode_to_tempcode($text,$for_member,$as_admin,60,$pass_id,$connection);
 		$connection->text_lookup_cache[$id]=$_text2;
 		$text2=$_text2->to_assembly();
 	} else $text2='';
-	if (is_null($source_member)) $source_member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
+	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
+	if (is_null($for_member)) $for_member=$member;
 
 	$remap=array('broken'=>0,'text_original'=>$text,'text_parsed'=>$text2);
-	if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($source_member,'allow_html')) || (!has_specific_permission($source_member,'use_very_dangerous_comcode')))
-		$remap['source_user']=$source_member;
+	if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($member,'allow_html')) || (!has_specific_permission($member,'use_very_dangerous_comcode')))
+		$remap['source_user']=$member;
+	elseif (!is_null($for_member))
+		$remap['source_user']=$for_member; // Reset to latest submitter for main record
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
 		$connection->query_update('translate',$remap,array('id'=>$id,'language'=>$lang),'',1);
