@@ -168,11 +168,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!ENABLE_WYSIWYG;^}');
 
 				// Unload editor
-				window.wysiwyg_editors[id].elementMode=window.CKEDITOR.ELEMENT_MODE_NONE;
-				window.CKEDITOR.remove(window.wysiwyg_editors[id]);
-				delete window.wysiwyg_editors[id];
-				var wysiwyg_node=document.getElementById('cke_'+id);
-				wysiwyg_node.parentNode.removeChild(wysiwyg_node);
+				window.wysiwyg_editors[id].destroy();
 			}
 		}
 	}
