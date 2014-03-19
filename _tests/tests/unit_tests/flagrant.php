@@ -24,6 +24,12 @@ class flagrant_test_set extends ocp_test_case
 	{
 		parent::setUp();
 
+		if (in_safe_mode())
+		{
+			$this->assertTrue(false,'Cannot work in safe mode');
+			return;
+		}
+
 		require_code('flagrant');
 
 		$this->flag_id=add_flagrant('test',3,'Welcome to ocPortal',1);
@@ -33,6 +39,12 @@ class flagrant_test_set extends ocp_test_case
 
 	function testEditFlagrant()
 	{
+		if (in_safe_mode())
+		{
+			$this->assertTrue(false,'Cannot work in safe mode');
+			return;
+		}
+
 		edit_flagrant($this->flag_id,'Tested','Thank you',0);
 
 		$this->assertTrue('Thank you'==$GLOBALS['SITE_DB']->query_value('text','notes',array('id'=>$this->flag_id)));
@@ -40,6 +52,12 @@ class flagrant_test_set extends ocp_test_case
 
 	function tearDown()
 	{
+		if (in_safe_mode())
+		{
+			$this->assertTrue(false,'Cannot work in safe mode');
+			return;
+		}
+
 		delete_flagrant($this->flag_id);
 		parent::tearDown();
 	}
