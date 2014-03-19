@@ -1168,7 +1168,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			{
 				require_code('attachments2');
 				require_code('attachments3');
-				update_lang_comcode_attachments($current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+				update_lang_comcode_attachments($current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);
 			} else
 			{
 				lang_remap_comcode($current,$value,$GLOBALS['FORUM_DB']);
