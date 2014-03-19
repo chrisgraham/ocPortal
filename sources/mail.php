@@ -644,18 +644,19 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 							{
 								$attractive_date=strftime('%d %B %Y  %H:%M:%S',time());
 
+								$_to_name=preg_replace('#@.*$#','',is_array($to_name)?$to_name[$i]:$to_name); // preg_replace is because some servers may reject sending names that look like e-mail addresses. ocP tries this from recommend module.
 								if (count($to_email)==1)
 								{
-									if ($to_name==='')
+									if ($_to_name=='')
 									{
 										fwrite($socket,'To: '.$to_email[$i]."\r\n");
 									} else
 									{
-										fwrite($socket,'To: '.(is_array($to_name)?$to_name[$i]:$to_name).' <'.$to_email[$i].'>'."\r\n");
+										fwrite($socket,'To: '.$_to_name.' <'.$to_email[$i].'>'."\r\n");
 									}
 								} else
 								{
-									fwrite($socket,'To: '.(is_array($to_name)?$to_name[$i]:$to_name)."\r\n");
+									fwrite($socket,'To: '.$_to_name."\r\n");
 								}
 								fwrite($socket,'Subject: '.$tightened_subject."\r\n");
 								fwrite($socket,'Date: '.$attractive_date."\r\n");
@@ -695,12 +696,13 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 			$additional='';
 			if (get_option('enveloper_override')=='1') $additional='-f '.$website_email;
-			if (($to_name==='') || (strtoupper(substr(PHP_OS,0,3))=='WIN'))
+			$_to_name=preg_replace('#@.*$#','',is_array($to_name)?$to_name[$i]:$to_name); // preg_replace is because some servers may reject sending names that look like e-mail addresses. ocP tries this from recommend module.
+			if (($_to_name=='') || (strtoupper(substr(PHP_OS,0,3))=='WIN'))
 			{
 				$to_line=$to;
 			} else
 			{
-				$to_line='"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>';
+				$to_line='"'.$_to_name.'" <'.$to.'>';
 			}
 			//if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
 			$php_errormsg=mixed();
