@@ -6,6 +6,11 @@
 // HTML EDITOR
 // ===========
 
+if (typeof window.CKEDITOR=='undefined')
+{
+	window.CKEDITOR=null;
+}
+
 function wysiwyg_cookie_says_on()
 {
 	var cookie=read_cookie('use_wysiwyg');
@@ -308,10 +313,10 @@ function wysiwyg_editor_init_for(element)
 	{
 		css+=get_inner_html(linked_sheets[counter]);
 	}
-	CKEDITOR.addCss(css);
+	window.CKEDITOR.addCss(css);
 
 	// Change some CKEditor defaults
-	CKEDITOR.on('dialogDefinition',function(ev) {
+	window.CKEDITOR.on('dialogDefinition',function(ev) {
 		var dialogName=ev.data.name;
 		var dialogDefinition=ev.data.definition;
 
