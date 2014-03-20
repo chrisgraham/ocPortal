@@ -174,7 +174,7 @@ html, body {
 	border: 0;
 }
 
-body, textarea, input, td, th {
+body, .email_body, textarea, input, td, th {
 	/* 'Open Sans' is a Google font, and only will be enabled if uncommented in HTML_HEAD.tpl -- so normally it is Segoe UI (Windows, newer version of Tahoma) or Tahoma that is active (available on Windows and Mac since Leopard) or a similar humanist sans-serif font */
 	font-family: 'Open Sans', 'Segoe UI', Tahoma, Verdana, Arial, Helvetica, sans-serif;
 }
@@ -367,7 +367,7 @@ body.website_body {
 	padding: 0 !important;
 	margin: 0;
 	color: {$GET,slightly_seeded_text};
-	background: {$GET,main_background};
+	background-color: {$GET,main_background};
 }
 .email_body .box {
 	color: {$GET,slightly_seeded_text};
@@ -1165,7 +1165,7 @@ div.red_alert, p.red_alert {
 	display: inline-block;
 	white-space: nowrap;
 	border: 1px dotted {$GET,dark_border};
-	background: {$GET,main_background} !important;
+	background-color: {$GET,main_background} !important;
 	text-align: center;
 	width: 1.1em;
 	font-size: 0.9em;
@@ -1175,12 +1175,12 @@ div.red_alert, p.red_alert {
 	border-right-color: transparent;
 }
 .comment_count strong {
-	background: {$GET,main_background} !important;
+	background-color: {$GET,main_background} !important;
 }
 .comment_count span {
 	display: none;
 	padding-right: 2px;
-	background: {$GET,main_background} !important;
+	background-color: {$GET,main_background} !important;
 }
 .comment_count:hover span {
 	display: inline-block;
@@ -1241,7 +1241,8 @@ th.meta_data_title {
 		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
 		Find how to edit the referenced "block_background" theme image by doing an Admin Zone search for "block_background"
 	*/
-	background: url('{$IMG;,block_background}') {$GET,area_background};
+	background-image: url('{$IMG;,block_background}');
+	background-color: {$GET,area_background};
 	/* If the browser supports gradients, we'll put a nice box-filling gradient in here instead */
 	{$BETA_CSS_PROPERTY,background-image: linear-gradient(to bottom\, {$GET,area_background}\, {$GET,area_4_background});}
 
@@ -1261,7 +1262,7 @@ th.meta_data_title {
 
 /* Don't let boxes on side panels get too much styling (focuses the eye away) */
 .global_side_panel .box, .box.nested {
-	background: {$GET,area_5_background};
+	background-color: {$GET,area_5_background};
 }
 .box.nested {
 	border: 1px solid {$GET,pale_border};
@@ -1272,6 +1273,10 @@ th.meta_data_title {
 
 .box>.box_inner, .box>.toggleable_tray {
 	margin: 0.5em;
+}
+.email_body .box>.box_inner { /* Outlook.com does not support margins */
+	margin: 0;
+	padding: 0.5em;
 }
 
 .box_inner>h1, .box_inner>h2, .box_inner>h3, .box_inner>h4, .box_inner>h5, .box_inner>h6, .toggleable_tray_title, #standalone_html_wrap .box .box .box_inner>h2, #standalone_html_wrap .box .box .box_inner>h3 {
@@ -1312,7 +1317,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 	border: 1px solid {$GET,pale_border} !important;
 }
 .pale_box.box h2, .pale_box .box h2, .pale_box.box h3, .pale_box .box h3 {
-	background: {$GET,point_of_interest_background} !important;
+	background-color: {$GET,point_of_interest_background} !important;
 	color: {$GET,area_key_text} !important;
 }
 
@@ -2322,7 +2327,7 @@ div.wysiwyg_toolbar_color_finder {
 }
 
 .comment_wrapper .highlighted_post {
-	background: {$GET,point_of_interest_background} !important;
+	background-color: {$GET,point_of_interest_background} !important;
 	padding: 1em !important;
 	border: 1px dotted {$GET,slightly_seeded_complement_text} !important;
 }
@@ -2868,7 +2873,7 @@ button.wide_button, button.button_micro, button.button_page, button.button_pagei
 .magic_image_edit_link {
 	font-size: 15px;
 	border: 1px solid {$GET,light_error_border} !important;
-	background: {$GET,light_error_background} !important;
+	background-color: {$GET,light_error_background} !important;
 	color: {$GET,slightly_seeded_text} !important;
 }
 
@@ -3043,7 +3048,7 @@ Form buttons are wrapped in either:
 /* Tighten up subtab display */
 .tab_surround .tab_surround {
 	background-image: none;
-	background: {$GET,main_background};
+	background-color: {$GET,main_background};
 	overflow: hidden; /* To stop margin collapsing bleeding backgrounds */
 }
 .tab_surround .tab_surround .form_table {
