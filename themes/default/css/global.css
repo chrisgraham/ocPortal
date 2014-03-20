@@ -1274,7 +1274,7 @@ th.meta_data_title {
 .box>.box_inner, .box>.toggleable_tray {
 	margin: 0.5em;
 }
-.email_body .box>.box_inner { /* Outlook.com does not support margins */
+.email_body .box .box_inner { /* Outlook.com does not support margins or complex use of the sibling selector */
 	margin: 0;
 	padding: 0.5em;
 }
