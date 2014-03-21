@@ -514,6 +514,7 @@ function delete_quiz($id)
 	seo_meta_erase_storage('quiz',strval($id));
 
 	$GLOBALS['SITE_DB']->query_delete('quizzes',array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_delete('quiz_member_last_visit',array('v_quiz_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('quiz_winner',array('q_quiz'=>$id));
 	$entries=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id));
 	foreach ($entries as $entry)

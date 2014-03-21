@@ -290,8 +290,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 				$for_this=in_array(strval($a['id']),$_given_answers[$question['id']]);
 				$should_be_this=($a['q_is_correct']==1);
 
-				$dist=($for_this?1:0)-($should_be_this?1:0);
-				$wrongness+=$dist*$dist;
+				if ($for_this!=$should_be_this) $wrongness++;
 
 				if ($should_be_this)
 				{
@@ -306,11 +305,11 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 					$accum->attach(get_translated_text($a['q_answer_text']));
 				}
 			}
-			$wrongness=sqrt($wrongness);
 			// Normalise it
 			$wrongness/=count($question['answers']);
 			// And get our complement
 			$correctness=1.0-$wrongness;
+			$marks+=$correctness;
 
 			$marks+=$correctness;
 
