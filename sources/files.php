@@ -245,6 +245,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'.htpasswd'=>'.*',
 		'iirf.ini'=>'',
 		'robots.txt'=>'',
+		'favicon.ico'=>'', // Not used for ocPortal, but default path for other scripts on server
 		'400.shtml'=>'',
 		'500.shtml'=>'',
 		'404.shtml'=>'',
@@ -330,6 +331,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 	$ignore_filename_and_dir_name_patterns=array( // Case insensitive
 		array('\..*\.(png|gif|jpeg|jpg)','.*'), // Image meta data file, e.g. ".example.png"
 		array('\_vti\_.*','.*'), // Frontpage
+		array('google.*\.html',''), // Google authorisation files
 		array('\.\_.*','.*'), // MacOS extended attributes
 		array('tmpfile__.*','.*'), // ocp_tempnam produced temporarily files (unfortunately we can't specify a .tmp suffix)
 		array('.*\.\d+','exports/file_backups'), // File backups (saved as revisions)

@@ -208,7 +208,7 @@ class Module_newsletter
 				'np_last_sent'=>'TIME',
 			));
 		}
-		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
+		if ((!is_null($upgrade_from)) && ($upgrade_from>=8) && ($upgrade_from<9))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_template','ID_TEXT');
 		}

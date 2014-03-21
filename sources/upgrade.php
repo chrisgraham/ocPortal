@@ -1163,17 +1163,20 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 
 		$addon_files=collapse_2d_complexity('filename','addon_name',$GLOBALS['SITE_DB']->query_select('addons_files',array('filename','addon_name')));
 		list($alien,$addon)=check_alien($addon_files,file_exists(get_file_base().'/data/files_previous.dat')?unserialize(file_get_contents(get_file_base().'/data/files_previous.dat')):array(),$master_data,get_file_base().'/');
-		if ($alien!='')
-		{
-			$ret_str.=do_lang('WARNING_FILE_ALIEN',$alien);
-		}
-		if ($addon!='')
-		{
-			$ret_str.=do_lang('WARNING_FILE_ADDON',$addon);
-		}
 		if (($moved!='') || ($alien!=''))
 		{
+			$ret_str.='<div>';
+			if ($alien!='')
+			{
+				$ret_str.=do_lang('WARNING_FILE_ALIEN',$alien);
+			}
+			if ($addon!='')
+			{
+				$ret_str.=do_lang('WARNING_FILE_ADDON',$addon);
+			}
+			$ret_str.='<p class="associated_details"><a href="#" onclick="var checkmarks=this.parentNode.parentNode.getElementsByTagName(\'input\'); for (var i=0;i&lt;checkmarks.length;i++) { checkmarks[i].checked=true; } return false;">'.do_lang('FU_CHECK_ALL').'</a></p>';
 			$ret_str.='<input class="button_page" accesskey="c" style="margin: 1px; padding: 0" type="submit" value="'.do_lang('FU_AUTO_HANDLE').'" />';
+			$ret_str.='</div>';
 		}
 		$ret_str.='</form>';
 	}
