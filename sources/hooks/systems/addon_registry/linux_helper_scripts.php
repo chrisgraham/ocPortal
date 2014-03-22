@@ -99,6 +99,8 @@ class Hook_addon_registry_linux_helper_scripts
 			// The following are sh shell scripts
 			'decache.sh',
 			'fixperms.sh',
+			'themechanges.sh',
+			'recentchanges.sh',
 			'db_init.sh',
 			'db_export.sh',
 			'db_import.sh',
@@ -111,6 +113,14 @@ class Hook_addon_registry_linux_helper_scripts
 			// data_custom/compile_in_includes.php (Compile ocPortal overrides against originals, for slight performance improvement)
 
 			// Various tools are also built into the Admin Zone menus
+
+			// Various tools are built into the upgrader
+			//  E.g. detecting alien files
+			//  E.g. detecting missing files
+			//  E.g. detecting corrupt files
+			//  E.g. clearing the caches (without having to run the full ocPortal)
+			//  E.g. detecting missing permissions
+			//  E.g. deleting files accidentally uploaded from non-installed addons
 		);
 	}
 }

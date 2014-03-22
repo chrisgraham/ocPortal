@@ -1744,7 +1744,7 @@ function fix_mysql_database_charset()
 }
 
 /**
- * Refresh a MySQL database's character set is correct.
+ * Refresh a MySQL database's character set.
  *
  * @param  ID_TEXT		Character set
  * @param  object			Database
