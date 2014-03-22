@@ -101,7 +101,9 @@
 					if (label) set_inner_html(label,object.nextSibling.nodeValue);
 				}
 
-				document.getElementById('forum_path').style.display=type;
+				document.getElementById('forum_database_info').style.display=type;
+				if (document.getElementById('forum_path'))
+					document.getElementById('forum_path').style.display=type;
 			}
 
 			function toggle_section(id)

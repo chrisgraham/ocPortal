@@ -343,7 +343,8 @@ class Hook_addon_registry_installer
 			'FORUM_PATH_DEFAULT'=>get_file_base().'/forums',
 			'FORUMS'=>$tforums,
 			'DATABASES'=>$tdatabase,
-			'VERSION'=>$default_version
+			'VERSION'=>$default_version,
+			'IS_QUICK'=>false
 		));
 
 		return array(
