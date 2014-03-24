@@ -35,6 +35,7 @@ class Hook_login_providers_direct_auth_external_db
 		if ($cookie_login || $password_raw=='') return NULL;
 
 		$db=external_db();
+		if (is_null($db)) return NULL;
 
 		$table=get_long_value('external_db_login__table');
 		$username_field=get_long_value('external_db_login__username_field');

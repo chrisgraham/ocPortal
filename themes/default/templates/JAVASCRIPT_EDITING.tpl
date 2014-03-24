@@ -579,7 +579,7 @@ function ensure_true_id(element,field_name) // Works around IE bug
 
 function is_wysiwyg_field(the_element)
 {
-	return ((typeof window.wysiwyg_editors!='undefined') && (typeof wysiwyg_editors[theElement.id]=='object'));
+	return ((typeof window.wysiwyg_editors!='undefined') && (typeof wysiwyg_editors[the_element.id]=='object'));
 }
 
 function get_textbox(element)

@@ -319,7 +319,6 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 				generate_captcha();
 			}
 			set_http_status_code('500');
-
 			warn_exit(do_lang_tempcode('NO_SESSION_SECURITY_CODE'));
 		}
 		if (strlen(strval($_code_needed))>6) // Encoded in ASCII (we did it like this to avoid breaking DB compatibility)
