@@ -350,7 +350,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	require_code('member_mentions');
 	dispatch_member_mention_notifications('member',strval($member_id));
 
-	decache('main_members');
+	if (function_exists('decache')) decache('main_members');
 
 	return $member_id;
 }
@@ -562,7 +562,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 		generate_resourcefs_moniker('cpf',strval($id),NULL,NULL,true);
 	}
 
-	decache('main_members');
+	if (function_exists('decache')) decache('main_members');
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
 	return $id;

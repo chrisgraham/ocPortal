@@ -1248,7 +1248,7 @@ function ocf_delete_custom_field($id)
 		expunge_resourcefs_moniker('cpf',strval($id));
 	}
 
-	decache('main_members');
+	if (function_exists('decache')) decache('main_members');
 }
 
 /**
@@ -1341,7 +1341,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 		return $change;
 	}
 
-	decache('main_members');
+	if (function_exists('decache')) decache('main_members');
 
 	return NULL;
 }

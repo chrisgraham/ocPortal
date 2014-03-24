@@ -55,6 +55,7 @@ class Module_quiz
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entry_answer');
 
 		delete_privilege('bypass_quiz_repeat_time_restriction');
+		delete_privilege('view_others_quiz_results');
 	}
 
 	/**
@@ -91,11 +92,6 @@ class Module_quiz
 					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'quiz','category_name'=>strval($quiz['id']),'group_id'=>$group_id));
 				}
 			}
-		}
-
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			add_privilege('QUIZZES','view_others_quiz_results',false);
 
 			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_type','ID_TEXT','MULTIPLECHOICE');
 			$GLOBALS['SITE_DB']->query_update('quiz_questions',array('q_type'=>'LONG'),array('q_long_input_field'=>1));
@@ -103,6 +99,11 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->delete_table_field('quiz_questions','q_long_input_field');
 			$GLOBALS['SITE_DB']->delete_table_field('quiz_questions','q_num_choosable_answers');
 			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_question_extra_text','LONG_TRANS');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			add_privilege('QUIZZES','view_others_quiz_results',false);
 		}
 
 		if (is_null($upgrade_from))
