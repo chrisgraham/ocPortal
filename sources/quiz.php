@@ -460,6 +460,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 function typed_answer_is_correct($given_answer,$all_answers)
 {
 	$filtered_given_answer=preg_replace('#[^\d\w]#','',strtolower($given_answer));
+	if ($filtered_given_answer=='') return false;
 
 	$has_correct=false;
 	$has_incorrect=false;
