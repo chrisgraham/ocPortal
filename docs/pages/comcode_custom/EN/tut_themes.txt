@@ -22,6 +22,8 @@ At this time, there are over 1,000 templates that make up ocPortal and all of it
 
 The Theme Wizard is available via it's own icon in the Style section of the Admin Zone.
 
+Note that extreme black/white themes will not come out of the Theme Wizard 100% perfectly, and need a small amount of tuning. Using the Theme Wizard at extreme black/white, causes contrast problems, as a result of the maths (essentially, there are fewer intermediate shades of black or white than there are shades of colour if the saturation is high enough for colour to be discernible). There's no good automatic solution to that, other than to manually go in and change some of our subtly shaded colours to hard white/black as required. The issue is worst in the few places where we're using different colours to provide contrast rather than combination dark & light.
+
 {!themes:DOC_LOGOWIZARD}
 
 [title="2"]Making a new theme manually[/title]
