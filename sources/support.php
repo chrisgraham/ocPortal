@@ -67,9 +67,9 @@ function init__support()
 	$ZONE_DEFAULT_PAGES=array();
 
 	global $PHP_REP_FROM,$PHP_REP_TO,$PHP_REP_TO_TWICE;
-	$PHP_REP_FROM=array('\\',"\n",'$','"');
-	$PHP_REP_TO=array('\\\\','\n','\$','\\"');
-	$PHP_REP_TO_TWICE=array('\\\\\\\\','\\n','\\\\$','\\\\\"');
+	$PHP_REP_FROM=array('\\',"\n",'$','"',"\0");
+	$PHP_REP_TO=array('\\\\','\n','\$','\\"','\0');
+	$PHP_REP_TO_TWICE=array('\\\\\\\\','\\n','\\\\$','\\\\\"','\\0');
 
 	global $IS_WIDE,$IS_WIDE_HIGH;
 	$IS_WIDE=NULL;
