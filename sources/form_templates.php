@@ -516,9 +516,10 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?ID_TEXT		Page type to show (NULL: all)
  * @param  boolean		Whether to also get the title for the page
+ * @param  boolean		Whether to get node titles in a website-friendly form, as opposed to a more technical explanation of what the nodes are
  * @return tempcode		The input field
  */
-function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$page_type=NULL,$get_title_too=false)
+function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$page_type=NULL,$get_title_too=false,$content_centric=false)
 {
 	if (!has_js())
 	{
@@ -532,7 +533,7 @@ function form_input_page_link($pretty_name,$description,$name,$default,$required
 	require_javascript('javascript_more');
 
 	// Display
-	$input=do_template('PAGE_LINK_CHOOSER',array('AS_FIELD'=>true,'GET_TITLE_TOO'=>$get_title_too,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type));
+	$input=do_template('PAGE_LINK_CHOOSER',array('AS_FIELD'=>true,'GET_TITLE_TOO'=>$get_title_too,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type,'CONTENT_CENTRIC'=>$content_centric));
 
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }

@@ -1702,31 +1702,31 @@ table.scrollable_inside {
 	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
 }
 
-.results_table th {
+.results_table>*>tr>th {
 	text-align: right;
 }
 
-.results_table thead th {
+.results_table>thead>th {
 	text-align: center;
 }
 
-.results_table td, .results_table th {
+.results_table>*>tr>td, .results_table>*>tr>th {
 	border-top: 1px solid {$GET,standard_border};
 	border-right: 1px solid {$GET,standard_border};
 	padding: 0.5em;
 }
-.results_table td:first-child, .results_table th:first-child {
+.results_table>*>tr>td:first-child, .results_table>*>tr>th:first-child {
 	border-left: 1px solid {$GET,standard_border};
 }
-.results_table tbody tr:last-child td, .results_table tbody tr:last-child th {
+.results_table>tbody>tr:last-child>td, .results_table>tbody>tr:last-child>th {
 	border-bottom: 1px solid {$GET,standard_border};
 }
 
-.results_table .zebra_0 th, .results_table .zebra_0 td, div.zebra_0 {
+.results_table>*>.zebra_0>th, .results_table>*>.zebra_0>td, div.zebra_0 {
 	background-color: {$GET,area_zebra_background} !important;
 	color: {$GET,slightly_seeded_text};
 }
-.results_table .zebra_1 th, .results_table .zebra_1 td, div.zebra_1 {
+.results_table>*>.zebra_1>th, .results_table>*>.zebra_1>td, div.zebra_1 {
 	background-color: {$GET,area_background} !important;
 	color: {$GET,slightly_seeded_text};
 }

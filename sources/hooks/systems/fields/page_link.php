@@ -85,7 +85,7 @@ class Hook_fields_page_link
 		list($zone,$attributes,)=page_link_decode($_ev[0]);
 		$url=build_url($attributes,$zone);
 
-		return hyperlink($url,escape_html($_ev[1]),true);
+		return hyperlink($url,escape_html($_ev[1]));
 	}
 
 	// ======================
@@ -109,7 +109,7 @@ class Hook_fields_page_link
 		$_actual_value=explode(' ',$actual_value,2);
 		if (!array_key_exists(1,$_actual_value)) $_actual_value[1]=$_actual_value[0];
 
-		return form_input_page_link($_cf_name,$_cf_description,'field_'.strval($field['id']),$_actual_value[0],$field['cf_required']==1,NULL,NULL,true);
+		return form_input_page_link($_cf_name,$_cf_description,'field_'.strval($field['id']),$_actual_value[0],$field['cf_required']==1,NULL,NULL,true,true);
 	}
 
 	/**

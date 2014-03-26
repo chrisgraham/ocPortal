@@ -222,6 +222,8 @@ function site_tree_script()
 	require_lang('zones');
 	$page_link=get_param('id',NULL,true);
 
+	$content_centric=get_param_integer('content_centric',0);
+
 	if ((!is_null($page_link)) && ($page_link!='') && ((strpos($page_link,':')===false) || (strpos($page_link,':')===strlen($page_link)-1))) // Expanding a zone
 	{
 		if (strpos($page_link,':')===strlen($page_link)-1) $page_link=substr($page_link,0,strlen($page_link)-1);
@@ -261,7 +263,22 @@ function site_tree_script()
 					break;
 				case 'comcode':
 				case 'comcode_custom':
-					$page_title=do_lang('COMCODE_PAGE').': '.(is_string($page)?$page:strval($page));
+					if ($content_centric==1)
+					{
+						$page_title='';
+						$trans_cc_page_title_key=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','cc_page_title',array('the_page'=>$page,'the_zone'=>$zone));
+						if (!is_null($trans_cc_page_title_key))
+						{
+							$page_title=get_translated_text($trans_cc_page_title_key);
+						}
+						if ($page_title=='')
+						{
+							$page_title=titleify($page);
+						}
+					} else
+					{
+						$page_title=do_lang('COMCODE_PAGE').': '.(is_string($page)?$page:strval($page));
+					}
 					break;
 				case 'html':
 				case 'html_custom':
@@ -269,7 +286,13 @@ function site_tree_script()
 					break;
 				case 'modules':
 				case 'modules_custom':
-					$page_title=do_lang('MODULE').': '.$page;
+					if ($content_centric==1)
+					{
+						$page_title=titleify($page);
+					} else
+					{
+						$page_title=do_lang('MODULE').': '.$page;
+					}
 
 					$matches=array();
 					if (preg_match('#@package\s+(\w+)#',file_get_contents(zone_black_magic_filterer(get_file_base().'/'.$zone.'/pages/'.$page_type.'/'.$page.'.php')),$matches)!=0)
@@ -291,10 +314,22 @@ function site_tree_script()
 					break;
 				case 'minimodules':
 				case 'minimodules_custom':
-					$page_title=do_lang('MINIMODULE').': '.$page;
+					if ($content_centric==1)
+					{
+						$page_title=titleify($page);
+					} else
+					{
+						$page_title=do_lang('MINIMODULE').': '.$page;
+					}
 					break;
 				default:
-					$page_title=do_lang('PAGE').': '.$page;
+					if ($content_centric==1)
+					{
+						$page_title=titleify($page);
+					} else
+					{
+						$page_title=do_lang('PAGE').': '.$page;
+					}
 					break;
 			}
 			if ($permissions_needed)
@@ -421,7 +456,14 @@ function site_tree_script()
 			foreach ($entrypoints as $entry_point=>$lang_string)
 			{
 				$serverid=$zone.':'.$page;
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="entry_point" id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).':type='.$entry_point.'" title="'.xmlentities(do_lang('ENTRY_POINT').': '.do_lang($lang_string)).'" has_children="false" selectable="true">';
+				if ($content_centric==1)
+				{
+					$node_title=do_lang($lang_string);
+				} else
+				{
+					$node_title=do_lang('ENTRY_POINT').': '.do_lang($lang_string);
+				}
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="entry_point" id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).':type='.$entry_point.'" title="'.xmlentities($node_title).'" has_children="false" selectable="true">';
 				echo '</category>';
 			}
 		}
@@ -578,6 +620,14 @@ function site_tree_script()
 			$zone=$_zone['zone_name'];
 			$zone_title=$_zone['text_original'];
 
+			if ($content_centric==1)
+			{
+				$node_title=$zone_title;
+			} else
+			{
+				$node_title=do_lang('ZONE').': '.$zone_title;
+			}
+
 			$serverid=$zone;
 			if ($start_links)
 			{
@@ -593,10 +643,10 @@ function site_tree_script()
 						$view_perms.='g_view_'.strval($group).'="'.(in_array(array('zone_name'=>$zone,'group_id'=>$group),$zone_access)?'true':'false').'" ';
 				}
 
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" no_sps="1" highlighted="true" '.$view_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'img_func_1="permissions_img_func_1" img_func_2="permissions_img_func_2" no_sps="1" highlighted="true" '.$view_perms.' id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($node_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
 			} else
 			{
-				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="zone" droppable="page" id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities(do_lang('ZONE').': '.$zone_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
+				echo '<category '.(($serverid==$default)?'selected="yes" ':'').'type="zone" droppable="page" id="'.uniqid('',true).'" serverid="'.xmlentities($serverid).'" title="'.xmlentities($node_title).'" has_children="'.((count($pages)!=0)?'true':'false').'" selectable="true">';
 			}
 			echo '</category>';
 		}
