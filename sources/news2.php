@@ -134,12 +134,15 @@ function import_rss()
 		}
 
 		// Dates
-		$add_date=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:(array_key_exists('add_date',$item)?strtotime($item['add_date']):time());
-		if ($add_date===false) $add_date=time(); // We've seen this situation in an error email, it's if the add date won't parse by PHP
-		$edit_date=array_key_exists('clean_edit_date',$item)?$item['clean_edit_date']:(array_key_exists('edit_date',$item)?strtotime($item['edit_date']):NULL);
-		if ($edit_date===false) $edit_date=NULL;
-		if ($add_date>time()) $add_date=time();
-		if ($add_date<0) $add_date=time();
+		$post_time=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:(array_key_exists('add_date',$item)?strtotime($item['add_date']):time());
+		if ($post_time===false) $post_time=time(); // We've seen this situation in an error email, it's if the add date won't parse by PHP
+		if (($post_time<0) || ($post_time>2147483647)) $post_time=2147483647;
+		$edit_time=array_key_exists('clean_edit_date',$item)?$item['clean_edit_date']:(array_key_exists('edit_date',$item)?strtotime($item['edit_date']):NULL);
+		if ($edit_time===false) $edit_time=NULL;
+		if (!is_null($edit_time))
+		{
+			if (($edit_time<0) || ($edit_time>2147483647)) $edit_time=2147483647;
+		}
 
 		// Validation status
 		$validated=$is_validated;
@@ -269,10 +272,10 @@ function import_rss()
 				$news_article,
 				$owner_category_id,
 				$cat_ids,
-				$add_date,
+				$post_time,
 				$submitter_id,
 				0,
-				$edit_date,
+				$edit_time,
 				NULL,
 				$rep_image
 			);
@@ -325,8 +328,8 @@ function import_rss()
 				'the_page'=>$file,
 				'p_parent_page'=>'',
 				'p_validated'=>$validated,
-				'p_edit_date'=>$edit_date,
-				'p_add_date'=>$add_date,
+				'p_edit_date'=>$edit_time,
+				'p_add_date'=>$post_time,
 				'p_submitter'=>$submitter_id,
 				'p_show_as_edit'=>0
 			));
@@ -603,6 +606,17 @@ function import_wordpress_db()
 				$allow_comments=($post['comment_status']=='open')?1:0;
 				$allow_trackbacks=($post['ping_status']=='open')?1:0;
 
+				// Dates
+				$post_time=strtotime($post['post_date_gmt']);
+				if ($post_time===false) $post_time=strtotime($post['post_date']);
+				if (($post_time<0) || ($post_time>2147483647)) $post_time=2147483647;
+				$edit_time=is_null($post['post_modified_gmt'])?NULL:strtotime($post['post_modified_gmt']);
+				if ($edit_time===false) $edit_time=strtotime($post['post_modified']);
+				if (!is_null($edit_time))
+				{
+					if (($edit_time<0) || ($edit_time>2147483647)) $edit_time=2147483647;
+				}
+
 				if ($post['post_type']=='post') // News
 				{
 					if (addon_installed('import'))
@@ -659,12 +673,6 @@ function import_wordpress_db()
 					{
 						$news_article='[highlight]'.do_lang('POST_ACCESS_IS_RESTRICTED').'[/highlight]'."\n\n".'[if_in_group="Administrators"]'.$news_article.'[/if_in_group]';
 					}
-
-					// Dates
-					$post_time=strtotime($post['post_date_gmt']);
-					if ($post_time===false) $post_time=strtotime($post['post_date']);
-					$edit_time=is_null($post['post_modified_gmt'])?NULL:strtotime($post['post_modified_gmt']);
-					if ($edit_time===false) $edit_time=strtotime($post['post_modified']);
 
 					// Add news
 					$id=add_news(
@@ -748,8 +756,8 @@ function import_wordpress_db()
 						'the_page'=>$file,
 						'p_parent_page'=>'',
 						'p_validated'=>$is_validated,
-						'p_edit_date'=>strtotime($post['post_modified_gmt']),
-						'p_add_date'=>strtotime($post['post_date_gmt']),
+						'p_edit_date'=>$post_time,
+						'p_add_date'=>$edit_time,
 						'p_submitter'=>$submitter_id,
 						'p_show_as_edit'=>0
 					));
