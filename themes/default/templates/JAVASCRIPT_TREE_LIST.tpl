@@ -231,7 +231,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			expand_button.oncontextmenu=function() { return false; };
 			expand_button.object=this;
 			expand_button.onclick=function(expand_button) { return function(event,automated) {
-				if (document.getElementById('choose_url')) click_link(document.getElementById('choose_'+_this.name));
+				if (document.getElementById('choose_'+_this.name)) click_link(document.getElementById('choose_'+_this.name));
 				if (!event) var event=window.event;
 				if (event)
 				{
