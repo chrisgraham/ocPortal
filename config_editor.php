@@ -421,9 +421,9 @@ function do_set()
 	$copied_ok=@copy($FILE_BASE.'/'.$info_file,$path);
 	if ($copied_ok!==false) co_sync_file($path);
 	$info=fopen($FILE_BASE.'/'.$info_file,'at');
+	if ($info===false) exit();
 	flock($info,LOCK_EX);
 	ftruncate($info,0);
-	if ($info===false) exit();
 	fwrite($info,"<"."?php\n");
 	foreach ($new as $key=>$val)
 	{

@@ -101,9 +101,9 @@ class Module_admin_customers
 		require_code('mantis');
 		$cur_id = NULL;
 		$cur_id = get_credits_profile_field_id('ocp_currency');
-		if(!is_null($cur_id ))
+		if (!is_null($cur_id))
 		{
-			$GLOBALS['SITE_DB']->query('UPDATE '.$SITE_INFO['ocf_table_prefix'].'f_custom_fields SET cf_owner_view=1, cf_owner_set=1 WHERE id='.strval($cur_id));
+			$GLOBALS['SITE_DB']->query_update('f_custom_fields',array('cf_owner_view'=>1,'cf_owner_set'=>1),array('id'=>$cur_id),'',1);
 		}
 		ocf_make_custom_field('ocp_support_credits',1,'','',0,1,0,0,'integer');
 		ocf_make_custom_field('ocp_ftp_host',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');

@@ -1328,7 +1328,9 @@ class Module_topics
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('forum_id',strval($forum_id)));
-			$threaded=($GLOBALS['FORUM_DB']->query_value('f_forums','f_is_threaded',array('id'=>$forum_id))==1);
+			$_threaded=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_is_threaded',array('id'=>$forum_id));
+			if (is_null($_threaded)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$threaded=($_threaded==1);
 		}
 
 		// Description

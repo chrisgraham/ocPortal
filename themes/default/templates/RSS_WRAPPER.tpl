@@ -1,5 +1,5 @@
 {+START,IF,{$NOT,{$BROWSER_MATCHES,itunes}}}<?xml version="1.0" encoding="{$CHARSET*}"?>
-<?xml-stylesheet href="{$FIND_SCRIPT*,backend}?type=xslt-rss" type="text/xsl"?>
+<?xml-stylesheet href="{$FIND_SCRIPT*,backend}?type=xslt-rss{$KEEP*,0,1}" type="text/xsl"?>
 <rss version="2.0">
 {+END}
 {+START,IF,{$BROWSER_MATCHES,itunes}}<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">

@@ -263,10 +263,10 @@ function aspell_init()
 			if ($aspellconfig===false) $aspellconfig=pspell_config_create('en',$spelling,'',$charset);
 			pspell_config_personal($aspellconfig,$p_dict_path.'/'.$lang_stub.'.pws');
 			pspell_config_repl($aspellconfig,$p_dict_path.'/'.$lang_stub.'.prepl');
-			$aspellcommand=@pspell_new_config($aspellconfig);
+			$aspellcommand=pspell_new_config($aspellconfig);
 		}
 
-		if (is_null($aspellcommand)) exit();
+		if ($aspellcommand===false) warn_exit('Cannot initialise pspell');
 	}
 
 	return array($aspelldictionaries,$aspellcommand,$tempnam,$lang);

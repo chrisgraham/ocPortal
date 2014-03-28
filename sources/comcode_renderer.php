@@ -329,13 +329,17 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		}
 	}
 
+	// TODO: Update in v10
+	$GLOBALS['HELPER_PANEL_PIC']='';
+	$GLOBALS['HELPER_PANEL_TUTORIAL']='';
+
 	// Output our error / correction form
 	@ob_end_clean();
 	$hidden=build_keep_post_fields(array($name));
 	require_code('form_templates');
-	$fields=form_input_text_comcode(do_lang_tempcode('NEW'),do_lang_tempcode('COMCODE_REPLACEMENT'),$name,$comcode,true,NULL,true);
+	$fields=form_input_huge_comcode(do_lang_tempcode('FIXED_COMCODE'),do_lang_tempcode('COMCODE_REPLACEMENT'),$name,$comcode,true,NULL,20,NULL,NULL,false,true);
 	$post_url=get_self_url();
-	$form=do_template('FORM',array('_GUID'=>'207bad1252add775029b34ba36e02856','URL'=>$post_url,'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED')));
+	$form=do_template('FORM',array('_GUID'=>'207bad1252add775029b34ba36e02856','URL'=>$post_url,'TEXT'=>'','HIDDEN'=>$hidden,'FIELDS'=>$fields,'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'SKIP_REQUIRED'=>true));
 	$output=do_template('COMCODE_MISTAKE_SCREEN',array('_GUID'=>'0010230e6612b0775566d07ddf54305a','EDITABLE'=>!running_script('preview'),'FORM'=>$form,'TITLE'=>get_screen_title('ERROR_OCCURRED'),'LINE'=>integer_format($line),'MESSAGE'=>$message,'LINES'=>$lines));
 	$echo=new ocp_tempcode();
 	if (!running_script('preview'))

@@ -18,8 +18,6 @@
 
 		<div class="comcode_error_details_div">
 			{+START,IF,{EDITABLE}}
-				<h2>{!FIXED_COMCODE}</h2>
-
 				{FORM}
 			{+END}
 

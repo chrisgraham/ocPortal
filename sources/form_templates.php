@@ -785,9 +785,10 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
  * @param  mixed			A secondary side description for this input field
  * @param  ?tempcode		The parsed Comcode. (NULL: calculate)
  * @param  boolean		Whether the field scrolls
+ * @param  boolean		Force non-WYSIWYG and non default-Comcode parsing
  * @return tempcode		The input field
  */
-function form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$rows=20,$description_side='',$default_parsed=NULL,$scrolls=false)
+function form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$rows=20,$description_side='',$default_parsed=NULL,$scrolls=false,$force_non_wysiwyg=false)
 {
 	require_lang('comcode');
 
@@ -809,14 +810,21 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 	$WYSIWYG_ATTACHED=true;
 	@header('Content-type: text/html; charset='.get_charset());
 
-	$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(browser_matches('wysiwyg')) && (has_js()) && (strpos($default,'{$,page hint: no_wysiwyg}')===false);
-	if ($w) $_required.=' wysiwyg';
-	global $LAX_COMCODE;
-	$temp=$LAX_COMCODE;
-	$LAX_COMCODE=true;
-	$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-	/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
-	$LAX_COMCODE=$temp;
+	if (!$force_non_wysiwyg)
+	{
+		$w=/* (has_specific_permission(get_member(),'comcode_dangerous')) && */(browser_matches('wysiwyg')) && (has_js()) && (strpos($default,'{$,page hint: no_wysiwyg}')===false);
+		if ($w) $_required.=' wysiwyg';
+		global $LAX_COMCODE;
+		$temp=$LAX_COMCODE;
+		$LAX_COMCODE=true;
+		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
+		/*if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
+		$LAX_COMCODE=$temp;
+	} else
+	{
+		$w=false;
+		$default_parsed=new ocp_tempcode();
+	}
 
 	$_comcode=do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),get_comcode_zone('userguide_comcode',false))));
 

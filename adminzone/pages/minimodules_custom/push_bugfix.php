@@ -488,6 +488,7 @@ function make_call($call,$params,$file=NULL)
 				foreach ($val as $k2=>$v2)
 				{
 					if (!is_string($k2)) $k2=strval($k2);
+					if (!is_string($v2)) $v2=strval($v2);
 					echo '<input type="hidden" name="'.escape_html($key.'['.$k2.']').'" value="'.escape_html($v2).'" />';
 				}
 			}
