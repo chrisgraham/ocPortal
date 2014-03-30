@@ -12,10 +12,14 @@ $timeout=$guest_session?(time()+intval(60.0*60.0*max(0.017,$session_expiry_time)
 
 $test=setcookie(get_session_cookie(),strval($session_id),$timeout,get_cookie_path());
 
-$expires=60*60*1;
+/*$expires=60*60*1;		Caching won't work well
 header('Pragma: public');
 header('Cache-Control: max-age='.strval($expires));
-header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
+header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');*/
+@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
+@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+@header('Cache-Control: no-cache, max-age=0');
+@header('Pragma: no-cache'); // for proxies, and also IE
 
 header('Content-type: image/png');
 $img=imagecreatetruecolor(1,1);

@@ -13,7 +13,7 @@
  * @package		multi_domain_login
  */
 
-class Hook_addon_registry_ad_success
+class Hook_addon_registry_multi_domain_login
 {
 	/**
 	 * Get a list of file permissions to set

@@ -45,6 +45,6 @@ class Hook_startup_multi_domain_login
 		$url.='?session_expiry_time='.get_option('session_expiry_time');
 		$url.='&session_id='.strval(get_session_id());
 		$url.='&guest_session='.(is_guest()?'1':'0');
-		return 'new Image().src=\''.addslashes($url).'\';';
+		return $url;
 	}
 }
