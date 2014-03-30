@@ -1267,7 +1267,7 @@ th.meta_data_title {
 .box.nested {
 	border: 1px solid {$GET,pale_border};
 }
-.global_side_panel .box_inner>h1, .global_side_panel .box_inner>h2, .global_side_panel .box_inner>h3, .global_side_panel .box_inner>h4, .global_side_panel .box_inner>h5, .global_side_panel .box_inner>h6 {
+.global_side_panel .box_inner>h1, .global_side_panel .box_inner>h2, .global_side_panel .box_inner>h3, .global_side_panel .box_inner>h4, .global_side_panel .box_inner>h5, .global_side_panel .box_inner>h6, .global_side_panel .box>.toggleable_tray_title {
 	background-image: none;
 }
 
@@ -3186,7 +3186,7 @@ ul.nl, .nl ul {
 	padding: 3px 5px 3px 0 !important;
 }
 
-.menu_type__popup .nlevel li , .menu_type__dropdown .nlevel li {
+.menu_type__popup .nlevel li, .menu_type__dropdown .nlevel li {
 	white-space: nowrap;
 }
 

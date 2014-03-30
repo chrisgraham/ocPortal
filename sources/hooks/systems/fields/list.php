@@ -43,7 +43,7 @@ class Hook_fields_list
 		$display=array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
 		foreach ($list as $l)
 		{
-			$special->attach(form_input_list_entry($l,get_param('option_'.strval($row['id']),'')==$l));
+			$special->attach(form_input_list_entry($l,get_param('option_'.strval($row['id']),NULL)===$l));
 		}
 		$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
 		return $fields;

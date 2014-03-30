@@ -402,6 +402,8 @@ class Module_search
 			if ($catalogue_name!='') $url_map['catalogue_name']=$catalogue_name;
 			$force_non_tabular=get_param_integer('force_non_tabular',0);
 			if ($force_non_tabular==1) $url_map['force_non_tabular']=1;
+			$embedded=get_param_integer('embedded',0);
+			if ($embedded==1) $url_map['embedded']=1;
 			$url=build_url($url_map,'_SELF',NULL,false,true);
 
 			require_code('hooks/modules/search/'.filter_naughty_harsh($id),true);
@@ -513,7 +515,7 @@ class Module_search
 
 		$author=get_param('author','');
 		$author_id=($author!='')?$GLOBALS['FORUM_DRIVER']->get_member_from_username($author):NULL;
-		$days=get_param_integer('days',60);
+		$days=get_param_integer('days',($id=='ocf_members')?NULL:60);
 		$sort=get_param('sort','relevance');
 		$direction=get_param('direction','DESC');
 		if (!in_array(strtoupper($direction),array('ASC','DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');

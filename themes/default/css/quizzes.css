@@ -15,14 +15,18 @@
 	width: 100%;
 }
 
+.quiz_form th {
+	position: relative;
+}
+
 .quiz_form th, .quiz_form td {
 	padding: 0.5em 2em 5em 4em;
 }
 
 .quiz_form th>span {
-	position: relative;
 	display: block;
 	padding-left: 60px;
+	padding-top: 2em;
 	z-index: 10;
 }
 
@@ -33,6 +37,7 @@
 	line-height: 1.8em;
 	font-size: 3.5em;
 	position: absolute;
+	left: 30px;
 	color: {$GET,th_secondary_text};
 }
 
