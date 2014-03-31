@@ -264,9 +264,16 @@ function aspell_init()
 			pspell_config_personal($aspellconfig,$p_dict_path.'/'.$lang_stub.'.pws');
 			pspell_config_repl($aspellconfig,$p_dict_path.'/'.$lang_stub.'.prepl');
 			$aspellcommand=pspell_new_config($aspellconfig);
+			if (($aspellcommand===false) && ($lang!='en')) // Might be that we had a late fail on initialising that language
+			{
+				$aspellconfig=pspell_config_create('en',$spelling,'',$charset);
+				pspell_config_personal($aspellconfig,$p_dict_path.'/'.$lang_stub.'.pws');
+				pspell_config_repl($aspellconfig,$p_dict_path.'/'.$lang_stub.'.prepl');
+				$aspellcommand=pspell_new_config($aspellconfig);
+			}
 		}
 
-		if ($aspellcommand===false) warn_exit('Cannot initialise pspell');
+		if ($aspellcommand===false) warn_exit('Cannot initialise pspell. Make sure the server has the \''.$lang.'\''.(($lang=='en')?'':' or \'en\'').' spelling pack installed.');
 	}
 
 	return array($aspelldictionaries,$aspellcommand,$tempnam,$lang);
@@ -325,9 +332,9 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
 	if (is_null($words_skip)) $words_skip=array();
 
 	// Convert UTF-8 multi-bytes into decimal character entities.  This is because aspell isn't fully utf8-aware
-	$text=preg_replace('/([\xC0-\xDF][\x80-\xBF])/e',"'&#'.utf8_ord('\$1').';'",$text);
-	$text=preg_replace('/([\xE0-\xEF][\x80-\xBF][\x80-\xBF])/e',"'&#'.utf8_ord('\$1').';'",$text);
-	$text=preg_replace('/([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])/e',"'&#'.utf8_ord('\$1').';'",$text);
+	$text=preg_replace('/([\xC0-\xDF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
+	$text=preg_replace('/([\xE0-\xEF][\x80-\xBF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
+	$text=preg_replace('/([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])/e',"'&#'.strval(utf8_ord('\$1')).';'",$text);
 
 	if (!$ret)
 	{

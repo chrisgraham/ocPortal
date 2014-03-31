@@ -171,7 +171,7 @@ function build_preview($multi_return=false)
 			if ($spellcheck)
 			{
 				require_code('comcode_from_html');
-				$mispellings=spellchecklogic('check',semihtml_to_comcode($val,true),$words_skip,true);
+				$mispellings=spellchecklogic('check',strip_comcode(semihtml_to_comcode($val,true)),$words_skip,true);
 				$_misspellings=array();
 				foreach ($mispellings as $misspelling)
 				{
