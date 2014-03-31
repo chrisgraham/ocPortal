@@ -15,28 +15,31 @@
 
 class Hook_startup_multi_domain_login
 {
-	function run()
+	function run($MICRO_BOOTUP,$MICRO_AJAX_BOOTUP)
 	{
-		//if (isset($_POST['login_username'])) return;	Actually, we'll use caching to avoid this
-
-		$value="<!-- Syndicate sessions -->\n";
-		$value.='<script>';
-		//$url=$this->session_syndicate_code(ocp_srv('HTTP_HOST'),preg_replace('#^.*://[^/]*(/|$)#','',get_base_url()));
-		//$value.='new Image().src=\''.addslashes($url).'\';';
-		foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
+		if ((!$MICRO_AJAX_BOOTUP) && (!$MICRO_BOOTUP) && (running_script('index')))
 		{
-			if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
+			//if (isset($_POST['login_username'])) return;	Actually, we'll use caching to avoid this
+
+			$value="<!-- Syndicate sessions -->\n";
+			$value.='<script>';
+			//$url=$this->session_syndicate_code(ocp_srv('HTTP_HOST'),preg_replace('#^.*://[^/]*(/|$)#','',get_base_url()));
+			//$value.='new Image().src=\''.addslashes($url).'\';';
+			foreach ($GLOBALS['SITE_INFO'] as $key=>$_val)
 			{
-				if ($_val[0]!=ocp_srv('HTTP_HOST'))
+				if (substr($key,0,strlen('ZONE_MAPPING_'))=='ZONE_MAPPING_')
 				{
-					$url=$this->session_syndicate_code($_val[0],$_val[1]);
-					$value.='new Image().src=\''.addslashes($url).'\';';
+					if ($_val[0]!=ocp_srv('HTTP_HOST'))
+					{
+						$url=$this->session_syndicate_code($_val[0],$_val[1]);
+						$value.='new Image().src=\''.addslashes($url).'\';';
+					}
 				}
 			}
-		}
-		$value.="</script>\n\n";
+			$value.="</script>\n\n";
 
-		attach_to_screen_header($value);
+			attach_to_screen_header($value);
+		}
 	}
 
 	function session_syndicate_code($domain,$path)

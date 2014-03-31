@@ -42,7 +42,7 @@ class Hook_addon_registry_multi_domain_login
 	 */
 	function get_category()
 	{
-		return 'Development';
+		return 'New Features';
 	}
 
 	/**
