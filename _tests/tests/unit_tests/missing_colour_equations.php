@@ -30,7 +30,7 @@ class missing_colour_equations_test_set extends ocp_test_case
 		{
 			if (substr($f,-4)=='.css')
 			{
-				if (in_array($f,array('swfupload.css','occle.css','ocworld.css','install.css','htmlarea.css','colour_picker.css','date_chooser.css','phpinfo.css'))) continue;
+				if (in_array($f,array('swfupload.css','occle.css','ocworld.css','install.css','colour_picker.css','date_chooser.css','phpinfo.css'))) continue;
 
 				$contents=file_get_contents(get_file_base().'/themes/default/css/'.$f);
 				$matches=array();

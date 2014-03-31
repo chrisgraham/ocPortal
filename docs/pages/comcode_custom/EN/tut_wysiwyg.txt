@@ -12,7 +12,7 @@ A WYSIWYG (What You See Is What You Get) editor is a document editor where the e
 
 The ocPortal WYSIWYG editor is (as of version 5.1) CKEditor.
 
-ocPortal can, in principle, support almost any WYSIWYG editor component. ocPortal binds itself to the editor via Javascript code stored in ocPortal's [tt]HTML_EDIT[/tt] and [tt]JAVASCRIPT_POSTING[/tt] templates. The editor itself is stored in [tt]data/ckeditor[/tt].
+ocPortal can, in principle, support almost any WYSIWYG editor component. ocPortal binds itself to the editor via Javascript code stored in ocPortal's [tt]WYSIWYG_LOAD[/tt], [tt]WYSIWYG_SETTINGS[/tt], and [tt]JAVASCRIPT_POSTING[/tt] templates. The editor itself is stored in [tt]data/ckeditor[/tt].
 
 [title="2"]Highlighting of Comcode tags[/title]
 

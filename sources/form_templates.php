@@ -166,7 +166,7 @@ function attach_wysiwyg()
 	if (!$WYSIWYG_ATTACHED)
 	{
 		require_code('site');
-		attach_to_javascript(do_template('HTML_EDIT'));
+		attach_to_javascript(do_template('WYSIWYG_LOAD'));
 	}
 	$WYSIWYG_ATTACHED=true;
 	@header('Content-type: text/html; charset='.get_charset());

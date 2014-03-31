@@ -111,7 +111,7 @@ class Hook_addon_registry_core_form_interfaces
 			'sources/hooks/systems/addon_registry/core_form_interfaces.php',
 			'themes/default/templates/POSTING_FORM.tpl',
 			'themes/default/templates/POSTING_SCREEN.tpl',
-			'themes/default/templates/HTML_EDIT.tpl',
+			'themes/default/templates/WYSIWYG_LOAD.tpl',
 			'themes/default/templates/JAVASCRIPT_POSTING.tpl',
 			'themes/default/templates/JAVASCRIPT_EDITING.tpl',
 			'themes/default/templates/WYSIWYG_SETTINGS.tpl',
@@ -489,7 +489,7 @@ class Hook_addon_registry_core_form_interfaces
 			'PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl'=>'preview_script_keyword_density',
 			'PREVIEW_SCRIPT_CODE.tpl'=>'preview_script_code',
 			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE.tpl'=>'form_screen',
-			'HTML_EDIT.tpl'=>'html_edit',
+			'WYSIWYG_LOAD.tpl'=>'wysiwyg_load',
 			'POSTING_FORM.tpl'=>'posting_form',
 			'COMCODE_MESSAGE.tpl'=>'form_screen_1',
 			'COMCODE_EDITOR.tpl'=>'posting_form',
@@ -1631,10 +1631,10 @@ class Hook_addon_registry_core_form_interfaces
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__html_edit()
+	function tpl_preview__wysiwyg_load()
 	{
 		return array(
-			lorem_globalise(do_lorem_template('HTML_EDIT',array()),NULL,'',true)
+			lorem_globalise(do_lorem_template('WYSIWYG_LOAD',array()),NULL,'',true)
 		);
 	}
 
