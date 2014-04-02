@@ -28,7 +28,7 @@ class Hook_paypal
 	 */
 	function _get_payment_address()
 	{
-		return ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
+		return trim(ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn'));
 	}
 
 	/**
@@ -207,10 +207,10 @@ class Hook_paypal
 
 		if (!is_null($primary_paypal_email))
 		{
-			if ($receiver_email!=$primary_paypal_email) my_exit(do_lang('IPN_EMAIL_ERROR'));
+			if (trim($receiver_email)!=trim($primary_paypal_email)) my_exit(do_lang('IPN_EMAIL_ERROR'));
 		} else
 		{
-			if ($receiver_email!=$this->_get_payment_address()) my_exit(do_lang('IPN_EMAIL_ERROR'));
+			if (trim($receiver_email)!=$this->_get_payment_address()) my_exit(do_lang('IPN_EMAIL_ERROR'));
 		}
 
 		if (addon_installed('shopping'))

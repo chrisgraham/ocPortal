@@ -1143,6 +1143,11 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 			$end=min($end1,$end2)+2+$spaces;
 			$func=substr($file,$start,$end-$start);
 
+			if (strpos($func,'$this->')!==false)
+			{
+				return extract_module_functions($path,$functions,$params,true);
+			}
+
 			/*if (strpos($func,'function '.$function.'()')===false)			Fails for default parameters (e.g. $a=NULL in function definition)
 			{
 				$new_func=preg_replace('#function '.preg_quote($function).'\(([^\n]*)\)#','list(${1})=array('.$_params.');',$func);
