@@ -17,7 +17,7 @@ function script_load_stuff()
 	if (window==window.top && !window.opener || window.name=='') window.name='_site_opener';
 
 	/* Are we dealing with a touch device? */
-	if (typeof window.TouchEvent!='undefined') document.body.className+=' touch_enabled';
+	if (typeof document.documentElement.ontouchstart!='undefined') document.body.className+=' touch_enabled';
 
 	/* Dynamic images need preloading */
 	var preloader=new Image();

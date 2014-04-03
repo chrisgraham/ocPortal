@@ -3086,9 +3086,6 @@ a.tab, a.tab:visited, a.tab:hover {
 .tab:hover {
 	text-decoration: underline !important;
 }
-.tab:hover, body.touch_enabled .tab {
-	{$BETA_CSS_PROPERTY,opacity: 1;}
-}
 
 .tab strong {
 	font-weight: normal;
