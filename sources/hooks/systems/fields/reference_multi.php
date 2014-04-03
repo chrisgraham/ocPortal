@@ -105,7 +105,7 @@ class Hook_fields_reference_multi
 		require_code('content');
 
 		$ret=new ocp_tempcode();
-		$evs=explode("\n",$ev);
+		$evs=explode("\n",str_replace(',',"\n",$ev));
 		foreach ($evs as $ev)
 		{
 			list($title)=content_get_details('catalogue_entry',$ev);

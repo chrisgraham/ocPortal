@@ -148,8 +148,14 @@ function user_sync__inbound($since=NULL)
 				continue;
 			}
 
+			$email_address=trim(user_sync_handle_field_remap('email_address',$field_remap['email_address'],$user,$dbh,NULL));
+
 			// Bind to existing?
 			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+			if ((is_null($member_id)) && (get_option('one_per_email_address')=='1') && ($email_address!=''))
+			{
+				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_email_address($email_address);
+			}
 
 			// Work out other data
 			$user_data=array();
@@ -161,7 +167,6 @@ function user_sync__inbound($since=NULL)
 			{
 				$user_data[$key]=user_sync_handle_field_remap($key,$remap_scheme,$user,$dbh,$member_id);
 			}
-			$email_address=trim($user_data['email_address']);
 			$groups=$user_data['groups'];
 			$dob_day=$user_data['dob_day'];
 			$dob_month=$user_data['dob_month'];
@@ -300,7 +305,7 @@ function user_sync__inbound($since=NULL)
 				}
 				foreach ($members_groups as $group_id)
 				{
-					if (!in_array($group_id,$groups))
+					if ((!in_array($group_id,$groups)) && ($group_id!=$primary_group))
 					{
 						ocf_member_leave_group($group_id,$member_id);
 					}
