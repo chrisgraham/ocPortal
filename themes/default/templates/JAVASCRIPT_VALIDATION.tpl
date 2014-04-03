@@ -312,7 +312,7 @@ function check_field(the_element,the_form,for_preview)
 {
 	var i,the_class,required,my_value,erroneous=false,error_msg='',regexp,total_file_size=0,alerted=false,error_element=null;
 
-	if (((the_element.type=='hidden') || ((the_element.style.display=='none') && ((typeof window.is_wysiwyg_field=='undefined') || (!is_wysiwyg_field(the_element))))) && ((!the_element.className) || (element_has_class(the_element,'hidden_but_needed'))==-1))
+	if (((the_element.type=='hidden') || ((the_element.style.display=='none') && ((typeof window.is_wysiwyg_field=='undefined') || (!is_wysiwyg_field(the_element))))) && ((!the_element.className) || (element_has_class(the_element,'hidden_but_needed'))==null))
 	{
 		return null;
 	}
