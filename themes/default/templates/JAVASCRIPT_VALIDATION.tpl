@@ -404,7 +404,7 @@ function check_field(the_element,the_form,for_preview)
 	if ((required) && (my_value.replace(/&nbsp;/g,' ').replace(/<br\s*\/?>/g,' ').replace(/\s/g,'')==''))
 	{
 		error_msg='{!REQUIRED_NOT_FILLED_IN;^}';
-		if ((errormsg_element) && (errormsg_element.getAttribute('data-errorUnfilled')!=''))
+		if ((errormsg_element) && (errormsg_element.getAttribute('data-errorUnfilled')!=null) && (errormsg_element.getAttribute('data-errorUnfilled')!=''))
 			error_msg=errormsg_element.getAttribute('data-errorUnfilled');
 	} else
 	{
