@@ -289,6 +289,9 @@ class forum_driver_ocf extends forum_driver_base
 	function topic_is_threaded($topic_id)
 	{
 		global $TOPIC_IS_THREADED;
+		
+		if (get_param_integer('threaded', null)===1) return true;
+		
 		if (array_key_exists($topic_id,$TOPIC_IS_THREADED)) return $TOPIC_IS_THREADED[$topic_id]==1;
 
 		$TOPIC_IS_THREADED[$topic_id]=$this->connection->query_value_null_ok('f_topics t JOIN '.$this->connection->get_table_prefix().'f_forums f ON f.id=t.t_forum_id','f_is_threaded',array('t.id'=>$topic_id));
