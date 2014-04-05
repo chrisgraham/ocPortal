@@ -47,7 +47,7 @@ class Hook_stats_forum
 				if (get_option('forum_show_stats_count_posts',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'de7e97b855cfbc4d60d069ca3f652b17','KEY'=>do_lang_tempcode('COUNT_POSTS'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_num_forum_posts()))));
 				if (get_option('forum_show_stats_count_posts_today',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'8649eee4a70ce0383c5534da43e2b58c','KEY'=>do_lang_tempcode('COUNT_POSTSTODAY'),'VALUE'=>integer_format($GLOBALS['FORUM_DRIVER']->get_num_new_forum_posts()))));
 			}
-			if ($bits->is_empty()) return new ocp_tempcode();
+			if ($bits->is_definitely_empty()) return new ocp_tempcode();
 			$forums=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'52cd616760efe17adcec4b97e1305301','SECTION'=>do_lang_tempcode('FORUM_SLASH_COMMUNITY'),'CONTENT'=>$bits));
 		} else $forums=new ocp_tempcode();
 

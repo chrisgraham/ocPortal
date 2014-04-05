@@ -52,7 +52,7 @@ class Hook_stats_calendar
 			$events=calendar_matches($GLOBALS['FORUM_DRIVER']->get_guest_id(),true,utctime_to_usertime(time()),utctime_to_usertime(time()+60*60*24*365));
 			$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('EVENTS_THIS_YEAR'),'VALUE'=>integer_format(count($events)))));
 		}
-		if ($bits->is_empty()) return new ocp_tempcode();
+		if ($bits->is_definitely_empty()) return new ocp_tempcode();
 		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('SECTION'=>do_lang_tempcode('CALENDAR'),'CONTENT'=>$bits));
 
 		return $section;

@@ -342,7 +342,7 @@ iframe {
 		overflow-x: visible !important;
 		overflow-y: visible !important;
 	}
-	col {
+	.field_name_column, .field_input_column {
 		width: auto !important;
 	}
 	* {
@@ -1161,6 +1161,9 @@ div.red_alert, p.red_alert {
 }
 
 /* Used for a little 'X comments' box, but with the comments bit showing as an HTML tooltip */
+.comment_count:empty {
+	display: none;
+}
 .comment_count {
 	display: inline-block;
 	white-space: nowrap;
@@ -3801,6 +3804,7 @@ figure {
 
 .attachment_left .attachment, .attachment_right .attachment {
 	width: 200px;
+	white-space: normal;
 }
 
 .attachment_img {

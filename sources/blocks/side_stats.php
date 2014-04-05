@@ -141,7 +141,7 @@ class Block_side_stats
 			if (get_option('activity_show_stats_count_page_views_this_month',true)=='1')
 				$bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'hc9760b2ed9e985e96b53c91c511e84e','KEY'=>do_lang_tempcode('PAGE_VIEWS_THIS_MONTH'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'stats WHERE date_and_time>'.strval(time()-60*60*24*31))))));
 		}
-		if (!$bits->is_empty())
+		if (!$bits->is_definitely_empty())
 			$full_tpl->attach(do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'e2408c71a7c74f1d14089412d4538b6d','SECTION'=>$title,'CONTENT'=>$bits)));
 
 		$_hooks=find_all_hooks('blocks','side_stats');
@@ -157,7 +157,7 @@ class Block_side_stats
 			$object=object_factory('Hook_'.filter_naughty_harsh($hook),true);
 			if (is_null($object)) continue;
 			$bits=$object->run();
-			if (!$bits->is_empty()) $full_tpl->attach($bits);
+			if (!$bits->is_definitely_empty()) $full_tpl->attach($bits);
 		}
 
 		return do_template('BLOCK_SIDE_STATS',array('_GUID'=>'0e9986c117c2a3c04690840fedcbddcd','CONTENT'=>$full_tpl));

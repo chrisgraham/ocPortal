@@ -37,7 +37,7 @@ class Hook_stats_chat
 		if (get_option('chat_show_stats_count_users',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'904a46b83a84728243f3fd655705cc04','KEY'=>do_lang_tempcode('COUNT_CHATTERS'),'VALUE'=>integer_format(get_num_chatters()))));
 		if (get_option('chat_show_stats_count_rooms',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'adf12b729fd23b6fa7115758a64155c6','KEY'=>do_lang_tempcode('ROOMS'),'VALUE'=>integer_format(get_num_chatrooms()))));
 		if (get_option('chat_show_stats_count_messages',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'0e86e89171ddd8225ac41e14b18ecdb0','KEY'=>do_lang_tempcode('COUNT_CHATPOSTS'),'VALUE'=>integer_format(get_num_chatposts()))));
-		if ($bits->is_empty()) return new ocp_tempcode();
+		if ($bits->is_definitely_empty()) return new ocp_tempcode();
 		$chat=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'4d688c45e01ed34f257fd03100a6be6d','SECTION'=>do_lang_tempcode('SECTION_CHAT'),'CONTENT'=>$bits));
 
 		return $chat;

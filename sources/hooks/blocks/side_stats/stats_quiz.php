@@ -34,7 +34,7 @@ class Hook_stats_quiz
 
 		$bits=new ocp_tempcode();
 		if (get_option('quiz_show_stats_count_total_open',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('QUIZZES'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value('quizzes','COUNT(*)')))));
-		if ($bits->is_empty()) return new ocp_tempcode();
+		if ($bits->is_definitely_empty()) return new ocp_tempcode();
 		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('SECTION'=>do_lang_tempcode('QUIZZES'),'CONTENT'=>$bits));
 
 		return $section;

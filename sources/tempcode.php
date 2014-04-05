@@ -1152,6 +1152,7 @@ class ocp_tempcode
 
 	/**
 	 * Find whether the current tempcode object is definitely blank, by doing a very quick check.
+	 * Does not perform an evaluation, so will not trigger any early pre-processing or out-of-order evaluation.
 	 *
 	 * @return boolean		Whether the tempcode object is empty
 	 */

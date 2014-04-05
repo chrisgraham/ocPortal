@@ -2187,9 +2187,17 @@ function ecv($lang,$escaped,$type,$name,$param)
 					{
 						$count=0;
 						$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$param[0].'_'.$param[1]),$count,0,0,false);
-						$_value=do_lang_tempcode('_COMMENTS',integer_format(0));
-						if (is_array($_comments)) $_value=do_lang_tempcode('_COMMENTS',escape_html(integer_format($count)));
-						$value=$_value->evaluate();
+						if (($count!=0) || (!array_key_exists(2,$param)) || ($param[2]=='0'))
+						{
+							if (is_array($_comments))
+							{
+								$_value=do_lang_tempcode('_COMMENTS',escape_html(integer_format($count)));
+							} else
+							{
+								$_value=do_lang_tempcode('_COMMENTS',integer_format(0));
+							}
+							$value=$_value->evaluate();
+						}
 					} else
 					{
 						$value=do_lang('VIEW');

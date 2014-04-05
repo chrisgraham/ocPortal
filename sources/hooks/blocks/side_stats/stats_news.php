@@ -35,7 +35,7 @@ class Hook_stats_news
 		$bits=new ocp_tempcode();
 		if (get_option('news_show_stats_count_total_posts',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('COUNT_POSTS'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value('news','COUNT(*)')))));
 		if (get_option('news_show_stats_count_blogs',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('KEY'=>do_lang_tempcode('BLOGS'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NOT NULL')))));
-		if ($bits->is_empty()) return new ocp_tempcode();
+		if ($bits->is_definitely_empty()) return new ocp_tempcode();
 		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('SECTION'=>do_lang_tempcode('NEWS'),'CONTENT'=>$bits));
 
 		return $section;

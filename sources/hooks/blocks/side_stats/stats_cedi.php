@@ -36,7 +36,7 @@ class Hook_stats_cedi
 		$bits=new ocp_tempcode();
 		if (get_option('cedi_show_stats_count_pages',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'8bbd18d5169c4e5449b252880ecda716','KEY'=>do_lang_tempcode('COUNT_PAGES'),'VALUE'=>integer_format(get_num_cedi_pages()))));
 		if (get_option('cedi_show_stats_count_posts',true)=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'d8cf3d5aabc18777f609760010303ace','KEY'=>do_lang_tempcode('COUNT_POSTS'),'VALUE'=>integer_format(get_num_cedi_posts()))));
-		if ($bits->is_empty()) return new ocp_tempcode();
+		if ($bits->is_definitely_empty()) return new ocp_tempcode();
 		$cedi=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'ea19e51db4e62958843ace808016af1e','SECTION'=>do_lang_tempcode('CEDI'),'CONTENT'=>$bits));
 
 		return $cedi;
