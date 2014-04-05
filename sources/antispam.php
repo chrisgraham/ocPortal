@@ -409,6 +409,8 @@ function _check_stopforumspam($user_ip,$username=NULL,$email=NULL)
 	if ($key!='') $url.='&api_key='.urlencode($key); // Key not needed for read requests, but give it as a courtesy
 	$_result=http_download_file($url,NULL,false);
 
+	secure_serialized_data($_result);
+
 	$result=@unserialize($_result);
 	if ($result!==false)
 	{

@@ -243,6 +243,7 @@ function post_comment_script()
 
 	// Read in context of what we're doing
 	$options=post_param('options');
+	secure_serialized_data($options);
 	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time)=unserialize($options);
 
 	// Check security

@@ -311,6 +311,8 @@ function try_cookie_login()
 				$the_cookie=stripslashes($_COOKIE[$base]);
 			}
 
+			secure_serialized_data($the_cookie,array());
+
 			$unserialize=unserialize($the_cookie);
 
 			if (array_key_exists($real_member_cookie,$unserialize))
