@@ -285,7 +285,13 @@ class OCP_Topic
 		$this->topic_id=$topic_id;
 		$this->reverse=$reverse;
 
-		$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
+		if (get_param_integer('threaded',NULL)===1)
+		{
+			$this->is_threaded=true;
+		} else
+		{
+			$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
+		}
 
 		$posts=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts(
 			$topic_id,
