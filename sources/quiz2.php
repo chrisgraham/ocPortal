@@ -190,6 +190,8 @@ function _save_available_quiz_answers($id,$text,$type)
 			}
 		}
 
+		if (count($as)==0) continue; // Was only an orphaned explanation, so ignore
+
 		$_q=array_shift($as);
 		$question=$_q[0];
 		$question_extra_text=$_q[1];
@@ -225,6 +227,8 @@ function _save_available_quiz_answers($id,$text,$type)
 			}
 		} else // We're replacing an existing question
 		{
+			if ($existing[$i]['q_question_extra_text']==1) $existing[$i]['q_question_extra_text']=insert_lang('',2); // Fix possible corruption
+
 			$GLOBALS['SITE_DB']->query_update('quiz_questions',array(
 				'q_quiz'=>$id,
 				'q_type'=>$type,

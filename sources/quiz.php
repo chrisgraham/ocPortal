@@ -224,6 +224,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 	$out_of=0;
 	$given_answers=array();
 	$corrections=array();
+	$affirmations=array();
 	$unknowns=array();
 	foreach ($questions as $i=>$question)
 	{
@@ -261,6 +262,11 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 				if ($was_correct)
 				{
 					$marks++;
+
+					$affirmation=array($question['id'],$question_text,$correct_answer,$given_answer);
+					if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
+						$affirmation[]=$correct_explanation;
+					$affirmations[]=$affirmation;
 				} else
 				{
 					$correction=array($question['id'],$question_text,$correct_answer,$given_answer);
@@ -319,6 +325,12 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
 					$correction[]=$correct_explanation;
 				$corrections[]=$correction;
+			} else
+			{
+				$affirmation=array($question['id'],$question_text,$correct_answer,$given_answer);
+				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
+					$affirmation[]=$correct_explanation;
+				$affirmations[]=$affirmation;
 			}
 
 			$given_answer=$accum->evaluate();
@@ -352,7 +364,6 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 						$was_correct=true;
 
 						$marks++;
-						break;
 					}
 
 					$correct_explanation=get_translated_text($a['q_explanation']);
@@ -365,6 +376,12 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
 					$correction[]=$correct_explanation;
 				$corrections[]=$correction;
+			} else
+			{
+				$affirmation=array($question['id'],$question_text,$correct_answer,$given_answer);
+				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
+					$affirmation[]=$correct_explanation;
+				$affirmations[]=$affirmation;
 			}
 
 			$given_answers[]=array(
@@ -387,6 +404,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 	// Prepare results for display
 	$corrections_to_staff=new ocp_tempcode();
 	$corrections_to_member=new ocp_tempcode();
+	$affirmations_to_member=new ocp_tempcode();
 	foreach ($corrections as $correction)
 	{
 		if ((array_key_exists(4,$correction)) || ($quiz['q_reveal_answers']==1) || ($reveal_all))
@@ -413,6 +431,22 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 		);
 		$corrections_to_staff->attach($_correction);
 	}
+	foreach ($affirmations as $affirmation)
+	{
+		if (array_key_exists(4,$affirmation))
+		{
+			$__affirmation=do_lang_tempcode(
+				'QUIZ_AFFIRMATION_HTML',
+				escape_html(is_object($affirmation[1])?$affirmation[1]->evaluate():$affirmation[1]),
+				escape_html(is_object($affirmation[3])?$affirmation[3]->evaluate():$affirmation[3]),
+				array(
+					escape_html(is_object($affirmation[2])?$affirmation[2]->evaluate():$affirmation[2]),
+					escape_html(array_key_exists(4,$affirmation)?$affirmation[4]:''),
+				)
+			);
+			$affirmations_to_member->attach($__affirmation);
+		}
+	}
 	$unknowns_to_staff=new ocp_tempcode();
 	foreach ($unknowns as $unknown)
 	{
@@ -437,6 +471,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 		$out_of,
 		$given_answers,
 		$corrections,
+		$affirmations,
 		$unknowns,
 		$minimum_percentage,
 		$maximum_percentage,
@@ -444,6 +479,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 		$percentage_range,
 		$corrections_to_staff,
 		$corrections_to_member,
+		$affirmations_to_member,
 		$unknowns_to_staff,
 		$given_answers_to_staff,
 		$passed,

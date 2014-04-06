@@ -76,6 +76,8 @@ class Hook_Preview_quiz
 				}
 			}
 
+			if (count($as)==0) continue; // Was only an orphaned explanation, so ignore
+
 			$_q=array_shift($as);
 			$question=$_q[0];
 			$question_extra_text=$_q[1];

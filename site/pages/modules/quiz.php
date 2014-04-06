@@ -246,7 +246,7 @@ class Module_quiz
 			} else $awards=array();
 
 			$quiz_name=get_translated_text($quiz['q_name']);
-			$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$quiz_id,$quiz_name));
+			$title_to_use=do_lang_tempcode('QUIZ_THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$quiz_id,$quiz_name));
 			$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
 			seo_meta_load_for('quiz',strval($quiz_id),$title_to_use_2);
 
@@ -306,7 +306,7 @@ class Module_quiz
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('QUIZZES')),array('_SELF:_SELF:do:'.strval($quiz_id),make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
 
-			$this->title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
+			$this->title=get_screen_title(do_lang_tempcode('QUIZ_THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 
 			$this->quiz_id=$quiz_id;
 			$this->quiz=$quiz;
@@ -568,6 +568,7 @@ class Module_quiz
 			$out_of,
 			$given_answers,
 			$corrections,
+			$affirmations,
 			$unknowns,
 			$minimum_percentage,
 			$maximum_percentage,
@@ -575,6 +576,7 @@ class Module_quiz
 			$percentage_range,
 			$corrections_to_staff,
 			$corrections_to_member,
+			$affirmations_to_member,
 			$unknowns_to_staff,
 			$given_answers_to_staff,
 			$passed,
@@ -696,6 +698,7 @@ class Module_quiz
 			'QUIZ_NAME'=>$quiz_name,
 			'GIVEN_ANSWERS_ARR'=>$given_answers,
 			'CORRECTIONS'=>$corrections_to_member,
+			'AFFIRMATIONS'=>$affirmations_to_member,
 			'PASSED'=>$passed,
 			'POINTS_DIFFERENCE'=>strval($points_difference),
 			'RESULT'=>$result_to_member,
