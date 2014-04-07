@@ -40,7 +40,7 @@ php.ini
 /*.shtml
 /.project
 
-; These should be banned for the main ocPortal dev repository but not for ocP projects
+; These files should be banned for the main ocPortal dev repository but not for ocP projects
 .idea
 cron.yaml
 /data_custom/modules/google_appengine/*
