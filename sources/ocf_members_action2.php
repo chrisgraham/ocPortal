@@ -822,6 +822,21 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	{
 		$update['m_username']=$username;
 
+		// Reassign personal galleries
+		if (addon_installed('galleries'))
+		{
+			require_lang('galleries');
+			$personal_galleries=$GLOBALS['SITE_DB']->query('SELECT fullname,parent_id FROM '.get_table_prefix().'galleries WHERE name LIKE \'member_'.strval($member_id).'_%\'');
+			foreach ($personal_galleries as $gallery)
+			{
+				$parent_title=get_translated_text($GLOBALS['SITE_DB']->query_value('galleries','fullname',array('name'=>$gallery['parent_id'])));
+				if (get_translated_text($gallery['fullname'])==do_lang('PERSONAL_GALLERY_OF',$old_username,$parent_title))
+				{
+					lang_remap($gallery['fullname'],do_lang('PERSONAL_GALLERY_OF',$username,$parent_title),$GLOBALS['FORUM_DB']);
+				}
+			}
+		}
+
 		require_code('notifications');
 
 		$subject=do_lang('USERNAME_CHANGED_MAIL_SUBJECT',$username,$old_username,NULL,get_lang($member_id));

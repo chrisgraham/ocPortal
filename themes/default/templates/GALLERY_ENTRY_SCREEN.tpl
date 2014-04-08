@@ -62,7 +62,7 @@
 		</div>
 
 		{+START,IF_NON_EMPTY,{MEMBER_DETAILS}}{+START,IF_PASSED,MEMBER_ID}
-			<div class="right">
+			<div class="gallery_member_details right">
 				<div class="box box___gallery_entry_screen"><div class="box_inner">
 					<h2>{GALLERY_TITLE*}</h2>
 

@@ -9,6 +9,10 @@
 	margin-bottom: 1em;
 }
 
+.gallery_member_details {
+	min-width: 24em;
+}
+
 .gallery_entry_field_name_column {
 	width: 8.5em;
 }
