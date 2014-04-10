@@ -304,7 +304,7 @@ class Module_polls
 			build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),
 			$_title,
 			find_overridden_comment_forum('polls'),
-			$myrow['add_date']
+			$myrow['add_time']
 		);
 
 		// Management links

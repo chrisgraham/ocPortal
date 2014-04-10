@@ -55,6 +55,7 @@ class Module_quiz
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entry_answer');
 
 		delete_privilege('bypass_quiz_repeat_time_restriction');
+		delete_privilege('view_others_quiz_results');
 	}
 
 	/**
@@ -91,6 +92,13 @@ class Module_quiz
 					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'quiz','category_name'=>strval($quiz['id']),'group_id'=>$group_id));
 				}
 			}
+
+			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_type','ID_TEXT','MULTIPLECHOICE');
+			$GLOBALS['SITE_DB']->query_update('quiz_questions',array('q_type'=>'LONG'),array('q_long_input_field'=>1));
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'quiz_questions SET q_type=\'MULTIMULTI\' WHERE q_num_choosable_answers>0');
+			$GLOBALS['SITE_DB']->delete_table_field('quiz_questions','q_long_input_field');
+			$GLOBALS['SITE_DB']->delete_table_field('quiz_questions','q_num_choosable_answers');
+			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_question_extra_text','LONG_TRANS');
 		}
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
@@ -136,10 +144,10 @@ class Module_quiz
 
 			$GLOBALS['SITE_DB']->create_table('quiz_questions',array( // Note there is only a matching question_answer if it is not a free question. If there is just one answer, then it is not multiple-choice.
 				'id'=>'*AUTO',
-				'q_long_input_field'=>'BINARY', // Only applies for free questions
-				'q_num_choosable_answers'=>'INTEGER', // If >1 then they can do multi-choice
+				'q_type'=>'ID_TEXT',
 				'q_quiz'=>'AUTO_LINK',
 				'q_question_text'=>'LONG_TRANS',
+				'q_question_extra_text'=>'LONG_TRANS',
 				'q_order'=>'INTEGER',
 				'q_required'=>'BINARY',
 				'q_marked'=>'BINARY',
@@ -238,7 +246,7 @@ class Module_quiz
 			} else $awards=array();
 
 			$quiz_name=get_translated_text($quiz['q_name']);
-			$title_to_use=do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$quiz_id,$quiz_name));
+			$title_to_use=do_lang_tempcode('QUIZ_THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$quiz_id,$quiz_name));
 			$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
 			seo_meta_load_for('quiz',strval($quiz_id),$title_to_use_2);
 
@@ -298,7 +306,7 @@ class Module_quiz
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('QUIZZES')),array('_SELF:_SELF:do:'.strval($quiz_id),make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))))));
 
-			$this->title=get_screen_title(do_lang_tempcode('THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
+			$this->title=get_screen_title(do_lang_tempcode('QUIZ_THIS_WITH',do_lang_tempcode($quiz['q_type']),make_string_tempcode(escape_html(get_translated_text($quiz['q_name'])))),false);
 
 			$this->quiz_id=$quiz_id;
 			$this->quiz=$quiz;
@@ -518,7 +526,7 @@ class Module_quiz
 		}
 		foreach ($questions as $i=>$question)
 		{
-			if ($question['q_num_choosable_answers']==0) // Text box ("free question"). May be an actual answer, or may not be
+			if ($question['q_type']=='SHORT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
 			{
 				$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 					'q_entry'=>$entry_id,
@@ -526,12 +534,12 @@ class Module_quiz
 					'q_answer'=>post_param('q_'.strval($question['id']),'')
 				));
 			}
-			elseif ($question['q_num_choosable_answers']>1) // Check boxes
+			elseif ($question['q_type']=='MULTIMULTIPLE') // Check boxes
 			{
 				$accum=new ocp_tempcode();
 				foreach ($question['answers'] as $a)
 				{
-					if (post_param_integer($name.'_'.strval($a['id']),0)==1)
+					if (post_param_integer('q_'.strval($question['id']).'_'.strval($a['id']),0)==1)
 					{
 						$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 							'q_entry'=>$entry_id,
@@ -540,7 +548,7 @@ class Module_quiz
 						));
 					}
 				}
-			} else // Radio buttons
+			} elseif ($question['q_type']=='MULTIPLECHOICE') // Radio buttons
 			{
 				$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 					'q_entry'=>$entry_id,
@@ -560,6 +568,7 @@ class Module_quiz
 			$out_of,
 			$given_answers,
 			$corrections,
+			$affirmations,
 			$unknowns,
 			$minimum_percentage,
 			$maximum_percentage,
@@ -567,6 +576,7 @@ class Module_quiz
 			$percentage_range,
 			$corrections_to_staff,
 			$corrections_to_member,
+			$affirmations_to_member,
 			$unknowns_to_staff,
 			$given_answers_to_staff,
 			$passed,
@@ -688,6 +698,7 @@ class Module_quiz
 			'QUIZ_NAME'=>$quiz_name,
 			'GIVEN_ANSWERS_ARR'=>$given_answers,
 			'CORRECTIONS'=>$corrections_to_member,
+			'AFFIRMATIONS'=>$affirmations_to_member,
 			'PASSED'=>$passed,
 			'POINTS_DIFFERENCE'=>strval($points_difference),
 			'RESULT'=>$result_to_member,

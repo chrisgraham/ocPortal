@@ -294,6 +294,8 @@ function comcode_helper_script()
 		$content=comcode_helper_script_step3();
 	}
 
+	else warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+
 	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'c1f229be68a1137c5b418b0d5d8a7ccf','TITLE'=>do_lang_tempcode('COMCODE_HELPER'),'POPUP'=>true,'CONTENT'=>$content));
 	exit($echo->evaluate());
 	$echo->handle_symbol_preprocessing();

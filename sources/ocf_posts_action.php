@@ -338,7 +338,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		if (!is_null($forum_id))
 		{
 			$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_post_count_increment',array('id'=>$forum_id));
-			if (($post_counts===1) && (!$anonymous)) ocf_force_update_member_post_count($poster,1);
+			if (($post_counts===1) && (!$anonymous) && ($validated==1)) ocf_force_update_member_post_count($poster,1);
 
 			if ($check_permissions) ocf_decache_ocp_blocks($forum_id,NULL,$intended_solely_for); // i.e. we don't run this if in installer
 		}

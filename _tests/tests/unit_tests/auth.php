@@ -64,7 +64,7 @@ class auth_test_set extends ocp_test_case
 	function testAdminZoneDoesFail()
 	{
 		require_code('files');
-		http_download_file(static_evaluate_tempcode(build_url(array('page'=>''),'adminzone',NULL,false,false,true)),NULL,false);
+		$result=http_download_file(static_evaluate_tempcode(build_url(array('page'=>''),'adminzone',NULL,false,false,true)),NULL,false);
 		global $HTTP_MESSAGE;
 		$this->assertTrue($HTTP_MESSAGE=='401');
 	}

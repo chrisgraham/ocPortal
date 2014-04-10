@@ -66,10 +66,11 @@ class Module_admin_wordfilter
 			));
 
 			$naughties=array(
-				'arsehole','asshole','arse','cock','cocked','cocksucker','crap','cunt','cum','bastard',
-				'bitch','blowjob','bollocks','bondage','bugger','buggery','dickhead','fuck','fucked','fucking',
-				'fucker','gayboy','motherfucker','nigger','piss','pissed','pussy','shag','shagged',
-				'shit','slut','twat','wank','wanker','whore',
+				'arsehole','asshole','arse','bastard','cock','cocked','cocksucker','crap','cunt','cum',
+				'blowjob','bollocks','bondage','bugger','buggery','dickhead','dildo','faggot','fuck','fucked','fucking',
+				'fucker','gayboy','jackoff','jerk-off','motherfucker','nigger','piss','pissed','puffter','pussy',
+				'queers','retard','shag','shagged',
+				'shat','shit','slut','twat','wank','wanker','whore',
 			);
 			foreach ($naughties as $word)
 			{

@@ -196,7 +196,7 @@ function get_exif_image_caption($path,$filename)
 		if ((function_exists('iptcparse')) && (function_exists('getimagesize')))
 		{
 			$meta_data2=array();
-			getimagesize($path,$meta_data2);
+			@getimagesize($path,$meta_data2);
 			if (isset($meta_data2['APP13']))
 			{
 				$meta_data2=iptcparse($meta_data2['APP13']);

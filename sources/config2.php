@@ -19,7 +19,7 @@
  */
 
 /**
- * Find whether to run in multi-lang mode.
+ * An option has dissappeared somehow - find it via searching our code-base for it's install code. It doesn't get returned, just loaded up. This function will produce a fatal error if we cannot find it.
  *
  * @return boolean		Whether to run in multi-lang mode.
  */
@@ -184,7 +184,7 @@ function set_option($name,$value,$will_be_formally_set=1)
  * @param  SHORT_TEXT	The name value
  * @param  ID_TEXT		The type
  */
-function config_update_value_ref($old_title,$title,$type)
+function config_update_value_ref($old_setting,$setting,$type)
 {
 	$hooks=find_all_hooks('systems','config');
 	$all_options=array();
@@ -193,9 +193,9 @@ function config_update_value_ref($old_title,$title,$type)
 		require_code('hooks/systems/config/'.filter_naughty($hook));
 		$ob=object_factory('Hook_config_'.$hook);
 		$option=$ob->get_details();
-		if ($option['type']==$type)
+		if (($option['type']==$type) && (get_option($hook)==$old_setting))
 		{
-			$GLOBALS['FORUM_DB']->query_update('config',array('c_value'=>$title),array('c_name'=>$hook,'c_value'=>$old_title));
+			$GLOBALS['FORUM_DB']->query_update('config',array('c_value'=>$setting),array('c_name'=>$hook),'',1);
 		}
 	}
 }

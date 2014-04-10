@@ -472,6 +472,9 @@ class Module_admin_addons
 			if (is_numeric($url))
 			{
 				$_POST['url']='http://ocportal.com/site/dload.php?id='.$url;
+			} else
+			{
+				$_POST['url']=$url; // In case it was submitted in array form, which is possible on some UAs (based on an automated bug report)
 			}
 
 			$urls=get_url('url','file','imports/addons',0,0,false,'','',true);

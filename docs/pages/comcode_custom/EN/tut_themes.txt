@@ -162,6 +162,7 @@ On devices like iphones or Android, it still works if mobile mode is not enabled
 6) Make good use of the template tree if you're not sure what templates are being used on a screen. Alternatively use the template search feature (available on the screen where you choose a template to edit)
 7) If you are choosing a template to edit manually from the full list but you know the name of the template, you can quickly get to it by typing rather than scrolling. Just click one of the entries in the list, and then type "dash-space-template-name", and most browsers will jump straight to it
 8) Remember to test how your e-mails look as well as your screens
+9) The font-size changer assumes you will use em-based (i.e. relative) sizing for all styles. The font sizer works by setting a larger base font size. The default theme sizes almost everything relatively (using 'em'), so a larger base font size has an effect that cascades through everything. If you change styles to 'pt' or 'px' then that is absolute and hence the cascade will be stopped at that point.
 
 For more tips, see [page="forum:topicview:misc:9553"]a walk-through guide[/page] on our forum.
 

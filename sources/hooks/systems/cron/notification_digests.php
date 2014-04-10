@@ -47,7 +47,7 @@ class Hook_cron_notification_digests
 					$to_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
 					$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($to_member_id,'m_join_time');
 
-					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message','d_date_and_time'),array(
+					$messages=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('d_subject','d_message','d_date_and_time','d_read'),array(
 						'd_to_member_id'=>$to_member_id,
 						'd_frequency'=>$frequency,
 					),'ORDER BY d_date_and_time');
@@ -59,7 +59,7 @@ class Hook_cron_notification_digests
 					$_message='';
 					foreach ($messages as $message)
 					{
-						if ($d['read']==0)
+						if ($message['d_read']==0)
 						{
 							if ($_message!='') $_message.="\n";
 							$_message.=do_lang('DIGEST_EMAIL_INDIVIDUAL_MESSAGE_WRAP',comcode_escape($message['d_subject']),get_translated_text($message['d_message']),array(comcode_escape(get_site_name()),get_timezoned_date($message['d_date_and_time'])));

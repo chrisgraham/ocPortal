@@ -37,7 +37,10 @@ class Hook_fields_content_link
 				$declared_hook=$hook;
 				if ($hook=='topic') $declared_hook='forum_topic';
 
-				$ret['at_'.$declared_hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html($hook));
+				if ((is_file(get_file_base().'/sources_custom/hooks/systems/content_meta_aware/'.$hook.'.php')) || (is_file(get_file_base().'/sources/hooks/systems/content_meta_aware/'.$hook.'.php')))
+				{
+					$ret['at_'.$declared_hook]=do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html($hook));
+				}
 			}
 		}
 		return $ret;

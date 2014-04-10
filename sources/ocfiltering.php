@@ -456,7 +456,10 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 
 	if ($filter=='') return '1=2';
 	if ($filter=='*') return '1=1';
-	if ($filter==strval(db_get_first_id()).'*') return '1=1';
+	if ($parent_spec__table_name!=='catalogue_categories')
+	{
+		if ($filter==strval(db_get_first_id()).'*') return '1=1';
+	}
 
 	if ($parent_spec__table_name===NULL)
 	{
@@ -506,8 +509,12 @@ function ocfilter_to_sqlfragment($filter,$field_name,$parent_spec__table_name=NU
 			if (($parent_spec__table_name=='catalogue_categories') && (strpos($field_name,'c_name')===false) && ($parent_field_name=='cc_id') && ($matches[2]!='>') && (db_has_subqueries($db->connection_read))) // Special case (optimisation) for catalogues
 			{
 				// MySQL should be smart enough to not enumerate the 'IN' clause here, which would be bad - instead it can jump into the embedded WHERE clause on each test iteration
-				$this_details=$db->query_select('catalogue_categories',array('cc_parent_id','c_name'),array('id'=>intval($matches[1])),'',1);
-				if (array_key_exists(0,$this_details))
+				$this_details=$db->query_select('catalogue_categories cc JOIN '.$db->get_table_prefix().'catalogues c ON c.c_name=cc.c_name',array('cc_parent_id','cc.c_name','c_is_tree'),array('id'=>intval($matches[1])),'',1);
+				if ($this_details[0]['c_is_tree']==0)
+				{
+					$out_or.=_ocfilter_eq($parent_field_name,$matches[1],$numeric_category_set_ids);
+				}
+				elseif (is_null($this_details[0]['cc_parent_id']))
 				{
 					if ($this_details[0]['cc_parent_id']===NULL)
 					{

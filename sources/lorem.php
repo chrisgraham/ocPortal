@@ -889,7 +889,7 @@ function get_text_templates()
 		'CSS_NEED',
 		'CSS_NEED_FULL',
 		'CSS_NEED_INLINE',
-		'HTML_EDIT',
+		'WYSIWYG_LOAD',
 		'JAVASCRIPT_NEED',
 		'JAVASCRIPT_NEED_INLINE',
 		'AJAX_PAGINATION',

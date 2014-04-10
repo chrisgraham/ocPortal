@@ -75,8 +75,10 @@ class Hook_members_quiz
 				,
 				,
 				,
+				,
 				$marks_range,
 				$percentage_range,
+				,
 				,
 				,
 				,
@@ -111,6 +113,10 @@ class Hook_members_quiz
 					'RUNNING_PERCENTAGE__CREDIT'=>0.0,
 				);
 			}
+			/*if (!$has_points)
+			{
+				$entry['q_points_for_passing']=$out_of;
+			}*/
 			$categories[$category_title]['QUIZZES'][$entry['id']]=array(
 				'QUIZ_NAME'=>$quiz_name,
 				'QUIZ_START_TEXT'=>get_translated_tempcode($entry['q_start_text']),
@@ -125,10 +131,6 @@ class Hook_members_quiz
 				'PASSED'=>$passed,
 				'POINTS'=>strval($entry['q_points_for_passing']),
 			);
-			/*if (!$has_points)
-			{
-				$entry['q_points_for_passing']=$out_of;
-			}*/
 			$categories[$category_title]['RUNNING_MARKS']+=$marks;
 			$categories[$category_title]['RUNNING_OUT_OF']+=$out_of-$potential_extra_marks; /*manually marking discounted to limit us to certainties*/
 			$categories[$category_title]['RUNNING_MARKS__CREDIT']+=floatval($entry['q_points_for_passing'])*$marks/floatval($out_of-$potential_extra_marks);

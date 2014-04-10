@@ -40,7 +40,7 @@ class missing_block_params_test_set extends ocp_test_case
 					if ($matches[1][$i]=='cache') continue;
 
 					// Check param defined in block definition
-					if ((preg_match('/\$info\[\'parameters\'\]=array\([^\n]*\''.preg_quote($matches[1][$i]).'\'[^\n]*\);/',$contents)==0))
+					if ((preg_match('/\$info\[\'parameters\'\]=array\([^\)]*\''.preg_quote($matches[1][$i]).'\'[^\)]*\);/',$contents)==0))
 					{
 						$this->assertTrue(false,'Missing block param... '.basename($f,'.php').': '.$matches[1][$i]);
 					}
@@ -50,7 +50,7 @@ class missing_block_params_test_set extends ocp_test_case
 					// Check for cacheing
 					if ((strpos($contents,'$info[\'cache_on\']')!==false) && (strpos($contents,'$info[\'cache_on\']=array(')===false))
 					{
-						$pattern='/\$info\[\'cache_on\'\]=\'[^\n]*array\([^\n]*\\\\\''.preg_quote($matches[1][$i]).'\\\\\'/';
+						$pattern='/\$info\[\'cache_on\'\]=\'[^;]*array\([^;]*\\\\\''.preg_quote($matches[1][$i]).'\\\\\'/';
 						if (preg_match($pattern,$contents)==0)
 						{
 							$this->assertTrue(false,'Block param not cached... '.basename($f,'.php').': '.$matches[1][$i]);

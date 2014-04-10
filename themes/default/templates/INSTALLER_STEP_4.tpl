@@ -8,9 +8,7 @@
 		<input name="board_path" type="hidden" value="{BOARD_PATH*}" />
 
 		<div class="installer_main_min">
-			{+START,IF_NON_EMPTY,{MESSAGE}}
-				<div class="lonely_label">{MESSAGE}</div>
-			{+END}
+			{MESSAGE}
 
 			{SECTIONS}
 		</div>

@@ -32,23 +32,84 @@ function load_quiz_questions_to_string($id)
 	{
 		$answer_rows=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$q['id']),'ORDER BY q_order');
 		$text.=get_translated_text($q['q_question_text']);
-		if ($q['q_long_input_field']==1) $text.=' [LONG]';
+		$question_extra_text=get_translated_text($q['q_question_extra_text']);
+		$text.=' ['.$q['q_type'].']';
 		if ($q['q_required']==1) $text.=' [REQUIRED]';
 		if ($q['q_marked']==0) $text.=' [UNMARKED]';
-		if (($q['q_num_choosable_answers']==count($answer_rows)) && ($q['q_num_choosable_answers']!=0)) $text.=' [*]';
-		$text.="\n";
+		if ($question_extra_text!='')
+		{
+			$text.="\n".preg_replace('#^#m',':',$question_extra_text);
+		}
 		foreach ($answer_rows as $a)
 		{
-			$text.=get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'')."\n";
+			$text.="\n".get_translated_text($a['q_answer_text']).(($a['q_is_correct']==1)?' [*]':'');
 			$explanation=get_translated_text($a['q_explanation']);
 			if ($explanation!='')
 			{
-				$text.=':'.$explanation."\n";
+				$text.="\n".preg_replace('#^#m',':',$explanation);
 			}
 		}
-		$text.="\n";
+		$text.="\n\n";
 	}
 	return $text;
+}
+
+/**
+ * Parse a quiz question line, to find the question options.
+ *
+ * @param  string			The quiz question line
+ * @param  array			List of possible answers (used for validation purposes)
+ * @param  string			The quiz question description
+ * @param  boolean		Whether to perform validation / corrections
+ * @return array			A tuple: Question, question type, required?, marked?, question extra text (description)
+ */
+function parse_quiz_question_line($question,$answers,$question_extra_text='',$do_validation=true)
+{
+	$question=trim($question);
+
+	// Type?
+	$type=((count($answers)==0)?'SHORT':'MULTIPLECHOICE');
+	foreach (array('MULTIPLECHOICE','MULTIMULTIPLE','LONG','SHORT') as $possible_type)
+	{
+		if (strpos($question,' ['.$possible_type.']')!==false)
+		{
+			$type=$possible_type;
+		}
+		$question=str_replace(' ['.$possible_type.']','',$question);
+	}
+
+	// Required?
+	$required=(strpos($question,' [REQUIRED]')!==false)?1:0;
+	$question=str_replace(' [REQUIRED]','',$question);
+
+	// Marked?
+	$marked=(strpos($question,' [UNMARKED]')!==false)?0:1;
+	$question=str_replace(' [UNMARKED]','',$question);
+
+	// Some validation
+	if ($do_validation)
+	{
+		if (($type=='MULTIPLECHOICE' || $type=='MULTIMULTIPLE') && (count($answers)==0)) // Error if multiple choice but no choices
+		{
+			require_lang('quiz');
+			attach_message(do_lang_tempcode('QUIZ_INVALID_MULTI_NO_ANSWERS'),'warn');
+			$type='SHORT';
+		}
+		if (($type=='LONG') && (count($answers)>0)) // Error if any answers for LONG
+		{
+			require_lang('quiz');
+			attach_message(do_lang_tempcode('QUIZ_INVALID_LONG_HAS_ANSWERS'),'warn');
+			$type='MULTIPLECHOICE';
+		}
+		if (($marked==0) && (count($answers)>0))
+		{
+			require_lang('quiz');
+			attach_message(do_lang_tempcode('QUIZ_INVALID_UNMARKED_HAS_ANSWERS'),'warn');
+			$marked=1;
+		}
+	}
+
+	return array($question,$type,$required,$marked,$question_extra_text);
 }
 
 /**
@@ -61,8 +122,7 @@ function load_quiz_questions_to_string($id)
  */
 function _save_available_quiz_answers($id,$text,$type)
 {
-	$_existing=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
-
+	// Basic pre-parse
 	$_qs=explode("\n\n",$text);
 	$qs=array();
 	foreach ($_qs as $q)
@@ -72,6 +132,8 @@ function _save_available_quiz_answers($id,$text,$type)
 	}
 	$num_q=0;
 
+	// Try and bind to existing questions (if editing)
+	$_existing=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id),'ORDER BY q_order');
 	$qs2=array();
 	$existing=array();
 	foreach ($qs as $i=>$q)
@@ -82,38 +144,33 @@ function _save_available_quiz_answers($id,$text,$type)
 		{
 			if ($a!='') $as[]=$a;
 		}
+
 		$q=array_shift($as);
-		$matches=array();
-		if (preg_match('#^(.*)#',$q,$matches)===false) continue;
-		if (count($matches)==0) continue;
+		$qs2[$i]=$q."\n".implode("\n",$as);
 
-		$implicit_question_number=$i;//$matches[1];
-
-		$qs2[$implicit_question_number]=$q."\n".implode("\n",$as);
-
-		$question=trim($matches[count($matches)-1]);
-		$question=str_replace(array(' [LONG]',' [*]',' [REQUIRED]'),array('','',''),$question);
+		list($question)=parse_quiz_question_line($q,$as,'',false);
 
 		foreach ($_existing as $_i=>$q_row) // Try and match to an existing question, by the question name
 		{
 			if (get_translated_text($q_row['q_question_text'])==$question)
 			{
-				$existing[$implicit_question_number]=$q_row;
+				$existing[$i]=$q_row;
 				unset($_existing[$_i]);
 				continue 2;
 			}
 		}
-		$existing[$implicit_question_number]=NULL;
+		$existing[$i]=NULL;
 	}
 
-	ksort($qs2);
-	ksort($existing);
+	// Reassign DB slots for existing questions that were left unused, to new ones that were not matched
 	foreach ($existing as $i=>$e)
 	{
 		if (is_null($e)) $existing[$i]=array_shift($_existing);
 	}
+	// Even if there were more before, we will add them to what we're saving now - then erase later
 	foreach ($_existing as $e) $existing[]=$e;
 
+	// Parse out answers etc for each question
 	foreach ($qs2 as $i=>$q)
 	{
 		$_as=explode("\n",$q);
@@ -125,36 +182,28 @@ function _save_available_quiz_answers($id,$text,$type)
 				if (substr($a,0,1)==':') // Is an explanation
 				{
 					if (count($as)!=0)
-						$as[count($as)-1][1]=substr($a,1);
+						$as[count($as)-1][1]=trim($as[count($as)-1][1]."\n".trim(substr($a,1)));
 				} else
 				{
 					$as[]=array($a,'');
 				}
 			}
 		}
-		$q=array_shift($as);
-		$q=$q[0];
-		$matches=array();
-		if (preg_match('#^(.*)#',$q,$matches)===false) continue;
-		if (count($matches)==0) continue;
 
-		$question=trim($matches[count($matches)-1]);
-		$long_input_field=(strpos($question,' [LONG]')!==false)?1:0;
-		$question=str_replace(' [LONG]','',$question);
-		$num_choosable_answers=(strpos($question,' [*]')!==false)?count($as):((count($as)>0)?1:0);
-		$question=str_replace(' [*]','',$question);
-		$required=(strpos($question,' [REQUIRED]')!==false)?1:0;
-		$question=str_replace(' [REQUIRED]','',$question);
-		$marked=(strpos($question,' [UNMARKED]')!==false)?0:1;
-		$question=str_replace(' [UNMARKED]','',$question);
+		if (count($as)==0) continue; // Was only an orphaned explanation, so ignore
+
+		$_q=array_shift($as);
+		$question=$_q[0];
+		$question_extra_text=$_q[1];
+		list($question,$type,$required,$marked,$question_extra_text)=parse_quiz_question_line($question,$as,$question_extra_text);
 
 		if (is_null($existing[$i])) // We're adding a new question on the end
 		{
 			$q_id=$GLOBALS['SITE_DB']->query_insert('quiz_questions',array(
-				'q_long_input_field'=>$long_input_field,
-				'q_num_choosable_answers'=>$num_choosable_answers,
 				'q_quiz'=>$id,
+				'q_type'=>$type,
 				'q_question_text'=>insert_lang($question,2),
+				'q_question_extra_text'=>insert_lang($question_extra_text,2),
 				'q_order'=>$i,
 				'q_required'=>$required,
 				'q_marked'=>$marked,
@@ -178,11 +227,13 @@ function _save_available_quiz_answers($id,$text,$type)
 			}
 		} else // We're replacing an existing question
 		{
+			if ($existing[$i]['q_question_extra_text']==1) $existing[$i]['q_question_extra_text']=insert_lang('',2); // Fix possible corruption
+
 			$GLOBALS['SITE_DB']->query_update('quiz_questions',array(
-				'q_long_input_field'=>$long_input_field,
-				'q_num_choosable_answers'=>$num_choosable_answers,
 				'q_quiz'=>$id,
+				'q_type'=>$type,
 				'q_question_text'=>lang_remap($existing[$i]['q_question_text'],$question),
+				'q_question_extra_text'=>lang_remap($existing[$i]['q_question_extra_text'],$question_extra_text),
 				'q_order'=>$i,
 				'q_required'=>$required,
 				'q_marked'=>$marked,
@@ -226,7 +277,7 @@ function _save_available_quiz_answers($id,$text,$type)
 						'q_answer_text'=>lang_remap($existing_a[$x]['q_answer_text'],$a),
 						'q_is_correct'=>$is_correct,
 						'q_order'=>$x,
-						'q_explanation'=>insert_lang($explanation,2),
+						'q_explanation'=>lang_remap($existing_a[$x]['q_explanation'],$explanation),
 					),array('id'=>$existing_a[$x]['id']),'',1);
 				} else
 				{
@@ -371,7 +422,6 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
  * @param  BINARY			Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
  * @param  BINARY			Whether to shuffle questions, to make cheating a bit harder
  * @param  BINARY			Whether to shuffle multiple-choice answers, to make cheating a bit harder
- * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
  * @param  ?TIME			Add time (NULL: do not change)
  * @param  ?MEMBER		Submitter (NULL: do not change)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
@@ -468,11 +518,13 @@ function delete_quiz($id)
 	seo_meta_erase_storage('quiz',strval($id));
 
 	$GLOBALS['SITE_DB']->query_delete('quizzes',array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_delete('quiz_member_last_visit',array('v_quiz_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('quiz_winner',array('q_quiz'=>$id));
 	$entries=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id));
 	foreach ($entries as $entry)
 	{
 		delete_lang($entry['q_question_text']);
+		delete_lang($entry['q_question_extra_text']);
 		$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$entry['id']));
 		foreach ($answers as $answer)
 		{

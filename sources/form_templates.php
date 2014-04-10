@@ -166,7 +166,7 @@ function attach_wysiwyg()
 	if (!$WYSIWYG_ATTACHED)
 	{
 		require_code('site');
-		attach_to_javascript(do_template('HTML_EDIT'));
+		attach_to_javascript(do_template('WYSIWYG_LOAD'));
 	}
 	$WYSIWYG_ATTACHED=true;
 	@header('Content-type: text/html; charset='.get_charset());
@@ -520,6 +520,8 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
  * @param  ?integer		The maximum length of the field (NULL: default 255)
  * @param  string			The input type
  * @param  ?string		The placeholder value for this input field (NULL: none)
+ * @param  ?string		Custom regex pattern (NULL: none)
+ * @param  ?string		Custom regex pattern validation error (NULL: none)
  * @return tempcode		The input field
  */
 function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text',$placeholder=NULL,$pattern=NULL,$pattern_error=NULL)
@@ -680,8 +682,7 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
 
 	$_required=($required)?'_required':'';
 	$input=do_template('FORM_SCREEN_INPUT_COLOUR',array('_GUID'=>'9a1a8061cebd717ea98522984d9465af','RAW_FIELD'=>false,'REQUIRED'=>$required,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'TABINDEX'=>strval($tabindex),'_REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
-	if ($true_field) $input=_form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
-	return $input;
+	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 
 /**
@@ -753,6 +754,8 @@ function form_input_line_comcode($pretty_name,$description,$name,$default,$requi
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  string			CSS class for input.
  * @set    line email
+ * @param  ?string		Custom regex pattern (NULL: none)
+ * @param  ?string		Custom regex pattern validation error (NULL: none)
  * @return tempcode		The input field
  */
 function form_input_line_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex=NULL,$class='line',$pattern=NULL,$pattern_error=NULL)

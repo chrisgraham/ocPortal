@@ -244,7 +244,7 @@ If you put a file called [tt]closed.html[/tt] then this will be shown to people 
 
 Values are like hidden configuration options. They are either hidden because they are managed by code (perhaps used for keeping track of something), or because they are obscure. To set a value, open up OcCLE (under the 'tools' section in the Admin Zone or clicking the symbol at the bottom-left of any page) and type [tt]:set_value('<name>','1');[/tt] (replace '1' if appropriate, but usually we do use '1' to enable). In normal PHP code, you can use the same [tt]set_value[/tt] function, and also the [tt]get_value[/tt] function. You can automatically add a new hidden value just by setting it for the first time.
 
-We also have the following which are either unlikely to be useful, or potentially unstable or unpolished:
+We have the following which are either unlikely to be useful, or potentially unstable or unpolished:
  - Integrations
   - [tt]force_admin_auth[/tt] -- set this to '1' if you want any super-administrator to have to have some kind of authorisation-based login by redirecting them to [tt]http://base_url/admin_login/[/tt] which presumably you have configured to be a redirect-through that catches logins (Apache only)
   - [tt]no_password_hashing[/tt] -- set this to '1' if you want passwords to be stored as plain-text in the database (not recommended)
@@ -301,6 +301,7 @@ We also have the following which are either unlikely to be useful, or potentiall
   - [tt]site_location[/tt] -- an address for where your website is, sometimes used in meta-data.
   - [tt]google_news_urls[/tt] -- set this to '1' if news URLs should contain a Google-News-friendly entry ID.
   - [tt]enable_delayed_inserts[/tt] -- set this to '1' to enable MySQL delayed inserts. Delayed inserts can cause a very small performance improvement if log calculations happen quite regularly; however they only work on MyISAM tables and are deprecated as of MySQL 5.6
+  - [tt]really_want_highlighting[/tt] -- set this to '1' if you want to force HTML to be converted to Comcode when searches happen, so keyword highlighting works better.
  - Performance tuning (positive) [not official options as will break normal expectations of how the system will behave / complicate things]
   - [tt]lots_of_data_in_*[/tt] -- set this to '1', with '*' replaced with a database table name, if you want the ocFilter mechanism to work with recursive db lookups rather than one huge flat lookup
   - [tt]disable_cat_cat_perms[/tt] -- set this to '1' if you want to disable catalogue category permissions

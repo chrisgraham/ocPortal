@@ -354,10 +354,10 @@ class Hook_ocp_merge
 
 			$id_new=$GLOBALS['SITE_DB']->query_insert('quiz_questions',array(
 				'q_order'=>array_key_exists('q_order',$row)?$row['q_order']:$i,
-				'q_long_input_field'=>$row['q_long_input_field'],
-				'q_num_choosable_answers'=>$row['q_num_choosable_answers'],
+				'q_type'=>$row['q_type'],
 				'q_quiz'=>$quiz,
 				'q_question_text'=>insert_lang($this->get_lang_string($db,$row['q_question_text']),2),
+				'q_question_extra_text'=>insert_lang($this->get_lang_string($db,$row['q_question_extra_text']),2),
 				'q_required'=>array_key_exists('q_required',$row)?$row['q_required']:0,
 			),true);
 

@@ -37,6 +37,8 @@ Multiple-choice/single-choice inputs are collected under a statistics heading. F
 
 The method of inputting quiz questions may seem a bit fiddly at first, but you'll find it is actually fairly straight-forward and makes it really quick to input new sets of questions.
 
+A detailed description of the input syntax is presented in the help for the Questions field on the add/edit quiz form.
+
 Comcode is supported, so you could include images using code such as:
 [code]
 [url="/example.png" target="_blank"][img]/example_thumb.png[/img][/url]
@@ -70,7 +72,7 @@ Manually marked questions result in a percentage range being shown to the user, 
 
 Unmarked questions just don't count toward anything. So if you had 5 questions and 1 was unmarked, it would be marked out of 4.
 
-[title="2"]Security[/title]
+[title="2"]Security and difficulty[/title]
 
 You can determine the level of security or difficulty on quizzes:
  - Restrict them only to newsletter subscribers
@@ -84,7 +86,7 @@ You can determine the level of security or difficulty on quizzes:
 
 If you prefix quiz names with "Example: " then you can create quiz sets.
 
-This is mainly just a convention and won't affect how the system works. However, for tests, it will result in running scoring/percentages for the whole test, when viewing past results on a member's profile screen.
+This is mainly just a convention and won't affect how the system works. However, for tests, it will result in running scoring/percentages for the whole test set, when viewing past results on a member's profile screen.
 
 Often surveyors will want to create long multi-part questionnaires. You could link parts together in a chain by putting a follow-up link in each quizzes end-text. Use of the naming convention will help you (and users) intuitively recognise that particular quizzes are designed to go together.
 

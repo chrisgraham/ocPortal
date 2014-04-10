@@ -24,6 +24,19 @@
 					elements[0].parentNode.parentNode.style.display='none';
 				}
 			}
+
+			var func= {
+				exec: function(e) {
+					fauxmodal_alert(window.lang_PREFER_OCP_ATTACHMENTS,function() {
+						editor.execCommand('image');
+					});
+				}
+			};
+			editor.addCommand('ocportal_image',func);
+			editor.ui.addButton('ocportal_image',{
+				label: editor.lang.common.image,
+				command: 'ocportal_image'
+			});
 		}
 	});
 })();

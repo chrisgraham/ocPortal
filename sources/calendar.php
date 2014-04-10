@@ -366,12 +366,12 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
 		}
 
 		// Crossing a DST in our reference timezone? (as we store in UTC, which is DST-less, we need to specially accomodate for this)
-		$start_hour-=intval(date('H',tz_time(mktime(0,0,0,$start_month,$start_day_of_month,$start_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day_of_month-$dif_day,$start_year-$dif_year),$timezone)));
-		$start_minute-=intval(date('i',tz_time(mktime(0,0,0,$start_month,$start_day_of_month,$start_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$start_month-$dif_month,$start_day_of_month-$dif_day,$start_year-$dif_year),$timezone)));
+		$start_hour-=intval(date('H',tz_time(mktime($start_hour,$start_minute,0,$start_month,$start_day_of_month,$start_year),$timezone)))-intval(date('H',tz_time(mktime($start_hour,$start_minute,0,$start_month-$dif_month,$start_day_of_month-$dif_day,$start_year-$dif_year),$timezone)));
+		$start_minute-=intval(date('i',tz_time(mktime($start_hour,$start_minute,0,$start_month,$start_day_of_month,$start_year),$timezone)))-intval(date('i',tz_time(mktime($start_hour,$start_minute,0,$start_month-$dif_month,$start_day_of_month-$dif_day,$start_year-$dif_year),$timezone)));
 		if (!is_null($end_hour))
 		{
-			$end_hour-=intval(date('H',tz_time(mktime(0,0,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('H',tz_time(mktime(0,0,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
-			$end_minute-=intval(date('i',tz_time(mktime(0,0,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('i',tz_time(mktime(0,0,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
+			$end_hour-=intval(date('H',tz_time(mktime($end_hour,$end_minute,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('H',tz_time(mktime($end_hour,$end_minute,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
+			$end_minute-=intval(date('i',tz_time(mktime($end_hour,$end_minute,0,$end_month,$end_day,$end_year),$timezone)))-intval(date('i',tz_time(mktime($end_hour,$end_minute,0,$end_month-$dif_month,$end_day-$dif_day,$end_year-$dif_year),$timezone)));
 		}
 
 		// Let it reset

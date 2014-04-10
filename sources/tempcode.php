@@ -130,7 +130,7 @@ function php_addslashes_twice($in)
 }
 
 /**
- * The PHP uniqid function is slow on some PHP versions. This version is much faster.
+ * Create a unique identifer.
  *
  * @return string				Unique Identifier
  */

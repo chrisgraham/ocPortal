@@ -314,8 +314,14 @@ class Database_Static_mysql extends Database_super_mysql
 							$newrow[$name]=NULL;
 						} else
 						{
-							$_v=intval($v);
-							$newrow[$name]=$_v;
+							if ((!isset($v[1])) && (ord($v[0])<=1))
+							{
+								$newrow[$name]=ord($v); // 0/1 char for BIT field
+							} else
+							{
+								$_v=intval($v);
+								$newrow[$name]=$_v;
+							}
 						}
 						break;
 
@@ -326,9 +332,9 @@ class Database_Static_mysql extends Database_super_mysql
 					case 'unknown':
 						if (is_string($v))
 						{
-							if ((strlen($v)==1) && ($v[0]==chr(0)))
+							if ((!isset($v[1])) && (ord($v[0])<=1))
 							{
-								$newrow[$name]=($v===NULL)?NULL:ord($v); // 0/1 char for BIT field
+								$newrow[$name]=ord($v); // 0/1 char for BIT field
 							} else
 							{
 								$newrow[$name]=intval($v);

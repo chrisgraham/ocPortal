@@ -37,7 +37,7 @@ After being validated by the staff, your news announcement will be visible on th
 
 News entries may be in multiple news categories, but a user needs access to the primary news category to be able to read the news.
 
-[title="3"]Scheduled news[/title]
+[title="3"]Scheduled news / Manual date selection[/title]
 
 See the [page="_SELF:tut_configuration"]basic configuration[/page] tutorial for information on setting up the scheduler.
 

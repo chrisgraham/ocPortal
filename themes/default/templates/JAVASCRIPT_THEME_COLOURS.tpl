@@ -17,9 +17,9 @@ function hex_to_dec(number)
 
 if (typeof window.names_to_numbers=='undefined')
 {
-	window.names_to_numbers=[];
-	window.last_cc=[];
-	window.last_cc_i=[];
+	window.names_to_numbers={};
+	window.last_cc={};
+	window.last_cc_i={};
 }
 function do_color_change(e)
 {

@@ -610,6 +610,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$sending_message.='Content-Transfer-Encoding: 8bit'.$line_term.$line_term; // Requires RFC 1652
 		$sending_message.=wordwrap(str_replace("\n",$line_term,unixify_line_format($html_evaluated)).$line_term,988,$line_term,true);
 	}
+	$total_filesize=0;
 	foreach ($CID_IMG_ATTACHMENT as $id=>$img)
 	{
 		$sending_message.='--'.$boundary3.$line_term;
@@ -618,7 +619,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$filename=basename($img);
 		if (!is_null($file_path_stub))
 		{
-			if (@filesize($file_path_stub)>1024*1024*5) continue; // Too large to process into an email
+			$total_filesize+=@filesize($file_path_stub);
+			if ($total_filesize>1024*1024*5) continue; // Too large to process into an email
 
 			$file_contents=@file_get_contents($file_path_stub);
 		} else
@@ -649,7 +651,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 						{
 							$filename=$myrow['a_original_filename'];
 							require_code('mime_types');
-							if (filesize($_full)>1024*1024*5) continue; // Too large to process into an email
+							$total_filesize+=@filesize($_full);
+							if ($total_filesize>1024*1024*5) continue; // Too large to process into an email
 							$file_contents=file_get_contents($_full);
 							$mime_type=get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous'));
 						}
@@ -660,7 +663,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			{
 				$file_contents=http_download_file($img,1024*1024*5,false);
 				if (is_null($file_contents)) continue;
-				if (strlen($file_contents)>=1024*1024*5) continue; // Too large to process into an email
+				$total_filesize+=strlen($file_contents);
+				if ($total_filesize>1024*1024*5) continue; // Too large to process into an email
 				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
 				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
 			}
@@ -772,18 +776,19 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 							{
 								$attractive_date=strftime('%d %B %Y  %H:%M:%S',time());
 
+								$_to_name=preg_replace('#@.*$#','',is_array($to_name)?$to_name[$i]:$to_name); // preg_replace is because some servers may reject sending names that look like e-mail addresses. ocP tries this from recommend module.
 								if (count($to_email)==1)
 								{
-									if ($to_name==='')
+									if ($_to_name=='')
 									{
 										fwrite($socket,'To: '.$to_email[$i]."\r\n");
 									} else
 									{
-										fwrite($socket,'To: '.(is_array($to_name)?$to_name[$i]:$to_name).' <'.$to_email[$i].'>'."\r\n");
+										fwrite($socket,'To: '.$_to_name.' <'.$to_email[$i].'>'."\r\n");
 									}
 								} else
 								{
-									fwrite($socket,'To: '.(is_array($to_name)?$to_name[$i]:$to_name)."\r\n");
+									fwrite($socket,'To: '.$_to_name."\r\n");
 								}
 								fwrite($socket,'Subject: '.$tightened_subject."\r\n");
 								fwrite($socket,'Date: '.$attractive_date."\r\n");
@@ -823,12 +828,13 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 			$additional='';
 			if (get_option('enveloper_override')=='1') $additional='-f '.$website_email;
-			if (($to_name==='') || (strtoupper(substr(PHP_OS,0,3))=='WIN'))
+			$_to_name=preg_replace('#@.*$#','',is_array($to_name)?$to_name[$i]:$to_name); // preg_replace is because some servers may reject sending names that look like e-mail addresses. ocP tries this from recommend module.
+			if (($_to_name=='') || (strtoupper(substr(PHP_OS,0,3))=='WIN'))
 			{
 				$to_line=$to;
 			} else
 			{
-				$to_line='"'.(is_array($to_name)?$to_name[$i]:$to_name).'" <'.$to.'>';
+				$to_line='"'.$_to_name.'" <'.$to.'>';
 			}
 			//if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
 			$php_errormsg=mixed();

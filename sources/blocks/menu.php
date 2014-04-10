@@ -98,6 +98,30 @@ class Block_menu
  */
 function block_menu__cache_on($map)
 {
+	/*
+	Menu caching is problematic. "Is active" caching theoretically would need doing against each URL.
+	 (or to use Javascript, or Tempcode pre-processing, to implement that -- but that would be messy)
+	We therefore assume that menu links are maximally distinguished by zone&page&type parameters.
+	 (special case -- catalogue index screens are also distinguished by ID, as catalogues vary a lot)
+
+	There is a simple workaround if our assumptions don't hold up. Just turn off cacheing for the
+	particular menu block instance. cache="0". It won't hurt very much, menus are relatively fast.
+	*/
+
 	$menu=array_key_exists('param',$map)?$map['param']:'';
-	return array($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),((substr($menu,0,1)!='_') && (substr($menu,0,3)!='!!!') && (has_actual_page_access(get_member(),'admin_menus'))),get_zone_name(),get_page_name(),get_param('type','misc'),array_key_exists('type',$map)?$map['type']:'embossed',$menu,array_key_exists('title',$map)?$map['title']:'',array_key_exists('silent_failure',$map)?$map['silent_failure']:'0',array_key_exists('tray_status',$map)?$map['tray_status']:'');
+	$page=get_page_name();
+	$url_type=get_param('type','misc');
+	return array(
+		$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),
+		((substr($menu,0,1)!='_') && (substr($menu,0,3)!='!!!') && (has_actual_page_access(get_member(),'admin_menus'))),
+		get_zone_name(),
+		$page,
+		$url_type,
+		($page=='catalogues' && $url_type=='index')?get_param('id',''):'', // Catalogues need a little extra work to distinguish them
+		array_key_exists('type',$map)?$map['type']:'embossed',
+		$menu,
+		array_key_exists('title',$map)?$map['title']:'',
+		array_key_exists('silent_failure',$map)?$map['silent_failure']:'0',
+		array_key_exists('tray_status',$map)?$map['tray_status']:'',
+	);
 }

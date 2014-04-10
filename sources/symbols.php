@@ -119,7 +119,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				// A constant?
 				elseif (defined($name))
 				{
-					$value=constant($name);
+					$value=@strval(constant($name));
 					if (!is_string($value)) $value=strval($value);
 
 					if ($escaped!=array())

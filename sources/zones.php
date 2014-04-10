@@ -209,7 +209,7 @@ function get_module_zone($module_name,$type='modules',$dir2=NULL,$ftype='php',$e
 	$zone=get_zone_name();
 
 	global $MODULES_ZONES_CACHE;
-	if ((isset($MODULES_ZONES_CACHE[$zone][$module_name])) || ((!$error) && (array_key_exists($module_name,$MODULES_ZONES_CACHE[$zone])) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
+	if ((isset($MODULES_ZONES_CACHE[$zone][$module_name])) || ((!$error) && (isset($MODULES_ZONES_CACHE[$zone])) && (array_key_exists($module_name,$MODULES_ZONES_CACHE[$zone])) && ($type=='modules')/*don't want to look at cached failure for different page type*/))
 	{
 		return $MODULES_ZONES_CACHE[$zone][$module_name];
 	}
@@ -772,7 +772,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			}
 			if (($row===NULL) && (isset($map['quick_cache'])) && ($map['quick_cache']=='1'))
 			{
-				$row=array('cached_for'=>$codename,'cache_on'=>'$map','cache_ttl'=>60);
+				$row=array('cached_for'=>$codename,'cache_on'=>'array($map,$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member()))','cache_ttl'=>60);
 			}
 		}
 		if ($row!==NULL)
@@ -1206,7 +1206,15 @@ function extract_module_functions($path,$functions,$params=NULL,$prefer_direct_c
 		return $ret;
 	}
 
-	if (!is_file($path)) return array(NULL);
+	if (!is_file($path))
+	{
+		$ret=array();
+		foreach ($functions as $function)
+		{
+			$ret[]=NULL;
+		}
+		return $ret;
+	}
 	$file=unixify_line_format(file_get_contents($path),NULL,false,true);
 
 	if (strpos($file,'class Mx_')!==false)

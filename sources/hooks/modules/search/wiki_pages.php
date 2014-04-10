@@ -28,6 +28,8 @@ class Hook_search_wiki_pages
 	 */
 	function info($check_permissions=true)
 	{
+		if (!module_installed('wiki')) return NULL;
+
 		if ($check_permissions)
 		{
 			if (!has_actual_page_access(get_member(),'wiki')) return NULL;

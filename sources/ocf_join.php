@@ -314,7 +314,6 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 			enforce_captcha();
 		}
 	}
-
 	if (addon_installed('ldap'))
 	{
 		require_code('ocf_ldap');
@@ -343,7 +342,7 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$url_simple=$_url_simple->evaluate();
 		$redirect=get_param('redirect','');
 		if ($redirect!='') $url.='&redirect='.ocp_url_encode($redirect);
-		$message=do_lang('OCF_SIGNUP_TEXT',comcode_escape(get_site_name()),comcode_escape($url),array($url_simple,$email_address,strval($validated_email_confirm_code)),$language);
+		$message=do_lang('OCF_SIGNUP_TEXT',comcode_escape(get_site_name()),comcode_escape($url),array($url_simple,$email_address,$validated_email_confirm_code),$language);
 		require_code('mail');
 		if (!$coppa) mail_wrap(do_lang('CONFIRM_EMAIL_SUBJECT',get_site_name(),NULL,NULL,$language),$message,array($email_address),$username,'','',3,NULL,false,NULL,false,false,false,'MAIL',true);
 	}
@@ -389,7 +388,17 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		$forum_id=get_option('intro_forum_id');
 		if ($forum_id!='')
 		{
-			if (!is_numeric($forum_id)) $forum_id=strval($GLOBALS['FORUM_DB']->query_select_value('f_forums','id',array('f_name'=>$forum_id)));
+			if (!is_numeric($forum_id))
+			{
+				$_forum_id=$GLOBALS['FORUM_DB']->query_select_value('f_forums','id',array('f_name'=>$forum_id));
+				if (is_null($_forum_id))
+				{
+					$forum_id=strval(db_get_first_id());
+				} else
+				{
+					$forum_id=strval($_forum_id);
+				}
+			}
 
 			$intro_title=post_param('intro_title','');
 			$intro_post=post_param('intro_post','');

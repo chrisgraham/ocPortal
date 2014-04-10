@@ -114,6 +114,8 @@ ocWorld is a full zone addon for ocPortal.';
 	{
 		return array(
 			'requires'=>array(
+				'points',
+				'pointstore',
 			),
 			'recommends'=>array(
 			),

@@ -131,7 +131,7 @@ function _ocp_tempnam($prefix)
 	if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'),'tempnam')===false))
 	{
 		$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
-		if (($tempnam===false) && (!$problem_saving))
+		if ((($tempnam===false) || ($tempnam==''/*Should not be blank, but seen in the wild*/)) && (!$problem_saving))
 		{
 			$tempnam=tempnam($local_path,$prefix);
 		}
@@ -432,7 +432,7 @@ function get_directory_size($path,$recurse=true)
 		if (is_file($path.'/'.$e))
 		{
 			$size+=filesize($path.'/'.$e);
-		} else
+		} elseif (is_dir($path.'/'.$e))
 		{
 			if ($recurse)
 			{
@@ -1003,8 +1003,11 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$crt_path=get_file_base().'/data/curl-ca-bundle.crt';
 				if (get_value('disable_ssl_for__'.$url_parts['host'])==='1')
 					curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
-				curl_setopt($ch,CURLOPT_CAINFO,$crt_path);
-				curl_setopt($ch,CURLOPT_CAPATH,$crt_path);
+				if (ini_get('curl.cainfo')=='')
+				{
+					curl_setopt($ch,CURLOPT_CAINFO,$crt_path);
+					curl_setopt($ch,CURLOPT_CAPATH,$crt_path);
+				}
 				//if (!$no_redirect) @curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true); // May fail with safe mode, meaning we can't follow Location headers. But we can do better ourselves anyway and protect against file:// exploits.
 				curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,intval($timeout));
 				curl_setopt($ch,CURLOPT_TIMEOUT,intval($timeout));

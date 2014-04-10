@@ -863,7 +863,7 @@ function ModalWindow()
 				{
 					button=this.element('button',{
 						'html': this.cancel_button,
-						'class': 'button_screen_item button_cancel'
+						'class': 'button_screen_item buttons__cancel'
 					});
 					this.button_container.appendChild(button);
 				} else

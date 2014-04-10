@@ -643,3 +643,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 		max-width: 6em;
 	}
 {+END}
+
+/* Extra stuff for CKEditor */
+
+.cke_button__ocportal_image_icon { background: url('{$BASE_URL;}/data/ckeditor/skins/kama/icons.png') no-repeat 0 -288px !important; }

@@ -225,6 +225,8 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
 		}
 	}
 
+	$errstr=_sanitise_error_msg($errstr);
+
 	// Generate error message
 	$outx='<strong>'.strtoupper($type).'</strong> ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline).'<br />'."\n";
 	if (class_exists('ocp_tempcode'))
@@ -298,6 +300,18 @@ function _warn_screen($title,$text,$provide_back=true,$support_match_key_message
 /**
  * Do a terminal execution on a defined page type
  *
+ * @param  string			The error message
+ * @return string			Sanitised error message
+ */
+function _sanitise_error_msg($text)
+{
+	// Strip paths, for security reasons
+	return str_replace(array(get_custom_file_base().'/',get_file_base().'/'),array('',''),$text);
+}
+
+/**
+ * Do a terminal execution on a defined page type
+ *
  * @param  mixed			The error message (string or tempcode)
  * @param  ID_TEXT		Name of the terminal page template
  * @param  boolean		?Whether match key messages / redirects should be supported (NULL: detect)
@@ -306,6 +320,15 @@ function _generic_exit($text,$template,$support_match_key_messages=false)
 {
 	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
+	if (is_object($text))
+	{
+		$text=$text->evaluate();
+		$text=_sanitise_error_msg($text);
+		$text=protect_from_escaping($text);
+	} else
+	{
+		$text=_sanitise_error_msg($text);
+	}
 	$text_eval=is_object($text)?$text->evaluate():$text;
 
 	global $RUNNING_TASK;
@@ -840,6 +863,16 @@ function _fatal_exit($text,$return=false)
 {
 	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
+	if (is_object($text))
+	{
+		$text=$text->evaluate();
+		$text=_sanitise_error_msg($text);
+		$text=protect_from_escaping($text);
+	} else
+	{
+		$text=_sanitise_error_msg($text);
+	}
+
 	if (!headers_sent())
 	{
 		require_code('firephp');
@@ -997,11 +1030,13 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'_custom/')===false) && 
 		(strpos($text,'data/occle.php')===false) && 
 		(strpos($text,'/mini')===false) && 
+		(strpos($text,'XCache var cache was not initialized properly')===false) && 
 		(strpos($text,'has been disabled for security reasons')===false) && 
 		(strpos($text,'max_questions')/*mysql limit*/===false) && 
 		(strpos($text,'Error at offset')===false) && 
 		(strpos($text,'Unable to allocate memory for pool')===false) && 
 		(strpos($text,'Out of memory')===false) && 
+		(strpos($text,'Can\'t open file')===false) && 
 		(strpos($text,'Disk is full writing')===false) && 
 		(strpos($text,'Disk quota exceeded')===false) && 
 		(strpos($text,'from storage engine')===false) && 

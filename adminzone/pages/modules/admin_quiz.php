@@ -502,8 +502,6 @@ class Module_admin_quiz
 	 */
 	function __quiz_results()
 	{
-		require_code('templates_map_table');
-
 		$id=get_param_integer('id'); // entry ID
 
 		$row=$this->row;
@@ -533,8 +531,10 @@ class Module_admin_quiz
 			,
 			,
 			,
+			,
 			$marks_range,
 			$percentage_range,
+			,
 			,
 			,
 			,

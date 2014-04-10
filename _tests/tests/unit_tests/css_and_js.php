@@ -66,7 +66,7 @@ class css_and_js_test_set extends ocp_test_case
 				$this->assertTrue(is_null($errors),'Bad JS in '.$f);
 				if (!is_null($errors))
 				{
-					if (isset($_GET['show']))
+					if (get_param_integer('debug',0)==1)
 					{
 						unset($errors['tag_ranges']);
 						unset($errors['value_ranges']);

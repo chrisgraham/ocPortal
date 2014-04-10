@@ -439,7 +439,11 @@ function _get_where_clause_groups($member,$consider_clubs=true)
 		if ($out!='') $out.=' OR ';
 		$out.='group_id='.strval($id);
 	}
-	if ($out=='') fatal_exit(do_lang_tempcode('MEMBER_NO_GROUP')); // Shouldn't happen
+	if ($out=='')
+	{
+		if ((!$consider_clubs) && (get_forum_type()=='ocf')) return 'group_id='.strval(db_get_first_id()); // Hmm, user was just put in a club! :S
+		fatal_exit(do_lang_tempcode('MEMBER_NO_GROUP')); // Shouldn't happen
+	}
 
 	return $out;
 }

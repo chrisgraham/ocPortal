@@ -12,7 +12,7 @@ toolbar.push(formatting);
 toolbar.push(['NumberedList','BulletedList',precision_editing?'-':null,precision_editing?'Outdent':null,precision_editing?'Indent':null]);
 if (precision_editing)
 	toolbar.push(['JustifyLeft','JustifyCenter','JustifyRight',precision_editing?'JustifyBlock':null]);
-toolbar.push([precision_editing?'Image':null,'Table']);
+toolbar.push([precision_editing?'ocportal_image':null,'Table']);
 if (precision_editing)
 	toolbar.push('/');
 toolbar.push(['Format','Font','FontSize']);
@@ -26,29 +26,30 @@ if (use_ocportal_toolbar)
 	toolbar.push(['ocportal_block','ocportal_comcode',precision_editing?'ocportal_page':null,'ocportal_quote',precision_editing?'ocportal_box':null,'ocportal_code']);
 
 var editor_settings={
-	enterMode : CKEDITOR.ENTER_BR,
+	enterMode : window.CKEDITOR.ENTER_BR,
 	uiColor : wysiwyg_color,
 	fontSize_sizes : '0.6em;0.85em;1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;2em',
-	removePlugins: 'smiley,uicolor,contextmenu,forms',
+	removePlugins: '',
 	extraPlugins: ''+(use_ocportal_toolbar?'ocportal':''),
 	customConfig : '',
-	bodyId : 'htmlarea',
+	bodyId : 'wysiwyg_editor',
 	baseHref : get_base_url()+'/',
 	linkShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	imageShowAdvancedTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	imageShowLinkTab : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	imageShowSizing : {$?,{$CONFIG_OPTION,eager_wysiwyg},false,true},
 	autoUpdateElement : true,
-	contentsCss : pageStyleSheets,
+	contentsCss : page_stylesheets,
 	cssStatic : css,
 	startupOutlineBlocks : true,
 	language : (window.ocp_lang)?ocp_lang.toLowerCase():'en',
 	emailProtection : false,
 	resize_enabled : true,
-	width : find_width(element),
+	width : (find_width(element)-15),
 	height : (window.location.href.indexOf('cms_comcode_pages')==-1)?250:500,
 	{+START,IF,{$NOT,{$VALUE_OPTION,commercial_spellchecker}}}
 		disableNativeSpellChecker : false,
 	{+END}
-	toolbar : toolbar
+	toolbar : toolbar,
+	allowedContent: true
 };

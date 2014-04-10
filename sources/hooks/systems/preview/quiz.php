@@ -39,12 +39,15 @@ class Hook_Preview_quiz
 	function run()
 	{
 		require_code('quiz');
+		require_code('quiz2');
 
 		$questions=array();
 
-		$text=post_param('text');
 		$type=post_param('type');
 
+		// Do a basic parse (just enough to render the quiz)
+
+		$text=post_param('text');
 		$_qs=explode("\n\n",$text);
 		$qs=array();
 		foreach ($_qs as $q)
@@ -52,74 +55,55 @@ class Hook_Preview_quiz
 			$q=trim($q);
 			if ($q!='') $qs[]=$q;
 		}
-		$num_q=0;
 
-		$qs2=array();
 		foreach ($qs as $i=>$q)
 		{
 			$_as=explode("\n",$q);
+
 			$as=array();
 			foreach ($_as as $a)
 			{
-				if ($a!='') $as[]=$a;
+				if ($a!='')
+				{
+					if (substr($a,0,1)==':') // Is an explanation
+					{
+						if (count($as)!=0)
+							$as[count($as)-1][1]=trim($as[count($as)-1][1]."\n".trim(substr($a,1)));
+					} else
+					{
+						$as[]=array($a,'');
+					}
+				}
 			}
-			$q=array_shift($as);
-			$matches=array();
-			if (preg_match('#^(.*)#',$q,$matches)===false) continue;
-			if (count($matches)==0) continue;
 
-			$implicit_question_number=$i;//$matches[1];
+			if (count($as)==0) continue; // Was only an orphaned explanation, so ignore
 
-			$qs2[$implicit_question_number]=$q."\n".implode("\n",$as);
-		}
-		ksort($qs2);
-
-		foreach (array_values($qs2) as $i=>$q)
-		{
-			$_as=explode("\n",$q);
-			$as=array();
-			foreach ($_as as $a)
-			{
-				if ($a!='') $as[]=$a;
-			}
-			$q=array_shift($as);
-			$matches=array();
-			if (preg_match('#^(.*)#',$q,$matches)===false) continue;
-			if (count($matches)==0) continue;
-			$question=trim($matches[count($matches)-1]);
-			$long_input_field=(strpos($question,' [LONG]')!==false)?1:0;
-			$question=str_replace(' [LONG]','',$question);
-			$num_choosable_answers=(strpos($question,' [*]')!==false)?count($as):((count($as)>0)?1:0);
-			$question=str_replace(' [*]','',$question);
-			$required=(strpos($question,' [REQUIRED]')!==false)?1:0;
-			$question=str_replace(' [REQUIRED]','',$question);
+			$_q=array_shift($as);
+			$question=$_q[0];
+			$question_extra_text=$_q[1];
+			list($question,$type,$required,$marked,$question_extra_text)=parse_quiz_question_line($question,$as,$question_extra_text);
 
 			// Now we add the answers
 			$answers=array();
 			foreach ($as as $x=>$a)
 			{
-				$is_correct=((($x==0) && (strpos($qs2[$i],' [*]')===false) && ($type!='SURVEY')) || (strpos($a,' [*]')!==false))?1:0;
-				$a=str_replace(' [*]','',$a);
-
-				if (substr($a,0,1)==':') continue;
+				$a[0]=str_replace(' [*]','',$a[0]);
 
 				$answers[]=array(
 					'id'=>$x,
-					'q_answer_text'=>$a,
-					'q_is_correct'=>$is_correct,
+					'q_answer_text'=>$a[0],
+					'q_is_correct'=>1,
 				);
 			}
 
 			$questions[]=array(
 				'id'=>$i,
-				'q_long_input_field'=>$long_input_field,
-				'q_num_choosable_answers'=>$num_choosable_answers,
+				'q_type'=>$type,
 				'q_question_text'=>$question,
+				'q_question_extra_text'=>$question_extra_text,
 				'answers'=>$answers,
 				'q_required'=>$required,
 			);
-
-			$num_q++;
 		}
 
 		$preview=render_quiz($questions);

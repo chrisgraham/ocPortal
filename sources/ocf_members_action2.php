@@ -455,12 +455,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),$email_description,'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
 		if ((is_null($member_id)) && ($email_address=='') && (get_option('email_confirm_join')=='1'))
 		{
-			if ($email_address=='') $email_address=trim(get_param('email_address',''));
-			$fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'),(get_option('email_confirm_join')=='0')?new ocp_tempcode():do_lang_tempcode('MUST_BE_REAL_ADDRESS'),'email_address',$email_address,!has_privilege(get_member(),'member_maintenance')));
-			if ((is_null($member_id)) && ($email_address=='') && (get_option('email_confirm_join')=='1'))
-			{
-				$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',!has_privilege(get_member(),'member_maintenance')));
-			}
+			$fields->attach(form_input_email(do_lang_tempcode('CONFIRM_EMAIL_ADDRESS'),'','email_address_confirm','',!has_privilege(get_member(),'member_maintenance')));
 		}
 	}
 
@@ -695,6 +690,8 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 		{
 			$value=mixed();
 			$value=$custom_fields[$custom_field['id']];
+			if (is_float($value)) $value=float_to_raw_string($value,10,true);
+			elseif (is_integer($value)) $value=strval($value);
 			if (strpos($storage_type,'_trans')!==false)
 			{
 				$value=((is_null($value)) || ($value==0))?'':get_translated_text($value,$GLOBALS['FORUM_DB']);
@@ -1031,7 +1028,7 @@ function ocf_delete_member($member_id)
 	$GLOBALS['FORUM_DB']->query_delete('f_members',array('id'=>$member_id),'',1);
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id'=>$member_id));
 	$GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>get_member()),array('g_group_leader'=>$member_id));
-	$GLOBALS['FORUM_DB']->query_delete('sessions',array('the_user'=>$member_id));
+	$GLOBALS['FORUM_DB']->query_delete('sessions',array('member_id'=>$member_id));
 
 	require_code('fields');
 
@@ -1248,7 +1245,7 @@ function ocf_delete_custom_field($id)
 		expunge_resourcefs_moniker('cpf',strval($id));
 	}
 
-	decache('main_members');
+	if (function_exists('decache')) decache('main_members');
 }
 
 /**
@@ -1310,7 +1307,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			{
 				require_code('attachments2');
 				require_code('attachments3');
-				update_lang_comcode_attachments($current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+				update_lang_comcode_attachments($current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);
 			} else
 			{
 				lang_remap_comcode($current,$value,$GLOBALS['FORUM_DB']);
@@ -1341,7 +1338,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 		return $change;
 	}
 
-	decache('main_members');
+	if (function_exists('decache')) decache('main_members');
 
 	return NULL;
 }

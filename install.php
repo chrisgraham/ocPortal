@@ -492,7 +492,7 @@ function step_3()
 	if (($email!='') || ($advertise_on==1))
 	{
 		require_code('files');
-		http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('SCRIPT_NAME')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG);
+		http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url='.urlencode('http://'.ocp_srv('HTTP_HOST').ocp_srv('SCRIPT_NAME')).'&email='.urlencode($email).'&interest_level='.$_POST['interest_level'].'&advertise_on='.strval($advertise_on).'&lang='.$INSTALL_LANG,NULL,false);
 	}
 
 	// Forum chooser
@@ -606,6 +606,7 @@ function step_3()
 		'FORUMS'=>$tforums,
 		'DATABASES'=>$tdatabase,
 		'VERSION'=>$default_version,
+		'IS_QUICK'=>@is_array($GLOBALS['FILE_ARRAY']),
 	));
 }
 
@@ -773,22 +774,14 @@ function step_4()
 	$hidden=new ocp_tempcode();
 	if (!GOOGLE_APPENGINE)
 	{
-		$options->attach(make_option(do_lang_tempcode('DOMAIN'),example('DOMAIN_EXAMPLE','DOMAIN_TEXT'),'domain',$domain,false,true));
-		$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
+		$options->attach(make_option(do_lang_tempcode('DOMAIN'),example('DOMAIN_EXAMPLE'),'domain',$domain,false,true));
+		$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_TEXT'),'base_url',$base_url,false,true));
 	} else
 	{
 		$options->attach(make_option(do_lang_tempcode('GAE_APPLICATION'),do_lang_tempcode('DESCRIPTION_GAE_APPLICATION'),'gae_application',preg_replace('#^.*~#','',$_SERVER['APPLICATION_ID']),false,true));
 		$hidden->attach(form_input_hidden('domain',$domain));
 		$hidden->attach(form_input_hidden('base_url',$base_url));
 		$options->attach(make_option(do_lang_tempcode('GAE_BUCKET_NAME'),do_lang_tempcode('DESCRIPTION_GAE_BUCKET_NAME'),'gae_bucket_name','<application>',false,true));
-	}
-	if (post_param('db_type')!='xml')
-		$options->attach(make_option(do_lang_tempcode('TABLE_PREFIX'),example('TABLE_PREFIX_EXAMPLE','TABLE_PREFIX_TEXT'),'table_prefix',$table_prefix));
-	else
-		$hidden->attach(form_input_hidden('table_prefix',$table_prefix));
-	if (!GOOGLE_APPENGINE)
-	{
-		$options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
 	}
 	$master_password='';
 	$options->attach(make_option(do_lang_tempcode('MASTER_PASSWORD'),example('','CHOOSE_MASTER_PASSWORD'),'master_password',$master_password,true));
@@ -802,7 +795,7 @@ function step_4()
 	$forum_text=new ocp_tempcode();
 	if (($forum_type=='ocf') || ($forum_type=='none'))
 	{
-		$forum_title=do_lang_tempcode('FORUM_SETTINGS');
+		$forum_title=do_lang_tempcode('MEMBER_SETTINGS');
 	} else
 	{
 		$_forum_type=do_lang('FORUM_CLASS_'.preg_replace('#\d+$#','',$forum_type),NULL,NULL,NULL,NULL,false);
@@ -862,6 +855,14 @@ function step_4()
 		$hidden->attach(form_input_hidden('db_site_user',''));
 		$hidden->attach(form_input_hidden('db_site_password',''));
 	}
+	if (post_param('db_type')!='xml')
+		$options->attach(make_option(do_lang_tempcode('TABLE_PREFIX'),example('TABLE_PREFIX_TEXT'),'table_prefix',$table_prefix));
+	else
+		$hidden->attach(form_input_hidden('table_prefix',$table_prefix));
+	/*if (!GOOGLE_APPENGINE)	Excessive, let user tune later
+	{
+		$options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
+	}*/
 
 	if (($use_msn==0) && ($forum_type!='ocf')) // Merge into one set of options
 	{
@@ -898,7 +899,7 @@ function step_4()
 			');
 		} else
 		{
-			$title=do_lang_tempcode('OCPORTAL_SETTINGS');
+			$title=do_lang_tempcode((($forum_type=='ocf' || $forum_type=='none') && $use_msn==0)?'DATABASE_SETTINGS':'OCPORTAL_SETTINGS');
 			if (!$forum_options->is_empty()) $sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'232b69a995f384275c1cd9269a42c3b8','HIDDEN'=>'','TITLE'=>$forum_title,'TEXT'=>$forum_text,'OPTIONS'=>$forum_options)));
 			$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'15e0f275f78414b6c4fe7775a1cacb23','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
 		}
@@ -975,6 +976,7 @@ function step_5()
 	$cookie_path=post_param('cookie_path');
 	$cookie_domain=trim(post_param('cookie_domain'));
 	$base_url=post_param('base_url');
+	if (strpos($base_url,'://')===false) $base_url='http://'.$base_url;
 	if (substr($base_url,-1)=='/') $base_url=substr($base_url,0,strlen($base_url)-1);
 	$url_parts=parse_url($base_url);
 	if (!array_key_exists('host',$url_parts)) $url_parts['host']='localhost';
@@ -1002,7 +1004,6 @@ function step_5()
 	}
 
 	$table_prefix=post_param('table_prefix');
-	if ($table_prefix=='') warn_exit(do_lang_tempcode('NO_BLANK_TABLE_PREFIX'));
 
 	// Read in a temporary SITE_INFO, but only so this step has something to run with (the _config.php write doesn't use this data)
 	global $SITE_INFO;
