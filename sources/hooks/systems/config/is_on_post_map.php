@@ -31,13 +31,13 @@ class Hook_config_is_on_post_map
 		return array(
 			'human_name'=>'IS_ON_POST_MAP',
 			'type'=>'tick',
-            'category'=>'FORUMS',
-            'group'=>'FORUM_TOPICS',
+			'category'=>'FORUMS',
+			'group'=>'FORUM_TOPICS',
 			'explanation'=>'CONFIG_OPTION_is_on_post_map',
 			'shared_hosting_restricted'=>'0',
-            'list_options'=>'',
+			'list_options'=>'',
 
-            'addon'=>'ocf_forum',
+			'addon'=>'ocf_forum',
 		);
 	}
 
