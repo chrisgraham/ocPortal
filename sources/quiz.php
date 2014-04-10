@@ -325,12 +325,6 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
 					$correction[]=$correct_explanation;
 				$corrections[]=$correction;
-			} else
-			{
-				$affirmation=array($question['id'],$question_text,$correct_answer,$given_answer);
-				if ((!is_null($correct_explanation)) && ($correct_explanation!=''))
-					$affirmation[]=$correct_explanation;
-				$affirmations[]=$affirmation;
 			}
 
 			$given_answer=$accum->evaluate();

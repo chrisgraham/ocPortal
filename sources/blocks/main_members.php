@@ -120,7 +120,9 @@ class Block_main_members
 			$filters_row_b=array_key_exists('filters_row_b',$map)?$map['filters_row_b']:'';
 		} else
 		{
-			$filters_row_a='m_username='.php_addslashes(do_lang('USERNAME')).',usergroup='.php_addslashes(do_lang('GROUP'));
+			$filters_row_a='m_username='.php_addslashes(do_lang('USERNAME'));
+			if ($usergroup=='')
+				$filters_row_a.=',usergroup='.php_addslashes(do_lang('GROUP'));
 			$filters_row_b='';
 			$cpfs=ocf_get_all_custom_fields_match(ocf_get_all_default_groups(),1,1,NULL,NULL,1,NULL);
 			$_filters_row_a=2;
@@ -182,24 +184,29 @@ class Block_main_members
 
 		if ($usergroup!='')
 		{
-			if (is_numeric($usergroup))
+			$where.=' AND (1=0';
+			foreach (explode(',',$usergroup) as $_usergroup)
 			{
-				$group_id=intval($usergroup);
-			} else
-			{
-				$group_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$usergroup));
-				if (is_null($group_id))
+				if (is_numeric($_usergroup))
 				{
-					return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'red_alert');
+					$group_id=intval($_usergroup);
+				} else
+				{
+					$group_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_usergroup));
+					if (is_null($group_id))
+					{
+						return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'red_alert');
+					}
+				}
+				if ($has_exists)
+				{
+					$where.=' OR (m_primary_group='.strval($group_id).' OR EXISTS(SELECT gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members x WHERE x.gm_member_id=r.id AND gm_validated=1 AND gm_group_id='.strval($group_id).'))';
+				} else
+				{
+					$where.=' OR (m_primary_group='.strval($group_id).' OR gm_member_id=r.id AND gm_group_id='.strval($group_id).')';
 				}
 			}
-			if ($has_exists)
-			{
-				$where.=' AND (m_primary_group='.strval($group_id).' OR EXISTS(SELECT gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members x WHERE x.gm_member_id=r.id AND gm_validated=1 AND gm_group_id='.strval($group_id).'))';
-			} else
-			{
-				$where.=' AND (m_primary_group='.strval($group_id).' OR gm_member_id=r.id AND gm_group_id='.strval($group_id).')';
-			}
+			$where.=')';
 		}
 
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND m_validated=1';
