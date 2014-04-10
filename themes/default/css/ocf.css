@@ -478,6 +478,15 @@ hr.ocf_sig_barrier {
 	margin-top: 4em;
 }
 
+.box___post_map ul {
+    padding-left: 13px;
+}
+
+.box___post_map li {
+    list-style: none;
+    margin-bottom: 5px;
+}
+
 /*
 =========================
 =======Forum View========

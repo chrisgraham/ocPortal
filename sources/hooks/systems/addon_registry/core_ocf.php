@@ -407,6 +407,13 @@ class Hook_addon_registry_core_ocf
 			'themes/default/css/ocf_admin.css',
 			'themes/default/css/ocf_header.css',
 			'themes/default/css/ocf_footer.css',
+            // Files for post map functionality
+            'sources/hooks/systems/config_default/is_on_post_map.php',
+            'themes/default/templates/OCF_POST_MAP.tpl',
+            'themes/default/templates/OCF_POST_MAP_ITEM.tpl',
+            'themes/default/images/mesg_level.png',
+            'themes/default/images/middle_mesg_level.png',
+            'themes/default/images/last_mesg_level.png',
 		);
 	}
 
@@ -1006,7 +1013,7 @@ class Hook_addon_registry_core_ocf
 			'VIEW_PROFILES'=>true,
 			'ON_PROBATION'=>lorem_phrase(),
 			'USERGROUP'=>lorem_word(),
-			'CLUBS'=>lorem_phrase()
+			'CLUBS'=>lorem_phrase(),
 			'VIEWS'=>placeholder_number(),
 			'TOTAL_SESSIONS'=>placeholder_number(),
 		));
