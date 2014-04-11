@@ -85,7 +85,7 @@ class Hook_fields_page_link
 		list($zone,$attributes,)=page_link_decode($_ev[0]);
 		$url=build_url($attributes,$zone);
 
-		return hyperlink($url,escape_html($_ev[1]),true);
+		return hyperlink($url,escape_html($_ev[1]));
 	}
 
 	// ======================

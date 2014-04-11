@@ -7,7 +7,7 @@
 {CSS}
 </head>
 <body style="font-size: 12px" class="email_body">
-	<div style="font-size: 12px">
+	<div style="font-size: 12px" class="email_body">
 		{CONTENT}
 	</div>
 </body>

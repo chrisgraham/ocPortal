@@ -274,6 +274,7 @@ function newsletter_who_send_to($send_details,$lang,$start,$max,$get_raw_rows=fa
 	// From CSV
 	if ($csv_data!='')
 	{
+		secure_serialized_data($csv_data,array());
 		$_csv_data=unserialize($csv_data);
 
 		$email_index=0;

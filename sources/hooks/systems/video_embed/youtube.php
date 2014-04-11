@@ -47,7 +47,7 @@ class Hook_video_embed_youtube
 	function get_video_thumbnail($src_url)
 	{
 		$matches=array();
-		if ((preg_match('#^http://www\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$src_url,$matches)!=0))
+		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^https?://youtu\.be/([\w\-]+)#',$src_url,$matches)!=0))
 		{
 			return 'http://img.youtube.com/vi/'.rawurldecode($matches[1]).'/0.jpg';
 		}
@@ -63,7 +63,7 @@ class Hook_video_embed_youtube
 			'tag_tag'=>'youtube',
 			'tag_title'=>lang_code_to_default_content('custom_comcode:YOUTUBE_TAG_TITLE'),
 			'tag_description'=>lang_code_to_default_content('custom_comcode:YOUTUBE_TAG_DESCRIPTION'),
-			'tag_replace'=>'{$SET,VIDEO,{$PREG_REPLACE,(http://.*\?v=)?(http://youtu.be/)?([\w\-]+)(.*)?,$\{3\},{$STRIP_TAGS,{content}}}}<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/{$GET*,VIDEO}?fs=1&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{$GET*,VIDEO}?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>',
+			'tag_replace'=>'{$SET,VIDEO,{$PREG_REPLACE,(https?://.*\?v=)?(https?://youtu.be/)?([\w\-]+)(.*)?,$\{3\},{$STRIP_TAGS,{content}}}}<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/{$GET*,VIDEO}?fs=1&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{$GET*,VIDEO}?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>',
 			'tag_example'=>'[youtube]http://www.youtube.com/watch?v=ZDFFHaz9GsY[/youtube]',
 			'tag_parameters'=>'',
 			'tag_enabled'=>1,

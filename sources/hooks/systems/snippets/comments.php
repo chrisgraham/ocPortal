@@ -35,6 +35,7 @@ class Hook_comments
 
 		if (best_hash($serialized_options,get_site_salt())!=$hash) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
+		secure_serialized_data($serialized_options);
 		list($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,$reverse,$may_reply,$highlight_by_user,$allow_reviews)=unserialize($serialized_options);
 
 		$posts=array_map('intval',explode(',',get_param('ids',false,true)));

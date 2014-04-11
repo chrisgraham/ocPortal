@@ -591,6 +591,7 @@ function uninstall_addon($name)
 
 	require_code('zones2');
 	require_code('zones3');
+	require_code('abstract_file_manager');
 
 	// Clear some cacheing
 	require_code('view_modes');

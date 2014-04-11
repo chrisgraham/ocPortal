@@ -537,7 +537,7 @@ class Module_admin_version
 			}
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<14))
+		if ((!is_null($upgrade_from)) && ($upgrade_from>=10) && ($upgrade_from<14))
 		{
 			$GLOBALS['SITE_DB']->drop_if_exists('tracking');
 			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_template','ID_TEXT');

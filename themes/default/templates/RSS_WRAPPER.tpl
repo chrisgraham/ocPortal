@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="{!charset}"?>
-<?xml-stylesheet href="{$FIND_SCRIPT*,backend}?type=xslt-rss" type="text/xsl"?>
+<?xml-stylesheet href="{$FIND_SCRIPT*,backend}?type=xslt-rss{$KEEP*,0,1}" type="text/xsl"?>
 {+START,IF,{$NOT,{$BROWSER_MATCHES,itunes}}}
 <rss version="2.0">
 {+END}

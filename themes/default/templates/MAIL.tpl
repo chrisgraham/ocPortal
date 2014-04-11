@@ -9,7 +9,7 @@
 {CSS}
 </head>
 <body style="font-size: 12px" class="email_body">
-	<div style="font-size: 12px">
+	<div style="font-size: 12px" class="email_body">
 		<a href="{$BASE_URL*}"><img src="{$IMG*,logo/trimmed-logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
 
 		<br />

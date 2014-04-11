@@ -16,7 +16,7 @@ html, body {
 	{+END}
 }
 
-body, textarea, input, td, th {
+body, .email_body, textarea, input, td, th {
 	font-family: 'Verdana', 'Arial', 'Helvetica', sans-serif;
 }
 
@@ -235,7 +235,7 @@ form { /* For IE6 */
 .re_body {
 	padding: 0 !important;
 	color: #0d1522; /* {$,wizard, 20% seed + 80% !W/B} */
-	background: #FFFFFF; /* {$,wizard, 100% W/B} */
+	background-color: #FFFFFF; /* {$,wizard, 100% W/B} */
 }
 
 {+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
@@ -725,7 +725,7 @@ form { /* For IE6 */
 		overflow-x: visible !important;
 		overflow-y: visible !important;
 	}
-	col {
+	.field_name_column, .field_input_column {
 		width: auto !important;
 	}
 	* {
@@ -896,7 +896,8 @@ html>body .standardbox_wrap_panel { /* Runs before the below selector, the best 
 		Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
 		Find how to edit the referenced "block-background" theme image by doing an Admin Zone search for "block-background"
 	*/
-	background: url('{$IMG;,block-background}') #eaeff6; /* {$,wizard, 100% ocf_row2} */
+	background-image: url('{$IMG;,block-background}');
+	background-color: #eaeff6; /* {$,wizard, 100% ocf_row2} */
 }
 
 .standardbox_t_panel, .standardbox_nt_panel {

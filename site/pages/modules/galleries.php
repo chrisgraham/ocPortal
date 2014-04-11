@@ -685,13 +685,14 @@ class Module_galleries
 
 		// Sorting
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
-		$_selectors=array(
-			'compound_rating DESC'=>'POPULARITY',
+		if (get_option('is_on_rating')=='1')
+			$_selectors['compound_rating DESC']='POPULARITY';
+		$_selectors=array_merge($_selectors,array(
 			'url ASC'=>'FILENAME',
 			'add_date ASC'=>'OLDEST_FIRST',
 			'add_date DESC'=>'NEWEST_FIRST',
 			'title ASC'=>'TITLE'
-		);
+		));
 		$selectors=new ocp_tempcode();
 		foreach ($_selectors as $selector_value=>$selector_name)
 		{

@@ -406,6 +406,9 @@ function get_custom_file_base()
  */
 function filter_naughty($in,$preg=false)
 {
+	if (strpos($in,"\0")!==false)
+		log_hack_attack_and_exit('PATH_HACK');
+
 	if (strpos($in,'..')!==false)
 	{
 		if ($preg) return str_replace('.','',$in);

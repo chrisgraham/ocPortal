@@ -46,7 +46,7 @@ class Hook_worldpay
 	 */
 	function get_ipn_url()
 	{
-		return 'https://select.worldpay.com/wcc/purchase';
+		return 'https://secure.worldpay.com/wcc/purchase';
 	}
 
 	/**
