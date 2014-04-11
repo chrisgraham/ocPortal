@@ -133,7 +133,9 @@ class Hook_members_quiz
 			);
 			$categories[$category_title]['RUNNING_MARKS']+=$marks;
 			$categories[$category_title]['RUNNING_OUT_OF']+=$out_of-$potential_extra_marks; /*manually marking discounted to limit us to certainties*/
-			$categories[$category_title]['RUNNING_MARKS__CREDIT']+=floatval($entry['q_points_for_passing'])*$marks/floatval($out_of-$potential_extra_marks);
+			$adjusted_out_of=$out_of-$potential_extra_marks;
+			if ($adjusted_out_of==0) $adjusted_out_of=1;
+			$categories[$category_title]['RUNNING_MARKS__CREDIT']+=floatval($entry['q_points_for_passing'])*$marks/floatval($adjusted_out_of);
 			$categories[$category_title]['RUNNING_OUT_OF__CREDIT']+=$entry['q_points_for_passing'];
 		}
 		foreach ($categories as &$category)
