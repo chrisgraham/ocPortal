@@ -217,7 +217,10 @@ function actual_delete_zone_lite($zone)
 	}
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$zone,'cf_type'=>'zone'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$zone,'cf_type'=>'zone'));
+	}
 
 	log_it('DELETE_ZONE',$zone);
 	decache('side_stored_menu');

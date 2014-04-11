@@ -150,7 +150,10 @@ function delete_author($author)
 		$GLOBALS['SITE_DB']->query_delete('authors',array('author'=>$author),'',1);
 	} else warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$author,'cf_type'=>'author'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$author,'cf_type'=>'author'));
+	}
 
 	log_it('DELETE_AUTHOR',$author);
 }

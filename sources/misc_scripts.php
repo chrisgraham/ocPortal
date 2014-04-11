@@ -957,6 +957,7 @@ function emoticons_script()
 	$padding=2;
 	$window_width=300;
 	$cols=intval(floor(floatval($window_width)/floatval($max_emoticon_width+$padding)));
+	if ($cols==0) $cols=1;
 
 	// Render UI
 	$content=new ocp_tempcode();

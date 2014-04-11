@@ -335,7 +335,10 @@ function delete_chatroom($id)
 
 	decache('side_shoutbox');
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'chat'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'chat'));
+	}
 
 	if ($rows[0]['is_im']==0)
 		log_it('DELETE_ROOM',strval($id),$rows[0]['room_name']);

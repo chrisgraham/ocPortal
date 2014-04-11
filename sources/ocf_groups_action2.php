@@ -152,7 +152,10 @@ function ocf_delete_group($group_id,$target_group=NULL)
 	require_code('themes2');
 	tidy_theme_img_code(NULL,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($group_id),'cf_type'=>'group'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($group_id),'cf_type'=>'group'));
+	}
 
 	log_it('DELETE_GROUP',strval($group_id),$name);
 }

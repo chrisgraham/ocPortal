@@ -624,7 +624,10 @@ class Module_admin_sitetree
 
 				$GLOBALS['SITE_DB']->query_delete('https_pages',array('https_page_name'=>$page),'',1);
 
-				$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$page,'cf_type'=>'comcode_page'));
+				if (addon_installed('catalogues'))
+				{
+					$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$page,'cf_type'=>'comcode_page'));
+				}
 
 				log_it('DELETE_PAGES',$page);
 			}

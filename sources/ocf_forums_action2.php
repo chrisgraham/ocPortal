@@ -194,7 +194,10 @@ function ocf_delete_forum($forum_id,$target_forum_id=NULL,$delete_topics=0)
 	$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_member',array('i_forum_id'=>$forum_id));
 	$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_ip',array('i_forum_id'=>$forum_id));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($forum_id),'cf_type'=>'forum'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($forum_id),'cf_type'=>'forum'));
+	}
 
 	log_it('DELETE_FORUM',strval($forum_id),$name);
 }

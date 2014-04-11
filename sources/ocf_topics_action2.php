@@ -245,7 +245,10 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL,$check
 		ocf_force_update_forum_cacheing($forum_id,($validated==0)?0:-1,-$num_posts);
 	}
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($topic_id),'cf_type'=>'topic'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($topic_id),'cf_type'=>'topic'));
+	}
 
 	require_code('ocf_general_action2');
 	ocf_mod_log_it('DELETE_TOPIC',strval($topic_id),$name,$reason);

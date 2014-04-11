@@ -911,6 +911,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'Lost connection to MySQL server')===false) && 
 		(strpos($text,'Unable to save result set')===false) && 
 		(strpos($text,'.MYI')===false) && 
+		(strpos($text,'.MYD')===false) && 
 		(strpos($text,'MySQL server has gone away')===false) && 
 		(strpos($text,'Incorrect key file')===false) && 
 		(strpos($text,'Too many connections')===false) && 
