@@ -365,8 +365,6 @@ function _compensate_for_dst_change(&$hour,&$minute,$day_of_month,$month,$year,$
 	$new_time=tz_time(mktime($hour,$minute,0,$month,$day_of_month,$year),$timezone);
 	$old_time=tz_time(mktime($hour,$minute,0,$month-$dif_month,$day_of_month-$dif_day,$year-$dif_year),$timezone);
 
-	// TODO: Why no DST detected?
-
 	$hours_new=intval(date('H',$new_time));
 	$hours_old=intval(date('H',$old_time));
 	// Any possible wraparound point between DST-switches should not be around the clock-over point but rather around 0
