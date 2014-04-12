@@ -196,7 +196,7 @@ class Hook_search_comcode_pages
 
 						if (in_memory_search_match(array('content'=>$content,'conjunctive_operator'=>$boolean_operator),$contents))
 						{
-							$out[$i]['data']=array('extra'=>array($zone,$page,$limit_to));
+							$out[$i]['data']=array('the_zone'=>$zone,'the_page'=>$page)+array('extra'=>array($zone,$page,$limit_to));
 							if ($remapped_orderer=='the_page') $out[$i]['orderer']=$page;
 							elseif ($remapped_orderer=='the_zone') $out[$i]['orderer']=$zone;
 

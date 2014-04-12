@@ -196,6 +196,7 @@ function post_comment_script()
 
 	// Read in context of what we're doing
 	$options=either_param('options');
+	secure_serialized_data($options);
 	$_options=@unserialize($options);
 	if (!is_array($_options)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time)=$_options;

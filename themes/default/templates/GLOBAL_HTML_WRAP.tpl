@@ -222,11 +222,13 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 							{+START,IF,{$OR,{$IS_HTTPAUTH_LOGIN},{$IS_GUEST}}}
 								<li><a onclick="return open_link_as_overlay(this);" href="{$PAGE_LINK*,_SELF:login:{$?,{$NOR,{$GET,login_screen},{$EQ,{$PAGE},login}},redirect={$SELF_URL&*,1}}}">{!_LOGIN}</a></li>
 							{+END}
-							{+START,IF,{$CONFIG_OPTION,mobile_support}}{+START,IF,{$MOBILE,1}}
-								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=0}">{!NONMOBILE_VERSION}</a>{+END}
-							{+END}
-							{+START,IF,{$NOT,{$MOBILE,1}}}
-								<li><a href="{$SELF_URL*,1,0,0,keep_mobile=1}">{!MOBILE_VERSION}</a></li>
+							{+START,IF,{$CONFIG_OPTION,mobile_support}}
+								{+START,IF,{$MOBILE,1}}
+									<li><a href="{$SELF_URL*,1,0,0,keep_mobile=0}">{!NONMOBILE_VERSION}</a>
+								{+END}
+								{+START,IF,{$NOT,{$MOBILE,1}}}
+									<li><a href="{$SELF_URL*,1,0,0,keep_mobile=1}">{!MOBILE_VERSION}</a></li>
+								{+END}
 							{+END}
 							{+START,IF_NON_EMPTY,{$HONEYPOT_LINK}}
 								<li class="accessibility_hidden">{$HONEYPOT_LINK}</li>

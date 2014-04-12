@@ -320,7 +320,13 @@ class OCP_Topic
 		$this->topic_id=$topic_id;
 		$this->reverse=$reverse;
 
-		$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
+		if (get_param_integer('threaded',NULL)===1)
+		{
+			$this->is_threaded=true;
+		} else
+		{
+			$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
+		}
 
 		$sort=$this->_get_sort_order($reverse);
 		$_sort=$sort; // Passed through forum layer, we need to run a translation...

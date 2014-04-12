@@ -22,3 +22,7 @@ AddType text/css .css
 #
 
 AddType text/xml .xml
+
+
+# Files are encoded as utf-8
+AddCharset UTF-8 .js

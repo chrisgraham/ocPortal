@@ -86,12 +86,15 @@ class Hook_task_import_rss
 			}
 
 			// Dates
-			$add_date=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:(array_key_exists('add_date',$item)?strtotime($item['add_date']):time());
-			if ($add_date===false) $add_date=time(); // We've seen this situation in an error email, it's if the add date won't parse by PHP
-			$edit_date=array_key_exists('clean_edit_date',$item)?$item['clean_edit_date']:(array_key_exists('edit_date',$item)?strtotime($item['edit_date']):NULL);
-			if ($edit_date===false) $edit_date=NULL;
-			if ($add_date>time()) $add_date=time();
-			if ($add_date<0) $add_date=time();
+			$post_time=array_key_exists('clean_add_date',$item)?$item['clean_add_date']:(array_key_exists('add_date',$item)?strtotime($item['add_date']):time());
+			if ($post_time===false) $post_time=time(); // We've seen this situation in an error email, it's if the add date won't parse by PHP
+			if (($post_time<0) || ($post_time>2147483647)) $post_time=2147483647;
+			$edit_time=array_key_exists('clean_edit_date',$item)?$item['clean_edit_date']:(array_key_exists('edit_date',$item)?strtotime($item['edit_date']):NULL);
+			if ($edit_time===false) $edit_time=NULL;
+			if (!is_null($edit_time))
+			{
+				if (($edit_time<0) || ($edit_time>2147483647)) $edit_time=2147483647;
+			}
 
 			// Validation status
 			$validated=$is_validated;
@@ -226,10 +229,10 @@ class Hook_task_import_rss
 					$news_article,
 					$owner_category_id,
 					$cat_ids,
-					$add_date,
+					$post_time,
 					$submitter_id,
 					0,
-					$edit_date,
+					$edit_time,
 					NULL,
 					$rep_image
 				);
@@ -282,8 +285,8 @@ class Hook_task_import_rss
 					'the_page'=>$file,
 					'p_parent_page'=>'',
 					'p_validated'=>$validated,
-					'p_edit_date'=>$edit_date,
-					'p_add_date'=>$add_date,
+					'p_edit_date'=>$edit_time,
+					'p_add_date'=>$post_time,
 					'p_submitter'=>$submitter_id,
 					'p_show_as_edit'=>0
 				));

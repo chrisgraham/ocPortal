@@ -27,7 +27,7 @@ class Hook_paypal
 	 */
 	function _get_payment_address()
 	{
-		return ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
+		return trim(ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn'));
 	}
 
 	/**

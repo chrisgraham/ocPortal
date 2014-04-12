@@ -917,6 +917,21 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	{
 		$update['m_username']=$username;
 
+		// Reassign personal galleries
+		if (addon_installed('galleries'))
+		{
+			require_lang('galleries');
+			$personal_galleries=$GLOBALS['SITE_DB']->query('SELECT fullname,parent_id FROM '.get_table_prefix().'galleries WHERE name LIKE \'member_'.strval($member_id).'_%\'');
+			foreach ($personal_galleries as $gallery)
+			{
+				$parent_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$gallery['parent_id'])));
+				if (get_translated_text($gallery['fullname'])==do_lang('PERSONAL_GALLERY_OF',$old_username,$parent_title))
+				{
+					lang_remap($gallery['fullname'],do_lang('PERSONAL_GALLERY_OF',$username,$parent_title),$GLOBALS['FORUM_DB']);
+				}
+			}
+		}
+
 		require_code('notifications');
 
 		$subject=do_lang('USERNAME_CHANGED_MAIL_SUBJECT',$username,$old_username,NULL,get_lang($member_id));
@@ -1077,7 +1092,10 @@ function ocf_delete_member($member_id)
 		sync_file(rawurldecode($old));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($member_id),'cf_type'=>'member'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($member_id),'cf_type'=>'member'));
+	}
 
 	log_it('DELETE_MEMBER',strval($member_id),$username);
 

@@ -41,9 +41,9 @@ function init__global3()
 	$HTML_ESCAPE_1_STRREP=array('&','"','\'','<','>');
 	$HTML_ESCAPE_2=array('&amp;','&quot;','&#039;','&lt;','&gt;');
 	global $PHP_REP_FROM,$PHP_REP_TO,$PHP_REP_TO_TWICE;
-	$PHP_REP_FROM=array('\\',"\n",'$','"');
-	$PHP_REP_TO=array('\\\\','\n','\$','\\"');
-	$PHP_REP_TO_TWICE=array('\\\\\\\\','\\n','\\\\$','\\\\\"');
+	$PHP_REP_FROM=array('\\',"\n",'$','"',"\0");
+	$PHP_REP_TO=array('\\\\','\n','\$','\\"','\0');
+	$PHP_REP_TO_TWICE=array('\\\\\\\\','\\n','\\\\$','\\\\\"','\\0');
 
 	global $BOT_MAP_CACHE,$BOT_TYPE_CACHE;
 	$BOT_MAP_CACHE=NULL;
@@ -2765,4 +2765,57 @@ function appengine_live_guard()
 {
 	if (appengine_is_live())
 		warn_exit(do_lang_tempcode('NOT_ON_LIVE_GOOGLE_APPENGINE'));
+}
+
+/**
+ * Check serialized data for objects, as a security measure.
+ *
+ * @param string		Serialized data
+ * @param ?mixed		What to substitute if objects are contained (NULL: substitute null)
+ */
+function secure_serialized_data(&$data,$safe_replacement=NULL)
+{
+	// Security check, unserialize can result in unchecked magic method invocation on defined objects
+	//  Would be a vulnerability if there's a defined class where such method invocation has dangerous side-effects
+
+	$matches=array();
+	$num_matches=preg_match_all('#(^|;)O:\d+:"([^"]+)"#',$data,$matches);
+	for ($i=0;$i<$num_matches;$i++)
+	{
+		$harsh=true; // Could be turned into a method parameter later, if needed
+		if ($harsh)
+		{
+			$bad_methods=array(
+				'__.*',
+			);
+		} else
+		{
+			$bad_methods=array(
+				'__sleep',
+				'__wakeup',
+				'__destruct',
+				'__toString',
+				'__set_state',
+				'__isset',
+				'__get',
+				'__set',
+				'__call',
+				'__callStatic',
+			);
+		}
+
+		$methods=get_class_methods($matches[2][$i]);
+
+		foreach ($bad_methods as $bad_method)
+		{
+			foreach ($methods as $method)
+			{
+				if (preg_match('#^'.$bad_method.'$#',$method)!=0)
+				{
+					$data=serialize($safe_replacement);
+					return;
+				}
+			}
+		}
+	}
 }

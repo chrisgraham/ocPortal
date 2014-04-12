@@ -584,7 +584,10 @@ function delete_image($id,$delete_full=true)
 	delete_lang($title);
 	delete_lang($description);
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'image'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'image'));
+	}
 
 	// Delete file
 	if ($delete_full)
@@ -1022,7 +1025,10 @@ function delete_video($id,$delete_full=true)
 	delete_lang($title);
 	delete_lang($description);
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'video'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'video'));
+	}
 
 	if ($delete_full)
 	{
@@ -1341,7 +1347,10 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 			}
 		}
 
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$name),array('cv_value'=>$old_name,'cf_type'=>'gallery'));
+		if (addon_installed('catalogues'))
+		{
+			$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$name),array('cv_value'=>$old_name,'cf_type'=>'gallery'));
+		}
 	}
 
 	if (!is_null($meta_keywords)) seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
@@ -1444,7 +1453,10 @@ function delete_gallery($name)
 	delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$name);
 	delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$name);
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$name,'cf_type'=>'gallery'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$name,'cf_type'=>'gallery'));
+	}
 
 	delete_lang($rows[0]['fullname']);
 	delete_lang($rows[0]['description']);

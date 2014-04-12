@@ -128,7 +128,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 							'TOPIC_URL'=>$topic_url,
 							'TOPIC_TITLE'=>($subforum['last_title']=='')?do_lang_tempcode('NA'):$subforum['last_title'],
 							'POSTER'=>$poster,
-							'MEMBER_ID'=>strval($subforum['last_member_id']),
+							'MEMBER_ID'=>is_null($subforum['last_member_id'])?'':strval($subforum['last_member_id']),
 							'ID'=>strval($subforum['last_topic_id'])
 						));
 					}

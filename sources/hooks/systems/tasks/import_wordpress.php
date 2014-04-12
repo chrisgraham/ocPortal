@@ -108,6 +108,17 @@ class Hook_task_import_wordpress
 					$allow_comments=($post['comment_status']=='open')?1:0;
 					$allow_trackbacks=($post['ping_status']=='open')?1:0;
 
+					// Dates
+					$post_time=strtotime($post['post_date_gmt']);
+					if ($post_time===false) $post_time=strtotime($post['post_date']);
+					if (($post_time<0) || ($post_time>2147483647)) $post_time=2147483647;
+					$edit_time=is_null($post['post_modified_gmt'])?NULL:strtotime($post['post_modified_gmt']);
+					if ($edit_time===false) $edit_time=strtotime($post['post_modified']);
+					if (!is_null($edit_time))
+					{
+						if (($edit_time<0) || ($edit_time>2147483647)) $edit_time=2147483647;
+					}
+
 					if ($post['post_type']=='post') // News
 					{
 						if (addon_installed('import'))
@@ -164,12 +175,6 @@ class Hook_task_import_wordpress
 						{
 							$news_article='[highlight]'.do_lang('POST_ACCESS_IS_RESTRICTED').'[/highlight]'."\n\n".'[if_in_group="Administrators"]'.$news_article.'[/if_in_group]';
 						}
-
-						// Dates
-						$post_time=strtotime($post['post_date_gmt']);
-						if ($post_time===false) $post_time=strtotime($post['post_date']);
-						$edit_time=is_null($post['post_modified_gmt'])?NULL:strtotime($post['post_modified_gmt']);
-						if ($edit_time===false) $edit_time=strtotime($post['post_modified']);
 
 						// Add news
 						$id=add_news(
@@ -253,8 +258,8 @@ class Hook_task_import_wordpress
 							'the_page'=>$file,
 							'p_parent_page'=>'',
 							'p_validated'=>$is_validated,
-							'p_edit_date'=>strtotime($post['post_modified_gmt']),
-							'p_add_date'=>strtotime($post['post_date_gmt']),
+							'p_edit_date'=>$post_time,
+							'p_add_date'=>$edit_time,
 							'p_submitter'=>$submitter_id,
 							'p_show_as_edit'=>0
 						));

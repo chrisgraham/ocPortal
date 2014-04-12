@@ -1043,9 +1043,14 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'Lost connection to MySQL server')===false) && 
 		(strpos($text,'Unable to save result set')===false) && 
 		(strpos($text,'.MYI')===false) && 
+		(strpos($text,'.MYD')===false) && 
 		(strpos($text,'MySQL server has gone away')===false) && 
 		(strpos($text,'Incorrect key file')===false) && 
 		(strpos($text,'Too many connections')===false) && 
+		(strpos($text,'Incorrect string value')===false) && 
+		(strpos($text,'Can\'t create/write to file')===false) &&  // MySQL
+		(strpos($text,'Error writing file')===false) && // E.g. cannot PHP create a temporary file
+		(strpos($text,'Illegal mix of collations')===false) && 
 		(strpos($text,'marked as crashed and should be repaired')===false) && 
 		(strpos($text,'connect to')===false) && 
 		(strpos($text,'Access denied for')===false) && 

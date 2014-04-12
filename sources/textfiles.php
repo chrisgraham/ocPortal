@@ -107,9 +107,9 @@ function write_text_file($codename,$lang,$out)
 	}
 
 	$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'at');
+	if ($myfile===false) intelligent_write_error($path);
 	@flock($myfile,LOCK_EX);
 	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
-	if ($myfile===false) intelligent_write_error($path);
 	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
 	@flock($myfile,LOCK_UN);
 	fclose($myfile);

@@ -454,6 +454,8 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	{
 		// Find what we sold
 		list($found,$type_code)=find_product_row($item_name,true,true);
+
+		if ($found[0]==PRODUCT_SUBSCRIPTION) exit(); // We ignore separate payment signal for subscriptions (for Paypal it is web_accept)
 	}
 	if (is_null($found)) fatal_ipn_exit(do_lang('PRODUCT_NO_SUCH').' - '.$item_name,true);
 
