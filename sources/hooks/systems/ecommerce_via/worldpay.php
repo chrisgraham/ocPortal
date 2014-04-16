@@ -22,9 +22,9 @@ class Hook_worldpay
 {
 
 	// Requires:
-	//  callback URL set in control panel ('CMS') to be set to "http://<WPDISPLAY ITEM=MC_callback>"
+	//  Payment Response URL set in control panel to be set to "http://<WPDISPLAY ITEM=MC_callback>"
 	//  digest password sent as 'secret' to WorldPay tech support
-	//  account must be set as 'live' in control panel ('CMS') once testing is done
+	//  account must be set as 'live' in control panel once testing is done
 	//  WorldPay-side payment pages will probably want customing
 	//  Logos, refund policies, and contact details [e-mail, phone, postal], may need coding into the templates
 	//  FuturePay must be enabled for subscriptions to work (contact WorldPay about it)
@@ -46,7 +46,7 @@ class Hook_worldpay
 	 */
 	function get_ipn_url()
 	{
-		return 'https://secure.worldpay.com/wcc/purchase';
+		return 'https://'.(ecommerce_test_mode()?'select-test':'select').'.worldpay.com/wcc/purchase';
 	}
 
 	/**
@@ -102,7 +102,7 @@ class Hook_worldpay
 			'e_length'=>NULL,
 			'e_length_units'=>'',
 		));
-		return do_template('ECOM_BUTTON_VIA_WORLDPAY',array('_GUID'=>'56c78a4e16c0e7f36fcfbe57d37bc3d3','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'DIGEST'=>$digest,'TEST_MODE'=>ecommerce_test_mode(),'PURCHASE_ID'=>strval($trans_id),'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url,'EMAIL_ADDRESS'=>$email_address));
+		return do_template('ECOM_BUTTON_VIA_WORLDPAY',array('_GUID'=>'56c78a4e16c0e7f36fcfbe57d37bc3d3','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'DIGEST'=>$digest,'TEST_MODE'=>ecommerce_test_mode(),'PURCHASE_ID'=>$trans_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url,'EMAIL_ADDRESS'=>$email_address));
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Hook_worldpay
 			'e_length'=>NULL,
 			'e_length_units'=>'',
 		));
-		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY',array('_GUID'=>'1f88716137762a467edbf5fbb980c6fe','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'LENGTH'=>strval($length),'LENGTH_UNITS_2'=>$length_units_2,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>strval($trans_id),'AMOUNT'=>float_to_raw_string($amount),'FIRST_REPEAT'=>date('Y-m-d',$first_repeat),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
+		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_WORLDPAY',array('_GUID'=>'1f88716137762a467edbf5fbb980c6fe','PRODUCT'=>$product,'DIGEST'=>$digest,'TEST'=>ecommerce_test_mode(),'LENGTH'=>strval($length),'LENGTH_UNITS_2'=>$length_units_2,'ITEM_NAME'=>$item_name,'PURCHASE_ID'=>$trans_id,'AMOUNT'=>float_to_raw_string($amount),'FIRST_REPEAT'=>date('Y-m-d',$first_repeat),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url));
 	}
 
 	/**
