@@ -144,6 +144,10 @@ function disable_wysiwyg(forms,so,so2,discard)
 				textarea.disabled=false;
 				textarea.readOnly=false;
 
+				// Unload editor
+				var wysiwyg_data=window.wysiwyg_editors[id].getData();
+				window.wysiwyg_editors[id].destroy();
+
 				// Comcode conversion
 				if ((discard) && (window.wysiwyg_original_comcode[id]))
 				{
@@ -152,10 +156,10 @@ function disable_wysiwyg(forms,so,so2,discard)
 				{
 					var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub());
 					if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
-					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(window.wysiwyg_editors[id].getData().replace(new RegExp(String.fromCharCode(8203),'g'),'')));
+					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(wysiwyg_data.replace(new RegExp(String.fromCharCode(8203),'g'),'')));
 					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName('result')[0]))
 					{
-						textarea.value='[semihtml]'+window.wysiwyg_editors[id].getData()+'[/semihtml]';
+						textarea.value='[semihtml]'+wysiwyg_data+'[/semihtml]';
 					} else
 					{
 						var result_tags=request.responseXML.documentElement.getElementsByTagName('result');
@@ -166,9 +170,6 @@ function disable_wysiwyg(forms,so,so2,discard)
 				}
 				if (document.getElementById('toggle_wysiwyg_'+id))
 					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'{!ENABLE_WYSIWYG;^}');
-
-				// Unload editor
-				window.wysiwyg_editors[id].destroy();
 			}
 		}
 	}
