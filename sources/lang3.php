@@ -262,9 +262,10 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
  * @param  ?MEMBER		The member performing the change (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
+ * @param  boolean		Whether to leave the source member intact, as we trust this edit (it's not an interactive user edit, just something behind-the-scenes)
  * @return integer		The language entries id
  */
-function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false)
+function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false,$leave_source_member=false)
 {
 	if ($id==0) return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
 
@@ -298,20 +299,32 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 		));
 	}
 
+	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
+	if (is_null($for_member)) $for_member=$member;
+
 	if ($comcode)
 	{
 		$_text2=comcode_to_tempcode($text,$for_member,$as_admin,60,$pass_id,$connection);
 		$connection->text_lookup_cache[$id]=$_text2;
 		$text2=$_text2->to_assembly();
 	} else $text2='';
-	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
-	if (is_null($for_member)) $for_member=$member;
 
 	$remap=array('broken'=>0,'text_original'=>$text,'text_parsed'=>$text2);
-	if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($member,'allow_html')) || (!has_specific_permission($member,'use_very_dangerous_comcode')))
-		$remap['source_user']=$member;
-	elseif (!is_null($for_member))
-		$remap['source_user']=$for_member; // Reset to latest submitter for main record
+
+	if (!$leave_source_member)
+	{
+		/*
+		We set the Comcode user to the editing user (not the content owner) if the editing user does not have full HTML/Dangerous-Comcode privileges.
+		The Comcode user is set to the content owner if the editing user does have those privileges (which is the idealised, consistent state).
+		This is necessary as editing admin's content shouldn't let you write content with admin's privileges, even if you have privilege to edit their content
+		 – yet also, if the source_user is changed, when admin edits it has to change back again.
+		*/
+		if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($member,'allow_html')) || (!has_specific_permission($member,'use_very_dangerous_comcode')))
+			$remap['source_user']=$member;
+		else
+			$remap['source_user']=$for_member; // Reset to latest submitter for main record
+	}
+
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
 		$connection->query_update('translate',$remap,array('id'=>$id,'language'=>$lang),'',1);
@@ -346,7 +359,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 	$result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
 	$result=array_key_exists(0,$result)?$result[0]:NULL;
 
-	if (is_null($result))
+	if (is_null($result)) // A missing translation
 	{
 		if ($force)
 		{
@@ -379,7 +392,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			lang_remap_comcode($entry,is_null($result)?'':$result['text_original'],$connection,NULL,$result['source_user'],$as_admin);
+			_lang_remap($entry,is_null($result)?'':$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 			if (!is_null($SEARCH__CONTENT_BITS))
 			{
 				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
@@ -395,7 +408,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 		return $connection->text_lookup_cache[$entry];
-	} else
+	} else // Missing parsed Comcode
 	{
 		load_user_stuff();
 		require_code('comcode'); // might not have been loaded for a quick-boot
@@ -411,7 +424,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}
-		lang_remap_comcode($entry,$result['text_original'],$connection,NULL,$result['source_user'],$as_admin);
+		_lang_remap($entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 		$LAX_COMCODE=$temp;
 		$ret=get_translated_tempcode($entry,$connection,$lang);
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;

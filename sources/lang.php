@@ -1066,8 +1066,6 @@ function insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang
  */
 function lang_remap_comcode($id,$text,$connection=NULL,$pass_id=NULL,$source_member=NULL,$as_admin=false)
 {
-	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
-
 	return lang_remap($id,$text,$connection,true,$pass_id,$source_member,$as_admin);
 }
 
