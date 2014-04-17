@@ -63,11 +63,14 @@ div.flash {
 .progressName {
 	font-size: 8pt;
 	font-weight: 700;
-	color: #555;
 	height: 14px;
 	text-align: left;
 	white-space: nowrap;
 	overflow: hidden;
+}
+
+.progressName, .progressBarStatus {
+	color: #555;
 }
 
 .progressBarInProgress,

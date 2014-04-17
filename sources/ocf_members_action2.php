@@ -630,7 +630,7 @@ function ocf_get_member_fields_profile($mini_mode=true,$member_id=NULL,$groups=N
 				elseif (is_integer($value)) $value=strval($value);
 				if (strpos($storage_type,'_trans')!==false)
 				{
-					$value=((is_null($value)) || ($value==0))?'':get_translated_text($value,$GLOBALS['FORUM_DB']);
+					$value=((is_null($value)) || ($value=='0'))?'':get_translated_text(intval($value),$GLOBALS['FORUM_DB']);
 				}
 				if (($custom_field['cf_encrypted']==1) && (is_encryption_enabled()))
 					$value=remove_magic_encryption_marker($value);
@@ -818,7 +818,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($photo_thumb_url)) $update['m_photo_thumb_url']=$photo_thumb_url;
 
 	$old_username=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
-	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self'))))
+	if ((!is_null($username)) && ($username!=$old_username) && (($skip_checks) || (has_actual_page_access(get_member(),'admin_ocf_join')) || (has_specific_permission($member_id,'rename_self')))) // Username change
 	{
 		$update['m_username']=$username;
 
@@ -852,7 +852,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 
 		update_member_username_caching($member_id,$username);
 	}
-	if (!is_null($password))
+	if (!is_null($password)) // Password change
 	{
 		if ((is_null($password_compatibility_scheme)) && (get_value('no_password_hashing')==='1'))
 		{
@@ -874,23 +874,20 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			$update['m_password_compat_scheme']='';
 		}
 
+		// Security, clear out sessions from other people on this user - just in case the reset is due to suspicious activity
+		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'sessions WHERE the_user='.strval($member_id).' AND the_session<>'.strval(get_session_id()));
+
 		if (!$skip_checks)
 		{
-			$part_b='';
-			if (!has_actual_page_access(get_member(),'admin_ocf_join'))
-				$part_b=do_lang('PASSWORD_CHANGED_MAIL_BODY_2',get_ip_address());
-			$mail=do_lang('PASSWORD_CHANGED_MAIL_BODY',get_site_name(),$part_b,NULL,get_lang($member_id));
-			$old_email_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
-
-			if ($old_email_address!=$email_address)
-			{
-				$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_email_address'=>$old_email_address),array('i_email_address'=>$email_address));
-			}
-
 			if (($member_id==get_member()) || (get_value('disable_password_change_mails_for_staff')!=='1'))
 			{
 				if (get_page_name()!='admin_ocf_join')
 				{
+					$part_b='';
+					if (!has_actual_page_access(get_member(),'admin_ocf_join'))
+						$part_b=do_lang('PASSWORD_CHANGED_MAIL_BODY_2',get_ip_address());
+					$mail=do_lang('PASSWORD_CHANGED_MAIL_BODY',get_site_name(),$part_b,NULL,get_lang($member_id));
+
 					require_code('notifications');
 					dispatch_notification('ocf_password_changed',NULL,do_lang('PASSWORD_CHANGED_MAIL_SUBJECT',NULL,NULL,NULL,get_lang($member_id)),$mail,array($member_id),NULL,2);
 				}
@@ -909,18 +906,23 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	}
 	if (!is_null($primary_group)) $update['m_primary_group']=$primary_group;
 
-	$old_validated=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_validated');
-
 	$GLOBALS['FORUM_DB']->query_update('f_members',$update,array('id'=>$member_id),'',1);
 
 	if (get_member()!=$member_id) log_it('EDIT_MEMBER_PROFILE',strval($member_id),$username);
 
+	$old_validated=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_validated');
 	if (($old_validated==0) && ($validated==1))
 	{
 		require_code('mail');
 		$_login_url=build_url(array('page'=>'login'),get_module_zone('login'),NULL,false,false,true);
 		$login_url=$_login_url->evaluate();
 		mail_wrap(do_lang('VALIDATED_MEMBER_SUBJECT',get_site_name(),NULL,get_lang($member_id)),do_lang('MEMBER_VALIDATED',get_site_name(),$username,$login_url,get_lang($member_id)),array($email_address),$username);
+	}
+
+	$old_email_address=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
+	if ($old_email_address!=$email_address)
+	{
+		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_email_address'=>$old_email_address),array('i_email_address'=>$email_address));
 	}
 
 	// Decache from run-time cache
@@ -1574,11 +1576,18 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 function update_member_username_caching($member_id,$username)
 {
 	// Fix cacheing for usernames
-	$to_fix=array('f_forums/f_cache_last_username/f_cache_last_member_id','f_posts/p_poster_name_if_guest/p_poster','f_topics/t_cache_first_username/t_cache_first_member_id','f_topics/t_cache_last_username/t_cache_last_member_id');
+	$to_fix=array(
+		'f_forums/f_cache_last_username/f_cache_last_member_id',
+		'f_posts/p_poster_name_if_guest/p_poster',
+		'f_topics/t_cache_first_username/t_cache_first_member_id',
+		'f_topics/t_cache_last_username/t_cache_last_member_id',
+		'sessions/cache_username/the_user',
+	);
 	foreach ($to_fix as $fix)
 	{
 		list($table,$field,$updating_field)=explode('/',$fix,3);
-		$GLOBALS['FORUM_DB']->query_update($table,array($field=>$username),array($updating_field=>$member_id));
+		$con=$GLOBALS[(substr($table,0,2)=='f_')?'FORUM_DB':'SITE_DB'];
+		$con->query_update($table,array($field=>$username),array($updating_field=>$member_id));
 	}
 }
 

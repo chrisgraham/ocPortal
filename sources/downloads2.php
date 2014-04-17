@@ -118,7 +118,7 @@ function dload_script()
 	// Some basic security: don't fopen php files
 	if ($extension=='php') log_hack_attack_and_exit('PHP_DOWNLOAD_INNOCENT',integer_format($id));
 
-	// Size, bandwidth, logging
+	// Size, bandwidth
 	$size=filesize($_full);
 	if (is_null($got_before))
 	{
@@ -129,7 +129,6 @@ function dload_script()
 		require_code('files2');
 		check_shared_bandwidth_usage($size);
 	}
-	log_download($id,$size,!is_null($got_before));
 
 	// Send header
 	if ((strpos($myrow['original_filename'],chr(10))!==false) || (strpos($myrow['original_filename'],chr(13))!==false))
@@ -191,6 +190,8 @@ function dload_script()
 	header('Content-Length: '.strval($new_length));
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	error_reporting(0);
+
+	if ($from==0) log_download($id,$size,!is_null($got_before));
 
 	// Send actual data
 	$myfile=fopen($_full,'rb');
