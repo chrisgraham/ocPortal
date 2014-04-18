@@ -352,6 +352,13 @@ class Hook_search_ocf_members
 		$member_id=$row['id'];
 		$preview=true;
 
+		if (get_param_integer('option__emails_only',0)==1)
+		{
+			$link=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'],false,$row['m_username']);
+			$link2=($row['m_email_address']=='')?new ocp_tempcode():hyperlink('mailto: '.$row['m_email_address'],$row['m_email_address'],false,true);
+			return array(do_lang('USERNAME')=>$link->evaluate(),do_lang('EMAIL_ADDRESS')=>$link2->evaluate());
+		}
+
 		if (get_forum_type()!='ocf')
 		{
 			return array();

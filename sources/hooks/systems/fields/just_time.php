@@ -93,6 +93,7 @@ class Hook_fields_just_time
 				if (!array_key_exists(1,$time_bits)) $time_bits[1]='00';
 				if (!array_key_exists(2,$time_bits)) $time_bits[2]='00';
 				$time=mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]));
+				//$time=utctime_to_usertime($time);	No, as we have no idea what date it is for, so cannot do DST changes
 			}
 			$ev=get_timezoned_time($time,false,NULL,true);
 		}
@@ -134,7 +135,7 @@ class Hook_fields_just_time
 
 			$time=array(intval($time_bits[1]),intval($time_bits[0]),intval(date('m')),intval(date('d')),intval(date('Y')));
 		}
-		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),true,$time,1,1900,NULL,$field['cf_required']==1,false);
+		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),true,$time,1,1900,NULL,$field['cf_required']==1,false,NULL,false);
 	}
 
 	/**

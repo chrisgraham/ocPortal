@@ -104,7 +104,7 @@ function get_site_timezone()
 	{
 		$timezone_site=get_server_timezone();
 	}
-	elseif (is_numeric($_timezone_site))
+	elseif (is_numeric($_timezone_site)) // LEGACY
 	{
 		$timezone_site=convert_timezone_offset_to_formal_timezone(floatval($_timezone_site));
 		set_value('timezone',$timezone_site);
@@ -140,12 +140,12 @@ function get_users_timezone($member=NULL)
 	if ((get_forum_type()=='ocf') && (!is_guest($member)))
 	{
 		$_timezone_member=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_timezone_offset');
-		if (is_integer($_timezone_member))
+		if (is_integer($_timezone_member)) // LEGACY
 		{
 			// Database upgrade needed
 			$GLOBALS['FORUM_DB']->alter_table_field('f_members','m_timezone_offset','SHORT_TEXT');
 		}
-		if ((is_integer($_timezone_member)) || (is_numeric($_timezone_member))) // Old date, must upgrade
+		if ((is_integer($_timezone_member)) || (is_numeric($_timezone_member))) // Old date, must upgrade LEGACY
 		{
 			$_timezone_old_offset=get_value('timezone_old_offset');
 			if (is_null($_timezone_old_offset)) $_timezone_old_offset='0';

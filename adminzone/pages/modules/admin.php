@@ -155,6 +155,7 @@ class Module_admin
 			array('member','user'),
 			array('profile','account','memberaccount'),
 			array('permission','privilege','authorisation','authorization','right'),
+			array('overlay','popup','dialog','window'),
 			array('option','setting','value'),
 			array('configure','setup','install'),
 			array('emoticon','smiley','face'),

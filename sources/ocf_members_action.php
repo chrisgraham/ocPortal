@@ -392,7 +392,6 @@ function get_cpf_storage_for($type)
 		case 'long_trans':
 		case 'posting_field':
 		case 'tick':
-		case 'integer':
 		case 'float':
 		case 'color':
 		case 'content_link':

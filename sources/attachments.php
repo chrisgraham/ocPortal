@@ -84,38 +84,15 @@ function attachments_script()
 		}
 	}
 
-	// Is it non-local? If so, redirect
-	if (!url_is_local($full))
-	{
-		if ((strpos($full,chr(10))!==false) || (strpos($full,chr(13))!==false))
-			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-		header('Location: '.$full);
-		return;
-	}
-
-//	$breakdown=pathinfo($full);
-//	$filename=$breakdown['basename'];
-	$_full=get_custom_file_base().'/'.rawurldecode($full);
-	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
-	$size=filesize($_full);
 	$original_filename=($thumb==1 && $myrow['a_thumb_url']!='')?rawurldecode(basename($myrow['a_thumb_url'])):$myrow['a_original_filename'];
 	$extension=get_file_extension($original_filename);
 
-	require_code('files2');
-	check_shared_bandwidth_usage($size);
-
+	// Send header
 	require_code('mime_types');
 	$mime_type=get_mime_type($extension);
-
-	/*$myfile2=fopen('test','wb');
-	fwrite($myfile2,var_export($_SERVER,true));
-	fwrite($myfile2,var_export($_ENV,true));
-	fclose($myfile2);*/
-
-	// Send header
+	header('Content-Type: '.$mime_type.'; authoritative=true;');
 	if ((strpos($original_filename,chr(10))!==false) || (strpos($original_filename,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-	header('Content-Type: '.$mime_type.'; authoritative=true;');
 	//if ($mime_type=='application/octet-stream') Not sure about this at time of writing
 	{
 		/* if (substr($original_filename,-4)=='.pdf')
@@ -126,6 +103,23 @@ function attachments_script()
 			header('Content-Disposition: inline; filename="'.$original_filename.'"');
 		}
 	}
+
+	$_full=get_custom_file_base().'/'.rawurldecode($full);
+	$size=filesize($_full);
+	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
+
+	// Is it non-local? If so, redirect
+	if (!url_is_local($full))
+	{
+		if ((strpos($full,chr(10))!==false) || (strpos($full,chr(13))!==false))
+			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
+		header('Location: '.$full);
+		return;
+	}
+
+	require_code('files2');
+	check_shared_bandwidth_usage($size);
+
 	header('Accept-Ranges: bytes');
 
 	// Caching

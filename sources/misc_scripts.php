@@ -1007,6 +1007,10 @@ function thumb_script()
 	}
 	$url_thumb=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 
+	require_code('mime_types');
+	$mime_type=get_mime_type($url_thumb);
+	header('Content-Type: '.$mime_type.'; authoritative=true;');
+
 	if ((strpos($url_thumb,chr(10))!==false) || (strpos($url_thumb,chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Location: '.$url_thumb);
