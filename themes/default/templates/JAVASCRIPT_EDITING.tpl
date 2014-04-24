@@ -287,8 +287,33 @@ function wysiwyg_editor_init_for(element)
 	var test_div=document.createElement('div');
 	document.body.appendChild(test_div);
 	test_div.className='wysiwyg_toolbar_color_finder';
+	var matches;
 	var wysiwyg_color=abstract_get_computed_style(test_div,'color');
 	test_div.parentNode.removeChild(test_div);
+	matches=wysiwyg_color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/,matches);
+	if (matches)
+	{
+		wysiwyg_color='#';
+		var hex;
+		hex=(window.parseInt(matches[1]).toString(16))+'';
+		if (hex.length==1) hex='0'+hex;
+		wysiwyg_color+=hex;
+		hex=(window.parseInt(matches[2]).toString(16))+'';
+		if (hex.length==1) hex='0'+hex;
+		wysiwyg_color+=hex;
+		hex=(window.parseInt(matches[3]).toString(16))+'';
+		if (hex.length==1) hex='0'+hex;
+		wysiwyg_color+=hex;
+	}
+	// CKEditor doesn't allow low saturation, so raise up if we need to
+	matches=wysiwyg_color.match(/^#([0-4])(.)([0-4])(.)([0-4])(.)$/);
+	if (matches)
+	{
+		wysiwyg_color='#';
+		wysiwyg_color+=(window.parseInt(matches[1])+4)+matches[2];
+		wysiwyg_color+=(window.parseInt(matches[3])+4)+matches[4];
+		wysiwyg_color+=(window.parseInt(matches[5])+4)+matches[6];
+	}
 
 	{+START,INCLUDE,WYSIWYG_SETTINGS}{+END}
 
