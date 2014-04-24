@@ -505,7 +505,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 				{
 					if ($i!=0)
 						$subs->attach(do_lang_tempcode('LIST_SEP'));
-					$subs->attach(hyperlink(build_url(array('page'=>'admin_ecommerce','type'=>'_ed','id'=>$sub['id']),get_module_zone('admin_ecommerce')),get_translated_text($sub['s_title'])));
+					$subs->attach(hyperlink(build_url(array('page'=>'admin_ecommerce','type'=>'_ed','id'=>$sub['id']),get_module_zone('admin_ecommerce')),get_translated_text($sub['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB'])));
 				}
 				require_lang('ecommerce');
 				$text->attach(paragraph(do_lang_tempcode('HAS_THESE_SUBS',$subs)));
