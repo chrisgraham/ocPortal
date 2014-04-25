@@ -400,7 +400,7 @@ class Hook_secpay
 		else $_url=build_url(array('page'=>'purchase','type'=>'finish','cancel'=>1,'message'=>do_lang_tempcode('DECLINED_MESSAGE',$message)),get_module_zone('purchase'));
 		$url=$_url->evaluate();
 
-		echo http_download_file($url);
+		echo http_download_file($url,NULL,false);
 
 		if(addon_installed('shopping'))
 		{

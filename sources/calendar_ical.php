@@ -40,7 +40,7 @@ function output_ical()
 	@ini_set('ocproducts.xss_detect','0');
 
 	header('Content-Type: text/calendar');
-	header('Content-Disposition: filename="export.ics"');
+	header('Content-Disposition: inline; filename="export.ics"');
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 

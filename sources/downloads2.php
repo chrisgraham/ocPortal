@@ -107,14 +107,14 @@ function dload_script()
 	// Send header
 	if ((strpos($myrow['original_filename'],chr(10))!==false) || (strpos($myrow['original_filename'],chr(13))!==false))
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-	header('Content-Type: application/octet-stream'.'; authoritative=true;');
 	if (get_option('immediate_downloads')=='1')
 	{
 		require_code('mime_types');
 		header('Content-Type: '.get_mime_type(get_file_extension($myrow['original_filename'])).'; authoritative=true;');
-		header('Content-Disposition: filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
+		header('Content-Disposition: inline; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
 	} else
 	{
+		header('Content-Type: application/octet-stream'.'; authoritative=true;');
 		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($myrow['original_filename']))).'"');
 	}
 

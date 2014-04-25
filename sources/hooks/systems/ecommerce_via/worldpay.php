@@ -22,10 +22,15 @@ class Hook_worldpay
 {
 
 	// Requires:
-	//  Payment Response URL set in control panel to be set to "http://<WPDISPLAY ITEM=MC_callback>"
-	//  digest password sent as 'secret' to WorldPay tech support
-	//  account must be set as 'live' in control panel once testing is done
-	//  WorldPay-side payment pages will probably want customing
+	//  the "Payment Response URL" set in control panel should be set to "http://<WPDISPLAY ITEM=MC_callback>"
+	//  the "Payment Response enabled?" and "Enable Recurring Payment Response" and "Enable the Shopper Response" and "Suspension of Payment Response" should all be ticked (checked)
+	//  the "Payment Response password" is the ocPortal "Gateway password" option
+	//  the "MD5 secret for transactions" is the ocPortal "Gateway digest code" option; it may be blank
+	//  the account must be set as 'live' in control panel once testing is done
+	//  the "Shopper Redirect URL" should be set to "http://<baseurl>/site/index.php?page=purchase&type=finish"
+	//   (typically -- but page=shopping if you use the shopping module, or nothing at all and create custom payment response pages if you use multiple eCommerce types)
+	//   (although actually "Shopper Redirect URL" does not seem to work at all http://stackoverflow.com/questions/8232607/how-do-i-create-returning-page-setting-with-worldpay)
+	//  WorldPay-side payment pages will probably want customing (http://www.worldpay.com/support/kb/bg/customisingadvanced/custa.html)
 	//  Logos, refund policies, and contact details [e-mail, phone, postal], may need coding into the templates
 	//  FuturePay must be enabled for subscriptions to work (contact WorldPay about it)
 
@@ -249,9 +254,9 @@ class Hook_worldpay
 		else $_url=build_url(array('page'=>'purchase','type'=>'finish','cancel'=>1,'message'=>do_lang_tempcode('DECLINED_MESSAGE',$message)),get_module_zone('purchase'));
 		$url=$_url->evaluate();
 
-		echo http_download_file($url);
+		echo http_download_file($url,NULL,false); // WorldPay may or may not show the result of this, depending on if it is 'secure'. It does not actually redirect to the proper target URL like the config implies it should.
 
-		if(addon_installed('shopping'))
+		if (addon_installed('shopping'))
 		{
 			$this->store_shipping_address($purchase_id);
 		}

@@ -24,8 +24,8 @@ function bookables_ical_script()
 
 	@ini_set('ocproducts.xss_detect','0');
 
-//	header('Content-Type: text/calendar');
-//	header('Content-Disposition: filename="bookables_export.ics"');
+	//header('Content-Type: text/calendar');
+	//header('Content-Disposition: inline; filename="bookables_export.ics"');
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -158,7 +158,7 @@ function bookings_ical_script()
 	if ($pass_ok)
 	{
 		header('Content-Type: text/calendar');
-		header('Content-Disposition: filename="bookings_export.ics"');
+		header('Content-Disposition: inline; filename="bookings_export.ics"');
 	} // If not, it's an admin testing, so just display contents
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);

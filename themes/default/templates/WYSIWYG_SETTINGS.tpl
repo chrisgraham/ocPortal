@@ -30,6 +30,7 @@ var editor_settings={
 	uiColor : wysiwyg_color,
 	fontSize_sizes : '0.6em;0.85em;1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;2em',
 	removePlugins: '',
+	//removePlugins: 'contextmenu,liststyle,tableresize,tabletools', to restore the native context menu, with spellcheck/working-copy&paste
 	extraPlugins: ''+(use_ocportal_toolbar?'ocportal':''),
 	customConfig : '',
 	bodyId : 'htmlarea',

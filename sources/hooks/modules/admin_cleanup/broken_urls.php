@@ -77,6 +77,7 @@ class Hook_broken_urls
 		foreach ($urlpaths as $urlpath)
 		{
 			if ($urlpath['m_table']=='hackattack') continue;
+			if ($urlpath['m_table']=='incoming_uploads') continue;
 			if ($urlpath['m_table']=='url_title_cache') continue;
 			if ($urlpath['m_table']=='theme_images') continue;
 			if (array_key_exists($urlpath['m_table'],$skip_hooks)) continue;

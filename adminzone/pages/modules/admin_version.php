@@ -488,7 +488,7 @@ class Module_admin_version
 				'i_submitter'=>'USER',
 				'i_date_and_time'=>'TIME',
 				'i_orig_filename'=>'URLPATH',
-				'i_save_url'=>'URLPATH'
+				'i_save_url'=>'SHORT_TEXT'
 			));
 		}
 

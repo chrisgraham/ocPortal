@@ -506,7 +506,7 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 
 /* Extra stuff for CKEditor */
 
-.cke_button__ocportal_image_icon { background: url('{$BASE_URL;}/data/ckeditor/skins/kama/icons.png') no-repeat 0 -384px !important; }
+.cke_button__ocportal_image_icon { background: url('{$BASE_URL;}/data/ckeditor/skins/kama/icons.png') no-repeat 0 0 !important; }
 
 #htmlarea th, #htmlarea td {
 	border: 1px dotted {$GET,native_ui_foreground};

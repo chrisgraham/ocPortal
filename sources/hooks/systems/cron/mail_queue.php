@@ -59,6 +59,8 @@ class Hook_cron_mail_queue
 
 					$GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued'=>0),array('id'=>$row['id']),'',1);
 				}
+
+				decache('main_staff_checklist');
 			}
 		}
 	}

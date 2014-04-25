@@ -49,8 +49,10 @@
 			</xsl:element>
 		</h2>
 		<p><span name="decodeable"><xsl:value-of select="atom:summary" disable-output-escaping="yes" /></span></p>
-		<xsl:if test="atom:content">
-			<p><span name="decodeable"><xsl:value-of select="atom:content" disable-output-escaping="yes" /></span></p>
+		<xsl:if test="atom:summary = ''">
+			<xsl:if test="atom:content">
+				<p><span name="decodeable"><xsl:value-of select="atom:content" disable-output-escaping="yes" /></span></p>
+			</xsl:if>
 		</xsl:if>
 		<cite>
 			<xsl:text>{!_SUBMITTED_BY} </xsl:text>

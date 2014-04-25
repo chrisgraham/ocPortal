@@ -137,7 +137,8 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 	}
 
 	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
-	if (is_null($for_member)) $for_member=$member;
+	if ((is_null($for_member)) || ($GLOBALS['FORUM_DRIVER']->get_username($for_member)===NULL))
+		$for_member=$member;
 
 	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$for_member);
 	$text2='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();

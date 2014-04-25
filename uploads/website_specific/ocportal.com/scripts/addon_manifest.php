@@ -63,6 +63,9 @@ foreach (array_keys($_GET) as $x)
 		$filter_sql=ocfilter_to_sqlfragment(strval($_id).'*','id','download_categories','parent_id','category_id','id');
 
 		$addon_name=get_param($x);
+
+		$addon_times[intval(substr($x,6))]=array(NULL,NULL,NULL,$addon_name);
+
 		$result=$GLOBALS['SITE_DB']->query('SELECT d.id,url,text_original FROM '.get_table_prefix().'download_downloads d JOIN '.get_table_prefix().'translate t ON t.id=d.name WHERE '.db_string_equal_to('text_original',$addon_name).' AND ('.$filter_sql.')');
 		if (array_key_exists(0,$result))
 		{
@@ -70,19 +73,17 @@ foreach (array_keys($_GET) as $x)
 
 			if (url_is_local($url))
 			{
-				$last_date=filemtime(get_custom_file_base().'/'.rawurldecode($url));
+				$last_date=@filemtime(get_custom_file_base().'/'.rawurldecode($url));
 			} else
 			{
-				$last_date=filemtime($url);
+				$last_date=@filemtime($url);
 			}
+			if ($last_date===false) continue;
 
 			$text_original=$result[0]['text_original'];
 			$url=$result[0]['url'];
 			$id=$result[0]['id'];
 			$addon_times[intval(substr($x,6))]=array($last_date,$id,$url,$text_original);
-		} else
-		{
-			$addon_times[intval(substr($x,6))]=array(NULL,NULL,NULL,$addon_name);
 		}
 	}
 }
