@@ -39,11 +39,11 @@ class Hook_worldpay
 	}
 
 	/**
-	 * Get the IPN URL.
+	 * Get the remote form URL.
 	 *
-	 * @return URLPATH		The IPN URL.
+	 * @return URLPATH		The remote form URL.
 	 */
-	function get_ipn_url()
+	function _get_remote_form_url()
 	{
 		return 'https://secure.worldpay.com/wcc/purchase';
 	}
@@ -85,7 +85,7 @@ class Hook_worldpay
 	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
 		$username=$this->_get_username();
-		$ipn_url=$this->get_ipn_url();
+		$ipn_url=$this->_get_remote_form_url();
 		$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 		$trans_id=$this->generate_trans_id();
 		$digest=md5(get_option('ipn_digest').':'.$trans_id.':'.float_to_raw_string($amount).':'.$currency);
@@ -132,7 +132,7 @@ class Hook_worldpay
 	function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
 	{
 		$username=$this->_get_username();
-		$ipn_url=$this->get_ipn_url();
+		$ipn_url=$this->_get_remote_form_url();
 		$trans_id=$this->generate_trans_id();
 		$length_units_2='1';
 		$first_repeat=time();
