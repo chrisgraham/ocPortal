@@ -34,14 +34,7 @@ class Hook_cron_site_cleanup
 			global $SITE_INFO;
 			if (!isset($SITE_INFO['mysql_root_password'])) return;
 
-			require_lang('ocpcom');
-
-			$servers=find_all_servers();
-			$server=array_shift($servers);
-			$codename='shareddemo';
-			$password='demo123';
-			$email_address='';
-			myocp_add_site_raw($server,$codename,$email_address,$password);
+			server__public__demo_reset();
 		}
 	}
 

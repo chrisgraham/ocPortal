@@ -86,7 +86,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 			$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcd','ab');
 			if ($myfile===false)
 			{
-				if (@mkdir($path2,0777))
+				if (@mkdir($path2,0777,true))
 				{
 					require_code('files');
 					fix_permissions($path2,0777);

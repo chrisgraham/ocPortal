@@ -633,7 +633,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 			@mkdir(dirname($path2),0777);
 			fix_permissions(dirname($path2),0777);
 			sync_file(dirname($path2));
-			if (@mkdir($path2,0777))
+			if (@mkdir($path2,0777,true))
 			{
 				fix_permissions($path2,0777);
 				sync_file($path2);

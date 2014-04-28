@@ -55,4 +55,11 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('comcode_from_html');
+	header('Content-Type: text/plain; charset=utf-8');
+	@ini_set('ocproducts.xss_detect','0');
+	echo 'STARTS';
+	echo semihtml_to_comcode(' <br />&nbsp; ');
+	echo 'ENDS';
+	flush();
 }

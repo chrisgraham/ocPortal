@@ -239,7 +239,7 @@ class Module_cms_comcode_pages
 		if (($_dir===false) && (function_exists('glob'))) $_dir=array();
 		if ($_dir===false)
 		{
-			if (@mkdir($dir,0777)===false)
+			if (@mkdir($dir,0777,true)===false)
 			{
 				if (substr($subdir,0,14)!='comcode_custom') return array();
 				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));

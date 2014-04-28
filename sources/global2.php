@@ -1728,7 +1728,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 	{
 		if (!is_dir($dir))
 		{
-			if (@mkdir($dir,0777)===false)
+			if (@mkdir($dir,0777,true)===false)
 			{
 				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
 			}
@@ -1915,7 +1915,7 @@ function css_enforce($c,$theme=NULL,$minify=NULL)
 	{
 		if (!is_dir($dir))
 		{
-			if (@mkdir($dir,0777)===false)
+			if (@mkdir($dir,0777,true)===false)
 			{
 				warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY_REPAIR',escape_html($dir)));
 			}

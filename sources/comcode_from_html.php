@@ -304,6 +304,8 @@ function semihtml_to_comcode($semihtml,$force=false)
 	require_code('obfuscate');
 	$semihtml=trim($semihtml);
 
+	if (ocp_trim($semihtml,strlen($semihtml)<30)=='') return '';
+
 	@ini_set('pcre.backtrack_limit','10000000');
 
 	$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml);

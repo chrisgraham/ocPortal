@@ -748,7 +748,7 @@ class Module_admin_stats
 		require_code('templates_results_table');
 		$fields_title=results_field_title(array(do_lang_tempcode('KEYWORD'),do_lang_tempcode('COUNT_VIEWS')),$sortables,'sort',$sortable.' '.$sort_order);
 		$fields=new ocp_tempcode();
-		$degrees=360/$total;
+		$degrees=($total==0)?360.0:(360/$total);
 		$done_total=0;
 		//$done=0;
 		$data=array();

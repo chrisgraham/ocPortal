@@ -200,6 +200,7 @@ function myocp_add_site($codename,$name,$email_address,$password,$description,$c
 	reset_info_php($server);
 
 	// Welcome email
+	require_lang('sites');
 	require_code('mail');
 	$subject=do_lang('MO_EMAIL_SUBJECT');
 	$message=do_lang('MO_EMAIL_BODY',comcode_escape($codename),comcode_escape($password));
@@ -213,7 +214,8 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 	$master_conn->query('DROP DATABASE `myocp_site_'.$codename.'`',NULL,NULL,true);
 	$master_conn->query('CREATE DATABASE `myocp_site_'.$codename.'`',NULL,NULL,true);
 	$user=substr(md5('myocp_site_'.$codename),0,16);
-	$master_conn->query('GRANT ALL ON `myocp_site_'.$codename.'`.* TO \''.$user.'\' IDENTIFIED BY \''.db_escape_string($GLOBALS['SITE_INFO']['mysql_myocp_password']).'\'');
+	$master_conn->query('GRANT ALL ON `myocp_site_'.$codename.'`.* TO \''.$user.'\'@\'%\' IDENTIFIED BY \''.db_escape_string($GLOBALS['SITE_INFO']['mysql_myocp_password']).'\''); // tcp/ip
+	$master_conn->query('GRANT ALL ON `myocp_site_'.$codename.'`.* TO \''.$user.'\'@\'localhost\' IDENTIFIED BY \''.db_escape_string($GLOBALS['SITE_INFO']['mysql_myocp_password']).'\''); // local socket
 	$cmd='mysql -h'./*$server*/'localhost'.' -Dmyocp_site_'.$codename.' -u'.$user.' -p'.$GLOBALS['SITE_INFO']['mysql_myocp_password'].' < '.special_myocp_dir().'/template.sql';
 	if (get_member()==6) attach_message($cmd,'inform');
 	shell_exec($cmd);
@@ -231,12 +233,26 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 		deldir_contents($path);
 	} else
 	{
-		mkdir($path,0744);
+		@mkdir(dirname($path),0775);
+		mkdir($path,0775);
 	}
+	chmod($path,0775);
 	require_code('tar');
 	$tar=tar_open(special_myocp_dir().'/template.tar','rb');
-	tar_extract_to_folder($tar,$path);
+	$path_short=substr($path,strlen(get_custom_file_base().'/'));
+	tar_extract_to_folder($tar,$path_short);
 	tar_close($tar);
+	require_code('files2');
+	$contents=get_directory_contents($path,$path,true,true,true);
+	foreach ($contents as $c)
+	{
+		chmod($c,0664);
+	}
+	$contents=get_directory_contents($path,$path,true,true,false);
+	foreach ($contents as $c)
+	{
+		chmod($c,0775);
+	}
 }
 
 /**
@@ -246,7 +262,7 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
  */
 function special_myocp_dir()
 {
-	return 'uploads/website_specific/ocportal.com/myocp';
+	return get_custom_file_base().'/uploads/website_specific/ocportal.com/myocp';
 }
 
 /**
@@ -353,14 +369,14 @@ global \$SITE_INFO;
 \$SITE_INFO['cookie_path']='/';
 \$SITE_INFO['cookie_days']='120';
 
-\$SITE_INFO['throttle_space_complementary']=100;
+/*\$SITE_INFO['throttle_space_complementary']=100;
 \$SITE_INFO['throttle_space_views_per_meg']=10;
 \$SITE_INFO['throttle_bandwidth_complementary']=500;
-\$SITE_INFO['throttle_bandwidth_views_per_meg']=1;
+\$SITE_INFO['throttle_bandwidth_views_per_meg']=1;*/
 
 \$SITE_INFO['custom_base_url_stub']='http://'.\$_SERVER['HTTP_HOST'].'/sites';
-\$SITE_INFO['custom_file_base_stub']='/home/ocp/public_html/servers/myocp.com/sites';
-\$SITE_INFO['custom_share_domain']=(strpos(\$_SERVER['HTTP_HOST'],'.3c.ms')!==false)?'3c.ms':'myocp.com';
+\$SITE_INFO['custom_file_base_stub']='".special_myocp_dir()."/servers/myocp.com/sites';
+\$SITE_INFO['custom_share_domain']='myocp.com';
 \$SITE_INFO['custom_share_path']='sites';
 ";
 	$rows=$GLOBALS['SITE_DB']->query_select('sites',array('s_codename','s_domain_name'),array('s_server'=>$server));
@@ -401,7 +417,6 @@ function reset_aliases()
 	foreach ($sites as $site)
 	{
 		$text.=$site['s_codename'].'.myocp.com:'.'alias-myocp_'.$site['s_codename'].chr(10);
-		$text.=$site['s_codename'].'.3c.ms:'.'alias-myocp_'.$site['s_codename'].chr(10);
 		if ($site['s_domain_name']!='') $text.=$site['s_domain_name'].':'.'alias-myocp_'.$site['s_codename'].chr(10);
 	}
 	$myfile=fopen(special_myocp_dir().'/virtualdomains','at');
@@ -422,7 +437,6 @@ function reset_aliases()
 	foreach ($sites as $site)
 	{
 		$hosts[$site['s_codename'].'.myocp.com']=1;
-		$hosts[$site['s_codename'].'.3c.ms']=1;
 		if ($site['s_domain_name']!='')
 			$hosts[$site['s_domain_name']]=1;
 	}

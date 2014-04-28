@@ -24,13 +24,14 @@ class Hook_worldpay
 	// Requires:
 	//  the "Payment Response URL" set in control panel should be set to "http://<WPDISPLAY ITEM=MC_callback>"
 	//  the "Payment Response enabled?" and "Enable Recurring Payment Response" and "Enable the Shopper Response" and "Suspension of Payment Response" should all be ticked (checked)
-	//  the "Payment Response password" is the ocPortal "Gateway password" option
+	//  the "Payment Response password" is the ocPortal "Callback password" option; it may be blank
+	//  the "Installation ID" (a number given to you) is the ocPortal "Gateway username" and also "Testing mode gateway username" (it's all the same installation ID)
 	//  the "MD5 secret for transactions" is the ocPortal "Gateway digest code" option; it may be blank
 	//  the account must be set as 'live' in control panel once testing is done
 	//  the "Shopper Redirect URL" should be set to "http://<baseurl>/site/index.php?page=purchase&type=finish"
 	//   (typically -- but page=shopping if you use the shopping module, or nothing at all and create custom payment response pages if you use multiple eCommerce types)
-	//   (although actually "Shopper Redirect URL" does not seem to work at all http://stackoverflow.com/questions/8232607/how-do-i-create-returning-page-setting-with-worldpay)
-	//  WorldPay-side payment pages will probably want customing (http://www.worldpay.com/support/kb/bg/customisingadvanced/custa.html)
+	//   (although actually "Shopper Redirect URL" does not seem to work at all http://stackoverflow.com/questions/8232607/how-do-i-create-returning-page-setting-with-worldpay - so actually you should create custom payment response pages)
+	//  WorldPay-side custom payment response pages will probably want customing (http://www.worldpay.com/support/kb/bg/customisingadvanced/custa.html)
 	//  Logos, refund policies, and contact details [e-mail, phone, postal], may need coding into the templates
 	//  FuturePay must be enabled for subscriptions to work (contact WorldPay about it)
 

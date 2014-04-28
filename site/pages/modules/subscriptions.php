@@ -197,6 +197,7 @@ class Module_subscriptions
 			$hook=object_factory($via);
 			if ($hook->auto_cancel($id)!==true)
 			{
+				// Because we cannot TRIGGER a REMOTE cancellation, we have it so the local user action triggers that notification, informing the staff to manually do a remote cancellation
 				require_code('notifications');
 				$trans_id=$GLOBALS['SITE_DB']->query_value('transactions','id',array('purchase_id'=>strval($id)));
 				$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
