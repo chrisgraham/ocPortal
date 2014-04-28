@@ -3,36 +3,23 @@
  * Google Translator
  * @package WebService :: GTranslate
  * @author ntf
- * @version 1.0
  * @copyright Creative Commons Attribution-Non-Commercial 3.0 Hong Kong http://creativecommons.org/licenses/by-nc/3.0/hk/
+ * Modified for Google Translate 2 API by ocProducts, and generally tidied up.
  */
-class GTranslate{
+
+class GTranslate
+{
 	protected $lang_from='en';
 	protected $lang_to;
+
+	protected $key = null;
 
 	protected $language_list = array( 'ar'=>'Arabic', 'bg'=>'Bulgarian', 'zh-CN'=>'Simplified Chinese', 'zh-TW'=>'Traditional Chinese', 'hr'=>'Croatian', 'cs'=>'Czech', 'da'=>'Danish', 'nl'=>'Dutch', 'en'=>'English', 'fi'=>'Finnish', 'fr'=>'French', 'de'=>'German', 'el'=>'Greek', 'hi'=>'Hindi', 'it'=>'Italian', 'ja'=>'Japanese', 'ko'=>'Korean', 'pl'=>'Polish', 'pt'=>'Portuguese', 'ro'=>'Romanian', 'ru'=>'Russian', 'es'=>'Spanish', 'sv'=>'Swedish');
         
 	protected $translateContent;
-	protected $translateMode=false;
 
-	function __construct(){
-
-	}
-
-	function Text($text){
-		$this->translateMode = '_TranslateMode_Text';
-		$this->translateContent = $text;
-		return $this;
-	}
-	/* TODO : Debug
-	function Url($url){
-		$this->translateMode = '_TranslateMode_Url';
-		$this->translateContent = $url;
-		return $this;
-	}
-*/
-	function From($language){
-
+	function From($language)
+	{
 		if( $this->_in_language_list($language) !== false ){
 		 	$this->lang_from = $this->_in_language_list($language);
 		}else{
@@ -43,35 +30,36 @@ class GTranslate{
 		return $this;
 	}
 
-	function To($language){
-
+	function To($language)
+	{
 		if( $this->_in_language_list($language) !== false ){
 		 	$this->lang_to = $this->_in_language_list($language);		
-			return  $this->Translate();		
+			return  $this->_Translate();		
 		}else{
 			throw new Exception(__METHOD__ .' Required Language not in the Translation list');
 			return false;
 		}
-
 	}
 
-	function GetLanguageList(){
+	function Key($key)
+	{
+		$this->key = $key;
+		return $this;
+	}
+
+	function Text($translateContent)
+	{
+		$this->translateContent = $translateContent;
+		return $this;
+	}
+
+	function GetLanguageList()
+	{
 		return $this->language_list;
 	}
-	function Translate(){
 
-		if(!method_exists( $this , $this->translateMode) ){
-			return false;
-		}
-
-		$result = call_user_func( array($this , $this->translateMode) );
-
-		$this->translateMode=false;
-		return $result;
-	}
-
-	protected function _in_language_list( $language ){
-
+	protected function _in_language_list( $language )
+	{
 		if( array_key_exists($language , $this->language_list) ){
 			return $language;
 		}elseif( in_array( $language , $this->language_list ) ){
@@ -79,12 +67,12 @@ class GTranslate{
 		}else{
 			return false;
 		}
-
 	}
 
-	protected function _TranslateMode_Text(){
+	protected function _Translate()
+	{
 		require_code('files');
-		$text=str_split($this->translateContent,3000); // Google can't translate too much at once
+		$text=str_split($this->translateContent,4900); // Google can't translate too much at once
 		if (count($text)>1)
 		{
 			for ($i=0;$i<count($text)-1;$i++) // Fiddle things a bit to get correct XHTML in each
@@ -107,32 +95,28 @@ class GTranslate{
 		$out='';
 		foreach ($text as $t)
 		{
-			$key=get_value('google_translate_api_key');
-			$post_params=array(
-				'v'=>'1.0',
-				'userip'=>get_ip_address(),
-				'q'=>$t,
-				'langpair'=>$this->lang_from.'|'.$this->lang_to,
-				'format'=>'html',
-			);
-			if (!is_null($key)) $post_params['key']=$key;
-			$json = http_download_file('http://ajax.googleapis.com/ajax/services/language/translate',NULL,true,false,get_site_name(),$post_params,NULL,NULL,NULL,NULL,NULL,ocp_srv('HTTP_REFERER'));
+			$url='https://www.googleapis.com/language/translate/v2';
+			$url.='?q='.urlencode($t);
+			$url.='&prettyprint='.urlencode('false');
+			$url.='&source='.urlencode($this->lang_from);
+			$url.='&target='.urlencode($this->lang_to);
+			$url.='&format='.urlencode('html');
+			$url.='&key='.urlencode($this->key);
+
+			$json = http_download_file($url,NULL,true,false,get_site_name());
+
 			$json = str_replace('\u003c','<',$json);
 			$json = str_replace('\u003d','=',$json);
 			$json = str_replace('\u003e','>',$json);
 			$json = str_replace("\n",'\n',$json);
 			$json = str_replace("\t",'\t',$json);
 			$translate_object = json_decode($json);
-			if (!isset($translate_object->responseData->translatedText)) return NULL;//fatal_exit($json.serialize($translate_object));
-			$out.=$translate_object->responseData->translatedText;
+
+			if (!isset($translate_object->data->translations[0]->translatedText)) return NULL;//fatal_exit($json.serialize($translate_object));
+
+			$out.=$translate_object->data->translations[0]->translatedText;
 		}
 
 		return $out;
 	}
-/* TODO Debug , If I use header redirect, google will not response correctly
-	protected function _TranslateMode_Url(){
-   		header('location: http://66.102.9.104/translate_c?hl=en&safe=off&ie=UTF-8&oe=UTF-8&prev=%2Flanguage_tools&u='.urlencode($this->translateContent).'&langpair='. $this->lang_from .'%7C'. $this->lang_to .';');
-
-	}
-*/
 }

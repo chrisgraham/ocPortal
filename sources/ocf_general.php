@@ -36,9 +36,17 @@ function ocf_get_forums_stats()
 {
 	$out=array();
 
-	$out['num_topics']=$GLOBALS['OCF_DRIVER']->get_topics();
-	$out['num_posts']=$GLOBALS['OCF_DRIVER']->get_num_forum_posts();
-	$out['num_members']=$GLOBALS['OCF_DRIVER']->get_members();
+	if (isset($GLOBALS['OCF_DRIVER']))
+	{
+		$out['num_topics']=$GLOBALS['OCF_DRIVER']->get_topics();
+		$out['num_posts']=$GLOBALS['OCF_DRIVER']->get_num_forum_posts();
+		$out['num_members']=$GLOBALS['OCF_DRIVER']->get_members();
+	} else
+	{
+		$out['num_topics']=0;
+		$out['num_posts']=0;
+		$out['num_members']=0;
+	}
 
 	$temp=get_value_newer_than('ocf_newest_member_id',time()-60*60*1);
 	$out['newest_member_id']=is_null($temp)?NULL:intval($temp);

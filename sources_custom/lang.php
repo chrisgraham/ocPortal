@@ -403,13 +403,14 @@ if (!function_exists('get_translated_text'))
  * @param  LONG_TEXT		The language to convert to
  * @return LONG_TEXT		The converted string
  */
-function google_translate($str_in, $lang)
+function google_translate($str_in,$lang)
 {
 	$tempcode=is_object($str_in);
 
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	if (get_option('enable_google_translate',true)!=='1') return $str_in;
+	$key=get_option('enable_google_translate',true);
+	if (empty($key)) return $str_in;
 
 	if ($tempcode) $str_in=$str_in->evaluate();
 
@@ -422,18 +423,19 @@ function google_translate($str_in, $lang)
 
 	if (strpos($str_in,'gtranslate_cache')!==false) return $tempcode?protect_from_escaping($str_in):$str_in; // Stop loops about corrupt/missing database tables
 
-	$language_list=array( 'ar'=>'Arabic', 'bg'=>'Bulgarian', 'zh-cn'=>'Simplified Chinese', 'zh-tw'=>'Traditional Chinese', 'hr'=>'Croatian', 'cs'=>'Czech', 'da'=>'Danish', 'nl'=>'Dutch', 'en'=>'English', 'fi'=>'Finnish', 'fr'=>'French', 'de'=>'German', 'el'=>'Greek', 'hi'=>'Hindi', 'it'=>'Italian', 'ja'=>'Japanese', 'ko'=>'Korean', 'pl'=>'Polish', 'pt'=>'Portuguese', 'ro'=>'Romanian', 'ru'=>'Russian', 'es'=>'Spanish', 'sv'=>'Swedish');
+	require_code('GTranslate');
+	$translate=new GTranslate();
+
+	$language_list=$translate->GetLanguageList();
 	$lang=strtolower($lang);
 	if (!array_key_exists($lang,$language_list)) return $tempcode?protect_from_escaping($str_in):$str_in;
 
 	$DOING_TRANSLATE=true;
 
 	require_lang('lang');
-	$chache=check_google_cache($str_in, $lang);
-	if(count($chache)==0)
+	$cache=check_google_cache($str_in,$lang);
+	if (count($cache)==0)
 	{
-		require_code('GTranslate');
-		$translate=new GTranslate();
 		$num_matches=array();
 		$matches=array();
 		$rep=array();
@@ -494,7 +496,8 @@ function google_translate($str_in, $lang)
 		$from_lang=strtolower(get_site_default_lang());
 		try
 		{
-			$convertedstring=$translate->Text($prepped)->From(array_key_exists($from_lang,$language_list)?$language_list[$from_lang]:'English')->To($to);
+			$_from=array_key_exists($from_lang,$language_list)?$language_list[$from_lang]:'English';
+			$convertedstring=$translate->Key($key)->Text($prepped)->From($_from)->To($to);
 		}
 		catch (Exception $e)
 		{
@@ -516,11 +519,11 @@ function google_translate($str_in, $lang)
 		$convertedstring=str_replace('<html> ','',$convertedstring);
 		$convertedstring=str_replace('&#39;','',$convertedstring);
 
-		save_google_cache($str_in, $lang, $convertedstring);
+		save_google_cache($str_in,$lang,$convertedstring);
 		$str=$convertedstring;
 	} else
 	{
-		$str=$chache['t_result'];
+		$str=$cache['t_result'];
 	}
 	$DOING_TRANSLATE=false;
 	if ((function_exists('ocp_mark_as_escaped')) && (ocp_is_escaped($str_in))) ocp_mark_as_escaped($str);
@@ -534,7 +537,7 @@ function google_translate($str_in, $lang)
  * @param  STRING		The lANGUAGE STRING
  * @return ARRAY		array of data
  */
-function check_google_cache($str, $lang)
+function check_google_cache($str,$lang)
 {
 	if (!$GLOBALS['SITE_DB']->table_exists('gtranslate_cache'))
 	{
@@ -543,7 +546,7 @@ function check_google_cache($str, $lang)
 		);
 	}
 
-	$where=array('stringtoconvert'=>$str, 'language'=>$lang);
+	$where=array('stringtoconvert'=>$str,'language'=>$lang);
 	$_result=$GLOBALS['SITE_DB']->query_select('gtranslate_cache',array('*'),$where,'',1);
 	if(count($_result)==1)
 	{
@@ -563,7 +566,7 @@ function check_google_cache($str, $lang)
  * @param  STRING		result of request
  * @return BINARY		If success return true
  */
-function save_google_cache($str, $lang, $result)
+function save_google_cache($str,$lang,$result)
 {
 	$time=time();
 	$GLOBALS['SITE_DB']->query_insert('gtranslate_cache',array('language'=>$lang,'stringtoconvert'=>$str,'t_result'=>$result,'create_time'=>$time));
