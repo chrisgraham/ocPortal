@@ -695,7 +695,7 @@ class Module_galleries
 
 		// Sorting
 		list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos)=$this->get_sort_order();
-		$_selectors=array();
+		$_selectors=array(); 
 		if (get_option('is_on_rating')=='1')
 			$_selectors['compound_rating DESC']='POPULARITY';
 		$_selectors=array_merge($_selectors,array(
