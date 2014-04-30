@@ -13,7 +13,7 @@
 		<div class="edited" role="note">
 			<img alt="" src="{$IMG*,edited}" />
 			{!EDITED}
-			<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}" pubdate="pubdate">{$DATE*,{EDIT_DATE_RAW}}</time>
+			<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}" pubdate="pubdate">{$DATE*,,,,{EDIT_DATE_RAW}}</time>
 		</div>
 	{+END}{+END}
 
