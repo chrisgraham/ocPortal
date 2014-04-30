@@ -258,39 +258,41 @@ class Module_cms_news extends standard_aed_module
 
 		if ($title=='')
 		{
-			$main_news_category=get_param_integer('cat',$main_news_category);
 			$title=get_param('title',$title);
 			$author=get_param('author',$author);
 			$notes=get_param('notes',$notes);
+
+			if (is_null($main_news_category))
+			{
+				global $NON_CANONICAL_PARAMS;
+				$NON_CANONICAL_PARAMS[]='cat';
+
+				$param_cat=get_param('cat','');
+				if ($param_cat=='')
+				{
+					$main_news_category=NULL;
+					$news_category=array();
+				} elseif (strpos($param_cat,',')===false)
+				{
+					$main_news_category=intval($param_cat);
+					$news_category=array();
+				} else
+				{
+					require_code('ocfiltering');
+					$_param_cat=explode(',',$param_cat);
+					$_main_news_category=array_shift($_param_cat);
+					$param_cat=implode(',',$_param_cat);
+					$main_news_category=($_main_news_category=='')?NULL:intval($_main_news_category);
+					$news_category=ocfilter_to_idlist_using_db($param_cat,'id','news_categories','news_categories',NULL,'id','id');
+				}
+
+				$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			}
 		}
 
 		require_lang('menus');
 		$GLOBALS['HELPER_PANEL_TEXT']=comcode_lang_string('DOC_WRITING');
 		$GLOBALS['HELPER_PANEL_PIC']='';
-
-		if (is_null($main_news_category))
-		{
-			global $NON_CANONICAL_PARAMS;
-			$NON_CANONICAL_PARAMS[]='cat';
-
-			$param_cat=get_param('cat','');
-			if ($param_cat=='')
-			{
-				$news_category=array();
-				$main_news_category=NULL;
-			} elseif (strpos($param_cat,',')===false)
-			{
-				$news_category=array();
-				$main_news_category=intval($param_cat);
-			} else
-			{
-				require_code('ocfiltering');
-				$news_category=ocfilter_to_idlist_using_db($param_cat,'id','news_categories','news_categories',NULL,'id','id');
-				$main_news_category=NULL;
-			}
-
-			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		}
 
 		$cats1=nice_get_news_categories($main_news_category,false,true,is_integer($main_news_category),NULL,true);
 		$cats2=nice_get_news_categories(is_null($news_category)?array():$news_category,false,true,is_integer($main_news_category),NULL,true);

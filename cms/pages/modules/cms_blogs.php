@@ -198,27 +198,38 @@ class Module_cms_blogs extends standard_aed_module
 		global $NON_CANONICAL_PARAMS;
 		$NON_CANONICAL_PARAMS[]='validated';
 
-		if (is_null($main_news_category))
+		if ($title=='')
 		{
-			$NON_CANONICAL_PARAMS[]='cat';
+			$title=get_param('title',$title);
+			$author=get_param('author',$author);
+			$notes=get_param('notes',$notes);
 
-			$param_cat=get_param('cat','');
-			if ($param_cat=='')
+			if (is_null($main_news_category))
 			{
-				$news_category=array();
-				$main_news_category=NULL;
-			} elseif (strpos($param_cat,',')===false)
-			{
-				$news_category=array();
-				$main_news_category=intval($param_cat);
-			} else
-			{
-				require_code('ocfiltering');
-				$news_category=ocfilter_to_idlist_using_db($param_cat,'id','news_categories','news_categories',NULL,'id','id');
-				$main_news_category=NULL;
+				global $NON_CANONICAL_PARAMS;
+				$NON_CANONICAL_PARAMS[]='cat';
+
+				$param_cat=get_param('cat','');
+				if ($param_cat=='')
+				{
+					$main_news_category=NULL;
+					$news_category=array();
+				} elseif (strpos($param_cat,',')===false)
+				{
+					$main_news_category=intval($param_cat);
+					$news_category=array();
+				} else
+				{
+					require_code('ocfiltering');
+					$_param_cat=explode(',',$param_cat);
+					$_main_news_category=array_shift($_param_cat);
+					$param_cat=implode(',',$_param_cat);
+					$main_news_category=($_main_news_category=='')?NULL:intval($_main_news_category);
+					$news_category=ocfilter_to_idlist_using_db($param_cat,'id','news_categories','news_categories',NULL,'id','id');
+				}
+
+				$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 			}
-
-			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		}
 
 		$cats1=nice_get_news_categories($main_news_category,false,true,false,true);
