@@ -253,7 +253,7 @@ class Module_cms_blogs extends standard_aed_module
 		{
 			$hidden->attach(form_input_hidden('author',$author));
 		}
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>(is_null($news_category) || (count($news_category)==0)) && $image=='' && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$image=='' && ($title==''/*=new entry and selected news cats was from URL*/ || is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields2->attach(form_input_text_comcode(do_lang_tempcode('BLOG_NEWS_SUMMARY'),do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'),'news',$news,false));
 		if (get_value('disable_secondary_news')!=='1')
 		{

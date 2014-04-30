@@ -320,7 +320,7 @@ class Module_cms_news extends standard_aed_module
 			if (addon_installed('unvalidated'))
 				$fields2->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode('DESCRIPTION_VALIDATED'),'validated',$validated==1));
 
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$news=='' && $image=='' && (is_null($scheduled)) && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>$news=='' && $image=='' && (is_null($scheduled)) && ($title==''/*=new entry and selected news cats was from URL*/ || is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields2->attach(form_input_text_comcode(do_lang_tempcode('NEWS_SUMMARY'),do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'),'news',$news,false));
 		$fields2->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_CATEGORIES'),do_lang_tempcode('DESCRIPTION_SECONDARY_CATEGORIES'),'news_category',$cats2));
 		$hidden=new ocp_tempcode();
