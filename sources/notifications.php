@@ -109,9 +109,10 @@ function _get_notification_ob_for_code($notification_code)
  * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
  * @param  string			Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
  * @param  string			Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
- * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
+ * @param  ?array			A list of attachments (each attachment being a map, path=>filename) (NULL: none)
+ * @param  boolean		Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
  */
-function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='',$attachments=NULL)
+function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids=NULL,$from_member_id=NULL,$priority=3,$store_in_staff_messaging_system=false,$no_cc=false,$no_notify_for__notification_code=NULL,$no_notify_for__code_category=NULL,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='',$attachments=NULL,$use_real_from=false)
 {
 	global $NOTIFICATIONS_ON;
 	if (!$NOTIFICATIONS_ON) return;
@@ -122,7 +123,7 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
 
 	if (running_script('install')) return;
 
-	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix,$attachments);
+	$dispatcher=new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix,$attachments,$use_real_from);
 
 	if ((get_param_integer('keep_debug_notifications',0)==1) || ($notification_code=='task_completed'))
 	{
@@ -157,6 +158,7 @@ class Notification_dispatcher
 	var $body_prefix='';
 	var $body_suffix='';
 	var $attachments=NULL;
+	var $use_real_from=false;
 
 	/**
 	 * Construct notification dispatcher.
@@ -177,9 +179,10 @@ class Notification_dispatcher
 	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: subject suffix for storage
 	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: body prefix for storage
 	 * @param  string			Only relevant if $store_in_staff_messaging_system is true: body suffix for storage
-	 * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
+	 * @param  ?array			A list of attachments (each attachment being a map, path=>filename) (NULL: none)
+	 * @param  boolean		Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
 	 */
-	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='',$attachments=NULL)
+	function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix='',$subject_suffix='',$body_prefix='',$body_suffix='',$attachments=NULL,$use_real_from=false)
 	{
 		$this->notification_code=$notification_code;
 		$this->code_category=$code_category;
@@ -197,6 +200,7 @@ class Notification_dispatcher
 		$this->body_prefix=$body_prefix;
 		$this->body_suffix=$body_suffix;
 		$this->attachments=$attachments;
+		$this->use_real_from=$use_real_from;
 	}
 
 	/**
@@ -265,7 +269,7 @@ class Notification_dispatcher
 				}
 
 				if (($to_member_id!==$this->from_member_id) || ($testing))
-					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc,$this->attachments);
+					$no_cc=_dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc,$this->attachments,$this->use_real_from);
 			}
 
 			$start+=$max;
@@ -395,19 +399,28 @@ function _find_member_statistical_notification_type($to_member_id)
  * @range  1 5
  * @param  boolean		Whether to NOT CC to the CC address
  * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
+ * @param  boolean		Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
  * @return boolean		New $no_cc setting
  */
-function _dispatch_notification_to_member($to_member_id,$setting,$notification_code,$code_category,$subject,$message,$from_member_id,$priority,$no_cc,$attachments)
+function _dispatch_notification_to_member($to_member_id,$setting,$notification_code,$code_category,$subject,$message,$from_member_id,$priority,$no_cc,$attachments,$use_real_from)
 {
 	// Fish out some general details of the sender
 	$to_name=$GLOBALS['FORUM_DRIVER']->get_username($to_member_id,true);
 	$from_email='';
 	$from_name='';
+	$from_member_id_shown=db_get_first_id();
 	if ((!is_null($from_member_id)) && ($from_member_id>=0))
 	{
-		/*$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_member_id);		No; we can't disclose email addresses, so notifications will all be emailed from system
-		if ($from_email=='') $from_email='';
-		$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id,true);*/
+		if ($use_real_from)
+		{
+			$from_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($from_member_id);
+			if ($from_email=='') $from_email='';
+			$from_name=$GLOBALS['FORUM_DRIVER']->get_username($from_member_id,true);
+			$from_member_id_shown=$from_member_id;
+		}
+	} else
+	{
+		$use_real_from=false;
 	}
 	$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($to_member_id,'m_join_time');
 
@@ -449,7 +462,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 			if ($to_email!='')
 			{
 				$wrapped_subject=do_lang('NOTIFICATION_EMAIL_SUBJECT_WRAP',$subject,comcode_escape(get_site_name()));
-				$wrapped_message=do_lang('NOTIFICATION_EMAIL_MESSAGE_WRAP',$message_to_send,comcode_escape(get_site_name()));
+				$wrapped_message=do_lang($use_real_from?'NOTIFICATION_EMAIL_MESSAGE_WRAP_DIRECT_REPLY':'NOTIFICATION_EMAIL_MESSAGE_WRAP',$message_to_send,comcode_escape(get_site_name()));
 
 				mail_wrap(
 					$wrapped_subject,
@@ -534,11 +547,11 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 			require_code('ocf_posts_action');
 
 			$wrapped_subject=do_lang('NOTIFICATION_PT_SUBJECT_WRAP',$subject);
-			$wrapped_message=do_lang('NOTIFICATION_PT_MESSAGE_WRAP',$message_to_send);
+			$wrapped_message=do_lang($use_real_from?'NOTIFICATION_PT_MESSAGE_WRAP_DIRECT_REPLY':'NOTIFICATION_PT_MESSAGE_WRAP',$message_to_send);
 
 			// NB: These are posted by Guest (system) although the display name is set to the member triggering. This is intentional to stop said member getting unexpected replies.
-			$topic_id=ocf_make_topic(NULL,$wrapped_subject,'icons/14x14/ocf_topic_modifiers/announcement',1,1,0,0,0,db_get_first_id(),$to_member_id,false,0,NULL,'');
-			ocf_make_post($topic_id,$wrapped_subject,$wrapped_message,0,true,1,0,($from_member_id<0)?do_lang('SYSTEM'):$from_name,NULL,NULL,db_get_first_id(),NULL,NULL,NULL,false,true,NULL,true,$wrapped_subject,0,NULL,true,true,true,($from_member_id==A_FROM_SYSTEM_PRIVILEGED));
+			$topic_id=ocf_make_topic(NULL,$wrapped_subject,'icons/14x14/ocf_topic_modifiers/announcement',1,1,0,0,0,$from_member_id_shown,$to_member_id,false,0,NULL,'');
+			ocf_make_post($topic_id,$wrapped_subject,$wrapped_message,0,true,1,0,($from_member_id<0)?do_lang('SYSTEM'):$from_name,NULL,NULL,$from_member_id_shown,NULL,NULL,NULL,false,true,NULL,true,$wrapped_subject,0,NULL,true,true,true,($from_member_id==A_FROM_SYSTEM_PRIVILEGED));
 		}
 	}
 

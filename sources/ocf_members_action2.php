@@ -940,7 +940,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 
 		$subject=do_lang('STAFF_USERNAME_CHANGED_MAIL_SUBJECT',$username,$old_username,NULL,get_site_default_lang());
 		$mail=do_lang('STAFF_USERNAME_CHANGED_MAIL',comcode_escape(get_site_name()),comcode_escape($username),comcode_escape($old_username),get_site_default_lang());
-		dispatch_notification('ocf_username_changed_staff',NULL,$subject,$mail);
+		dispatch_notification('ocf_username_changed_staff',NULL,$subject,$mail,NULL,get_member(),3,false,false,NULL,NULL,'','','','',NULL,true);
 
 		if (addon_installed('news'))
 			$GLOBALS['SITE_DB']->query_update('news',array('author'=>$username),array('author'=>$old_username));
@@ -1541,7 +1541,7 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 	require_code('notifications');
 	$subject=do_lang('CHOOSE_SIGNATURE_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id));
 	$body=do_lang('CHOOSE_SIGNATURE_BODY',$new_signature,$GLOBALS['FORUM_DRIVER']->get_username($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),get_lang($member_id));
-	dispatch_notification('ocf_choose_signature',NULL,$subject,$body);
+	dispatch_notification('ocf_choose_signature',NULL,$subject,$body,NULL,get_member(),3,false,false,NULL,NULL,'','','','',NULL,true);
 
 	// Decache from run-time cache
 	unset($GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED[$member_id]);
@@ -1624,7 +1624,7 @@ function ocf_member_choose_avatar($avatar_url,$member_id=NULL)
 			require_code('notifications');
 			$subject=do_lang('CHOOSE_AVATAR_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id));
 			$body=do_lang('CHOOSE_AVATAR_BODY',$stub.$avatar_url,$GLOBALS['FORUM_DRIVER']->get_username($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),get_lang($member_id));
-			dispatch_notification('ocf_choose_avatar',NULL,$subject,$body);
+			dispatch_notification('ocf_choose_avatar',NULL,$subject,$body,NULL,get_member(),3,false,false,NULL,NULL,'','','','',NULL,true);
 		}
 	}
 
@@ -1726,7 +1726,7 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id=NULL)
 	require_code('notifications');
 	$subject=do_lang('CHOOSE_PHOTO_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id));
 	$body=do_lang('CHOOSE_PHOTO_BODY',$url,$thumb_url,array($GLOBALS['FORUM_DRIVER']->get_username($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true)),get_lang($member_id));
-	dispatch_notification('ocf_choose_photo',NULL,$subject,$body);
+	dispatch_notification('ocf_choose_photo',NULL,$subject,$body,NULL,get_member(),3,false,false,NULL,NULL,'','','','',NULL,true);
 
 	// If Avatars addon not installed, use photo for it
 	if (!addon_installed('ocf_avatars'))

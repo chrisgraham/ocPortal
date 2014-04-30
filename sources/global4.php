@@ -503,7 +503,7 @@ function _log_it($type,$a=NULL,$b=NULL)
 			$subject=do_lang('ACTIONLOG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),do_lang($type),array($a,$b));
 			$mail=do_lang('ACTIONLOG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(do_lang($type)),array(is_null($a)?'':comcode_escape($a),is_null($b)?'':comcode_escape($b)));
 			if (addon_installed('actionlog'))
-				dispatch_notification('actionlog',$type,$subject,$mail);
+				dispatch_notification('actionlog',$type,$subject,$mail,NULL,get_member(),3,false,false,NULL,NULL,'','','','',NULL,true);
 		}
 	}
 }

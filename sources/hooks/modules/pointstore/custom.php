@@ -249,7 +249,7 @@ class Hook_pointstore_custom
 		$subject=do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),NULL,NULL,get_site_default_lang());
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
 		$message_raw=do_lang('MAIL_REQUEST_CUSTOM_BODY',comcode_escape($c_title),$username,NULL,get_site_default_lang());
-		dispatch_notification('pointstore_request_custom','custom'.strval($id).'_'.strval($sale_id),$subject,$message_raw,NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_custom','custom'.strval($id).'_'.strval($sale_id),$subject,$message_raw,NULL,NULL,3,true,false,NULL,NULL,'','','','',NULL,true);
 
 		$member=get_member();
 

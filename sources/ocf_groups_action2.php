@@ -250,7 +250,7 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 		{
 			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',comcode_escape($their_username),comcode_escape($group_name),array($url),get_site_default_lang());
 			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
-			dispatch_notification('ocf_group_join_request_staff',NULL,$subject,$mail);
+			dispatch_notification('ocf_group_join_request_staff',NULL,$subject,$mail,NULL,get_member(),3,false,false,NULL,NULL,'','','','',NULL,true);
 		}
 	}
 }
