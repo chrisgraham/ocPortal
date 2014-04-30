@@ -441,7 +441,7 @@ function get_comcode_editor($field_name='post',$cut_down=false)
  */
 function wysiwyg_on()
 {
-	return ((browser_matches('wysiwyg')) && ((!array_key_exists('use_wysiwyg',$_COOKIE)) || ($_COOKIE['use_wysiwyg']=='1')));
+	return ((browser_matches('wysiwyg')) && ((!array_key_exists('use_wysiwyg',$_COOKIE)) || ($_COOKIE['use_wysiwyg']!='0')));
 }
 
 /**

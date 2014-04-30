@@ -501,7 +501,7 @@ function handle_textarea_scrolling()
 
 /* Ask a user a question: they must click a button */
 // 'Cancel' should come as index 0 and Ok/default-option should come as index 1. This is so that the fallback works right.
-function generate_question_ui(message,button_set,window_title,fallback_message,callback)
+function generate_question_ui(message,button_set,window_title,fallback_message,callback,dialog_width,dialog_height)
 {
 	var image_set=[];
 	var new_button_set=[];
@@ -514,15 +514,16 @@ function generate_question_ui(message,button_set,window_title,fallback_message,c
 
 	if ((typeof window.showModalDialog!='undefined'){+START,IF,{$CONFIG_OPTION,js_overlays}} || true{+END})
 	{
-		var height=180;
 		if (button_set.length>4) height+=5*(button_set.length-4);
 
 		// Intentionally FIND_SCRIPT and not FIND_SCRIPT_NOHTTP, because no needs-HTTPS security restriction applies to popups, yet popups do not know if they run on HTTPS if behind a transparent reverse proxy
 		var url=maintain_theme_in_link('{$FIND_SCRIPT;,question_ui}?message='+window.encodeURIComponent(message)+'&image_set='+window.encodeURIComponent(image_set.join(','))+'&button_set='+window.encodeURIComponent(button_set.join(','))+'&window_title='+window.encodeURIComponent(window_title)+keep_stub());
+		if (typeof dialog_width=='undefined') dialog_width=440;
+		if (typeof dialog_height=='undefined') dialog_height=180;
 		window.faux_showModalDialog(
 			url,
 			null,
-			'dialogWidth=440;dialogHeight='+height+';status=no;unadorned=yes',
+			'dialogWidth='+dialog_width+';dialogHeight='+dialog_height+';status=no;unadorned=yes',
 			function(result)
 			{
 				if ((typeof result=='undefined') || (result===null))
@@ -821,7 +822,7 @@ function set_cookie(cookie_name,cookie_value,num_days)
 	var extra='';
 	if ('{$COOKIE_PATH;}'!='') extra=extra+';path={$COOKIE_PATH;}';
 	if ('{$COOKIE_DOMAIN;}'!='') extra=extra+';domain={$COOKIE_DOMAIN;}';
-	var to_set=cookie_name+'='+encodeURIComponent(cookie_value)+';expires='+expire.toUTCString()+extra;
+	var to_set=cookie_name+'='+window.encodeURIComponent(cookie_value)+';expires='+expire.toUTCString()+extra;
 	document.cookie=to_set;
 	var read=read_cookie(cookie_name);
 	if ((read!=cookie_value) && (read))
