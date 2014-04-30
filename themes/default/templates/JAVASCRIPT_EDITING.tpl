@@ -147,6 +147,7 @@ function disable_wysiwyg(forms,so,so2,discard)
 				// Unload editor
 				var wysiwyg_data=window.wysiwyg_editors[id].getData();
 				window.wysiwyg_editors[id].destroy();
+				delete window.wysiwyg_editors[id];
 
 				// Comcode conversion
 				if ((discard) && (window.wysiwyg_original_comcode[id]))
@@ -239,7 +240,7 @@ function load_html_edit(posting_form,ajax_copy)
 			window.wysiwyg_original_comcode[id]=e.value;
 			if (!ajax_copy)
 			{
-				if ((typeof posting_form.elements[id+'_parsed']!='undefined') && (posting_form.elements[id+'_parsed'].value!='') && (e.defaultValue==e.value)) // The extra conditionals are for if back button used
+				if ((typeof posting_form.elements[id+'_parsed']!='undefined') && (posting_form.elements[id+'_parsed'].value!='') && ((e.defaultValue==''/*IE bug*/) || (e.defaultValue==e.value))) // The extra conditionals are for if back button used
 					e.value=posting_form.elements[id+'_parsed'].value;
 			} else
 			{
