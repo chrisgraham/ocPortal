@@ -630,7 +630,7 @@ class Module_galleries
 				if ((is_null($max)) || (($num_galleries>=$start) && ($num_galleries<$start+$max)))
 				{
 					$content=show_gallery_box($child,$root,true,get_zone_name(),get_option('show_empty_galleries')!='1');
-					if (!$content->is_empty())
+					if (!$content->is_definitely_empty())
 						$children->attach(do_template('GALLERY_SUBGALLERY_WRAP',array('_GUID'=>'dec5ea7f76819b3a7ff3c4876ba53399','CONTENT'=>$content)));
 				}
 				$num_galleries++;

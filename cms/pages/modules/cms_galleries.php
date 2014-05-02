@@ -419,7 +419,7 @@ class Module_cms_galleries extends standard_aed_module
 
 							if ((is_image($_file)) || (is_video($_file)))
 							{
-								$this->store_from_archive($_file,$tmp_name_2,$cat,$i);
+								$this->store_from_archive($_file,$tmp_name_2,$cat);
 								$i++;
 							}
 
@@ -456,7 +456,7 @@ class Module_cms_galleries extends standard_aed_module
 
 							if ((is_image($_file)) || (is_video($_file)))
 							{
-								$this->store_from_archive($_file,$tmp_name_2,$cat,$i);
+								$this->store_from_archive($_file,$tmp_name_2,$cat);
 								$i++;
 							}
 							unset($_in);
@@ -478,7 +478,7 @@ class Module_cms_galleries extends standard_aed_module
 							$test=@copy($tmp_name,$tmp_name_2); // We could rename, but it would hurt integrity of refreshes
 						}
 
-						$this->store_from_archive($file,$tmp_name_2,$cat,$i);
+						$this->store_from_archive($file,$tmp_name_2,$cat);
 						$i++;
 					} else
 					{

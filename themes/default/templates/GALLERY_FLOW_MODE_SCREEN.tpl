@@ -5,7 +5,7 @@
 
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}
 		<div itemprop="descriptions">
-			{DESCRIPTION}
+			{$PARAGRAPH,{DESCRIPTION}}
 		</div>
 	{+END}
 

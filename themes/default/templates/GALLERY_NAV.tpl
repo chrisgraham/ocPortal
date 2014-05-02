@@ -1,8 +1,8 @@
-<div onkeypress="return null;" onclick="cancel_bubbling(event);">
+<div onkeypress="return null;">
 	{+START,IF,{SLIDESHOW}}
 		<label for="slideshow_from" class="slideshow_speed">
 			{!SPEED_IN_SECS}
-			<input onchange="reset_slideshow_countdown();" onmousedown="stop_slideshow_timer('{!STOPPED;=}');" onkeypress="cancel_bubbling(event);" type="number" name="slideshow_from" id="slideshow_from" value="5" />
+			<input onclick="cancel_bubbling(event);" onchange="reset_slideshow_countdown();" onmousedown="stop_slideshow_timer('{!STOPPED;=}');" onkeypress="cancel_bubbling(event);" type="number" name="slideshow_from" id="slideshow_from" value="5" />
 		</label>
 		<input type="hidden" id="next_slide" name="next_slide" value="{SLIDESHOW_NEXT_URL*}" />
 		<input type="hidden" id="previous_slide" name="previous_slide" value="{SLIDESHOW_PREVIOUS_URL*}" />
@@ -12,7 +12,7 @@
 	{$REQUIRE_JAVASCRIPT,javascript_ajax}
 
 	<div class="trinav_wrap">
-		<div class="trinav_left">
+		<div class="trinav_left" onclick="cancel_bubbling(event);">
 			{$,Back}
 			{+START,IF_NON_EMPTY,{BACK_URL}}
 				<a {+START,IF,{SLIDESHOW}}onclick="return slideshow_backward();" {+END}rel="prev" accesskey="j" href="{BACK_URL*}"><img {+START,IF,{$MOBILE}}style="width: 95px" {+END}class="button_page" title="{!PREVIOUS}" alt="{!PREVIOUS}" src="{$IMG*,page/previous}" /></a>
@@ -22,7 +22,7 @@
 			{+END}
 		</div>
 
-		<div class="trinav_right">
+		<div class="trinav_right" onclick="cancel_bubbling(event);">
 			{$,Start slideshow}
 			{+START,IF_NON_EMPTY,{SLIDESHOW_URL}}
 				{+START,IF,{$NOT,{$MOBILE}}}
