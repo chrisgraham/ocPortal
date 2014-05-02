@@ -1001,7 +1001,8 @@ function assign_tick_deletion_confirm(name)
 						if (result)
 						{
 							var form=e.form;
-							form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
+							if (form.action.indexOf('_post')==-1) // Remove redirect if redirecting back, IF it's not just deleting an on-page post (Wiki+)
+								form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
 						} else
 						{
 							e.checked=false;
