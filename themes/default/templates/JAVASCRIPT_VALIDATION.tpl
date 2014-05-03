@@ -915,3 +915,4 @@ function getAllFormElements(container)
 	for (i=0;i<elements3.length;i++) elements.push(elements3[i]);
 	return elements;
 }
+

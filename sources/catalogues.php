@@ -1001,14 +1001,18 @@ function nice_get_catalogue_entries_tree($catalogue_name,$it=NULL,$submitter=NUL
  */
 function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id=NULL,$tree=NULL,$title=NULL,$levels=NULL,$editable_filter=false)
 {
+	if (is_null($category_id))
+	{
+		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name),'',1);
+	}
+
 	if ((is_null($category_id)) && (is_null($levels)))
 	{
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return array(); // Too many!
+		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)) return array(); // Too many!
 	}
 
 	if (is_null($category_id))
 	{
-		$is_tree=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_is_tree',array('c_name'=>$catalogue_name),'',1);
 		if (is_null($is_tree)) return array();
 		if ($is_tree==0)
 		{
@@ -1111,7 +1115,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
  */
 function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
 {
-	if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
+	if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000) return new ocp_tempcode(); // Too many!
 
 	$tree=array();
 	$temp_rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND cc_parent_id IS NULL ORDER BY id DESC',300/*reasonable limit to stop it dying*/);

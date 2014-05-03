@@ -25,7 +25,7 @@ function close_down()
 
 window.currently_doing_list=null;
 
-add_event_listener_abstract(window,'load',function () {
+addEventListenerAbstract(window,'load',function () {
 	var es=document.getElementsByTagName('input');
 	for (var i=0;i<es.length;i++)
 	{
