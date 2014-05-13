@@ -5,24 +5,26 @@
 	<input type="hidden" name="{STUB%}" value="1" />
 {+END}
 
-<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_day" name="{STUB%}_day"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-	<option value="">-</option>
-	{DAYS}
-</select>
-<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_month" name="{STUB%}_month"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-	<option value="">-</option>
-	{MONTHS}
-</select>
-<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_year" name="{STUB%}_year"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-	<option value="">-</option>
-	{YEARS}
-</select>
+<span class="vertical_alignment">
+	<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_day" name="{STUB%}_day"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
+		<option value="">-</option>
+		{DAYS}
+	</select>
+	<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_month" name="{STUB%}_month"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
+		<option value="">-</option>
+		{MONTHS}
+	</select>
+	<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_year" name="{STUB%}_year"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
+		<option value="">-</option>
+		{YEARS}
+	</select>
 
-{TIME}
+	{TIME}
 
-{+START,IF,{$JS_ON}}
-	<img class="top_vertical_alignment" id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
-{+END}
+	{+START,IF,{$JS_ON}}
+		<img id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
+	{+END}
+</span>
 
 <div id="cal{STUB#}Container" class="inline"></div>
 

@@ -558,7 +558,7 @@ function snippet_script()
 	@ini_set('zlib.output_compression','Off');
 	$size=strlen($out);
 	header('Connection: close');
-	ignore_user_abort(true);
+	@ignore_user_abort(true);
 	header('Content-Encoding: none');
 	header('Content-Length: '.strval($size));
 	echo $out;

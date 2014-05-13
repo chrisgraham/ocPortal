@@ -189,6 +189,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		$lang_id=insert_lang_comcode($post,4,$GLOBALS['FORUM_DB'],$insert_comcode_as_admin);
 	} else
 	{
+		@ignore_user_abort(true);
+
 		$lang_id=0;
 	}
 
@@ -219,6 +221,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		$lang_id=insert_lang_comcode_attachments(4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB']);
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_post'=>$lang_id),array('id'=>$post_id),'',1);
 	}
+
+	@ignore_user_abort(false);
 
 	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
 	$url=$_url->evaluate();

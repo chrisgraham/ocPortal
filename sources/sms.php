@@ -60,7 +60,7 @@ function sms_wrap($message,$to_sms)
 	// TODO: $confirmed_numbers=collapse_2d_complexity('m_phone_number','m_member_id',$GLOBALS['SITE_DB']->query_select('confirmed_mobiles',array('m_phone_number','m_member_id'),array('m_confirm_code'=>'')));
 
 	// Check current user has not trigered too many
-	$triggered_already=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'sms_log WHERE s_time>'.strval(time()-60*60*24*31).' AND '.db_string_equal_to('s_trigger_ip',get_ip_address(2)));
+	$triggered_already=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'sms_log WHERE s_time>'.strval(time()-60*60*24*31).' AND s_time<='.strval(time()).' AND '.db_string_equal_to('s_trigger_ip',get_ip_address(2)));
 	$trigger_limit=intval(get_option('sms_'.(has_specific_permission(get_member(),'sms_higher_trigger_limit')?'high':'low').'_trigger_limit'));
 	if ($triggered_already+count($to_sms)>$trigger_limit) return 0;
 

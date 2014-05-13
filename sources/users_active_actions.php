@@ -186,7 +186,7 @@ function handle_active_login($username)
 	} else
 	{
 		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));
-		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'failedlogins WHERE date_and_time>'.strval(time()-60*15).' AND '.db_string_equal_to('ip',get_ip_address()));
+		$count=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'failedlogins WHERE date_and_time>'.strval(time()-60*15).' AND date_and_time<='.strval(time()).' AND '.db_string_equal_to('ip',get_ip_address()));
 		if ($count>30) log_hack_attack_and_exit('BRUTEFORCE_LOGIN_HACK');
 	}
 }

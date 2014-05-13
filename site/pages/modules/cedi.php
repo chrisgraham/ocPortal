@@ -748,12 +748,16 @@ class Module_cedi
 
 		require_code('comcode_check');
 
+		@ignore_user_abort(true);
+
 		$message=post_param('post');
 		check_comcode($message,NULL,false,NULL,true);
 		$post_id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',array('edit_date'=>NULL,'the_message'=>0,'the_user'=>get_member(),'date_and_time'=>time(),'page_id'=>get_param_integer('id'),'validated'=>1,'seedy_views'=>0),true);
 		require_code('attachments2');
 		$the_message=insert_lang_comcode_attachments(2,$message,'cedi_post',strval($post_id));
 		$GLOBALS['SITE_DB']->query_update('seedy_posts',array('the_message'=>$the_message),array('id'=>$post_id),'',1);
+
+		@ignore_user_abort(false);
 
 		$markers=$this->get_markers();
 		foreach ($markers as $id)

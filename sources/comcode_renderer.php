@@ -1041,7 +1041,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 				if (!is_null($daily_quota))
 				{
-					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval((integer)$source_member).' AND a_add_time>'.strval(time()-60*60*24));
+					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval((integer)$source_member).' AND a_add_time>'.strval(time()-60*60*24).' AND a_add_time<='.strval(time()));
 					if (is_null($_size_uploaded_today[0]['the_answer'])) $_size_uploaded_today[0]['the_answer']=0;
 					$size_uploaded_today=ceil(((float)$_size_uploaded_today[0]['the_answer'])/1024.0/1024.0);
 					$attach_size=0;

@@ -91,6 +91,8 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	require_code('comcode_check');
 	check_comcode($message,NULL,false,NULL,true);
 
+	ignore_user_abort(true);
+
 	if (!addon_installed('unvalidated')) $validated=1;
 	$id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',array('validated'=>$validated,'edit_date'=>NULL,'the_message'=>0,'the_user'=>$member,'date_and_time'=>time(),'page_id'=>$page_id,'seedy_views'=>0),true);
 	require_code('attachments2');
@@ -122,6 +124,8 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	}
 
 	if (get_option('show_post_validation')=='1') decache('main_staff_checklist');
+
+	@ignore_user_abort(false);
 
 	return $id;
 }

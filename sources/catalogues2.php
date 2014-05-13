@@ -764,6 +764,8 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	require_code('comcode_check');
 	require_code('fields');
 
+	@ignore_user_abort(true);
+
 	if (!addon_installed('unvalidated')) $validated=1;
 	$imap=array('c_name'=>$catalogue_name,'ce_edit_date'=>$edit_date,'cc_id'=>$category_id,'ce_last_moved'=>time(),'ce_submitter'=>$submitter,'ce_add_date'=>$time,'ce_views'=>$views,'ce_views_prior'=>$views,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks);
 	if (!is_null($id)) $imap['id']=$id;
@@ -842,6 +844,8 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	decache('main_cc_embed');
 	decache('main_recent_cc_entries');
 
+	@ignore_user_abort(false);
+
 	return $id;
 }
 
@@ -879,6 +883,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 	{
 		send_content_validated_notification('catalogue_entry',strval($id));
 	}
+
+	@ignore_user_abort(true);
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_edit_date'=>time(),'cc_id'=>$category_id,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks),array('id'=>$id),'',1);
 	require_code('fields');
@@ -969,6 +975,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		$title,
 		process_overridden_comment_forum('catalogues__'.$catalogue_name,strval($id),strval($category_id),strval($old_category_id))
 	);
+
+	@ignore_user_abort(false);
 }
 
 /**
@@ -981,6 +989,8 @@ function actual_delete_catalogue_entry($id)
 	$old_category_id=$GLOBALS['SITE_DB']->query_value('catalogue_entries','cc_id',array('id'=>$id));
 
 	$catalogue_name=$GLOBALS['SITE_DB']->query_value('catalogue_entries','c_name',array('id'=>$id));
+
+	@ignore_user_abort(true);
 
 	require_code('fields');
 	require_code('catalogues');
@@ -1049,6 +1059,8 @@ function actual_delete_catalogue_entry($id)
 
 	if ($catalogue_name[0]!='_')
 		log_it('DELETE_CATALOGUE_ENTRY',strval($id),$title);
+
+	@ignore_user_abort(false);
 }
 
 

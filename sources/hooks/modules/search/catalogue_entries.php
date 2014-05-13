@@ -102,7 +102,7 @@ class Hook_search_catalogue_entries
 			exit();
 		}
 
-		return array('choose_catalogue_entry',array('catalogue_name'=>$catalogue_name));
+		return array('choose_catalogue_category',array('catalogue_name'=>$catalogue_name));
 	}
 
 	/**

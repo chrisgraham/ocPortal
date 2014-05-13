@@ -68,9 +68,12 @@ When a website sends out e-mail there is always a risk that it could get blocked
 General causes are:
  - If your server is on a spamlist. A good tool to check for this is: http://www.mxtoolbox.com/blacklists.aspx
  - If your "Website e-mail address" is for an email address hosted on another server and an SPF record exists for the domain does not grant your web server permission to use the address for sending out mail. If this might be the case, you either need to get the SPF record amended to cover your server, or use a different "Website e-mail address". Note that ocPortal uses the "Website e-mail address" as the "From" address in all outgoing e-mails, but the reply addresses depend on context (often they are the "Staff address", but they could also be the address of the member who caused the e-mail to be sent.
- - If your messages look like spam, which Sometimes can happen inadvertently. A good tool to check this is: http://www.mailingcheck.com/
+ - If your messages look like spam, which sometimes can happen inadvertently. Very carefully check your spam folder. Spam filters typically run a complex set of calculations to detect if something is 'spam'. It could well by a domain SPF setting is wrong, and combined with ocPortal emails being more complex than some other software, that knocking it over a spam threshold. That is just one of many possibilities that should be looked into if it is indeed a spam-filtering issue. A good tool to check spam filtering scores is: http://www.mailingcheck.com/
+ - It could be some host/software-specific bug. You can open a bug report if you're willing to give the developers access to run tests on your server, after you've checked it's not a spam folder, and only if you're not on a low-quality free web host.
 
 One very effective way to stop your messages being marked as spam is to persuade your visitors to add your staff address to their contacts list. Spam checkers usually will not block mail sent from someone on their contacts list.
+
+The non-bundled Bettermail addon might help work around some problems. This will send email using a totally different set of code that could incidentally workaround a bug in the server software.
 
 [concepts
  1_key="SMTP"   1_value="The e-mail protocol for sending e-mail and delivery between servers"

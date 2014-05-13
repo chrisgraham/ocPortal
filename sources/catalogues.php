@@ -977,7 +977,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				}
 				break;
 			case 'short_text':
-				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,$only_field_ids);
+				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,'short',$only_field_ids);
 				$fields[$i]['effective_value']=$fields[$i]['effective_value_pure'];
 				if (is_null($fields[$i]['effective_value']))
 				{
@@ -1029,7 +1029,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 	if (is_array($entry_id)) $entry_id=$entry_id['id'];
 
 	global $SITE_INFO;
-	if (((!isset($SITE_INFO['mysql_old'])) || ($SITE_INFO['mysql_old']=='0')) && ((!isset($SITE_INFO['mysql_old'])) || (!is_file(get_file_base().'/mysql_old'))))
+	if ((!running_script('ajax_tree')) && ((!isset($SITE_INFO['mysql_old'])) || ($SITE_INFO['mysql_old']=='0')) && ((!isset($SITE_INFO['mysql_old'])) || (!is_file(get_file_base().'/mysql_old'))))
 	{
 		// Pre-caching of whole entry
 		static $catalogue_entry_cache=array();
@@ -1138,7 +1138,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 {
 	if ((is_null($category_id)) && (is_null($levels)))
 	{
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return array(); // Too many!
+		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000) return array(); // Too many!
 	}
 
 	if (is_null($category_id))
@@ -1189,7 +1189,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 	}
 	$where=array('cc_id'=>$category_id);
 	if (!is_null($submitter)) $where['ce_submitter']=$submitter;
-	$erows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter'),$where,'ORDER BY ce_add_date DESC',1000/*reasonable limit*/);
+	$erows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter'),$where,'ORDER BY ce_add_date DESC',300/*reasonable limit*/);
 	if (get_page_name()=='cms_catalogues')
 	{
 		if (count($erows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
@@ -1246,7 +1246,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
  */
 function nice_get_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
 {
-	if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
+	if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000) return new ocp_tempcode(); // Too many!
 
 	$tree=array();
 	$temp_rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.db_string_equal_to('c_name',$catalogue_name).' AND cc_parent_id IS NULL ORDER BY id DESC',300/*reasonable limit to stop it dying*/);

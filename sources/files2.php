@@ -329,7 +329,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 			$daily_quota=5; // 5 is a hard-coded default for non-OCF forums
 		}
 		if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
-		$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval((integer)$source_member).' AND a_add_time>'.strval(time()-60*60*24));
+		$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval((integer)$source_member).' AND a_add_time>'.strval(time()-60*60*24).' AND a_add_time<='.strval(time()));
 		$size_uploaded_today=intval($_size_uploaded_today[0]['the_answer']);
 		$d=$daily_quota*1024*1024-$size_uploaded_today;
 	}

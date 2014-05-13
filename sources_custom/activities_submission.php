@@ -52,7 +52,7 @@ function activities_addon_syndicate_described_activity($a_language_string_code='
 
 	// Check if this has been posted previously (within the last 10 minutes) to
 	// stop spamming but allow generalised repeat status messages.
-	$test=$GLOBALS['SITE_DB']->query_select('activities',array('a_language_string_code','a_label_1','a_label_2','a_label_3','a_is_public'),NULL,'WHERE a_time>'.strval(time()-600),1);
+	$test=$GLOBALS['SITE_DB']->query_select('activities',array('a_language_string_code','a_label_1','a_label_2','a_label_3','a_is_public'),NULL,'WHERE a_time>'.strval(time()-600).' AND a_time<='.strval(time()),1);
 	if ((!array_key_exists(0,$test)) || ($test[0]!=$go) || (running_script('execute_temp')))
 	{
 		// Log the activity

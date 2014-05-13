@@ -136,7 +136,7 @@ function dload_script()
 	$size=filesize($_full);
 	if (is_null($got_before))
 	{
-		$bandwidth=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT SUM(file_size) AS answer FROM '.get_table_prefix().'download_logging l LEFT JOIN '.get_table_prefix().'download_downloads d ON l.id=d.id WHERE date_and_time>'.strval(time()-24*60*60*32));
+		$bandwidth=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT SUM(file_size) AS answer FROM '.get_table_prefix().'download_logging l LEFT JOIN '.get_table_prefix().'download_downloads d ON l.id=d.id WHERE date_and_time>'.strval(time()-24*60*60*32).' AND date_and_time<='.strval(time()));
 		if ((($bandwidth+floatval($size))>(floatval(get_option('maximum_download'))*1024*1024*1024)) && (!has_specific_permission(get_member(),'bypass_bandwidth_restriction')))
 			warn_exit(do_lang_tempcode('TOO_MUCH_DOWNLOAD'));
 
