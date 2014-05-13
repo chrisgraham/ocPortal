@@ -328,14 +328,14 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_ur
  * @param  LONG_TEXT		The ticket title
  * @param  LONG_TEXT		The ticket post's content
  * @param  mixed			The home URL (to view the ticket) (URLPATH or Tempcode URL)
- * @param  string			Ticket owner's e-mail address, in the case of a new ticket
+ * @param  EMAIL			Ticket owner's e-mail address, in the case of a new ticket
  * @param  integer		The new ticket type, or -1 if it is a reply to an existing ticket
  * @param  ?MEMBER		Posting member (NULL: current member)
  * @param  boolean		Whether the ticket was auto-created
  */
-function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticket_type_if_new,$poster=NULL,$auto_created=false)
+function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticket_type_if_new,$new_poster=NULL,$auto_created=false)
 {
-	if (is_null($poster)) $poster=get_member();
+	if (is_null($new_poster)) $new_poster=get_member();
 
 	require_lang('tickets');
 	require_code('notifications');
@@ -356,20 +356,20 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 	$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
 	$ticket_type_text=mixed();
 
-	if ($uid!=$poster)
+	if ($uid!=$new_poster)
 	{
 		// Reply from staff, notification to member
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
-			$staff_displayname=$GLOBALS['FORUM_DRIVER']->get_username($poster,true);
-			$staff_username=$GLOBALS['FORUM_DRIVER']->get_username($poster);
+			$staff_displayname=$GLOBALS['FORUM_DRIVER']->get_username($new_poster,true);
+			$staff_username=$GLOBALS['FORUM_DRIVER']->get_username($new_poster);
 
 			if ((get_option('ticket_mail_on')=='1') && (cron_installed()) && (function_exists('imap_open')))
 			{
 				require_code('tickets_email_integration');
-            if ($uid_email=='') $uid_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($uid);
+				if ($uid_email=='') $uid_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($uid);
 				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$title,$post,$uid_displayname,$uid_email,$staff_displayname);
 			} elseif (!is_guest($uid))
 			{
@@ -391,7 +391,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 						comcode_escape($staff_displayname),
 						$post,
 						comcode_escape($ticket_type_text),
-						strval($poster),
+						strval($new_poster),
 						comcode_escape($staff_username)
 					),
 					$uid_lang
@@ -426,7 +426,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 				comcode_escape($uid_displayname),
 				$post,
 				comcode_escape($ticket_type_text),
-				strval($poster),
+				strval($new_poster),
 				comcode_escape($uid_username)
 			),
 			get_site_default_lang()
@@ -444,7 +444,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 			} else
 			{
 				require_code('mail');
-				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($uid_email),NULL,'','',3,NULL,false,$poster);
+				mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT',$title),do_lang('YOUR_MESSAGE_WAS_SENT_BODY',$post),array($uid_email),NULL,'','',3,NULL,false,$new_poster);
 			}
 		}
 	}
