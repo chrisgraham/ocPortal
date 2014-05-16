@@ -70,7 +70,7 @@ Want to take things to the next level with your newsletters? You can create full
 
 Creating templated newsletters is best shown by example (this is the newsletter itself, fed into the field when you send the newsletter, or put inside the [tt]NEWSLETTER_DEFAULT_FCOMCODE[/tt] template that prepopulates that field):
 [codebox]
-<html lang="{$LANG*}" dir="{!dir}">
+<html lang="{$LCASE*,{$LANG}}" dir="{!dir}">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={!charset}" />
 <title>{title*}</title>

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html lang="{$LANG*}" dir="{!dir}">
+<html lang="{$LCASE*,{$LANG}}" dir="{!dir}">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 		<meta name="GENERATOR" content="ocPortal" />
 		<meta name="description" content="ocPortal installer" />
-		<meta name="language" content="{$LANG*}" />
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 		<link href="{CSS_URL*}" rel="stylesheet" type="text/css" />
 		<link href="{CSS_URL_2*}" rel="stylesheet" type="text/css" />

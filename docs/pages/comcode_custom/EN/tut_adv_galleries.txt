@@ -89,6 +89,18 @@ The tier that a member resides in is based on usergroup permissions with two pri
  - has high limit in member galleries
  - has no limit in member galleries
 
+[title="3"]Linking directly for a member to add to their own member gallery[/title]
+
+If you find the link to submit to a particular member gallery, you'll find it looks something like:
+[tt]http://baseurl/cms/index.php?page=cms_galleries&type=ad&cat=member_13_foobar[/tt]
+
+(this is for member #13's gallery under [tt]foobar[/tt])
+
+If you change the member ID to a question mark, it will work as a generic URL that you can give any member:
+[tt]http://baseurl/cms/index.php?page=cms_galleries&type=ad&cat=member_?_foobar[/tt]
+
+(ocPortal automatically will substitute the question mark with the ID of the current member)
+
 [title="2"]Podcasts[/title]
 
 ocPortal RSS complies with Apple's podcast format.

@@ -316,7 +316,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 				$in_entity=false;
 			} else
 			{
-				if (preg_match('#\w#',$current_char)==0) // Broken entity
+				if (preg_match('#[\#\w]#',$current_char)==0) // Broken entity
 				{
 					$in_entity=false;
 					$_html_buildup=preg_replace('#(.*)&#s','${1}&amp;',$_html_buildup);
@@ -408,6 +408,8 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 				$in_entity=true;
 				$_html_buildup='';
 				if (($literal_pos?$i:$c)<$from || (($real_from==0) && ($from!=0))) $_html_buildup.=$current_char;
+
+				$c++;
 			}
 			elseif (($current_char=='<') && ($next_char=='!') && (substr($html,$i,9)=='<![CDATA[')) // Skip over CDATA
 			{
@@ -498,9 +500,9 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 				$new_html.=$details[1];
 			}
 
-			$new_html=rtrim($new_html).$start_ellipses;
+			$new_html=rtrim($new_html).$start_ellipses; // NB: $_html_buildup is not used, as that's for HTML stack analysis, not for final output
 
-			$main_portion=substr($html,$real_from,$i-$real_from+1);
+			$main_portion=substr($html,$real_from,$i-$real_from+1); // +1 because offsets are one less than lengths
 			$new_html.=$main_portion;
 
 			if (!in_array(array_peek($tag_stack),$no_text_inside))

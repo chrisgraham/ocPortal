@@ -244,7 +244,7 @@ function disable_buttons_just_clicked(inputs)
 	}
 }
 
-function do_form_preview(form,preview_url,has_separate_preview)
+function do_form_preview(event,form,preview_url,has_separate_preview)
 {
 	preview_url+=((typeof window.mobile_version_for_preview=='undefined')?'':('&keep_mobile='+(window.mobile_version_for_preview?'1':'0')));
 

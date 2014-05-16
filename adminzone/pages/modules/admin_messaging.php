@@ -137,10 +137,8 @@ class Module_admin_messaging
 				$message_type=substr($looking_at,strpos($looking_at,'#')+1,strrpos($looking_at,'_')-strpos($looking_at,'#')-1);
 				if ($message_type=='') continue;
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id,'message_type'=>$message_type),'_SELF');
-				//$display_string=do_lang_tempcode('MESSAGE_DETAILS',get_timezoned_date($row['firsttime']),$message_type);
 
 				$fields->attach(results_entry(array(hyperlink($url,$name,false,true),get_timezoned_date($row['firsttime']),$message_type),true));
-//			do_template('INDEX_SCREEN_ENTRY',array('_GUID'=>'5e2d0d35e30402f3e7db284010cd359c','URL'=>$url,'NAME'=>$name,'DISPLAY_STRING'=>$display_string))
 			}
 		}
 
@@ -181,6 +179,7 @@ class Module_admin_messaging
 			$message=$_comments[0]['message'];
 			if (isset($_comments[0]['message_comcode']))
 			{
+				$GLOBALS['LAX_COMCODE']=true;
 				$message=comcode_to_tempcode(str_replace('[/staff_note]','',str_replace('[staff_note]','',$_comments[0]['message_comcode'])),$GLOBALS['FORUM_DRIVER']->get_guest_id());
 			}
 			$by=$_comments[0]['username'];

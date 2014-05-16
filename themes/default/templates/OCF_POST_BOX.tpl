@@ -4,11 +4,11 @@
 	</div>
 </div></div>
 
-{+START,IF_PASSED,URL}
+{+START,IF_PASSED,URL}{+START,IF_NON_EMPTY,{URL}}
 	<p class="right">
 		<a href="{URL*}"><img class="button_pageitem" src="{$IMG*,pageitem/goto}" alt="{!FORUM_POST} #{ID*}" /></a>
 	</p>
-{+END}
+{+END}{+END}
 
 {+START,IF_PASSED,BREADCRUMBS}
 	<nav class="breadcrumbs" itemprop="breadcrumb" role="navigation"><p>
