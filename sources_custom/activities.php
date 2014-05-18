@@ -101,6 +101,8 @@ function get_activity_querying_sql($viewer_id,$mode,$member_ids)
 	      break;
 
 		case 'friends':
+			$where_clause='';
+
 			// "friends" only makes sense if the chat addon is installed
 			if ((addon_installed('chat')) && (!$is_guest)) // If not a guest, get all reciprocal friendships.
 			{
@@ -146,7 +148,7 @@ function get_activity_querying_sql($viewer_id,$mode,$member_ids)
 						$where_clause.='a_member_id IN ('.$lm_ids.')';
 					if ($lo_ids!='')
 					{
-						if ($where_clause!='')
+						if ($where_clause!='(')
 							$where_clause.=' OR ';
 						$where_clause.='(a_member_id IN ('.$lo_ids.') AND a_is_public=1)';
 					}
