@@ -632,10 +632,11 @@ class Module_recommend
 				$_url=(post_param_integer('invite',0)==1)?build_url(array('page'=>'join','email_address'=>$email_address,'keep_referrer'=>$referring_username),get_module_zone('join')):build_url(array('page'=>'','keep_referrer'=>$referring_username),'');
 				$url=$_url->evaluate();
 				$join_url=$GLOBALS['FORUM_DRIVER']->join_url();
-				$message=do_lang((post_param_integer('invite',0)==1)?'INVITE_MEMBER_MESSAGE':'RECOMMEND_MEMBER_MESSAGE',$name,$url,array(get_site_name(),$join_url)).$message;
+				$_message=do_lang((post_param_integer('invite',0)==1)?'INVITE_MEMBER_MESSAGE':'RECOMMEND_MEMBER_MESSAGE',$name,$url,array(get_site_name(),$join_url)).$message;
 			} else
 			{
 				$title=get_screen_title('RECOMMEND_LINK');
+				$_message=$message;
 			}
 
 			if ((may_use_invites()) && (get_forum_type()=='ocf') && (!is_guest()) && (post_param_integer('invite',0)==1))
@@ -643,7 +644,7 @@ class Module_recommend
 				$invites=get_num_invites(get_member());
 				if ($invites>0)
 				{
-					send_recommendation_email($name,$email_address,$message,true,$recommender_email_address,post_param('subject',NULL),$names_to_send[$key]);
+					send_recommendation_email($name,$email_address,$_message,true,$recommender_email_address,post_param('subject',NULL),$names_to_send[$key]);
 
 					$GLOBALS['FORUM_DB']->query_insert('f_invites',array(
 						'i_inviter'=>get_member(),
@@ -667,7 +668,7 @@ class Module_recommend
 
 			if (!$invite)
 			{
-				send_recommendation_email($name,$email_address,$message,false,$recommender_email_address,post_param('subject',NULL),$names_to_send[$key]);
+				send_recommendation_email($name,$email_address,$_message,false,$recommender_email_address,post_param('subject',NULL),$names_to_send[$key]);
 			}
 		}
 
