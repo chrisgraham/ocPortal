@@ -155,7 +155,73 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 	if ((function_exists('set_time_limit')) && (ini_get('max_execution_time')!='0')) @set_time_limit(300);
 
-	$allowed_html_seqs=array('<table>','<table class="[^"]*">','<table class="[^"]*" summary="[^"]*">','<table summary="[^"]*">','</table>','<tr>','</tr>','<td>','</td>','<th>','</th>','<pre>','</pre>','<br />','<br/>','<br >','<br>','<p>','</p>','<p />','<b>','</b>','<u>','</u>','<i>','</i>','<em>','</em>','<strong>','</strong>','<li>','</li>','<ul>','</ul>','<ol>','</ol>','<del>','</del>','<dir>','</dir>','<s>','</s>','</a>','</font>','<!--','<h1 id="screen_title">','<h1 class="screen_title">','<h1 id="screen_title" class="screen_title">','</h1>','<img (class="vertical_alignment" )?alt="[^"]*" src="[^"]*" (complete="true" )*/>','<img src=["\'][^"\'<>]*["\']( border=["\'][^"\'<>]*["\'])?( alt=["\'][^"\'<>]*["\'])?( )?(/)?'.'>','<a href=["\'][^"\'<>]*["\']( target=["\'][^"\'<>]*["\'])?'.'>'); // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
+	$allowed_html_seqs=array( // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
+		'<table>',
+		'<table( class="[^"<>]*")?( summary="[^"<>]*")?>',
+		'</table>',
+		'<tr>',
+		'</tr>',
+		'<td>',
+		'</td>',
+		'<th>',
+		'</th>',
+		'<pre>',
+		'</pre>',
+		'<address>',
+		'</address>',
+		'<br\s*/?'.'>',
+		'<p>',
+		'</p>',
+		'<p\s*/>',
+		'<div( style=".*")?'.'>',
+		'</div>',
+		'<b>',
+		'</b>',
+		'<u>',
+		'</u>',
+		'<i>',
+		'</i>',
+		'<em>',
+		'</em>',
+		'<strong>',
+		'</strong>',
+		'<li>',
+		'</li>',
+		'<ul>',
+		'</ul>',
+		'<ol>',
+		'</ol>',
+		'<dir>',
+		'</dir>',
+		'<del>',
+		'</del>',
+		'<s>',
+		'</s>',
+		'<font( color="[^"<>]*")?( face="[^"<>]*")?( size="[^"<>]*")?>',
+		'</font>',
+		'<!--',
+		'<h1( class="screen_title")?( id="screen_title")?>',
+		'</h1>',
+		'<h2>',
+		'</h2>',
+		'<h3>',
+		'</h3>',
+		'<h4>',
+		'</h4>',
+		'<h5>',
+		'</h5>',
+		'<h6>',
+		'</h6>',
+		'<img( alt="[^"<>]*")?( border="[^"<>]*")?( class="vertical_alignment")? src="[^"<>]*"( style="vertical-align: (top|middle|bottom|baseline)")?( title="[^"<>]*")?\s*/?'.'>',
+		'<a( class="[^"<>]*")? href="[^"<>]*"( rel="[^"<>]*")?( target="[^"<>]*")?( title="[^"<>]*")?'.'>',
+		'</a>',
+		'<span>',
+		'<span style="color:\s*\#[A-Fa-f0-9]+;?">',
+		'<span style="font-family:\s*[\w-\s,]+;?">',
+		'<span style="font-size:\s*[\d\.]+(em|px|pt)?;?">',
+		'</span>',
+	);
+
 	if ($as_admin)
 	{
 		$comcode_dangerous=true;
@@ -360,6 +426,21 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 						foreach ($allowed_html_seqs as $allowed_html_seq)
 						{
 							if (preg_match('#^'.$allowed_html_seq.'$#',$portion)!=0) $seq_ok=true;
+						}
+						if (!$seq_ok)
+						{
+							$unstrippable_tags=array(
+								'table','tr','th','td','ul','ol','dl','dir','li', // Stop big structural problems causing out-of-scope corruptions (e.g. orphaned tr making preceding text move away completely when there's a wider surrounding table)
+								'div','p', // Stop disallowed opening tags paired with allowed closing tags causing mess up of surrounding layout
+							);
+							foreach ($unstrippable_tags as $unstrippable_tag)
+							{
+								if (preg_match('#^<'.$unstrippable_tag.'(\s[^<>]*|)>$#i',$portion)!=0)
+								{
+									$continuation.='<'.$unstrippable_tag.'>';
+									break;
+								}
+							}
 						}
 						if (!$seq_ok)
 						{

@@ -402,6 +402,8 @@ body.website_body, #htmlarea {
 }
 #htmlarea {
 	margin: 0;
+	color: {$GET,slightly_seeded_text};
+	background-color: {$GET,main_background};
 }
 
 body#main_website {

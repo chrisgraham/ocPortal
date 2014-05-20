@@ -159,11 +159,13 @@ class Hook_Syndication_facebook
 
 	function auth_is_set_site()
 	{
+		global $FACEBOOK_CONNECT;
+		if (!isset($FACEBOOK_CONNECT)) return false;
+
 		if (get_long_value('facebook_oauth_token')===NULL) return false;
 
 		if (get_option('facebook_uid')=='') return false; // No configured target
 
-		global $FACEBOOK_CONNECT;
 		if (($this->auth_is_set(get_member())) && (get_option('facebook_uid')==strval($FACEBOOK_CONNECT->getUser())))
 		{
 			return false; // Avoid double syndication, will already go to the user

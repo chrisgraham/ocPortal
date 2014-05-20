@@ -1,1 +1,1 @@
-<a rel="lightbox" title="{CAPTION*}: {!LINK_NEW_WINDOW}" class="link_exempt" target="_blank" href="{URL_FULL}"><img style="vertical-align: {ALIGN|}" src="{URL_THUMB*}" title="{CAPTION*}" alt="{CAPTION*}" /></a>
+<a class="link_exempt" href="{URL_FULL}" rel="lightbox" target="_blank" title="{CAPTION*}: {!LINK_NEW_WINDOW}"><img alt="{CAPTION*}" src="{URL_THUMB*}" style="vertical-align: {ALIGN|}" title="{CAPTION*}" /></a>
