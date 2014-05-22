@@ -583,7 +583,7 @@ class Module_shopping
 			{
 				$order_id=handle_transaction_script();
 
-				$object=find_product(do_lang('CART-ORDER',$order_id));
+				$object=find_product(do_lang('CART_ORDER',$order_id));
 
 				if (method_exists($object,'get_finish_url'))
 				{
