@@ -330,7 +330,7 @@ function handle_image_mouse_over(event)
 	if (typeof window.ocp_theme=='undefined') return;
 
 	var target=event.target || event.srcElement;
-	if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && target.previousSibling.className.indexOf('magic_image_edit_link')!=-1) return;
+	if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && (typeof target.previousSibling.className.indexOf!='undefined') && (target.previousSibling.className.indexOf('magic_image_edit_link')!=-1)) return;
 	if (find_width(target)<130) return;
 
 	var src=(typeof target.src=='undefined')?abstract_get_computed_style(target,'background-image'):target.src;
@@ -376,7 +376,7 @@ function handle_image_mouse_out(event)
 	var target=event.target || event.srcElement;
 
 	{+START,IF,{$CONFIG_OPTION,enable_theme_img_buttons}}
-		if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && target.previousSibling.className.indexOf('magic_image_edit_link')!=-1)
+		if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && (typeof target.previousSibling.className.indexOf!='undefined') && (target.previousSibling.className.indexOf('magic_image_edit_link')!=-1))
 		{
 			if ((typeof target.mo_link!='undefined') && (target.mo_link)) // Clear timed display of new edit button
 			{
@@ -390,7 +390,7 @@ function handle_image_mouse_out(event)
 			target.mo_link=window.setTimeout(function() {
 				if ((typeof target.edit_window=='undefined') || (!target.edit_window) || (target.edit_window.closed))
 				{
-					if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && target.previousSibling.className.indexOf('magic_image_edit_link')!=-1)
+					if (target.previousSibling && (typeof target.previousSibling.className!='undefined') && (typeof target.previousSibling.className.indexOf!='undefined') && (target.previousSibling.className.indexOf('magic_image_edit_link')!=-1))
 						target.parentNode.removeChild(target.previousSibling);
 				}
 			} , 3000);

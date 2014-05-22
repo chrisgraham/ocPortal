@@ -563,6 +563,9 @@ class Module_admin_version
 				'member_view'=>'BINARY',
 				'friend_view'=>'BINARY'
 			));
+			$GLOBALS['SITE_DB']->create_index('content_privacy','guest_view',array('guest_view'));
+			$GLOBALS['SITE_DB']->create_index('content_privacy','member_view',array('member_view'));
+			$GLOBALS['SITE_DB']->create_index('content_privacy','friend_view',array('friend_view'));
 			$GLOBALS['SITE_DB']->create_table('content_primary__members',array(
 				'content_type'=>'*ID_TEXT',
 				'content_id'=>'*ID_TEXT',

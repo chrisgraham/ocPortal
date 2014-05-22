@@ -572,7 +572,7 @@ function ModalWindow()
 			});
 
 			this.box_wrapper.appendChild(this.element('div',{ // The main overlay
-				'class': 'box overlay'+((this.type=='lightbox')?' lightbox':''),
+				'class': 'box overlay '+this.type,
 				'role': 'dialog',
 				'styles': {
 					// This will be updated immediately in reset_dimensions

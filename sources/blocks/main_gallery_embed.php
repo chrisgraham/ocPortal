@@ -145,8 +145,15 @@ class Block_main_gallery_embed
 		}
 
 		// Get rows
-		$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.$extra_join_image.' WHERE '.$cat_select.' AND '.$image_select.$where_sup.$extra_where_image,false,true);
-		$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.$extra_join_video.' WHERE '.$cat_select.' AND '.$video_select.$where_sup.$extra_where_video,false,true);
+		if ($do_pagination)
+		{
+			$total_images=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'images r'.$extra_join_sql.$extra_join_image.' WHERE '.$cat_select.' AND '.$image_select.$where_sup.$extra_where_image,false,true);
+			$total_videos=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*)'.$extra_select_sql.' FROM '.get_table_prefix().'videos r'.$extra_join_sql.$extra_join_video.' WHERE '.$cat_select.' AND '.$video_select.$where_sup.$extra_where_video,false,true);
+		} else
+		{
+			$total_images=0;
+			$total_videos=0;
+		}
 		if ($_sort=='average_rating')
 		{
 			$rating_sort=',(SELECT AVG(rating) FROM '.get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','images').' AND rating_for_id=r.id) AS average_rating';
