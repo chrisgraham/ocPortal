@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package codequalitychecker;
 
 import javax.swing.*;
@@ -29,7 +28,7 @@ public class Main {
     public static String phpPath = ".\\php.exe";
 
     // Memory
-    static Vector skipped_errors = new Vector();
+    static ArrayList skipped_errors = new ArrayList();
 
     /**
      * @param args the command line arguments
@@ -39,8 +38,14 @@ public class Main {
         try {
             String lf = UIManager.getCrossPlatformLookAndFeelClassName();
             UIManager.setLookAndFeel(lf);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (ClassNotFoundException exception) {
+            exception.printStackTrace(System.out);
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace(System.out);
+        } catch (InstantiationException exception) {
+            exception.printStackTrace(System.out);
+        } catch (UnsupportedLookAndFeelException exception) {
+            exception.printStackTrace(System.out);
         }
 
         // Load settings
@@ -63,62 +68,63 @@ public class Main {
             if (!new File(textEditorPath).exists()) {
                 if (new File(
                         "C:\\Program Files\\Macromedia\\Dreamweaver 7\\Dreamweaver.exe").
-                    exists()) {
-                    textEditorPath =
-                            "C:\\Program Files\\Macromedia\\Dreamweaver 7\\Dreamweaver.exe";
+                        exists()) {
+                    textEditorPath
+                            = "C:\\Program Files\\Macromedia\\Dreamweaver 7\\Dreamweaver.exe";
                 } else {
                     if (new File(
                             "C:\\Program Files\\Macromedia\\Dreamweaver 8\\Dreamweaver.exe").
-                        exists()) {
-                        textEditorPath =
-                                "C:\\Program Files\\Macromedia\\Dreamweaver 8\\Dreamweaver.exe";
+                            exists()) {
+                        textEditorPath
+                                = "C:\\Program Files\\Macromedia\\Dreamweaver 8\\Dreamweaver.exe";
                     } else {
                         if (new File(
                                 "C:\\Program Files\\Macromedia\\Dreamweaver 9\\Dreamweaver.exe").
-                            exists()) {
-                            textEditorPath =
-                                    "C:\\Program Files\\Macromedia\\Dreamweaver 9\\Dreamweaver.exe";
+                                exists()) {
+                            textEditorPath
+                                    = "C:\\Program Files\\Macromedia\\Dreamweaver 9\\Dreamweaver.exe";
                         } else {
                             if (new File("C:\\Program Files\\jedit\\jedit.exe").
-                                exists()) {
-                                textEditorPath =
-                                        "C:\\Program Files\\jedit\\jedit.exe";
+                                    exists()) {
+                                textEditorPath
+                                        = "C:\\Program Files\\jedit\\jedit.exe";
                             } else {
                                 if (new File(
                                         "C:\\Program Files\\ConTEXT\\ConTEXT.exe").
-                                    exists()) {
-                                    textEditorPath =
-                                            "C:\\Program Files\\ConTEXT\\ConTEXT.exe";
+                                        exists()) {
+                                    textEditorPath
+                                            = "C:\\Program Files\\ConTEXT\\ConTEXT.exe";
                                 } else {
                                     if (new File("/usr/bin/kate").exists()) {
                                         textEditorPath = "/usr/bin/kate";
                                     } else {
-		                                if (new File(
-		                                        "C:\\Program Files (x86)\\Codelobster Software\\CodelobsterPHPEdition\\ClPhpEd.exe").
-		                                    exists()) {
-		                                    textEditorPath =
-		                                            "C:\\Program Files (x86)\\Codelobster Software\\CodelobsterPHPEdition\\ClPhpEd.exe";
-		                                }
-												}
+                                        if (new File(
+                                                "C:\\Program Files (x86)\\Codelobster Software\\CodelobsterPHPEdition\\ClPhpEd.exe").
+                                                exists()) {
+                                            textEditorPath
+                                                    = "C:\\Program Files (x86)\\Codelobster Software\\CodelobsterPHPEdition\\ClPhpEd.exe";
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        } catch (Exception e) {} // No saving then
+        } catch (IOException e) {
+        } // No saving then
 
         // Load skipped
         try {
             BufferedReader skipFile = new BufferedReader(new FileReader(
                     System.getProperty("user.dir") + File.separator + "non_errors.txt"));
-            String line=skipFile.readLine();
-            while (line!=null)
-            {
-                skipped_errors.addElement(line);
-                line=skipFile.readLine();
+            String line = skipFile.readLine();
+            while (line != null) {
+                skipped_errors.add(line);
+                line = skipFile.readLine();
             }
-        } catch (Exception e) {} // No skip-saving then
+        } catch (IOException e) {
+        } // No skip-saving then
 
         MainDialog d = new MainDialog();
     }
