@@ -904,7 +904,14 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	{
 		$update['m_highlighted_name']=$highlighted_name;
 	}
-	if (!is_null($primary_group)) $update['m_primary_group']=$primary_group;
+	if (!is_null($primary_group))
+	{
+		$update['m_primary_group']=$primary_group;
+		if ($primary_group!=$old_primary_group)
+		{
+			log_it('MEMBER_PRIMARY_GROUP_CHANGED',strval($member_id),strval($primary_group));
+		}
+	}
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',$update,array('id'=>$member_id),'',1);
 

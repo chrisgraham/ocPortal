@@ -101,6 +101,9 @@ function handle_usergroup_subscription($purchase_id,$details,$product)
 					ocf_add_member_to_group($member_id,$new_group);
 				}
 			}
+
+			$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_member_timeouts',array('member_id'=>$member_id,'group_id'=>$new_group));
+
 			dispatch_notification('paid_subscription_started',NULL/*strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB'],get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
 	}

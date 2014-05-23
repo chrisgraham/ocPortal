@@ -236,6 +236,8 @@ function ocf_member_leave_group($group_id,$member_id=NULL)
 	if ($group_leader==$member_id) $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader'=>NULL),array('id'=>$group_id),'',1);
 
 	$GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id'=>$group_id,'gm_member_id'=>$member_id),'',1);
+
+	log_it('MEMBER_REMOVED_FROM_GROUP',strval($member_id),strval($group_id));
 }
 
 /**
@@ -265,6 +267,8 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 		'gm_member_id'=>$member_id,
 		'gm_validated'=>$validated
 	),false,true);
+
+	log_it('MEMBER_ADDED_TO_GROUP',strval($member_id),strval($id));
 
 	if (ocf_get_group_property($id,'hidden')==0)
 	{
@@ -304,6 +308,8 @@ function ocf_member_validate_into_group($group_id,$prospective_member_id,$declin
 			'gm_member_id'=>$prospective_member_id,
 			'gm_validated'=>1
 		));
+
+		log_it('MEMBER_ADDED_TO_GROUP',strval($prospective_member_id),strval($group_id));
 
 		$mail=do_lang('GROUP_ACCEPTED_MAIL',get_site_name(),$name,NULL,get_lang($prospective_member_id));
 		$subject=do_lang('GROUP_ACCEPTED_MAIL_SUBJECT',$name,NULL,NULL,get_lang($prospective_member_id));

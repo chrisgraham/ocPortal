@@ -41,7 +41,7 @@ class Hook_content_meta_aware_cedi_page
 
 			'is_category'=>true,
 			'is_entry'=>false,
-			'seo_type_code'=>NULL,
+			'seo_type_code'=>'seedy_page',
 			'feedback_type_code'=>NULL,
 			'permissions_type_code'=>NULL, // NULL if has no permissions
 			'view_pagelink_pattern'=>'_SEARCH:cedi:misc:_WILD',

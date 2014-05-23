@@ -218,7 +218,7 @@ function xhtmlise_html($html,$definitely_want=false)
 	'tfoot','thead','tr','dd','dt','dl','li','ol','ul','rbc','rtc','rb','rt','rp',/*'span',*/'abbr',
 	'acronym','cite',/*'code',*/'dfn',/*'em','strong','kbd','q','samp','var','sub','sup','tt','del',*/'ruby','bdo',
 	'img',/*'ins',*/'param','input','select','object','caption','label',/*'b','i','small','big',*/'base','body','col','colgroup','map',
-	'optgroup','option','legend','area','form',
+	'optgroup','legend','area','form',
 	);
 	foreach ($may_not_be_empty as $t)
 	{
@@ -534,7 +534,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 			'tfoot','thead','tr','dd','dt','dl','li','ol','ul','rbc','rtc','rb','rt','rp','span','abbr',
 			'acronym','cite','code','dfn','em','strong','kbd','q','samp','var','sub','sup','tt','del','ruby','bdo',
 			'img','ins','param','input','select','object','caption','label','b','i','small','big','base','body','col','colgroup','map',
-			'optgroup','option','legend','area','form',
+			'optgroup','legend','area','form',
 			);
 			foreach ($may_not_be_empty as $t)
 			{

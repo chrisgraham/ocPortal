@@ -114,7 +114,7 @@ class Module_login
 		// It's intentional that we will only go to the zone-default page if an explicitly blank redirect URL is given. If not we go to the given redirect URL or to the made-safe current URL (made-safe=zone root if we posted as we do not want to re-post). Note that 'redirect_passon' is simulated by injecting the self-URL as a URL parameter by access_denied() - as we want re-post in this case.
 		$redirect_default=get_self_url(true,true); // Still won't redirect to root if we have $_POST, because we relay $_POST values and have intelligence later on
 		$redirect=get_param('redirect',$redirect_default);
-		if (($redirect!='') && (strpos($redirect,'page=logout')===false) && (strpos($redirect,'page=login')===false) && (strpos($redirect,'/login.htm')===false) && (strpos($redirect,'/login/misc.htm')===false) && (strpos($redirect,'/pg/login')===false))
+		if (($redirect!='') && (strpos($redirect,'page=login')===false) && (strpos($redirect,'/login.htm')===false) && (strpos($redirect,'/login/logout.htm')===false) && (strpos($redirect,'/login/misc.htm')===false) && (strpos($redirect,'/pg/login')===false))
 		{
 			$passion=form_input_hidden('redirect',$redirect);
 		} else

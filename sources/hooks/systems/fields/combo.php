@@ -112,8 +112,8 @@ class Hook_fields_combo
 		$default=$field['cf_default'];
 		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
-		if (($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value)))
-			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+		if ((($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value))) && (!in_array('',$list)))
+			$_list->attach(form_input_list_entry('',($actual_value=='') || (is_null($actual_value)),do_lang_tempcode('NA_EM')));
 		foreach ($list as $l)
 		{
 			$_list->attach(form_input_list_entry($l,false));
