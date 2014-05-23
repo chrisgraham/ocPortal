@@ -277,6 +277,7 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	$_title=$page['title'];
 	$original_poster=$page['submitter'];
 
+	$GLOBALS['SITE_DB']->query_update('seedy_children',array('title'=>$title),array('title'=>get_translated_text($_title),'child_id'=>$id));
 	require_code('attachments2');
 	require_code('attachments3');
 	$GLOBALS['SITE_DB']->query_update('seedy_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'cedi_page',strval($id),NULL,true,$original_poster),'notes'=>$notes,'title'=>lang_remap($_title,$title)),array('id'=>$id),'',1);
@@ -324,6 +325,9 @@ function cedi_delete_page($id)
 	$GLOBALS['SITE_DB']->query_delete('seedy_changes',array('the_page'=>$id));
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'wiki_page'));
+
+	require_code('seo2');
+	seo_meta_erase_storage('seedy_page',strval($id));
 }
 
 /**

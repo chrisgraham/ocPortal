@@ -452,31 +452,21 @@ class Module_cedi
 		$breadcrumbs=cedi_breadcrumbs($chain,$current_title,has_specific_permission(get_member(),'open_virtual_roots'),true,true);
 
 		// Children Links
-		$dbchildren=$GLOBALS['SITE_DB']->query('SELECT child_id FROM '.get_table_prefix().'seedy_children c LEFT JOIN '.get_table_prefix().'seedy_pages p ON c.child_id=p.id WHERE c.parent_id='.strval((integer)$id).' ORDER BY c.the_order');
+		$dbchildren=$GLOBALS['SITE_DB']->query('SELECT child_id,c.title,hide_posts,description FROM '.get_table_prefix().'seedy_children c JOIN '.get_table_prefix().'seedy_pages p ON c.child_id=p.id WHERE c.parent_id='.strval((integer)$id).' ORDER BY c.the_order');
 		$num_children=0;
 		$children=new ocp_tempcode();
-		$or_list='';
-		foreach ($dbchildren as $myrow)
-		{
-			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='id='.strval((integer)$myrow['child_id']);
-		}
-		$_subpage=($or_list=='')?array():list_to_map('id',$GLOBALS['SITE_DB']->query('SELECT id,title,hide_posts,description FROM '.get_table_prefix().'seedy_pages WHERE '.$or_list));
 		foreach ($dbchildren as $myrow)
 		{
 			$child_id=$myrow['child_id'];
-			if (!array_key_exists($myrow['child_id'],$_subpage)) continue;
-			$subpage=$_subpage[$myrow['child_id']];
-			$_child_title=$subpage['title'];
-			$child_title=get_translated_text($_child_title);
-			$child_description=get_translated_text($subpage['description']);
+			$child_title=$myrow['title'];
+			$child_description=get_translated_text($myrow['description']);
 
 			$my_child_posts=$GLOBALS['SITE_DB']->query_value('seedy_posts','COUNT(*)',array('page_id'=>$child_id));
 			$my_child_children=$GLOBALS['SITE_DB']->query_value('seedy_children','COUNT(*)',array('parent_id'=>$child_id));
 
 			$my_child_posts_string=do_lang_tempcode('POST_PLU',integer_format($my_child_posts));
 			$my_child_children_string=do_lang_tempcode('CHILD_PLU',integer_format($my_child_children));
-			if ((!($my_child_posts>0)) && (!($my_child_children>0))) $sup=($subpage['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
+			if ((!($my_child_posts>0)) && (!($my_child_children>0))) $sup=($myrow['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
 			if (($my_child_posts>0) || ($my_child_children>0) || (trim($child_description)!=''))
 			{
 				$sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array(
@@ -1119,7 +1109,7 @@ class Module_cedi
 		$url_stub=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF',NULL,false,false,true);
 		$last_change_time=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_changes','date_and_time',NULL,'ORDER BY date_and_time DESC');
 
-		$children_rows=$GLOBALS['SITE_DB']->query_select('seedy_children',array('child_id','parent_id'),NULL,'ORDER BY the_order');
+		$children_rows=$GLOBALS['SITE_DB']->query_select('seedy_children',array('child_id','parent_id','title'),NULL,'ORDER BY the_order');
 		$page_rows=$GLOBALS['SITE_DB']->query_select('seedy_pages',array('id','title'));
 		$map=array();
 		foreach ($page_rows as $i=>$page)
