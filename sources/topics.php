@@ -610,7 +610,8 @@ class OCP_Topic
 		$rendered=array();
 		$non_rendered=array();
 
-		foreach ($posts as $i=>$p)
+		$posts_copy=$posts; // So the foreach's array iteration pointer is not corrupted by the iterations in our recursive calls (issue on some PHP versions)
+		foreach ($posts_copy as $i=>$p)
 		{
 			if ($p['parent_id']===$post_id)
 			{

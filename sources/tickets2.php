@@ -325,13 +325,14 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 	{
 		// Reply from staff, notification to user
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_value_null_ok('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
+		if (is_null($ticket_type_text)) $ticket_type_text=do_lang('UNKNOWN');
 		$their_lang=get_lang($uid);
 		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,$their_lang);
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
 			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_text)),$their_lang);
-			dispatch_notification('ticket_reply',strval($ticket_type_id),$subject,$message,array($uid));
+			dispatch_notification('ticket_reply',is_null($ticket_type_id)?'':strval($ticket_type_id),$subject,$message,array($uid));
 		}
 	}
 	elseif ($uid==get_member())
