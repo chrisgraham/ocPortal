@@ -477,11 +477,11 @@ class Module_tickets
 				));
 
 				// "Staff only reply" tickbox
-				$staff_only=((get_forum_type()=='ocf') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())));
+				$has_staff_only=((get_forum_type()=='ocf') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())));
 			} else
 			{
 				$comments=new ocp_tempcode();
-				$staff_only=false;
+				$has_staff_only=false;
 				$ticket_type_details=get_ticket_type(NULL);
 			}
 
@@ -602,6 +602,31 @@ class Module_tickets
 				$set_ticket_extra_access_url=build_url(array('page'=>'_SELF','type'=>'set_ticket_extra_access','id'=>$id),'_SELF');
 			}
 
+			// Post templates
+			$post_templates=new ocp_tempcode();
+			if ($has_staff_only)
+			{
+				require_code('ocf_posts_action');
+				require_lang('ocf_post_templates');
+
+				$forum_id=get_ticket_forum_id($ticket_owner,$ticket_type);
+
+				$templates=ocf_get_post_templates($forum_id);
+				$_post_templates=new ocp_tempcode();
+				foreach ($templates as $template)
+				{
+					list($pt_title,$pt_text,)=$template;
+					$_post_templates->attach(form_input_list_entry(str_replace("\n",'\n',$pt_text),false,$pt_title));
+				}
+				if ((!$_post_templates->is_empty()) && (has_js()))
+				{
+					$post_templates2=form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
+					$post_templates2->attach($_post_templates);
+
+					$post_templates=do_template('OCF_POST_TEMPLATE_SELECT',array('LIST'=>$post_templates2,'RESETS'=>true));
+				}
+			}
+
 			// Render ticket screen
 			$post_url=build_url(array('page'=>'_SELF','id'=>$id,'type'=>'post','redirect'=>get_param('redirect',NULL),'start_comments'=>get_param('start_comments',NULL),'max_comments'=>get_param('max_comments',NULL)),'_SELF');
 			$tpl=do_template('SUPPORT_TICKET_SCREEN',array(
@@ -618,8 +643,9 @@ class Module_tickets
 				'WARNING_DETAILS'=>$warning_details,
 				'NEW'=>$new,
 				'TICKET_PAGE_TEXT'=>$ticket_page_text,
+				'POST_TEMPLATES'=>$post_templates,
 				'TYPES'=>$types,
-				'STAFF_ONLY'=>$staff_only,
+				'STAFF_ONLY'=>$has_staff_only,
 				'POSTER'=>$poster,
 				'TITLE'=>$this->title,
 				'COMMENTS'=>$comments,

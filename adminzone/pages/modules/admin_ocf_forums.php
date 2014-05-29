@@ -62,6 +62,7 @@ class Module_admin_ocf_forums extends standard_crud_module
 			$ret['_SEARCH:admin_ocf_forum_groupings:ed']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EDIT_FORUM_GROUPING'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','COUNT(*)',NULL,'',true))))),'menu/_generic_admin/edit_one_category');
 			if (addon_installed('ocf_post_templates'))
 			{
+				require_lang('ocf_post_templates');
 				$ret['_SEARCH:admin_ocf_post_templates:misc']=array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('POST_TEMPLATES'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_post_templates','COUNT(*)',NULL,'',true))))),'menu/adminzone/structure/forum/post_templates');
 			}
 			if (addon_installed('ocf_multi_moderations'))
@@ -150,7 +151,10 @@ class Module_admin_ocf_forums extends standard_crud_module
 		);
 
 		if (addon_installed('ocf_post_templates'))
+		{
+			require_lang('ocf_post_templates');
 			$menu_links[]=array('menu/adminzone/structure/forum/post_templates',array('admin_ocf_post_templates',array('type'=>'misc'),get_module_zone('admin_ocf_post_templates')),do_lang_tempcode('POST_TEMPLATES'),'DOC_POST_TEMPLATES');
+		}
 		if (addon_installed('ocf_multi_moderations'))
 		{
 			require_lang('ocf_multi_moderations');

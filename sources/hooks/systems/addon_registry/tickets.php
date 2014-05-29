@@ -268,6 +268,7 @@ class Hook_addon_registry_tickets
 				'TICKET_TYPE'=>NULL,
 				'SUPPORT_OPERATOR_URL'=>NULL,
 				'TICKET_PAGE_TEXT'=>lorem_sentence_html(),
+				'POST_TEMPLATES'=>'',
 				'TYPES'=>placeholder_array(),
 				'STAFF_ONLY'=>true,
 				'POSTER'=>lorem_phrase(),

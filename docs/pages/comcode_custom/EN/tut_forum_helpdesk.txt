@@ -7,7 +7,7 @@ Running an online helpdesk is something many companies will want to do. It allow
 [title="2"]Multi-moderation[/title]
 
 [media width="150" description="Adding a multi-moderation" float="right"]data_custom/images/docs/forum_helpdesk_Add-multi-moderation.png[/media]
-{!ocf:DOC_MULTI_MODERATIONS}
+{!ocf_multi_moderations:DOC_MULTI_MODERATIONS}
 
 [title="3"]Adding a multi-moderation[/title]
 
@@ -31,7 +31,7 @@ For topic view screens the actions are available in the 'Actions upon marked pos
 [title="2"]Post templates[/title]
 
 [media width="150" description="Adding a post template" float="right"]data_custom/images/docs/forum_helpdesk_Add-post-template.png[/media]
-{!ocf:DOC_POST_TEMPLATES}
+{!ocf_post_templates:DOC_POST_TEMPLATES}
 
 [title="3"]Adding a post template[/title]
 

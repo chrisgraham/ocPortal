@@ -28,6 +28,36 @@ function init__ocf_posts_action()
 }
 
 /**
+ * Get a list of post templates that apply to a certain forum.
+ *
+ * @param  AUTO_LINK The ID of the forum.
+ * @return array 		The list of applicable post templates.
+ */
+function ocf_get_post_templates($forum_id)
+{
+	if (!addon_installed('ocf_post_templates')) return array();
+
+	$all_templates=$GLOBALS['FORUM_DB']->query_select('f_post_templates',array('*'));
+	$apply=array();
+	foreach ($all_templates as $template)
+	{
+		require_code('ocfiltering');
+		$idlist=ocfilter_to_idlist_using_db($template['t_forum_multi_code'],'id','f_forums','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
+		if (in_array($forum_id,$idlist))
+		{
+			if (strpos($template['t_text'],'{')!==false)
+			{
+				require_code('tempcode_compiler');
+				$e=template_to_tempcode($template['t_text']);
+				$template['t_text']=$e->evaluate();
+			}
+			$apply[]=array($template['t_title'],$template['t_text'],$template['t_use_default_forums']);
+		}
+	}
+	return $apply;
+}
+
+/**
  * Check a post would be valid.
  *
  * @param  LONG_TEXT		The post.

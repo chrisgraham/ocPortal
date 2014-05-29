@@ -179,7 +179,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 
 		$target_forum=read_multi_code('forum_multi_code');
 
-		$multi_mods=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('id'),array('mm_forum_multi_code'=>$target_forum));
+		$multi_mods=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('id'),array('mm_move_to'=>NULL,'mm_pin_state'=>NULL,'mm_sink_state'=>NULL,'mm_open_state'=>NULL,'mm_title_suffix'=>'','mm_forum_multi_code'=>$target_forum));
 		require_code('ocf_moderation_action2');
 		foreach ($multi_mods as $multi_mod)
 		{
@@ -285,7 +285,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 
 		$data=fix_bad_unicode($data);
 
-		ocf_make_multi_moderation($name,$data,NULL,NULL,NULL,NULL,$target_forum);
+		ocf_make_multi_moderation($name,$data,NULL,NULL,NULL,NULL,$target_forum,'');
 	}
 
 	/**

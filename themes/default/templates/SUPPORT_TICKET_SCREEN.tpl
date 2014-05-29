@@ -5,13 +5,15 @@
 	{WARNING_DETAILS}
 {+END}
 
-<div>
-	{+START,IF,{NEW}}
-		<div class="ticket_page_text">
-			{TICKET_PAGE_TEXT}
-		</div>
+{+START,IF,{NEW}}
+	<div class="ticket_page_text">
+		{TICKET_PAGE_TEXT}
+	</div>
+{+END}
 
-		{+START,SET,EXTRA_COMMENTS_FIELDS_1}
+<div>
+	{+START,SET,EXTRA_COMMENTS_FIELDS_1}
+		{+START,IF,{NEW}}
 			<tr>
 				<th class="de_th">
 					<span class="field_name"><label for="ticket_type">{!TICKET_TYPE}:</label></span>
@@ -24,6 +26,17 @@
 						{+END}
 					</select>
 					<div id="error_ticket_type" style="display: none" class="input_error_here"></div>
+				</td>
+			</tr>
+		{+END}
+
+		{+START,IF_NON_EMPTY,{POST_TEMPLATES}}
+			<tr>
+				<th class="de_th">
+					<span class="field_name"><label for="ticket_type">{!POST_TEMPLATE}:</label></span>
+				</th>
+				<td>
+					{POST_TEMPLATES}
 				</td>
 			</tr>
 		{+END}
