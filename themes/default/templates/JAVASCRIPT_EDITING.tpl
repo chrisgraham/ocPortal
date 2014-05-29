@@ -45,10 +45,10 @@ function toggle_wysiwyg(name)
 			generate_question_ui(
 				'{!comcode:WHETHER_SAVE_WYSIWYG_SELECTION;}',
 				{
-					button__cancel: '{!INPUTSYSTEM_CANCEL;^}',
-					button__clear: '{!javascript:WYSIWYG_DISABLE_ONCE;^}',
-					button__no: '{!javascript:WYSIWYG_DISABLE_ONCE_AND_DONT_ASK;^}',
-					button__yes: '{!javascript:WYSIWYG_DISABLE_ALWAYS;^}'
+					buttons__cancel: '{!INPUTSYSTEM_CANCEL;^}',
+					buttons__clear: '{!javascript:WYSIWYG_DISABLE_ONCE;^}',
+					//buttons__no: '{!javascript:WYSIWYG_DISABLE_ONCE_AND_DONT_ASK;^}',		Too confusing, re-enable if you want it
+					buttons__yes: '{!javascript:WYSIWYG_DISABLE_ALWAYS;^}'
 				},
 				'{!comcode:DISABLE_WYSIWYG;^}',
 				'{!comcode:DISCARD_WYSIWYG_CHANGES;^}',
@@ -121,7 +121,7 @@ function _toggle_wysiwyg(name)
 		{
 			generate_question_ui(
 				'{!comcode:DISCARD_WYSIWYG_CHANGES_NICE;^}',
-				{button__cancel: '{!INPUTSYSTEM_CANCEL;^}',button__convert: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE_CONVERT;^}',button__no: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE;^}'},
+				{buttons__cancel: '{!INPUTSYSTEM_CANCEL;^}',buttons__convert: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE_CONVERT;^}',buttons__no: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE;^}'},
 				'{!comcode:DISABLE_WYSIWYG;^}',
 				'{!comcode:DISCARD_WYSIWYG_CHANGES;^}',
 				function(prompt)
