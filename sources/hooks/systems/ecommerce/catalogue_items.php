@@ -176,7 +176,8 @@ class Hook_catalogue_items
 			$available_stock=intval($fields[3]['effective_value']);
 
 			//Locked order check
-			$query='SELECT sum(t2.p_quantity) as qty FROM '.get_table_prefix().'shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id WHERE t1.c_member='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' AND add_date>'.strval(time()-60*60*24).' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_awaiting_payment').' AND t2.p_id='.strval(intval($product));
+			// TODO: Make 24 hours a config option
+			$query='SELECT sum(t2.p_quantity) as qty FROM '.get_table_prefix().'shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id WHERE add_date>'.strval(time()-60*60*24).' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_awaiting_payment').' AND t2.p_id='.strval(intval($product));
 			if (is_guest())
 			{
 				$query.=' AND t1.session_id<>'.strval(get_session_id());

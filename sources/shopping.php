@@ -167,6 +167,7 @@ function delete_incomplete_orders()
 {
 	// Delete any 2-week+ old orders
 	$GLOBALS['SITE_DB']->query("DELETE t1,t2 FROM ".get_table_prefix()."shopping_order t1, ".get_table_prefix()."shopping_order_details t2 WHERE t1.id=t2.order_id AND t1.order_status='ORDER_STATUS_awaiting_payment' AND add_date<".strval(time()-60*60*24*14));
+	// TODO: Make 14 days a config option
 }
 
 /**
@@ -274,51 +275,69 @@ function update_stock($order_id)
 }
 
 /**
- * Payment step.
+ * Delete cart contents for the current user.
  *
- * @return tempcode	The result of execution.
+ * @param  boolean		Whether to just do a soft delete, i.e. mark as deleted.
  */
-function payment_form()
+function empty_cart($soft_delete=false)
+{
+	$where=array();
+	if (is_guest())
+	{
+		$where['session_id']=get_session_id();
+	} else
+	{
+		$where['ordered_by']=get_member();
+	}
+	if ($soft_delete)
+	{
+		$GLOBALS['SITE_DB']->query_update('shopping_cart',array('is_deleted'=>1),$where);
+	} else
+	{
+		$GLOBALS['SITE_DB']->query_delete('shopping_cart',$where);
+	}
+}
+
+/**
+ * Delete any pending orders for the current user. E.g. if cart purchase was cancelled, or cart was changed.
+ */
+function delete_pending_orders_for_current_user()
+{
+	$where=array('order_status'=>'ORDER_STATUS_awaiting_payment');
+	if (is_guest())
+	{
+		$where['session_id']=get_session_id();
+	} else
+	{
+		$where['c_member']=get_member();
+	}
+	$orders=$GLOBALS['SITE_DB']->query_select('shopping_order',array('id'),$where);
+	foreach ($orders as $order)
+	{
+		$GLOBALS['SITE_DB']->query_delete('shopping_order_details',array('order_id'=>$order['id']));
+		$GLOBALS['SITE_DB']->query_delete('shopping_order',array('id'=>$order['id']),'',1);
+	}
+}
+
+/**
+ * Turn shopping cart contents into an order.
+ *
+ * @return ?AUTO_LINK	Order ID (NULL: no items).
+ */
+function lock_in_cart_order()
 {
 	require_code('ecommerce');
 
-	$title=get_screen_title('PAYMENT_HEADING');
-
-	$cart_items=find_products_in_cart();
-
-	$purchase_id=NULL;
-
 	$tax_opt_out=get_order_tax_opt_out_status();
 
-	if (count($cart_items)>0)
-	{
-		$insert=array(
-			'c_member'=>get_member(),
-			'session_id'=>get_session_id(),
-			'add_date'=>time(),
-			'tot_price'=>0,
-			'order_status'=>'ORDER_STATUS_awaiting_payment',
-			'notes'=>'',
-			'purchase_through'=>'cart',
-			'transaction_id'=>'',
-			'tax_opted_out'=>$tax_opt_out,
-		);
-
-		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','id')))
-		{
-			$insert['id']=hexdec('1701D'); // Start offset
-		}
-
-		$order_id=$GLOBALS['SITE_DB']->query_insert('shopping_order',$insert,true);
-	} else
-	{
-		$order_id=NULL;
-	}
-
-	$total_price=0;	
-
+	// Work out items in the cart
+	$cart_items=find_products_in_cart();
+	$total_price=0.0;
+	$items=array();
 	foreach ($cart_items as $item)
 	{	
+		if ($item['quantity']==0) continue;
+
 		$product=$item['product_id'];
 
 		$hook=$item['product_type'];
@@ -334,17 +353,6 @@ function payment_form()
 
 		$price=$temp[$product][1];
 
-		$item_name=$temp[$product][4];				
-
-		if (method_exists($object,'set_needed_fields'))
-			$purchase_id=$object->set_needed_fields($product);
-		else
-			$purchase_id=strval(get_member());
-
-		$length=NULL;
-
-		$length_units='';
-
 		if (method_exists($object,'calculate_product_price'))
 			$price=$object->calculate_product_price($item['price'],$item['price_pre_tax'],$item['product_weight']);
 		else
@@ -355,27 +363,81 @@ function payment_form()
 		else
 			$tax=0.0;
 
-		$GLOBALS['SITE_DB']->query_insert(
-			'shopping_order_details',
-			array(
-				'p_id'=>$item['product_id'],
-				'p_name'=>$item['product_name'],
-				'p_code'=>$item['product_code'],
-				'p_type'=>$item['product_type'],
-				'p_quantity'=>$item['quantity'],
-				'p_price'=>$price,
-				'included_tax'=>$tax,
-				'order_id'=>$order_id,
-				'dispatch_status'=>'',
-			),
-			true
+		$items[$item['product_id']]=array(
+			'p_id'=>$item['product_id'],
+			'p_name'=>$item['product_name'],
+			'p_code'=>$item['product_code'],
+			'p_type'=>$item['product_type'],
+			'p_quantity'=>$item['quantity'],
+			'p_price'=>$price,
+			'included_tax'=>$tax,
+			'dispatch_status'=>'',
 		);
 
 		$total_price+=$price*$item['quantity'];
 	}
+	ksort($items);
 
-	$GLOBALS['SITE_DB']->query_update('shopping_order',array('tot_price'=>$total_price),array('id'=>$order_id),'',1);
+	// Already locked in? Better to avoid volatility as far as is possible
+	$where=array('order_status'=>'ORDER_STATUS_awaiting_payment','transaction_id'=>md5(serialize($items)));
+	if (is_guest())
+	{
+		$where['session_id']=get_session_id();
+	} else
+	{
+		$where['c_member']=get_member();
+	}
+	$order_id=$GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','id',$where);
+	if (!is_null($order_id)) return $order_id;
 
+	if (count($items)>0)
+	{
+		delete_pending_orders_for_current_user(); // We have to assume that any pending order will never come through. IPN should be instant, so assumption is reasonable. We need to clean up to avoid locking stock orders.
+
+		$insert=array(
+			'c_member'=>get_member(),
+			'session_id'=>get_session_id(),
+			'add_date'=>time(),
+			'tot_price'=>$total_price,
+			'order_status'=>'ORDER_STATUS_awaiting_payment',
+			'notes'=>'',
+			'purchase_through'=>'cart',
+			'transaction_id'=>md5(serialize($items)), // Temporary
+			'tax_opted_out'=>$tax_opt_out,
+		);
+
+		if (is_null($GLOBALS['SITE_DB']->query_value_null_ok('shopping_order','id')))
+		{
+			$insert['id']=hexdec('1701D'); // Start offset
+		}
+
+		$order_id=$GLOBALS['SITE_DB']->query_insert('shopping_order',$insert,true);
+
+		foreach ($items as $item)
+		{
+			$GLOBALS['SITE_DB']->query_insert('shopping_order_details',$item+array('order_id'=>$order_id));
+		}
+	} else
+	{
+		$order_id=mixed();
+	}
+
+	return $order_id;
+}
+
+/**
+ * Payment step.
+ *
+ * @return tempcode	The result of execution.
+ */
+function payment_form()
+{
+	require_code('ecommerce');
+
+	$title=get_screen_title('PAYMENT_HEADING');
+
+	$order_id=lock_in_cart_order();
+	if (is_null($order_id)) return new ocp_tempcode();
 
 	if (!perform_local_payment()) // Pass through to the gateway's HTTP server
 	{
@@ -388,12 +450,10 @@ function payment_form()
 			warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 		}
 
+		$price=$GLOBALS['SITE_DB']->query_value('shopping_order','tot_price',array('id'=>$order_id));
+		$item_name=do_lang('CART_ORDER',strval($order_id));
 		$fields=is_null($order_id)?new ocp_tempcode():get_transaction_form_fields(NULL,$order_id,$item_name,float_to_raw_string($price),NULL,'');
 
-		/*$via	=get_option('payment_gateway');
-		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
-		$object=object_factory('Hook_'.$via);
-		$ipn_url=$object->get_ipn_url();*/
 		$finish_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
 
 		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'a70d6995baabb7e41e1af68409361f3c','FIELDS'=>$fields));

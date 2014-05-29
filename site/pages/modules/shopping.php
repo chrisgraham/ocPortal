@@ -463,17 +463,7 @@ class Module_shopping
 
 		log_cart_actions('Cart emptied');
 
-		$where=array();
-
-		if (is_guest())
-		{
-			$where['session_id']=get_session_id();
-		} else
-		{
-			$where['ordered_by']=get_member();
-		}
-
-		$GLOBALS['SITE_DB']->query_update('shopping_cart',array('is_deleted'=>1),$where);
+		empty_cart(true);
 
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 
@@ -510,18 +500,11 @@ class Module_shopping
 
 		$message=get_param('message',NULL,true); // TODO: Assumption, needs to really go through the payment gateway API
 
+		require_code('shopping');
+
 		if (get_param_integer('cancel',0)==0)
 		{
-			//Empty cart.
-			$where=array();
-			if (is_guest())
-			{
-				$where['session_id']=get_session_id();
-			} else
-			{
-				$where['ordered_by']=get_member();
-			}
-			$GLOBALS['SITE_DB']->query_delete('shopping_cart',$where);
+			empty_cart();
 
 			log_cart_actions('Completed payment');
 
@@ -530,15 +513,11 @@ class Module_shopping
 				$trans_id=post_param('trans_id');
 
 				$transaction_rows=$GLOBALS['SITE_DB']->query_select('trans_expecting',array('*'),array('id'=>$trans_id),'',1);
-
 				if (!array_key_exists(0,$transaction_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-
 				$transaction_row=$transaction_rows[0];
 
 				$amount=$transaction_row['e_amount'];
-
 				$length=$transaction_row['e_length'];
-
 				$length_units=$transaction_row['e_length_units'];
 
 				$via=get_option('payment_gateway');
@@ -548,17 +527,11 @@ class Module_shopping
 				$object=object_factory('Hook_'.$via);
 
 				$name=post_param('name');
-
 				$card_number=post_param('card_number');
-
 				$expiry_date=str_replace('/','',post_param('expiry_date'));
-
 				$issue_number=post_param_integer('issue_number',NULL);
-
 				$start_date=str_replace('/','',post_param('start_date'));
-
 				$card_type=post_param('card_type');
-
 				$cv2=post_param('cv2');
 
 				list($success,,$message,$message_raw)=$object->do_transaction($trans_id,$name,$card_number,$amount,$expiry_date,$issue_number,$start_date,$card_type,$cv2,$length,$length_units);
@@ -593,6 +566,8 @@ class Module_shopping
 
 			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'3857e761ab75f314f4960805bc76b936','TITLE'=>$title,'MESSAGE'=>$message)),$title,NULL);
 		}
+
+		delete_pending_orders_for_current_user(); // Don't lock the stock unless they go back to the cart again
 
 		if (!is_null($message))
 		{
