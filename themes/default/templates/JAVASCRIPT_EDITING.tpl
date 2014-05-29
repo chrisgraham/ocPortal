@@ -788,17 +788,20 @@ function get_selected_html(editor)
 	if (!my_selection || my_selection.getType()==window.CKEDITOR.SELECTION_NONE) return '';
 
 	var selected_text='';
-	if (window.CKEDITOR.env.ie)
+	if (my_selection.getNative())
 	{
-		my_selection.unlock(true);
-		selected_text=my_selection.getNative().createRange().htmlText;
-	} else
-	{
-		try
+		if ((window.CKEDITOR.env.ie) && (typeof my_selection.getNative().getRangeAt=='undefined')) // IE8 and under (selection object)
 		{
-			selected_text=get_inner_html(my_selection.getNative().getRangeAt(0).cloneContents());
+			my_selection.unlock(true);
+			selected_text=my_selection.getNative().createRange().htmlText;
+		} else // IE9 / standards (HTMLSelection object)
+		{
+			try
+			{
+				selected_text=get_inner_html(my_selection.getNative().getRangeAt(0).cloneContents());
+			}
+			catch (e) {};
 		}
-		catch (e) {};
 	}
 	return selected_text;
 }
