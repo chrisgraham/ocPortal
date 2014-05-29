@@ -548,9 +548,9 @@ class Module_wiki
 			if ((has_edit_permission('low',get_member(),$poster,'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 			{
 				$edit_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain,'post_id'=>$post_id),'_SELF');
-				$extra=do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'37404e2e5cf7e4cb806f796e9df90898','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE_FULL'=>do_lang_tempcode('EDIT'),'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'buttons__edit'));
+				$extra=do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'37404e2e5cf7e4cb806f796e9df90898','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'FULL_TITLE'=>do_lang_tempcode('EDIT'),'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'buttons__edit'));
 				$move_url=build_url(array('page'=>'_SELF','type'=>'move','id'=>$chain,'post_id'=>$post_id),'_SELF');
-				$extra->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'b4325cd1bac924cc83771d4c3c41be8b','REL'=>'move','IMMEDIATE'=>false,'URL'=>$move_url,'TITLE_FULL'=>do_lang_tempcode('MOVE'),'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'buttons__move')));
+				$extra->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'b4325cd1bac924cc83771d4c3c41be8b','REL'=>'move','IMMEDIATE'=>false,'URL'=>$move_url,'FULL_TITLE'=>do_lang_tempcode('MOVE'),'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'buttons__move')));
 			} else $extra=new ocp_tempcode();
 			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($poster,false,true);
 			$rate_url=get_self_url(true);

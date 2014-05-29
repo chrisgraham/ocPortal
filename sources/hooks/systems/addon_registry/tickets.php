@@ -284,6 +284,7 @@ class Hook_addon_registry_tickets
 						'OVERVIEW_COUNT'=>placeholder_number(),
 					),
 				),
+				'SET_TICKET_EXTRA_ACCESS_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}

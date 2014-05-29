@@ -896,6 +896,8 @@ class Module_topics
 	 */
 	function mass_multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$mm_id=intval(substr(get_param('type','misc'),4));
 
 		$topics=$this->get_markers();
@@ -982,6 +984,8 @@ class Module_topics
 	 */
 	function _mass_multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$mm_id=get_param_integer('mm_id');
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');
@@ -3685,6 +3689,8 @@ END;
 	 */
 	function multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$mm_id=intval(substr(get_param('type','misc'),3));
 		$topic_id=get_param_integer('id');
 
@@ -3762,6 +3768,8 @@ END;
 	 */
 	function _multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$topic_id=get_param_integer('id');
 		$mm_id=get_param_integer('mm_id');
 		require_code('ocf_moderation_action');

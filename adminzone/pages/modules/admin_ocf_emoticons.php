@@ -73,15 +73,15 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 
 		if ($type=='import')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS'))));
 		}
 
 		if ($type=='_import')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_EMOTICONS'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_EMOTICONS'))));
 		}
 
-		if ($type=='import' && $type=='_import')
+		if ($type=='import' || $type=='_import')
 		{
 			$this->title=get_screen_title('IMPORT_EMOTICONS');
 		}
@@ -205,6 +205,8 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 		require_code('uploads');
 		require_code('images');
 		is_swf_upload(true);
+
+		set_mass_import_mode();
 
 		foreach ($_FILES as $attach_name=>$__file)
 		{

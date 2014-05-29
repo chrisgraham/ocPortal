@@ -19,6 +19,61 @@
  */
 
 /**
+ * Build a list of ticket types.
+ *
+ * @param  ?AUTO_LINK	The current selected ticket type (NULL: none)
+ * @param  ?array			List of ticket types to show regardless of access permissions (NULL: none)
+ * @return array			A map between ticket types, and template-ready details about them
+ */
+function build_types_list($selected_ticket_type,$ticket_types_to_let_through=NULL)
+{
+	if (is_null($ticket_types_to_let_through)) $ticket_types_to_let_through=array();
+
+	$_types=$GLOBALS['SITE_DB']->query_select('ticket_types LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate ON id=ticket_type',array('ticket_type','text_original','cache_lead_time'),NULL,'ORDER BY text_original');
+	$types=array();
+	foreach ($_types as $type)
+	{
+		if ((!has_category_access(get_member(),'tickets',$type['text_original'])) && (!in_array($type['ticket_type'],$ticket_types_to_let_through)))
+			continue;
+
+		if (is_null($type['cache_lead_time'])) $lead_time=do_lang('UNKNOWN');
+		else $lead_time=display_time_period($type['cache_lead_time']);
+		$types[$type['ticket_type']]=array('TICKET_TYPE'=>strval($type['ticket_type']),'SELECTED'=>($type['ticket_type']===$selected_ticket_type),'NAME'=>$type['text_original'],'LEAD_TIME'=>$lead_time);
+	}
+	return $types;
+}
+
+/**
+ * Checks the ticket ID is valid, and there is access for the current member to view it. Bombs out if there's a problem.
+ *
+ * @param  string			The ticket ID to check
+ * @param  MEMBER			The ticket owner
+ */
+function check_ticket_access($id)
+{
+	// Never for a guest
+	if (is_guest()) access_denied('NOT_AS_GUEST');
+
+	// Check we are allowed using normal checks
+	$_temp=explode('_',$id);
+	$ticket_owner=intval($_temp[0]);
+	if (array_key_exists(2,$_temp)) log_hack_attack_and_exit('TICKET_SYSTEM_WEIRD');
+	if (has_privilege(get_member(),'view_others_tickets')) return $ticket_owner;
+	if ($ticket_owner==get_member()) return $ticket_owner;
+
+	// Check we're allowed using extra access
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('ticket_extra_access','ticket_id',array('ticket_id'=>$id,'member_id'=>get_member()));
+	if (!is_null($test)) return $ticket_owner;
+
+	// No access :(
+	if (is_guest(intval($_temp[0])))
+		access_denied(do_lang('TICKET_OTHERS_HACK'));
+	log_hack_attack_and_exit('TICKET_OTHERS_HACK');
+
+	return $ticket_owner; // Will never get here
+}
+
+/**
  * Get the forum ID for a given ticket type and member, taking the ticket_member_forums and ticket_type_forums options
  * into account.
  *

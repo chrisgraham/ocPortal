@@ -2461,19 +2461,19 @@ div.wysiwyg_toolbar_color_finder {
 	margin-top: 1.3em;
 }
 
-.post_buttons a {
+div .post_buttons>*, div .buttons_group_faded>* {
 	{$BETA_CSS_PROPERTY,opacity: 0.1;} display: inline-block;/*Needed for IE8*/
 	{$BETA_CSS_PROPERTY,transition-property : opacity;}
 	{$BETA_CSS_PROPERTY,transition-duration : 0.5s;}
 	{$BETA_CSS_PROPERTY,transform: translateZ(0);} /* Needed to stop size jerk during animation, by forcing it as a layer at all times */
 }
 
-.post_buttons a[rel="add reply"] {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
+.post_buttons>*[rel="add reply"] {
+	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
 }
 
-.post_buttons:hover a, body.touch_enabled .post_buttons a {
-	{$BETA_CSS_PROPERTY,opacity: 1.0;} display: inline-block;/*Needed for IE8*/
+.post_buttons:hover>*, body.touch_enabled .post_buttons>*, .buttons_group_faded:hover>*, body.touch_enabled .buttons_group_faded>* {
+	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;} display: inline-block;/*Needed for IE8*/
 }
 
 .post_show_more {
@@ -2585,7 +2585,7 @@ div.wysiwyg_toolbar_color_finder {
 		text-align: center;
 	{+END}
 	{+START,IF,{$NOT,{$MOBILE}}}
-		margin: 0 0 1em 160px;
+		margin: 0 0 1em 0;
 	{+END}
 }
 

@@ -233,7 +233,7 @@ class Hook_addon_registry_wiki
 			'IMMEDIATE'=>false,
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('EDIT'),
-			'TITLE_FULL'=>do_lang_tempcode('EDIT'),
+			'FULL_TITLE'=>do_lang_tempcode('EDIT'),
 			'IMG'=>'buttons__edit'
 		));
 
@@ -242,7 +242,7 @@ class Hook_addon_registry_wiki
 			'IMMEDIATE'=>false,
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('MOVE'),
-			'TITLE_FULL'=>do_lang_tempcode('MOVE'),
+			'FULL_TITLE'=>do_lang_tempcode('MOVE'),
 			'IMG'=>'buttons__move'
 		)));
 

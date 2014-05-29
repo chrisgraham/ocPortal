@@ -5559,6 +5559,7 @@ function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,fil
 	maindiv.id='maindiv_'+name;
 	rep.parentNode.appendChild(maindiv);
 	var subdiv=document.createElement('div');
+	maindiv.style.display='inline-block';
 	maindiv.appendChild(subdiv);
 
 	var progressDiv=document.createElement('div');

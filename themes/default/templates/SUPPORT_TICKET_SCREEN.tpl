@@ -52,12 +52,12 @@
 			1_URL={STAFF_DETAILS*}
 			1_TITLE={!VIEW_COMMENT_TOPIC}
 			1_ICON=feedback/comments_topic
-			{+START,IF_PASSED,TICKET_TYPE}{+START,IF,{$HAS_PRIVILEGE,assume_any_member}}
+			{+START,IF_PASSED,TICKET_TYPE}
 				{+START,IF,{$NEQ,{USERNAME},{$USERNAME}}}
-					2_URL={$PAGE_LINK,_SEARCH:tickets:ticket:default={TICKET_TYPE}:post={!TICKET_SPLIT_POST&,{USERNAME}}:keep_su={USERNAME}}
+					2_URL={$PAGE_LINK,_SEARCH:tickets:ticket:default={TICKET_TYPE}:post={!TICKET_SPLIT_POST&,{USERNAME}}:post_as={USERNAME}}
 					2_TITLE={!STAFF_NEW_TICKET_AS,{USERNAME}}
 					2_ICON=buttons/add_ticket
-				{+END}{+END}
+				{+END}
 				{+START,IF_PASSED,SUPPORT_OPERATOR_URL}
 					3_URL={SUPPORT_OPERATOR_URL}
 					3_TITLE={!SUPPORT_ACCOUNT_SWITCH}
@@ -102,7 +102,7 @@
 	<hr class="spaced_rule" />
 {+END}
 
-<div class="buttons_group">
+<div class="buttons_group buttons_group_faded">
 	{+START,IF,{$NEQ,{$_GET,type},ticket}}
 		{+START,INCLUDE,BUTTON_SCREEN}
 			TITLE={!CREATE_SUPPORT_TICKET}
@@ -111,12 +111,22 @@
 			IMMEDIATE=0
 		{+END}
 	{+END}
+
 	{+START,IF_PASSED,TOGGLE_TICKET_CLOSED_URL}
 		{+START,INCLUDE,BUTTON_SCREEN}
 			TITLE={$?,{CLOSED},{!OPEN_TICKET},{!CLOSE_TICKET}}
 			IMG={$?,{CLOSED},buttons__closed,buttons__clear}
 			IMMEDIATE=1
 			URL={TOGGLE_TICKET_CLOSED_URL}
+		{+END}
+	{+END}
+
+	{+START,IF_PASSED,SET_TICKET_EXTRA_ACCESS_URL}
+		{+START,INCLUDE,BUTTON_SCREEN}
+			TITLE={!_SET_TICKET_EXTRA_ACCESS}
+			IMG=menu__adminzone__security__permissions__privileges
+			URL={SET_TICKET_EXTRA_ACCESS_URL}
+			IMMEDIATE=0
 		{+END}
 	{+END}
 </div>

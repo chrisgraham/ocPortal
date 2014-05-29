@@ -623,13 +623,16 @@ function ocf_cache_member_details($members)
  * @param  array			Map of topic info.
  * @param  array			Map of post info.
  * @param  boolean		Whether the current member may reply to the topic
+ * @param  ID_TEXT		Rendering context
  * @return tempcode		The buttons.
  */
-function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
+function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply,$rendering_context='ocf')
 {
 	require_lang('ocf');
 	require_code('ocf_members2');
+
 	$buttons=new ocp_tempcode();
+
 	if ((array_key_exists('may_validate_posts',$topic_info)) && (addon_installed('unvalidated')) && ((($topic_info['validated']==0) && ($_postdetails['id']==$topic_info['first_post_id'])) || ($_postdetails['validated']==0)))
 	{
 		$map=array('page'=>'topics','type'=>'validate_post','id'=>$_postdetails['id']);
@@ -642,8 +645,9 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title_full=new ocp_tempcode();
 		$_title_full->attach($_title);
 		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'712fdaee35f378e37b007f3a73246690','REL'=>'validate','IMMEDIATE'=>true,'IMG'=>'menu__adminzone__audit__unvalidated','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url)));
+		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'712fdaee35f378e37b007f3a73246690','REL'=>'validate','IMMEDIATE'=>true,'IMG'=>'menu__adminzone__audit__unvalidated','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url)));
 	}
+
 	if (($may_reply) && (is_null(get_bot_type())))
 	{
 		$map=array('page'=>'topics','type'=>'new_post','id'=>$_postdetails['topic_id'],'parent_id'=>$_postdetails['id']);
@@ -674,16 +678,48 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title_full=new ocp_tempcode();
 		$_title_full->attach(do_lang_tempcode(($topic_info['is_threaded']==1)?'REPLY':'QUOTE_POST'));
 		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'buttons__new_reply':'buttons__new_quote','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
+		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>($topic_info['is_threaded']==1)?'buttons__new_reply':'buttons__new_quote','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url,'JAVASCRIPT'=>$javascript)));
+
 		if ($topic_info['is_threaded']==1) // Second button for replying with explicit quote
 		{
 			$_title=do_lang_tempcode('QUOTE_POST');
 			$_title_full=new ocp_tempcode();
 			$_title_full->attach($_title);
 			$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-			$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'buttons__new_quote','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url,'JAVASCRIPT'=>$javascript_explicit_quote)));
+			$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'fc13d12cfe58324d78befec29a663b4f','REL'=>'add reply','IMMEDIATE'=>false,'IMG'=>'buttons__new_quote','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url,'JAVASCRIPT'=>$javascript_explicit_quote)));
 		}
 	}
+
+	if ($rendering_context=='tickets')
+	{
+		if ((array_key_exists('message_comcode',$_postdetails)) && (!is_null($_postdetails['message_comcode'])))
+		{
+			$ticket_id=get_param('id',NULL);
+			if (!is_null($ticket_id))
+			{
+				require_lang('tickets');
+				require_code('tickets');
+				$ticket_owner=check_ticket_access($ticket_id);
+
+				if (($ticket_owner==get_member()) || (has_privilege(get_member(),'view_others_tickets')))
+				{
+					$_title=do_lang_tempcode('QUOTE_TO_NEW_TICKET');
+					$_title_full=new ocp_tempcode();
+					$_title_full->attach($_title);
+					$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+
+					$action_url=build_url(array('page'=>'tickets','type'=>'ticket','post_as'=>($ticket_owner==get_member())?NULL:$ticket_owner),get_module_zone('tickets'));
+
+					$ticket_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$ticket_id),get_module_zone('tickets'));
+					$quote_to_new_post=do_lang('POSTING_TICKET_AS',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$ticket_url->evaluate(),$_postdetails['message_comcode']);
+					$hidden=form_input_hidden('post',$quote_to_new_post);
+
+					$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('IMMEDIATE'=>true,'HIDDEN'=>$hidden,'IMG'=>'buttons__new_quote','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url,'TARGET'=>'_blank')));
+				}
+			}
+		}
+	}
+
 	if ((array_key_exists('may_pt_members',$topic_info)) && ($may_reply) && ($_postdetails['poster']!=get_member()) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (ocf_may_whisper($_postdetails['poster'])) && (get_option('overt_whisper_suggestion')=='1'))
 	{
 		$whisper_type=(get_option('inline_pp_advertise')=='0')?'new_pt':'whisper';
@@ -692,12 +728,13 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title_full=new ocp_tempcode();
 		$_title_full->attach($_title);
 		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply contact','IMMEDIATE'=>false,'IMG'=>(get_option('inline_pp_advertise')=='0')?'buttons__send':'buttons__whisper','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url)));
+		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'fb1c74bae9c553dc160ade85adf289b5','REL'=>'add reply contact','IMMEDIATE'=>false,'IMG'=>(get_option('inline_pp_advertise')=='0')?'buttons__send':'buttons__whisper','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url)));
 	}
+
 	if (array_key_exists('may_edit',$_postdetails))
 	{
 		$map=array('page'=>'topics','type'=>'edit_post','id'=>$_postdetails['id']);
-		if (get_page_name()=='tickets')
+		if ($rendering_context=='tickets')
 			$map['redirect']=static_evaluate_tempcode(build_url(array('page'=>'tickets','type'=>'ticket','id'=>get_param('id')),get_module_zone('tickets'),NULL,false,false,false,'_top'));
 		else
 			$map['redirect']=get_self_url(true);
@@ -710,12 +747,13 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title_full=do_lang_tempcode('EDIT_POST');
 		$_title_full->attach($_title);
 		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'f341cfc94b3d705437d43e89f572bff6','REL'=>'edit','IMMEDIATE'=>false,'IMG'=>'buttons__edit','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$edit_url)));
+		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'f341cfc94b3d705437d43e89f572bff6','REL'=>'edit','IMMEDIATE'=>false,'IMG'=>'buttons__edit','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$edit_url)));
 	}
+
 	if (array_key_exists('may_delete',$_postdetails))
 	{
 		$map=array('page'=>'topics','type'=>'delete_post','id'=>$_postdetails['id']);
-		if (get_page_name()=='tickets')
+		if ($rendering_context=='tickets')
 			$map['redirect']=static_evaluate_tempcode(build_url(array('page'=>'tickets','type'=>'ticket','id'=>get_param('id')),get_module_zone('tickets'),NULL,false,false,false,'_top'));
 		else
 			$map['redirect']=get_self_url(true);
@@ -728,27 +766,33 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title_full=new ocp_tempcode();
 		$_title_full->attach(do_lang_tempcode('DELETE_POST'));
 		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'8bf6d098ddc217eef75718464dc03d41','REL'=>'delete','IMMEDIATE'=>false,'IMG'=>'menu___generic_admin__delete','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$delete_url)));
+		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'8bf6d098ddc217eef75718464dc03d41','REL'=>'delete','IMMEDIATE'=>false,'IMG'=>'menu___generic_admin__delete','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$delete_url)));
 	}
-	if ((array_key_exists('may_report_posts',$topic_info)) && (addon_installed('ocf_reported_posts')) && (is_null(get_bot_type())))
+
+	if ($rendering_context!='tickets')
 	{
-		$action_url=build_url(array('page'=>'topics','type'=>'report_post','id'=>$_postdetails['id']),get_module_zone('topics'));
-		$_title=do_lang_tempcode('_REPORT_POST');
-		$_title_full=new ocp_tempcode();
-		$_title_full->attach(do_lang_tempcode('REPORT_POST'));
-		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'f81cbe84f524b4ed9e089c6e89a7c717','REL'=>'report','IMMEDIATE'=>false,'IMG'=>'buttons__report','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url,'JAVASCRIPT'=>'return open_link_as_overlay(this,null,\'100%\');')));
+		if ((array_key_exists('may_report_posts',$topic_info)) && (addon_installed('ocf_reported_posts')) && (is_null(get_bot_type())))
+		{
+			$action_url=build_url(array('page'=>'topics','type'=>'report_post','id'=>$_postdetails['id']),get_module_zone('topics'));
+			$_title=do_lang_tempcode('_REPORT_POST');
+			$_title_full=new ocp_tempcode();
+			$_title_full->attach(do_lang_tempcode('REPORT_POST'));
+			$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+			$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'f81cbe84f524b4ed9e089c6e89a7c717','REL'=>'report','IMMEDIATE'=>false,'IMG'=>'buttons__report','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url,'JAVASCRIPT'=>'return open_link_as_overlay(this,null,\'100%\');')));
+		}
+
+		if ((array_key_exists('may_warn_members',$topic_info)) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (addon_installed('ocf_warnings')))
+		{
+			$redir_url=get_self_url(true);
+			$redir_url.='#post_'.strval($_postdetails['id']);
+			$action_url=build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$_postdetails['poster'],'post_id'=>$_postdetails['id'],'redirect'=>$redir_url),get_module_zone('warnings'));
+			$_title=do_lang_tempcode('__WARN_MEMBER');
+			$_title_full=do_lang_tempcode('WARN_MEMBER');
+			$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
+			$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'buttons__warn','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url)));
+		}
 	}
-	if ((array_key_exists('may_warn_members',$topic_info)) && ($_postdetails['poster']!=$GLOBALS['OCF_DRIVER']->get_guest_id()) && (addon_installed('ocf_warnings')))
-	{
-		$redir_url=get_self_url(true);
-		$redir_url.='#post_'.strval($_postdetails['id']);
-		$action_url=build_url(array('page'=>'warnings','type'=>'ad','member_id'=>$_postdetails['poster'],'post_id'=>$_postdetails['id'],'redirect'=>$redir_url),get_module_zone('warnings'));
-		$_title=do_lang_tempcode('__WARN_MEMBER');
-		$_title_full=do_lang_tempcode('WARN_MEMBER');
-		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'2698c51b06a72773ac7135bbfe791318','IMMEDIATE'=>false,'IMG'=>'buttons__warn','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url)));
-	}
+
 	if ((has_privilege(get_member(),'view_content_history')) && ($_postdetails['has_history']))
 	{
 		$action_url=build_url(array('page'=>'admin_ocf_history','type'=>'misc','post_id'=>$_postdetails['id']),'adminzone');
@@ -756,16 +800,21 @@ function ocf_render_post_buttons($topic_info,$_postdetails,$may_reply)
 		$_title_full=new ocp_tempcode();
 		$_title_full->attach($_title);
 		$_title_full->attach(do_lang_tempcode('ID_NUM',strval($_postdetails['id'])));
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'6086b2ae226bf2a69d1e34641d22ae21','REL'=>'history','IMMEDIATE'=>false,'IMG'=>'buttons__history','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url)));
+		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'6086b2ae226bf2a69d1e34641d22ae21','REL'=>'history','IMMEDIATE'=>false,'IMG'=>'buttons__history','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url)));
 	}
-	if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])) && (has_privilege($_postdetails['poster'],'use_points')))
+
+	if ($rendering_context!='tickets')
 	{
-		require_css('points');
-		$action_url=build_url(array('page'=>'points','type'=>'member','id'=>$_postdetails['poster']),get_module_zone('points'));
-		$_title=do_lang_tempcode('__POINTS_THANKS');
-		$_title_full=do_lang_tempcode('POINTS_THANKS');
-		$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','IMMEDIATE'=>false,'IMG'=>'buttons__points','TITLE'=>$_title,'TITLE_FULL'=>$_title_full,'URL'=>$action_url)));
+		if ((addon_installed('points')) && (!is_guest()) && (!is_guest($_postdetails['poster'])) && (has_privilege($_postdetails['poster'],'use_points')))
+		{
+			require_css('points');
+			$action_url=build_url(array('page'=>'points','type'=>'member','id'=>$_postdetails['poster']),get_module_zone('points'));
+			$_title=do_lang_tempcode('__POINTS_THANKS');
+			$_title_full=do_lang_tempcode('POINTS_THANKS');
+			$buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'a66f98cb4d56bd0d64e9ecc44d357141','IMMEDIATE'=>false,'IMG'=>'buttons__points','TITLE'=>$_title,'FULL_TITLE'=>$_title_full,'URL'=>$action_url)));
+		}
 	}
+
 	return $buttons;
 }
 

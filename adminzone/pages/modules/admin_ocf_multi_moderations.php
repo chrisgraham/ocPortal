@@ -68,9 +68,25 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 		$type=get_param('type','misc');
 
 		require_lang('ocf');
+		require_lang('ocf_multi_moderations');
 		require_css('ocf_admin');
 
 		set_helper_panel_tutorial('tut_forum_helpdesk');
+
+		if ($type=='import')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MULTI_MODERATIONS'))));
+		}
+
+		if ($type=='_import')
+		{
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MULTI_MODERATIONS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_STOCK_RESPONSES'))));
+		}
+
+		if ($type=='import' || $type=='_import')
+		{
+			$this->title=get_screen_title('IMPORT_STOCK_RESPONSES');
+		}
 
 		return parent::pre_run($top_level);
 	}
@@ -93,6 +109,8 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 		$this->edit_one_label=do_lang_tempcode('EDIT_MULTI_MODERATION');
 
 		if ($type=='misc') return $this->misc();
+		if ($type=='import') return $this->import();
+		if ($type=='_import') return $this->_import();
 		return new ocp_tempcode();
 	}
 
@@ -108,9 +126,166 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 			array(
 				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_MULTI_MODERATION')),
 				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_MULTI_MODERATION')),
+				array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('IMPORT_STOCK_RESPONSES')),
 			),
 			do_lang('MULTI_MODERATIONS')
 		);
+	}
+
+	/**
+	 * The UI to import in bulk from an archive file.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function import()
+	{
+		require_code('form_templates');
+
+		$post_url=build_url(array('page'=>'_SELF','type'=>'_import','uploading'=>1),'_SELF');
+
+		$fields=new ocp_tempcode();
+
+		$supported='tar';
+		if ((function_exists('zip_open')) || (get_option('unzip_cmd')!='')) $supported.=', zip';
+		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_TEXT_FILES',escape_html($supported),escape_html('txt')),'file',true,NULL,NULL,true,'txt,'.$supported));
+
+		if (addon_installed('tickets'))
+		{
+			require_code('tickets');
+			$ticket_forum_id=get_ticket_forum_id();
+		} else
+		{
+			$ticket_forum_id=mixed();
+		}
+		require_code('ocf_general_action2');
+		$fields->attach(ocf_get_forum_multi_code_field(is_null($ticket_forum_id)?NULL:('+'.strval($ticket_forum_id))));
+
+		$text=paragraph(do_lang_tempcode('DESCRIPTION_IMPORT_STOCK_RESPONSES'));
+
+		return do_template('FORM_SCREEN',array('TITLE'=>$this->title,'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>do_lang_tempcode('IMPORT_STOCK_RESPONSES'),'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>''));
+	}
+
+	/**
+	 * The actualiser to import in bulk from an archive file.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function _import()
+	{
+		require_code('uploads');
+		is_swf_upload(true);
+
+		set_mass_import_mode();
+
+		$target_forum=read_multi_code('forum_multi_code');
+
+		$multi_mods=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('id'),array('mm_forum_multi_code'=>$target_forum));
+		require_code('ocf_moderation_action2');
+		foreach ($multi_mods as $multi_mod)
+		{
+			ocf_delete_multi_moderation($multi_mod['id']);
+		}
+
+		foreach ($_FILES as $attach_name=>$__file)
+		{
+			$tmp_name=$__file['tmp_name'];
+			$file=$__file['name'];
+			switch (get_file_extension($file))
+			{
+				case 'zip':
+					if ((!function_exists('zip_open')) && (get_option('unzip_cmd')=='')) warn_exit(do_lang_tempcode('ZIP_NOT_ENABLED'));
+					if (!function_exists('zip_open'))
+					{
+						require_code('m_zip');
+						$mzip=true;
+					} else $mzip=false;
+					$myfile=zip_open($tmp_name);
+					if (!is_integer($myfile))
+					{
+						while (false!==($entry=zip_read($myfile)))
+						{
+							// Load in file
+							zip_entry_open($myfile,$entry);
+
+							$filename=zip_entry_name($entry);
+
+							if ((strtolower(substr($filename,-4))=='.txt') && (!should_ignore_file($filename)))
+							{
+								$data='';
+								do
+								{
+									$more=zip_entry_read($entry);
+									if ($more!==false) $data.=$more;
+								}
+								while (($more!==false) && ($more!=''));
+
+								$this->_import_stock_response($filename,$data,$target_forum);
+							}
+
+							zip_entry_close($entry);
+						}
+
+						zip_close($myfile);
+					} else
+					{
+						require_code('failure');
+						warn_exit(zip_error($myfile,$mzip));
+					}
+					break;
+				case 'tar':
+					require_code('tar');
+					$myfile=tar_open($tmp_name,'rb');
+					if ($myfile!==false)
+					{
+						$directory=tar_get_directory($myfile);
+						foreach ($directory as $entry)
+						{
+							$filename=$entry['path'];
+
+							if ((strtolower(substr($filename,-4))=='.txt') && (!should_ignore_file($filename)))
+							{
+								// Load in file
+								$_in=tar_get_file($myfile,$entry['path'],false);
+
+								$this->_import_stock_response($filename,$_in['data'],$target_forum);
+							}
+						}
+
+						tar_close($myfile);
+					}
+					break;
+				default:
+					if (strtolower(substr($file,-4))=='.txt')
+					{
+						$this->_import_stock_response($file,file_get_contents($tmp_name),$target_forum);
+					} else
+					{
+						attach_message(do_lang_tempcode('BAD_ARCHIVE_FORMAT'),'warn');
+					}
+			}
+		}
+
+		log_it('IMPORT_STOCK_RESPONSES');
+
+		return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),NULL);
+	}
+
+	/**
+	 * Import a stock response.
+	 *
+	 * @param  PATH			Path of the file (not on disk, just for reference as a title).
+	 * @param  string			Data.
+	 * @param  SHORT_TEXT	The forum multicode identifying where the multi-moderation is applicable
+	 */
+	function _import_stock_response($path,$data,$target_forum)
+	{
+		require_code('ocf_moderation_action');
+
+		$name=do_lang('STOCK_RESPONSE',ucwords(str_replace(array('/','\\'),array(': ',': '),preg_replace('#\.txt$#','',$path))));
+
+		$data=fix_bad_unicode($data);
+
+		ocf_make_multi_moderation($name,$data,NULL,NULL,NULL,NULL,$target_forum);
 	}
 
 	/**
