@@ -238,6 +238,8 @@ class Module_admin_addons
 		breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ADDONS'))));
 
 		$text=new ocp_tempcode();
+		$text->attach(paragraph(do_lang_tempcode('HELP_IMPORTING_ADDON')));
+
 		require_code('files2');
 		$max=floatval(get_max_file_size())/floatval(1024*1024);
 		if ($max<30.0)
