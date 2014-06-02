@@ -321,7 +321,13 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 
 		// Post query
 		$where=ocf_get_topic_where($topic_id);
-		$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
+		if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
+		{
+			$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
+		} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
+		{
+			$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode, (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id)) AS h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
+		}
 	} else
 	{
 		$out=array(
