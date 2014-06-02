@@ -1956,6 +1956,62 @@ function ecv2_NUM_NEW_TOPICS($lang,$escaped,$param)
  * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
  * @return string				The result.
  */
+function ecv2_RATING($lang,$escaped,$param)
+{
+	$value='';
+	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+
+	if (isset($param[1]))
+	{
+		static $cache_rating=array();
+		$cache_key=serialize($param);
+		if (isset($cache_rating[$cache_key]))
+		{
+			$value=$cache_rating[$cache_key];
+		} else
+		{
+			global $DISPLAYED_TITLE;
+
+			require_code('feedback');
+			$display_tpl=array_key_exists(5,$param)?$param[5]:'RATING_FORM';
+			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
+			if ($rating!==NULL)
+			{
+				if (array_key_exists(5,$param))
+				{
+					$value=static_evaluate_tempcode(do_template($display_tpl,$rating));
+				} else
+				{
+					$value=isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
+				}
+			} else
+			{
+				if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
+				{
+					$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
+				} else
+				{
+					$value=do_template('RATING_INLINE_STATIC',$rating);
+				}
+				if (is_object($value)) $value=$value->evaluate();
+			}
+
+			$cache_rating[$cache_key]=$value;
+		}
+	}
+
+	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
+	return $value;
+}
+
+/**
+ * Evaluate a particular Tempcode symbol.
+ *
+ * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array				Array of escaping operations.
+ * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ * @return string				The result.
+ */
 function ecv2_NUM_RATINGS($lang,$escaped,$param)
 {
 	$value='';
@@ -2150,62 +2206,6 @@ function ecv2_PREG_MATCH($lang,$escaped,$param)
 function ecv2_QUERY_STRING($lang,$escaped,$param)
 {
 	$value=ocp_srv('QUERY_STRING');
-
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
-}
-
-/**
- * Evaluate a particular Tempcode symbol.
- *
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- * @return string				The result.
- */
-function ecv2_RATING($lang,$escaped,$param)
-{
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-
-	if (isset($param[1]))
-	{
-		static $cache_rating=array();
-		$cache_key=serialize($param);
-		if (isset($cache_rating[$cache_key]))
-		{
-			$value=$cache_rating[$cache_key];
-		} else
-		{
-			global $DISPLAYED_TITLE;
-
-			require_code('feedback');
-			$display_tpl=array_key_exists(5,$param)?$param[5]:'RATING_FORM';
-			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
-			if ($rating!==NULL)
-			{
-				if (array_key_exists(5,$param))
-				{
-					$value=static_evaluate_tempcode(do_template($display_tpl,$rating));
-				} else
-				{
-					$value=isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
-				}
-			} else
-			{
-				if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
-				{
-					$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
-				} else
-				{
-					$value=do_template('RATING_INLINE_STATIC',$rating);
-				}
-				if (is_object($value)) $value=$value->evaluate();
-			}
-
-			$cache_rating[$cache_key]=$value;
-		}
-	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
