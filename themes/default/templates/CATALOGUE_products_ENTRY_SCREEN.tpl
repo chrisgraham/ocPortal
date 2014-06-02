@@ -10,7 +10,7 @@
 			<div class="float_surrounder">
 				{+START,IF_NON_EMPTY,{FIELD_7_THUMB}}
 					<p class="catalogue_entry_box_thumbnail">
-						<a rel="lightbox" class="link_exempt" href="{+START,IF,{$NOT,{$IN_STR,{FIELD_7_PLAIN},://}}}{$BASE_URL*}/{+END}{FIELD_7_PLAIN*}" target="_blank" title="{!IMAGE}: {!LINK_NEW_WINDOW}" itemprop="image">{$TRIM,{FIELD_7_THUMB}}</a>
+						{$REPLACE, rel="lightbox", rel="lightbox" itemprop="image",{FIELD_7}}
 					</p>
 				{+END}
 
