@@ -204,11 +204,21 @@ foreach ($lines as $line)
 	$matches=array();
 	if (preg_match('#\t(both )?modified:\s+(.*)$#',$line,$matches)!=0)
 	{
-		if (($matches[2]!='data/files.dat') && ($matches[2]!='ocportal-git.clpprj') && ($matches[2]!='data_custom/execute_temp.php'))
+		if (($matches[2]!='data/files.dat') && (basename($matches[2])!='push_bugfix.php') && ($matches[2]!='data_custom/execute_temp.php'))
 			$git_found[get_file_base().'/'.$matches[2]]=true;
 	}
 }
-$files=(@$_GET['full_scan']=='1')?do_dir(get_file_base(),$git_found):array_keys($git_found);
+if (@$_GET['full_scan']=='1')
+{
+	$files=do_dir(get_file_base(),$git_found,24*60*60);
+	if (count($files)==0)
+	{
+		$files=do_dir(get_file_base(),$git_found,24*60*60*14);
+	}
+} else
+{
+	$files=array_keys($git_found);
+}
 
 $git_status='placeholder="optional"';
 $git_status_2=' <span style="font-size: 0.8em">(if not entered a new one will be made)</span>';
@@ -218,7 +228,11 @@ $choose_files_label='Choose files';
 if (count($files)==0)
 {
 	echo '<p><em>Found no changed files so done a full filesystem scan (rather than relying on git). You can enter a git ID or select files.</p>';
-	$files=do_dir(get_file_base(),$git_found);
+	$files=do_dir(get_file_base(),$git_found,24*60*60);
+	if (count($files)==0)
+	{
+		$files=do_dir(get_file_base(),$git_found,24*60*60*14);
+	}
 	/*$git_status='required="required"';
 	$git_status_2='';*/
 	$git_status_3='<strong>Git commit ID</strong>';
@@ -546,7 +560,7 @@ function make_post_request_with_attached_file($filename,$file_path,$more_post_da
 	return array($header,$content);
 }
 
-function do_dir($dir,$git_found)
+function do_dir($dir,$git_found,$seconds_since)
 {
 	$out=array();
 	$_dir=($dir=='')?'.':$dir;
@@ -555,16 +569,16 @@ function do_dir($dir,$git_found)
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if ($file[0]!='.')
+			if (($file!='push_bugfix.php') && (!should_ignore_file(str_replace(get_file_base().'/','',$_dir.'/'.$file),IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_HIDDEN_FILES | IGNORE_NONBUNDLED_SCATTERED | IGNORE_USER_CUSTOMISE | IGNORE_BUNDLED_VOLATILE | IGNORE_BUNDLED_UNSHIPPED_VOLATILE)))
 			{
 				$path=$dir.((substr($dir,-1)!='/')?'/':'').$file;
 				if (is_file($_dir.'/'.$file))
 				{
-					if ((filemtime($path)<time()-60*60*24) && (!isset($git_found[$path]))) continue;
+					if ((filemtime($path)<time()-$seconds_since) && (!isset($git_found[$path]))) continue;
 					$out[]=$path;
 				} elseif (is_dir($_dir.'/'.$file))
 				{
-					$out=array_merge($out,do_dir($path,$git_found));
+					$out=array_merge($out,do_dir($path,$git_found,$seconds_since));
 				}
 			}
 		}
