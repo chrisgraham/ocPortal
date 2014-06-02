@@ -155,7 +155,7 @@ class Hook_fields_picture
 	 */
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{
-		if (is_null($upload_dir)) return NULL;
+		if (is_null($upload_dir)) return NULL; // TODO: Make sure to respect this in v10 for upload_multi, picture_multi, and video_multi
 
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
