@@ -65,12 +65,24 @@ class Block_main_contact_catalogues
 
 		$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_value('catalogues','c_title'));
 
+		$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		require_code('fields');
+
 		if (post_param('subject','')!='')
 		{
+			$field_results=array();
+			foreach ($special_fields as $field_num=>$field)
+			{
+				$ob=get_fields_hook($field['cf_type']);
+				$inputted_value=$ob->inputted_to_field_value(false,$field,NULL);
+				if (!is_null($inputted_value))
+					$field_results[get_translated_text($field['cf_name'])]=$inputted_value;
+			}
+
 			require_code('mail');
 			$to_email=array_key_exists('to',$map)?$map['to']:'';
 			if ($to_email=='') $to_email=NULL;
-			form_to_email(NULL,'',NULL,$to_email);
+			form_to_email(NULL,'',$field_results,$to_email,false);
 
 			attach_message(do_lang_tempcode('SUCCESS'));
 		}
@@ -79,13 +91,10 @@ class Block_main_contact_catalogues
 
 		$fields=new ocp_tempcode();
 
-		$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
-
 		$field_groups=array();
 
 		$hidden=new ocp_tempcode();
 
-		require_code('fields');
 		foreach ($special_fields as $field_num=>$field)
 		{
 			$ob=get_fields_hook($field['cf_type']);

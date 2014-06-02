@@ -877,8 +877,9 @@ function form_to_email_entry_script()
  * @param  string		The intro text to the mail.
  * @param  ?array		A map of fields to field titles to transmit. (NULL: all posted fields, except subject and email)
  * @param  ?string	Email address to send to (NULL: look from post environment / staff address).
+ * @param  boolean	Whether $fields refers to some POSTed fields, as opposed to a direct field->value map.
  */
-function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
+function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$is_via_post=true)
 {
 	if (is_null($subject)) $subject=post_param('subject',get_site_name());
 	if (is_null($fields))
@@ -896,12 +897,24 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL)
 
 	$message_raw=$intro;
 	if ($message_raw!='') $message_raw.="\n\n------------\n\n";
-	foreach ($fields as $field=>$field_title)
+
+	if ($is_via_post)
 	{
-		$field_val=post_param($field,NULL);
-		if (!is_null($field_val))
-			$message_raw.=$field_title.': '.$field_val."\n\n";
+		foreach ($fields as $field=>$field_title)
+		{
+			$field_val=post_param($field,NULL);
+			if (!is_null($field_val))
+				$message_raw.=$field_title.': '.$field_val."\n\n";
+		}
+	} else
+	{
+		foreach ($fields as $field_title=>$field_val)
+		{
+			if (!is_null($field_val))
+				$message_raw.=$field_title.': '.$field_val."\n\n";
+		}
 	}
+
 	$from_email=trim(post_param('email',''));
 
 	$to_name=mixed();
