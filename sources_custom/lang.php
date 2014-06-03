@@ -300,7 +300,7 @@ if (!function_exists('_do_lang'))
 				$out=str_replace('{2}',$token2,$out);
 				if ($plural_or_vowel_check)
 				{
-					$_token_denum=str_replace(',','',$token1);
+					$_token_denum=str_replace(',','',$token2);
 					$out=preg_replace('#\{2\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token2,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 				}
 				if (($XSS_DETECT) && (ocp_is_escaped($token2)) && ($escaped)) ocp_mark_as_escaped($out);

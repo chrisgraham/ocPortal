@@ -159,16 +159,16 @@ function ocf_has_read_topic($topic_id,$topic_last_time=NULL,$member_id=NULL,$mem
 	if (is_null($topic_last_time))
 		$topic_last_time=$GLOBALS['FORUM_DB']->query_value('f_topics','t_cache_last_time',array('id'=>$topic_id));
 
-	$seven_days_ago=time()-60*60*24*intval(get_option('post_history_days'));
+	$post_history_days_ago=time()-60*60*24*intval(get_option('post_history_days'));
 
 	// Occasionally we need to delete old entries
 	if (mt_rand(0,1000)==123)
 	{
 		if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
-			$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE l_time<'.strval($seven_days_ago));
+			$GLOBALS['FORUM_DB']->query('DELETE FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs WHERE l_time<'.strval($post_history_days_ago));
 	}
 
-	if ($topic_last_time<$seven_days_ago) return true; // We don't store that old
+	if ($topic_last_time<$post_history_days_ago) return true; // We don't store that old
 	if (is_null($member_last_time))
 		$member_last_time=$GLOBALS['FORUM_DB']->query_value_null_ok('f_read_logs','l_time',array('l_member_id'=>$member_id,'l_topic_id'=>$topic_id));
 	if (is_null($member_last_time)) return false;

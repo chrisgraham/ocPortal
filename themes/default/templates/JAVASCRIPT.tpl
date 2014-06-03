@@ -575,7 +575,7 @@ function get_main_ocp_window(any_large_ok)
 
 	try
 	{
-		if ((window.parent) && (typeof window.parent.get_main_ocp_window!='undefined')) return window.parent.get_main_ocp_window();
+		if ((window.parent) && (window.parent!=window) && (typeof window.parent.get_main_ocp_window!='undefined')) return window.parent.get_main_ocp_window();
 	}
 	catch (e) {};
 	try
