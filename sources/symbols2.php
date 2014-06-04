@@ -732,7 +732,11 @@ function ecv2_COMCODE($lang,$escaped,$param)
 
 	if (isset($param[0]))
 	{
-		$_value=comcode_to_tempcode($param[0],NULL,true);
+		global $LAX_COMCODE;
+		$tmp=$LAX_COMCODE;
+		$LAX_COMCODE=true;
+		$_value=comcode_to_tempcode($param[0],NULL,!isset($param[1]) || $param[1]=='1');
+		$LAX_COMCODE=$tmp;
 		$value=$_value->evaluate();
 	}
 
