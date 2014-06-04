@@ -605,12 +605,19 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
  */
 function require_all_lang($lang=NULL,$only_if_for_lang=false)
 {
-	$GLOBALS['SITE_INFO']['disable_smart_decaching']='1'; // We'll temporarily set this to stop hundreds of disk checks happening
+	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
+	if ($support_smart_decaching)
+		$GLOBALS['SITE_INFO']['disable_smart_decaching']='1'; // We'll temporarily set this to stop hundreds of disk checks happening
 
 	if (is_null($lang))
 	{
 		global $REQUIRED_ALL_LANG;
-		if (array_key_exists($lang,$REQUIRED_ALL_LANG)) return;
+		if (array_key_exists($lang,$REQUIRED_ALL_LANG))
+		{
+			if ($support_smart_decaching)
+				unset($GLOBALS['SITE_INFO']['disable_smart_decaching']);
+			return;
+		}
 		$REQUIRED_ALL_LANG[$lang]=true;
 	}
 
@@ -625,6 +632,9 @@ function require_all_lang($lang=NULL,$only_if_for_lang=false)
 		if ((!$only_if_for_lang) || (is_file(get_custom_file_base().'/lang_custom/'.$lang.'/'.$file.'.ini')) || (is_file(get_custom_file_base().'/lang/'.$lang.'/'.$file.'.ini')) || (is_file(get_custom_file_base().'/lang_custom/'.$lang.'/'.$file.'.po')) || (is_file(get_custom_file_base().'/lang_custom/'.$lang.'/'.$file.'-'.strtolower($lang).'.po')))
 			require_lang($file,$lang,NULL,true);
 	}
+
+	if ($support_smart_decaching)
+		unset($GLOBALS['SITE_INFO']['disable_smart_decaching']);
 }
 
 /**

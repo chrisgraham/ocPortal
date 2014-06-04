@@ -30,7 +30,7 @@
 				} );
 			{+END}
 
-			script_load_stuff();
+			if (typeof script_load_stuff!='undefined') script_load_stuff();
 
 			{+START,IF,{$RUNNING_SCRIPT,preview}}
 				disable_preview_scripts();

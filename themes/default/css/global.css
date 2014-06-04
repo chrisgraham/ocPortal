@@ -1323,6 +1323,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 .pale_box.box h2, .pale_box .box h2, .pale_box.box h3, .pale_box .box h3 {
 	background-color: {$GET,point_of_interest_background} !important;
+	background-image: none;
 	color: {$GET,area_key_text} !important;
 }
 
