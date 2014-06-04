@@ -43,7 +43,7 @@ For this, I am assuming that you are using [concept]OCF[/concept]. If you are us
 
 [exp_thumb="Change the settings and 'Go'" float="right"]disaster_pass_3[/exp_thumb]
 4) There are numerous fields, but we only need to change three:
- - [tt]m_pass_hash_salted[/tt] should be given the new password. It is essential that you also choose 'MD5' from the list to the left of the input field, so that the password gets 'encrypted' (ocPortal assumes an encrypted password and if it is not then it will not succesfully log in).
+ - [tt]m_pass_hash_salted[/tt] should be given the new password. It is essential that you also choose 'MD5' from the list to the left of the input field, so that the password gets 'encrypted' (ocPortal assumes an encrypted password and if it is not then it will not successfully log in).
  - [tt]m_pass_salt[/tt] should be blanked out.
  - [tt]m_password_compat_scheme[/tt] should be set to 'md5'.
 
