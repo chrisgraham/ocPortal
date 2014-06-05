@@ -154,7 +154,7 @@ function ocf_delete_group($group_id,$target_group=NULL)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($group_id),'cf_type'=>'group'));
+		update_catalogue_content_ref('group',strval($group_id),'');
 	}
 
 	log_it('DELETE_GROUP',strval($group_id),$name);

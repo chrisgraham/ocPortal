@@ -327,7 +327,7 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 
 		if (addon_installed('catalogues'))
 		{
-			$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$name),array('cv_value'=>$old_name,'cf_type'=>'banner'));
+			update_catalogue_content_ref('banner',$old_name,$name);
 		}
 	}
 
@@ -384,7 +384,7 @@ function delete_banner($name)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$name,'cf_type'=>'banner'));
+		update_catalogue_content_ref('banner',$name,'');
 	}
 
 	log_it('DELETE_BANNER',$name,get_translated_text($caption));
@@ -449,7 +449,7 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 
 		if (addon_installed('catalogues'))
 		{
-			$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$id),array('cv_value'=>$old_id,'cf_type'=>'banner_type'));
+			update_catalogue_content_ref('banner_type',$old_id,$id);
 		}
 	}
 
@@ -478,7 +478,7 @@ function delete_banner_type($id)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'banner_type'));
+		update_catalogue_content_ref('banner_type',strval($id),'');
 	}
 
 	log_it('DELETE_BANNER_TYPE',$id);

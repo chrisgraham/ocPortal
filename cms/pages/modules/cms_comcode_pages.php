@@ -1076,7 +1076,7 @@ class Module_cms_comcode_pages
 
 			if (addon_installed('catalogues'))
 			{
-				$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$new_file),array('cv_value'=>$file,'cf_type'=>'comcode_page'));
+				update_catalogue_content_ref('comcode_page',$file,$new_file);
 			}
 
 			foreach ($rename_map as $path=>$new_path)

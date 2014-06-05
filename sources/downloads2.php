@@ -325,7 +325,7 @@ function delete_download_category($category_id)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($category_id),'cf_type'=>'download_category'));
+		update_catalogue_content_ref('download_category',strval($category_id),'');
 	}
 
 	log_it('DELETE_DOWNLOAD_CATEGORY',strval($category_id),get_translated_text($category));
@@ -887,7 +887,7 @@ function delete_download($id,$leave=false)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'download'));
+		update_catalogue_content_ref('download',strval($id),'');
 	}
 
 	log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));

@@ -2564,3 +2564,25 @@ function secure_serialized_data(&$data,$safe_replacement=NULL)
 		}
 	}
 }
+
+/**
+ * Update a catalogue content field reference, to a new value.
+ *
+ * @param ID_TEXT		Content type
+ * @param ID_TEXT		Old value
+ * @param ID_TEXT		New value
+ */
+function update_catalogue_content_ref($type,$from,$to)
+{
+	if (strpos(get_db_type(),'mysql')!==false)
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$to),array('cv_value'=>$from,'cf_type'=>$type));
+	} else
+	{
+		$fields=$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('id'),array('cf_type'=>$type));
+		foreach ($fields as $field)
+		{
+			$GLOBALS['SITE_DB']->query_update('catalogue_efv_short',array('cv_value'=>$to),array('cv_value'=>$from,'cf_id'=>$field['id']));
+		}
+	}
+}

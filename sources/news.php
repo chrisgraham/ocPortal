@@ -167,7 +167,7 @@ function delete_news_category($id)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'news_category'));
+		update_catalogue_content_ref('news_category',strval($id),'');
 	}
 
 	log_it('DELETE_NEWS_CATEGORY',strval($id),$old_title);
@@ -556,7 +556,7 @@ function delete_news($id)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'news'));
+		update_catalogue_content_ref('news',strval($id),'');
 	}
 
 	$_title=get_translated_text($title);

@@ -247,7 +247,7 @@ function ocf_delete_topic($topic_id,$reason='',$post_target_topic_id=NULL,$check
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($topic_id),'cf_type'=>'topic'));
+		update_catalogue_content_ref('topic',strval($topic_id),'');
 	}
 
 	require_code('ocf_general_action2');

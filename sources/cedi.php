@@ -203,7 +203,7 @@ function cedi_delete_post($post_id,$member=NULL)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($post_id),'cf_type'=>'wiki_post'));
+		update_catalogue_content_ref('wiki_post',strval($post_id),'');
 	}
 
 	// Stat
@@ -329,7 +329,7 @@ function cedi_delete_page($id)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'wiki_page'));
+		update_catalogue_content_ref('wiki_page',strval($id),'');
 	}
 
 	require_code('seo2');

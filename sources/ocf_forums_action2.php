@@ -196,7 +196,7 @@ function ocf_delete_forum($forum_id,$target_forum_id=NULL,$delete_topics=0)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($forum_id),'cf_type'=>'forum'));
+		update_catalogue_content_ref('forum',strval($forum_id),'');
 	}
 
 	log_it('DELETE_FORUM',strval($forum_id),$name);

@@ -152,7 +152,7 @@ function delete_author($author)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$author,'cf_type'=>'author'));
+		update_catalogue_content_ref('author',$author,'');
 	}
 
 	log_it('DELETE_AUTHOR',$author);

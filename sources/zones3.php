@@ -219,7 +219,7 @@ function actual_delete_zone_lite($zone)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$zone,'cf_type'=>'zone'));
+		update_catalogue_content_ref('zone',$zone,'');
 	}
 
 	log_it('DELETE_ZONE',$zone);
