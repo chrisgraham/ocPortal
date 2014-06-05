@@ -201,7 +201,10 @@ function cedi_delete_post($post_id,$member=NULL)
 
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_DELETE_POST','the_page'=>$post_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($post_id),'cf_type'=>'wiki_post'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($post_id),'cf_type'=>'wiki_post'));
+	}
 
 	// Stat
 	update_stat('num_seedy_posts',-1);
@@ -324,7 +327,10 @@ function cedi_delete_page($id)
 	$GLOBALS['SITE_DB']->query_delete('seedy_children',array('child_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('seedy_changes',array('the_page'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'wiki_page'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'wiki_page'));
+	}
 
 	require_code('seo2');
 	seo_meta_erase_storage('seedy_page',strval($id));

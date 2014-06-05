@@ -1392,11 +1392,6 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 			$category_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_parent_id','cc_title'),array('id'=>$category_id),'',1);
 			if (!array_key_exists(0,$category_rows))
 			{
-				// Auto-fix
-				$c_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('cc_parent_id'=>$category_id));
-				$root=$GLOBALS['SITE_DB']->query_value('catalogue_categories','id',array('cc_parent_id'=>NULL,'c_name'=>$c_name));
-				$GLOBALS['SITE_DB']->query_update('catalogue_categories',array('cc_parent_id'=>$root),array('cc_parent_id'=>$category_id));
-
 				fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html(strval($category_id))));
 			}
 			$PT_PAIR_CACHE[$category_id]=$category_rows[0];

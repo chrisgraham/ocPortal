@@ -1092,7 +1092,7 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('attachment',strval($row['id']))) continue;
+			if (import_check_if_imported('image',strval($row['id']))) continue;
 
 			$submitter=$on_same_msn?$row['submitter']:import_id_remap_get('member',$row['submitter'],true);
 			if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();

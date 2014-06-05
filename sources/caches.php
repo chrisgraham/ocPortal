@@ -136,7 +136,9 @@ function persistent_cache_delete($key)
 function persistent_cache_empty()
 {
 	// TODO: Fix dir in v10
-	$d=opendir(get_custom_file_base().'/persistent_cache');
+	$path=get_custom_file_base().'/persistent_cache';
+	if (!file_exists($path)) return;
+	$d=opendir($path);
 	while (($e=readdir($d))!==false)
 	{
 		if (substr($e,-4)=='.gcd')

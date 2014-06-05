@@ -327,10 +327,10 @@ class Hook_search_catalogue_entries
 			if (is_null($title_field)) return array(); // No fields in catalogue -- very odd
 			if ($g_or=='')
 			{
-				$rows=get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,$trans_fields,$where_clause,$content_where,str_replace('b_cv_value',$title_field,$remapped_orderer),'r.*,r.id AS id,r.cc_id AS r_cc_id,'.$title_field.' AS b_cv_value'.$extra_select,$nontrans_fields);
+				$rows=get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,$trans_fields,$where_clause,$content_where,$remapped_orderer,'r.*,r.id AS id,r.cc_id AS r_cc_id,'.$title_field.' AS b_cv_value'.$extra_select,$nontrans_fields);
 			} else
 			{
-				$rows=get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name','catalogues_category').' AND z.category_name=r.cc_id AND '.str_replace('group_id','z.group_id',$g_or).') LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access p ON ('.db_string_equal_to('p.module_the_name','catalogues_catalogue').' AND p.category_name=r.c_name AND '.str_replace('group_id','p.group_id',$g_or).')',$trans_fields,$where_clause,$content_where,str_replace('b_cv_value',$title_field,$remapped_orderer),'r.*,r.id AS id,r.cc_id AS r_cc_id,'.$title_field.' AS b_cv_value'.$extra_select,$nontrans_fields);
+				$rows=get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name','catalogues_category').' AND z.category_name=r.cc_id AND '.str_replace('group_id','z.group_id',$g_or).') LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access p ON ('.db_string_equal_to('p.module_the_name','catalogues_catalogue').' AND p.category_name=r.c_name AND '.str_replace('group_id','p.group_id',$g_or).')',$trans_fields,$where_clause,$content_where,$remapped_orderer,'r.*,r.id AS id,r.cc_id AS r_cc_id,'.$title_field.' AS b_cv_value'.$extra_select,$nontrans_fields);
 			}
 		} else
 		{

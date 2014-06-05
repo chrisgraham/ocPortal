@@ -137,7 +137,7 @@ class Module_admin_actionlog
 
 		// Possible selections for action type filter
 		$_action_type_list=array();
-		$rows1=$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('DISTINCT l_the_type'));
+		$rows1=(get_forum_type()=='ocf')?$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('DISTINCT l_the_type')):array();
 		$rows2=$GLOBALS['SITE_DB']->query_select('adminlogs',array('DISTINCT the_type'));
 		foreach ($rows1 as $row)
 		{

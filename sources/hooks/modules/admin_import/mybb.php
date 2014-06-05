@@ -302,7 +302,7 @@ class Hook_mybb
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'usergroups ORDER BY gid');
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('title',strval($row['gid']))) continue;
+			if (import_check_if_imported('group',strval($row['gid']))) continue;
 
 			$is_super_admin=($row['title']=='Administrator')?1:0;
 			$is_super_moderator=($row['title']=='Universal Moderator')?1:0;

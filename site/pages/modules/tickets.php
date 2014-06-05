@@ -447,6 +447,7 @@ class Module_tickets
 		if (!is_null($id))
 		{
 			$_temp=explode('_',$id);
+			if (!isset($_temp[1])) warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Normal topic, not a ticket!
 			$ticket_owner=intval($_temp[0]);
 			$ticket_id=$_temp[1];
 

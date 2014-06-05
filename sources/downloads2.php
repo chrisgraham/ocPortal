@@ -323,7 +323,10 @@ function delete_download_category($category_id)
 	require_code('files2');
 	delete_upload('uploads/grepimages','download_categories','rep_image','id',$category_id);
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($category_id),'cf_type'=>'download_category'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($category_id),'cf_type'=>'download_category'));
+	}
 
 	log_it('DELETE_DOWNLOAD_CATEGORY',strval($category_id),get_translated_text($category));
 
@@ -882,7 +885,10 @@ function delete_download($id,$leave=false)
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'download'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'download'));
+	}
 
 	log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 	delete_lang($myrow['name']);

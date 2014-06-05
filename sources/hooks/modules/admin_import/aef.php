@@ -186,7 +186,7 @@ class Hook_aef
 
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('mem_gr_name',strval($row['member_group']))) continue;
+			if (import_check_if_imported('group',strval($row['member_group']))) continue;
 
 			$is_super_admin=($row['mem_gr_name']=='Administrator')?1:0;
 			$is_super_moderator=($row['mem_gr_name']=='Universal Moderator')?1:0;

@@ -55,28 +55,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	header('Content-Type: text/plain');
-	@ini_set('ocproducts.xss_detect','0');
-
-	$db_meta=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'LONG_TRANS'));
-	foreach ($db_meta as $dbm)
-	{
-		if ($dbm['m_table']=='f_members')
-		{
-			$submitter_field_name='id';
-		} else
-		{
-			$submitter_field_name=$GLOBALS['SITE_DB']->query_value_null_ok('db_meta','m_name',array('m_type'=>'USER','m_table'=>$dbm['m_table']));
-		}
-		if ((!is_null($submitter_field_name)) && (($submitter_field_name=='id') || (strpos($submitter_field_name,'the_user')!==false) || (strpos($submitter_field_name,'submitter')!==false)))
-		{
-			$sql='UPDATE '.get_table_prefix().'translate t JOIN '.get_table_prefix().$dbm['m_table'].' r ON r.'.$dbm['m_name'].'=t.id SET text_parsed=\'\',source_user=r.'.$submitter_field_name;
-			echo $sql.";\n";
-			$db=$GLOBALS['SITE_DB'];
-			if (substr($dbm['m_table'],0,2)=='f_') $db=$GLOBALS['FORUM_DB'];
-			$db->query($sql);
-		}
-	}
-
-	echo "SQL executed!\n\n";
 }

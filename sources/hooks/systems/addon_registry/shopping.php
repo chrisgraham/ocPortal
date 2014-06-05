@@ -59,7 +59,8 @@ class Hook_addon_registry_shopping
 	{
 		return array(
 			'requires'=>array(
-				'ecommerce'
+				'ecommerce',
+				'catalogues',
 			),
 			'recommends'=>array(),
 			'conflicts_with'=>array()

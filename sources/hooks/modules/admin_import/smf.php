@@ -283,7 +283,7 @@ class Hook_smf
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'membergroups ORDER BY ID_GROUP');
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('title',strval($row['ID_GROUP']))) continue;
+			if (import_check_if_imported('group',strval($row['ID_GROUP']))) continue;
 
 			$is_super_admin=($row['groupName']=='Administrator')?1:0;
 			$is_super_moderator=($row['groupName']=='Global Moderator')?1:0;

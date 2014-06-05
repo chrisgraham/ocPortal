@@ -85,7 +85,7 @@ The 'ocp merge' importer cannot:
 Remember:
  - you must specify to import from an ocPortal database, not a forum database.
 
-The importer does not cover Comcode pages. However these are just .txt files that may be copied from one install to another.
+The importer does not cover Comcode pages. However these are just .txt files ([tt]<zone>/pages/comcode_custom/<language>/<page>.txt[/tt]) that may be copied from one install to another.
 
 Please note that URL and page-link links will not be altered during the import, meaning it is likely they will need updating (because resource IDs change).
 
