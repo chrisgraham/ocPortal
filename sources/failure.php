@@ -1300,6 +1300,10 @@ function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_tex
 				elseif (preg_match('#^\w*:\w*#',$message_raw)!=0) // Looks like a page-link
 				{
 					list($zone,$map,$hash)=page_link_decode($message_raw);
+					if ((isset($map['error_message'])) && ($map['error_message']==''))
+					{
+						$map['error_message']=$natural_text;
+					}
 					$url=static_evaluate_tempcode(build_url($map,$zone,array(),false,false,false,$hash));
 					require_code('site2');
 					assign_refresh($url,0.0);
