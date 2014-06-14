@@ -514,6 +514,7 @@ function uninstall_block($block)
 
 /**
  * Extract code to execute the requested functions with the requested parameters from the module requested.
+ * If it's not a module, returns an empty array.
  *
  * @param  ID_TEXT		The zone it is in
  * @param  ID_TEXT		The page name
@@ -657,7 +658,7 @@ function _find_all_pages($zone,$type,$ext='php',$keep_ext_on=false,$cutoff_time=
 	{
 		while (($file=readdir($dh))!==false)
 		{
-			if ((substr($file,-4)=='.'.$ext) && (file_exists($stub.'/'.$module_path.'/'.$file)) && (preg_match('#^[\w\-\.]*$#',substr($file,0,strlen($file)-4))!=0))
+			if ((substr($file,-4)=='.'.$ext) && (file_exists($stub.'/'.$module_path.'/'.$file)) && (preg_match('#^[\w\-]*$#',substr($file,0,strlen($file)-4))!=0))
 			{
 				if (!is_null($cutoff_time))
 					if (filectime($stub.'/'.$module_path.'/'.$file)<$cutoff_time) continue;
