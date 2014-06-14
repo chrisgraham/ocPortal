@@ -608,6 +608,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 {
 	if (!addon_installed('securitylogging')) return false;
+	if ($ip=='') return false;
 
 	require_code('support2');
 	if ((!is_null($ban_until)) && (ip_banned($ip,true))) return false; // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!

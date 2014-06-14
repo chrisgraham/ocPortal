@@ -180,6 +180,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 	}
 
 	if (!addon_installed('securitylogging')) return false;
+	if ($ip=='') return false;
 
 	// Check exclusions first
 	$_exclusions=get_option('spam_check_exclusions',true);
