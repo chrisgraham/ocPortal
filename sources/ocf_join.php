@@ -237,7 +237,13 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 		if (get_option('is_on_invites')=='1')
 		{
 			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_inviter',array('i_email_address'=>$email_address,'i_taken'=>0));
-			if (is_null($test)) warn_exit(do_lang_tempcode('NO_INVITE'));
+			if (is_null($test))
+			{
+				$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_invites','i_email_address',array('i_email_address'=>$email_address));
+				if (!is_null($test)) warn_exit(do_lang_tempcode('INVITE_ALREADY_JOINED'));
+
+				warn_exit(do_lang_tempcode('NO_INVITE'));
+			}
 		}
 
 		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$email_address,'i_taken'=>0),'',1);
