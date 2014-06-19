@@ -412,10 +412,10 @@ function has_category_access($member,$module,$category)
 	global $SITE_INFO;
 	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))) || ($member==$GLOBALS['FORUM_DRIVER']->get_guest_id()))
 	{
-		$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.')',1,NULL,false,true);
+		$perhaps=$db->query('SELECT DISTINCT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.')',1,NULL,false,true);
 	} else
 	{
-		$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',1,NULL,false,true);
+		$perhaps=$db->query('SELECT DISTINCT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT DISTINCT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval((integer)$member).' AND active_until>'.strval(time()).')',1,NULL,false,true);
 	}
 
 	$result=(count($perhaps)>0);

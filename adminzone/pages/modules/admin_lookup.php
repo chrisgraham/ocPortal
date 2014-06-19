@@ -225,7 +225,7 @@ class Module_admin_lookup
 				{
 					$member_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_member_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
 				}
-				if (($ip!='') && ($ip!=get_ip_address()))
+				if (($ip!='') && ($ip!=get_ip_address()) && ($ip!=ocp_srv('SERVER_ADDR')))
 				{
 					$ip_ban_link=do_template('ACTION_LOGS_TOGGLE_LINK',array('URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_ip_ban','id'=>$ip),get_module_zone('admin_actionlog'))));
 				}

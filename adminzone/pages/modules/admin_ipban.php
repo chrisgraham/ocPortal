@@ -176,7 +176,15 @@ class Module_admin_ipban
 			if (trim($ban)=='') continue;
 			if (!in_array($ban,$old_bans))
 			{
-				if (preg_match('#^(\d+|\*)\.(\d+|\*)\.(\d+|\*)\.(\d+|\*)(.*)#',$ban,$matches)==0)
+				if ($ban==get_ip_address())
+				{
+					attach_message(do_lang_tempcode('WONT_BAN_SELF',$ban),'warn');
+				}
+				elseif ($ban==ocp_srv('SERVER_ADDR'))
+				{
+					attach_message(do_lang_tempcode('WONT_BAN_SERVER',$ban),'warn');
+				}
+				elseif (preg_match('#^(\d+|\*)\.(\d+|\*)\.(\d+|\*)\.(\d+|\*)(.*)#',$ban,$matches)==0)
 				{
 					attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',$ban),'warn');
 				} else

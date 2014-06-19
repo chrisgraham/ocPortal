@@ -1121,7 +1121,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 												$groups=_get_where_clause_groups($source_member);
 												if (!is_null($groups))
 												{
-													$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')'));
+													$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT DISTINCT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')'));
 													$new_rows=array();
 													foreach ($rows as $row)
 													{

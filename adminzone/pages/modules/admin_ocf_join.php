@@ -617,6 +617,8 @@ class Module_admin_ocf_join
 
 		$at=mixed();
 
+		disable_php_memory_limit(); // Even though we split into chunks, PHP does leak memory :(
+
 		$limit=get_param_integer('max',200); // Set 'max' if you don't want all records
 
 		$start=0;
@@ -797,6 +799,8 @@ class Module_admin_ocf_join
 	function _import_csv()
 	{
 		$title=get_screen_title('IMPORT_MEMBER_CSV');
+
+		disable_php_memory_limit(); // Even though we split into chunks, PHP does leak memory :(
 
 		$GLOBALS['HELPER_PANEL_PIC']='pagepics/import_csv';
 

@@ -2471,7 +2471,14 @@ END;
 		$groups=_get_where_clause_groups(get_member());
 		if (!is_null($groups))
 		{
-			$perhaps=$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','forums').' AND ('.$groups.')');
+			global $SITE_INFO;
+			if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
+			{
+				$perhaps=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
+			} else
+			{
+				$perhaps=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
+			}
 			$or_list='';
 			foreach ($perhaps as $row)
 			{

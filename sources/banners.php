@@ -154,7 +154,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 			$groups=_get_where_clause_groups(get_member());
 			if (!is_null($groups))
 			{
-				$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')'));
+				$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT DISTINCT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')'));
 				$new_rows=array();
 				foreach ($rows as $row)
 				{
