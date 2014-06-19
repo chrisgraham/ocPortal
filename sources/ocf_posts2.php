@@ -91,12 +91,18 @@ function render_post_box($row,$use_post_title=false)
 			$poster_details=new ocp_tempcode();
 		}
 
-		if ((!is_guest($row['p_poster'])) && (!is_null($primary_group)))
+		if (addon_installed('ocf_forum'))
 		{
-			$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($row['p_poster']),'ID'=>strval($row['p_poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($row['p_poster'],false,true),'POSTER_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'HIGHLIGHT_NAME'=>NULL));
+			if ((!is_guest($row['p_poster'])) && (!is_null($primary_group)))
+			{
+				$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($row['p_poster']),'ID'=>strval($row['p_poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($row['p_poster'],false,true),'POSTER_USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['p_poster']),'HIGHLIGHT_NAME'=>NULL));
+			} else
+			{
+				$poster=do_template('OCF_POSTER_GUEST',array('LOOKUP_IP_URL'=>'','POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>($row['p_poster_name_if_guest']!='')?$row['p_poster_name_if_guest']:do_lang('GUEST')));
+			}
 		} else
 		{
-			$poster=do_template('OCF_POSTER_GUEST',array('LOOKUP_IP_URL'=>'','POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>($row['p_poster_name_if_guest']!='')?$row['p_poster_name_if_guest']:do_lang('GUEST')));
+			$poster=make_string_tempcode(escape_html($post['poster_username']));
 		}
 
 		$poster_details_cache[$row['p_poster']]=array($poster_title,$avatar,$post_avatar,$rank_images,$poster_details,$poster);

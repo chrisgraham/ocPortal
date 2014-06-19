@@ -783,7 +783,7 @@ class OCP_Topic
 					} else
 					{
 						$custom_fields=new ocp_tempcode();
-						if (array_key_exists('ip_address',$post))
+						if ((array_key_exists('ip_address',$post)) && (addon_installed('ocf_forum')))
 						{
 							$custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('NAME'=>do_lang_tempcode('IP_ADDRESS'),'VALUE'=>($post['ip_address']))));
 							$poster_details=do_template('OCF_GUEST_DETAILS',array('_GUID'=>'df42e7d5003834a60fdb3bf476b393c5','CUSTOM_FIELDS'=>$custom_fields));
@@ -793,13 +793,19 @@ class OCP_Topic
 						}
 					}
 				}
-				if (!is_guest($post['poster']))
+				if (addon_installed('ocf_forum'))
 				{
-					$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($post['poster']),'ID'=>strval($post['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),'POSTER_USERNAME'=>$post['poster_username']));
+					if (!is_guest($post['poster']))
+					{
+						$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>member_is_online($post['poster']),'ID'=>strval($post['poster']),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url($post['poster'],false,true),'POSTER_USERNAME'=>$post['poster_username']));
+					} else
+					{
+						$ip_link=((array_key_exists('ip_address',$post)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
+						$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'93107543c6a0138f379e7124b72b24ff','LOOKUP_IP_URL'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$post['poster_username']));
+					}
 				} else
 				{
-					$ip_link=((array_key_exists('ip_address',$post)) && (has_actual_page_access(get_member(),'admin_lookup')))?build_url(array('page'=>'admin_lookup','param'=>$post['ip_address']),get_module_zone('admin_lookup')):new ocp_tempcode();
-					$poster=do_template('OCF_POSTER_GUEST',array('_GUID'=>'93107543c6a0138f379e7124b72b24ff','LOOKUP_IP_URL'=>$ip_link,'POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$post['poster_username']));
+					$poster=make_string_tempcode(escape_html($post['poster_username']));
 				}
 			}
 
