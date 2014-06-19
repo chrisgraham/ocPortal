@@ -511,6 +511,8 @@ class Hook_addon_registry_quizzes
 			lorem_globalise(do_lorem_template('MEMBER_QUIZ_ENTRIES',array(
 				'CATEGORIES'=>$categories,
 				'MEMBER_ID'=>placeholder_id(),
+				'SORTING'=>placeholder_table(),
+				'DELETE_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}

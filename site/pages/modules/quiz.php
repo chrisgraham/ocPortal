@@ -55,6 +55,7 @@ class Module_quiz
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entry_answer');
 
 		delete_privilege('bypass_quiz_repeat_time_restriction');
+		delete_privilege('bypass_quiz_timer');
 		delete_privilege('view_others_quiz_results');
 	}
 
@@ -104,6 +105,7 @@ class Module_quiz
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
 			add_privilege('QUIZZES','view_others_quiz_results',false);
+			add_privilege('QUIZZES','bypass_quiz_timer',false);
 		}
 
 		if (is_null($upgrade_from))
@@ -247,7 +249,7 @@ class Module_quiz
 
 			$quiz_name=get_translated_text($quiz['q_name']);
 			$title_to_use=do_lang_tempcode('QUIZ_THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$quiz_id,$quiz_name));
-			$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
+			$title_to_use_2=do_lang('QUIZ_THIS_WITH',do_lang($quiz['q_type']),$quiz_name);
 			seo_meta_load_for('quiz',strval($quiz_id),$title_to_use_2);
 
 			breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))));
@@ -428,6 +430,9 @@ class Module_quiz
 		$title_to_use=$this->title_to_use;
 		$title_to_use_2=$this->title_to_use_2;
 
+		if (has_specific_permission(get_member(),'bypass_quiz_timer'))
+			$quiz['q_timeout']=NULL;
+
 		$this->enforcement_checks($quiz);
 
 		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$quiz_id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
@@ -511,6 +516,9 @@ class Module_quiz
 		$quiz=$this->quiz;
 		$quiz_name=get_translated_text($quiz['q_name']);
 
+		if (has_specific_permission(get_member(),'bypass_quiz_timer'))
+			$quiz['q_timeout']=NULL;
+
 		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$quiz_id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (is_null($last_visit_time)) warn_exit(do_lang_tempcode('QUIZ_TWICE'));
 		if (!is_null($quiz['q_timeout']))
@@ -533,7 +541,7 @@ class Module_quiz
 		}
 		foreach ($questions as $i=>$question)
 		{
-			if ($question['q_type']=='SHORT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
+			if ($question['q_type']=='SHORT' || $question['q_type']=='SHORT_STRICT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
 			{
 				$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 					'q_entry'=>$entry_id,

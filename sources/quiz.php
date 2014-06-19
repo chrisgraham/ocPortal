@@ -37,6 +37,9 @@ function render_quiz_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$name=get_translated_text($row['q_name']);
 	$start_text=get_translated_tempcode($row['q_start_text']);
 
+	if (has_specific_permission(get_member(),'bypass_quiz_timer'))
+		$row['q_timeout']=NULL;
+
 	$timeout=is_null($row['q_timeout'])?'':display_time_period($row['q_timeout']*60);
 	$redo_time=((is_null($row['q_redo_time'])) || ($row['q_redo_time']==0))?'':display_time_period($row['q_redo_time']*60*60);
 
@@ -167,6 +170,7 @@ function render_quiz($questions)
 				break;
 
 			case 'SHORT':
+			case 'SHORT_STRICT':
 				$fields->attach(form_input_line($question,$description,$name,'',$q['q_required']==1));
 				break;
 
@@ -233,7 +237,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 
 		$question_text=get_translated_text($question['q_question_text']);
 
-		if ($question['q_type']=='SHORT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
+		if ($question['q_type']=='SHORT' || $question['q_type']=='SHORT_STRICT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
 		{
 			$given_answer=$_given_answers[$question['id']][0];
 
@@ -258,7 +262,7 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
 						$correct_explanation=get_translated_text($a['q_explanation']);
 					}
 				}
-				$was_correct=typed_answer_is_correct($given_answer,$question['answers']);
+				$was_correct=typed_answer_is_correct($given_answer,$question['answers'],$question['q_type']=='SHORT_STRICT');
 				if ($was_correct)
 				{
 					$marks++;
@@ -485,18 +489,31 @@ function score_quiz($entry_id,$quiz_id=NULL,$quiz=NULL,$questions=NULL,$reveal_a
  *
  * @param  string			The given (typed) answer
  * @param  array			Answer rows
+ * @param  boolean		Whether to do a strict check
  * @return boolean		Whether it is correct
  */
-function typed_answer_is_correct($given_answer,$all_answers)
+function typed_answer_is_correct($given_answer,$all_answers,$strict=false)
 {
-	$filtered_given_answer=preg_replace('#[^\d\w]#','',strtolower($given_answer));
+	if ($strict)
+	{
+		$filtered_given_answer=trim($given_answer);
+	} else
+	{
+		$filtered_given_answer=preg_replace('#[^\d\w]#','',strtolower($given_answer));
+	}
 	if ($filtered_given_answer=='') return false;
 
 	$has_correct=false;
 	$has_incorrect=false;
 	foreach ($all_answers as $a)
 	{
-		$filtered_answer=preg_replace('#[^\d\w]#','',strtolower(get_translated_text($a['q_answer_text'])));
+		if ($strict)
+		{
+			$filtered_answer=trim(get_translated_text($a['q_answer_text']));
+		} else
+		{
+			$filtered_answer=preg_replace('#[^\d\w]#','',strtolower(get_translated_text($a['q_answer_text'])));
+		}
 
 		if (get_translated_text($a['q_answer_text'])==$given_answer) return ($a['q_is_correct']==1); // Match exactly
 

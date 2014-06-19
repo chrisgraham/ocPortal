@@ -56,11 +56,28 @@ class Hook_members_quiz
 		require_lang('quiz');
 		require_code('quiz');
 
+		// Sorting
+		$order=get_param('sort_quiz_results','e.q_time DESC',true);
+		$_selectors=array(
+			't.text_original ASC'=>'ALPHABETICAL_FORWARD',
+			't.text_original DESC'=>'ALPHABETICAL_BACKWARD',
+			'e.q_time ASC'=>'OLDEST_RESULTS_FIRST',
+			'e.q_time DESC'=>'NEWEST_RESULTS_FIRST'
+		);
+		$selectors=new ocp_tempcode();
+		foreach ($_selectors as $selector_value=>$selector_name)
+		{
+			$selected=($order==$selector_value);
+			$selectors->attach(do_template('PAGINATION_SORTER',array('SELECTED'=>$selected,'NAME'=>do_lang_tempcode($selector_name),'VALUE'=>$selector_value)));
+		}
+		$sort_url=get_self_url(false,false,array('sort_quiz_results'=>NULL));
+		$sorting=do_template('PAGINATION_SORT',array('SORT'=>'sort_quiz_results','URL'=>$sort_url,'SELECTORS'=>$selectors));
+
 		$entries=$GLOBALS['SITE_DB']->query_select(
-			'quiz_entries e JOIN '.get_table_prefix().'quizzes q ON q.id=e.q_quiz',
+			'quiz_entries e JOIN '.get_table_prefix().'quizzes q ON q.id=e.q_quiz JOIN '.get_table_prefix().'translate t ON t.id=q.q_name AND '.db_string_equal_to('t.language',user_lang()),
 			array('e.id AS e_id','e.q_time','q.*'),
 			array('q_member'=>$member_id,'q_type'=>'TEST','q_validated'=>1),
-			'ORDER BY e.q_time DESC'
+			'ORDER BY '.$order
 		);
 		//$has_points=($GLOBALS['SITE_DB']->query_select_value('quizzes','SUM(q_points_for_passing)',array('q_type'=>'TEST','q_validated'=>1))>0.0);
 		$categories=array();
@@ -154,7 +171,18 @@ class Hook_members_quiz
 			$category['RUNNING_OUT_OF__CREDIT']=strval($category['RUNNING_OUT_OF__CREDIT']);
 		}
 
-		return array(do_template('MEMBER_QUIZ_ENTRIES',array('CATEGORIES'=>$categories,'MEMBER_ID'=>strval($member_id))));
+		$delete_url=new ocp_tempcode();
+		if (has_actual_page_access(get_member(),'admin_quiz'))
+		{
+			$delete_url=build_url(array('page'=>'admin_quiz','type'=>'delete_quiz_results'),get_module_zone('admin_quiz'));
+		}
+
+		return array(do_template('MEMBER_QUIZ_ENTRIES',array(
+			'CATEGORIES'=>$categories,
+			'MEMBER_ID'=>strval($member_id),
+			'SORTING'=>$sorting,
+			'DELETE_URL'=>$delete_url,
+		)));
 	}
 }
 
