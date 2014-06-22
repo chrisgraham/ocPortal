@@ -405,6 +405,7 @@ class Hook_addon_registry_testing_platform
 			'_tests/tests/unit_tests/news.php',
 			'_tests/tests/unit_tests/news_category.php',
 			'_tests/tests/unit_tests/newsletter.php',
+			'_tests/tests/unit_tests/ocp_merge.php',
 			'_tests/tests/unit_tests/points.php',
 			'_tests/tests/unit_tests/poll.php',
 			'_tests/tests/unit_tests/post_template.php',
