@@ -54,9 +54,12 @@ function _mail_css_rep_callback($matches)
 {
 	global $CID_IMG_ATTACHMENT;
 	$cid=uniqid('',true).'@'.get_domain();
-	if ((basename($matches[1])!='keyboard.png') && (basename($matches[1])!='email_link.png') && (basename($matches[1])!='external_link.png'))
+	if ((basename($matches[1])!='block_background.png') && (basename($matches[1])!='gradient.png') && (basename($matches[1])!='keyboard.png') && (basename($matches[1])!='email_link.png') && (basename($matches[1])!='external_link.png'))
+	{
 		$CID_IMG_ATTACHMENT[$cid]=$matches[1];
-	return 'url(\'cid:'.$cid.'\')';
+		return 'url(\'cid:'.$cid.'\')';
+	}
+	return 'none';
 }
 
 /**
@@ -754,7 +757,7 @@ function filter_css($css,$context)
 	$count=preg_match_all('#\sid=["\']([^"\']*)["\']#',$context,$matches);
 	for ($i=0;$i<$count;$i++)
 	{
-		$ids[]=$matches[1][$i];
+		$ids[$matches[1][$i]]=true;
 	}
 
 	// Find out all our classes
@@ -764,6 +767,15 @@ function filter_css($css,$context)
 	{
 		if ($matches[1][$i]=='') continue;
 		$classes=array_merge($classes,preg_split('#\s+#',$matches[1][$i],-1,PREG_SPLIT_NO_EMPTY));
+	}
+	$classes=array_flip($classes);
+
+	// Find all our XHTML tags
+	$tags=array();
+	$count=preg_match_all('#<(\w+)([^\w])#',$context,$matches);
+	for ($i=0;$i<$count;$i++)
+	{
+		$tags[$matches[1][$i]]=true;
 	}
 
 	// Strip comments from CSS. This optimises, and also avoids us needing to do a sophisticated parse
@@ -795,33 +807,44 @@ function filter_css($css,$context)
 						$selector=trim($selector);
 
 						if (strpos($selector,'@media print')!==false) break;
+						if (strpos($selector,'::selection')!==false) continue;
+						if (strpos($selector,'a[href^="mailto:"]')!==false) continue;
+						if (strpos($selector,'a[target="_blank"]')!==false) continue;
 
-						// We let all tag-name selectors through if the tag exists in the document, unless they contain a class/ID specifier -- in which case we toe to the presence of that class/ID
-						if ((strpos($selector,'.')===false) && (strpos($selector,'#')===false) && (preg_match('#(^|\s)(\w+)([\[\#\.:\s]|$)#',$selector,$matches)!=0))
-						{
-							$applies=true;
-							break;
-						}
+						$matches=array();
 
 						// ID selectors
-						foreach ($ids as $id)
+						$num_matches=preg_match_all('#\#(\w+)#',$selector,$matches);
+						for ($i=0;$i<$num_matches;$i++)
 						{
-							if (preg_match('#\#'.preg_quote($id,'#').'([\[\.:\s]|$)#',$selector)!=0)
+							if (!isset($ids[$matches[1][$i]]))
 							{
-								$applies=true;
-								break;
+								continue 2;
 							}
 						}
 
 						// Class name selectors
-						foreach ($classes as $class)
+						$num_matches=preg_match_all('#\.(\w+)#',$selector,$matches);
+						for ($i=0;$i<$num_matches;$i++)
 						{
-							if (preg_match('#\.'.preg_quote($class,'#').'([\[\#:\s]|$)#',$selector)!=0)
+							if (!isset($classes[$matches[1][$i]]))
 							{
-								$applies=true;
-								break;
+								continue 2;
 							}
 						}
+
+						// Tag selectors
+						$num_matches=preg_match_all('#(^|\s|>)(\w+)#',$selector,$matches);
+						for ($i=0;$i<$num_matches;$i++)
+						{
+							if (!isset($tags[$matches[2][$i]]))
+							{
+								continue 2;
+							}
+						}
+
+						$applies=true;
+						break;
 					}
 					if ($applies)
 					{
