@@ -559,8 +559,10 @@ class Module_admin_themes
 
 		$fields=new ocp_tempcode();
 		$site_default_theme=preg_replace('#[^\w\-\.\d]#','_',get_site_name());
-		if ($name!='default') $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode(file_exists(get_custom_file_base().'/themes/'.$site_default_theme)?'DESCRIPTION_CODENAME_THEME':'DESCRIPTION_CODENAME_THEME_HELPER',escape_html($site_default_theme)),'theme',$name,true));
 		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
+		if ($name!='default') $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode(file_exists(get_custom_file_base().'/themes/'.$site_default_theme)?'DESCRIPTION_CODENAME_THEME':'DESCRIPTION_CODENAME_THEME_HELPER',escape_html($site_default_theme)),'theme',$name,true));
+
+		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
 		$fields->attach(form_input_line(do_lang_tempcode('AUTHOR'),do_lang_tempcode('DESCRIPTION_AUTHOR_THEME'),'author',$author,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_WIDE'),do_lang_tempcode('DESCRIPTION_SUPPORTS_WIDE'),'supports_wide',$supports_wide==1));
@@ -603,6 +605,8 @@ class Module_admin_themes
 		if (post_param_integer('use_on_all',0)==1)
 		{
 			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'zones SET zone_theme=\''.db_escape_string($theme).'\' WHERE '.db_string_not_equal_to('zone_name','cms').' AND '.db_string_not_equal_to('zone_name','adminzone'));
+
+			attach_message(do_lang_tempcode('THEME_MADE_LIVE'),'inform');
 		}
 		erase_persistent_cache();
 
@@ -674,6 +678,14 @@ class Module_admin_themes
 		require_javascript('javascript_ajax');
 		$script=find_script('snippet');
 		$javascript="
+			var title=document.getElementById('title');
+			title.onchange=function() {
+				var codename=document.getElementById('theme');
+				if (codename.value=='')
+				{
+					codename.value=title.value.replace(/[^a-zA-Z0-9]/g,'');
+				}
+			}
 			var form=document.getElementById('main_form');
 			form.old_submit=form.onsubmit;
 			form.onsubmit=function()

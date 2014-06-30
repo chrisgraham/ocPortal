@@ -282,8 +282,8 @@ class Module_login
 				$refresh=new ocp_tempcode();
 			} else
 			{
-				$post=build_keep_post_fields(array('redirect','redirect_passon'));
-				$redirect_passon=post_param('redirect_passon',NULL);
+				$post=build_keep_post_fields(array('login_username','password','remember','login_invisible','redirect'));
+				$redirect_passon=post_param('redirect_passon',NULL); // redirect_passon is used when there are POST fields, as it says what the redirect will be on this post-login-check hop (post fields prevent us doing an immediate HTTP-level redirect).
 				if (!is_null($redirect_passon))
 					$post->attach(form_input_hidden('redirect',enforce_sessioned_url($redirect_passon)));
 				$refresh=do_template('JS_REFRESH',array('_GUID'=>'c7d2f9e7a2cc637f3cf9ac4d1cf97eca','FORM_NAME'=>'redir_form'));
