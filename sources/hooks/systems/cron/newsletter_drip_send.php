@@ -35,7 +35,7 @@ class Hook_cron_newsletter_drip_send
 
 		$time=time();
 		$last_time=intval(get_value('last_newsletter_drip_send'));
-		if (($last_time>time()-$minutes_between_sends*60) && (!/*we do allow an admin to force it by CRON URL*/$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) return;
+		if (($last_time>time()-$minutes_between_sends*60-5/*Accomodate for slight startup time changes*/) && (!/*we do allow an admin to force it by CRON URL*/$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) return;
 		set_value('last_newsletter_drip_send',strval($time));
 
 		$to_send=$GLOBALS['SITE_DB']->query_select('newsletter_drip_send',array('*'),NULL,'ORDER BY d_inject_time DESC',$mails_per_send);

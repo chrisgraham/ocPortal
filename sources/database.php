@@ -1014,7 +1014,7 @@ class database_driver
 		}
 
 		$lang_strings_expecting=array();
-		if ((isset($lang_fields[0])) && (function_exists('user_lang')))
+		if ((isset($lang_fields[0])) && (function_exists('user_lang')) && ((is_null($start)) || ($start<200)))
 		{
 			$lang=user_lang(); // We can we assume this, as we will cache against it -- if subsequently code wants something else it'd be a cache miss which is fine
 

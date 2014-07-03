@@ -467,8 +467,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		$order='compound_rating';
 	}
 
-	$translate_join_type=(get_value('alternate_search_join_type')==='1')?'LEFT JOIN':'JOIN';
-
 	// Defined-keywords/tags search
 	if ((get_param_integer('keep_just_show_query',0)==0) && (!is_null($meta_type)) && ($content!=''))
 	{
@@ -489,18 +487,18 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			{
 				if (($field=='') || ($field=='!') || (strpos($select,'t1.text_original')===false)) continue;
 
-				$extra_join.=' '.$translate_join_type.' '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+				$extra_join.=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 			}
 			if (!db_has_subqueries($db->connection_read) || true /* Forced this old code to run because the "optimisation" does not work for larger result sets */)
 			{
-				$_keywords_query=$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+				$_keywords_query=$table_clause.' JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
 				$_keywords_query.=' WHERE '.$keywords_where;
 				$_keywords_query.=(($where_clause!='')?(' AND '.$where_clause):'');
 			} else
 			{
-				$_keywords_query=$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+				$_keywords_query=$table_clause.' JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
 				$_keywords_query.=' WHERE '.$keywords_where;
-				$_keywords_query.=(($where_clause!='')?(' AND tm.id IN (SELECT m.id FROM '.$table_clause.' '.$translate_join_type.' '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') '.$translate_join_type.' '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).' WHERE '.$where_clause.' AND '.$keywords_where.')'):'');
+				$_keywords_query.=(($where_clause!='')?(' AND tm.id IN (SELECT m.id FROM '.$table_clause.' JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).' WHERE '.$where_clause.' AND '.$keywords_where.')'):'');
 			}
 
 			$keywords_query='SELECT '.$select.' FROM '.$_keywords_query;
@@ -553,7 +551,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			{
 				if ((strpos($select,'t'.strval($i).'.text_original')!==false) || (strpos($where_clause,'t'.strval($i).'.text_original')!==false))
 				{
-					$tc_add=' '.$translate_join_type.' '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+					$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 					$orig_table_clause.=$tc_add;
 				}
 			}
@@ -563,7 +561,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				if ($field==$order) $order='t'.$i.'.text_original'; // Ah, remap to the textual equivalent then
 
-				$tc_add=' '.$translate_join_type.' '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+				$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
 				if (strpos($orig_table_clause,$tc_add)!==false) $tc_add='';
 
 				if (($only_titles) && ($i!=0)) break;

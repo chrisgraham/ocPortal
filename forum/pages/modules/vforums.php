@@ -149,42 +149,23 @@ class Module_vforums
 		$forum_name=do_lang_tempcode('VIRTUAL_FORUM');
 
 		// Find topics
-		$extra='';
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $extra='t_validated=1';
-		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-		{
-			$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);
-			$group_or_list='';
-			foreach ($groups as $group)
-			{
-				if ($group_or_list!='') $group_or_list.=' OR ';
-				$group_or_list.='group_id='.strval((integer)$group);
-			}
-
-			if ($extra!='') $extra.=' AND ';
-			$or_list='';
-			global $SITE_INFO;
-			if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
-			{
-				$forum_access=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
-			} else
-			{
-				$forum_access=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
-			}
-			foreach ($forum_access as $access)
-			{
-				if ($or_list!='') $or_list.=' OR ';
-				$or_list.='t_forum_id='.strval((integer)$access['category_name']);
-			}
-			$extra.='('.$or_list.')';
-		}
-		if ($extra!='') $extra=' AND ('.$extra.') ';
+		$extra=' AND ';
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $extra.='t_validated=1 AND ';
+		require_code('ocf_forums');
+		$extra.=get_forum_access_sql('top.t_forum_id');
 		$max_rows=0;
 		$topic_rows=array();
 		foreach (is_array($condition)?$condition:array($condition) as $_condition)
 		{
-			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL ORDER BY '.$order;
-			$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,t.text_parsed AS _trans_post,l_time'.$query,$max,$start));
+			if ($start<200)
+			{
+				$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL ORDER BY '.$order;
+				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,t.text_parsed AS _trans_post,l_time'.$query,$max,$start));
+			} else // deep search, so we need to make offset more efficient, trade-off is more queries
+			{
+				$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL ORDER BY '.$order;
+				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,NULL AS _trans_post,l_time'.$query,$max,$start));
+			}
 			//if (($start==0) && (count($topic_rows)<$max)) $max_rows+=$max; // We know that they're all on this screen
 			/*else */$max_rows+=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) '.$query);
 		}

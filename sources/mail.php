@@ -358,14 +358,17 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	$simplify_when_can=true; // Used for testing. Not actually needed
 
 	// Evaluate message. Needs doing early so we know if we have any headers
-	$GLOBALS['NO_LINK_TITLES']=true;
-	global $LAX_COMCODE;
-	$temp=$LAX_COMCODE;
-	$LAX_COMCODE=true;
-	$html_content=comcode_to_tempcode($message_raw,$as,$as_admin);
-	$LAX_COMCODE=$temp;
-	$GLOBALS['NO_LINK_TITLES']=false;
-	$attachments=array_merge(is_null($attachments)?array():$attachments,$EMAIL_ATTACHMENTS);
+	if (!$in_html)
+	{
+		$GLOBALS['NO_LINK_TITLES']=true;
+		global $LAX_COMCODE;
+		$temp=$LAX_COMCODE;
+		$LAX_COMCODE=true;
+		$html_content=comcode_to_tempcode($message_raw,$as,$as_admin);
+		$LAX_COMCODE=$temp;
+		$GLOBALS['NO_LINK_TITLES']=false;
+		$attachments=array_merge(is_null($attachments)?array():$attachments,$EMAIL_ATTACHMENTS);
+	}
 
 	// Headers
 	$website_email=get_option('website_email');

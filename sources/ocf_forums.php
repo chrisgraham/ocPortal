@@ -37,6 +37,52 @@ function init__ocf_forums()
 }
 
 /**
+ * Get SQL clause to limit a query to accessible forums.
+ *
+ * @param  ID_TEXT		Field name.
+ * @return string			SQL clause.
+ */
+function get_forum_access_sql($field)
+{
+	$groups=_get_where_clause_groups(get_member());
+
+	if (is_null($groups)) return '1=1';
+
+	global $SITE_INFO;
+	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
+	{
+		$perhaps=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
+	} else
+	{
+		$perhaps=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
+	}
+	if (count($perhaps)==0) return '0=1';
+
+	$forums=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id'));
+
+	$or_list='';
+	foreach ($perhaps as $row)
+	{
+		if ($or_list!='') $or_list.=' OR ';
+		$or_list.=$field.'='.strval((integer)$row['category_name']);
+	}
+
+	$perhaps2=array_flip(array_map('intval',collapse_1d_complexity('category_name',$perhaps)));
+	$not_list='1=1';
+	foreach ($forums as $forum)
+	{
+		if (!isset($perhaps2[$forum['id']]))
+		{
+			if ($not_list!='') $not_list.=' AND ';
+			$not_list.=$field.'<>'.strval($forum['id']);
+		}
+	}
+
+	if (strlen($not_list)<strlen($or_list)) return $not_list;
+	return '('.$or_list.')';
+}
+
+/**
  * Organise a list of forum rows into a tree structure.
  *
  * @param  array			The list of all forum rows (be aware that this will get modified for performance reasons).

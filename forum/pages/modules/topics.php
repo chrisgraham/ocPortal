@@ -2468,31 +2468,9 @@ END;
 		$fields->attach($this->get_poll_form_fields());
 
 		// Find polls we can grab
-		$groups=_get_where_clause_groups(get_member());
-		if (!is_null($groups))
-		{
-			global $SITE_INFO;
-			if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
-			{
-				$perhaps=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
-			} else
-			{
-				$perhaps=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$groups.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
-			}
-			$or_list='';
-			foreach ($perhaps as $row)
-			{
-				if ($or_list!='') $or_list.=' OR ';
-				$or_list.='t.t_forum_id='.strval((integer)$row['category_name']);
-			}
-			if ($or_list!='')
-			{
-				$polls=$GLOBALS['FORUM_DB']->query('SELECT p.*,t_cache_first_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls p ON p.id=t.t_poll_id WHERE ('.$or_list.') AND p.id IS NOT NULL ORDER BY id DESC',30);
-			} else $polls=array();
-		} else
-		{
-			$polls=$GLOBALS['FORUM_DB']->query('SELECT p.*,t_cache_first_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls p ON p.id=t.t_poll_id WHERE p.id IS NOT NULL ORDER BY id DESC',30);
-		}
+		require_code('ocf_forums');
+		$or_list=get_forum_access_sql('t.t_forum_id');
+		$polls=$GLOBALS['FORUM_DB']->query('SELECT p.*,t_cache_first_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls p ON p.id=t.t_poll_id WHERE ('.$or_list.') AND p.id IS NOT NULL ORDER BY id DESC',30);
 		if (count($polls)!=0)
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ALT_COPY_EXISTING_POLL'))));
