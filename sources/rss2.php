@@ -218,6 +218,8 @@ function backend_script()
 	// Firefox (and probably other browsers, but I didn't test) doesn't want to display Atom feeds inline if they're sent as text/xml+atom, even if the Content-Disposition is sent to inline :(
 	header('Content-Type: text/xml'); // application/rss+xml ?
 
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
 	$echo=do_template($prefix.'WRAPPER',array('FILTER'=>$filter,'CUTOFF'=>strval($cutoff),'MODE'=>$mode,'MODE_NICE'=>$mode_nice,'RSS_CLOUD'=>$rss_cloud,'VERSION'=>ocp_version_pretty(),'COPYRIGHT'=>$copyright,'DATE'=>$date,'LOGO_URL'=>$logo_url,'ABOUT'=>$site_about,'CONTENT'=>$content,'SELF_URL'=>get_self_url_easy()));
 	$echo->evaluate_echo();
 }

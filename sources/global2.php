@@ -286,6 +286,15 @@ function init__global2()
 
 	// Most critical things
 	require_code('support'); // A lot of support code is present in this
+	if (!running_script('webdav'))
+	{
+		$http_method=ocp_srv('REQUEST_METHOD');
+		if ($http_method!='GET' && $http_method!='POST' && $http_method!='HEAD' && $http_method!='')
+		{
+			header('HTTP/1.0 405 Method Not Allowed');
+			exit();
+		}
+	}
 	srand(make_seed());
 	mt_srand(make_seed());
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots

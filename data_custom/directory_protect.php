@@ -90,6 +90,8 @@ header('Expires: '.gmdate('D, d M Y H:i:s',time()+60*60*24*365).' GMT');
 $time=filemtime($_full);
 header('Last-Modified: '.gmdate('D, d M Y H:i:s',$time).' GMT');
 
+if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
 // Default to no resume
 $from=0;
 $new_length=$size;

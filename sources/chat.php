@@ -355,6 +355,8 @@ function chat_logs_script()
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
 
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
 	$message_contents=do_template('BASIC_HTML_WRAP',array('TITLE'=>do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'CONTENT'=>$message_contents));
 
 	echo $message_contents->evaluate();

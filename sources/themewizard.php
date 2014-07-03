@@ -384,8 +384,12 @@ function generate_logo($name,$slogan,$raw=false,$theme=NULL,$use='logo_template'
 	{
 		header('Content-type: image/png');
 		//header('Content-Disposition: attachment; filename="-logo.png"');
+
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
 		imagepng($img);
 		imagedestroy($img);
+
 		exit();
 	}
 

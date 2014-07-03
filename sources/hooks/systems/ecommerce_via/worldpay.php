@@ -95,7 +95,8 @@ class Hook_worldpay
 		$ipn_url=$this->get_ipn_url();
 		$email_address=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
 		$trans_id=$this->generate_trans_id();
-		$digest=md5(get_option('ipn_digest').':'.$trans_id.':'.float_to_raw_string($amount).':'.$currency);
+		$digest_option=get_option('ipn_digest');
+		$digest=md5((($digest_option=='')?($digest_option.':'):'').$trans_id.':'.float_to_raw_string($amount).':'.$currency);
 		$GLOBALS['SITE_DB']->query_insert('trans_expecting',array(
 			'id'=>$trans_id,
 			'e_purchase_id'=>$purchase_id,
@@ -150,7 +151,8 @@ class Hook_worldpay
 				$first_repeat=60*60*24*365*$length;
 				break;
 		}
-		$digest=md5(get_option('ipn_digest').':'.$trans_id.':'.float_to_raw_string($amount).':'.$currency.$length_units_2.strval($length));
+		$digest_option=get_option('ipn_digest');
+		$digest=md5((($digest_option=='')?($digest_option.':'):'').$trans_id.':'.float_to_raw_string($amount).':'.$currency.$length_units_2.strval($length));
 		$GLOBALS['SITE_DB']->query_insert('trans_expecting',array(
 			'id'=>$trans_id,
 			'e_purchase_id'=>$purchase_id,
