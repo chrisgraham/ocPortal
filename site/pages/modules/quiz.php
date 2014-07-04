@@ -430,7 +430,7 @@ class Module_quiz
 		$title_to_use=$this->title_to_use;
 		$title_to_use_2=$this->title_to_use_2;
 
-		if (has_specific_permission(get_member(),'bypass_quiz_timer'))
+		if (has_privilege(get_member(),'bypass_quiz_timer'))
 			$quiz['q_timeout']=NULL;
 
 		$this->enforcement_checks($quiz);
@@ -516,7 +516,7 @@ class Module_quiz
 		$quiz=$this->quiz;
 		$quiz_name=get_translated_text($quiz['q_name']);
 
-		if (has_specific_permission(get_member(),'bypass_quiz_timer'))
+		if (has_privilege(get_member(),'bypass_quiz_timer'))
 			$quiz['q_timeout']=NULL;
 
 		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$quiz_id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');

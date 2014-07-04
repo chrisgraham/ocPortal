@@ -37,7 +37,7 @@ function render_quiz_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$name=get_translated_text($row['q_name']);
 	$start_text=get_translated_tempcode($row['q_start_text']);
 
-	if (has_specific_permission(get_member(),'bypass_quiz_timer'))
+	if (has_privilege(get_member(),'bypass_quiz_timer'))
 		$row['q_timeout']=NULL;
 
 	$timeout=is_null($row['q_timeout'])?'':display_time_period($row['q_timeout']*60);
@@ -153,7 +153,7 @@ function render_quiz($questions)
 					$answer_text=is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode($a['q_answer_text']);
 					$radios->attach(form_input_radio_entry($name,strval($a['id']),false,protect_from_escaping($answer_text)));
 				}
-				$fields->attach(form_input_radio($question,$description,$name,$radios));
+				$fields->attach(form_input_radio($question,$description,$name,$radios,$q['q_required']==1));
 				break;
 
 			case 'MULTIMULTIPLE':
