@@ -55,4 +55,16 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	$blocked=array();
+	$block_path=get_custom_file_base().'/uploads/website_specific/newsletter_blocked.csv';
+	if (is_file($block_path))
+	{
+		$myfile=fopen($block_path,'rt');
+		while (($row=fgetcsv($myfile,1024))!==false)
+		{
+			if ($row[0]!='') $blocked[$row[0]]=true;
+		}
+		fclose($myfile);
+	}
+	var_dump($blocked);
 }

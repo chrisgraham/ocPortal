@@ -376,6 +376,28 @@ function newsletter_variable_substitution($message,$subject,$forename,$surname,$
 }
 
 /**
+ * Work out newsletter block list.
+ *
+ * @return array				List of blocked email addresses (actually a map)
+ */
+function newsletter_block_list()
+{
+	$blocked=array();
+	$block_path=get_custom_file_base().'/uploads/website_specific/newsletter_blocked.csv';
+	if (is_file($block_path))
+	{
+		@ini_set('auto_detect_line_endings','1');
+		$myfile=fopen($block_path,'rt');
+		while (($row=fgetcsv($myfile,1024))!==false)
+		{
+			if ($row[0]!='') $blocked[$row[0]]=true;
+		}
+		fclose($myfile);
+	}
+	return $blocked;
+}
+
+/**
  * Actually send out the newsletter in the background.
  */
 function newsletter_shutdown_function()
@@ -384,7 +406,15 @@ function newsletter_shutdown_function()
 
 	//mail_wrap($NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_ADDRESSES,$NEWSLETTER_USERNAMES,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,3,NULL,true,NULL,true,$NEWSLETTER_HTML_ONLY==1);  Not so easy any more as message needs tailoring per subscriber
 
+	disable_php_memory_limit(); // As PHP can leak memory, or caches can fill, even if we do this carefully
+
 	$last_cron=get_value('last_cron');
+
+	// These variables are for optimisation, we detect if we can avoid work on the loop iterations via looking at what happened on the first
+	$needs_substitutions=mixed();
+	$needs_tempcode=mixed();
+
+	$blocked=newsletter_block_list();
 
 	$start=0;
 	do
@@ -394,8 +424,18 @@ function newsletter_shutdown_function()
 		// Send to all
 		foreach ($addresses as $i=>$email_address)
 		{
+			if (isset($blocked[$email_address])) continue;
+
 			// Variable substitution in body
-			$newsletter_message_substituted=(strpos($NEWSLETTER_MESSAGE,'{')===false)?$NEWSLETTER_MESSAGE:newsletter_variable_substitution($NEWSLETTER_MESSAGE,$NEWSLETTER_SUBJECT,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
+			if ($needs_substitutions===NULL || $needs_substitutions)
+			{
+				$newsletter_message_substituted=(strpos($NEWSLETTER_MESSAGE,'{')===false)?$NEWSLETTER_MESSAGE:newsletter_variable_substitution($NEWSLETTER_MESSAGE,$NEWSLETTER_SUBJECT,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
+
+				if ($needs_substitutions===NULL) $needs_substitutions=($newsletter_message_substituted!=$NEWSLETTER_MESSAGE);
+			} else
+			{
+				$newsletter_message_substituted=$NEWSLETTER_MESSAGE;
+			}
 			$in_html=false;
 			if (strpos($newsletter_message_substituted,'<html')===false)
 			{
@@ -407,9 +447,16 @@ function newsletter_shutdown_function()
 				}
 			} else
 			{
-				require_code('tempcode_compiler');
-				$_m=template_to_tempcode($newsletter_message_substituted);
-				$newsletter_message_substituted=$_m->evaluate($NEWSLETTER_LANGUAGE);
+				if ($needs_tempcode===NULL || $needs_tempcode)
+				{
+					require_code('tempcode_compiler');
+					$_m=template_to_tempcode($newsletter_message_substituted);
+					$temp=$_m->evaluate($NEWSLETTER_LANGUAGE);
+
+					if ($needs_tempcode===NULL) $needs_tempcode=(trim($temp)!=trim($newsletter_message_substituted));
+
+					$newsletter_message_substituted=$temp;
+				}
 				$in_html=true;
 			}
 

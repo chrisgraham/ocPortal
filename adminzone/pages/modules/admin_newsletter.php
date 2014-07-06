@@ -215,7 +215,8 @@ class Module_admin_newsletter extends standard_aed_module
 				}
 			}
 
-			$myfile=fopen($_FILES['file']['tmp_name'],'rb');
+			@ini_set('auto_detect_line_endings','1');
+			$myfile=fopen($_FILES['file']['tmp_name'],'rt');
 			$del=',';
 			$csv_test_line=fgetcsv($myfile,4096,$del);
 			if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
@@ -1028,6 +1029,12 @@ class Module_admin_newsletter extends standard_aed_module
 	 */
 	function send_gui($_existing='')
 	{
+		$blocked=newsletter_block_list();
+		if (count($blocked)!=0)
+		{
+			attach_message(do_lang_tempcode('BLOCK_LIST_IN_PLACE',escape_html(number_format(count($blocked)))),'notice');
+		}
+
 		// If this is a periodic newsletter, we make some changes to the regular
 		// language strings.
 		$periodic_action_raw=post_param('periodic_choice','');
@@ -1386,6 +1393,7 @@ class Module_admin_newsletter extends standard_aed_module
 			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
 				$__csv_data=array();
+				@ini_set('auto_detect_line_endings','1');
 				$myfile=fopen($_FILES['file']['tmp_name'],'rt');
 				$del=',';
 				$csv_test_line=fgetcsv($myfile,4096,$del);

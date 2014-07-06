@@ -370,7 +370,8 @@ class Module_recommend
 						fclose($myfile);
 					}
 
-					$myfile=fopen($_FILES['upload']['tmp_name'],'rb');
+					@ini_set('auto_detect_line_endings','1');
+					$myfile=fopen($_FILES['upload']['tmp_name'],'rt');
 
 					$del=',';
 

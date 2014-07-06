@@ -846,7 +846,8 @@ class Module_admin_ocf_join
 				}
 			}
 
-			$myfile=fopen($_FILES['file']['tmp_name'],'rb');
+			@ini_set('auto_detect_line_endings','1');
+			$myfile=fopen($_FILES['file']['tmp_name'],'rt');
 			$del=',';
 			$csv_header=fgetcsv($myfile,102400,$del);
 			if ($csv_header===false) warn_exit(do_lang_tempcode('NO_DATA_IMPORTED'));
