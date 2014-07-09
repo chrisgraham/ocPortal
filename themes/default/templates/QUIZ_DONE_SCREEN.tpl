@@ -1,6 +1,6 @@
 {TITLE}
 
-<p>
+<p class="quiz_result_headline">
 	{RESULT}
 </p>
 

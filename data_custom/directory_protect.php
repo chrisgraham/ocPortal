@@ -68,6 +68,7 @@ foreach ($zones as $zone)
 					if (has_actual_page_access(get_member(),$page,$zone))
 					{
 						$okay=true;
+						break 4;
 					}
 				}
 			}

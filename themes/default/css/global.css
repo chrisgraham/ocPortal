@@ -1898,7 +1898,7 @@ table.scrollable_inside {
 	text-align: right;
 }
 
-.results_table>thead>th {
+.results_table>thead>tr>th {
 	text-align: left;
 }
 

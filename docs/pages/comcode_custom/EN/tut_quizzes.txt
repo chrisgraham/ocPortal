@@ -37,7 +37,22 @@ Multiple-choice/single-choice inputs are collected under a statistics heading. F
 
 The method of inputting quiz questions may seem a bit fiddly at first, but you'll find it is actually fairly straight-forward and makes it really quick to input new sets of questions.
 
-A detailed description of the input syntax is presented in the help for the Questions field on the add/edit quiz form.
+The text should consist of question blocks, each question block having a blank line between it and the next. The first line of a question block is the question, and subsequent lines are a set of potential answers.
+
+There are a few different types of question, indicated by a little tag after the question:
+ - [tt][MULTIPLECHOICE][/tt] -- The user can pick any one answer from the answer set.
+ - [tt][MULTIMULTIPLE][/tt] -- The user can pick multiple answers from the answer set.
+ - [tt][LONG][/tt] -- A multi-line typed answer. the answer set will be ignored as it cannot be auto-marked.
+ - [tt][SHORT][/tt] -- A single-line typed answer. If correct answers are provided then an inexact match is performed. The match is a case-insensitive punctuationless match for being within 75% closeness to the correct answer (25% of the characters may need to be added/removed/substituted) -- the user needs to hit a valid answer, and miss all invalid answers.
+ - [tt][SHORT_STRICT][/tt] -- A single-line typed answer. If correct answers are provided then a case-sensitive exact match will be performed.
+
+If a question is followed by [tt][REQUIRED][/tt] then the software will force it to be filled in (unless you have set a timeout and the timeout is exceeded).
+
+You may put line(s) starting with a ':' immediately under the question, to provide a longer caption for the question.
+
+You may also put line(s) starting with a ':' and followed by an explanation, below each answer to a question, which will be displayed at completion for the explanation as to specifically why the given answer was correct or incorrect.
+
+There is support for marking. If an answer is followed by [tt][*][/tt] then it is considered "correct" (this is very important for competitions and tests). If nothing is marked correct, the question will be considered as manually-marked (resulting in a quoted result range for the user, rather than a specific result), unless [tt][UNMARKED][/tt] is put after the question, in which case it will be collected but not count towards marking.
 
 Comcode is supported, so you could include images using code such as:
 [code]

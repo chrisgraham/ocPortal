@@ -517,8 +517,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			}*/
 
 			$db->dedupe_mode=true;
-			$t_keyword_search_rows_count=$db->query_value_if_there($_count_query_keywords_search);
-			$t_keyword_search_rows=$db->query($keywords_query,$max+$start);
+			$t_keyword_search_rows_count=$db->query_value_if_there($_count_query_keywords_search,true);
+			if (is_null($t_keyword_search_rows_count)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
+			$t_keyword_search_rows=$db->query($keywords_query,$max+$start,NULL,true);
+			if (is_null($t_keyword_search_rows)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
 			$db->dedupe_mode=false;
 			$t_count+=$t_keyword_search_rows_count;
 			$t_rows=array_merge($t_rows,$t_keyword_search_rows);
@@ -703,9 +705,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}*/
 
 		$db->dedupe_mode=true;
-		$t_main_search_rows_count=$db->query_value_if_there($_count_query_main_search);
-		$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
-		if ($t_main_search_rows===NULL) $t_main_search_rows=array(); // In case of a failed search query
+		$t_main_search_rows_count=$db->query_value_if_there($_count_query_main_search,true);
+		if (is_null($t_main_search_rows_count)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
+		$t_main_search_rows=$db->query($query,$max+$start,NULL,true,true);
+		if (is_null($t_main_search_rows)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
 		$db->dedupe_mode=false;
 		$t_count+=$t_main_search_rows_count;
 	} else

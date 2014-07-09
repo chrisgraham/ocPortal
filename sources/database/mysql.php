@@ -69,7 +69,7 @@ class Database_Static_mysql extends Database_super_mysql
 			critical_error('PASSON',$error);
 		}
 
-		$db=$persistent?@mysql_pconnect($db_host,$db_user,$db_password):@mysql_connect($db_host,$db_user,$db_password);
+		$db=$persistent?@mysql_pconnect($db_host,$db_user,$db_password):@mysql_connect($db_host,$db_user,$db_password,true);
 		if ($db===false)
 		{
 			$error='Could not connect to database-server ('.mysql_error().', '.(@strval($php_errormsg)).')';
@@ -225,7 +225,13 @@ class Database_Static_mysql extends Database_super_mysql
 			if ((function_exists('mysql_ping')) && ($err=='MySQL server has gone away') && (!$this->reconnected_once))
 			{
 				$this->reconnected_once=true;
-				mysql_ping($db);
+				if ((!mysql_ping($db)) && (isset($GLOBALS['SITE_DB'])) && ($db_parts[1]==$GLOBALS['SITE_DB']->connection_write[1]))
+				{
+					$this->cache_db=array();
+					$db_parts=$this->db_get_connection(get_use_persistent(),get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password());
+					$GLOBALS['SITE_DB']->connection_write=$db_parts;
+					$GLOBALS['SITE_DB']->connection_read=$db_parts;
+				}
 				$ret=$this->db_query($query,$db_parts,$max,$start,$fail_ok,$get_insert_id);
 				$this->reconnected_once=false;
 				return $ret;

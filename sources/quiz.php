@@ -517,7 +517,7 @@ function typed_answer_is_correct($given_answer,$all_answers,$strict=false)
 
 		if (get_translated_text($a['q_answer_text'])==$given_answer) return ($a['q_is_correct']==1); // Match exactly
 
-		if (strpos($filtered_answer,$filtered_given_answer)!==false) // Matches inexactly
+		if ((!$strict) && (levenshtein($filtered_answer,$filtered_given_answer)<=intval(strlen($filtered_answer)*0.2))) // Matches inexactly
 		{
 			if ($a['q_is_correct']==1)
 			{

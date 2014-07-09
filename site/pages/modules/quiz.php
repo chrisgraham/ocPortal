@@ -462,10 +462,14 @@ class Module_quiz
 			$timer_offset=0;
 		}
 
+		$all_required=true;
+
 		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
 		if ($quiz['q_shuffle_questions']==1) shuffle($questions);
 		foreach ($questions as $i=>$question)
 		{
+			if ($question['q_required']==0) $all_required=false;
+
 			$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$question['id']),'ORDER BY q_order');
 			if ($quiz['q_shuffle_answers']==1) shuffle($answers);
 			$questions[$i]['answers']=$answers;
@@ -502,6 +506,7 @@ class Module_quiz
 			'START_TEXT'=>$start_text,
 			'FIELDS'=>$fields,
 			'TIMEOUT'=>is_null($quiz['q_timeout'])?'':strval($quiz['q_timeout']*60-$timer_offset),
+			'ALL_REQUIRED'=>$all_required,
 		));
 	}
 

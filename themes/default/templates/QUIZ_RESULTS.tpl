@@ -33,15 +33,15 @@
 					{+END}
 				</td>
 
-				<td>
+				<td class="quiz_result_question">
 					{$COMCODE,{QUESTION}}
 				</td>
 
-				<td>
+				<td class="quiz_result_given_answer">
 					{$COMCODE,{GIVEN_ANSWER},1}
 				</td>
 
-				<td>
+				<td class="quiz_result_answer">
 					{+START,IF_NON_EMPTY,{CORRECT_ANSWER}}
 						{$COMCODE,{CORRECT_ANSWER}}
 					{+END}

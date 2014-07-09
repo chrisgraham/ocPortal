@@ -331,7 +331,8 @@ class Hook_addon_registry_quizzes
 				'START_TEXT'=>lorem_sentence_html(),
 				'FIELDS'=>placeholder_fields(),
 				'TIMEOUT'=>'5',
-				'EDIT_URL'=>placeholder_url()
+				'EDIT_URL'=>placeholder_url(),
+				'ALL_REQUIRED'=>false,
 			)),NULL,'',true)
 		);
 	}
