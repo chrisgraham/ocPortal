@@ -1011,7 +1011,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 			if ($semiparse_mode)
 			{
-				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="screen_title"':'').'><span class="inner">'.$embed->evaluate().'</span></h'.strval($level).'>');
+				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="screen_title"':'').'>'.$embed->evaluate().'</h'.strval($level).'>');
 				break;
 			}
 			$tpl_map=array('ID'=>(substr($pass_id,0,5)=='panel')?NULL:$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');

@@ -1361,7 +1361,7 @@ class Module_admin_themes
 					$old_file=get_custom_file_base().'/themes/'.str_replace('default/',$theme.'/',str_replace('templates/','templates_custom/',$file)).'.'.strval($time);
 				}
 				$size=filesize($old_file);
-				$restore_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>basename($file),'restore_from'=>str_replace('templates/','templates_custom/',$file).'.'.strval($time)),'_SELF');
+				$restore_url=build_url(array('page'=>'_SELF','type'=>'_edit_templates','theme'=>$theme,'f0file'=>basename($file),'restore_from'=>substr($old_file,strlen(get_custom_file_base().'/themes/'))),'_SELF');
 				require_code('diff');
 				if (function_exists('diff_simple'))
 				{
