@@ -545,9 +545,13 @@ function ocportal_cleanup($caches=NULL)
  */
 function erase_tempcode_cache()
 {
+	ocp_profile_start_for('erase_tempcode_cache');
+
 	$GLOBALS['SITE_DB']->query_delete('cache_on',NULL,'',NULL,NULL,true);
 	$GLOBALS['SITE_DB']->query_delete('cache');
 	if (function_exists('persistent_cache_empty')) persistent_cache_empty();
+
+	ocp_profile_end_for('erase_tempcode_cache');
 }
 
 /**
@@ -557,6 +561,9 @@ function erase_comcode_cache()
 {
 	static $done_once=false; // Useful to stop it running multiple times in admin_cleanup module, as this code takes time
 	if ($done_once) return;
+
+	ocp_profile_start_for('erase_comcode_cache');
+
 	if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
 	{
 		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
@@ -565,6 +572,8 @@ function erase_comcode_cache()
 		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
 	}
 	$done_once=true;
+
+	ocp_profile_end_for('erase_comcode_cache');
 }
 
 /**
@@ -572,6 +581,8 @@ function erase_comcode_cache()
  */
 function erase_cached_language()
 {
+	ocp_profile_start_for('erase_cached_language');
+
 	$langs=find_all_langs(true);
 	foreach (array_keys($langs) as $lang)
 	{
@@ -624,6 +635,8 @@ function erase_cached_language()
 	init__lang();
 	$LANGS_REQUESTED=$langs_requested_copy;
 	require_all_open_lang_files();
+
+	ocp_profile_end_for('erase_cached_language');
 }
 
 /**
@@ -633,6 +646,8 @@ function erase_cached_language()
  */
 function erase_cached_templates($preserve_some=false)
 {
+	ocp_profile_start_for('erase_cached_templates');
+
 	global $ERASED_TEMPLATES_ONCE;
 	$ERASED_TEMPLATES_ONCE=true;
 
@@ -693,6 +708,8 @@ function erase_cached_templates($preserve_some=false)
 		javascript_enforce('javascript_validation');
 		javascript_enforce('javascript_editing');
 	}
+
+	ocp_profile_end_for('erase_cached_templates');
 }
 
 /**

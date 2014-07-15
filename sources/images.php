@@ -516,6 +516,29 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
  */
 function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=true,$ext2=NULL,$using_path=false,$only_make_smaller=false,$thumb_options=NULL)
 {
+	ocp_profile_start_for('convert_image');
+	$ret=_convert_image($from,$to,$width,$height,$box_width,$exit_on_error,$ext2,$using_path,$only_make_smaller,$thumb_options);
+	ocp_profile_end_for('convert_image',$from);
+	return $ret;
+}
+
+/**
+ * (Helper for above).
+ *
+ * @param  URLPATH		The URL to the image to resize
+ * @param  PATH			The file path (including filename) to where the resized image will be saved
+ * @param  integer		The maximum width we want our new image to be (-1 means "don't factor this in")
+ * @param  integer		The maximum height we want our new image to be (-1 means "don't factor this in")
+ * @param  integer		This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
+ * @param  boolean		Whether to exit ocPortal if an error occurs
+ * @param  ?string		The file extension to save with (NULL: same as our input file)
+ * @param  boolean		Whether $from was in fact a path, not a URL
+ * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  ?array			This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (NULL: no details passed)
+ * @return boolean		Success
+ */
+function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=true,$ext2=NULL,$using_path=false,$only_make_smaller=false,$thumb_options=NULL)
+{
 	disable_php_memory_limit();
 
 	// Load

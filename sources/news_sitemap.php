@@ -32,6 +32,8 @@ function build_news_sitemap()
 		if (!is_writable_wrap($path)) return;
 	}
 
+	ocp_profile_start_for('build_news_sitemap');
+
 	$sitemap_file=fopen($path,'at');
 	flock($sitemap_file,LOCK_EX);
 	ftruncate($sitemap_file,0);
@@ -146,4 +148,6 @@ function build_news_sitemap()
 
 	require_code('sitemap');
 	ping_sitemap(get_custom_base_url().'/ocp_news_sitemap.xml');
+
+	ocp_profile_end_for('build_news_sitemap');
 }

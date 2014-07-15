@@ -218,6 +218,7 @@ class Hook_addon_registry_core
 			'sources/blocks/main_content_filtering.php',
 			'MISSING_SCREEN.tpl',
 			'PARAM_INFO.tpl',
+			'sources/profiler.php',
 			'sources/temporal.php',
 			'sources/temporal2.php',
 			'sources/blocks/main_comcode_page_children.php',

@@ -3,6 +3,11 @@ Order Allow,Deny
 Deny from all
 </Files>
 
+<Files "profiling.*.log">
+Order Allow,Deny
+Deny from all
+</Files>
+
 <Files "ecommerce.log">
 Order Allow,Deny
 Deny from all

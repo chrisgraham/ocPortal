@@ -529,11 +529,18 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			}*/
 
 			$db->dedupe_mode=true;
+
+			ocp_profile_start_for('SEARCH:t_keyword_search_rows_count');
 			$t_keyword_search_rows_count=$db->query_value_null_ok_full($_count_query_keywords_search);
-			$t_keyword_search_rows=$db->query($keywords_query,$max+$start);
-			$db->dedupe_mode=false;
+			ocp_profile_end_for('SEARCH:t_keyword_search_rows_count',$_count_query_keywords_search);
 			$t_count+=$t_keyword_search_rows_count;
+
+			ocp_profile_start_for('SEARCH:t_keyword_search_rows');
+			$t_keyword_search_rows=$db->query($keywords_query,$max+$start);
+			ocp_profile_end_for('SEARCH:t_keyword_search_rows',$keywords_query);
 			$t_rows=array_merge($t_rows,$t_keyword_search_rows);
+
+			$db->dedupe_mode=false;
 		} else $_count_query_keywords_search=NULL;
 	} else $_count_query_keywords_search=NULL;
 
@@ -738,11 +745,18 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}*/
 
 		$db->dedupe_mode=true;
+
+		ocp_profile_start_for('SEARCH:t_main_search_rows_count');
 		$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
-		$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
-		if ($t_main_search_rows===NULL) $t_main_search_rows=array(); // In case of a failed search query
-		$db->dedupe_mode=false;
+		ocp_profile_end_for('SEARCH:t_main_search_rows_count',$_count_query_main_search);
 		$t_count+=$t_main_search_rows_count;
+
+		ocp_profile_start_for('SEARCH:t_main_search_rows');
+		$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
+		ocp_profile_end_for('SEARCH:t_main_search_rows',$query);
+		if ($t_main_search_rows===NULL) $t_main_search_rows=array(); // In case of a failed search query
+
+		$db->dedupe_mode=false;
 	} else
 	{
 		$t_main_search_rows=array();

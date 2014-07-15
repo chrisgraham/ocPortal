@@ -366,7 +366,7 @@ function get_db_forums_password()
  *
  * @param  string			First microtime
  * @param  string			Second microtime
- * @return float			The time difference
+ * @return float			The time difference, in seconds
  */
 function microtime_diff($a,$b)
 {
@@ -998,6 +998,8 @@ class database_driver
 		}
 		if (($QUERY_COUNT==68) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && ($IN_MINIKERNEL_VERSION==0) && (get_param('special_page_type','')!='query'))
 		{
+			ocp_profile_start_for('_query:HIGH_VOLUME_ALERT');
+
 			$NO_QUERY_LIMIT=true;
 			$log_path=get_custom_file_base().'/data_custom/big_query_screens.log';
 			if (is_writable_wrap($log_path))
@@ -1011,6 +1013,8 @@ class database_driver
 				$QUERY_COUNT=0;
 				fatal_exit(do_lang_tempcode('TOO_MANY_QUERIES'));
 			}
+
+			ocp_profile_end_for('_query:HIGH_VOLUME_ALERT');
 		}
 
 		$lang_strings_expecting=array();
@@ -1135,6 +1139,11 @@ class database_driver
 			$out=array('time'=>microtime_diff($after,$before),'text'=>$text);
 			$QUERY_LIST[]=$out;
 		}
+		/*if (microtime_diff($after,$before)>1.0)	Generally one would use MySQL's own slow query log, which will impact ocPortal performance less
+		{
+			ocp_profile_start_for('_query:SLOW_ALERT');
+			ocp_profile_end_for('_query:SLOW_ALERT',$query);
+		}*/
 
 		// Run hooks, if any exist
 		if ($UPON_QUERY_HOOKS!==NULL)
@@ -1146,9 +1155,15 @@ class database_driver
 			}
 		}
 
-		// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 		if ($ret!==NULL)
 		{
+			if ((isset($ret[300])) && (strpos($query,'theme_images')===false) && (strpos($query,'config')===false))
+			{
+				ocp_profile_start_for('_query:MANY_RESULTS_ALERT');
+				ocp_profile_end_for('_query:MANY_RESULTS_ALERT',$query);
+			}
+
+			// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 			$cnt_orig=count($this->text_lookup_original_cache);
 			$cnt_parsed=count($this->text_lookup_cache);
 			foreach ($lang_strings_expecting as $bits)

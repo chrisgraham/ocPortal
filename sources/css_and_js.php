@@ -112,6 +112,8 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
  */
 function js_compile($j,$js_cache_path,$minify=true)
 {
+	ocp_profile_start_for('js_compile');
+
 	require_lang('javascript');
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	$temp_keep_markers=$KEEP_MARKERS;
@@ -177,6 +179,8 @@ function js_compile($j,$js_cache_path,$minify=true)
 	{
 		touch($js_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
 	}
+
+	ocp_profile_end_for('js_compile',$j);
 }
 
 /**
@@ -191,6 +195,8 @@ function js_compile($j,$js_cache_path,$minify=true)
  */
 function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=true)
 {
+	ocp_profile_start_for('css_compile');
+
 	if ($c!='global') // We need to make sure the global.css file is parsed, as it contains some shared THEME_WIZARD_COLOR variables that Tempcode will pick up on
 	{
 		$found=find_template_place('global','',$active_theme,'.css','css');
@@ -217,6 +223,8 @@ function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=t
 	{
 		touch($css_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
 	}
+
+	ocp_profile_end_for('css_compile',$c);
 }
 
 /**

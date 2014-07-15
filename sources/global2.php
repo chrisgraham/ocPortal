@@ -2006,13 +2006,13 @@ function css_tempcode($inline=false,$only_global=false,$context=NULL,$theme=NULL
 		{
 			if (!$text_only)
 			{
-				$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
-				$__css=$_css->evaluate();
 				if ($context!==NULL)
 				{
-					$__css=filter_css($__css,$context);
+					$__css=filter_css($c,$theme,$context);
 				} else
 				{
+					$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
+					$__css=$_css->evaluate();
 					$__css=str_replace('} ','}'.chr(10),preg_replace('#\s+#',' ',$__css));
 				}
 

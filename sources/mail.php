@@ -206,14 +206,19 @@ http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
  * @param  boolean		HTML-only
  * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools
  * @param  ID_TEXT		The template used to show the email
- * @param  boolean		Whether to bypass queueing
+ * @param  ?boolean		Whether to bypass queueing (NULL: auto-decide)
  * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false)
+function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=NULL)
 {
 	if (running_script('stress_test_loader')) return NULL;
 
 	if (@$GLOBALS['SITE_INFO']['no_email_output']==='1') return NULL;
+
+	if (is_null($bypass_queue))
+	{
+		$bypass_queue=($priority<3);
+	}
 
 	global $EMAIL_ATTACHMENTS;
 	$EMAIL_ATTACHMENTS=array();
@@ -225,10 +230,10 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 	if (!$coming_out_of_queue)
 	{
-		if (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages'))
+		if ((mt_rand(0,100)==1) && (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages')))
 			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'logged_mail_messages WHERE m_date_and_time<'.strval(time()-60*60*24*14).' AND m_queued=0'); // Log it all for 2 weeks, then delete
 
-		$through_queue=(!$bypass_queue) && ((get_option('mail_queue_debug')==='1') || ((get_option('mail_queue')==='1') && (cron_installed())));
+		$through_queue=(!$bypass_queue) && ((get_option('mail_queue')==='1') || ((get_option('mail_queue_debug')==='1') && (cron_installed())));
 
 		$GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
 			'm_subject'=>substr($subject_line,0,255),
@@ -305,6 +310,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	$from_name=str_replace("\r",'',$from_name);
 	$from_name=str_replace("\n",'',$from_name);
 
+	ocp_profile_start_for('mail_wrap');
+
 	$theme=method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	if ($theme=='default') // Sucks, probably due to sending from Admin Zone...
 	{
@@ -357,17 +364,55 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 
 	$simplify_when_can=true; // Used for testing. Not actually needed
 
+	global $CID_IMG_ATTACHMENT;
+	$CID_IMG_ATTACHMENT=array();
+
 	// Evaluate message. Needs doing early so we know if we have any headers
 	if (!$in_html)
 	{
-		$GLOBALS['NO_LINK_TITLES']=true;
-		global $LAX_COMCODE;
-		$temp=$LAX_COMCODE;
-		$LAX_COMCODE=true;
-		$html_content=comcode_to_tempcode($message_raw,$as,$as_admin);
-		$LAX_COMCODE=$temp;
-		$GLOBALS['NO_LINK_TITLES']=false;
+		$cache_sig=serialize(array(
+			$lang,
+			$mail_template,
+			$subject,
+			$theme,
+			crc32($message_raw),
+		));
+
+		static $html_content_cache=array();
+		if (isset($html_content_cache[$cache_sig]))
+		{
+			list($html_evaluated,$message_plain,$EMAIL_ATTACHMENTS)=$html_content_cache[$cache_sig];
+		} else
+		{
+			$GLOBALS['NO_LINK_TITLES']=true;
+			global $LAX_COMCODE;
+			$temp=$LAX_COMCODE;
+			$LAX_COMCODE=true;
+			$html_content=comcode_to_tempcode($message_raw,$as,$as_admin);
+			$LAX_COMCODE=$temp;
+			$GLOBALS['NO_LINK_TITLES']=false;
+
+			$_html_content=$html_content->evaluate($lang);
+			$_html_content=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',$_html_content);
+			$message_html=(strpos($_html_content,'<html')!==false)?make_string_tempcode($_html_content):do_template($mail_template,array('_GUID'=>'b23069c20202aa59b7450ebf8d49cde1','CSS'=>'{CSS}','LOGOURL'=>get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG'=>$lang,'TITLE'=>$subject,'CONTENT'=>$_html_content),$lang,false,NULL,'.tpl','templates',$theme);
+			$css=css_tempcode(true,true,$message_html->evaluate($lang),$theme);
+			$_css=$css->evaluate($lang);
+			if (get_option('allow_ext_images')!='1')
+			{
+				$_css=preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$_css);
+			}
+			$html_evaluated=$message_html->evaluate($lang);
+			$html_evaluated=str_replace('{CSS}',$_css,$html_evaluated);
+
+			// Cleanup the Comcode a bit
+			$message_plain=comcode_to_clean_text($message_raw);
+
+			$html_content_cache[$cache_sig]=array($html_evaluated,$message_plain,$EMAIL_ATTACHMENTS);
+		}
 		$attachments=array_merge(is_null($attachments)?array():$attachments,$EMAIL_ATTACHMENTS);
+	} else
+	{
+		$html_evaluated=$message_raw;
 	}
 
 	// Headers
@@ -406,31 +451,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		$sending_message.='Content-Type: multipart/alternative;'."\n\t".'boundary="'.$boundary2.'"'.$line_term.$line_term.$line_term;
 	}
 
-	global $CID_IMG_ATTACHMENT;
-	$CID_IMG_ATTACHMENT=array();
-
-	// Message starts (actually: it is kind of in header form also as it uses mime multi-part)
-	if (!$in_html)
-	{
-		$_html_content=$html_content->evaluate($lang);
-		$_html_content=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',$_html_content);
-		$message_html=(strpos($_html_content,'<html')!==false)?make_string_tempcode($_html_content):do_template($mail_template,array('_GUID'=>'b23069c20202aa59b7450ebf8d49cde1','CSS'=>'{CSS}','LOGOURL'=>get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG'=>$lang,'TITLE'=>$subject,'CONTENT'=>$_html_content),$lang,false,NULL,'.tpl','templates',$theme);
-		$css=css_tempcode(true,true,$message_html->evaluate($lang),$theme);
-		$_css=$css->evaluate($lang);
-		if (get_option('allow_ext_images')!='1')
-		{
-			$_css=preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$_css);
-		}
-		$html_evaluated=$message_html->evaluate($lang);
-		$html_evaluated=str_replace('{CSS}',$_css,$html_evaluated);
-
-		// Cleanup the Comcode a bit
-		$message_plain=comcode_to_clean_text($message_raw);
-	} else
-	{
-		$html_evaluated=$message_raw;
-	}
-
+	// Message starts (actually: it is kind of in header form also as it uses mime multi-part)...
 
 	$base64_encode=(get_value('base64_emails')==='1'); // More robust, but more likely to be spam-blocked, and some servers can scramble it.
 
@@ -727,6 +748,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		}
 	}
 
+	ocp_profile_end_for('mail_wrap',$subject_line);
+
 	if (!$worked)
 	{
 		$SENDING_MAIL=false;
@@ -748,12 +771,23 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
  * Filter out any CSS selector blocks from the given CSS if they definitely do not affect the given (X)HTML.
  * Whilst this is a clever algorithm, it isn't so clever as to actually try and match each selector against a DOM tree. If any segment of a compound selector matches, match is assumed.
  *
- * @param  string			CSS
+ * @param  ID_TEXT		CSS file
+ * @param  ID_TEXT		Theme
  * @param  string			(X)HTML context under which CSS is filtered
  * @return string			Filtered CSS
  */
-function filter_css($css,$context)
+function filter_css($c,$theme,$context)
 {
+	// Reduce input parameters to critical components, and cache on - saves a lot of time if multiple emails sent by script
+	static $cache=array();
+	$simple_sig=preg_replace('#\s+(?!class)(?!id)[\w\-]+="[^"<>]*"#','',preg_replace('#[^<>]*(<[^<>]+>)[^<>]*#s','${1}',$context));
+	$simple_sig.=$c.$theme;
+	if (isset($cache[$simple_sig]))
+		return $cache[$simple_sig];
+
+	$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
+	$css=$_css->evaluate();
+
 	// Find out all our IDs
 	$ids=array();
 	$matches=array();
@@ -867,6 +901,8 @@ function filter_css($css,$context)
 		}
 	}
 	while (true);
+
+	$cache[$simple_sig]=$css_new;
 
 	return $css_new;
 }

@@ -105,6 +105,8 @@ function ocf_check_post($post,$topic_id=NULL,$poster=NULL)
  */
 function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$validated=NULL,$is_emphasised=0,$poster_name_if_guest=NULL,$ip_address=NULL,$time=NULL,$poster=NULL,$intended_solely_for=NULL,$last_edit_time=NULL,$last_edit_by=NULL,$check_permissions=true,$update_cacheing=true,$forum_id=NULL,$support_attachments=true,$topic_title='',$sunk=0,$id=NULL,$anonymous=false,$skip_post_checks=false,$is_pt=false,$insert_comcode_as_admin=false,$parent_id=NULL,$send_notification=true)
 {
+	ocp_profile_start_for('ocf_make_post');
+
 	if (is_null($poster)) $poster=get_member();
 
 	if (function_exists('inject_action_spamcheck')) inject_action_spamcheck($poster_name_if_guest,get_param('email',NULL));
@@ -123,7 +125,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 		if ((is_null($intended_solely_for)) && (!$skip_post_checks))
 		{
+			ocp_profile_start_for('ocf_make_post:ocf_check_post');
 			ocf_check_post($post,$topic_id,$poster);
+			ocp_profile_end_for('ocf_make_post:ocf_check_post');
 		}
 	}
 
@@ -186,7 +190,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 
 	if (!$support_attachments)
 	{
+		ocp_profile_start_for('ocf_make_post:insert_lang_comcode');
 		$lang_id=insert_lang_comcode($post,4,$GLOBALS['FORUM_DB'],$insert_comcode_as_admin);
+		ocp_profile_end_for('ocf_make_post:insert_lang_comcode');
 	} else
 	{
 		@ignore_user_abort(true);
@@ -218,7 +224,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	if ($support_attachments)
 	{
 		require_code('attachments2');
+		ocp_profile_start_for('ocf_make_post:insert_lang_comcode_attachments');
 		$lang_id=insert_lang_comcode_attachments(4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB']);
+		ocp_profile_end_for('ocf_make_post:insert_lang_comcode_attachments');
 		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_post'=>$lang_id),array('id'=>$post_id),'',1);
 	}
 
@@ -244,7 +252,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			$post_comcode=get_translated_text($lang_id,$GLOBALS['FORUM_DB']);
 
 			require_code('ocf_posts_action2');
+			ocp_profile_start_for('ocf_make_post:ocf_send_topic_notification');
 			ocf_send_topic_notification($url,$topic_id,$forum_id,$anonymous?db_get_first_id():$poster,$is_starter,$post_comcode,$topic_title,$intended_solely_for,$is_pt);
+			ocp_profile_end_for('ocf_make_post:ocf_send_topic_notification');
 
 			// Send a notification for the inline PP
 			if (!is_null($intended_solely_for))
@@ -264,7 +274,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		if ($auto_monitor_contrib_content==1)
 		{
 			require_code('notifications');
+			ocp_profile_start_for('ocf_make_post:enable_notifications');
 			enable_notifications('ocf_topic',strval($topic_id),$poster);
+			ocp_profile_end_for('ocf_make_post:enable_notifications');
 		}
 	}
 
@@ -273,18 +285,22 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		if (function_exists('get_member'))
 		{
 			if (function_exists('ocf_ping_topic_read'))
+			{
+				ocp_profile_start_for('ocf_make_post:ocf_ping_topic_read');
 				ocf_ping_topic_read($topic_id);
+				ocp_profile_end_for('ocf_make_post:ocf_ping_topic_read');
+			}
 
 			if (is_null($forum_id))
 			{
 				$with=$info[0]['t_pt_from'];
 				if ($with==$poster) $with=$info[0]['t_pt_to'];
 
-				decache('side_ocf_personal_topics',array($with));
-				decache('_new_pp',array($with));
+				decache(array(
+					array('side_ocf_personal_topics',array($with)),
+					array('_new_pp',array($with)),
+				));
 			}
-
-   		if (get_option('show_post_validation')=='1') decache('main_staff_checklist');
 		}
 
 		if (is_null($intended_solely_for))
@@ -292,7 +308,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			if (($validated==1)/* || ($is_starter)*/)
 			{
 				require_code('ocf_posts_action2');
+				ocp_profile_start_for('ocf_make_post:ocf_force_update_topic_cacheing');
 				ocf_force_update_topic_cacheing($topic_id,1,true,$is_starter,$post_id,$time,$title,$lang_id,$poster_name_if_guest,$poster);
+				ocp_profile_end_for('ocf_make_post:ocf_force_update_topic_cacheing');
 			}
 			if ($validated==1)
 			{
@@ -320,26 +338,45 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 							}
 						}
 
+						ocp_profile_start_for('ocf_make_post:ocf_force_update_forum_cacheing');
 						ocf_force_update_forum_cacheing($forum_id,($is_starter)?1:0,1,($topic_validated==0)?NULL:$topic_id,($topic_validated==0)?NULL:$topic_title,($topic_validated==0)?NULL:$time,($topic_validated==0)?NULL:$poster_name_if_guest,($topic_validated==0)?NULL:$poster,($topic_validated==0)?NULL:$forum_id);
+						ocp_profile_end_for('ocf_make_post:ocf_force_update_forum_cacheing');
 					}
 				}
 			}
 		}
 
-		// Update post count
 		if (!is_null($forum_id))
 		{
 			$post_counts=is_null($forum_id)?1:$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_post_count_increment',array('id'=>$forum_id));
-			if (($post_counts===1) && (!$anonymous) && ($validated==1)) ocf_force_update_member_post_count($poster,1);
+			if (($post_counts===1) && (!$anonymous) && ($validated==1))
+			{
+				// Update post count
+				ocp_profile_start_for('ocf_make_post:ocf_force_update_member_post_count');
+				ocf_force_update_member_post_count($poster,1);
+				ocp_profile_end_for('ocf_make_post:ocf_force_update_member_post_count');
+			}
 
-			if ($check_permissions) ocf_decache_ocp_blocks($forum_id,NULL,$intended_solely_for); // i.e. we don't run this if in installer
+			// Block decache
+			if ($check_permissions)
+			{
+				ocp_profile_start_for('ocf_make_post:ocf_decache_ocp_blocks');
+				ocf_decache_ocp_blocks($forum_id,NULL,$intended_solely_for); // i.e. we don't run this if in installer
+				ocp_profile_end_for('ocf_make_post:ocf_decache_ocp_blocks');
+			}
 		}
+
+		// Promotions
 		if ($poster!=$GLOBALS['OCF_DRIVER']->get_guest_id())
 		{
 			require_code('ocf_posts_action2');
+			ocp_profile_start_for('ocf_make_post:ocf_member_handle_promotion');
 			ocf_member_handle_promotion($poster);
+			ocp_profile_end_for('ocf_make_post:ocf_member_handle_promotion');
 		}
 	}
+
+	ocp_profile_end_for('ocf_make_post','#'.strval($post_id));
 
 	return $post_id;
 }
@@ -389,15 +426,27 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif=NU
  */
 function ocf_decache_ocp_blocks($updated_forum_id,$forum_name=NULL,$member=NULL)
 {
-	if (is_null($forum_name)) $forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$updated_forum_id));
-	decache('main_forum_news');
-	decache('main_forum_topics');
-	decache('side_forum_news');
-	decache('bottom_news',array($forum_name));
+	if (is_null($forum_name))
+		$forum_name=$GLOBALS['FORUM_DB']->query_value('f_forums','f_name',array('id'=>$updated_forum_id));
+
+	$decache=array(
+		array('main_forum_news',NULL),
+		array('main_forum_topics',NULL),
+		array('side_forum_news',NULL),
+		array('bottom_news',array($forum_name)),
+	);
+
 	if (!is_null($member))
 	{
-		decache('side_ocf_personal_topics',array($member));
-		decache('_new_pp',array($member));
+		$decache[]=array('side_ocf_personal_topics',array($member));
+		$decache[]=array('_new_pp',array($member));
 	}
+
+	if (get_option('show_post_validation')=='1')
+	{
+		$decache[]=array('main_staff_checklist',NULL);
+	}
+
+	decache($decache);
 }
 

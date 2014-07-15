@@ -60,6 +60,8 @@ class Block_main_sitemap
 	 */
 	function run($map)
 	{
+		ocp_profile_start_for('Block_main_sitemap');
+
 		require_css('sitemap');
 
 		require_all_lang();
@@ -268,6 +270,8 @@ class Block_main_sitemap
 				$out->attach($bit);
 			}
 		}
+
+		ocp_profile_end_for('Block_main_sitemap');
 
 		return $out;
 	}

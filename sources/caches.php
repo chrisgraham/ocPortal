@@ -157,50 +157,74 @@ function persistent_cache_empty()
 /**
  * Remove an item from the general cache (most commonly used for blocks).
  *
- * @param  ID_TEXT		The type of what we are cacheing (e.g. block name)
+ * @param  mixed			The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array			A map of identifiying characteristics (NULL: no identifying characteristics, decache all)
  */
 function decache($cached_for,$identifier=NULL)
 {
 	if (get_mass_import_mode()) return;
 
-	// NB: If we use persistent cache we still need to decache from DB, in case we're switching between for whatever reason. Or maybe some users use persistent cache and others don't. Or maybe some nodes do and others don't.
+	if (!is_array($cached_for)) $cached_for=array($cached_for);
 
-	if ($GLOBALS['MEM_CACHE']!==NULL)
+	$where='';
+
+	$bot_statuses=array(true,false);
+	$timezones=array_keys(get_timezone_list());
+
+	foreach ($cached_for as $_cached_for)
 	{
-		persistent_cache_delete(array('CACHE',$cached_for));
-	}
-
-	$where=db_string_equal_to('cached_for',$cached_for);
-	if ($identifier!==NULL)
-	{
-		$where.=' AND (';
-		$done_first=false;
-
-		// For combinations of implied parameters
-		$bot_statuses=array(true,false);
-		$timezones=array_keys(get_timezone_list());
-		foreach ($bot_statuses as $bot_status)
+		if (is_array($_cached_for))
 		{
-			foreach ($timezones as $timezone)
-			{
-				$_cache_identifier=$identifier;
-				$_cache_identifier[]=$timezone;
-				$_cache_identifier[]=$bot_status;
-				if ($done_first) $where.=' OR ';
-				$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
-				$done_first=true;
-			}
+			$_identifier=$_cached_for[1];
+			$_cached_for=$_cached_for[0];
+		} else
+		{
+			$_identifier=$identifier;
 		}
 
-		// And finally for no implied parameters (raw API usage)
-		$_cache_identifier=$identifier;
-		if ($done_first) $where.=' OR ';
-		$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
-		$done_first=true;
+		// NB: If we use persistent cache we still need to decache from DB, in case we're switching between for whatever reason. Or maybe some users use persistent cache and others don't. Or maybe some nodes do and others don't.
+
+		if ($GLOBALS['MEM_CACHE']!==NULL)
+		{
+			persistent_cache_delete(array('CACHE',$_cached_for));
+		}
+
+		if ($where!='') $where.=' OR ';
+
+		$where.='(';
+
+		$where.=db_string_equal_to('cached_for',$_cached_for);
+		if ($_identifier!==NULL)
+		{
+			$where.=' AND (';
+			$done_first=false;
+
+			// For combinations of implied parameters
+			foreach ($bot_statuses as $bot_status)
+			{
+				foreach ($timezones as $timezone)
+				{
+					$_cache_identifier=$_identifier;
+					$_cache_identifier[]=$timezone;
+					$_cache_identifier[]=$bot_status;
+					if ($done_first) $where.=' OR ';
+					$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
+					$done_first=true;
+				}
+			}
+
+			// And finally for no implied parameters (raw API usage)
+			$_cache_identifier=$_identifier;
+			if ($done_first) $where.=' OR ';
+			$where.=db_string_equal_to('identifier',md5(serialize($_cache_identifier)));
+			$done_first=true;
+
+			$where.=')';
+		}
 
 		$where.=')';
 	}
+
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
 }
 

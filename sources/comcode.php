@@ -188,7 +188,17 @@ function comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap_
 	}
 
 	require_code('comcode_renderer');
-	return _comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
+	$long=(strlen($comcode)>1000);
+	if ($long)
+	{
+		ocp_profile_start_for('comcode_to_tempcode/LONG');
+	}
+	$ret=_comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
+	if ($long)
+	{
+		ocp_profile_end_for('comcode_to_tempcode/LONG',is_null($source_member)?'':('owned by member #'.strval($source_member)));
+	}
+	return $ret;
 }
 
 /**

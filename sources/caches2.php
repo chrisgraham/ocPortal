@@ -46,6 +46,8 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 	$langs_required.='!';
 	$langs_required.=(is_null($_csss_required))?'':implode(':',$_csss_required);
 
+	ocp_profile_start_for('put_into_cache');
+
 	if (!is_null($GLOBALS['MEM_CACHE']))
 	{
 		$pcache=persistent_cache_get(array('CACHE',$codename));
@@ -57,6 +59,8 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 		$GLOBALS['SITE_DB']->query_delete('cache',array('lang'=>$lang,'the_theme'=>$theme,'cached_for'=>$codename,'identifier'=>md5($cache_identifier)),'',1);
 		$GLOBALS['SITE_DB']->query_insert('cache',array('langs_required'=>$langs_required,'lang'=>$lang,'cached_for'=>$codename,'the_value'=>$tempcode?$cache->to_assembly($lang):serialize($cache),'date_and_time'=>time(),'the_theme'=>$theme,'identifier'=>md5($cache_identifier)),false,true);
 	}
+
+	ocp_profile_end_for('put_into_cache',$codename.' - '.$cache_identifier);
 }
 
 

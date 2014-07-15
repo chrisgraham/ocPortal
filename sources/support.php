@@ -2586,3 +2586,26 @@ function update_catalogue_content_ref($type,$from,$to)
 		}
 	}
 }
+
+/**
+ * Start a profiling block, for a specified identifier (of your own choosing).
+ *
+ * @param  ID_TEXT		Identifier
+ */
+function ocp_profile_start_for($identifier)
+{
+	require_code('profiler');
+	_ocp_profile_start_for($identifier);
+}
+
+/**
+ * End a profiling block, for a specified identifier (of your own choosing - but you must have started it with ocp_profile_start_for).
+ *
+ * @param  ID_TEXT		Identifier
+ * @param  ?string		Longer details of what happened (e.g. a specific SQL query that ran) (NULL: none provided)
+ */
+function ocp_profile_end_for($identifier,$specifics=NULL)
+{
+	require_code('profiler');
+	_ocp_profile_end_for($identifier,$specifics);
+}

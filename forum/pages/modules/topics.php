@@ -1847,6 +1847,8 @@ class Module_topics
 			enforce_captcha();
 		}
 
+		ocp_profile_start_for('_add_reply');
+
 		require_code('attachments2');
 		require_code('ocf_posts_action');
 		require_code('ocf_posts_action2');
@@ -2152,6 +2154,8 @@ END;
 		{
 			send_pt_notification($post_id,$title,$topic_id,$member_id,NULL,$post);
 		}
+
+		ocp_profile_end_for('_add_reply','#'.strval($post_id));
 
 		if ($add_poll==1)
 		{

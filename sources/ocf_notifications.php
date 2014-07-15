@@ -126,8 +126,10 @@ function generate_notifications($member_id)
 	static $notifications_cache=NULL;
 	if (isset($notifications_cache[$cache_identifier])) return $notifications_cache[$cache_identifier];
 
+	$do_cacheing=((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0));
+
 	$notifications=mixed();
-	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0)))
+	if ($do_cacheing)
 	{
 		$_notifications=get_cache_entry('_new_pp',$cache_identifier,10000);
 
@@ -185,8 +187,11 @@ function generate_notifications($member_id)
 			$notifications->attach(do_template('OCF_NOTIFICATION',array('_GUID'=>'3b224ea3f4da2f8f869a505b9756970a','ADDITIONAL_POSTS'=>integer_format($additional_posts),'_ADDITIONAL_POSTS'=>strval($additional_posts),'ID'=>strval($unread_pp['id']),'U_TITLE'=>$u_title,'IGNORE_URL'=>$ignore_url,'IGNORE_URL_2'=>$ignore_url_2,'REPLY_URL'=>$reply_url,'TOPIC_URL'=>$topic_url,'POST'=>$post,'DESCRIPTION'=>$description,'TIME'=>$time,'TIME_RAW'=>strval($time_raw),'BY'=>$by,'PROFILE_URL'=>$profile_link,'TYPE'=>$type)));
 		}
 
-		require_code('caches2');
-		put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications->to_assembly(),$num_unread_pps));
+		if ($do_cacheing)
+		{
+			require_code('caches2');
+			put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications->to_assembly(),$num_unread_pps));
+		}
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 	}

@@ -190,6 +190,8 @@ class Notification_dispatcher
 	{
 		if (get_mass_import_mode()) return;
 
+		ocp_profile_start_for('Notification_dispatcher');
+
 		$subject=$this->subject;
 		$message=$this->message;
 		$no_cc=$this->no_cc;
@@ -254,6 +256,8 @@ class Notification_dispatcher
 			$start+=$max;
 		}
 		while ($possibly_has_more);
+
+		ocp_profile_end_for('Notification_dispatcher',$subject);
 	}
 }
 
