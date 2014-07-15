@@ -64,6 +64,8 @@ function ocp_profile_is_enabled()
 {
 	if (!function_exists('get_value')) return false;
 	if (!function_exists('get_member')) return false;
+	if (!function_exists('get_self_url_easy')) return false;
+	if (!function_exists('clean_file_size')) return false;
 
 	global $PROFILING_ALLOWED,$PROFILING_LINUX_FULL;
 	if (!isset($PROFILING_ALLOWED))
@@ -154,7 +156,13 @@ function _ocp_profile_log_line($line)
 		if (!isset($PROFILER_PATH))
 		{
 			$PROFILER_PATH=get_custom_file_base().'/data_custom/profiling';
-			$PROFILER_PATH.='--member'.strval(get_member());
+			if (is_guest())
+			{
+				$PROFILER_PATH.='--guest';
+			} else
+			{
+				$PROFILER_PATH.='--member'.strval(get_member());
+			}
 			$PROFILER_PATH.='.timestamp'.strval(time());
 			$PROFILER_PATH.='.rand'.uniqid('',true);
 			$PROFILER_PATH.='--in-progress.log';
@@ -165,9 +173,9 @@ function _ocp_profile_log_line($line)
 		// Pre-logging
 		if ($PROFILING_LINUX_FULL)
 		{
-			_ocp_profiler_generic_logging();
-
 			_ocp_profile_log_line('URL: '.get_self_url_easy());
+
+			_ocp_profiler_generic_logging();
 
 			_ocp_profile_log_line(''); // Spacer line
 		}

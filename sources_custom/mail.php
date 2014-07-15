@@ -118,6 +118,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	if ($from_email=='') $from_email=get_option('staff_address');
 	if ($from_name=='') $from_name=get_site_name();
 
+	ocp_profile_start_for('mail_wrap');
+
 	$theme=method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	if ($theme=='default') // Sucks, probably due to sending from Admin Zone...
 	{
@@ -383,6 +385,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	{
 		if ($r['temp']) @unlink($r['path']);
 	}
+
+	ocp_profile_end_for('mail_wrap',$subject_line);
 
 	// Return / Error handling
 	$SENDING_MAIL=false;

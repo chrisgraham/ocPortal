@@ -1157,7 +1157,7 @@ class database_driver
 
 		if ($ret!==NULL)
 		{
-			if ((isset($ret[300])) && (strpos($query,'theme_images')===false) && (strpos($query,'config')===false))
+			if ((isset($ret[300])) && (strpos($query,'theme_images')===false) && (strpos($query,'gsp')===false) && (strpos($query,'config')===false))
 			{
 				ocp_profile_start_for('_query:MANY_RESULTS_ALERT');
 				ocp_profile_end_for('_query:MANY_RESULTS_ALERT',$query);
