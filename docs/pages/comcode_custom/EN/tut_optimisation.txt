@@ -358,6 +358,11 @@ Google's work with SPDY is also interesting, and SDCH is [i]extremely interestin
 
 The CloudFlare service provides some of the same optimisations that mod_pagespeed does, as well as a CDN. However personally I'd opt to use mod_pagespeed and a custom CDN, as it is a more straight-forward configuration that doesn't require proxying your traffic (which itself will impact performance). That said, CloudFlare does provide nice anti-spam and traffic filtering, so if you have a big spam/DOS problem, it can be a very useful tool. CloudFlare's preloading feature also looks interesting, but it is not likely to result in noticeable speedup for most sites.
 
+[title="2"]Profiling[/title]
+
+A developer can run a profiler to work out bottlenecks in code, and decide optimisations.
+For hard-core programming, xdebug would be used. However, you can also run profiling on a live site using ocPortal's built-in profiler. This is enabled via a hidden option (described in the Code Book, and comments in [tt]sources/profiler.php[/tt]).
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_moving"]Moving servers (including copying themes manually)[/page]

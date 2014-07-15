@@ -65,7 +65,7 @@ function ocp_profile_is_enabled()
 	if (!function_exists('get_value')) return false;
 	if (!function_exists('get_member')) return false;
 
-	global $PROFILING_ALLOWED;
+	global $PROFILING_ALLOWED,$PROFILING_LINUX_FULL;
 	if (!isset($PROFILING_ALLOWED))
 	{
 		$val=get_value('enable_profiler');
@@ -226,7 +226,11 @@ function _ocp_profiler_script_end()
  */
 function _ocp_profiler_generic_logging()
 {
-	_ocp_profile_log_line(shell_exec('uptime'));
+	$c=trim(@strval(shell_exec('uptime')));
+	if ($c!='')
+		_ocp_profile_log_line('uptime: '.$c);
 
-	_ocp_profile_log_line(shell_exec('vmstat'));
+	$c=trim(@strval(shell_exec('vmstat')));
+	if ($c!='')
+		_ocp_profile_log_line('vmstat: '.$c);
 }
