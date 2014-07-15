@@ -41,7 +41,7 @@ class Block_side_google_search
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'page_name\',$map)?$map[\'page_name\']:\'google_search\')';
-		$info['ttl']=15;
+		$info['ttl']=60*5;
 		return $info;
 	}
 

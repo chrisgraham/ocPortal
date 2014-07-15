@@ -46,7 +46,9 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 	$langs_required.='!';
 	$langs_required.=(is_null($_csss_required))?'':implode(':',$_csss_required);
 
-	ocp_profile_start_for('put_into_cache');
+	$big_mainstream_cache=false;//($codename!='side_stored_menu') && ($ttl>60*5) && (get_users_timezone(get_member())==get_site_timezone());
+	if ($big_mainstream_cache)
+		ocp_profile_start_for('put_into_cache');
 
 	if (!is_null($GLOBALS['MEM_CACHE']))
 	{
@@ -60,7 +62,8 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 		$GLOBALS['SITE_DB']->query_insert('cache',array('langs_required'=>$langs_required,'lang'=>$lang,'cached_for'=>$codename,'the_value'=>$tempcode?$cache->to_assembly($lang):serialize($cache),'date_and_time'=>time(),'the_theme'=>$theme,'identifier'=>md5($cache_identifier)),false,true);
 	}
 
-	ocp_profile_end_for('put_into_cache',$codename.' - '.$cache_identifier);
+	if ($big_mainstream_cache)
+		ocp_profile_end_for('put_into_cache',$codename.' - '.$cache_identifier);
 }
 
 

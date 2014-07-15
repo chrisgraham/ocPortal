@@ -1357,6 +1357,9 @@ function ocf_member_choose_title($new_title,$member_id=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
+	$old_title=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_title');
+	if ($old_title==$new_title) return;
+
 	if (ocp_mb_strlen($new_title)>intval(get_option('max_member_title_length'))) warn_exit(do_lang_tempcode('USER_TITLE_TOO_BIG'));
 
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_title'=>$new_title),array('id'=>$member_id),'',1);
@@ -1380,6 +1383,8 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 	if (ocp_mb_strlen($new_signature)>$max_sig_length) warn_exit(make_string_tempcode(escape_html(do_lang('SIGNATURE_TOO_BIG'))));
 
 	$_signature=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_signature');
+
+	if (get_translated_text($_signature)==$new_signature) return;
 
 	require_code('attachments2');
 	require_code('attachments3');

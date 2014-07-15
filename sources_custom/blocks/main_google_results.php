@@ -41,7 +41,7 @@ class Block_main_google_results
 	{
 		$info=array();
 		$info['cache_on']='array()';
-		$info['ttl']=15;
+		$info['ttl']=60*5;
 		return $info;
 	}
 

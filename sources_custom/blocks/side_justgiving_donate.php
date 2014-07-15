@@ -41,7 +41,7 @@ class Block_side_justgiving_donate
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'eggid\',$map)?$map[\'eggid\']:0)';
-		$info['ttl']=1;
+		$info['ttl']=60*5;
 		return $info;
 	}
 

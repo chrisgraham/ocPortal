@@ -138,8 +138,6 @@ function is_swf_upload($fake_prepopulation=false)
  */
 function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce_type=0,$make_thumbnail=false,$thumb_specify_name='',$thumb_attach_name='',$copy_to_server=false,$accept_errors=false,$should_get_something=false,$only_make_smaller=false)
 {
-	ocp_profile_start_for('get_url');
-
 	require_code('files2');
 
 	$upload_folder=filter_naughty($upload_folder);
@@ -197,6 +195,8 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 			}
 		}
 	}
+
+	if (count($_FILES)!=0) ocp_profile_start_for('get_url');
 
 	if ($obfuscate==3) $accept_errors=true;
 
@@ -494,7 +494,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	if ($specify_name!='') $_POST[$specify_name]=array_key_exists(0,$out)?$out[0]:'';
 	if ($thumb_specify_name!='') $_POST[$thumb_specify_name]=array_key_exists(1,$out)?$out[1]:'';
 
-	ocp_profile_end_for('get_url',$attach_name);
+	if (count($_FILES)!=0) ocp_profile_end_for('get_url',$attach_name);
 
 	return $out;
 }

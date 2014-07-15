@@ -194,6 +194,8 @@ function _ocp_profiler_script_end()
 
 	global $PAGE_START_TIME,$PROFILER_PATH,$PROFILER_FILEHANDLE,$PROFILING_LINUX_FULL;
 
+	if (!isset($PROFILER_FILEHANDLE)) return; // Never started, so don't tail off
+
 	// Lock out further profiling
 	global $PROFILING_ALLOWED;
 	$PROFILING_ALLOWED=false;

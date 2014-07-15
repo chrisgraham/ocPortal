@@ -626,7 +626,7 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 	ocp_profile_start_for('_do_template');
 	$result=template_to_tempcode($html,0,false,($suffix!='.tpl')?'':$codename,$theme_orig,$lang);
 	ocp_profile_end_for('_do_template',$codename.$suffix);
-	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP) && (($suffix=='.tpl') || ($codename=='no_cache')))
+	if (($CACHE_TEMPLATES) && (!$TEMPLATE_PREVIEW_OP))
 	{
 		$path2=get_custom_file_base().'/themes/'.$theme_orig.'/templates_cached/'.filter_naughty($lang).'/';
 		$myfile=@fopen($path2.filter_naughty($_codename).$suffix.'.tcp','ab');

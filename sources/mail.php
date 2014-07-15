@@ -38,6 +38,11 @@ function init__mail()
  */
 function _mail_img_rep_callback($matches)
 {
+	if ((!url_is_local($matches[0])) && (substr($matches[2],0,strlen(get_custom_base_url()))!=get_custom_base_url()) && (substr($matches[2],0,strlen(get_base_url()))!=get_base_url()))
+	{
+		return $matches[0];
+	}
+
 	global $CID_IMG_ATTACHMENT;
 	$cid=uniqid('',true).'@'.str_replace(' ','_',get_domain()); // str_replace is in case someone has put in the domain wrong
 	$CID_IMG_ATTACHMENT[$cid]=$matches[2];
@@ -310,7 +315,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 	$from_name=str_replace("\r",'',$from_name);
 	$from_name=str_replace("\n",'',$from_name);
 
-	ocp_profile_start_for('mail_wrap');
+	if (!$coming_out_of_queue)
+		ocp_profile_start_for('mail_wrap');
 
 	$theme=method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
 	if ($theme=='default') // Sucks, probably due to sending from Admin Zone...
@@ -748,7 +754,8 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 		}
 	}
 
-	ocp_profile_end_for('mail_wrap',$subject_line);
+	if (!$coming_out_of_queue)
+		ocp_profile_end_for('mail_wrap',$subject_line);
 
 	if (!$worked)
 	{

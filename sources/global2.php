@@ -941,14 +941,17 @@ function is_browser_decacheing()
 	global $BROWSER_DECACHEING;
 	if ($BROWSER_DECACHEING!==NULL) return $BROWSER_DECACHEING;
 
-	if (is_null(get_value('ran_once')))
+	if (is_null(get_value('ran_once'))) // Track whether ocPortal has run at least once
 	{
 		set_value('ran_once','1');
 		return true;
 	}
-	$header_method=(array_key_exists('HTTP_CACHE_CONTROL',$_SERVER)) && ($_SERVER['HTTP_CACHE_CONTROL']=='no-cache') && (ocp_srv('REQUEST_METHOD')!='POST') && ((!function_exists('browser_matches')) || (!browser_matches('opera')));
+
+	return false;	// This technique stopped working well, Chrome sends cache-control too freely
+
+	/*$header_method=(array_key_exists('HTTP_CACHE_CONTROL',$_SERVER)) && ($_SERVER['HTTP_CACHE_CONTROL']=='no-cache') && (ocp_srv('REQUEST_METHOD')!='POST') && ((!function_exists('browser_matches')) || (!browser_matches('opera')));
 	$BROWSER_DECACHEING=(($header_method) && ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (has_actual_page_access(get_member(),'admin_cleanup')) || ($GLOBALS['IS_ACTUALLY_ADMIN'])));
-	return $BROWSER_DECACHEING;
+	return $BROWSER_DECACHEING;*/
 }
 
 /**
