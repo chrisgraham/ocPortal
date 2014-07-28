@@ -136,6 +136,11 @@ class Module_admin_quiz
 			$this->title=get_screen_title('QUIZ_RESULTS');
 		}
 
+		if ($type=='delete_quiz_results')
+		{
+			$this->title=get_screen_title('DELETE_QUIZ_RESULTS');
+		}
+
 		return NULL;
 	}
 
@@ -158,6 +163,7 @@ class Module_admin_quiz
 		if ($type=='__quiz_results') return $this->__quiz_results();
 		if ($type=='export') return $this->export_quiz();	
 		if ($type=='_export') return $this->_export_quiz();
+		if ($type=='delete_quiz_results') return $this->delete_quiz_results();
 
 		return new ocp_tempcode();
 	}
@@ -560,6 +566,51 @@ class Module_admin_quiz
 			'MARKS_RANGE'=>$marks_range,
 			'PERCENTAGE_RANGE'=>$percentage_range,
 		));
+	}
+
+	/**
+	 * Delete some quiz results.
+	 *
+	 * @return tempcode	The result of execution.
+	 */
+	function delete_quiz_results()
+	{
+		$to_delete=array();
+
+		foreach (array_keys($_POST) as $key)
+		{
+			$matches=array();
+			if (preg_match('#^delete_(\d+)$#',$key,$matches)!=0)
+			{
+				if (post_param_integer($key)==1)
+				{
+					$to_delete[]=intval($matches[1]);
+				}
+			}
+		}
+
+		if (count($to_delete)==0)
+		{
+			warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+		}
+
+		foreach ($to_delete as $result_id)
+		{
+			$entry_rows=$GLOBALS['SITE_DB']->query_select('quiz_entries',array('q_quiz','q_member'),array('id'=>$result_id),'',1);
+			if (isset($entry_rows[0]))
+			{
+				$to_delete_sub=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('quiz_entries',array('id'),$entry_rows[0]));
+				foreach ($to_delete_sub as $_result_id)
+				{
+					$GLOBALS['SITE_DB']->query_delete('quiz_entries',array('id'=>$_result_id),'',1);
+					$GLOBALS['SITE_DB']->query_delete('quiz_entry_answer',array('q_entry'=>$_result_id));
+				}
+			}
+		}
+
+		log_it('DELETE_QUIZ_RESULTS');
+
+		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
 	}
 }
 

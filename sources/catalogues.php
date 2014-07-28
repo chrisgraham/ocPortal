@@ -396,7 +396,35 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 				}
 			}
 		}
-		foreach (array('add_date'=>'ADDED','average_rating'=>'RATING','compound_rating'=>'POPULARITY','fixed_random'=>'RANDOM') as $extra_sort_code=>$extra_sort_lang)
+		$extra_sorts=array();
+		$extra_sorts['add_date']='ADDED';
+		if (get_option('is_on_rating')=='0')
+		{
+			$has_ratings=false;
+		} else
+		{
+			if (is_null($entries))
+			{
+				$has_ratings=false;
+				foreach ($entries as $entry)
+				{
+					if ($entry['allow_rating']==1)
+					{
+						$has_ratings=true;
+					}
+				}
+				if ($has_ratings)
+				{
+					$extra_sorts['average_rating']='RATING';
+					$extra_sorts['compound_rating']='POPULARITY';
+				}
+			} else
+			{
+				$has_ratings=true;
+			}
+		}
+		$extra_sorts['fixed_random']='RANDOM';
+		foreach ($extra_sorts as $extra_sort_code=>$extra_sort_lang)
 		{
 			foreach (array('ASC'=>'_ASCENDING','DESC'=>'_DESCENDING') as $dir_code=>$dir_lang)
 			{

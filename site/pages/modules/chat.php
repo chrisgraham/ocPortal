@@ -299,7 +299,7 @@ class Module_chat
 			$this->title=get_screen_title('CHAT_DOWNLOAD_LOGS');
 		}
 
-		if ($type=='misc' && $type=='room')
+		if ($type=='misc' || $type=='room')
 		{
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CHAT_LOBBY'))));
 		}

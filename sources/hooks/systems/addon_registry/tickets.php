@@ -268,6 +268,7 @@ class Hook_addon_registry_tickets
 				'TICKET_TYPE'=>NULL,
 				'SUPPORT_OPERATOR_URL'=>NULL,
 				'TICKET_PAGE_TEXT'=>lorem_sentence_html(),
+				'POST_TEMPLATES'=>'',
 				'TYPES'=>placeholder_array(),
 				'STAFF_ONLY'=>true,
 				'POSTER'=>lorem_phrase(),
@@ -284,6 +285,7 @@ class Hook_addon_registry_tickets
 						'OVERVIEW_COUNT'=>placeholder_number(),
 					),
 				),
+				'SET_TICKET_EXTRA_ACCESS_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}

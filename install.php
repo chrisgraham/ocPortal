@@ -393,8 +393,10 @@ function step_1()
 			warn_exit(do_lang_tempcode('CORRUPT_FILES_LOWERCASE'));
 	}
 
-	if (file_exists('lang_custom/langs.ini')) $lookup=better_parse_ini_file(get_custom_file_base().'/lang_custom/langs.ini');
-		else $lookup=better_parse_ini_file(get_file_base().'/lang/langs.ini');
+	if (file_exists('lang_custom/langs.ini'))
+		$lookup=better_parse_ini_file(get_custom_file_base().'/lang_custom/langs.ini');
+	else
+		$lookup=better_parse_ini_file(get_file_base().'/lang/langs.ini');
 
 	$lang_count=array();
 	$langs1=get_dir_contents('lang');
@@ -458,12 +460,12 @@ function step_2()
 	global $FILE_ARRAY;
 	if (@is_array($FILE_ARRAY))
 	{
-		$licence=file_array_get('text/'.$_POST['default_lang'].'/licence.txt');
+		$licence=file_array_get('text/'.filter_naughty($_POST['default_lang']).'/licence.txt');
 		if (is_null($licence)) $licence=file_array_get('text/EN/licence.txt');
 	}
 	else
 	{
-		$licence=@file_get_contents(get_file_base().'/text/'.$_POST['default_lang'].'/licence.txt');
+		$licence=@file_get_contents(get_file_base().'/text/'.filter_naughty($_POST['default_lang']).'/licence.txt');
 		if ($licence=='') $licence=file_get_contents(get_file_base().'/text/EN/licence.txt');
 	}
 
@@ -2362,7 +2364,7 @@ function handle_self_referencing_embedment()
 			header('Content-type: image/png');
 			if (!file_exists(get_file_base().'/'.$type))
 			{
-				$out=file_array_get($type);
+				$out=file_array_get(filter_naughty($type));
 				echo $out;
 			} else
 			{
@@ -2588,8 +2590,6 @@ function get_dir_contents($dir,$php=false)
 				}
 			}
 		}
-
-//		return $out;
 	}
 
 	$_dir=@opendir($dir);

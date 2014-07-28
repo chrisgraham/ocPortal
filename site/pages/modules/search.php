@@ -220,6 +220,8 @@ class Module_search
 			$url_map=array('page'=>'_SELF','type'=>'results','id'=>$id,'specific'=>1);
 			$catalogue_name=get_param('catalogue_name','');
 			if ($catalogue_name!='') $url_map['catalogue_name']=$catalogue_name;
+			$embedded=get_param_integer('embedded',0);
+			if ($embedded==1) $url_map['embedded']=1;
 			$url=build_url($url_map,'_SELF',NULL,false,true);
 
 			require_code('hooks/modules/search/'.filter_naughty_harsh($id),true);
@@ -342,7 +344,7 @@ class Module_search
 
 		$author=get_param('author','');
 		$author_id=($author!='')?$GLOBALS['FORUM_DRIVER']->get_member_from_username($author):NULL;
-		$days=get_param_integer('days',60);
+		$days=get_param_integer('days',($id=='ocf_members')?NULL:60);
 		$sort=get_param('sort','relevance');
 		$direction=get_param('direction','DESC');
 		if (!in_array(strtoupper($direction),array('ASC','DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
@@ -382,7 +384,7 @@ class Module_search
 			'BOOLEAN_SEARCH'=>$this->_is_boolean_search(),
 			'AND'=>$boolean_operator=='AND',
 			'ONLY_TITLES'=>$only_titles,
-			'DAYS'=>strval($days),
+			'DAYS'=>is_null($days)?'':strval($days),
 			'SORT'=>$sort,
 			'DIRECTION'=>$direction,
 			'CONTENT'=>$content,

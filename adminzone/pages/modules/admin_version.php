@@ -436,7 +436,7 @@ class Module_admin_version
 			}
 		}
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<14))
+		if ((!is_null($upgrade_from)) && ($upgrade_from>=10) && ($upgrade_from<14))
 		{
 			$GLOBALS['SITE_DB']->drop_table_if_exists('tracking');
 			$GLOBALS['SITE_DB']->add_table_field('logged_mail_messages','m_template','ID_TEXT');
@@ -563,6 +563,9 @@ class Module_admin_version
 				'member_view'=>'BINARY',
 				'friend_view'=>'BINARY'
 			));
+			$GLOBALS['SITE_DB']->create_index('content_privacy','guest_view',array('guest_view'));
+			$GLOBALS['SITE_DB']->create_index('content_privacy','member_view',array('member_view'));
+			$GLOBALS['SITE_DB']->create_index('content_privacy','friend_view',array('friend_view'));
 			$GLOBALS['SITE_DB']->create_table('content_primary__members',array(
 				'content_type'=>'*ID_TEXT',
 				'content_id'=>'*ID_TEXT',

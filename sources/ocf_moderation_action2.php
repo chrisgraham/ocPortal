@@ -139,6 +139,7 @@ function ocf_perform_multi_moderation($id,$topic_id,$reason,$post_text='',$is_em
 		handle_topic_ticket_reply($forum_id,$topic_id,$topic_details[0]['t_cache_first_title'],$post_text);
 	}
 
+	require_lang('ocf_multi_moderations');
 	require_code('ocf_general_action2');
 	ocf_mod_log_it('PERFORM_MULTI_MODERATION',strval($id),strval($topic_id),$reason);
 }

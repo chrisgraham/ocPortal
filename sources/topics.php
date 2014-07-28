@@ -49,6 +49,7 @@ class OCP_Topic
 	var $topic_description=NULL;
 	var $topic_description_link=NULL;
 	var $topic_info=NULL;
+	var $rendering_context='ocf';
 
 	// Will be filled up during processing
 	var $all_posts_ordered=NULL;
@@ -67,6 +68,16 @@ class OCP_Topic
 	 */
 	function OCP_Topic()
 	{
+	}
+
+	/**
+	 * Set a rendering context.
+	 *
+	 * @param  ID_TEXT		Rendering context
+	 */
+	function set_rendering_context($rendering_context)
+	{
+		$this->rendering_context=$rendering_context;
 	}
 
 	/**
@@ -320,7 +331,13 @@ class OCP_Topic
 		$this->topic_id=$topic_id;
 		$this->reverse=$reverse;
 
-		$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
+		if (get_param_integer('threaded',NULL)===1)
+		{
+			$this->is_threaded=true;
+		} else
+		{
+			$this->is_threaded=$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id);
+		}
 
 		$sort=$this->_get_sort_order($reverse);
 		$_sort=$sort; // Passed through forum layer, we need to run a translation...
@@ -834,7 +851,7 @@ class OCP_Topic
 							$this->topic_info=ocf_read_in_topic($this->topic_id,0,0,false,false);
 						}
 						require_lang('ocf');
-						$buttons=ocf_render_post_buttons($this->topic_info,$post,$may_reply);
+						$buttons=ocf_render_post_buttons($this->topic_info,$post,$may_reply,$this->rendering_context);
 					}
 				}
 

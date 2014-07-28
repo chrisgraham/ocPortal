@@ -7,8 +7,8 @@
 <title>{TITLE*}</title>
 {CSS}
 </head>
-<body>
-	<div class="email_body">
+<body style="font-size: 12px" class="email_body">
+	<div style="font-size: 12px" class="email_body">
 		<p class="email_logo">
 			<a href="{$BASE_URL*}"><img src="{$IMG*,logo/standalone_logo}" title="{$SITE_NAME*}" alt="{$SITE_NAME*}" /></a>
 		</p>

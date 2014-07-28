@@ -1244,6 +1244,8 @@ class Module_cms_calendar extends standard_crud_module
 	{
 		check_privilege('mass_import');
 
+		set_mass_import_mode();
+
 		require_code('calendar_ical');
 
 		$ical_url=post_param('ical_feed_url',NULL);

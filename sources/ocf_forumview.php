@@ -128,7 +128,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 							'TOPIC_URL'=>$topic_url,
 							'TOPIC_TITLE'=>($subforum['last_title']=='')?do_lang_tempcode('NA'):$subforum['last_title'],
 							'POSTER'=>$poster,
-							'MEMBER_ID'=>strval($subforum['last_member_id']),
+							'MEMBER_ID'=>is_null($subforum['last_member_id'])?'':strval($subforum['last_member_id']),
 							'ID'=>strval($subforum['last_topic_id'])
 						));
 					}
@@ -277,6 +277,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 			$multi_moderations=ocf_list_multi_moderations($id);
 			if (count($multi_moderations)!=0)
 			{
+				require_lang('ocf_multi_moderations');
 				$moderator_actions.='<optgroup label="'.do_lang('MULTI_MODERATIONS').'">';
 				foreach ($multi_moderations as $mm_id=>$mm_name)
 					$moderator_actions.='<option value="mmt_'.strval($mm_id).'">'.$mm_name.'</option>';

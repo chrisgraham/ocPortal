@@ -575,6 +575,8 @@ class Module_admin_ocf_members
 	 */
 	function _import_csv()
 	{
+		set_mass_import_mode();
+
 		$default_password=post_param('default_password');
 
 		$use_temporary_passwords=(post_param_integer('temporary_password',0)==1);

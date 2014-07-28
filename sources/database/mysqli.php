@@ -222,6 +222,7 @@ class Database_Static_mysqli extends Database_super_mysql
 
 			if ((function_exists('mysqli_ping')) && ($err=='MySQL server has gone away') && (!$this->reconnected_once))
 			{
+				@ini_set('mysqli.reconnect','1');
 				$this->reconnected_once=true;
 				mysqli_ping($db);
 				$ret=$this->db_query($query,$db_parts,$max,$start,$fail_ok,$get_insert_id);

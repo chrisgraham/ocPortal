@@ -578,7 +578,7 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 	{
 		$new_ticket_id=strval($member_id).'_'.uniqid('',false);
 
-		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$new_ticket_id,'redirect'=>NULL),'_SELF',NULL,false,true,true);
+		$_home_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$new_ticket_id,'redirect'=>NULL),get_module_zone('tickets'),NULL,false,true,true);
 		$home_url=$_home_url->evaluate();
 
 		// Pick up ticket type
@@ -601,7 +601,7 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 		send_ticket_email($new_ticket_id,$subject,$body,$home_url,$from_email,$ticket_type,$member_id,true);
 	} else
 	{
-		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$existing_ticket,'redirect'=>NULL),'_SELF',NULL,false,true,true);
+		$_home_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$existing_ticket,'redirect'=>NULL),get_module_zone('tickets'),NULL,false,true,true);
 		$home_url=$_home_url->evaluate();
 
 		// Reply to the ticket...

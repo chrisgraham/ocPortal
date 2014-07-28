@@ -109,7 +109,7 @@ class Hook_stats_forum
 					)));
 				}
 			}
-			if ($bits->is_empty()) return new ocp_tempcode();
+			if ($bits->is_empty_shell()) return new ocp_tempcode();
 			$forums=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'52cd616760efe17adcec4b97e1305301','SECTION'=>do_lang_tempcode('FORUM_SLASH_COMMUNITY'),'CONTENT'=>$bits));
 		} else $forums=new ocp_tempcode();
 

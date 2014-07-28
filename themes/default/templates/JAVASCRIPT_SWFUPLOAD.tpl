@@ -1591,6 +1591,7 @@ function replace_file_input(page_type,name,_btn_submit_id,posting_field_name,fil
 	}
 
 	var maindiv=document.createElement('div');
+	maindiv.style.display='inline-block';
 	rep.parentNode.appendChild(maindiv);
 
 	var subdiv=document.createElement('div');

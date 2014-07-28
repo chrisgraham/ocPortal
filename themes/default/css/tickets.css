@@ -59,6 +59,9 @@ body table.results_table tbody tr.unclosed_ticket td {
 .buttons__new_reply_staff_only {
 	background-image: url('{$IMG,icons/24x24/buttons/new_reply_staff_only}') !important;
 }
+.menu__adminzone__security__permissions__privileges {
+	background-image: url('{$IMG,icons/24x24/menu/adminzone/security/permissions/privileges}') !important;
+}
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.buttons__add_ticket {
@@ -66,5 +69,8 @@ body table.results_table tbody tr.unclosed_ticket td {
 	}
 	.buttons__new_reply_staff_only {
 		background-image: url('{$IMG,icons/48x48/buttons/new_reply_staff_only}') !important;
+	}
+	.menu__adminzone__security__permissions__privileges {
+		background-image: url('{$IMG,icons/48x48/menu/adminzone/security/permissions/privileges}') !important;
 	}
 }

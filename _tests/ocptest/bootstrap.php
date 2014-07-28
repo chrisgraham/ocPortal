@@ -10,7 +10,7 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		unit_testing
+ * @package		testing_platform
  */
 
 function unit_testing_run()

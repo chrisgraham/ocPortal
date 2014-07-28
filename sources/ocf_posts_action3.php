@@ -228,7 +228,10 @@ function ocf_delete_posts_topic($topic_id,$posts,$reason='',$check_perms=true,$c
 
 		$or_list.='id='.strval($post);
 
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($post),'cf_type'=>'post'));
+		if (addon_installed('catalogues'))
+		{
+			$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($post),'cf_type'=>'post'));
+		}
 	}
 
 	// Check access

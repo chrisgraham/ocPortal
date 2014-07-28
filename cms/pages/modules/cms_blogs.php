@@ -678,6 +678,8 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		check_privilege('mass_import',NULL,NULL,'cms_news');
 
+		set_mass_import_mode();
+
 		// Wordpress posts, XML file importing method
 		if ((get_param('method')=='xml'))
 		{

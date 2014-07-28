@@ -31,13 +31,13 @@ class Hook_secpay
 	}
 
 	/**
-	 * Get the IPN URL.
+	 * Get the remote form URL.
 	 *
-	 * @return URLPATH		The IPN URL.
+	 * @return URLPATH		The remote form URL.
 	 */
-	function get_ipn_url()
+	function _get_remote_form_url()
 	{
-		return 'https://www.secpay.com/java-bin/ValCard';
+		return 'https://secure.worldpay.com/wcc/purchase';
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Hook_secpay
 	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
 		$username=$this->_get_username();
-		$ipn_url=$this->get_ipn_url();
+		$ipn_url=$this->_get_remote_form_url();
 		$trans_id=$this->generate_trans_id();
 		$GLOBALS['SITE_DB']->query_insert('trans_expecting',array(
 			'id'=>$trans_id,
@@ -148,7 +148,7 @@ class Hook_secpay
 	function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
 	{
 		$username=$this->_get_username();
-		$ipn_url=$this->get_ipn_url();
+		$ipn_url=$this->_get_remote_form_url();
 		$trans_id=$this->generate_trans_id();
 		$digest=md5($trans_id.float_to_raw_string($amount).get_option('ipn_password'));
 		list($length_units_2,$first_repeat)=$this->_translate_subscription_details($length,$length_units);

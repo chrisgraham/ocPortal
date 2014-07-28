@@ -825,6 +825,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 				require_code('caches3');
 				erase_cached_language();
 
+				require_code('site');
 				attach_message(do_lang_tempcode('MISSING_LANG_ENTRY',escape_html($codename)),'warn');
 				return '';
 			} else

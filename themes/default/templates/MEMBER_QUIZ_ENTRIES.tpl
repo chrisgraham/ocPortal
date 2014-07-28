@@ -11,6 +11,9 @@
 				<h3>{_loop_key*}</h3>
 			{+END}
 
+			{+START,IF_NON_EMPTY,{DELETE_URL}}
+			<form action="{DELETE_URL*}" method="post">
+			{+END}
 			<div class="wide_table_wrap"><table class="columned_table wide_table results_table autosized_table">
 				<thead>
 					<tr>
@@ -33,6 +36,12 @@
 						<th>
 							{!STATUS}
 						</th>
+
+						{+START,IF_NON_EMPTY,{DELETE_URL}}
+							<th>
+								{!DELETE}
+							</th>
+						{+END}
 					</tr>
 				</thead>
 
@@ -76,10 +85,34 @@
 									{!UNKNOWN}
 								{+END}
 							</td>
+
+							{+START,IF_NON_EMPTY,{DELETE_URL}}
+								<td>
+									<input type="checkbox" name="delete_{ENTRY_ID*}" value="1" />
+								</td>
+							{+END}
 						</tr>
 					{+END}
 				</tbody>
+
+				{+START,IF_NON_EMPTY,{DELETE_URL}}
+					<tfoot>
+						<tr>
+							<td colspan="6">
+							</td>
+
+							<td>
+								<input type="submit" value="{!DELETE}" />
+							</td>
+						</tr>
+					</tfoot>
+				{+END}
 			</table></div>
+			{+START,IF_NON_EMPTY,{DELETE_URL}}
+			</form>
+			{+END}
+
+			{SORTING}
 
 			{$,If more than one category of quiz entered then show summaries}
 			{+START,IF,{$OR,{$GET,want_sections},{$NEQ,{CATEGORIES},1}}}

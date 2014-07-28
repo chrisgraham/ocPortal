@@ -222,7 +222,7 @@ class Hook_addon_registry_core_abstract_components
 				'IMMEDIATE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
-				'TITLE_FULL'=>lorem_phrase(),
+				'FULL_TITLE'=>lorem_phrase(),
 				'IMG'=>'buttons__edit'
 			)),NULL,'',true)
 		);

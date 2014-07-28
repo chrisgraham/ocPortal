@@ -421,7 +421,10 @@ function delete_calendar_event($id)
 		}
 	}
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'event'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'event'));
+	}
 
 	log_it('DELETE_CALENDAR_EVENT',strval($id),$e_title);
 
@@ -518,7 +521,10 @@ function delete_event_type($id)
 	$GLOBALS['SITE_DB']->query_delete('calendar_types',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('calendar_interests',array('t_type'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'event_type'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'event_type'));
+	}
 
 	delete_lang($myrow['t_title']);
 

@@ -171,7 +171,10 @@ function ocf_delete_group($group_id,$target_group=NULL)
 	require_code('themes2');
 	tidy_theme_img_code(NULL,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($group_id),'cf_type'=>'group'));
+	if (addon_installed('catalogues'))
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($group_id),'cf_type'=>'group'));
+	}
 
 	log_it('DELETE_GROUP',strval($group_id),$name);
 
@@ -247,7 +250,7 @@ function ocf_member_ask_join_group($group_id,$member_id=NULL)
 		{
 			$mail=do_lang('GROUP_JOIN_REQUEST_MAIL',comcode_escape($their_username),comcode_escape($group_name),array($url),get_site_default_lang());
 			$subject=do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',NULL,NULL,NULL,get_site_default_lang());
-			dispatch_notification('ocf_group_join_request_staff',NULL,$subject,$mail);
+			dispatch_notification('ocf_group_join_request_staff',NULL,$subject,$mail,NULL,get_member(),3,false,false,NULL,NULL,'','','','',NULL,true);
 		}
 	}
 }

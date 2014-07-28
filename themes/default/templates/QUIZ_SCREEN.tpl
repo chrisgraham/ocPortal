@@ -26,6 +26,13 @@
 	</p>
 {+END}
 
+{$SET,no_required_stars,{ALL_REQUIRED}}
+{+START,IF,{$NOT,{ALL_REQUIRED}}}
+	{+START,IF,{$IN_STR,{FIELDS},required_star}}
+		{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
+	{+END}
+{+END}
+
 <form title="{!SAVE}" id="quiz_form" class="quiz_form" method="post" onsubmit="return check_form(this);" action="{URL*}">
 	<div>
 		<div class="wide_table_wrap"><table class="map_table form_table wide_table">

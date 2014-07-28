@@ -55,6 +55,7 @@ class Module_quiz
 		$GLOBALS['SITE_DB']->drop_table_if_exists('quiz_entry_answer');
 
 		delete_privilege('bypass_quiz_repeat_time_restriction');
+		delete_privilege('bypass_quiz_timer');
 		delete_privilege('view_others_quiz_results');
 	}
 
@@ -104,6 +105,7 @@ class Module_quiz
 		if ((is_null($upgrade_from)) || ($upgrade_from<6))
 		{
 			add_privilege('QUIZZES','view_others_quiz_results',false);
+			add_privilege('QUIZZES','bypass_quiz_timer',false);
 		}
 
 		if (is_null($upgrade_from))
@@ -247,7 +249,7 @@ class Module_quiz
 
 			$quiz_name=get_translated_text($quiz['q_name']);
 			$title_to_use=do_lang_tempcode('QUIZ_THIS_WITH',do_lang_tempcode($quiz['q_type']),make_fractionable_editable('quiz',$quiz_id,$quiz_name));
-			$title_to_use_2=do_lang('THIS_WITH_SIMPLE',do_lang($quiz['q_type']),$quiz_name);
+			$title_to_use_2=do_lang('QUIZ_THIS_WITH',do_lang($quiz['q_type']),$quiz_name);
 			seo_meta_load_for('quiz',strval($quiz_id),$title_to_use_2);
 
 			breadcrumb_set_self(make_string_tempcode(escape_html(get_translated_text($quiz['q_name']))));
@@ -341,32 +343,39 @@ class Module_quiz
 		$start=get_param_integer('quizzes_start',0);
 		$max=get_param_integer('quizzes_max',20);
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'q_validated=1 AND ':'').'q_open_time<'.strval(time()).' AND (q_close_time IS NULL OR q_close_time>'.strval(time()).') ORDER BY q_type ASC,id DESC',$max,$start);
-		$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'q_validated=1 AND ':'').'q_open_time<'.strval(time()).' AND (q_close_time IS NULL OR q_close_time>'.strval(time()).')');
-		if (count($rows)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
+		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'quizzes WHERE '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?'q_validated=1 AND ':'').'q_open_time<'.strval(time()).' AND (q_close_time IS NULL OR q_close_time>'.strval(time()).') ORDER BY q_type ASC,id DESC');
 		$content_tests=new ocp_tempcode();
 		$content_competitions=new ocp_tempcode();
 		$content_surveys=new ocp_tempcode();
+		$num=0;
 		foreach ($rows as $myrow)
 		{
 			// Check access
 			if (!has_category_access(get_member(),'quiz',strval($myrow['id']))) continue;
 
-			$link=render_quiz_box($myrow,'_SEARCH',false);
-
-			switch ($myrow['q_type'])
+			if (($num>=$start) && ($num<$start+$max))
 			{
-				case 'SURVEY':
-					$content_surveys->attach($link);
-					break;
-				case 'TEST':
-					$content_tests->attach($link);
-					break;
-				case 'COMPETITION':
-					$content_competitions->attach($link);
-					break;
+				$link=render_quiz_box($myrow,'_SEARCH',false);
+
+				switch ($myrow['q_type'])
+				{
+					case 'SURVEY':
+						$content_surveys->attach($link);
+						break;
+					case 'TEST':
+						$content_tests->attach($link);
+						break;
+					case 'COMPETITION':
+						$content_competitions->attach($link);
+						break;
+				}
 			}
+
+			$num++;
 		}
+		$max_rows=$num;
+
+		if ($max_rows==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
 
 		require_code('templates_pagination');
 		$pagination=pagination(do_lang_tempcode('QUIZZES'),$start,'quizzes_start',$max,'quizzes_max',$max_rows);
@@ -421,6 +430,9 @@ class Module_quiz
 		$title_to_use=$this->title_to_use;
 		$title_to_use_2=$this->title_to_use_2;
 
+		if (has_privilege(get_member(),'bypass_quiz_timer'))
+			$quiz['q_timeout']=NULL;
+
 		$this->enforcement_checks($quiz);
 
 		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$quiz_id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
@@ -450,10 +462,14 @@ class Module_quiz
 			$timer_offset=0;
 		}
 
+		$all_required=true;
+
 		$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$quiz_id),'ORDER BY q_order');
 		if ($quiz['q_shuffle_questions']==1) shuffle($questions);
 		foreach ($questions as $i=>$question)
 		{
+			if ($question['q_required']==0) $all_required=false;
+
 			$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$question['id']),'ORDER BY q_order');
 			if ($quiz['q_shuffle_answers']==1) shuffle($answers);
 			$questions[$i]['answers']=$answers;
@@ -490,6 +506,7 @@ class Module_quiz
 			'START_TEXT'=>$start_text,
 			'FIELDS'=>$fields,
 			'TIMEOUT'=>is_null($quiz['q_timeout'])?'':strval($quiz['q_timeout']*60-$timer_offset),
+			'ALL_REQUIRED'=>$all_required,
 		));
 	}
 
@@ -503,6 +520,9 @@ class Module_quiz
 		$quiz_id=$this->quiz_id;
 		$quiz=$this->quiz;
 		$quiz_name=get_translated_text($quiz['q_name']);
+
+		if (has_privilege(get_member(),'bypass_quiz_timer'))
+			$quiz['q_timeout']=NULL;
 
 		$last_visit_time=$GLOBALS['SITE_DB']->query_select_value_if_there('quiz_member_last_visit','v_time',array('v_quiz_id'=>$quiz_id,'v_member_id'=>get_member()),'ORDER BY v_time DESC');
 		if (is_null($last_visit_time)) warn_exit(do_lang_tempcode('QUIZ_TWICE'));
@@ -526,7 +546,7 @@ class Module_quiz
 		}
 		foreach ($questions as $i=>$question)
 		{
-			if ($question['q_type']=='SHORT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
+			if ($question['q_type']=='SHORT' || $question['q_type']=='SHORT_STRICT' || $question['q_type']=='LONG') // Text box ("free question"). May be an actual answer, or may not be
 			{
 				$GLOBALS['SITE_DB']->query_insert('quiz_entry_answer',array(
 					'q_entry'=>$entry_id,

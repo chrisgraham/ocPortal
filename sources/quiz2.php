@@ -69,7 +69,7 @@ function parse_quiz_question_line($question,$answers,$question_extra_text='',$do
 
 	// Type?
 	$type=((count($answers)==0)?'SHORT':'MULTIPLECHOICE');
-	foreach (array('MULTIPLECHOICE','MULTIMULTIPLE','LONG','SHORT') as $possible_type)
+	foreach (array('MULTIPLECHOICE','MULTIMULTIPLE','LONG','SHORT','SHORT_STRICT') as $possible_type)
 	{
 		if (strpos($question,' ['.$possible_type.']')!==false)
 		{

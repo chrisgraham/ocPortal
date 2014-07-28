@@ -454,6 +454,8 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 	{
 		// Find what we sold
 		list($found,$type_code)=find_product_row($item_name,true,true);
+
+		if ($found[0]==PRODUCT_SUBSCRIPTION) exit(); // We ignore separate payment signal for subscriptions (for Paypal it is web_accept)
 	}
 	if (is_null($found)) fatal_ipn_exit(do_lang('PRODUCT_NO_SUCH').' - '.$item_name,true);
 
@@ -497,7 +499,7 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 			$GLOBALS['SITE_DB']->query_update('subscriptions',array('s_state'=>'pending'),array('id'=>intval($purchase_id)),'',1);
 			if ($found[2]!='') call_user_func_array($found[2],array($purchase_id,$found,$type_code,true)); // Run cancel code
 		}
-		elseif ($item_name==do_lang('CART_ORDER',$purchase_id)) // Cart orders have special support for tracking the order status
+		elseif ($item_name==do_lang('shopping:CART_ORDER',$purchase_id)) // Cart orders have special support for tracking the order status
 		{
 			$found['ORDER_STATUS']='ORDER_STATUS_awaiting_payment';
 

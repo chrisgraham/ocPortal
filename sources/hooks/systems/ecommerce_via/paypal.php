@@ -27,17 +27,17 @@ class Hook_paypal
 	 */
 	function _get_payment_address()
 	{
-		return ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
+		return trim(ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn'));
 	}
 
 	/**
-	 * Get the PayPal IPN URL.
+	 * Get the remote form URL.
 	 *
-	 * @return URLPATH		The IPN URL.
+	 * @return URLPATH		The remote form URL.
 	 */
-	function get_ipn_url()
+	function _get_remote_form_url()
 	{
-		return ecommerce_test_mode()?'https://www.sandbox.paypal.com/cgi-bin/webscr':'https://www.paypal.com/cgi-bin/webscr';
+		return 'https://secure.worldpay.com/wcc/purchase';
 	}
 
 	/**
@@ -53,7 +53,7 @@ class Hook_paypal
 	function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
 	{
 		$payment_address=$this->_get_payment_address();
-		$ipn_url=$this->get_ipn_url();
+		$ipn_url=$this->_get_remote_form_url();
 
       $user_details=array();
 		if (!is_guest())
@@ -98,7 +98,7 @@ class Hook_paypal
 		// NB: We don't support PayPal's "recur_times", but that's fine because it's really not that useful (we can just set a long non-recurring subscription to the same effect)
 
 		$payment_address=$this->_get_payment_address();
-		$ipn_url=$this->get_ipn_url();
+		$ipn_url=$this->_get_remote_form_url();
 		return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array(
 			'_GUID'=>'7c8b9ce1f60323e118da1bef416adff3',
 			'TYPE_CODE'=>$type_code,
@@ -355,7 +355,7 @@ class Hook_paypal
 	{
 		$payment_address=$this->_get_payment_address();
 
-		$ipn_url=$this->get_ipn_url();
+		$ipn_url=$this->_get_remote_form_url();
 
 		$notification_text=do_lang_tempcode('CHECKOUT_NOTIFICATION_TEXT',strval($order_id));
 

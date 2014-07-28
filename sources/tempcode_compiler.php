@@ -876,6 +876,8 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 			if (!file_exists($path2))
 			{
 				require_code('files2');
+				if (!file_exists(dirname($path2)))
+					make_missing_directory(dirname($path2));
 				make_missing_directory($path2);
 			}
 

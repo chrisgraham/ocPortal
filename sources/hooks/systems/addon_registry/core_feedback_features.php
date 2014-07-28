@@ -155,6 +155,8 @@ class Hook_addon_registry_core_feedback_features
 			'sources/hooks/systems/config/is_on_comments.php',
 			'sources/hooks/systems/config/is_on_rating.php',
 			'sources/hooks/systems/config/is_on_trackbacks.php',
+			'sources/hooks/systems/symbols/SHOW_RATINGS.php',
+			'themes/default/templates/RATINGS_SHOW.tpl',
 		);
 	}
 
@@ -176,6 +178,7 @@ class Hook_addon_registry_core_feedback_features
 			'COMMENTS_POSTING_FORM.tpl'=>'comments',
 			'RATING_BOX.tpl'=>'rating',
 			'RATING_DISPLAY_SHARED.tpl'=>'rating_display_shared',
+			'RATINGS_SHOW.tpl'=>'ratings_show',
 			'COMMENTS_WRAPPER.tpl'=>'comments_wrapper',
 			'TRACKBACK_XML.tpl'=>'trackback_xml_wrapper',
 			'TRACKBACK_WRAPPER.tpl'=>'trackback_wrapper',
@@ -186,7 +189,7 @@ class Hook_addon_registry_core_feedback_features
 			'EMOTICON_CLICK_CODE.tpl'=>'comments',
 			'COMMENT_AJAX_HANDLER.tpl'=>'comments',
 			'POST.tpl'=>'comments_wrapper',
-			'POST_CHILD_LOAD_LINK.tpl'=>'comments_wrapper'
+			'POST_CHILD_LOAD_LINK.tpl'=>'comments_wrapper',
 		);
 	}
 
@@ -667,5 +670,33 @@ class Hook_addon_registry_core_feedback_features
 				'LIKES'=>false
 			)),NULL,'',true)
 		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function ratings_show()
+	{
+		$ratings=array();
+		$ratings[]=array(
+			'RATING_MEMBER'=>placeholder_id(),
+			'RATING_USERNAME'=>placeholder_lorem(),
+			'RATING_IP'=>placeholder_lorem(),
+			'RATING_TIME'=>placeholder_timestamp(),
+			'RATING_TIME_FORMATTED'=>placeholder_date(),
+			'RATING'=>'2',
+		);
+
+		return do_template('RATINGS_SHOW',array(
+			'RATINGS'=>$ratings,
+			'HAS_MORE'=>true,
+			'MAX'=>'1',
+			'CNT'=>'1',
+			'CNT_REMAINING'=>'10',
+		));
 	}
 }

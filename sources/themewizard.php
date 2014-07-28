@@ -803,6 +803,10 @@ function calculate_theme($seed,$source_theme,$algorithm,$show='colours',$dark=NU
 					{
 						$img=generate_recoloured_image($path,'#9C202F',$colours['a.hover'],'#BA1621',$colours['a.hover']);
 					}
+					elseif ($show=='tab')
+					{
+						$img=generate_recoloured_image($path,'#B5B5B5',$colours['tab_border'],'#F4F4F4',$colours['area_5_background']);
+					}
 					elseif (substr($show,0,10)=='checklist/')
 					{
 						$img=generate_recoloured_image($path,'#335082',$colours['special_borderer'],'#091C3D',$colours['special_middle']);

@@ -789,7 +789,7 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 			{
 				generate_question_ui(
 					'{!HOW_REMOVE_CHAT_NOTIFICATION;^}',
-					{/*button__cancel: '{!INPUTSYSTEM_CANCEL;^}',*/button__proceed: '{!CLOSE;^}',button__ignore: '{!HIDE;^}'},
+					{/*buttons__cancel: '{!INPUTSYSTEM_CANCEL;^}',*/buttons__proceed: '{!CLOSE;^}',buttons__ignore: '{!HIDE;^}'},
 					'{!REMOVE_CHAT_NOTIFICATION;^}',
 					null,
 					function(answer)
@@ -977,7 +977,7 @@ function close_chat_conversation(room_id)
 	{+START,IF,{$OR,{$NOT,{$ADDON_INSTALLED,ocf_forum}},{$NOT,{$OCF}}}}
 	generate_question_ui(
 		'{!WANT_TO_DOWNLOAD_LOGS*;^}',
-		{button__cancel: '{!INPUTSYSTEM_CANCEL*;^}',button__yes: '{!YES*;^}',button__no: '{!NO*;^}'},
+		{buttons__cancel: '{!INPUTSYSTEM_CANCEL*;^}',buttons__yes: '{!YES*;^}',buttons__no: '{!NO*;^}'},
 		'{!CHAT_DOWNLOAD_LOGS*;^}',
 		null,
 		function(logs)

@@ -9,7 +9,7 @@
 	{$PARAGRAPH,{TEXT}}
 {+END}
 
-{+START,IF,{$IN_STR,{FIELDS},_required}}
+{+START,IF,{$IN_STR,{FIELDS},required_star}}
 	{+START,INCLUDE,FORM_SCREEN_ARE_REQUIRED}{+END}
 {+END}
 
@@ -29,7 +29,7 @@
 
 	{+START,IF_PASSED,SKIPPABLE}
 		{+START,IF,{$JS_ON}}
-			<div class="skip_step_button_wrap{+START,IF,{$IN_STR,{FIELDS},_required}} skip_step_button_wrap_with_req_note{+END}">
+			<div class="skip_step_button_wrap{+START,IF,{$IN_STR,{FIELDS},required_star}} skip_step_button_wrap_with_req_note{+END}">
 				<div>
 					<input type="hidden" id="{SKIPPABLE*}" name="{SKIPPABLE*}" value="0" />
 					<input onclick="document.getElementById('{SKIPPABLE;}').value='1'; disable_button_just_clicked(this);" tabindex="151" class="buttons__skip button_screen_item" type="submit" value="{!SKIP}" />

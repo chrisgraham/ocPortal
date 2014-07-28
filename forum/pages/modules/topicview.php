@@ -770,6 +770,7 @@ class Module_topicview
 				$multi_moderations=ocf_list_multi_moderations($topic_info['forum_id']);
 				if (count($multi_moderations)!=0)
 				{
+					require_lang('ocf_multi_moderations');
 					$moderator_actions.='<optgroup label="'.do_lang('MULTI_MODERATIONS').'">';
 					foreach ($multi_moderations as $mm_id=>$mm_name)
 						$moderator_actions.='<option value="mm_'.strval($mm_id).'">'.$mm_name.'</option>';

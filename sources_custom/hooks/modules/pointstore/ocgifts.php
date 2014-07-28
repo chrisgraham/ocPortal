@@ -176,7 +176,7 @@ class Hook_pointstore_ocgifts
 
 					$message=do_lang('GIFT_EXPLANATION_MAIL',comcode_escape($sender_displayname),comcode_escape($gift_name),array($sender_url,$gift_image_url,$gift_message,$private_topic_url,comcode_escape($sender_username)),get_lang($to_member_id));
 
-					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id));
+					dispatch_notification('gift',NULL,$subject,$message,array($to_member_id),$member_id,3,false,false,NULL,NULL,'','','','',NULL,true);
 				} else
 				{
 					$message=do_lang('GIFT_EXPLANATION_ANONYMOUS_MAIL',comcode_escape($gift_name),$gift_image_url,$gift_message,get_lang($to_member_id));

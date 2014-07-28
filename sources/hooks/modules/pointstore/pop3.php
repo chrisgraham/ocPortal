@@ -326,7 +326,7 @@ class Hook_pointstore_pop3
 			'SUFFIX_PRICE'=>integer_format($suffix_price),
 		));
 		require_code('notifications');
-		dispatch_notification('pointstore_request_pop3','pop3_'.strval($sale_id),do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_pop3','pop3_'.strval($sale_id),do_lang('MAIL_REQUEST_POP3',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true,false,NULL,NULL,'','','','',NULL,true);
 
 		$text=do_lang_tempcode('ORDER_POP3_DONE',escape_html($prefix.'@'.$_suffix));
 		return inform_screen($title,$text);
@@ -407,7 +407,7 @@ class Hook_pointstore_pop3
 		$encoded_reason=do_lang('TITLE_QUOTA');
 		$message_raw=do_template('POINTSTORE_QUOTA_MAIL',array('_GUID'=>'5a4e0bb5e53e6ccf8e57581c377557f4','ENCODED_REASON'=>$encoded_reason,'QUOTA'=>integer_format($quota),'EMAIL'=>$prefix.$suffix,'QUOTA_URL'=>$quota_url,'PRICE'=>integer_format($_price)));
 		require_code('notifications');
-		dispatch_notification('pointstore_request_quota','quota_'.uniqid('',true),do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true);
+		dispatch_notification('pointstore_request_quota','quota_'.uniqid('',true),do_lang('MAIL_REQUEST_QUOTA',NULL,NULL,NULL,get_site_default_lang()),$message_raw->evaluate(get_site_default_lang(),false),NULL,NULL,3,true,false,NULL,NULL,'','','','',NULL,true);
 
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 		return redirect_screen($title,$url,do_lang_tempcode('ORDER_QUOTA_DONE'));

@@ -896,6 +896,8 @@ class Module_topics
 	 */
 	function mass_multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$mm_id=intval(substr(get_param('type','misc'),4));
 
 		$topics=$this->get_markers();
@@ -982,6 +984,8 @@ class Module_topics
 	 */
 	function _mass_multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$mm_id=get_param_integer('mm_id');
 		require_code('ocf_moderation_action');
 		require_code('ocf_moderation_action2');
@@ -1354,36 +1358,6 @@ class Module_topics
 	}
 
 	/**
-	 * Get a list of post templates that apply to a certain forum.
-	 *
-	 * @param  AUTO_LINK The ID of the forum.
-	 * @return array 		The list of applicable post templates.
-	 */
-	function ocf_get_post_templates($forum_id)
-	{
-		if (!addon_installed('ocf_post_templates')) return array();
-
-		$all_templates=$GLOBALS['FORUM_DB']->query_select('f_post_templates',array('*'));
-		$apply=array();
-		foreach ($all_templates as $template)
-		{
-			require_code('ocfiltering');
-			$idlist=ocfilter_to_idlist_using_db($template['t_forum_multi_code'],'id','f_forums','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
-			if (in_array($forum_id,$idlist))
-			{
-				if (strpos($template['t_text'],'{')!==false)
-				{
-					require_code('tempcode_compiler');
-					$e=template_to_tempcode($template['t_text']);
-					$template['t_text']=$e->evaluate();
-				}
-				$apply[]=array($template['t_title'],$template['t_text'],$template['t_use_default_forums']);
-			}
-		}
-		return $apply;
-	}
-
-	/**
 	 * The form element for choosing a post template.
 	 *
 	 * @param  AUTO_LINK		The forum ID we are looking for post templates active in
@@ -1393,9 +1367,12 @@ class Module_topics
 	{
 		if (!addon_installed('ocf_post_templates')) return array(new ocp_tempcode(),'');
 
+		require_lang('ocf_post_templates');
+
 		$specialisation=new ocp_tempcode();
 
-		$templates=$this->ocf_get_post_templates($forum_id);
+		require_code('ocf_posts_action');
+		$templates=ocf_get_post_templates($forum_id);
 		$post_templates=new ocp_tempcode();
 		$post='';
 		foreach ($templates as $template)
@@ -1503,8 +1480,9 @@ class Module_topics
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('forum_id',strval($forum_id)));
-			$threaded=($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_is_threaded',array('id'=>$forum_id))==1);
-			if (is_null($threaded)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$_threaded=($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_is_threaded',array('id'=>$forum_id))==1);
+			if (is_null($_threaded)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$threaded=($_threaded===1);
 		}
 
 		// Description
@@ -3684,6 +3662,8 @@ END;
 	 */
 	function multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$mm_id=intval(substr(get_param('type','misc'),3));
 		$topic_id=get_param_integer('id');
 
@@ -3761,6 +3741,8 @@ END;
 	 */
 	function _multimod() // Type
 	{
+		require_lang('ocf_multi_moderations');
+
 		$topic_id=get_param_integer('id');
 		$mm_id=get_param_integer('mm_id');
 		require_code('ocf_moderation_action');

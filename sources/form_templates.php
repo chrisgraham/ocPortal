@@ -441,7 +441,7 @@ function get_comcode_editor($field_name='post',$cut_down=false)
  */
 function wysiwyg_on()
 {
-	return ((browser_matches('wysiwyg')) && ((!array_key_exists('use_wysiwyg',$_COOKIE)) || ($_COOKIE['use_wysiwyg']=='1')));
+	return ((browser_matches('wysiwyg')) && ((!array_key_exists('use_wysiwyg',$_COOKIE)) || ($_COOKIE['use_wysiwyg']!='0')));
 }
 
 /**
@@ -696,9 +696,10 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?ID_TEXT		Page type to show (NULL: all)
  * @param  boolean		Whether to also get the title for the page
+ * @param  boolean		Whether to get node titles in a website-friendly form, as opposed to a more technical explanation of what the nodes are
  * @return tempcode		The input field
  */
-function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$page_type=NULL,$get_title_too=false)
+function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$page_type=NULL,$get_title_too=false,$content_centric=false)
 {
 	if (!has_js())
 	{
@@ -712,7 +713,7 @@ function form_input_page_link($pretty_name,$description,$name,$default,$required
 	require_javascript('javascript_more');
 
 	// Display
-	$input=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'aabbd8e80df919afe08ca70bd24578dc','AS_FIELD'=>true,'GET_TITLE_TOO'=>$get_title_too,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type));
+	$input=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'aabbd8e80df919afe08ca70bd24578dc','AS_FIELD'=>true,'GET_TITLE_TOO'=>$get_title_too,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type,'CONTENT_CENTRIC'=>$content_centric));
 
 	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
@@ -994,9 +995,10 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
  * @param  mixed			A secondary side description for this input field
  * @param  ?tempcode		The parsed Comcode. (NULL: calculate)
  * @param  boolean		Whether the field scrolls
+ * @param  boolean		Force non-WYSIWYG and non default-Comcode parsing
  * @return tempcode		The input field
  */
-function form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$rows=20,$description_side='',$default_parsed=NULL,$scrolls=false)
+function form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$rows=20,$description_side='',$default_parsed=NULL,$scrolls=false,$force_non_wysiwyg=false)
 {
 	require_lang('comcode');
 
@@ -1013,14 +1015,21 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 
 	attach_wysiwyg();
 
-	$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
-	if ($w) $_required.=' wysiwyg';
-	global $LAX_COMCODE;
-	$temp=$LAX_COMCODE;
-	$LAX_COMCODE=true;
-	$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-	/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
-	$LAX_COMCODE=$temp;
+	if (!$force_non_wysiwyg)
+	{
+		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
+		if ($w) $_required.=' wysiwyg';
+		global $LAX_COMCODE;
+		$temp=$LAX_COMCODE;
+		$LAX_COMCODE=true;
+		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
+		/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
+		$LAX_COMCODE=$temp;
+	} else
+	{
+		$w=false;
+		$default_parsed=new ocp_tempcode();
+	}
 
 	$help_zone=get_comcode_zone('userguide_comcode',false);
 	$_comcode=is_null($help_zone)?new ocp_tempcode():do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),$help_zone)));

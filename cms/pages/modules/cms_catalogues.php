@@ -1028,6 +1028,8 @@ class Module_cms_catalogues extends standard_crud_module
 	{	
 		check_privilege('mass_import');
 
+		set_mass_import_mode();
+
 		$catalogue_name=get_param('catalogue_name');
 
 		// Details about how to handle the import

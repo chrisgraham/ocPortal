@@ -639,7 +639,7 @@ class Hook_addon_registry_ocf_forum
 			'IMMEDIATE'=>false,
 			'IMG'=>'buttons__proceed',
 			'URL'=>placeholder_url(),
-			'TITLE_FULL'=>lorem_phrase(),
+			'FULL_TITLE'=>lorem_phrase(),
 			'TITLE'=>lorem_word(),
 		));
 
@@ -1742,7 +1742,7 @@ class Hook_addon_registry_ocf_forum
 					'IMMEDIATE'=>'',
 					'URL'=>placeholder_url(),
 					'IMG'=>'buttons__proceed',
-					'TITLE_FULL'=>lorem_phrase(),
+					'FULL_TITLE'=>lorem_phrase(),
 					'TITLE'=>lorem_word(),
 				)));
 			}

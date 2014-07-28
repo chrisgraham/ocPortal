@@ -26,6 +26,10 @@
 	height: 20px;
 }
 
+.screen_actions div a span {
+	display: none;
+}
+
 .screen_actions .facebook_like {
 	margin-right: 0;
 }

@@ -14,7 +14,7 @@ if (typeof window.CKEDITOR=='undefined')
 function wysiwyg_cookie_says_on()
 {
 	var cookie=read_cookie('use_wysiwyg');
-	return ((cookie=='') || (cookie=='1')) && (browser_matches('wysiwyg') && ('{$MOBILE}'!='1'));
+	return ((cookie=='') || (cookie!='0')) && (browser_matches('wysiwyg') && ('{$MOBILE}'!='1'));
 }
 
 function wysiwyg_on()
@@ -37,28 +37,58 @@ function toggle_wysiwyg(name)
 	var is_wysiwyg_on=wysiwyg_on();
 	if (is_wysiwyg_on)
 	{
-		window.fauxmodal_confirm(
-			'{!comcode:WHETHER_SAVE_WYSIWYG_SELECTION;}',
-			function(saving_cookies)
-			{
-				_toggle_wysiwyg(name,saving_cookies);
-			},
-			'{!REMEMBER_SETTING;}'
-		);
+		if (read_cookie('use_wysiwyg')=='-1')
+		{
+			_toggle_wysiwyg(name);
+		} else
+		{
+			generate_question_ui(
+				'{!comcode:WHETHER_SAVE_WYSIWYG_SELECTION;}',
+				{
+					buttons__cancel: '{!INPUTSYSTEM_CANCEL;^}',
+					buttons__clear: '{!javascript:WYSIWYG_DISABLE_ONCE;^}',
+					//buttons__no: '{!javascript:WYSIWYG_DISABLE_ONCE_AND_DONT_ASK;^}',		Too confusing, re-enable if you want it
+					buttons__yes: '{!javascript:WYSIWYG_DISABLE_ALWAYS;^}'
+				},
+				'{!comcode:DISABLE_WYSIWYG;^}',
+				'{!comcode:DISCARD_WYSIWYG_CHANGES;^}',
+				function(saving_cookies)
+				{
+					if (!saving_cookies) return;
+
+					if (saving_cookies.toLowerCase()=='{!javascript:WYSIWYG_DISABLE_ONCE;^}'.toLowerCase())
+					{
+						_toggle_wysiwyg(name);
+					}
+
+					if (saving_cookies.toLowerCase()=='{!javascript:WYSIWYG_DISABLE_ONCE_AND_DONT_ASK;^}'.toLowerCase())
+					{
+						_toggle_wysiwyg(name);
+						set_cookie('use_wysiwyg','-1',3000);
+					}
+
+					if (saving_cookies.toLowerCase()=='{!javascript:WYSIWYG_DISABLE_ALWAYS;^}'.toLowerCase())
+					{
+						_toggle_wysiwyg(name);
+						set_cookie('use_wysiwyg','0',3000);
+					}
+				},
+				600,
+				140
+			);
+		}
 		return false;
 	}
 
-	return _toggle_wysiwyg(name,true);
+	var ret=_toggle_wysiwyg(name);
+	if (read_cookie('use_wysiwyg')!='-1')
+		set_cookie('use_wysiwyg','1',3000);
+	return ret;
 }
 
-function _toggle_wysiwyg(name,saving_cookies)
+function _toggle_wysiwyg(name)
 {
 	var is_wysiwyg_on=wysiwyg_on();
-
-	if (saving_cookies)
-	{
-		set_cookie('use_wysiwyg',is_wysiwyg_on?'0':'1',3000);
-	}
 
 	var forms=document.getElementsByTagName('form');
 	var so=document.getElementById('post_special_options');
@@ -91,7 +121,7 @@ function _toggle_wysiwyg(name,saving_cookies)
 		{
 			generate_question_ui(
 				'{!comcode:DISCARD_WYSIWYG_CHANGES_NICE;^}',
-				{button__cancel: '{!INPUTSYSTEM_CANCEL;^}',button__convert: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE_CONVERT;^}',button__no: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE;^}'},
+				{buttons__cancel: '{!INPUTSYSTEM_CANCEL;^}',buttons__convert: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE_CONVERT;^}',buttons__no: '{!comcode:DISCARD_WYSIWYG_CHANGES_LINE;^}'},
 				'{!comcode:DISABLE_WYSIWYG;^}',
 				'{!comcode:DISCARD_WYSIWYG_CHANGES;^}',
 				function(prompt)
