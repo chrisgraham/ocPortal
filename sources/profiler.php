@@ -150,7 +150,7 @@ function _ocp_profile_generate_line($identifier,$at,$cnt)
 function _ocp_profile_log_line($line)
 {
 	// Open up unique log file (per-request) if not yet done so
-	global $PROFILER_FILEHANDLE,$PROFILER_PATH,$PROFILING_LINUX_FULL;
+	global $PROFILER_FILEHANDLE,$PROFILER_PATH;
 	if (!isset($PROFILER_FILEHANDLE))
 	{
 		if (!isset($PROFILER_PATH))
@@ -171,14 +171,9 @@ function _ocp_profile_log_line($line)
 		$PROFILER_FILEHANDLE=fopen($PROFILER_PATH,'at');
 
 		// Pre-logging
-		if ($PROFILING_LINUX_FULL)
-		{
-			_ocp_profile_log_line('URL: '.get_self_url_easy());
-
-			_ocp_profiler_generic_logging();
-
-			_ocp_profile_log_line(''); // Spacer line
-		}
+		_ocp_profile_log_line('URL: '.get_self_url_easy());
+		_ocp_profiler_generic_logging();
+		_ocp_profile_log_line(''); // Spacer line
 	}
 
 	// Write line
@@ -192,7 +187,7 @@ function _ocp_profiler_script_end()
 {
 	if (!ocp_profile_is_enabled()) return;
 
-	global $PAGE_START_TIME,$PROFILER_PATH,$PROFILER_FILEHANDLE,$PROFILING_LINUX_FULL;
+	global $PAGE_START_TIME,$PROFILER_PATH,$PROFILER_FILEHANDLE;
 
 	if (!isset($PROFILER_FILEHANDLE)) return; // Never started, so don't tail off
 
@@ -201,21 +196,15 @@ function _ocp_profiler_script_end()
 	$PROFILING_ALLOWED=false;
 
 	// Post-logging
-	if ($PROFILING_LINUX_FULL)
+	_ocp_profile_log_line(''); // Spacer line
+	_ocp_profiler_generic_logging();
+	if (function_exists('memory_get_usage'))
 	{
-		_ocp_profile_log_line(''); // Spacer line
-
-		_ocp_profiler_generic_logging();
-
-		if (function_exists('memory_get_usage'))
-		{
-			_ocp_profile_log_line('PHP memory usage: '.clean_file_size(memory_get_usage()));
-		}
-
-		if (function_exists('memory_get_peak_usage'))
-		{
-			_ocp_profile_log_line('PHP peak memory usage: '.clean_file_size(memory_get_peak_usage()));
-		}
+		_ocp_profile_log_line('PHP memory usage: '.clean_file_size(memory_get_usage()));
+	}
+	if (function_exists('memory_get_peak_usage'))
+	{
+		_ocp_profile_log_line('PHP peak memory usage: '.clean_file_size(memory_get_peak_usage()));
 	}
 
 	// Close down file
@@ -236,11 +225,16 @@ function _ocp_profiler_script_end()
  */
 function _ocp_profiler_generic_logging()
 {
-	$c=trim(@strval(shell_exec('uptime')));
-	if ($c!='')
-		_ocp_profile_log_line('uptime: '.$c);
+	global $PROFILING_LINUX_FULL;
 
-	$c=trim(@strval(shell_exec('vmstat')));
-	if ($c!='')
-		_ocp_profile_log_line('vmstat: '.$c);
+	if ($PROFILING_LINUX_FULL)
+	{
+		$c=trim(@strval(shell_exec('uptime')));
+		if ($c!='')
+			_ocp_profile_log_line('uptime: '.$c);
+
+		$c=trim(@strval(shell_exec('vmstat')));
+		if ($c!='')
+			_ocp_profile_log_line('vmstat: '.$c);
+	}
 }

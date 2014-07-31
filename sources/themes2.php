@@ -638,7 +638,7 @@ function find_all_themes($full_details=false)
 	{
 		global $M_SORT_KEY;
 		$M_SORT_KEY='title';
-		usort($themes,'multi_sort');
+		uasort($themes,'multi_sort');
 	} else
 	{
 		natsort($themes);

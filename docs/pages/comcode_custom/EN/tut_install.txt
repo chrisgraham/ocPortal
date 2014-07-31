@@ -184,7 +184,7 @@ All of the database fields should be filled out with the information given to yo
 
 After you finish the installation, you are presented with one final screen, congratulating you on your successful installation, and giving you two choices -- you can either jump right to your new homepage, or go to the Setup Wizard. If you have never used ocPortal before, we suggest that you run the Setup Wizard, as it will guide you through the basic settings of your website and familiarise you with the way ocPortal works.
 
-Congratulations on your successful installation![/urround]
+Congratulations on your successful installation![/surround]
 
 [concepts
  1_key="Administrative password"   1_value="The administrative password is a special password that will help you restore settings if something makes the traditional ocPortal interface unusable." 2_key="Multi-site networks (M.S.N.)" 2_value="Multi-site networks allow you to have more than one ocPortal installation (multiple websites), all running on the same network. If you choose this, members who join one website will also have registrations at other sites."]Concepts[/concepts]

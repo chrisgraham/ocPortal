@@ -168,6 +168,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		} else
 		{	
 			list($order_by,$direction)=explode(' ',$_order_by);
+			if (($direction!='ASC') && ($direction!='DESC'))
+				log_hack_attack_and_exit('ORDERBY_HACK');
 			if (($order_by!='rating') && ($order_by!='add_date') && ($order_by!='distance'))
 			{
 				$found=false;

@@ -392,9 +392,6 @@ The default theme can be modified to have a colour scheme of your choice, and ca
 [b]How do I change (some aspect of ocPortal's appearance)?[/b]
 ocPortal is displayed to web browser's using standard web technologies wherever possible, employing best practices. The appearance is fully configurable and defined using a combination of XHTML5 (in templates), CSS, and images. Sometimes these technologies can be complex to edit and require a good technical understanding, and this is unfortunately unavoidable; an analogy, is that writing or painting also require practice. Unfortunately for economic reasons ocProducts is not able to step through specific changes for free. It is often worth asking on the forum in case other user's can help.
 
-[b]I've edited template/CSS and my changes won't show?[/b]
-These files are evaluated and cached by ocPortal, so changes will only show if either the cache is disabled, or the cache is emptied. A quick way to empty the cache is to hold down ctrl+alt+shift and click refresh in the web browser (you need to be logged in as staff). Alternative ways to empty the cache including using the cleanup tools in the Admin Zone, or to manually delete cache files from the filesystem.
-
 [b]How do I know which template to edit?[/b]
 Use the 'template tree' feature available from the drop-down list in the footer. It'll show the template structure for the screen you're viewing. If the default footer is not available in your theme, add [tt]&special_page_type=tree[/tt] to the URL.
 

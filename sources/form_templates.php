@@ -354,7 +354,7 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
 }
 
 /**
- * Get the tempcode for a text input line.
+ * Get the tempcode for a text input line (an <input type="text" ... />).
  *
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field

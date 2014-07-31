@@ -943,9 +943,9 @@ class database_driver
 	{
 		if (!$skip_safety_check)
 		{
-			$_query=strtolower($query);
+			$_query=preg_replace('#\s#',' ',strtolower($query));
 			$queries=1;//substr_count($_query,'insert into ')+substr_count($_query,'replace into ')+substr_count($_query,'update ')+substr_count($_query,'select ')+substr_count($_query,'delete from '); Not reliable
-			if ((strpos(preg_replace('#\'[^\']*\'#','\'\'',str_replace('\\\'','',$_query)),' union ')!==false) || ($queries>1)) log_hack_attack_and_exit('SQL_INJECTION_HACK',$query);
+			if ((strpos(preg_replace("#'[^']*'#","''",str_replace(db_escape_string("'"),"",$_query)),' union ')!==false) || ($queries>1)) log_hack_attack_and_exit('SQL_INJECTION_HACK',$query);
 		}
 
 		return $this->_query($query,$max,$start,$fail_ok,false,$lang_fields,$field_prefix);
