@@ -82,11 +82,9 @@ class Hook_addon_registry_google_translate
 	 */
 	function get_description()
 	{
-		return 'Google-based automated content translation.
+		return 'This is the ocPortal plugin for Google-based automated content translation. By adding [code=""Comcode""][block]side_language[/block][/code] to a side panel of your website, you will give your users the option to translate the content of your website into another language by using Google Translate. Note that Google Translate is a paid API, so you will need to set it up as such -- enable the API in the Google Developers console, add a key (API * auth, Credentials, Create New Key), set up quote/billing for it, and then go and configure in ocPortal (Admin Zone > Setup > Configuration > Feature options > Google Translate). At first things will be extremely slow while the gtranslate_cache table fills up with translations for all ocPortal\'s language strings (you should let it run, even if it takes half an hour), but then things will speed up. This addon is intended for users serious about translation, to give a bootstrap to getting it done.
 
-This is much more sophisticated than the simple HTML snippet Google provide as it saves translations directly into ocPortal\'s translation table, for customisation.
-
-After installing you must enable via the \'Enable Google translate\' option.';
+		If you merely want dynamic on-the-fly translation, it\'s best just to embed Google\'s standard Translate widget into your site somewhere.';
 	}
 
 	/**

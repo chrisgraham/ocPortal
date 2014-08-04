@@ -334,6 +334,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		} else
 		{	
 			list($order_by,$direction)=explode(' ',$_order_by);
+			if (($direction!='ASC') && ($direction!='DESC'))
+				log_hack_attack_and_exit('ORDERBY_HACK');
 			if (($order_by!='fixed_random') && ($order_by!='average_rating') && ($order_by!='compound_rating') && ($order_by!='add_date') && ($order_by!='distance'))
 			{
 				$found=false;
@@ -1349,7 +1351,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 {
 	if (($category_id===NULL) && ($levels===NULL))
 	{
-		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return array(); // Too many!
+		if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000) return array(); // Too many!
 	}
 
 	if ($category_id===NULL)
@@ -1455,7 +1457,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
  */
 function create_selection_list_catalogue_category_tree($catalogue_name,$it=NULL,$addable_filter=false,$use_compound_list=false)
 {
-	if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>10000) return new ocp_tempcode(); // Too many!
+	if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000) return new ocp_tempcode(); // Too many!
 
 	$tree=array();
 	$temp_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),array('c_name'=>$catalogue_name,'cc_parent_id'=>NULL),'ORDER BY id DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);
@@ -1599,11 +1601,6 @@ function catalogue_category_breadcrumbs($category_id,$root=NULL,$no_link_for_me_
 			$category_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_parent_id','cc_title'),array('id'=>$category_id),'',1);
 			if (!array_key_exists(0,$category_rows))
 			{
-				// Auto-fix
-				$c_name=$GLOBALS['SITE_DB']->query_value('catalogue_categories','c_name',array('cc_parent_id'=>$category_id));
-				$root=$GLOBALS['SITE_DB']->query_value('catalogue_categories','id',array('cc_parent_id'=>NULL,'c_name'=>$c_name));
-				$GLOBALS['SITE_DB']->query_update('catalogue_categories',array('cc_parent_id'=>$root),array('cc_parent_id'=>$category_id));
-
 				fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html(strval($category_id))));
 			}
 			$PT_PAIR_CACHE[$category_id]=$category_rows[0];

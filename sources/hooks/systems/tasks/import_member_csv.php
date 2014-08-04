@@ -31,7 +31,6 @@ class Hook_task_import_member_csv
 	function run($default_password,$use_temporary_passwords,$path)
 	{
 		require_lang('ocf');
-		require_lang('import');
 		require_code('ocf_members_action');
 
 		$num_added=0;
@@ -56,7 +55,8 @@ class Hook_task_import_member_csv
 
 		$_csv_data=array();
 
-		$myfile=fopen($path,'rb');
+		@ini_set('auto_detect_line_endings','1');
+		$myfile=fopen($path,'rt');
 		$del=',';
 		$csv_header=fgetcsv($myfile,102400,$del);
 		if ($csv_header===false)
@@ -218,7 +218,8 @@ class Hook_task_import_member_csv
 			}
 
 			$avatar_url=array_key_exists('Avatar',$line)?$line['Avatar']:NULL;
-			if (substr($avatar_url,0,strlen(get_base_url()))==get_base_url()) $avatar_url=substr($avatar_url,strlen(get_base_url()));
+			if (!is_null($avatar_url))
+				if (substr($avatar_url,0,strlen(get_base_url()))==get_base_url()) $avatar_url=substr($avatar_url,strlen(get_base_url()));
 			$signature=array_key_exists('Signature',$line)?$line['Signature']:'';
 			$is_perm_banned=array_key_exists('Banned',$line)?((strtoupper($line['Banned'])=='YES' || $line['Banned']=='1' || strtoupper($line['Banned'])=='Y' || strtoupper($line['Banned'])=='ON')?1:0):0;
 			$reveal_age=array_key_exists('Reveal age',$line)?((strtoupper($line['Reveal age'])=='YES' || $line['Reveal age']=='1' || strtoupper($line['Reveal age'])=='Y' || strtoupper($line['Reveal age'])=='ON')?1:0):0;

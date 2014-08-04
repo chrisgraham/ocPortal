@@ -105,6 +105,14 @@ class Module_leader_board
 
 		// Continue on to displaying the leader-board...
 
+		// Are there any rank images going to display?
+		$or_list='1=1';
+		$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
+		$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
+		foreach (array_merge($admin_groups,$moderator_groups) as $group_id)
+			$or_list.=' AND id<>'.strval($group_id);
+		$has_rank_images=(get_forum_type()=='ocf') && ($GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups WHERE '.$or_list.' AND '.db_string_not_equal_to('g_rank_image',''))!=0);
+
 		$weeks=$GLOBALS['SITE_DB']->query('SELECT DISTINCT date_and_time FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'leader_board WHERE date_and_time>='.strval($start_date).' ORDER BY date_and_time DESC',$max,$start);
 		if (count($weeks)==0) warn_exit(do_lang_tempcode('NO_ENTRIES'));
 

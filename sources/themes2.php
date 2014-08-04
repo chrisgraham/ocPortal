@@ -700,6 +700,17 @@ function find_all_themes($full_details=false)
 		if (!array_key_exists('author',$details)) $details['author']='?';
 		$themes['default']=$full_details?$details:$details['title'];
 	}
+
+	if ($full_details)
+	{
+		global $M_SORT_KEY;
+		$M_SORT_KEY='title';
+		uasort($themes,'multi_sort');
+	} else
+	{
+		natsort($themes);
+	}
+
 	return $themes;
 }
 

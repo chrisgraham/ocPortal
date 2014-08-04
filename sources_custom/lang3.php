@@ -61,7 +61,7 @@ if (!function_exists('parse_translated_text'))
 
 				$temp=$LAX_COMCODE;
 				$LAX_COMCODE=true;
-				lang_remap_comcode($entry,is_null($result)?'':$result['text_original'],$connection,NULL,$result['source_user'],$as_admin);
+				_lang_remap($entry,is_null($result)?'':$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 				if (!is_null($SEARCH__CONTENT_BITS))
 				{
 					$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
@@ -89,7 +89,7 @@ if (!function_exists('parse_translated_text'))
 			global $LAX_COMCODE;
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			lang_remap_comcode($entry,$result['text_original'],$connection,NULL,$result['source_user'],$as_admin);
+			_lang_remap($entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 			if (!is_null($SEARCH__CONTENT_BITS))
 			{
 				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);

@@ -67,7 +67,7 @@ All this said, it is [i]possible[/i] to move between forums, if manual database 
 
 [title="3"]ocPortal merge[/title]
 
-When merging with another copy of ocPortal, you should make sure the other copy must be running the same major version. Whilst other versions may merge succesfully, ocProducts does not support this officially.
+When merging with another copy of ocPortal, you should make sure the other copy must be running the same major version. Whilst other versions may merge successfully, ocProducts does not support this officially.
 
 The 'ocp merge' importer can merge multiple ocPortal websites together that either:
  - each run on OCF (and thus, OCF data gets merged)
@@ -84,6 +84,8 @@ The 'ocp merge' importer cannot:
 
 Remember:
  - you must specify to import from an ocPortal database, not a forum database.
+
+The importer does not cover Comcode pages. However these are just .txt files ([tt]<zone>/pages/comcode_custom/<language>/<page>.txt[/tt]) that may be copied from one install to another.
 
 Please note that URL and page-link links will not be altered during the import, meaning it is likely they will need updating (because resource IDs change).
 

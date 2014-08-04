@@ -41,7 +41,7 @@ class Block_side_similar_sites
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'criteria\',$map)?$map[\'criteria\']:\'\',array_key_exists(\'max\',$map)?$map[\'max\']:3)';
-		$info['ttl']=15;
+		$info['ttl']=60*5;
 		return $info;
 	}
 

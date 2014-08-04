@@ -442,6 +442,8 @@ class Module_admin_addons
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_addon_import','uploading'=>1),'_SELF');
 
 		$text=new ocp_tempcode();
+		$text->attach(paragraph(do_lang_tempcode('HELP_IMPORTING_ADDON')));
+
 		require_code('files2');
 		$max=floatval(get_max_file_size())/floatval(1024*1024);
 		if ($max<30.0)

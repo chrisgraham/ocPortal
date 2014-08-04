@@ -45,6 +45,12 @@ class Hook_task_send_newsletter
 
 		$last_cron=get_value('last_cron');
 
+		// These variables are for optimisation, we detect if we can avoid work on the loop iterations via looking at what happened on the first
+		$needs_substitutions=mixed();
+		$needs_tempcode=mixed();
+
+		$blocked=newsletter_block_list();
+
 		$start=0;
 		do
 		{
@@ -53,8 +59,18 @@ class Hook_task_send_newsletter
 			// Send to all
 			foreach ($addresses as $i=>$email_address)
 			{
+				if (isset($blocked[$email_address])) continue;
+
 				// Variable substitution in body
-				$newsletter_message_substituted=(strpos($message,'{')===false)?$message:newsletter_variable_substitution($message,$subject,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
+				if ($needs_substitutions===NULL || $needs_substitutions)
+				{
+					$newsletter_message_substituted=(strpos($message,'{')===false)?$message:newsletter_variable_substitution($message,$subject,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
+
+					if ($needs_substitutions===NULL) $needs_substitutions=($newsletter_message_substituted!=$message);
+				} else
+				{
+					$newsletter_message_substituted=$message;
+				}
 				$in_html=false;
 				if (strpos($newsletter_message_substituted,'<html')===false)
 				{
@@ -66,9 +82,16 @@ class Hook_task_send_newsletter
 					}
 				} else
 				{
-					require_code('tempcode_compiler');
-					$_m=template_to_tempcode($newsletter_message_substituted);
-					$newsletter_message_substituted=$_m->evaluate($lang);
+					if ($needs_tempcode===NULL || $needs_tempcode)
+					{
+						require_code('tempcode_compiler');
+						$_m=template_to_tempcode($newsletter_message_substituted);
+						$temp=$_m->evaluate($lang);
+
+						if ($needs_tempcode===NULL) $needs_tempcode=(trim($temp)!=trim($newsletter_message_substituted));
+
+						$newsletter_message_substituted=$temp;
+					}
 					$in_html=true;
 				}
 

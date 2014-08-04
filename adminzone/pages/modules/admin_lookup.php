@@ -267,7 +267,7 @@ class Module_admin_lookup
 				{
 					$member_ban_link=do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'840c361ab217959f8b85141497e6e6a6','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_member_ban','id'=>$id,'redirect'=>get_self_url(true)),get_module_zone('admin_actionlog'))));
 				}
-				if (($ip!='') && ($ip!=get_ip_address()))
+				if (($ip!='') && ($ip!=get_ip_address()) && ($ip!=ocp_srv('SERVER_ADDR')))
 				{
 					$ip_ban_link=do_template('ACTIONLOGS_TOGGLE_LINK',array('_GUID'=>'76979d80cdd7d3e664c9a4ec04419bc6','URL'=>build_url(array('page'=>'admin_actionlog','type'=>'toggle_ip_ban','id'=>$ip),get_module_zone('admin_actionlog'))));
 				}

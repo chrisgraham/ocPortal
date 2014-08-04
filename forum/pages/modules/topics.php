@@ -2011,6 +2011,8 @@ class Module_topics
 			enforce_captcha();
 		}
 
+		ocp_profile_start_for('_add_reply');
+
 		require_code('attachments2');
 		require_code('ocf_posts_action');
 		require_code('ocf_posts_action2');
@@ -2343,6 +2345,8 @@ END;
 		{
 			send_pt_notification($post_id,$title,$topic_id,$member_id,NULL,$post);
 		}
+
+		ocp_profile_end_for('_add_reply','#'.strval($post_id));
 
 		if ($add_poll==1)
 		{
@@ -2677,24 +2681,9 @@ END;
 		url_default_parameters__disable();
 
 		// Find polls we can grab
-		$groups=_get_where_clause_groups(get_member());
-		if (!is_null($groups))
-		{
-			$perhaps=$GLOBALS['SITE_DB']->query('SELECT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','forums').' AND ('.$groups.')',NULL,NULL,false,true);
-			$or_list='';
-			foreach ($perhaps as $row)
-			{
-				if ($or_list!='') $or_list.=' OR ';
-				$or_list.='t.t_forum_id='.strval($row['category_name']);
-			}
-			if ($or_list!='')
-			{
-				$polls=$GLOBALS['FORUM_DB']->query('SELECT p.*,t_cache_first_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls p ON p.id=t.t_poll_id WHERE ('.$or_list.') AND p.id IS NOT NULL ORDER BY id DESC',30);
-			} else $polls=array();
-		} else
-		{
-			$polls=$GLOBALS['FORUM_DB']->query('SELECT p.*,t_cache_first_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls p ON p.id=t.t_poll_id WHERE p.id IS NOT NULL ORDER BY id DESC',30);
-		}
+		require_code('ocf_forums');
+		$or_list=get_forum_access_sql('t.t_forum_id');
+		$polls=$GLOBALS['FORUM_DB']->query('SELECT p.*,t_cache_first_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_polls p ON p.id=t.t_poll_id WHERE ('.$or_list.') AND p.id IS NOT NULL ORDER BY id DESC',30);
 		if (count($polls)!=0)
 		{
 			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'1fb2af282b014c3a6ae09d986e4f72eb','SECTION_HIDDEN'=>true,'TITLE'=>do_lang_tempcode('ALT_COPY_EXISTING_POLL'))));

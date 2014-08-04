@@ -57,7 +57,8 @@ class Hook_task_import_catalogue
 		$root_cat=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('cc_parent_id'=>NULL));
 
 		// Open CSV file
-		$handle=fopen($csv_name,'rb');
+		@ini_set('auto_detect_line_endings','1');
+		$handle=fopen($csv_name,'rt');
 
 		// Read column names
 		$del=',';

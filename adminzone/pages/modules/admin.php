@@ -226,6 +226,7 @@ class Module_admin
 			array('profile','account','memberaccount'),
 			array('intl','internationalisation','regionalisation'),
 			array('permission','privilege','authorisation','authorization','right'),
+			array('overlay','popup','dialog','window'),
 			array('option','setting','value'),
 			array('configure','configuration','setup','install','core_configuration'),
 			array('emoticon','smiley','face'),

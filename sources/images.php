@@ -114,7 +114,15 @@ function _symbol_thumbnail($param)
 			$thumb_save_dir='uploads/auto_thumbs';
 		}
 		if (!is_dir(get_custom_file_base().'/'.$thumb_save_dir)) $thumb_save_dir='uploads/website_specific';
-		$filename=url_to_filename((isset($param[3]) && $param[3]!='')?$param[3]:$orig_url); // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+		if (isset($param[3]) && $param[3]!='') // We can take a third parameter that hints what filename to save with (useful to avoid filename collisions within the thumbnail filename subspace). Otherwise we based on source's filename
+		{
+			$filename=$param[3];
+		} else
+		{
+			$ext=get_file_extension($orig_url);
+			if (!is_image($ext)) $ext='png';
+			$filename=url_to_filename($orig_url).'.'.$ext;
+		}
 		if (!is_saveable_image($filename)) $filename.='.png';
 		$file_prefix='/'.$thumb_save_dir.'/thumb__'.$dimensions.'__'.$algorithm;
 		if (isset($param[6])) $file_prefix.='__'.trim($param[6]);
@@ -497,6 +505,29 @@ function check_memory_limit_for($file_path,$exit_on_error=true)
  * @return boolean		Success
  */
 function convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=true,$ext2=NULL,$using_path=false,$only_make_smaller=true,$thumb_options=NULL)
+{
+	ocp_profile_start_for('convert_image');
+	$ret=_convert_image($from,$to,$width,$height,$box_width,$exit_on_error,$ext2,$using_path,$only_make_smaller,$thumb_options);
+	ocp_profile_end_for('convert_image',$from);
+	return $ret;
+}
+
+/**
+ * (Helper for above).
+ *
+ * @param  URLPATH		The URL to the image to resize
+ * @param  PATH			The file path (including filename) to where the resized image will be saved
+ * @param  integer		The maximum width we want our new image to be (-1 means "don't factor this in")
+ * @param  integer		The maximum height we want our new image to be (-1 means "don't factor this in")
+ * @param  integer		This is only considered if both $width and $height are -1. If set, it will fit the image to a box of this dimension (suited for resizing both landscape and portraits fairly)
+ * @param  boolean		Whether to exit ocPortal if an error occurs
+ * @param  ?string		The file extension to save with (NULL: same as our input file)
+ * @param  boolean		Whether $from was in fact a path, not a URL
+ * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  ?array			This optional parameter allows us to specify cropping or padding for the image. See comments in the function. (NULL: no details passed)
+ * @return boolean		Success
+ */
+function _convert_image($from,$to,$width,$height,$box_width=-1,$exit_on_error=true,$ext2=NULL,$using_path=false,$only_make_smaller=false,$thumb_options=NULL)
 {
 	disable_php_memory_limit();
 

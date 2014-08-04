@@ -127,6 +127,8 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 
 	require_lang('wiki');
 
+	ignore_user_abort(true);
+
 	require_code('comcode_check');
 	check_comcode($message,NULL,false,NULL,true);
 
@@ -179,6 +181,8 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 		require_code('resource_fs');
 		generate_resourcefs_moniker('wiki_post',strval($id),NULL,NULL,true);
 	}
+
+	@ignore_user_abort(false);
 
 	return $id;
 }
@@ -281,7 +285,10 @@ function wiki_delete_post($post_id,$member=NULL)
 
 	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_DELETE_POST','the_page'=>$post_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($post_id),'cf_type'=>'wiki_post'));
+	if (addon_installed('catalogues'))
+	{
+		update_catalogue_content_ref('wiki_post',strval($post_id),'');
+	}
 
 	// Stat
 	update_stat('num_wiki_posts',-1);
@@ -468,7 +475,10 @@ function wiki_delete_page($id)
 	$GLOBALS['SITE_DB']->query_delete('wiki_children',array('child_id'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('wiki_changes',array('the_page'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'wiki_page'));
+	if (addon_installed('catalogues'))
+	{
+		update_catalogue_content_ref('wiki_page',strval($id),'');
+	}
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{

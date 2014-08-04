@@ -24,7 +24,7 @@ class Hook_config_enable_google_translate
 	{
 		return array(
 			'human_name'=>'ENABLE_GOOGLE_TRANSLATE',
-			'type'=>'tick',
+			'type'=>'string',
 			'category'=>'SITE',
 			'group'=>'INTERNATIONALISATION',
 			'explanation'=>'CONFIG_OPTION_enable_google_translate',
@@ -42,7 +42,7 @@ class Hook_config_enable_google_translate
 	 */
 	function get_default()
 	{
-		return '0';
+		return '';
 	}
 }
 

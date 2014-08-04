@@ -852,7 +852,7 @@ class database_driver
 		global $DEV_MODE;
 		if (!$skip_safety_check)
 		{
-			$_query=strtolower($query);
+			$_query=preg_replace('#\s#',' ',strtolower($query));
 			$queries=1;//substr_count($_query,'insert into ')+substr_count($_query,'replace into ')+substr_count($_query,'update ')+substr_count($_query,'select ')+substr_count($_query,'delete from '); Not reliable
 			if ((strpos(preg_replace('#\'[^\']*\'#','\'\'',str_replace('\\\'','',$_query)),' union ')!==false) || ($queries>1)) log_hack_attack_and_exit('SQL_INJECTION_HACK',$query);
 
@@ -916,6 +916,8 @@ class database_driver
 
 		if (($QUERY_COUNT==250) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && (!$IN_MINIKERNEL_VERSION) && (get_param('special_page_type','')!='query'))
 		{
+			ocp_profile_start_for('_query:HIGH_VOLUME_ALERT');
+
 			$NO_QUERY_LIMIT=true;
 			$log_path=get_custom_file_base().'/data_custom/big_query_screens.log';
 			if (is_writable_wrap($log_path))
@@ -929,10 +931,12 @@ class database_driver
 				$QUERY_COUNT=0;
 				fatal_exit(do_lang_tempcode('TOO_MANY_QUERIES'));
 			}
+
+			ocp_profile_end_for('_query:HIGH_VOLUME_ALERT');
 		}
 
 		$lang_strings_expecting=array();
-		if ((isset($lang_fields[0])) && (function_exists('user_lang')))
+		if ((isset($lang_fields[0])) && (function_exists('user_lang')) && ((is_null($start)) || ($start<200)))
 		{
 			$lang=user_lang(); // We can we assume this, as we will cache against it -- if subsequently code wants something else it'd be a cache miss which is fine
 
@@ -1055,6 +1059,11 @@ class database_driver
 			$out=array('time'=>($after-$before),'text'=>$text);
 			$QUERY_LIST[]=$out;
 		}
+		/*if (microtime_diff($after,$before)>1.0)	Generally one would use MySQL's own slow query log, which will impact ocPortal performance less
+		{
+			ocp_profile_start_for('_query:SLOW_ALERT');
+			ocp_profile_end_for('_query:SLOW_ALERT',$query);
+		}*/
 
 		// Run hooks, if any exist
 		if ($UPON_QUERY_HOOKS_CACHE!==NULL)
@@ -1066,13 +1075,19 @@ class database_driver
 			}
 		}
 
-		// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 		if ($ret!==NULL)
 		{
 			foreach ($lang_strings_expecting as $bits)
 			{
 				list($field,$original,$parsed)=$bits;
 
+				if ((isset($ret[300])) && (strpos($query,'theme_images')===false) && (strpos($query,'group_category_access')===false) && (strpos($query,'group_privileges')===false) && (strpos($query,'config')===false))
+				{
+					ocp_profile_start_for('_query:MANY_RESULTS_ALERT');
+					ocp_profile_end_for('_query:MANY_RESULTS_ALERT',$query);
+				}
+
+				// Copy results to lang cache, but only if not null AND unset to avoid any confusion
 				foreach ($ret as $i=>$row)
 				{
 					$entry=$row[preg_replace('#^.*\.#','',$field)];

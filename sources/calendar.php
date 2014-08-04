@@ -785,7 +785,7 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 	}
 
 	if ($where!='') $where.=' AND ';
-	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' AND e_start_year='.date('Y',$period_start).' OR e_start_year>'.date('Y',$period_start).') AND (e_end_month<='.strval(intval(date('m',$period_end))+1).' AND e_end_year='.date('Y',$period_end).' OR e_end_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','').')';
+	$where.='(((e_start_month>='.strval(intval(date('m',$period_start))-1).' AND e_start_year='.date('Y',$period_start).') AND (e_start_month<='.strval(intval(date('m',$period_end))+1).' AND e_start_year='.date('Y',$period_end).' OR e_start_year<'.date('Y',$period_end).')) OR '.db_string_not_equal_to('e_recurrence','none').')';
 
 	$where=' WHERE '.$where;
 	$event_count=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events e'.$privacy_join.' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types t ON e.e_type=t.id'.$where);
@@ -1194,7 +1194,7 @@ function detect_happening_at($member_id,$skip_id,$our_times,$restrict=true,$peri
 	}
 	if ($where!='') $where.=' AND ';
 	$where.='validated=1';
-	$where.=' AND (((e_start_month>='.strval(intval(date('m',$our_times[0][0]))-1).' OR e_start_year>'.date('Y',$our_times[0][0]).') AND (e_end_month<='.strval(intval(date('m',$our_times[0][1]))+1).' OR e_end_year<'.date('Y',$our_times[0][1]).')) OR '.db_string_not_equal_to('e_recurrence','').')';
+	$where.=' AND (((e_start_month>='.strval(intval(date('m',$our_times[0][0]))-1).' AND e_start_year='.date('Y',$our_times[0][0]).') AND (e_start_month<='.strval(intval(date('m',$our_times[0][1]))+1).' AND e_start_year='.date('Y',$our_times[0][1]).' OR e_start_year<'.date('Y',$our_times[0][1]).')) OR '.db_string_not_equal_to('e_recurrence','none').')';
 	$where=' WHERE '.$where;
 	$events=$GLOBALS['SITE_DB']->query('SELECT *,e.id AS e_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().$table.$where);
 	foreach ($events as $event)

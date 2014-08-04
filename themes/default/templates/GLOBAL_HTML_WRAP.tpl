@@ -6,7 +6,7 @@ Powered by {$BRAND_NAME*} version {$VERSION_NUMBER*}, (c) ocProducts Ltd
 -->
 
 {$,We deploy as HTML5 but code and validate strictly to XHTML5}
-<html lang="{$LANG*}" dir="{!dir}">
+<html lang="{$LCASE*,{$LANG}}" dir="{!dir}">
 <head>
 	{+START,INCLUDE,HTML_HEAD}{+END}
 </head>

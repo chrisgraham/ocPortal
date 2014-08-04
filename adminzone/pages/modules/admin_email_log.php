@@ -174,7 +174,7 @@ class Module_admin_email_log
 				$date_time,
 				hyperlink('mailto:'.$from_email,$from_name,false,true),
 				hyperlink($to_link,$to_name[0],false,true),
-				do_template('CROP_TEXT_MOUSE_OVER',array('_GUID'=>'c2fd45ce32e1c03a536674108b937098','TEXT_LARGE'=>escape_html($row['m_message']),'TEXT_SMALL'=>escape_html($row['m_subject']))),
+				do_template('CROP_TEXT_MOUSE_OVER',array('_GUID'=>'c2fd45ce32e1c03a536674108b937098','TEXT_LARGE'=>escape_html(substr($row['m_message'],0,3000)),'TEXT_SMALL'=>escape_html($row['m_subject']))),
 			)));
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)');

@@ -68,6 +68,9 @@ class Block_main_contact_catalogues
 		$catalogue_name=array_key_exists('param',$map)?$map['param']:'';
 		if ($catalogue_name=='') $catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogues','c_name'); // Random/arbitrary (first one that comes out of the DB)
 
+		$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
+		require_code('fields');
+
 		$subject=array_key_exists('subject',$map)?$map['subject']:'';
 		if ($subject=='')
 			$subject=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title'));
@@ -86,10 +89,19 @@ class Block_main_contact_catalogues
 				enforce_captcha();
 			}
 
+			$field_results=array();
+			foreach ($special_fields as $field_num=>$field)
+			{
+				$ob=get_fields_hook($field['cf_type']);
+				$inputted_value=$ob->inputted_to_field_value(false,$field,NULL);
+				if (!is_null($inputted_value))
+					$field_results[get_translated_text($field['cf_name'])]=$inputted_value;
+			}
+
 			require_code('mail');
 			$to_email=array_key_exists('to',$map)?$map['to']:'';
 			if ($to_email=='') $to_email=NULL;
-			form_to_email($subject_prefix.$subject.$subject_suffix,$body_prefix,NULL,$to_email,$body_suffix);
+			form_to_email($subject_prefix.$subject.$subject_suffix,$body_prefix,$field_results,$to_email,$body_suffix,false);
 
 			attach_message(do_lang_tempcode('SUCCESS'));
 
@@ -114,15 +126,12 @@ class Block_main_contact_catalogues
 			$text->attach(do_lang_tempcode('FORM_TIME_SECURITY'));
 		}
 
-		$special_fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
-
 		$field_groups=array();
 
 		$hidden=new ocp_tempcode();
 
 		url_default_parameters__enable();
 
-		require_code('fields');
 		$found_email=false;
 		foreach ($special_fields as $field_num=>$field)
 		{

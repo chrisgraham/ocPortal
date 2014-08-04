@@ -119,7 +119,7 @@ The options have the following requirement for PayPal:
 </tbody></table>
 [/html]
 
-[i]Documentation for other Payment gateways is pending. Please [page="site:support"]ask[/page] if you would like ocProducts to help you here.[/i]
+[i]Documentation for other Payment gateways is pending (or as comments in the PHP code). Please [page="site:support"]ask[/page] if you would like ocProducts to help you here.[/i]
 
 [title="3"]Test mode[/title]
 

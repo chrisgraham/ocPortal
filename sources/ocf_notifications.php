@@ -139,8 +139,10 @@ function generate_notifications($member_id)
 	static $notifications_cache=NULL;
 	if (isset($notifications_cache[$cache_identifier])) return $notifications_cache[$cache_identifier];
 
+	$do_cacheing=((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0));
+
 	$notifications=mixed();
-	if (((get_option('is_on_block_cache')=='1') || (get_param_integer('keep_cache',0)==1) || (get_param_integer('cache',0)==1)) && ((get_param_integer('keep_cache',NULL)!==0) && (get_param_integer('cache',NULL)!==0)))
+	if ($do_cacheing)
 	{
 		$_notifications=get_cache_entry('_new_pp',$cache_identifier,10000);
 
@@ -215,7 +217,7 @@ function generate_notifications($member_id)
 			)));
 		}
 
-		if (get_option('is_on_block_cache')=='1')
+		if ($do_cacheing)
 		{
 			require_code('caches2');
 			put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications->to_assembly(),$num_unread_pps));

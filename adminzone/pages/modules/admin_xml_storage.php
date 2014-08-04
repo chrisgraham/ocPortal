@@ -106,6 +106,7 @@ class Module_admin_xml_storage
 
 		require_code('xml_storage');
 		require_lang('import');
+		require_lang('xml_storage');
 
 		switch ($type)
 		{

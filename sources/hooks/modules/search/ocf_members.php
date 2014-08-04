@@ -328,4 +328,3 @@ class Hook_search_ocf_members
 	}
 }
 
-

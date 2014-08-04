@@ -362,8 +362,8 @@ class Hook_task_import_rss
 
 						$comment_content=import_foreign_news_html($comment['COMMENT_CONTENT']);
 						$comment_author=array_key_exists('COMMENT_AUTHOR',$comment)?$comment['COMMENT_AUTHOR']:do_lang('GUEST');
-						$comment_parent=array_key_exists('COMMENT_PARENT',$comment)?$comment['COMMENT_PARENT']:'';
-						$comment_date_gmt=array_key_exists('COMMENT_DATE_GMT',$comment)?$comment['COMMENT_DATE_GMT']:date('D/m/Y H:i:s',time());
+						$comment_parent=array_key_exists('COMMENT_PARENT',$comment)?$comment['COMMENT_PARENT']:NULL;
+						$comment_date_gmt=array_key_exists('COMMENT_DATE_GMT',$comment)?$comment['COMMENT_DATE_GMT']:date('d-m-Y H:i:s',time());
 						$author_ip=array_key_exists('COMMENT_AUTHOR_IP',$comment)?$comment['COMMENT_AUTHOR_IP']:get_ip_address();
 						$comment_approved=array_key_exists('COMMENT_APPROVED',$comment)?$comment['COMMENT_APPROVED']:'1';
 						$comment_id=array_key_exists('COMMENT_ID',$comment)?$comment['COMMENT_ID']:'';

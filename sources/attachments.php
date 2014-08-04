@@ -222,6 +222,23 @@ function attachments_script()
 		}
 	}
 
+	$original_filename=($thumb==1 && $myrow['a_thumb_url']!='')?rawurldecode(basename($myrow['a_thumb_url'])):$myrow['a_original_filename'];
+	$extension=get_file_extension($original_filename);
+
+	// Send header
+	require_code('mime_types');
+	$mime_type=get_mime_type($extension,has_privilege($myrow['a_member_id'],'comcode_dangerous'));
+
+	// Send header
+	header('Content-Type: '.$mime_type.'; authoritative=true;');
+	if ((strpos($original_filename,"\n")!==false) || (strpos($original_filename,"\r")!==false))
+		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
+	header('Content-Disposition: inline; filename="'.$original_filename.'"');
+
+	$_full=get_custom_file_base().'/'.rawurldecode($full);
+	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
+	$size=filesize($_full);
+
 	// Is it non-local? If so, redirect
 	if (!url_is_local($full))
 	{
@@ -231,23 +248,6 @@ function attachments_script()
 		return;
 	}
 
-	$_full=get_custom_file_base().'/'.rawurldecode($full);
-	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
-	$size=filesize($_full);
-	$original_filename=($thumb==1 && $myrow['a_thumb_url']!='')?rawurldecode(basename($myrow['a_thumb_url'])):$myrow['a_original_filename'];
-	$extension=get_file_extension($original_filename);
-
-	require_code('files2');
-	check_shared_bandwidth_usage($size);
-
-	require_code('mime_types');
-	$mime_type=get_mime_type($extension,has_privilege($myrow['a_member_id'],'comcode_dangerous'));
-
-	// Send header
-	if ((strpos($original_filename,"\n")!==false) || (strpos($original_filename,"\r")!==false))
-		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-	header('Content-Type: '.$mime_type.'; authoritative=true;');
-	header('Content-Disposition: inline; filename="'.$original_filename.'"');
 	header('Accept-Ranges: bytes');
 
 	// Caching
@@ -298,6 +298,8 @@ function attachments_script()
 		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'values SET the_value=(the_value+'.strval($size).') WHERE the_name=\'download_bandwidth\'',1);
 
 	@ini_set('ocproducts.xss_detect','0');
+
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
 
 	// Send actual data
 	$myfile=fopen($_full,'rb');

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{$LANG*}" dir="{!dir}">
+<html lang="{$LCASE*,{$LANG}}" dir="{!dir}">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 <title>{TITLE*}</title>

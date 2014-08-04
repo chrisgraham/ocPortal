@@ -63,6 +63,9 @@ function captcha_script()
 	if ($mode=='audio')
 	{
 		header('Content-Type: audio/x-wav');
+
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
 		//header('Content-Disposition: attachment; filename="securityvoice.wav"');	Useful for testing
 		$data='';
 		for ($i=0;$i<strlen($code_needed);$i++)

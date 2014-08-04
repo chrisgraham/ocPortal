@@ -1235,6 +1235,8 @@ function doSubmit(e,ob,recurse) {
 		smooth_scroll(find_pos_y(txtFileName,true));
 	} else // Has uploaded
 	{
+		window.just_checking_requirements=false;
+
 		window.form_submitting=btnSubmit.form; // For IE
 
 		if (typeof ob.originalClickHandler=='undefined')
@@ -1404,8 +1406,15 @@ function uploadComplete(file, ob) {
 
 		if ((typeof ob.submitting!='undefined') && (ob.submitting))
 		{
-			btnSubmit.onclick(null,ob,btnSubmit.form);
-			ob.submitting=false;
+			window.form_submitting=btnSubmit.form; // For IE
+			if (typeof ob.originalClickHandler!='undefined')
+			{
+				ob.originalClickHandler(null,ob,btnSubmit.form);
+			} else
+			{
+				if ((btnSubmit.form.onsubmit) && (false===btnSubmit.form.onsubmit())) return;
+				btnSubmit.form.submit();
+			}
 		}
 	} else {
 		var progress = new FileProgress(file, this.customSettings.progress_target);

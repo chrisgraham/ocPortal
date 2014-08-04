@@ -260,36 +260,10 @@ class Module_vforums
 			access_denied('NOT_AS_GUEST');
 
 		// Find topics
-		$extra='';
-		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $extra='t_validated=1';
-		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-		{
-			$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member(),false,true);
-			$group_or_list='1=0';
-			foreach ($groups as $group)
-			{
-				$group_or_list.=' OR ';
-				$group_or_list.='group_id='.strval($group);
-			}
-
-			if ($extra!='') $extra.=' AND ';
-			global $SITE_INFO;
-			if (is_guest())
-			{
-				$forum_access=$GLOBALS['FORUM_DB']->query('SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
-			} else
-			{
-				$forum_access=$GLOBALS['FORUM_DB']->query('SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$group_or_list.') AND '.db_string_equal_to('module_the_name','forums').' UNION ALL SELECT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval(get_member()).' AND (active_until IS NULL OR active_until>'.strval(time()).')) AND '.db_string_equal_to('module_the_name','forums'),NULL,NULL,false,true);
-			}
-			$or_list='1=0';
-			foreach ($forum_access as $access)
-			{
-				if ($or_list!='') $or_list.=' OR ';
-				$or_list.='t_forum_id='.strval($access['category_name']);
-			}
-			$extra.='('.$or_list.')';
-		}
-		if ($extra!='') $extra=' AND ('.$extra.') ';
+		$extra=' AND ';
+		if (!has_specific_permission(get_member(),'see_unvalidated')) $extra.='t_validated=1 AND ';
+		require_code('ocf_forums');
+		$extra.=get_forum_access_sql('top.t_forum_id');
 		$max_rows=0;
 		$topic_rows=array();
 		foreach (is_array($condition)?$condition:array($condition) as $_condition)

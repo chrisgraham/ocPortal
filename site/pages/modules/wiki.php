@@ -473,23 +473,14 @@ class Module_wiki
 		$children=new ocp_tempcode();
 		if (get_option('wiki_enable_children')=='1')
 		{
-			$children_rows=$GLOBALS['SITE_DB']->query_select('wiki_children c LEFT JOIN '.get_table_prefix().'wiki_pages p ON c.child_id=p.id',array('child_id'),array('c.parent_id'=>$id),'ORDER BY c.the_order');
-			$or_list='';
-			foreach ($children_rows as $myrow)
-			{
-				if ($or_list!='') $or_list.=' OR ';
-				$or_list.='id='.strval($myrow['child_id']);
-			}
-			$_subpage=($or_list=='')?array():list_to_map('id',$GLOBALS['SITE_DB']->query('SELECT id,title,hide_posts,description FROM '.get_table_prefix().'wiki_pages WHERE '.$or_list,NULL,NULL,false,true));
+			$children_rows=$GLOBALS['SITE_DB']->query_select('wiki_children c LEFT JOIN '.get_table_prefix().'wiki_pages p ON c.child_id=p.id',array('child_id','c.title','hide_posts','description'),array('c.parent_id'=>$id),'ORDER BY c.the_order');
 			foreach ($children_rows as $myrow)
 			{
 				$child_id=$myrow['child_id'];
-				if (!array_key_exists($myrow['child_id'],$_subpage)) continue;
-				$subpage=$_subpage[$myrow['child_id']];
-				if (get_option('wiki_enable_content_posts')=='0') $subpage['hide_posts']=1;
-				$_child_title=$subpage['title'];
+				if (get_option('wiki_enable_content_posts')=='0') $myrow['hide_posts']=1;
+				$_child_title=$myrow['title'];
 				$child_title=get_translated_text($_child_title);
-				$child_description=get_translated_text($subpage['description']);
+				$child_description=get_translated_text($myrow['description']);
 
 				$my_child_posts=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id'=>$child_id));
 				$my_child_children=$GLOBALS['SITE_DB']->query_select_value('wiki_children','COUNT(*)',array('parent_id'=>$child_id));
@@ -504,7 +495,7 @@ class Module_wiki
 					));
 				} else
 				{
-					$sup=($subpage['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
+					$sup=($myrow['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
 				}
 
 				$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>wiki_derive_chain($child_id)),'_SELF');
@@ -757,12 +748,16 @@ class Module_wiki
 
 		require_code('comcode_check');
 
+		@ignore_user_abort(true);
+
 		$message=post_param('post');
 		check_comcode($message,NULL,false,NULL,true);
 		$post_id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('edit_date'=>NULL,'the_message'=>0,'member_id'=>get_member(),'date_and_time'=>time(),'page_id'=>get_param_integer('id'),'validated'=>1,'wiki_views'=>0),true);
 		require_code('attachments2');
 		$the_message=insert_lang_comcode_attachments(2,$message,'wiki_post',strval($post_id));
 		$GLOBALS['SITE_DB']->query_update('wiki_posts',array('the_message'=>$the_message),array('id'=>$post_id),'',1);
+
+		@ignore_user_abort(false);
 
 		$markers=$this->get_markers();
 		foreach ($markers as $id)

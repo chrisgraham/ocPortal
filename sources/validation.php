@@ -982,7 +982,7 @@ function _get_next_tag()
 					$errors[]=array('XML_TAG_OPEN_ANOMALY','4');
 					return array(NULL,$errors);
 				}
-				elseif (($next!=' ') && ($next!="\t") && ($next!="\n") && ($next!="\r"))
+				elseif (($next!=' ') && ($next!="\t") && ($next!='/') && ($next!="\n") && ($next!="\r"))
 				{
 					$status=IN_TAG_ATTRIBUTE_NAME;
 					$current_attribute_name.=$next;

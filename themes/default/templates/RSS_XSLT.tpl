@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:output method="html" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
 	<xsl:template match="/">
-		<html lang="{$LANG*}" dir="{!dir}">
+		<html lang="{$LCASE*,{$LANG}}" dir="{!dir}">
 			<head>
 				<title><xsl:value-of select="/rss/channel/title" disable-output-escaping="yes" /></title>
 				<meta name="GENERATOR" content="{$BRAND_NAME*}" />

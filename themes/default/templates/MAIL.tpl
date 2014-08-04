@@ -1,7 +1,7 @@
 {$,It is advisable to edit this MAIL template in the default theme, as this will ensure that all mail sent from the website will be formatted consistently, whatever theme happens to be running at the time}
 
 <!DOCTYPE html>
-<html lang="{$LANG*}" dir="{!dir}">
+<html lang="{$LCASE*,{$LANG}}" dir="{!dir}">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={$CHARSET*}" />
 <title>{TITLE*}</title>

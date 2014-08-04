@@ -154,7 +154,9 @@ function persistent_cache_delete($key,$substring=false)
  */
 function erase_persistent_cache()
 {
-	$d=opendir(get_custom_file_base().'/caches/persistent');
+	$path=get_custom_file_base().'/caches/persistent';
+	if (!file_exists($path)) return;
+	$d=opendir($path);
 	while (($e=readdir($d))!==false)
 	{
 		if (substr($e,-4)=='.gcd')
@@ -173,7 +175,7 @@ function erase_persistent_cache()
 /**
  * Remove an item from the general cache (most commonly used for blocks).
  *
- * @param  ID_TEXT		The type of what we are cacheing (e.g. block name)
+ * @param  mixed			The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array			A map of identifiying characteristics (NULL: no identifying characteristics, decache all)
  */
 function decache($cached_for,$identifier=NULL)

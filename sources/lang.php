@@ -608,7 +608,12 @@ function require_all_lang($lang=NULL,$only_if_for_lang=false)
 	if (is_null($lang))
 	{
 		global $REQUIRED_ALL_LANG;
-		if (array_key_exists($lang,$REQUIRED_ALL_LANG)) return;
+		if (array_key_exists($lang,$REQUIRED_ALL_LANG))
+		{
+			if ($support_smart_decaching)
+				unset($GLOBALS['SITE_INFO']['disable_smart_decaching']);
+			return;
+		}
 		$REQUIRED_ALL_LANG[$lang]=true;
 	}
 
@@ -623,6 +628,9 @@ function require_all_lang($lang=NULL,$only_if_for_lang=false)
 		if ((!$only_if_for_lang) || (is_file(get_custom_file_base().'/lang_custom/'.$lang.'/'.$file.'.ini')) || (is_file(get_custom_file_base().'/lang/'.$lang.'/'.$file.'.ini')) || (is_file(get_custom_file_base().'/lang_custom/'.$lang.'/'.$file.'.po')) || (is_file(get_custom_file_base().'/lang_custom/'.$lang.'/'.$file.'-'.strtolower($lang).'.po')))
 			require_lang($file,$lang,NULL,true);
 	}
+
+	if ($support_smart_decaching)
+		unset($GLOBALS['SITE_INFO']['disable_smart_decaching']);
 }
 
 /**
@@ -918,7 +926,7 @@ function _do_lang($codename,$token1=NULL,$token2=NULL,$token3=NULL,$lang=NULL,$r
 			$out=str_replace('{2}',$token2,$out);
 			if ($plural_or_vowel_check)
 			{
-				$_token_denum=str_replace(',','',$token1);
+				$_token_denum=str_replace(',','',$token2);
 				$out=preg_replace('#\{2\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token2,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
 			}
 			if (($XSS_DETECT) && (ocp_is_escaped($token2)) && ($escaped)) ocp_mark_as_escaped($out);
@@ -1032,8 +1040,6 @@ function insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang
  */
 function lang_remap_comcode($id,$text,$connection=NULL,$pass_id=NULL,$source_member=NULL,$as_admin=false)
 {
-	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
-
 	return lang_remap($id,$text,$connection,true,$pass_id,$source_member,$as_admin);
 }
 

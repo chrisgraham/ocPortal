@@ -9,9 +9,8 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.io.*;
 
-
-
 public class OptionsDialog extends JDialog {
+
     JPanel panel1 = new JPanel();
     JTabbedPane jTabbedPane1 = new JTabbedPane();
     JButton closeBtn = new JButton();
@@ -35,6 +34,7 @@ public class OptionsDialog extends JDialog {
     JCheckBox security = new JCheckBox();
     JCheckBox pedantic = new JCheckBox();
     JCheckBox non_terse = new JCheckBox();
+
     public OptionsDialog(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
         try {
@@ -42,7 +42,7 @@ public class OptionsDialog extends JDialog {
             jbInit();
             pack();
         } catch (Exception exception) {
-            exception.printStackTrace();
+            exception.printStackTrace(System.out);
         }
     }
 
@@ -54,17 +54,17 @@ public class OptionsDialog extends JDialog {
         panel1.setLayout(null);
         jTabbedPane1.setBounds(new Rectangle(10, 13, 451, 237));
         closeBtn.setBounds(new Rectangle(389, 263, 71, 23));
-        closeBtn.setMargin(new Insets(0,0,0,0));
+        closeBtn.setMargin(new Insets(0, 0, 0, 0));
         closeBtn.setActionCommand("closeBtn");
         closeBtn.setText("Close");
         closeBtn.addActionListener(new Dialog2_closeBtn_actionAdapter(this));
         cancelBtn.setBounds(new Rectangle(308, 263, 71, 23));
-        cancelBtn.setMargin(new Insets(0,0,0,0));
+        cancelBtn.setMargin(new Insets(0, 0, 0, 0));
         cancelBtn.setActionCommand("cancelBtn");
         cancelBtn.setText("Cancel");
         cancelBtn.addActionListener(new Dialog2_cancelBtn_actionAdapter(this));
         phpPathBtn.setBounds(new Rectangle(355, 53, 76, 22));
-        phpPathBtn.setMargin(new Insets(0,0,0,0));
+        phpPathBtn.setMargin(new Insets(0, 0, 0, 0));
         phpPathBtn.setActionCommand("phpPathBtn");
         phpPathBtn.setText("Browse");
         phpPathBtn.addActionListener(new Dialog2_phpPathBtn_actionAdapter(this));
@@ -76,7 +76,7 @@ public class OptionsDialog extends JDialog {
         jLabel1.setBounds(new Rectangle(8, 52, 104, 22));
         environment.setLayout(null);
         projectPathBtn.setBounds(new Rectangle(356, 86, 76, 22));
-        projectPathBtn.setMargin(new Insets(0,0,0,0));
+        projectPathBtn.setMargin(new Insets(0, 0, 0, 0));
         projectPathBtn.setActionCommand("projectPathBtn");
         projectPathBtn.setText("Browse");
         jLabel2.setToolTipText("");
@@ -170,7 +170,7 @@ public class OptionsDialog extends JDialog {
             p.put("textEditorPath", Main.textEditorPath);
             p.put("phpPath", Main.phpPath);
             p.store(out, null);
-        } catch (Exception e2) {
+        } catch (IOException e2) {
             System.out.println(e2.toString());
         } // No saving then
         this.setVisible(false);
@@ -181,27 +181,32 @@ public class OptionsDialog extends JDialog {
     }
 
     public void phpPathBtn_actionPerformed(ActionEvent e) {
-        String file=this.findFile(false);
-        if (file!=null) phpPath.setText(file);
+        String file = this.findFile(false);
+        if (file != null) {
+            phpPath.setText(file);
+        }
     }
 
     public void projectPathBtn_actionPerformed(ActionEvent e) {
-        String file=this.findFile(true);
-        if (file!=null) projectPath.setText(file);
+        String file = this.findFile(true);
+        if (file != null) {
+            projectPath.setText(file);
+        }
     }
 
     public void textEditorPathBtn_actionPerformed(ActionEvent e) {
-        String file=this.findFile(false);
-        if (file!=null) textEditorPath.setText(file);
+        String file = this.findFile(false);
+        if (file != null) {
+            textEditorPath.setText(file);
+        }
     }
 
-    public String findFile(boolean dirs)
-    {
+    public String findFile(boolean dirs) {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Find File");
 
         // Choose only files, not directories
-        fc.setFileSelectionMode(dirs?JFileChooser.DIRECTORIES_ONLY:JFileChooser.FILES_ONLY);
+        fc.setFileSelectionMode(dirs ? JFileChooser.DIRECTORIES_ONLY : JFileChooser.FILES_ONLY);
 
         // Start in current directory
         fc.setCurrentDirectory(new File("."));
@@ -224,60 +229,72 @@ public class OptionsDialog extends JDialog {
         return null;
     }
 }
+
 class Dialog2_phpPathBtn_actionAdapter implements ActionListener {
-    private OptionsDialog adaptee;
+
+    private final OptionsDialog adaptee;
+
     Dialog2_phpPathBtn_actionAdapter(OptionsDialog adaptee) {
         this.adaptee = adaptee;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         adaptee.phpPathBtn_actionPerformed(e);
     }
 }
 
-
 class Dialog2_projectPathBtn_actionAdapter implements ActionListener {
-    private OptionsDialog adaptee;
+
+    private final OptionsDialog adaptee;
+
     Dialog2_projectPathBtn_actionAdapter(OptionsDialog adaptee) {
         this.adaptee = adaptee;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         adaptee.projectPathBtn_actionPerformed(e);
     }
 }
 
-
 class Dialog2_textEditorPathBtn_actionAdapter implements ActionListener {
-    private OptionsDialog adaptee;
+
+    private final OptionsDialog adaptee;
+
     Dialog2_textEditorPathBtn_actionAdapter(OptionsDialog adaptee) {
         this.adaptee = adaptee;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         adaptee.textEditorPathBtn_actionPerformed(e);
     }
 }
 
-
 class Dialog2_cancelBtn_actionAdapter implements ActionListener {
-    private OptionsDialog adaptee;
+
+    private final OptionsDialog adaptee;
+
     Dialog2_cancelBtn_actionAdapter(OptionsDialog adaptee) {
         this.adaptee = adaptee;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         adaptee.cancelBtn_actionPerformed(e);
     }
 }
 
-
 class Dialog2_closeBtn_actionAdapter implements ActionListener {
-    private OptionsDialog adaptee;
+
+    private final OptionsDialog adaptee;
+
     Dialog2_closeBtn_actionAdapter(OptionsDialog adaptee) {
         this.adaptee = adaptee;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         adaptee.closeBtn_actionPerformed(e);
     }

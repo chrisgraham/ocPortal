@@ -133,7 +133,8 @@ function tar_get_directory(&$resource,$tolerate_errors=false)
 			{
 				if ($path!='././@LongLink')
 				{
-					$directory[$offset]=array('path'=>$path,'mode'=>$mode,'size'=>$size,'mtime'=>$mtime);
+					if (substr(basename($path),0,2)!='._')
+						$directory[$offset]=array('path'=>$path,'mode'=>$mode,'size'=>$size,'mtime'=>$mtime);
 					$next_name=NULL;
 					fseek($myfile,$block_size,SEEK_CUR);
 				} else

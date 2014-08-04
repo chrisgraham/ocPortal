@@ -295,7 +295,7 @@ function member_personal_links_and_details($member_id)
 			foreach ($usergroup_subs as $sub)
 			{
 				$url=build_url(array('page'=>'purchase','type'=>'message','type_code'=>'USERGROUP'.strval($sub['id'])),get_module_zone('purchase'));
-				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'5c4a1f300b37722e587fe2f608f1ee3a','NAME'=>do_lang_tempcode('UPGRADE_TO',escape_html(get_translated_text($sub['s_title']))),'URL'=>$url)));
+				$links->attach(do_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array('_GUID'=>'5c4a1f300b37722e587fe2f608f1ee3a','NAME'=>do_lang_tempcode('UPGRADE_TO',escape_html(get_translated_text($sub['s_title'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']))),'URL'=>$url)));
 			}
 		}
 	}

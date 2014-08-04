@@ -173,7 +173,7 @@ function ocf_delete_group($group_id,$target_group=NULL)
 
 	if (addon_installed('catalogues'))
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($group_id),'cf_type'=>'group'));
+		update_catalogue_content_ref('group',strval($group_id),'');
 	}
 
 	log_it('DELETE_GROUP',strval($group_id),$name);
@@ -276,6 +276,8 @@ function ocf_member_leave_group($group_id,$member_id=NULL)
 		'member_id'=>$member_id,
 		'usergroup_id'=>$group_id,
 	));
+
+	log_it('MEMBER_REMOVED_FROM_GROUP',strval($member_id),strval($group_id));
 }
 
 /**
@@ -305,6 +307,8 @@ function ocf_add_member_to_group($member_id,$id,$validated=1)
 		'gm_member_id'=>$member_id,
 		'gm_validated'=>$validated
 	),false,true);
+
+	log_it('MEMBER_ADDED_TO_GROUP',strval($member_id),strval($id));
 
 	if (ocf_get_group_property($id,'hidden')==0)
 	{
@@ -360,6 +364,8 @@ function ocf_member_validate_into_group($group_id,$prospective_member_id,$declin
 			'usergroup_id'=>$group_id,
 			'join_time'=>time()
 		));
+
+		log_it('MEMBER_ADDED_TO_GROUP',strval($prospective_member_id),strval($group_id));
 
 		$mail=do_lang('GROUP_ACCEPTED_MAIL',get_site_name(),$name,NULL,get_lang($prospective_member_id));
 		$subject=do_lang('GROUP_ACCEPTED_MAIL_SUBJECT',$name,NULL,NULL,get_lang($prospective_member_id));

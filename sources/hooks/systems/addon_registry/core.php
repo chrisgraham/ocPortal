@@ -608,6 +608,7 @@ class Hook_addon_registry_core
 			'sources/stemmer_EN.php',
 			'themes/default/templates/MISSING_SCREEN.tpl',
 			'themes/default/templates/PARAM_INFO.tpl',
+			'sources/profiler.php',
 			'sources/temporal.php',
 			'sources/temporal2.php',
 			'sources/blocks/main_comcode_page_children.php',

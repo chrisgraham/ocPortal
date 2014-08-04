@@ -334,7 +334,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
  * @param  boolean		Whether to backup the language string before changing it
  * @return integer		The language entry's ID
  */
-function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false)
+function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false,$leave_source_member=false)
 {
 	if ($id==0) return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
 
@@ -368,14 +368,16 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 		));
 	}
 
+	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
+	if ((is_null($for_member)) || ($GLOBALS['FORUM_DRIVER']->get_username($for_member)===NULL))
+		$for_member=$member;
+
 	if ($comcode)
 	{
 		$_text2=comcode_to_tempcode($text,$for_member,$as_admin,60,$pass_id,$connection);
 		$connection->text_lookup_cache[$id]=$_text2;
 		$text2=$_text2->to_assembly();
 	} else $text2='';
-	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
-	if (is_null($for_member)) $for_member=$member;
 
 	$remap=array('broken'=>0,'text_original'=>$text,'text_parsed'=>$text2);
 	if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_privilege($member,'allow_html')) || (!has_privilege($member,'use_very_dangerous_comcode')))
@@ -416,7 +418,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 	$result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
 	$result=array_key_exists(0,$result)?$result[0]:NULL;
 
-	if (is_null($result))
+	if (is_null($result)) // A missing translation
 	{
 		if ($force)
 		{
@@ -449,7 +451,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			lang_remap_comcode($entry,is_null($result)?'':$result['text_original'],$connection,NULL,$result['source_user'],$as_admin);
+			_lang_remap($entry,is_null($result)?'':$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 			if (!is_null($SEARCH__CONTENT_BITS))
 			{
 				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
@@ -465,7 +467,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 		return $connection->text_lookup_cache[$entry];
-	} else
+	} else // Missing parsed Comcode
 	{
 		load_user_stuff();
 		require_code('comcode'); // might not have been loaded for a quick-boot
@@ -481,7 +483,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}
-		lang_remap_comcode($entry,$result['text_original'],$connection,NULL,$result['source_user'],$as_admin);
+		_lang_remap($entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 		$LAX_COMCODE=$temp;
 		$ret=get_translated_tempcode($entry,$connection,$lang);
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;

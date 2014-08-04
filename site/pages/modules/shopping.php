@@ -527,17 +527,7 @@ class Module_shopping
 	{
 		log_cart_actions('Cart emptied');
 
-		$where=array();
-
-		if (is_guest())
-		{
-			$where['session_id']=get_session_id();
-		} else
-		{
-			$where['ordered_by']=get_member();
-		}
-
-		$GLOBALS['SITE_DB']->query_update('shopping_cart',array('is_deleted'=>1),$where);
+		empty_cart(true);
 
 		$cart_view=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
 
@@ -578,18 +568,11 @@ class Module_shopping
 			$message=$object->get_callback_url_message();
 		}
 
+		require_code('shopping');
+
 		if (get_param_integer('cancel',0)==0)
 		{
-			// Empty the cart.
-			$where=array();
-			if (is_guest())
-			{
-				$where['session_id']=get_session_id();
-			} else
-			{
-				$where['ordered_by']=get_member();
-			}
-			$GLOBALS['SITE_DB']->query_delete('shopping_cart',$where);
+			empty_cart();
 
 			log_cart_actions('Completed payment');
 
@@ -600,7 +583,6 @@ class Module_shopping
 
 				$transaction_rows=$GLOBALS['SITE_DB']->query_select('trans_expecting',array('*'),array('id'=>$trans_id),'',1);
 				if (!array_key_exists(0,$transaction_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-
 				$transaction_row=$transaction_rows[0];
 
 				$amount=$transaction_row['e_amount'];
@@ -648,6 +630,8 @@ class Module_shopping
 
 			return $this->wrap(do_template('PURCHASE_WIZARD_STAGE_FINISH',array('_GUID'=>'3857e761ab75f314f4960805bc76b936','TITLE'=>$this->title,'MESSAGE'=>$message)),$this->title,NULL);
 		}
+
+		delete_pending_orders_for_current_user(); // Don't lock the stock unless they go back to the cart again
 
 		if (!is_null($message))
 		{

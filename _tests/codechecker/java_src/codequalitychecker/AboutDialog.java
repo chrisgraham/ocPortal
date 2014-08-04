@@ -6,13 +6,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
-
 public class AboutDialog extends JDialog {
+
     JPanel panel1 = new JPanel();
     JButton closeBtn = new JButton();
     JLabel jLabel1 = new JLabel();
     JLabel jLabel2 = new JLabel();
+
     public AboutDialog(Frame owner, String title, boolean modal) {
         super(owner, title, modal);
         try {
@@ -20,7 +20,7 @@ public class AboutDialog extends JDialog {
             jbInit();
             pack();
         } catch (Exception exception) {
-            exception.printStackTrace();
+            exception.printStackTrace(System.out);
         }
     }
 
@@ -33,8 +33,8 @@ public class AboutDialog extends JDialog {
         closeBtn.setActionCommand("closeBtn");
         closeBtn.addActionListener(new Dialog3_closeBtn_actionAdapter(this));
         jLabel1.setText(
-                "<html>This is the Web Code Quality Checker, for checking web documents " +
-                "against web standards.<br><br>See the readme.txt file for full documentation.</html>");
+                "<html>This is the Web Code Quality Checker, for checking web documents "
+                + "against web standards.<br><br>See the readme.txt file for full documentation.</html>");
         jLabel1.setBounds(new Rectangle(20, 31, 349, 70));
         jLabel2.setToolTipText("");
         jLabel2.setText(
@@ -49,19 +49,23 @@ public class AboutDialog extends JDialog {
         panel1.add(jLabel2);
         closeBtn.setBounds(new Rectangle(153, 255, 71, 23));
         closeBtn.setText("Close");
-        panel1.setPreferredSize(new Dimension(400,300));
+        panel1.setPreferredSize(new Dimension(400, 300));
     }
 
     public void closeBtn_actionPerformed(ActionEvent e) {
         this.setVisible(false);
     }
 }
+
 class Dialog3_closeBtn_actionAdapter implements ActionListener {
-    private AboutDialog adaptee;
+
+    private final AboutDialog adaptee;
+
     Dialog3_closeBtn_actionAdapter(AboutDialog adaptee) {
         this.adaptee = adaptee;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         adaptee.closeBtn_actionPerformed(e);
     }

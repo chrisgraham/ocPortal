@@ -315,7 +315,8 @@ class Module_admin_newsletter extends standard_crud_module
 				}
 			}
 
-			$myfile=fopen($_FILES['file']['tmp_name'],'rb');
+			@ini_set('auto_detect_line_endings','1');
+			$myfile=fopen($_FILES['file']['tmp_name'],'rt');
 			$del=',';
 			$csv_test_line=fgetcsv($myfile,4096,$del);
 			if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
@@ -520,6 +521,8 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function bounce_filter_c()
 	{
+		disable_php_memory_limit(); // In case of a huge number
+
 		$username=post_param('username');
 		$password=post_param('password');
 		$server=post_param('server');
@@ -529,10 +532,10 @@ class Module_admin_newsletter extends standard_crud_module
 		$mbox=@imap_open($box,$username,$password);
 		if ($mbox===false)
 		{
-		   warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
+			warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
 		}
 
-		$fields=new ocp_tempcode();
+		$fields='';//new ocp_tempcode();
 		require_code('form_templates');
 
 		$all_subscribers=array();
@@ -560,7 +563,9 @@ class Module_admin_newsletter extends standard_crud_module
 		         $m=str_replace('@localhost.localdomain','',$m);
 		         if (($m!=get_option('staff_address')) && (array_key_exists($m,$all_subscribers)))
 		         {
-						$fields->attach(form_input_tick($m,$overview->subject.'.','email_'.strval($num),$checked,NULL,$m));
+						$tick=form_input_tick($m,$overview->subject.'.','email_'.strval($num),$checked,NULL,$m);
+						$fields.=$tick->evaluate(); // HTMLHTML
+						//$fields->attach($tick);
 						$num++;
 						unset($all_subscribers[$m]); // So as to make the list no longer than needed; each subscriber only considered once
 		         }
@@ -700,6 +705,8 @@ class Module_admin_newsletter extends standard_crud_module
 
 			header('Content-type: text/csv');
 			header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
+
+			if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
 
 			@ini_set('ocproducts.xss_detect','0');
 		}
@@ -1134,6 +1141,12 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function send_gui($_existing='')
 	{
+		$blocked=newsletter_block_list();
+		if (count($blocked)!=0)
+		{
+			attach_message(do_lang_tempcode('BLOCK_LIST_IN_PLACE',escape_html(number_format(count($blocked)))),'notice');
+		}
+
 		// If this is a periodic newsletter, we make some changes to the regular
 		// language strings.
 		$periodic_action_raw=post_param('periodic_choice','');
@@ -1496,6 +1509,7 @@ class Module_admin_newsletter extends standard_crud_module
 			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
 				$__csv_data=array();
+				@ini_set('auto_detect_line_endings','1');
 				$myfile=fopen($_FILES['file']['tmp_name'],GOOGLE_APPENGINE?'rb':'rt');
 				$del=',';
 				$csv_test_line=fgetcsv($myfile,4096,$del);

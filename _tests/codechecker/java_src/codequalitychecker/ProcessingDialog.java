@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class ProcessingDialog extends JDialog {
+
     JPanel panel1 = new JPanel();
     BorderLayout borderLayout1 = new BorderLayout();
     JLabel jLabel1 = new JLabel();
@@ -16,7 +17,7 @@ public class ProcessingDialog extends JDialog {
             jbInit();
             pack();
         } catch (Exception exception) {
-            exception.printStackTrace();
+            exception.printStackTrace(System.out);
         }
     }
 
@@ -33,7 +34,7 @@ public class ProcessingDialog extends JDialog {
         this.setTitle("Please wait...");
         getContentPane().add(panel1);
         panel1.add(jLabel1, java.awt.BorderLayout.WEST);
-        panel1.setPreferredSize(new Dimension(347,48));
-        this.setSize(new Dimension(347,48));
+        panel1.setPreferredSize(new Dimension(347, 48));
+        this.setSize(new Dimension(347, 48));
     }
 }

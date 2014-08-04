@@ -1382,7 +1382,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 			if ($semiparse_mode)
 			{
-				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="screen_title"':'').'><span class="inner">'.$embed->evaluate().'</span></h'.strval($level).'>');
+				$temp_tpl=make_string_tempcode('<h'.strval($level).(($level==1)?' class="screen_title"':'').'>'.$embed->evaluate().'</h'.strval($level).'>');
 				break;
 			}
 			$tpl_map=array('ID'=>(substr($pass_id,0,5)=='panel')?NULL:$uniq_id,'TITLE'=>$embed,'HELP_URL'=>'','HELP_TERM'=>'');
@@ -1909,7 +1909,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				require_code('upload_syndication');
 				if ((!is_null($daily_quota)) && ((substr($id,0,4)!='new_') || (!upload_will_syndicate('file'.substr($id,4)))))
 				{
-					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24));
+					$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24).' AND a_add_time<='.strval(time()));
 					if (is_null($_size_uploaded_today[0]['the_answer'])) $_size_uploaded_today[0]['the_answer']=0;
 					$size_uploaded_today=ceil(((float)$_size_uploaded_today[0]['the_answer'])/1024.0/1024.0);
 					$attach_size=0;

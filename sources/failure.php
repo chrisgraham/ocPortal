@@ -724,6 +724,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a='',$reason_param_b=''
 function add_ip_ban($ip,$descrip='',$ban_until=NULL,$ban_positive=true)
 {
 	if (!addon_installed('securitylogging')) return false;
+	if ($ip=='') return false;
 
 	require_code('global4');
 	if ((!is_null($ban_until)) && (ip_banned($ip,true))) return false; // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
@@ -1030,6 +1031,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 		(strpos($text,'_custom/')===false) && 
 		(strpos($text,'data/occle.php')===false) && 
 		(strpos($text,'/mini')===false) && 
+		(strpos($text,'A transaction for the wrong IPN e-mail went through')===false) && 
 		(strpos($text,'XCache var cache was not initialized properly')===false) && 
 		(strpos($text,'has been disabled for security reasons')===false) && 
 		(strpos($text,'max_questions')/*mysql limit*/===false) && 

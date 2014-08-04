@@ -223,6 +223,8 @@ function retrieve_sitemap_node($page_link='',$callback=NULL,$valid_node_types=NU
 {
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
+	ocp_profile_start_for('retrieve_sitemap_node',$page_link);
+
 	$test=find_sitemap_object($page_link);
 	if (is_null($test)) return NULL;
 	list($ob,$is_virtual)=$test;
@@ -233,7 +235,11 @@ function retrieve_sitemap_node($page_link='',$callback=NULL,$valid_node_types=NU
 		if (is_null($children)) $children=array();
 		return array('children'=>$children);
 	}
-	return $ob->get_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+	$ret=$ob->get_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+
+	ocp_profile_end_for('retrieve_sitemap_node');
+
+	return $ret;
 }
 
 /**

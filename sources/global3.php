@@ -216,7 +216,10 @@ function fix_permissions($path,$perms=0666) // We call this function assuming we
 function http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redirect=false,$ua='ocPortal',$post_params=NULL,$cookies=NULL,$accept=NULL,$accept_charset=NULL,$accept_language=NULL,$write_to_file=NULL,$referer=NULL,$auth=NULL,$timeout=6.0,$raw_post=false,$files=NULL,$extra_headers=NULL,$http_verb=NULL,$raw_content_type='application/xml')
 {
 	require_code('files2');
-	return _http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$raw_post,$files,$extra_headers,$http_verb,$raw_content_type);
+	ocp_profile_start_for('http_download_file');
+	$ret=_http_download_file($url,$byte_limit,$trigger_error,$no_redirect,$ua,$post_params,$cookies,$accept,$accept_charset,$accept_language,$write_to_file,$referer,$auth,$timeout,$raw_post,$files,$extra_headers,$http_verb,$raw_content_type);
+	ocp_profile_end_for('http_download_file',$url);
+	return $ret;
 }
 
 /**
@@ -1680,6 +1683,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 	}
 
 	if (!addon_installed('securitylogging')) return false;
+	if ($ip=='') return false;
 
 	// Check exclusions first
 	$_exclusions=get_option('spam_check_exclusions');
@@ -2020,7 +2024,7 @@ function browser_matches($code)
 				$BROWSER_MATCHES_CACHE[$code]=false;
 				return false;
 			}
-			$BROWSER_MATCHES_CACHE[$code]=true; // As of ocPortal 5.1, using CKEditor
+			$BROWSER_MATCHES_CACHE[$code]=(strpos($browser,'android')===false); // As of ocPortal 5.1, using CKEditor
 			return $BROWSER_MATCHES_CACHE[$code];
 		case 'windows':
 			$BROWSER_MATCHES_CACHE[$code]=(strpos($os,'windows')!==false) || (strpos($os,'win32')!==false);
@@ -2818,4 +2822,49 @@ function secure_serialized_data(&$data,$safe_replacement=NULL)
 			}
 		}
 	}
+}
+
+/**
+ * Update a catalogue content field reference, to a new value.
+ *
+ * @param ID_TEXT		Content type
+ * @param ID_TEXT		Old value
+ * @param ID_TEXT		New value
+ */
+function update_catalogue_content_ref($type,$from,$to)
+{
+	if (strpos(get_db_type(),'mysql')!==false)
+	{
+		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$to),array('cv_value'=>$from,'cf_type'=>$type));
+	} else
+	{
+		$fields=$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('id'),array('cf_type'=>$type));
+		foreach ($fields as $field)
+		{
+			$GLOBALS['SITE_DB']->query_update('catalogue_efv_short',array('cv_value'=>$to),array('cv_value'=>$from,'cf_id'=>$field['id']));
+		}
+	}
+}
+
+/**
+ * Start a profiling block, for a specified identifier (of your own choosing).
+ *
+ * @param  ID_TEXT		Identifier
+ */
+function ocp_profile_start_for($identifier)
+{
+	require_code('profiler');
+	_ocp_profile_start_for($identifier);
+}
+
+/**
+ * End a profiling block, for a specified identifier (of your own choosing - but you must have started it with ocp_profile_start_for).
+ *
+ * @param  ID_TEXT		Identifier
+ * @param  ?string		Longer details of what happened (e.g. a specific SQL query that ran) (NULL: none provided)
+ */
+function ocp_profile_end_for($identifier,$specifics=NULL)
+{
+	require_code('profiler');
+	_ocp_profile_end_for($identifier,$specifics);
 }

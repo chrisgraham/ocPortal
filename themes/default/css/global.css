@@ -374,9 +374,6 @@ body.website_body.frame {
 
 {+START,IF,{$CONFIG_OPTION,fixed_width}}{+START,IF,{$NOT,{$MOBILE}}}
 	html>body#main_website { /* #main_website targets only the main site screen, avoiding frames etc */
-		background-color: {$GET,fixed_width_background};
-		background-attachment: fixed;
-
 		/* Want to change the tiled background?
 			Try this Google search to get image ideas http://www.google.co.uk/search?tbm=isch&q=tile+background
 			Find how to edit the referenced "outer_background" theme image by doing an Admin Zone search for "outer_background"
@@ -406,6 +403,8 @@ body.website_body, #wysiwyg_editor {
 }
 #wysiwyg_editor {
 	margin: 0;
+	color: {$GET,slightly_seeded_text};
+	background-color: {$GET,main_background};
 }
 
 body#main_website {
@@ -1431,6 +1430,7 @@ a.toggleable_tray_button { /* Override above for toggleable_tray_button */
 }
 .pale_box.box h2, .pale_box .box h2, .pale_box.box h3, .pale_box .box h3 {
 	background-color: {$GET,point_of_interest_background} !important;
+	background-image: none;
 	color: {$GET,area_key_text} !important;
 }
 
@@ -2157,7 +2157,7 @@ div.zebra_0+div.zebra_1, div.zebra_1+div.zebra_0 {
 .results_launcher a:visited,
 .results_launcher a:hover,
 .results_launcher span {
-	padding: 2px {$?,{$MOBILE},10,5}px !important;
+	padding: 2px {$?,{$MOBILE},10,4}px !important;
 }
 
 .results_launcher {

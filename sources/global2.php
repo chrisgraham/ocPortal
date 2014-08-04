@@ -201,6 +201,17 @@ function init__global2()
 
 	// Most critical things
 	require_code('global3'); // A lot of support code is present in this
+	if (!running_script('webdav'))
+	{
+		$http_method=ocp_srv('REQUEST_METHOD');
+		if ($http_method!='GET' && $http_method!='POST' && $http_method!='HEAD' && $http_method!='')
+		{
+			header('HTTP/1.0 405 Method Not Allowed');
+			exit();
+		}
+	}
+	srand(make_seed());
+	mt_srand(make_seed());
 	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP)) // Fast cacheing for bots
 	{
 		if ((running_script('index')) && (count($_POST)==0))
@@ -810,14 +821,17 @@ function is_browser_decacheing()
 
 	if (GOOGLE_APPENGINE) return false; // Decaching by mistake is real-bad when Google Cloud Storage is involved
 
-	if (is_null(get_value('ran_once')))
+	if (is_null(get_value('ran_once'))) // Track whether ocPortal has run at least once
 	{
 		set_value('ran_once','1');
 		return true;
 	}
-	$header_method=(!browser_matches('chrome')/*Chrome does it too freely on any refresh*/) && (array_key_exists('HTTP_CACHE_CONTROL',$_SERVER)) && ($_SERVER['HTTP_CACHE_CONTROL']=='no-cache') && (ocp_srv('REQUEST_METHOD')!='POST') && ((!function_exists('browser_matches')) || (!browser_matches('opera')));
-	$BROWSER_DECACHEING_CACHE=(($header_method) && ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (has_actual_page_access(get_member(),'admin_cleanup')) || ($GLOBALS['IS_ACTUALLY_ADMIN'])));
-	return $BROWSER_DECACHEING_CACHE;
+
+	return false;	// This technique stopped working well, Chrome sends cache-control too freely
+
+	/*$header_method=(array_key_exists('HTTP_CACHE_CONTROL',$_SERVER)) && ($_SERVER['HTTP_CACHE_CONTROL']=='no-cache') && (ocp_srv('REQUEST_METHOD')!='POST') && ((!function_exists('browser_matches')) || (!browser_matches('opera')));
+	$BROWSER_DECACHEING=(($header_method) && ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (has_actual_page_access(get_member(),'admin_cleanup')) || ($GLOBALS['IS_ACTUALLY_ADMIN'])));
+	return $BROWSER_DECACHEING;*/
 }
 
 /**
@@ -1888,13 +1902,13 @@ function _css_tempcode($c,&$css,&$css_need_inline,$inline=false,$context=NULL,$t
 	{
 		if (!$text_only)
 		{
-			$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
-			$__css=$_css->evaluate();
 			if ($context!==NULL)
 			{
-				$__css=filter_css($__css,$context);
+				$__css=filter_css($c,$theme,$context);
 			} else
 			{
+				$_css=do_template($c,NULL,user_lang(),false,NULL,'.css','css',$theme);
+				$__css=$_css->evaluate();
 				$__css=str_replace('} ','}'."\n",preg_replace('#\s+#',' ',$__css));
 			}
 

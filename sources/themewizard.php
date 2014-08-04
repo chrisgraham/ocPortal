@@ -410,8 +410,13 @@ function generate_logo($name,$font_choice='Vera',$logo_theme_image='logo/default
 	if ($raw)
 	{
 		header('Content-type: image/png');
+		//header('Content-Disposition: attachment; filename="-logo.png"');
+
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
 		imagepng($canvas);
 		imagedestroy($canvas);
+
 		exit();
 	}
 
@@ -1627,6 +1632,10 @@ function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1
 
 	$gh=floatval($height-$gradient_offset);
 	$gw=floatval($width-$gradient_offset);
+
+	// Protect from a divide by zero, if images tampered with
+	if ($gh==0) return $image;
+	if ($gw==0) return $image;
 
 	$vertical=($gradient_direction=='vertical');
 	$horizontal=($gradient_direction=='horizontal');

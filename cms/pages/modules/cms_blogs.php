@@ -238,25 +238,38 @@ class Module_cms_blogs extends standard_crud_module
 	{
 		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		if (is_null($main_news_category))
+		if ($title=='')
 		{
-			$param_cat=get_param('cat','');
-			if ($param_cat=='')
-			{
-				$news_category=array();
-				$main_news_category=NULL;
-			} elseif (strpos($param_cat,',')===false)
-			{
-				$news_category=array();
-				$main_news_category=intval($param_cat);
-			} else
-			{
-				require_code('ocfiltering');
-				$news_category=ocfilter_to_idlist_using_db($param_cat,'id','news_categories','news_categories',NULL,'id','id');
-				$main_news_category=NULL;
-			}
+			$title=get_param('title',$title);
+			$author=get_param('author',$author);
+			$notes=get_param('notes',$notes);
 
-			$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			if (is_null($main_news_category))
+			{
+				global $NON_CANONICAL_PARAMS;
+				$NON_CANONICAL_PARAMS[]='cat';
+
+				$param_cat=get_param('cat','');
+				if ($param_cat=='')
+				{
+					$main_news_category=NULL;
+					$news_category=array();
+				} elseif (strpos($param_cat,',')===false)
+				{
+					$main_news_category=intval($param_cat);
+					$news_category=array();
+				} else
+				{
+					require_code('ocfiltering');
+					$_param_cat=explode(',',$param_cat);
+					$_main_news_category=array_shift($_param_cat);
+					$param_cat=implode(',',$_param_cat);
+					$main_news_category=($_main_news_category=='')?NULL:intval($_main_news_category);
+					$news_category=ocfilter_to_idlist_using_db($param_cat,'id','news_categories','news_categories',NULL,'id','id');
+				}
+
+				$author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
+			}
 		}
 
 		$cats1=create_selection_list_news_categories($main_news_category,false,true,false,true);
@@ -280,7 +293,7 @@ class Module_cms_blogs extends standard_crud_module
 		{
 			$hidden->attach(form_input_hidden('author',$author));
 		}
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'cff27a28d4d01f8e0255ee645ea210b3','SECTION_HIDDEN'=>(is_null($news_category) || (count($news_category)==0)) && $image=='' && (is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'cff27a28d4d01f8e0255ee645ea210b3','SECTION_HIDDEN'=>$image=='' && ($title==''/*=new entry and selected news cats was from URL*/ || is_null($news_category) || $news_category==array()),'TITLE'=>do_lang_tempcode('ADVANCED'))));
 		$fields2->attach(form_input_text_comcode(do_lang_tempcode('BLOG_NEWS_SUMMARY'),do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'),'news',$news,false));
 		if (get_option('enable_secondary_news')=='1')
 		{

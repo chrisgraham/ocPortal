@@ -378,6 +378,28 @@ function newsletter_variable_substitution($message,$subject,$forename,$surname,$
 }
 
 /**
+ * Work out newsletter block list.
+ *
+ * @return array				List of blocked email addresses (actually a map)
+ */
+function newsletter_block_list()
+{
+	$blocked=array();
+	$block_path=get_custom_file_base().'/uploads/website_specific/newsletter_blocked.csv';
+	if (is_file($block_path))
+	{
+		@ini_set('auto_detect_line_endings','1');
+		$myfile=fopen($block_path,'rt');
+		while (($row=fgetcsv($myfile,1024))!==false)
+		{
+			if ($row[0]!='') $blocked[$row[0]]=true;
+		}
+		fclose($myfile);
+	}
+	return $blocked;
+}
+
+/**
  * Make a newsletter.
  *
  * @param  SHORT_TEXT	The title

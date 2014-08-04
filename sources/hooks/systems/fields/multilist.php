@@ -119,7 +119,7 @@ class Hook_fields_multilist
 		$list=($default=='')?array():explode('|',$default);
 		$_list=new ocp_tempcode();
 		$exploded=explode("\n",$actual_value);
-		if (($field['cf_required']==0) && (($actual_value=='') || (is_null($actual_value))))
+		if (($field['cf_required']==0) && (($actual_value=='') || (is_null($actual_value))) && (!in_array('',$list)))
 			$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
 		foreach ($list as $l)
 		{
@@ -133,9 +133,9 @@ class Hook_fields_multilist
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
 	 * @param  array			The field details
-	 * @param  string			Where the files will be uploaded to
+	 * @param  ?string		Where the files will be uploaded to (NULL: do not store an upload, return NULL if we would need to do so)
 	 * @param  ?string		Former value of field (NULL: none)
-	 * @return string			The value
+	 * @return ?string		The value (NULL: could not process)
 	 */
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{

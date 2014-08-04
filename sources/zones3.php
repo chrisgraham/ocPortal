@@ -210,9 +210,7 @@ function actual_delete_zone_lite($zone)
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$zone.':'));
 
 	if (addon_installed('catalogues'))
-	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$zone,'cf_type'=>'zone'));
-	}
+		update_catalogue_content_ref('zone',$zone,'');
 
 	persistent_cache_delete(array('ZONE',$zone));
 	persistent_cache_delete('ALL_ZONES');
@@ -373,7 +371,8 @@ function save_comcode_page($zone,$new_file,$lang,$text,$validated,$parent_page=N
 	$renaming_page=($new_file!=$file);
 	if ($renaming_page)
 	{
-		$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$new_file),array('cv_value'=>$file,'cf_type'=>'comcode_page'));
+		if (addon_installed('catalogues'))
+			update_catalogue_content_ref('comcode_page',$file,$new_file);
 
 		$langs=find_all_langs(true);
 		$rename_map=array();
@@ -587,7 +586,8 @@ function delete_ocp_page($zone,$page,$type=NULL,$use_afm=false)
 
 	$GLOBALS['SITE_DB']->query_delete('https_pages',array('https_page_name'=>$page),'',1);
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$page,'cf_type'=>'comcode_page'));
+	if (addon_installed('catalogues'))
+		update_catalogue_content_ref('comcode_page',$page,'');
 
 	log_it('DELETE_PAGES',$page);
 }

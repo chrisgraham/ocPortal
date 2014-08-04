@@ -278,6 +278,51 @@ function update_stock($order_id)
 }
 
 /**
+ * Delete cart contents for the current user.
+ *
+ * @param  boolean		Whether to just do a soft delete, i.e. mark as deleted.
+ */
+function empty_cart($soft_delete=false)
+{
+	$where=array();
+	if (is_guest())
+	{
+		$where['session_id']=get_session_id();
+	} else
+	{
+		$where['ordered_by']=get_member();
+	}
+	if ($soft_delete)
+	{
+		$GLOBALS['SITE_DB']->query_update('shopping_cart',array('is_deleted'=>1),$where);
+	} else
+	{
+		$GLOBALS['SITE_DB']->query_delete('shopping_cart',$where);
+	}
+}
+
+/**
+ * Delete any pending orders for the current user. E.g. if cart purchase was cancelled, or cart was changed.
+ */
+function delete_pending_orders_for_current_user()
+{
+	$where=array('order_status'=>'ORDER_STATUS_awaiting_payment');
+	if (is_guest())
+	{
+		$where['session_id']=get_session_id();
+	} else
+	{
+		$where['c_member']=get_member();
+	}
+	$orders=$GLOBALS['SITE_DB']->query_select('shopping_order',array('id'),$where);
+	foreach ($orders as $order)
+	{
+		$GLOBALS['SITE_DB']->query_delete('shopping_order_details',array('order_id'=>$order['id']));
+		$GLOBALS['SITE_DB']->query_delete('shopping_order',array('id'=>$order['id']),'',1);
+	}
+}
+
+/**
  * Payment step.
  *
  * @return tempcode	The result of execution.

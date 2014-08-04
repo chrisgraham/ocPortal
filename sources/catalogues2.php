@@ -162,6 +162,8 @@ function catalogue_file_script()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	error_reporting(0);
 
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+
 	// Send actual data
 	$myfile=fopen($_full,'rb');
 	fseek($myfile,$from);
@@ -412,7 +414,7 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 	// Update field references
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'ck_'.$name),array('cf_type'=>'ck_'.$old_name));
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'cx_'.$name),array('cf_type'=>'cx_'.$old_name));
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>$name),array('cv_value'=>$old_name,'cf_type'=>'catalogue'));
+	update_catalogue_content_ref('catalogue',$old_name,$name);
 
 	decache('main_cc_embed');
 
@@ -484,7 +486,7 @@ function actual_delete_catalogue($name)
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'at_catalogue_entry'),array('cf_type'=>'ck_'.$name));
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',array('cf_type'=>'ax_catalogue_entry'),array('cf_type'=>'cx_'.$name));
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>$name,'cf_type'=>'catalogue'));
+	update_catalogue_content_ref('catalogue',$name,'');
 
 	log_it('DELETE_CATALOGUE',$name);
 
@@ -881,7 +883,7 @@ function actual_delete_catalogue_category($id,$deleting_all=false)
 		$GLOBALS['SITE_DB']->query_update('catalogue_categories',array('cc_move_target'=>NULL),array('cc_move_target'=>$id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'catalogue_category'));
+	update_catalogue_content_ref('catalogue_category',strval($id),'');
 
 	require_code('seo2');
 	seo_meta_erase_storage('catalogue_category',strval($id));
@@ -939,6 +941,8 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 	require_code('comcode_check');
 	require_code('fields');
+
+	@ignore_user_abort(true);
 
 	if (!addon_installed('unvalidated')) $validated=1;
 	$imap=array('c_name'=>$catalogue_name,'ce_edit_date'=>$edit_date,'cc_id'=>$category_id,'ce_last_moved'=>time(),'ce_submitter'=>$submitter,'ce_add_date'=>$time,'ce_views'=>$views,'ce_views_prior'=>$views,'ce_validated'=>$validated,'notes'=>$notes,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks);
@@ -1067,6 +1071,8 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 	require_code('member_mentions');
 	dispatch_member_mention_notifications('catalogue_entry',strval($id),$submitter);
 
+	@ignore_user_abort(false);
+
 	return $id;
 }
 
@@ -1128,6 +1134,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		$update_map['ce_views']=$views;
 	if (!is_null($submitter))
 		$update_map['ce_submitter']=$submitter;
+
+	@ignore_user_abort(true);
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_entries',$update_map,array('id'=>$id),'',1);
 
@@ -1233,6 +1241,8 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 		$title,
 		process_overridden_comment_forum('catalogues__'.$catalogue_name,strval($id),strval($category_id),strval($old_category_id))
 	);
+
+	@ignore_user_abort(false);
 }
 
 /**
@@ -1245,6 +1255,8 @@ function actual_delete_catalogue_entry($id)
 	$old_category_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','cc_id',array('id'=>$id));
 
 	$catalogue_name=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','c_name',array('id'=>$id));
+
+	@ignore_user_abort(true);
 
 	require_code('fields');
 	require_code('catalogues');
@@ -1301,7 +1313,7 @@ function actual_delete_catalogue_entry($id)
 	delete_all_notifications_on('comment_posted','catalogues_'.strval($id));
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'ck_'.$catalogue_name));
-	$GLOBALS['SITE_DB']->query_update('catalogue_fields f JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short v ON v.cf_id=f.id',array('cv_value'=>''),array('cv_value'=>strval($id),'cf_type'=>'catalogue_entry'));
+	update_catalogue_content_ref('catalogue_entry',strval($id),'');
 
 	require_code('seo2');
 	seo_meta_erase_storage('catalogue_entry',strval($id));
@@ -1318,6 +1330,8 @@ function actual_delete_catalogue_entry($id)
 		require_code('resource_fs');
 		expunge_resourcefs_moniker('catalogue_entry',strval($id));
 	}
+
+	@ignore_user_abort(false);
 }
 
 

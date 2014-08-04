@@ -174,6 +174,11 @@ function disable_wysiwyg(forms,so,so2,discard)
 				textarea.disabled=false;
 				textarea.readOnly=false;
 
+				// Unload editor
+				var wysiwyg_data=window.wysiwyg_editors[id].getData();
+				window.wysiwyg_editors[id].destroy();
+				delete window.wysiwyg_editors[id];
+
 				// Comcode conversion
 				if ((discard) && (window.wysiwyg_original_comcode[id]))
 				{
@@ -182,10 +187,10 @@ function disable_wysiwyg(forms,so,so2,discard)
 				{
 					var url=maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}?from_html=1'+keep_stub());
 					if (window.location.href.indexOf('topics')!=-1) url+='&forum_db=1';
-					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(window.wysiwyg_editors[id].getData().replace(new RegExp(String.fromCharCode(8203),'g'),'')));
+					var request=do_ajax_request(url,false,'data='+window.encodeURIComponent(wysiwyg_data.replace(new RegExp(String.fromCharCode(8203),'g'),'')));
 					if ((!request.responseXML) || (!request.responseXML.documentElement.getElementsByTagName('result')[0]))
 					{
-						textarea.value='[semihtml]'+window.wysiwyg_editors[id].getData()+'[/semihtml]';
+						textarea.value='[semihtml]'+wysiwyg_data+'[/semihtml]';
 					} else
 					{
 						var result_tags=request.responseXML.documentElement.getElementsByTagName('result');
@@ -271,7 +276,7 @@ function load_html_edit(posting_form,ajax_copy)
 			window.wysiwyg_original_comcode[id]=e.value;
 			if (!ajax_copy)
 			{
-				if ((typeof posting_form.elements[id+'_parsed']!='undefined') && (posting_form.elements[id+'_parsed'].value!='') && (e.defaultValue==e.value)) // The extra conditionals are for if back button used
+				if ((typeof posting_form.elements[id+'_parsed']!='undefined') && (posting_form.elements[id+'_parsed'].value!='') && ((e.defaultValue==''/*IE bug*/) || (e.defaultValue==e.value))) // The extra conditionals are for if back button used
 					e.value=posting_form.elements[id+'_parsed'].value;
 			} else
 			{
@@ -319,8 +324,33 @@ function wysiwyg_editor_init_for(element,id)
 	var test_div=document.createElement('div');
 	document.body.appendChild(test_div);
 	test_div.className='wysiwyg_toolbar_color_finder';
+	var matches;
 	var wysiwyg_color=abstract_get_computed_style(test_div,'color');
 	test_div.parentNode.removeChild(test_div);
+	matches=wysiwyg_color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/,matches);
+	if (matches)
+	{
+		wysiwyg_color='#';
+		var hex;
+		hex=(window.parseInt(matches[1]).toString(16))+'';
+		if (hex.length==1) hex='0'+hex;
+		wysiwyg_color+=hex;
+		hex=(window.parseInt(matches[2]).toString(16))+'';
+		if (hex.length==1) hex='0'+hex;
+		wysiwyg_color+=hex;
+		hex=(window.parseInt(matches[3]).toString(16))+'';
+		if (hex.length==1) hex='0'+hex;
+		wysiwyg_color+=hex;
+	}
+	// CKEditor doesn't allow low saturation, so raise up if we need to
+	matches=wysiwyg_color.match(/^#([0-4])(.)([0-4])(.)([0-4])(.)$/);
+	if (matches)
+	{
+		wysiwyg_color='#';
+		wysiwyg_color+=(window.parseInt(matches[1])+4)+matches[2];
+		wysiwyg_color+=(window.parseInt(matches[3])+4)+matches[4];
+		wysiwyg_color+=(window.parseInt(matches[5])+4)+matches[6];
+	}
 
 	{+START,INCLUDE,WYSIWYG_SETTINGS}{+END}
 
@@ -755,17 +785,20 @@ function get_selected_html(editor)
 	if (!my_selection || my_selection.getType()==window.CKEDITOR.SELECTION_NONE) return '';
 
 	var selected_text='';
-	if (window.CKEDITOR.env.ie)
+	if (my_selection.getNative())
 	{
-		my_selection.unlock(true);
-		selected_text=my_selection.getNative().createRange().htmlText;
-	} else
-	{
-		try
+		if ((window.CKEDITOR.env.ie) && (typeof my_selection.getNative().getRangeAt=='undefined')) // IE8 and under (selection object)
 		{
-			selected_text=get_inner_html(my_selection.getNative().getRangeAt(0).cloneContents());
+			my_selection.unlock(true);
+			selected_text=my_selection.getNative().createRange().htmlText;
+		} else // IE9 / standards (HTMLSelection object)
+		{
+			try
+			{
+				selected_text=get_inner_html(my_selection.getNative().getRangeAt(0).cloneContents());
+			}
+			catch (e) {};
 		}
-		catch (e) {};
 	}
 	return selected_text;
 }

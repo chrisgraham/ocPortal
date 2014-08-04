@@ -68,7 +68,7 @@ class Hook_content_meta_aware_wiki_page
 			'date_field'=>'add_date',
 			'validated_field'=>NULL,
 
-			'seo_type_code'=>NULL,
+			'seo_type_code'=>'wiki_page',
 
 			'feedback_type_code'=>NULL,
 

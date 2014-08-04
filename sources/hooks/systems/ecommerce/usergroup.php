@@ -88,7 +88,7 @@ function handle_usergroup_subscription($purchase_id,$details,$type_code,$payment
 					}
 				}
 
-				dispatch_notification('paid_subscription_messages',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+				dispatch_notification('paid_subscription_messages',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_ENDED',NULL,NULL,NULL,get_lang($member_id)),get_translated_text($myrow['s_mail_end'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB'],get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 			}
 		}
 	} else // Completed
@@ -117,6 +117,8 @@ function handle_usergroup_subscription($purchase_id,$details,$type_code,$payment
 					ocf_add_member_to_group($member_id,$new_group);
 				}
 			}
+
+			$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_member_timeouts',array('member_id'=>$member_id,'group_id'=>$new_group));
 		}
 
 		if ($myrow['s_auto_recur']==0) // Purchase-wizard, so need to maintain group-member-timeout
@@ -144,7 +146,7 @@ function handle_usergroup_subscription($purchase_id,$details,$type_code,$payment
 			));
 		}
 
-		dispatch_notification('paid_subscription_messages',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],NULL,get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
+		dispatch_notification('paid_subscription_messages',NULL/*Not currently per-sub settable strval($usergroup_subscription_id)*/,do_lang('PAID_SUBSCRIPTION_STARTED'),get_translated_text($myrow['s_mail_start'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB'],get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 	}
 }
 

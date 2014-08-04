@@ -388,7 +388,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 
 		$GROUP_MEMBERS_CACHE[$member_id][false][$handle_probation]=$groups;
 		$groups2=$groups;
-		foreach ($_groups as $group)
+		foreach ($_groups as $group) // For each secondary group
 		{
 			if ($group['g_hidden']==1)
 				unset($groups2[$group['gm_group_id']]);

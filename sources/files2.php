@@ -254,6 +254,8 @@ function make_csv($data,$filename='data.csv',$headers=true,$output_and_exit=true
 	{
 		header('Content-type: text/csv');
 		header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
+
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
 	}
 
 	$outfile=mixed();
@@ -490,7 +492,7 @@ function get_max_file_size($source_member=NULL,$connection=NULL)
 			$daily_quota=5; // 5 is a hard-coded default for non-OCF forums
 		}
 		if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
-		$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24));
+		$_size_uploaded_today=$connection->query('SELECT SUM(a_file_size) AS the_answer FROM '.$connection->get_table_prefix().'attachments WHERE a_member_id='.strval($source_member).' AND a_add_time>'.strval(time()-60*60*24).' AND a_add_time<='.strval(time()));
 		$size_uploaded_today=intval($_size_uploaded_today[0]['the_answer']);
 		$d=max(0,$daily_quota*1024*1024-$size_uploaded_today);
 	}
@@ -1001,7 +1003,7 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				$curl_headers=array();
 				if ((!is_null($cookies)) && (count($cookies)!=0)) curl_setopt($ch,CURLOPT_COOKIE,$_cookies);
 				$crt_path=get_file_base().'/data/curl-ca-bundle.crt';
-				if (get_value('disable_ssl_for__'.$url_parts['host'])==='1')
+				if ((function_exists('get_value')) && (get_value('disable_ssl_for__'.$url_parts['host'])==='1'))
 					curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
 				if (ini_get('curl.cainfo')=='')
 				{

@@ -317,7 +317,7 @@ class Module_admin_orders
 
 			$order_date=hyperlink($view_url,get_timezoned_date($row['add_date'],true,false,true,true));
 
-			if ($row['transaction_id']!='')
+			if (($row['transaction_id']!='') && ($row['order_status']!='ORDER_STATUS_awaiting_payment'))
 			{	
 				$transaction_details_url=build_url(array('page'=>'admin_ecommerce_logs','type'=>'logs','type_code'=>$order_title,'id'=>$row['id']),get_module_zone('admin_ecommerce_logs'));
 				$transaction_id=hyperlink($transaction_details_url,$row['transaction_id']);

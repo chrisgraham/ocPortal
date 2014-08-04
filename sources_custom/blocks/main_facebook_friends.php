@@ -41,7 +41,7 @@ class Block_main_facebook_friends
 	{
 		$info=array();
 		$info['cache_on']='array(array_key_exists(\'logobar\',$map)?$map[\'logobar\']:0,array_key_exists(\'stream\',$map)?$map[\'stream\']:0,array_key_exists(\'fans\',$map)?$map[\'fans\']:10,array_key_exists(\'show_fanpage_link\',$map)?$map[\'show_fanpage_link\']:1,array_key_exists(\'fanpage_name\',$map)?$map[\'fanpage_name\']:\'\')';
-		$info['ttl']=1;
+		$info['ttl']=60*5;
 		return $info;
 	}
 

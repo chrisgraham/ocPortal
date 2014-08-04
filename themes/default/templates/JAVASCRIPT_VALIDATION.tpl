@@ -262,19 +262,11 @@ function disable_buttons_just_clicked(inputs,permanent)
 	}
 }
 
-function do_form_preview(form,preview_url,has_separate_preview)
+function do_form_preview(event,form,preview_url,has_separate_preview)
 {
-	if ((window.check_form) && (!check_form(form,true))) return false;
-
 	preview_url+=((typeof window.mobile_version_for_preview=='undefined')?'':('&keep_mobile='+(window.mobile_version_for_preview?'1':'0')));
 
 	var old_action=form.getAttribute('action');
-
-	if ((has_separate_preview) || (window.has_separate_preview))
-	{
-		form.setAttribute('action',old_action+((old_action.indexOf('?')==-1)?'?':'&')+'preview=1');
-		return true;
-	}
 
 	if (!form.old_action) form.old_action=old_action;
 	form.setAttribute('action',/*maintain_theme_in_link - no, we want correct theme images to work*/(preview_url)+((form.old_action.indexOf('&uploading=1')!=-1)?'&uploading=1':''));
@@ -282,6 +274,21 @@ function do_form_preview(form,preview_url,has_separate_preview)
 	if (!old_target) old_target='_top'; /* not _self due to edit screen being a frame itself */
 	if (!form.old_target) form.old_target=old_target;
 	form.setAttribute('target','preview_iframe');
+
+	if ((window.check_form) && (!check_form(form,true))) return false;
+
+	if (form.onsubmit)
+	{
+		var test=form.onsubmit.call(form,event);
+		if (!test) return false;
+	} 
+
+	if ((has_separate_preview) || (window.has_separate_preview))
+	{
+		form.setAttribute('action',form.old_action+((form.old_action.indexOf('?')==-1)?'?':'&')+'preview=1');
+		return true;
+	}
+
 	document.getElementById('submit_button').style.display='inline';
 	//window.setInterval(function() { resize_frame('preview_iframe',window.top.scrollY+window.top.get_window_height()); },1500);
 	var pf=document.getElementById('preview_iframe');
@@ -1081,7 +1088,8 @@ function assign_tick_deletion_confirm(name)
 						if (result)
 						{
 							var form=e.form;
-							form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
+							if (form.action.indexOf('_post')==-1) // Remove redirect if redirecting back, IF it's not just deleting an on-page post (Wiki+)
+								form.action=form.action.replace(/([&\?])redirect=[^&]*/,'$1');
 						} else
 						{
 							e.checked=false;

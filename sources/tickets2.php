@@ -360,6 +360,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 	{
 		// Reply from staff, notification to member
 		$ticket_type_text=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
+		if (is_null($ticket_type_text)) $ticket_type_text=do_lang('UNKNOWN');
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
@@ -397,7 +398,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 					$uid_lang
 				);
 
-				dispatch_notification('ticket_reply',strval($ticket_type_id),$subject,$message,array($uid));
+				dispatch_notification('ticket_reply',is_null($ticket_type_id)?'':strval($ticket_type_id),$subject,$message,array($uid));
 			}
 		}
 	} else

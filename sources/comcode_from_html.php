@@ -304,6 +304,8 @@ function semihtml_to_comcode($semihtml,$force=false)
 	require_code('obfuscate');
 	$semihtml=trim($semihtml);
 
+	if (ocp_trim($semihtml,strlen($semihtml)<30)=='') return '';
+
 	@ini_set('pcre.backtrack_limit','10000000');
 
 	$semihtml=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$semihtml);
@@ -689,11 +691,11 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$semihtml2=$semihtml;
 
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<table summary="([^"]*)"([^>]*)>(.*)</table>$#siU',"\n{| \${2}\${3}\n|}\n");
-		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',"\n{|\n\${2}\n|}\n");
+		$array_html_preg_replace[]=array('#^<table summary="([^"]*)"([^>]*)>(.*)</table>$#siU',"\n{| \${2}\${3}\n\n|}\n");
+		$array_html_preg_replace[]=array('#^<table([^>]*)>(.*)</table>$#siU',"\n{|\n\${2}\n\n|}\n");
 		$semihtml2=array_html_preg_replace('table',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<thead([^>]*)>(.*)</thead>$#siU','');
+		$array_html_preg_replace[]=array('#^<thead([^>]*)>(.*)</thead>$#siU','${2}');
 		$semihtml2=array_html_preg_replace('thead',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<tbody([^>]*)>(.*)</tbody>$#siU','${2}');
@@ -702,8 +704,9 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 		$array_html_preg_replace[]=array('#^<tfoot([^>]*)>(.*)</tfoot>$#siU','');
 		$semihtml2=array_html_preg_replace('tfoot',$array_html_preg_replace,$semihtml2);
 		$array_html_preg_replace=array();
-		$array_html_preg_replace[]=array('#^<tr([^>]*)>(.*)</tr>$#siU',"\n|-\n\${2}");
+		$array_html_preg_replace[]=array('#^<tr([^>]*)>(.*)</tr>$#siU',"\n\n|-\n\${2}");
 		$semihtml2=array_html_preg_replace('tr',$array_html_preg_replace,$semihtml2);
+		$semihtml2=preg_replace("#\{\|(.*)\n+\t*\|-\n+#","{|\${1}\n",$semihtml2);
 		$array_html_preg_replace=array();
 		$array_html_preg_replace[]=array('#^<th([^>]*)>(.*)</th>$#siU',"\n\n! \${2}");
 		$semihtml2=array_html_preg_replace('th',$array_html_preg_replace,$semihtml2);

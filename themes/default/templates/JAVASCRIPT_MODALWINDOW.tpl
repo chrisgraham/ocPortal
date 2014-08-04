@@ -172,7 +172,13 @@ function fauxmodal_alert(notice,callback,title,unescaped)
 	{+END}
 
 	{+START,IF,{$NOT,{$CONFIG_OPTION,js_overlays}}}
-		window.alert(notice);
+		if ((typeof window.alert!='undefined') && (window.alert!=null))
+		{
+			window.alert(notice);
+		} else
+		{
+			console.log(notice);
+		}
 		callback();
 	{+END}
 }

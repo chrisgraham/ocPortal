@@ -410,7 +410,7 @@ function has_category_access($member,$module,$category)
 	$_category=db_string_equal_to('category_name',$category);
 
 	$db=$GLOBALS[($module=='forums')?'FORUM_DB':'SITE_DB'];
-	$perhaps=$db->query('SELECT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval($member).' AND (active_until IS NULL OR active_until>'.strval(time()).'))',1,NULL,false,true);
+	$perhaps=$db->query('SELECT DISTINCT category_name FROM '.$db->get_table_prefix().'group_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND ('.$groups.') UNION ALL SELECT DISTINCT category_name FROM '.$db->get_table_prefix().'member_category_access WHERE ('.db_string_equal_to('module_the_name',$module).' AND '.$_category.') AND (member_id='.strval($member).' AND (active_until IS NULL OR active_until>'.strval(time()).'))',1,NULL,false,true);
 
 	$result=(count($perhaps)>0);
 	handle_permission_check_logging($member,'has_category_access',array($module,$category),$result);

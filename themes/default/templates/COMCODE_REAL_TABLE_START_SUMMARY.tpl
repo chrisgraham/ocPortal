@@ -3,4 +3,3 @@
 		{CAPTION*}
 	</p>
 {+END}
-<div class="wide_table_wrap"><table class="wide_table comcode_table results_table">

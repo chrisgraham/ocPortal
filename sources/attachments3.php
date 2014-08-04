@@ -141,14 +141,24 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 	}
 
 	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
+	if ((is_null($for_member)) || ($GLOBALS['FORUM_DRIVER']->get_username($for_member)===NULL))
+		$for_member=$member;
 
 	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$for_member);
 	$text2='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
 	$remap=array('text_original'=>$_info['comcode'],'text_parsed'=>$text2);
+
+	/*
+	We set the Comcode user to the editing user (not the content owner) if the editing user does not have full HTML/Dangerous-Comcode privileges.
+	The Comcode user is set to the content owner if the editing user does have those privileges (which is the idealised, consistent state).
+	This is necessary as editing admin's content shouldn't let you write content with admin's privileges, even if you have privilege to edit their content
+	 – yet also, if the source_user is changed, when admin edits it has to change back again.
+	*/
 	if (((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_privilege($member,'allow_html')) || (!has_privilege($member,'use_very_dangerous_comcode')))
 		$remap['source_user']=$member;
-	elseif (!is_null($for_member))
+	else
 		$remap['source_user']=$for_member; // Reset to latest submitter for main record
+
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
 		$connection->query_update('translate',$remap,array('id'=>$lang_id,'language'=>user_lang()));

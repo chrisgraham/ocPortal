@@ -112,6 +112,8 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
  */
 function js_compile($j,$js_cache_path,$minify=true)
 {
+	ocp_profile_start_for('js_compile');
+
 	require_lang('javascript');
 	global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
 	$temp_keep_markers=$KEEP_MARKERS;
@@ -211,6 +213,8 @@ function compress_ocp_stub_file($stub_file)
 			sync_file($stub_file.'.gz');
 		}
 	}
+
+	ocp_profile_end_for('js_compile',$j);
 }
 
 /**
@@ -225,6 +229,8 @@ function compress_ocp_stub_file($stub_file)
  */
 function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=true)
 {
+	ocp_profile_start_for('css_compile');
+
 	if ($c!='global') // We need to make sure the global.css file is parsed, as it contains some shared THEME_WIZARD_COLOR variables that Tempcode will pick up on
 	{
 		$found=find_template_place('global','',$active_theme,'.css','css');
@@ -254,6 +260,8 @@ function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify=t
 	{
 		compress_ocp_stub_file($css_cache_path);
 	}
+
+	ocp_profile_end_for('css_compile',$c);
 }
 
 /**

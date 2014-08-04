@@ -208,7 +208,7 @@ function ocf_has_read_topic($topic_id,$topic_last_time=NULL,$member_id=NULL,$mem
 	if (is_null($topic_last_time))
 		$topic_last_time=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_last_time',array('id'=>$topic_id));
 
-	$seven_days_ago=time()-60*60*24*intval(get_option('post_history_days'));
+	$post_history_days_ago=time()-60*60*24*intval(get_option('post_history_days'));
 
 	if ((get_option('post_history_days')!='0') && (get_value('avoid_normal_topic_history')!=='1'))
 	{
@@ -220,7 +220,7 @@ function ocf_has_read_topic($topic_id,$topic_last_time=NULL,$member_id=NULL,$mem
 		}
 	}
 
-	if ($topic_last_time<$seven_days_ago) return true; // We don't store that old
+	if ($topic_last_time<$post_history_days_ago) return true; // We don't store that old
 	if (is_null($member_last_time))
 		$member_last_time=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_read_logs','l_time',array('l_member_id'=>$member_id,'l_topic_id'=>$topic_id));
 	if (is_null($member_last_time)) return false;

@@ -89,6 +89,12 @@ Topics may have a poll attached to them (by any member) by default, so as to gau
  - viewing of poll results until the poll is 'un-blinded'
  - voting, such that that members must reply to the topic of the poll before they may vote in it
 
+[title="2"]Editing posts[/title]
+
+If you edit a post, you get to choose whether it shows as edited or not. The default is usually to do so, but if you edit quickly (within 3 minutes), it will be unchecked as it is assumed the edit is a quick correction rather than a retraction which should be advertised.
+
+Staff can view full post history -- edits aren't secret from staff.
+
 [concepts
  1_key="discussion forums"   1_value="A system for discussing issues; topics contain posts, and topics are placed within forums which themselves are structured"
  2_key="forum"               2_value="A place for the archiving and posting of topics (discussions)"

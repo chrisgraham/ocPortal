@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:atom="http://www.w3.org/2005/Atom" version="1.0">
 	<xsl:output method="html" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
 	<xsl:template match="/">
-		<html lang="{$LANG*}" dir="{!dir}">
+		<html lang="{$LCASE*,{$LANG}}" dir="{!dir}">
 			<head>
 				<title><xsl:value-of select="/atom:feed/atom:title" disable-output-escaping="yes" /></title>
 				<meta name="GENERATOR" content="{$BRAND_NAME*}" />
@@ -49,8 +49,10 @@
 			</xsl:element>
 		</h2>
 		<p><span name="decodeable"><xsl:value-of select="atom:summary" disable-output-escaping="yes" /></span></p>
-		<xsl:if test="atom:content">
-			<p><span name="decodeable"><xsl:value-of select="atom:content" disable-output-escaping="yes" /></span></p>
+		<xsl:if test="atom:summary = ''">
+			<xsl:if test="atom:content">
+				<p><span name="decodeable"><xsl:value-of select="atom:content" disable-output-escaping="yes" /></span></p>
+			</xsl:if>
 		</xsl:if>
 		<cite>
 			<xsl:text>{!_SUBMITTED_BY} </xsl:text>
