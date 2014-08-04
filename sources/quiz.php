@@ -395,28 +395,31 @@ function delete_quiz($id)
 	$_name=$rows[0]['q_name'];
 	$_start_text=$rows[0]['q_start_text'];
 	$_end_text=$rows[0]['q_end_text'];
+	$_end_text_fail=$rows[0]['q_end_text_fail'];
 	$name=get_translated_text($_name);
 
 	delete_lang($_name);
 	delete_lang($_start_text);
 	delete_lang($_end_text);
+	delete_lang($_end_text_fail);
 
 	require_code('seo2');
 	seo_meta_erase_storage('quiz',strval($id));
 
 	$GLOBALS['SITE_DB']->query_delete('quizzes',array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_delete('quiz_winner',array('q_quiz'=>$id));
-	$entries=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id));
-	foreach ($entries as $entry)
+	$questions=$GLOBALS['SITE_DB']->query_select('quiz_questions',array('*'),array('q_quiz'=>$id));
+	foreach ($questions as $question)
 	{
-		delete_lang($entry['q_question_text']);
-		$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$entry['id']));
+		delete_lang($question['q_question_text']);
+		$answers=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$question['id']));
 		foreach ($answers as $answer)
 		{
 			delete_lang($answer['q_answer_text']);
+			delete_lang($answer['q_explanation']);
 		}
-		$GLOBALS['SITE_DB']->query_delete('quiz_entry_answer',array('q_question'=>$entry['id']));
-		$GLOBALS['SITE_DB']->query_delete('quiz_question_answers',array('q_question'=>$entry['id']));
+		$GLOBALS['SITE_DB']->query_delete('quiz_entry_answer',array('q_question'=>$question['id']));
+		$GLOBALS['SITE_DB']->query_delete('quiz_question_answers',array('q_question'=>$question['id']));
 	}
 	$GLOBALS['SITE_DB']->query_delete('quiz_questions',array('q_quiz'=>$id));
 	$GLOBALS['SITE_DB']->query_delete('quiz_entries',array('q_quiz'=>$id));

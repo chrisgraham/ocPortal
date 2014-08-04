@@ -263,7 +263,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		// Check validated
 		if ($topic_info['t_validated']==0)
 		{
-			if ((!has_specific_permission(get_member(),'jump_to_unvalidated')) && ((is_guest()) || ($topic_info['t_cache_first_member_id']!=get_member())))
+			if ((!has_specific_permission(get_member(),'jump_to_unvalidated')) && ($check_perms) && ((is_guest()) || ($topic_info['t_cache_first_member_id']!=get_member())))
 				access_denied('PRIVILEGE','jump_to_unvalidated');
 		}
 
