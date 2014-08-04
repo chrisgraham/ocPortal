@@ -118,7 +118,7 @@ function dload_script()
 	if (get_option('immediate_downloads')=='1')
 	{
 		require_code('mime_types');
-		header('Content-Type: '.get_mime_type(get_file_extension($myrow['original_filename'])).'; authoritative=true;');
+		header('Content-Type: '.get_mime_type(get_file_extension($myrow['original_filename']),false).'; authoritative=true;');
 		header('Content-Disposition: inline; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($myrow['original_filename']))).'"');
 	} else
 	{
@@ -200,7 +200,7 @@ function dload_script()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	error_reporting(0);
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	if ($from==0) log_download($id,$size,!is_null($got_before));
 

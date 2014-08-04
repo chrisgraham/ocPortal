@@ -327,6 +327,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		if (function_exists('get_member'))
 		{
 			if (function_exists('ocf_ping_topic_read'))
+			{
 				ocp_profile_start_for('ocf_make_post:ocf_ping_topic_read');
 				ocf_ping_topic_read($topic_id,$poster);
 				ocp_profile_end_for('ocf_make_post:ocf_ping_topic_read');

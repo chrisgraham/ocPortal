@@ -332,6 +332,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
  * @param  ?MEMBER		The member performing the change (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
+ * @param  boolean		Whether to leave the source member as-is (as opposed to resetting it to the current member)
  * @return integer		The language entry's ID
  */
 function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false,$leave_source_member=false)

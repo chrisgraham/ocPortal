@@ -62,7 +62,7 @@ function ocf_validate_post($post_id,$topic_id=NULL,$forum_id=NULL,$poster=NULL,$
 
 	if (!is_null($forum_id))
 	{
-		$post_counts=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','f_post_count_increment',array('id'=>$forum_id));
+		$post_counts=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','f_post_count_increment',array('id'=>$forum_id));
 		if ($post_counts===1)
 		{
 			ocf_force_update_member_post_count($poster,1);

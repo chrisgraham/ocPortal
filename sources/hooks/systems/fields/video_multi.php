@@ -194,12 +194,14 @@ class Hook_fields_video_multi
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
 	 * @param  array			The field details
-	 * @param  string			Where the files will be uploaded to
+	 * @param  ?string		Where the files will be uploaded to (NULL: do not store an upload, return NULL if we would need to do so)
 	 * @param  ?string		Former value of field (NULL: none)
-	 * @return string			The value
+	 * @return ?string		The value (NULL: could not process)
 	 */
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
 	{
+		if (is_null($upload_dir)) return NULL;
+
 		if (!fractional_edit())
 		{
 			$id=$field['id'];

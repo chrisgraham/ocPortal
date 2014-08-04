@@ -91,7 +91,7 @@ function _ocp_profile_start_for($identifier)
 	if (!isset($PROFILER_DATA[$identifier])) $PROFILER_DATA[$identifier]=array();
 
 	$at=array(
-		'time_start'=>microtime(false),
+		'time_start'=>microtime(true),
 		'specifics'=>NULL,
 	);
 	$PROFILER_DATA[$identifier][]=$at;
@@ -115,10 +115,10 @@ function _ocp_profile_end_for($identifier,$specifics=NULL)
 	$key=key($PROFILER_DATA[$identifier]);
 	$at=&$PROFILER_DATA[$identifier][$key];
 	$time_start=$at['time_start'];
-	$time_end=microtime(false);
+	$time_end=microtime(true);
 	$at=array(
 		'time_end'=>$time_end,
-		'time_length'=>microtime_diff($time_start,$time_end),
+		'time_length'=>intval(($time_start-$time_end)*1000),
 		'specifics'=>$specifics,
 	)+$at;
 
@@ -213,8 +213,8 @@ function _ocp_profiler_script_end()
 		fclose($PROFILER_FILEHANDLE);
 
 		// Rename file to make total time clearer, for easier identification of slow requests
-		$scope_time=microtime_diff($PAGE_START_TIME,microtime(false));
-		$new_path=preg_replace('#--in-progress\.log$#','--'.float_to_raw_string($scope_time).'s.log',$PROFILER_PATH);
+		$scope_time=intval(($PAGE_START_TIME-microtime(true))*1000);
+		$new_path=preg_replace('#--in-progress\.log$#','--'.strval($scope_time).'s.log',$PROFILER_PATH);
 		fix_permissions($PROFILER_PATH);
 		rename($PROFILER_PATH,$new_path);
 	}

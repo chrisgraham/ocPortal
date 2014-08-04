@@ -684,19 +684,21 @@ class Hook_addon_registry_core_feedback_features
 		$ratings=array();
 		$ratings[]=array(
 			'RATING_MEMBER'=>placeholder_id(),
-			'RATING_USERNAME'=>placeholder_lorem(),
-			'RATING_IP'=>placeholder_lorem(),
-			'RATING_TIME'=>placeholder_timestamp(),
+			'RATING_USERNAME'=>lorem_word(),
+			'RATING_IP'=>lorem_word(),
+			'RATING_TIME'=>placeholder_date_raw(),
 			'RATING_TIME_FORMATTED'=>placeholder_date(),
 			'RATING'=>'2',
 		);
 
-		return do_template('RATINGS_SHOW',array(
-			'RATINGS'=>$ratings,
-			'HAS_MORE'=>true,
-			'MAX'=>'1',
-			'CNT'=>'1',
-			'CNT_REMAINING'=>'10',
-		));
+		return array(
+			lorem_globalise(do_lorem_template('RATINGS_SHOW',array(
+				'RATINGS'=>$ratings,
+				'HAS_MORE'=>true,
+				'MAX'=>'1',
+				'CNT'=>'1',
+				'CNT_REMAINING'=>'10',
+			)),NULL,'',true)
+		);
 	}
 }

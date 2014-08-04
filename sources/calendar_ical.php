@@ -42,7 +42,7 @@ function output_ical()
 	header('Content-Type: text/calendar');
 	header('Content-Disposition: inline; filename="export.ics"');
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 

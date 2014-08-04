@@ -187,7 +187,7 @@ class Module_admin_ocf_merge_members
 				$GLOBALS['SITE_DB']->query_update('images',array('cat'=>$new_gallery_name),array('cat'=>$old_gallery_name));
 				$GLOBALS['SITE_DB']->query_update('videos',array('cat'=>$new_gallery_name),array('cat'=>$old_gallery_name));
 
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('galleries','name',array('name'=>$new_gallery_name));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$new_gallery_name));
 				if ($test===NULL) // Rename
 				{
 					$GLOBALS['SITE_DB']->query_update('galleries',array('name'=>$new_gallery_name),array('name'=>$old_gallery_name),'',1);

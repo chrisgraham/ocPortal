@@ -706,7 +706,7 @@ class Module_admin_newsletter extends standard_crud_module
 			header('Content-type: text/csv');
 			header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
 
-			if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+			if (ocp_srv('REQUEST_METHOD')=='HEAD') exit();
 
 			@ini_set('ocproducts.xss_detect','0');
 		}

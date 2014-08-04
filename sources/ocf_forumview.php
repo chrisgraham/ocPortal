@@ -859,10 +859,10 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 	{
 		if (is_guest())
 		{
-			$query='SELECT ttop.*,NULL AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+			$query='SELECT ttop.*,NULL AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
 		} else
 		{
-			$query='SELECT ttop.*,NULL AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+			$query='SELECT ttop.*,NULL AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
 		}
 	}
 	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,true);

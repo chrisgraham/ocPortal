@@ -299,7 +299,7 @@ function attachments_script()
 
 	@ini_set('ocproducts.xss_detect','0');
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	// Send actual data
 	$myfile=fopen($_full,'rb');

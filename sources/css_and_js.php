@@ -187,6 +187,8 @@ function js_compile($j,$js_cache_path,$minify=true)
 	{
 		compress_ocp_stub_file($js_cache_path);
 	}
+
+	ocp_profile_end_for('js_compile',$j);
 }
 
 /**
@@ -213,8 +215,6 @@ function compress_ocp_stub_file($stub_file)
 			sync_file($stub_file.'.gz');
 		}
 	}
-
-	ocp_profile_end_for('js_compile',$j);
 }
 
 /**

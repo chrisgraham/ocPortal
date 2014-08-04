@@ -428,11 +428,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('id'=>$trans_cc_page_title_key,'language'=>$lang));
 			if (is_null($test))
 			{
-				$test=$GLOBALS['SITE_DB']->query_value_null_ok('translate','id',array('id'=>$trans_cc_page_title_key,'language'=>$lang));
-				if (is_null($test))
-				{
-					$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_cc_page_title_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$title_to_use,'text_parsed'=>'','language'=>$lang),true);
-				}
+				$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_cc_page_title_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$title_to_use,'text_parsed'=>'','language'=>$lang),true);
 			} // else race condition, decached while being recached
 		}
 	}

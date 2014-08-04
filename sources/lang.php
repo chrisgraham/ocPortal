@@ -605,6 +605,9 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
  */
 function require_all_lang($lang=NULL,$only_if_for_lang=false)
 {
+	global $SITE_INFO;
+	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1');
+
 	if (is_null($lang))
 	{
 		global $REQUIRED_ALL_LANG;

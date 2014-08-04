@@ -398,7 +398,7 @@ class Module_tickets
 				$id=strval($ticket_owner).'_'.$ticket_id;
 				if ($ticket_owner!=get_member())
 				{
-					$this->title=get_screen_title('ADD_TICKET_AS',escape_html($GLOBALS['FORUM_DRIVER']->get_username($ticket_owner)));
+					$this->title=get_screen_title('ADD_TICKET_AS',true,escape_html($GLOBALS['FORUM_DRIVER']->get_username($ticket_owner)));
 				} else
 				{
 					$this->title=get_screen_title('ADD_TICKET');

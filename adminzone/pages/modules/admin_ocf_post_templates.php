@@ -158,7 +158,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 			$ticket_forum_id=mixed();
 		}
 		require_code('ocf_general_action2');
-		$fields->attach(ocf_get_forum_multi_code_field(is_null($ticket_forum_id)?NULL:('+'.strval($ticket_forum_id))));
+		$fields->attach(ocf_get_forum_multi_code_field(is_null($ticket_forum_id)?'':('+'.strval($ticket_forum_id))));
 
 		$text=paragraph(do_lang_tempcode('DESCRIPTION_IMPORT_STOCK_RESPONSES_PT'));
 

@@ -261,7 +261,7 @@ class Module_vforums
 
 		// Find topics
 		$extra=' AND ';
-		if (!has_specific_permission(get_member(),'see_unvalidated')) $extra.='t_validated=1 AND ';
+		if (!has_privilege(get_member(),'see_unvalidated')) $extra.='t_validated=1 AND ';
 		require_code('ocf_forums');
 		$extra.=get_forum_access_sql('top.t_forum_id');
 		$max_rows=0;

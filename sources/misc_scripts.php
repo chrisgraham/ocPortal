@@ -401,7 +401,7 @@ function thumb_script()
 	$url_thumb=get_custom_base_url().'/uploads/auto_thumbs/'.rawurlencode($new_name);
 
 	require_code('mime_types');
-	$mime_type=get_mime_type($url_thumb);
+	$mime_type=get_mime_type($url_thumb,false);
 	header('Content-Type: '.$mime_type.'; authoritative=true;');
 
 	if ((strpos($url_thumb,"\n")!==false) || (strpos($url_thumb,"\r")!==false))

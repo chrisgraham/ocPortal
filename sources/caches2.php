@@ -21,18 +21,20 @@
 /**
  * Remove an item from the general cache (most commonly used for blocks).
  *
- * @param  ID_TEXT		The type of what we are cacheing (e.g. block name)
+ * @param  mixed			The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array			A map of identifiying characteristics (NULL: no identifying characteristics, decache all)
  */
 function _decache($cached_for,$identifier=NULL)
 {
+	if (!is_array($cached_for)) $cached_for=array($cached_for);
+
+	$cached_for_sz=serialize($cached_for);
+
 	static $done_already=array();
 	if ($identifier===NULL)
 	{
-		if (array_key_exists($cached_for,$done_already)) return;
+		if (array_key_exists($cached_for_sz,$done_already)) return;
 	}
-
-	if (!is_array($cached_for)) $cached_for=array($cached_for);
 
 	$where='';
 
@@ -93,11 +95,11 @@ function _decache($cached_for,$identifier=NULL)
 		$where.=')';
 	}
 
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where);
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'cache WHERE '.$where,NULL,NULL,false,true);
 
 	if ($identifier===NULL)
 	{
-		$done_already[$cached_for]=true;
+		$done_already[$cached_for_sz]=true;
 	}
 }
 

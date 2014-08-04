@@ -47,7 +47,7 @@ function build_types_list($selected_ticket_type,$ticket_types_to_let_through=NUL
  * Checks the ticket ID is valid, and there is access for the current member to view it. Bombs out if there's a problem.
  *
  * @param  string			The ticket ID to check
- * @param  MEMBER			The ticket owner
+ * @return MEMBER			The ticket owner
  */
 function check_ticket_access($id)
 {

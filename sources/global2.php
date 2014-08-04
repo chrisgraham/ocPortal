@@ -210,8 +210,6 @@ function init__global2()
 			exit();
 		}
 	}
-	srand(make_seed());
-	mt_srand(make_seed());
 	if ((!$MICRO_BOOTUP) && (!$MICRO_AJAX_BOOTUP)) // Fast cacheing for bots
 	{
 		if ((running_script('index')) && (count($_POST)==0))
