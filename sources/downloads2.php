@@ -192,7 +192,7 @@ function dload_script()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	error_reporting(0);
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	if ($from==0) log_download($id,$size,!is_null($got_before));
 

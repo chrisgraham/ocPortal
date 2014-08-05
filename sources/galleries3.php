@@ -54,7 +54,7 @@ function download_gallery_script()
 	header('Content-Type: application/octet-stream'.'; authoritative=true;');
 	header('Content-Disposition: attachment; filename="gallery-'.$cat.'.zip"');
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	disable_php_memory_limit();
 

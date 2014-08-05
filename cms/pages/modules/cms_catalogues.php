@@ -1247,7 +1247,7 @@ class Module_cms_catalogues extends standard_aed_module
 		header('Content-type: text/csv');
 		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 
-		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') exit();
 
 		@ini_set('ocproducts.xss_detect','0');
 

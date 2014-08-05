@@ -580,7 +580,7 @@ class Module_admin_ocf_join
 		header('Content-type: text/csv');
 		header('Content-Disposition: attachment; filename="'.str_replace(chr(13),'',str_replace(chr(10),'',addslashes($filename))).'"');
 
-		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') exit();
 
 		@ini_set('ocproducts.xss_detect','0');
 

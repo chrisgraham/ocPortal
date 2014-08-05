@@ -102,7 +102,7 @@ function render_post_box($row,$use_post_title=false)
 			}
 		} else
 		{
-			$poster=make_string_tempcode(escape_html($post['poster_username']));
+			$poster=make_string_tempcode(escape_html(($row['p_poster_name_if_guest']!='')?$row['p_poster_name_if_guest']:do_lang('GUEST')));
 		}
 
 		$poster_details_cache[$row['p_poster']]=array($poster_title,$avatar,$post_avatar,$rank_images,$poster_details,$poster);

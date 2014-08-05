@@ -69,7 +69,7 @@ function captcha_script()
 	{
 		header('Content-Type: audio/x-wav');
 
-		if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+		if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 		//header('Content-Disposition: attachment; filename="securityvoice.wav"');
 		$data='';

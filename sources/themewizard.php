@@ -1646,8 +1646,8 @@ function generate_recoloured_image($path,$colour_a_orig,$colour_a_new,$colour_b1
 	$gw=floatval($width-$gradient_offset);
 
 	// Protect from a divide by zero, if images tampered with
-	if ($gh==0) return $image;
-	if ($gw==0) return $image;
+	if ($gh==0.0) return $image;
+	if ($gw==0.0) return $image;
 
 	$vertical=($gradient_direction=='vertical');
 	$horizontal=($gradient_direction=='horizontal');

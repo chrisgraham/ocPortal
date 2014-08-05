@@ -2147,6 +2147,15 @@ function ini_get($varname)
 }
 
 /**
+ * Restores the value of a configuration option.
+ *
+ * @param  string	Config option.
+ */
+function ini_restore($varname)
+{
+}
+
+/**
  * Sets the value of a configuration option.
  *
  * @param  string		Config option.

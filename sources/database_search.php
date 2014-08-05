@@ -439,10 +439,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		global $SITE_INFO;
 		if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
 		{
-			$cat_access=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$g_or.') AND '.db_string_equal_to('module_the_name',$permissions_module),NULL,NULL,false,true);
+			$cat_access=list_to_map('category_name',$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$g_or.') AND '.db_string_equal_to('module_the_name',$permissions_module),NULL,NULL,false,true));
 		} else
 		{
-			$cat_access=$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$g_or.') AND '.db_string_equal_to('module_the_name',$permissions_module).' UNION ALL SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name',$permissions_module),NULL,NULL,false,true);
+			$cat_access=list_to_map('category_name',$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$g_or.') AND '.db_string_equal_to('module_the_name',$permissions_module).' UNION ALL SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name',$permissions_module),NULL,NULL,false,true));
 		}
 	}
 

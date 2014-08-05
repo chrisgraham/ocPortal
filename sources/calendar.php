@@ -358,7 +358,6 @@ function find_periods_recurrence($timezone,$do_timezone_conv,$start_year,$start_
  * @param  integer			Jump in days that just happened
  * @param  integer			Jump in month that just happened
  * @param  integer			Jump in year that just happened
- * @return integer			The number of days
  */
 function _compensate_for_dst_change(&$hour,&$minute,$day_of_month,$month,$year,$timezone,$dif_day,$dif_month,$dif_year)
 {
