@@ -141,7 +141,7 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	{
 		$GLOBALS['FORUM_DB']->query_insert('f_post_history',array(
 			'h_create_date_and_time'=>$post_info[0]['p_time'],
-			'h_action_date_and_time'=>$edit_time,
+			'h_action_date_and_time'=>is_null($edit_time)?time():$edit_time,
 			'h_owner_member_id'=>$post_owner,
 			'h_alterer_member_id'=>get_member(),
 			'h_post_id'=>$post_id,

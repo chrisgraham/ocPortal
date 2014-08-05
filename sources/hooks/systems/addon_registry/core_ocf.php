@@ -938,7 +938,7 @@ class Hook_addon_registry_core_ocf
 			'contact'=>lorem_word(),
 			'profile'=>lorem_word_2(),
 			'views'=>lorem_word(),
-			'usage'=>lorem_word_2(),
+			'audit'=>lorem_word_2(),
 			'content'=>lorem_word()
 		);
 		$actions=array();
@@ -997,7 +997,7 @@ class Hook_addon_registry_core_ocf
 			'ACTIONS_contact'=>$actions['contact'],
 			'ACTIONS_profile'=>$actions['profile'],
 			'ACTIONS_views'=>$actions['views'],
-			'ACTIONS_usage'=>$actions['usage'],
+			'ACTIONS_audit'=>$actions['audit'],
 			'ACTIONS_content'=>$actions['content'],
 			'USERNAME'=>lorem_word(),
 			'MEMBER_ID'=>placeholder_id(),

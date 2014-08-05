@@ -328,6 +328,7 @@ class Hook_addon_registry_core_feedback_features
 
 		$ret->attach(do_lorem_template('COMMENT_AJAX_HANDLER',array(
 			'OPTIONS'=>'',
+			'IS_THREADED'=>false,
 			'HASH'=>''
 		)));
 
@@ -520,7 +521,9 @@ class Hook_addon_registry_core_feedback_features
 			'HAS_RATINGS'=>true,
 			'OVERALL_NUM_RATINGS'=>placeholder_number(),
 			'SIMPLISTIC'=>true,
-			'ERROR'=>''
+			'ERROR'=>'',
+			'CONTENT_URL'=>placeholder_url(),
+			'CONTENT_TITLE'=>lorem_phrase(),
 		));
 
 		return array(
@@ -679,7 +682,7 @@ class Hook_addon_registry_core_feedback_features
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function ratings_show()
+	function tpl_preview__ratings_show()
 	{
 		$ratings=array();
 		$ratings[]=array(

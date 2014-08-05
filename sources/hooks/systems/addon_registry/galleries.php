@@ -469,6 +469,7 @@ class Hook_addon_registry_galleries
 		return array(
 			lorem_globalise(
 				do_lorem_template('GALLERY_IMAGE',array(
+					'TITLE'=>lorem_phrase(),
 					'VIEW_URL'=>placeholder_url(),
 					'THUMB'=>placeholder_image(),
 					'DESCRIPTION'=>lorem_phrase(),

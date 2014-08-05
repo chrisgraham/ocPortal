@@ -856,6 +856,7 @@ class Hook_addon_registry_ecommerce
 
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_VIEW_MANUAL_TRANSACTIONS_SCREEN',array(
+				'TITLE'=>lorem_title(),
 				'CONTENT'=>$lines,
 			)),NULL,'',true)
 		);

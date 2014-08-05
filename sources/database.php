@@ -914,7 +914,7 @@ class database_driver
 			fb('Query: '.$query);
 		}
 
-		if (($QUERY_COUNT==250) && (get_param_integer('keep_no_query_limit',0)==0) && (count($_POST)==0) && (get_page_name()!='admin_importer') && (!$IN_MINIKERNEL_VERSION) && (get_param('special_page_type','')!='query'))
+		if (($QUERY_COUNT==250) && (get_param_integer('keep_no_query_limit',0)==0) && ($GLOBALS['RELATIVE_PATH']!='_tests') && (count($_POST)==0) && (get_page_name()!='admin_importer') && (!$IN_MINIKERNEL_VERSION) && (get_param('special_page_type','')!='query'))
 		{
 			ocp_profile_start_for('_query:HIGH_VOLUME_ALERT');
 

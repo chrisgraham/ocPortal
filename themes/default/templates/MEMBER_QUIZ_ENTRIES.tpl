@@ -12,7 +12,7 @@
 			{+END}
 
 			{+START,IF_NON_EMPTY,{DELETE_URL}}
-			<form action="{DELETE_URL*}" method="post">
+			<form action="{DELETE_URL*}" method="post" title="{!QUIZ}: {!DELETE}">
 			{+END}
 			<div class="wide_table_wrap"><table class="columned_table wide_table results_table autosized_table">
 				<thead>
@@ -88,7 +88,8 @@
 
 							{+START,IF_NON_EMPTY,{DELETE_URL}}
 								<td>
-									<input type="checkbox" name="delete_{ENTRY_ID*}" value="1" />
+									<label for="delete_quiz_{ENTRY_ID*}">{!DELETE}: {QUIZ_NAME*}</label>
+									<input type="checkbox" id="delete_quiz_{ENTRY_ID*}" name="delete_{ENTRY_ID*}" value="1" />
 								</td>
 							{+END}
 						</tr>

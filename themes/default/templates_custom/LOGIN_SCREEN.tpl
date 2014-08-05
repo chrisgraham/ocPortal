@@ -28,7 +28,7 @@
 					<div class="login_page_form">
 						<p class="constrain_field">
 							<label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / <span class="must_show_together">{!EMAIL_ADDRESS}</span>{+END}</label>
-							<input maxlength="80" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="15" />
+							<input maxlength="80" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="15" />
 						</p>
 
 						<p class="constrain_field">
@@ -44,7 +44,7 @@
 							<tr>
 								<th class="de_th"><label for="login_username">{!USERNAME}{+START,IF,{$AND,{$NOT,{$MOBILE}},{$OCF},{$CONFIG_OPTION,one_per_email_address}}} / <span class="must_show_together">{!EMAIL_ADDRESS}</span>{+END}</label>:</th>
 								<td>
-									<input maxlength="80" accesskey="l" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
+									<input maxlength="80" type="text" value="{USERNAME*}" id="login_username" name="login_username" size="25" />
 								</td>
 							</tr>
 							<tr>

@@ -11,7 +11,7 @@
 	{$REQUIRE_JAVASCRIPT,javascript_ajax}
 
 	<div class="trinav_wrap">
-		<div class="trinav_left" onclick="cancel_bubbling(event);">
+		<div class="trinav_left" onclick="/*Access-note: code has other activation*/ cancel_bubbling(event);">
 			{$,Back}
 			{+START,IF_NON_EMPTY,{BACK_URL}}
 				<a class="buttons__previous button_screen" {+START,IF,{SLIDESHOW}}onclick="return slideshow_backward();" {+END}rel="prev" accesskey="j" href="{BACK_URL*}"><span>{!PREVIOUS}</span></a>
@@ -21,7 +21,7 @@
 			{+END}
 		</div>
 
-		<div class="trinav_right" onclick="cancel_bubbling(event);">
+		<div class="trinav_right" onclick="/*Access-note: code has other activation*/ cancel_bubbling(event);">
 			{$,Start slideshow}
 			{+START,IF_NON_EMPTY,{SLIDESHOW_URL}}
 				{+START,IF,{$NOT,{$MOBILE}}}

@@ -2261,6 +2261,9 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('UPLOAD_SYNDICATION_SETUP_SCREEN',array(
+				'LABEL'=>lorem_phrase(),
+				'HOOK'=>lorem_word(),
+				'NAME'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}

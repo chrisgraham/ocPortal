@@ -631,6 +631,7 @@ class Hook_addon_registry_shopping
 			'PRICE'=>placeholder_number(),
 			'RATING'=>$rating_inside,
 			'FIELD_7_THUMB'=>placeholder_image(),
+			'FIELD_7'=>placeholder_image(),
 			'FIELD_7_PLAIN'=>placeholder_url(),
 			'MAP_TABLE'=>placeholder_table(),
 			'CART_BUTTONS'=>$cart_buttons,

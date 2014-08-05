@@ -196,12 +196,14 @@ class Hook_addon_registry_core_notifications
 				'DATE_WRITTEN_TIME'=>placeholder_time(),
 				'NOTIFICATION_CODE'=>placeholder_id(),
 				'CODE_CATEGORY'=>placeholder_id(),
+				'HAS_READ'=>true,
 			))
 		);
 
 		$out=do_lorem_template('NOTIFICATION_BROWSE_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'NOTIFICATIONS'=>$notifications,
+			'PAGINATION'=>placeholder_pagination(),
 		));
 
 		return array(

@@ -728,7 +728,7 @@ class Hook_addon_registry_core_form_interfaces
 
 		$name=placeholder_random_id();
 		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
-			'CHECKED'=>'true',
+			'CHECKED'=>true,
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name
 		));
@@ -767,7 +767,7 @@ class Hook_addon_registry_core_form_interfaces
 		$name=placeholder_random_id();
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
 			'DESCRIPTION'=>lorem_sentence(),
-			'CHECKED'=>'true',
+			'CHECKED'=>true,
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>placeholder_random(),
@@ -1147,7 +1147,7 @@ class Hook_addon_registry_core_form_interfaces
 		$name=placeholder_random_id();
 		$radios=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
 			'DESCRIPTION'=>lorem_phrase(),
-			'CHECKED'=>'true',
+			'CHECKED'=>true,
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>lorem_word(),
@@ -1155,7 +1155,7 @@ class Hook_addon_registry_core_form_interfaces
 		));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
 			'DESCRIPTION'=>lorem_phrase(),
-			'CHECKED'=>'true',
+			'CHECKED'=>true,
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>lorem_word_2(),
@@ -1556,7 +1556,7 @@ class Hook_addon_registry_core_form_interfaces
 			foreach (placeholder_array() as $_k=>$_v)
 			{
 				$temp=do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array(
-					'CHECKED'=>'true',
+					'CHECKED'=>true,
 					'PRETTY'=>lorem_phrase(),
 					'NAME'=>placeholder_random_id(),
 					'CODE'=>$_v,
@@ -1831,6 +1831,7 @@ class Hook_addon_registry_core_form_interfaces
 			'CODE'=>'',
 			'TABINDEX'=>placeholder_number(),
 			'CONTENT'=>lorem_phrase(),
+			'REQUIRED'=>true,
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,

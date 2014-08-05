@@ -654,7 +654,7 @@ class Hook_addon_registry_core_rich_media
 
 		return array(
 			lorem_globalise(do_lorem_template('COMCODE_MISTAKE_SCREEN',array(
-				'EDITABLE'=>placeholder_table(),
+				'EDITABLE'=>true,
 				'FORM'=>placeholder_form(),
 				'TITLE'=>lorem_title(),
 				'LINE'=>lorem_phrase(),
@@ -1549,52 +1549,8 @@ class Hook_addon_registry_core_rich_media
 			'CONTENT'=>lorem_phrase(),
 			'TYPE'=>''
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'100%',
-			'FLOAT'=>'left',
-			'PADDING'=>'',
-			'PADDING_AMOUNT'=>'5'
-		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE_START',array(
-			'WIDTH'=>'100%',
-			'FLOAT'=>'left',
-			'PADDING'=>'',
-			'PADDING_AMOUNT'=>'5'
-		)));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
 			'WIDTH'=>'40%',
 			'FLOAT'=>'left',
@@ -1602,72 +1558,18 @@ class Hook_addon_registry_core_rich_media
 			'PADDING_AMOUNT'=>'10'
 		)));
 		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START'));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_2_START',array(
 			'WIDTH'=>'100%',
 			'FLOAT'=>'left',
 			'PADDING'=>'',
 			'PADDING_AMOUNT'=>'5'
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START',array()));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
@@ -1678,85 +1580,38 @@ class Hook_addon_registry_core_rich_media
 		)));
 		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START',array()));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE_START',array(
+			'WIDTH'=>'100%',
+			'PADDING_AMOUNT'=>'0',
+			'FLOAT'=>'left',
+			'PADDING'=>''
+		)));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
+
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_START',array()));
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
 			'WIDTH'=>'100%',
 			'PADDING_AMOUNT'=>'0',
 			'FLOAT'=>'left',
 			'PADDING'=>''
 		)));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
 		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
-			'WIDTH'=>'40%',
-			'FLOAT'=>'left',
-			'PADDING'=>'-left',
-			'PADDING_AMOUNT'=>'10'
-		)));
-		$tag_output->attach(lorem_word_2());
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_END'));
-
+		$tag_output->attach(do_lorem_template('COMCODE_FAKE_TABLE_WRAP_END'));
 
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START',array(
 			'SUMMARY'=>lorem_phrase(),
 			'CAPTION'=>lorem_word()
 		)));
-
 		foreach (placeholder_array(2) as $i=>$table_row)
 		{
 			$map=array();
 			if ($i==0)
 				$map['START_BODY']=true;
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START',$map));
-
 			foreach (placeholder_array(2) as $cell)
 			{
 				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL',array(
@@ -1767,22 +1622,18 @@ class Hook_addon_registry_core_rich_media
 			}
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_END'));
 		}
-
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END',array('END_BODY'=>true)));
-
 
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START_SUMMARY',array(
 			'CAPTION'=>lorem_word(),
 			'START_BODY'=>true
 		)));
-
 		foreach (placeholder_array(2) as $i=>$table_row)
 		{
 			$map=array();
 			if ($i==0)
 				$map['START_BODY']=true;
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_START',$map));
-
 			foreach (placeholder_array(2) as $cell)
 			{
 				$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_CELL',array(
@@ -1793,7 +1644,6 @@ class Hook_addon_registry_core_rich_media
 			}
 			$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_ROW_END'));
 		}
-
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_END',array('END_BODY'=>true)));
 
 		return array(
