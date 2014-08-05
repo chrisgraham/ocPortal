@@ -1,10 +1,15 @@
 <section class="box box___poll_box"><div class="box_inner">
-	{+START,IF,{GIVE_CONTEXT}}
-		<h3>{!CONTENT_IS_OF_TYPE,{!POLL},{QUESTION}}</h3>
-	{+END}
+	{+START,SET,content_box_title}
+		{+START,IF,{GIVE_CONTEXT}}
+			{!CONTENT_IS_OF_TYPE,{!POLL},{QUESTION}}
+		{+END}
 
-	{+START,IF,{$NOT,{GIVE_CONTEXT}}}
-		<h3>{+START,FRACTIONAL_EDITABLE,{QUESTION_PLAIN},question,_SEARCH:cms_polls:__ed:{PID},1}{QUESTION}{+END}</h3>
+		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
+			{+START,FRACTIONAL_EDITABLE,{QUESTION_PLAIN},question,_SEARCH:cms_polls:__ed:{PID},1}{QUESTION}{+END}
+		{+END}
+	{+END}
+	{+START,IF,{$NOT,{$GET,skip_content_box_title}}}
+		<h3>{$GET,content_box_title}</h3>
 	{+END}
 
 	<a id="poll_jump" rel="dovote"></a>

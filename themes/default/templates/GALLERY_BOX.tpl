@@ -1,5 +1,5 @@
 <div class="box box___gallery_box"><div class="box_inner">
-	<h3>
+	{+START,SET,content_box_title}
 		{+START,IF,{GIVE_CONTEXT}}
 			{!CONTENT_IS_OF_TYPE,{!GALLERY},{TITLE*}}
 		{+END}
@@ -7,7 +7,10 @@
 		{+START,IF,{$NOT,{GIVE_CONTEXT}}}
 			{+START,FRACTIONAL_EDITABLE,{TITLE},fullname,_SEARCH:cms_galleries:__ec:{ID}}{TITLE*}{+END}
 		{+END}
-	</h3>
+	{+END}
+	{+START,IF,{$NOT,{$GET,skip_content_box_title}}}
+		<h3>{$GET,content_box_title}</h3>
+	{+END}
 
 	{+START,IF_NON_EMPTY,{THUMB}}
 		<div class="right float_separation">

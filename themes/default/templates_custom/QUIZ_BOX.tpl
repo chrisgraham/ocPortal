@@ -1,5 +1,10 @@
 <section class="box box___quiz_box"><div class="box_inner">
-	<h3>{NAME*}</h3>
+	{+START,SET,content_box_title}
+		{NAME*}
+	{+END}
+	{+START,IF,{$NOT,{$GET,skip_content_box_title}}}
+		<h3>{$GET,content_box_title}</h3>
+	{+END}
 
 	<div class="meta_details" role="note">
 		<dl class="meta_details_list">

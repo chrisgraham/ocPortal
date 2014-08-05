@@ -1,9 +1,12 @@
 <div class="box box___iotd_box"><div class="box_inner">
 	{+START,IF,{GIVE_CONTEXT}}
-		<h3>
+		{+START,SET,content_box_title}
 			{+START,IF_NON_EMPTY,{I_TITLE}}{!CONTENT_IS_OF_TYPE,{!IOTD},{I_TITLE}}{+END}
 			{+START,IF_EMPTY,{I_TITLE}}{!IOTD}{+END}
-		</h3>
+		{+END}
+		{+START,IF,{$NOT,{$GET,skip_content_box_title}}}
+			<h3>{$GET,content_box_title}</h3>
+		{+END}
 	{+END}
 
 	{+START,IF_NON_EMPTY,{THUMB_URL}}

@@ -1,5 +1,5 @@
 <div class="box box___download_box"><div class="box_inner">
-	<h3>
+	{+START,SET,content_box_title}
 		{+START,IF,{GIVE_CONTEXT}}
 			{!CONTENT_IS_OF_TYPE,{!DOWNLOAD},{NAME*}}
 		{+END}
@@ -12,7 +12,10 @@
 				{NAME*}
 			{+END}
 		{+END}
-	</h3>
+	{+END}
+	{+START,IF,{$NOT,{$GET,skip_content_box_title}}}
+		<h3>{$GET,content_box_title}</h3>
+	{+END}
 
 	<div class="meta_details" role="note">
 		<dl class="meta_details_list">

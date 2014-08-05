@@ -8,7 +8,7 @@
 		{$INC,has_mass_select}
 	{+END}
 
-	<h3>
+	{+START,SET,content_box_title}
 		{+START,IF,{GIVE_CONTEXT}}
 			{!CONTENT_IS_OF_TYPE,{!NEWS},{NEWS_TITLE}}
 		{+END}
@@ -20,7 +20,10 @@
 				{$TRUNCATE_LEFT,{NEWS_TITLE},70,1,1}
 			{+END}
 		{+END}
-	</h3>
+	{+END}
+	{+START,IF,{$NOT,{$GET,skip_content_box_title}}}
+		<h3>{$GET,content_box_title}</h3>
+	{+END}
 
 	{+START,IF,{$AND,{$NOT,{BLOG}},{$IS_NON_EMPTY,{AUTHOR_URL}}}}
 		<div class="newscat_img newscat_img_author">
