@@ -142,6 +142,7 @@ class Module_admin
 			array('license','licence'),
 			array('atom','rss','feed'),
 			array('login','logon','log-in','log-on'),
+			array('redirect','move'),
 			array('gallery','album'),
 			array('audit','log','usage'),
 			array('download','file','document'),

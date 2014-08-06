@@ -175,6 +175,16 @@ php /home/funkysite/htdocs/data/cron_bridge.php
 [/code]
 On Linux, the system level scheduler is 'Cron', and the process of adding a task is known as 'setting up a Cronjob'. Many web hosting control panels allow you to do this.
 
+[title="4"]Sandboxes CRON[/title]
+
+Some webhosts only allow you to execute CRON commands directly under your home directory. This means you cannot call up the PHP command directory like above.
+A workaround is to make a [tt]data/cron_bridge.sh[/tt] file (with execute permissions) containing:
+[code]
+#!/bin/sh
+php cron_bridge.php
+[/code]
+and tell CRON to execute [tt]/home/funkysite/htdocs/data/cron_bridge.sh[/tt].
+
 [title="3"]Specific advice for Windows[/title]
 
 On Windows the following command might work for an ocPortal installation in the '[tt]c:\sites\funkysite\www[/tt]' directory:

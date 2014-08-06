@@ -224,6 +224,9 @@ The ocPortal search module provides special support for searching catalogues by 
 
 You can import CSV files into catalogues. Be aware this adds entries only, it doesn't try and do any merging with what is already there.
 
+[title="2"]A note about permisssions[/title]
+
+If you manually alter the templates so that upload/picture fields display the raw URL, rather than going through ocPortal's downloader script, then you will need to delete the [tt]uploads/catalogues/.htaccess[/tt] file. By default permissions are denied to directly access these URLs, to prevent users without catalogue access from accessing individual files.
 
 
 
