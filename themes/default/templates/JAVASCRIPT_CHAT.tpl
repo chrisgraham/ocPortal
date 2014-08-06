@@ -431,7 +431,8 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 			} else if ((typeof opened_popups['room_'+current_room_id]!='undefined') && (!opened_popups['room_'+current_room_id].is_shutdown) && (opened_popups['room_'+current_room_id].document)) // Popup
 			{
 				message_container=opened_popups['room_'+current_room_id].document.getElementById('messages_window_'+current_room_id);
-			} else if (!message_container_global)
+			}
+			if (!message_container)
 			{
 				cannot_process_all=true;
 				continue; // Still no luck
@@ -1118,7 +1119,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 	} else
 	{
 		// Open popup
-		var im_popup_window_options='width=370,height=420,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2);
+		var im_popup_window_options='width=370,height=460,menubar=no,toolbar=no,location=no,resizable=no,scrollbars=yes,top='+((screen.height-520)/2)+',left='+((screen.width-440)/2);
 		var new_window=window.open('{$BASE_URL;,0}'.replace(/^http:/,window.location.protocol)+'/data/empty.html?instant_messaging','room_'+room_id,im_popup_window_options); // The "?instant_messaging" is just to make the location bar less surprising to the user ;-) [modern browsers always show the location bar for security, even if we try and disable it]
 		if ((!new_window) || (typeof new_window.window=='undefined' /*BetterPopupBlocker for Chrome returns a fake new window but won't have this defined in it*/))
 		{
@@ -1126,7 +1127,7 @@ function detected_conversation(room_id,room_name,participants) // Assumes conver
 		}
 		window.setTimeout(function() // Needed for Safari to set the right domain, and also to give window an opportunity to attach itself on its own accord
 		{
-			if ((typeof opened_popups['room_'+room_id]!='undefined') && (!opened_popups['room_'+room_id].is_shutdown)) // It's been reattached already
+			if ((typeof opened_popups['room_'+room_id]!='undefined') && (opened_popups['room_'+room_id]!=null) && (!opened_popups['room_'+room_id].is_shutdown)) // It's been reattached already
 			{
 				return;
 			}

@@ -188,6 +188,10 @@ class Hook_media_rendering_oembed
 			$data['thumbnail_url']=$data['media_url']; // noembed uses this, naughty
 			unset($data['media_url']);
 		}
+		if ((array_key_exists('thumbnail_url',$data)) && (array_key_exists('url',$data)) && (strpos($data['thumbnail_url'],'https://noembed.com/')!==false))
+		{
+			$data['url']=$data['thumbnail_url']; // noembed uses 'url' incorrectly, naughty
+		}
 		switch ($data['type'])
 		{
 			case 'photo':
@@ -201,8 +205,9 @@ class Hook_media_rendering_oembed
 
 				// Check security
 				$url_details=parse_url($url);
+				$url_details2=parse_url($endpoint);
 				$whitelist=explode("\n",get_option('oembed_html_whitelist'));
-				if ((!in_array($url_details['host'],$whitelist)) && (!in_array(preg_replace('#^www\.#','',$url_details['host']),$whitelist)))
+				if ((!in_array($url_details['host'],$whitelist)) && (!in_array($url_details2['host'],$whitelist)) && (!in_array(preg_replace('#^www\.#','',$url_details['host']),$whitelist)))
 				{
 					/*require_code('comcode_compiler');	We could do this but it's not perfect, it still has some level of trust
 					$len=strlen($data['html']);
@@ -217,6 +222,42 @@ class Hook_media_rendering_oembed
 
 			default:
 				return NULL;
+		}
+
+		// See if we can improve things
+		if ($data['type']=='photo')
+		{
+			$matches=array();
+
+			// Flickr
+			if (preg_match('#^(https?://[^/]+\.staticflickr\.com/.*_)[nm](\.jpg)$#',$data['url'],$matches)!=0)
+			{
+				unset($data['thumb_url']);
+				$data['url']=$matches[1].'b'.$matches[2];
+				$w=$data['width'];
+				$h=$data['height'];
+				$data['width']='1024';
+				$data['height']=strval(intval(1024.0*floatval($h)/floatval($w)));
+			}
+
+			// Instagram
+			elseif (preg_match('#^(https?://[^/]+\.instagram\.com/.*_)[as](\.jpg)$#',$data['url'],$matches)!=0)
+			{
+				unset($data['thumb_url']);
+				$data['url']=$matches[1].'n'.$matches[2];
+				$w=$data['width'];
+				$h=$data['height'];
+				$data['width']='640';
+				$data['height']=strval(intval(640.0*floatval($h)/floatval($w)));
+			}
+		}
+		elseif ($data['type']=='video')
+		{
+			// Instagram
+			if ((preg_match('#^(https?://([^/]+\.)?instagram\.com/.*/)$#',$url,$matches)!=0) && ($data['html']==''))
+			{
+				$data['html']='<iframe src="'.escape_html($url).'embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
+			}
 		}
 
 		return $data;

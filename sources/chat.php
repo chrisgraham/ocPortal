@@ -881,7 +881,7 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 	}*/
 
 	// Send response of new messages, so we get instant result
-	_chat_messages_script_ajax(($room_row['is_im']==1)?-1:$room_id,false,either_param_integer('message_id'),either_param_integer('event_id'));
+	_chat_messages_script_ajax(($room_row['is_im']==1)?-1:$room_id,false,either_param_integer('message_id',0),either_param_integer('event_id',0));
 }
 
 /**

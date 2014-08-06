@@ -1515,27 +1515,50 @@ class Module_cms_galleries_alt extends standard_crud_module
 			{
 				$url=post_param('url','');
 				if ($url=='') return array(NULL,NULL,NULL);
-				$download_test=NULL;
-				$temp_path='';
-				if ($url!='')
+
+				$_video_width=NULL;
+				$_video_height=NULL;
+
+				// Try oEmbed
+				require_code('media_renderer');
+				require_code('files2');
+				$meta_details=get_webpage_meta_details($url);
+				require_code('hooks/systems/media_rendering/oembed');
+				$oembed_ob=object_factory('Hook_media_rendering_oembed');
+				if ($oembed_ob->recognises_mime_type($meta_details['t_mime_type'],$meta_details) || $oembed_ob->recognises_url($url))
 				{
-					$temp_path=ocp_tempnam('ocpafm');
-					$write_to_file=fopen($temp_path,'wb');
-					$download_test=http_download_file($url,1024*50,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$write_to_file);
-					rewind($write_to_file);
-					fclose($write_to_file);
-				}
-				if (!is_null($download_test))
-				{
-					$filename=is_null($GLOBALS['HTTP_FILENAME'])?basename(urldecode($url)):$GLOBALS['HTTP_FILENAME'];
-					list($_video_width,$_video_height,$_video_length)=get_video_details($temp_path,$filename);
-				} else
-				{
-					$filename=mixed();
-					list($_video_width,$_video_height,$_video_length)=array(NULL,NULL,NULL);
+					$oembed=$oembed_ob->get_oembed_data_result($url,array('width'=>'1280','height'=>'1024'));
+					if (isset($oembed['width'])) $_video_width=$oembed['width'];
+					if (isset($oembed['height'])) $_video_height=$oembed['height'];
+					$_video_length=NULL;
 				}
 
-				if ($temp_path!='') @unlink($temp_path);
+				$filename=mixed();
+
+				// Try get_video_details
+				if (!isset($_video_width))
+				{
+					$download_test=NULL;
+					$temp_path='';
+					if ($url!='')
+					{
+						$temp_path=ocp_tempnam('ocpafm');
+						$write_to_file=fopen($temp_path,'wb');
+						$download_test=http_download_file($url,1024*50,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$write_to_file);
+						rewind($write_to_file);
+						fclose($write_to_file);
+					}
+					if (!is_null($download_test))
+					{
+						$filename=is_null($GLOBALS['HTTP_FILENAME'])?basename(urldecode($url)):$GLOBALS['HTTP_FILENAME'];
+						list($_video_width,$_video_height,$_video_length)=get_video_details($temp_path,$filename);
+					} else
+					{
+						list($_video_width,$_video_height,$_video_length)=array(NULL,NULL,NULL);
+					}
+
+					if ($temp_path!='') @unlink($temp_path);
+				}
 			}
 
 			if (!is_null($filename))

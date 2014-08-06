@@ -69,8 +69,11 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
 
 	$found=array();
 	$matches=array();
-	if (preg_match('#\.(\w+)$#',$url,$matches)!=0)
+	if (preg_match('#\.(\w+)$#',preg_replace('#\#.*#','',$url)/*trim off hash component*/,$matches)!=0)
 	{
+		/*
+		Unfortunately, just not reliable enough  (e.g. http://commons.wikimedia.org/wiki/File:Valmiki_Ramayana.jpg)
+
 		// Find via extension
 		require_code('mime_types');
 		$mime_type=get_mime_type($matches[1],$as_admin);
@@ -82,10 +85,12 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
 				{
 					$result=$obs[$hook]->recognises_mime_type($mime_type);
 					if ($result!=0)
+					{
 						$found[$hook]=$result;
+					}
 				}
 			}
-		}
+		}*/
 	}
 
 	// Find via URL recognition
@@ -95,7 +100,9 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
 		{
 			$result=$obs[$hook]->recognises_url($url);
 			if ($result!=0)
+			{
 				$found[$hook]=$result;
+			}
 		}
 	}
 	if (count($found)!=0)
@@ -122,7 +129,9 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
 			{
 				$result=$obs[$hook]->recognises_mime_type($mime_type,$meta_details);
 				if ($result!=0)
+				{
 					$found[$hook]=$result;
+				}
 			}
 		}
 		if (count($found)!=0)

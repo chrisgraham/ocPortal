@@ -608,7 +608,7 @@ function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type=
 				$oembed=$oembed_ob->get_oembed_data_result($url[0],array('width'=>'1280','height'=>'1024'));
 				if (($oembed!==NULL) && ($oembed['type']=='photo'))
 				{
-					$url[0]=preg_replace('#.*(https?://)#','${1}',$oembed['thumbnail_url']); // Get thumbnail, but strip noembed.com (for example) resizer-proxy prefix if there
+					$url[0]=preg_replace('#.*(https?://)#','${1}',array_key_exists('url',$oembed)?$oembed['url']:$oembed['thumbnail_url']); // Get thumbnail, but strip noembed.com (for example) resizer-proxy prefix if there
 					$url[1]=basename(urldecode($url[0]));
 					return $url;
 				}

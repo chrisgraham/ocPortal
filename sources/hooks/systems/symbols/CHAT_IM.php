@@ -34,6 +34,7 @@ class Hook_symbol_CHAT_IM
 		{
 			require_code('chat');
 			require_lang('chat');
+			require_css('chat');
 
 			$messages_php=find_script('messages');
 

@@ -161,7 +161,7 @@ function fauxmodal_alert(notice,callback,title,unescaped)
 	{+START,IF,{$CONFIG_OPTION,js_overlays}}
 		var my_alert={
 			type: 'alert',
-			text: escape_html(notice).replace(/\n/g,'<br />'),
+			text: unescaped?notice:escape_html(notice).replace(/\n/g,'<br />'),
 			yes_button: '{!INPUTSYSTEM_OK;^}',
 			width: '600',
 			yes: callback,

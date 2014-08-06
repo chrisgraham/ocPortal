@@ -66,7 +66,7 @@ function get_video_details($file_path,$filename,$delay_errors=false)
 			$info=_get_mov_details($file);
 			break;
 		default:
-			if (file_exists(get_file_base().'/sources_custom/getid3/getid3.php'))
+			if ((file_exists(get_file_base().'/sources_custom/getid3/getid3.php')) && (!in_safe_mode()))
 			{
 				error_reporting(0);
 
@@ -657,6 +657,14 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
 				}
 			}
 		}
+	}
+
+	// oEmbed etc
+	require_code('files2');
+	$meta_details=get_webpage_meta_details($src_url);
+	if ($meta_details['t_image_url']!='')
+	{
+		return $meta_details['t_image_url'];
 	}
 
 	// Audio ones should have automatic thumbnails

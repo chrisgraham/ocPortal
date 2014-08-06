@@ -3,7 +3,7 @@
 	{$SET,listing,0}
 
 	{+START,LOOP,DIRECTORIES}
-		<li class="occle_dir" onclick="/*Access-note: code has other activation*/ var c=document.getElementById('occle_command'); c.value='cd &quot;{FILENAME;*}&quot;'; click_link(c.nextSibling.nextSibling);">
+		<li class="occle_dir" onclick="/*Access-note: code has other activation*/ var c=document.getElementById('occle_command'); c.value='cd &quot;{FILENAME;*}&quot;'; click_link(c.nextSibling);">
 			{FILENAME*}
 
 			{+START,IF_NON_EMPTY,{FILESIZE}}
@@ -17,7 +17,7 @@
 	{+END}
 
 	{+START,LOOP,FILES}
-		<li class="occle_file" onclick="/*Access-note: code has other activation*/ var c=document.getElementById('occle_command'); c.value='cat &quot;{FILENAME;*}&quot;'; click_link(c.nextSibling.nextSibling);">
+		<li class="occle_file" onclick="/*Access-note: code has other activation*/ var c=document.getElementById('occle_command'); c.value='cat &quot;{FILENAME;*}&quot;'; click_link(c.nextSibling);">
 			{FILENAME*}
 
 			{+START,IF_NON_EMPTY,{FILESIZE}}

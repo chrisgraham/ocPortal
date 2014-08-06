@@ -3128,6 +3128,7 @@ div>.button_micro:first-child, div>.button_screen:first-child, div>.button_scree
 	font-size: 12px;
 	margin: 1px 0.25em 0 0.25em; /* Push it up a bit due to confined space */
 	text-shadow: 1px 1px 1px {$GET,dark_shadow};
+	line-height: 0.9em;
 }
 div .button_micro {
 	background-image: none !important; /* Too loud for such a small space */

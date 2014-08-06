@@ -69,9 +69,10 @@ class Hook_config_oembed_manual_patterns
 		*/
 
 		$default.="(https?://www\.imdb\.com/title/.*|http://twitpic\.com/.*) = http://api.embed.ly/1/oembed\n";
-		$default.="(https?://en\.wikipedia\.org/wiki/.*) = http://api.embed.ly/1/oembed\n";
+		$default.="(https?://\w+\.wiki(pedia|media)\.org/wiki/.*) = http://api.embed.ly/1/oembed\n";
 		$default.="(https?://edition\.cnn\.com/.*) = http://api.embed.ly/1/oembed\n";
 		$default.="(https?://maps\.google\.(co\.uk|com)/.*) = http://api.embed.ly/1/oembed\n";
+		$default.="(https?://www\.google\.(co\.uk|com)/maps/.*) = http://api.embed.ly/1/oembed\n";
 		$default.="(https?://xkcd\.com/\d+/?) = http://api.embed.ly/1/oembed\n";
 		$default.="(https?://imgur\.com/.*) = http://api.embed.ly/1/oembed\n";
 		$default.="(https?://tinypic.com/.*) = http://api.embed.ly/1/oembed\n";

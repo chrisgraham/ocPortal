@@ -1687,12 +1687,15 @@ function get_webpage_meta_details($url)
 	static $cache=array();
 
 	if (array_key_exists($url,$cache)) return $cache[$url];
-	$_meta_details=$GLOBALS['SITE_DB']->query_select('url_title_cache',array('*'),array('t_url'=>$url),'',1);
-	if (array_key_exists(0,$_meta_details))
+	if (get_param_integer('keep_oembed_cache',1)==1)
 	{
-		$meta_details=$_meta_details[0];
-		$cache[$url]=$meta_details;
-		return $meta_details;
+		$_meta_details=$GLOBALS['SITE_DB']->query_select('url_title_cache',array('*'),array('t_url'=>$url),'',1);
+		if (array_key_exists(0,$_meta_details))
+		{
+			$meta_details=$_meta_details[0];
+			$cache[$url]=$meta_details;
+			return $meta_details;
+		}
 	}
 
 	$meta_details=array(
