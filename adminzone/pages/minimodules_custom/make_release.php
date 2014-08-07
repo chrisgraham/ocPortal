@@ -243,7 +243,7 @@ function phase_2()
 			<strong>Upload</strong>: Upload all built files to ocPortal.com server (<kbd>uploads/downloads</kbd>)
 		</li>
 		<li>
-			<strong>Add to ocPortal.com</strong>: Run the <form target="_blank" style="display: inline" action="'.escape_html($push_url).'" method="post"><input type="hidden" name="changes" value="'.escape_html($changes).'" /><input type="submit" value="ocPortal.com setup script" /></form>. Note if you are re-releasing, this will still work &ndash; it will update existing entries appropriately.
+			<strong>Add to ocPortal.com</strong>: Run the <form target="_blank" onclick="window.setTimeout(undo_staff_unload_action,1000);" style="display: inline" action="'.escape_html($push_url).'" method="post"><input type="hidden" name="changes" value="'.escape_html($changes).'" /><input type="submit" value="ocPortal.com setup script" /></form>. Note if you are re-releasing, this will still work &ndash; it will update existing entries appropriately.
 		</li>
 	';
 
@@ -256,8 +256,8 @@ function phase_2()
 		$ms_sha1=sha1_file($webpi);
 
 		echo '
-			<li><strong>Installatron</strong>: Go into <a target="_blank" href="http://installatron.com/editor">Installatron</a>, login with the privileged management account, and setup a new release with the new version number (Main tab), update the URL (Version Info tab) and scroll down and click "Save all changes", and Publish (Publisher tab).</li>
-			<li><strong>Microsoft Web Platform</strong>: <a target="_blank" href="http://www.microsoft.com/web/gallery/appsubmit.aspx?id=460">Submit the new MS Web App Gallery file to Microsoft</a> using the privileged management account. Change the \'Version\', the \'Package Location URL\', and set the shasum to <kbd>'.escape_html($ms_sha1).'</kbd>. <strong>Wait a few days for this (note down the task); approval takes time and we want to make sure we are past any teething problems first</strong></li>
+			<li><strong>Installatron</strong>: Go into <a target="_blank" href="http://installatron.com/editor">Installatron</a>, login with the privileged management account, and setup a new release with the new version number (Main tab), update the URL (Version Info tab, use "Installatron installer (direct download)") and scroll down and click "Save all changes", and Publish (Publisher tab).</li>
+			<li><strong>Microsoft Web Platform</strong>: <a target="_blank" href="http://www.microsoft.com/web/gallery/appsubmit.aspx?id=460">Submit the new MS Web App Gallery file to Microsoft</a> using the privileged management account (chris@ocportal.com). Change the \'Version\', the \'Package Location URL\' (use "Microsoft installer (direct download)"), and set the shasum to <kbd>'.escape_html($ms_sha1).'</kbd>. <strong>Wait a few days for this (note down the task); approval takes time and we want to make sure we are past any teething problems first</strong></li>
 			<li><strong>Other integrations</strong>: E-mail <a href="mailto:?bcc=punit@softaculous.com,brijesh@softaculous.com,support@simplescripts.com&amp;subject=New ocPortal release&amp;body=Hi, this is an automated notification that a new release of ocPortal has been released - regards, the ocPortal team.">integration partners</a></li>
 			<!--Disabled for now as not ready <li><strong>Debian</strong>: Take "debian-'.escape_html($version_dotted).'.tar" to a debian box with correct signing key installed and do "tar xvf debian-'.escape_html($version_dotted).'.tar; cd ocportal-'.escape_html($version_dotted).' ; dpkg-buildpackage" and send \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_i386.changes\' and \'ocportal_'.escape_html($version_dotted).'-1_all.deb\' over</li>-->
 		';

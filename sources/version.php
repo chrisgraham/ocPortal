@@ -29,7 +29,7 @@ The version numbers here are not for interchange. sources/version2.php provides 
  */
 function ocp_version_minor()
 {
-	return '0.13';
+	return '0.14';
 }
 
 /**

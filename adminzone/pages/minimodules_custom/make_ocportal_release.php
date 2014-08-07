@@ -249,7 +249,7 @@ $urls['News: '.$news_title]=static_evaluate_tempcode(build_url(array('page'=>'ne
 
 // DONE!
 
-echo '<p>Done!</p>';
+echo '<p>Done version '.escape_html($version_pretty).'!</p>';
 
 echo '<ul>';
 foreach ($urls as $title=>$url)
