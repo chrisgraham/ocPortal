@@ -653,7 +653,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 		$type_b=js_check_expression($e[2]);
 		js_ensure_type(array('Number','String','Date'),$type_a,$c_pos-1,'Can only use arithmetical comparators with Numbers or Strings');
 		js_ensure_type(array('Number','String','Date'),$type_b,$c_pos,'Can only use arithmetical comparators with Numbers or Strings');
-		js_ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symettric operands ('.$type_a.' vs '.$type_b.')');
+		js_ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symmetric operands ('.$type_a.' vs '.$type_b.')');
 		return 'Boolean';
 	}
 	if (in_array($e[0],array('IS_EQUAL','IS_IDENTICAL','IS_NOT_IDENTICAL','IS_NOT_EQUAL')))
@@ -661,7 +661,7 @@ function js_check_expression($e,$secondary=false,$is_guarded=false)
 		$type_a=js_check_expression($e[1],false,$is_guarded);
 		$type_b=js_check_expression($e[2]);
 		if (($e[0]=='IS_EQUAL') && ($e[2][0]=='LITERAL') && ($e[2][1][0]=='Boolean')) js_log_warning('CHECKER','It\'s redundant to equate to truths',$c_pos);
-		$passes=js_ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symettric operands ('.$type_a.' vs '.$type_b.')');
+		$passes=js_ensure_type(array($type_a),$type_b,$c_pos,'Comparators must have type symmetric operands ('.$type_a.' vs '.$type_b.')');
 		//if ($passes) js_infer_expression_type_to_variable_type($type_a,$e[2]);
 		return 'Boolean';
 	}
