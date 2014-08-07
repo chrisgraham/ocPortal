@@ -35,7 +35,7 @@ function ocp_version()
  */
 function ocp_version_minor()
 {
-	return '1.12';
+	return '1.13';
 }
 
 /**
