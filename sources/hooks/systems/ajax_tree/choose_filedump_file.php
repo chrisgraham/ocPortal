@@ -73,7 +73,7 @@ class Hook_choose_filedump_file
 							if (is_image($f))
 							{
 								$url=get_custom_base_url().'/uploads/filedump/'.(($id=='')?'':($id.'/')).$f;
-								$_description=static_evaluate_tempcode(do_image_thumb($url,'',true,false,NULL,NULL,true));
+								$_description=static_evaluate_tempcode(do_image_thumb($url,'',true,true));
 							}
 						} else
 						{

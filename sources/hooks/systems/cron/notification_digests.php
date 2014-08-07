@@ -70,10 +70,10 @@ class Hook_cron_notification_digests
 						require_code('mail');
 						mail_wrap($wrapped_subject,$wrapped_message,array($to_email),$to_name,get_option('staff_address'),get_site_name(),3,NULL,true,A_FROM_SYSTEM_UNPRIVILEGED,false);
 						$GLOBALS['SITE_DB']->query_update('digestives_consumed',array(
-						  'c_time'=>time(),
+							'c_time'=>time(),
 						),array(
-						  'c_member_id'=>$to_member_id,
-						  'c_frequency'=>$frequency,
+							'c_member_id'=>$to_member_id,
+							'c_frequency'=>$frequency,
 						),'',1);
 					}
 				}

@@ -147,7 +147,7 @@ class Hook_search_filedump
 				{
 					if (function_exists('set_time_limit')) @set_time_limit(5);
 
-					$tpl=do_image_thumb($url,$caption,true,false,NULL,NULL,true);
+					$tpl=do_image_thumb($url,$caption,true,true);
 
 					$out[$i]['template']=do_template('SIMPLE_PREVIEW_BOX',array(
 						'_GUID'=>'61bc0cf751f4ccbd0b7f1a247b092368',

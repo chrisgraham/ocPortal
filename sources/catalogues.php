@@ -1010,7 +1010,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 
 	if ((is_null($category_id)) && (is_null($levels)))
 	{
-		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000)) return array(); // Too many!
+		if ($GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$catalogue_name))>1000) return array(); // Too many!
 	}
 
 	if (is_null($category_id))
