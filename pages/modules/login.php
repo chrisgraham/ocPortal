@@ -113,7 +113,7 @@ class Module_login
 		// Where we will be redirected to after login
 		$redirect_default=get_self_url(true,true); // Still won't redirect to root if we have $_POST, because we relay $_POST values and have intelligence later on
 		$redirect=get_param('redirect',$redirect_default);
-		if (($redirect!='') && (strpos($redirect,'page=logout')===false) && (strpos($redirect,'page=login')===false) && (strpos($redirect,'/login.htm')===false) && (strpos($redirect,'/login/misc.htm')===false) && (strpos($redirect,'/pg/login')===false))
+		if (($redirect!='') && (strpos($redirect,'page=login')===false) && (strpos($redirect,'/login.htm')===false) && (strpos($redirect,'/login/logout.htm')===false) && (strpos($redirect,'/login/misc.htm')===false) && (strpos($redirect,'/pg/login')===false))
 		{
 			$passion=form_input_hidden('redirect',$redirect);
 		} else

@@ -385,6 +385,8 @@ function newsletter_shutdown_function()
 
 	//mail_wrap($NEWSLETTER_SUBJECT,$NEWSLETTER_MESSAGE,$NEWSLETTER_ADDRESSES,$NEWSLETTER_USERNAMES,$NEWSLETTER_FROM_EMAIL,$NEWSLETTER_FROM_NAME,3,NULL,true,NULL,true,$NEWSLETTER_HTML_ONLY==1);  Not so easy any more as message needs tailoring per subscriber
 
+	disable_php_memory_limit(); // As PHP can leak memory, or caches can fill, even if we do this carefully
+
 	$last_cron=get_value('last_cron');
 
 	$start=0;

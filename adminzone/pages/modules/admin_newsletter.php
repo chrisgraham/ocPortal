@@ -406,6 +406,8 @@ class Module_admin_newsletter extends standard_aed_module
 	{
 		$title=get_page_title('BOUNCE_FILTER');
 
+		disable_php_memory_limit(); // In case of a huge number
+
 		$username=post_param('username');
 		$password=post_param('password');
 		$server=post_param('server');
@@ -415,10 +417,10 @@ class Module_admin_newsletter extends standard_aed_module
 		$mbox=@imap_open($box,$username,$password);
 		if ($mbox===false)
 		{
-		   warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
+			warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
 		}
 
-		$fields=new ocp_tempcode();
+		$fields='';//new ocp_tempcode();
 		require_code('form_templates');
 
 		$all_subscribers=array();
@@ -446,7 +448,9 @@ class Module_admin_newsletter extends standard_aed_module
 		         $m=str_replace('@localhost.localdomain','',$m);
 		         if (($m!=get_option('staff_address')) && (array_key_exists($m,$all_subscribers)))
 		         {
-						$fields->attach(form_input_tick($m,$overview->subject.'.','email_'.strval($num),$checked,NULL,$m));
+						$tick=form_input_tick($m,$overview->subject.'.','email_'.strval($num),$checked,NULL,$m);
+						$fields.=$tick->evaluate(); // HTMLHTML
+						//$fields->attach($tick);
 						$num++;
 						unset($all_subscribers[$m]); // So as to make the list no longer than needed; each subscriber only considered once
 		         }

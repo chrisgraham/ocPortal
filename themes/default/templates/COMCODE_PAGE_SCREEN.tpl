@@ -12,10 +12,10 @@
 			<img alt="" title="" src="{$IMG*,edited}" />
 			{!EDITED}
 			{+START,IF,{$VALUE_OPTION,html5}}
-				<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}" pubdate="pubdate">{$DATE*,{EDIT_DATE_RAW}}</time>
+				<time datetime="{$FROM_TIMESTAMP*,Y-m-d\TH:i:s\Z,{EDIT_DATE_RAW}}" pubdate="pubdate">{$DATE*,,,,{EDIT_DATE_RAW}}</time>
 			{+END}
 			{+START,IF,{$NOT,{$VALUE_OPTION,html5}}}
-				{$DATE*,{EDIT_DATE_RAW}}
+				{$DATE*,,,,{EDIT_DATE_RAW}}
 			{+END}
 		</div>
 	{+END}{+END}

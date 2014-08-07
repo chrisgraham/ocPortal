@@ -77,12 +77,18 @@ class Hook_Preview_comments
 			$custom_fields=new ocp_tempcode();
 			$poster_details=new ocp_tempcode();
 		}
-		if (!is_guest())
+		if (addon_installed('ocf_forum'))
 		{
-			$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>true,'ID'=>strval(get_member()),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'POSTER_USERNAME'=>$poster_name));
+			if (!is_guest())
+			{
+				$poster=do_template('OCF_POSTER_MEMBER',array('ONLINE'=>true,'ID'=>strval(get_member()),'POSTER_DETAILS'=>$poster_details,'PROFILE_URL'=>$GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'POSTER_USERNAME'=>$poster_name));
+			} else
+			{
+				$poster=do_template('OCF_POSTER_GUEST',array('IP_LINK'=>'','POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$poster_name));
+			}
 		} else
 		{
-			$poster=do_template('OCF_POSTER_GUEST',array('IP_LINK'=>'','POSTER_DETAILS'=>$poster_details,'POSTER_USERNAME'=>$poster_name));
+			$poster=make_string_tempcode(escape_html($poster_name)); // Should never happen actually, as applies discounts hook from even running
 		}
 
 		$highlight=false;

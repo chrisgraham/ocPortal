@@ -59,7 +59,7 @@ class Hook_addon_registry_shopping
 	function get_dependencies()
 	{
 		return array(
-			'requires'=>array('ecommerce'),
+			'requires'=>array('ecommerce','catalogues'),
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
 		);

@@ -244,7 +244,7 @@ function disable_buttons_just_clicked(inputs)
 	}
 }
 
-function do_form_preview(form,preview_url,has_separate_preview)
+function do_form_preview(event,form,preview_url,has_separate_preview)
 {
 	if ((window.checkForm) && (!checkForm(form,true))) return false;
 

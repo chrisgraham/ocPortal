@@ -1241,6 +1241,8 @@ function doSubmit(e,ob) {
 		smoothScroll(findPosY(txtFileName,true));
 	} else
 	{
+		window.just_checking_requirements=false;
+
 		window.form_submitting=btnSubmit.form; // For IE
 
 		if (typeof ob.originalClickHandler=='undefined')

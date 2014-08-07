@@ -286,7 +286,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 				$in_entity=false;
 			} else
 			{
-				if (preg_match('#\w#',$current_char)==0) // Broken entity
+				if (preg_match('#[\#\w]#',$current_char)==0) // Broken entity
 				{
 					$in_entity=false;
 					$_html_buildup=preg_replace('#(.*)&#s','${1}&amp;',$_html_buildup);
@@ -378,6 +378,8 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 				$in_entity=true;
 				$_html_buildup='';
 				if (($literal_pos?$i:$c)<$from || (($real_from==0) && ($from!=0))) $_html_buildup.=$current_char;
+
+				$c++;
 			}
 			elseif (($current_char=='<') && ($next_char=='!') && (substr($html,$i,9)=='<![CDATA[')) // Skip over CDATA
 			{

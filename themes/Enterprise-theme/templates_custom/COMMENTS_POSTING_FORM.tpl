@@ -231,7 +231,7 @@
 
 					<div class="proceed_button">
 						{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}{+START,IF,{$NOT,{$VALUE_OPTION,xhtml_strict}}}
-							<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; if (do_form_preview(form,maintain_theme_in_link('{$PREVIEW_URL*;}{$KEEP*;}'))) form.submit();" id="preview_button" accesskey="p" tabindex="250" class="button_pageitem" type="button">{!PREVIEW}</button>
+							<button onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; if (do_form_preview(event,form,maintain_theme_in_link('{$PREVIEW_URL*;}{$KEEP*;}'))) form.submit();" id="preview_button" accesskey="p" tabindex="250" class="button_pageitem" type="button">{!PREVIEW}</button>
 							&nbsp;
 						{+END}{+END}{+END}
 						{+START,IF_PASSED,MORE_URL}

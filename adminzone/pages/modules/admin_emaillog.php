@@ -129,7 +129,7 @@ class Module_admin_emaillog
 				$date_time,
 				hyperlink('mailto:'.$from_email,$from_name,false,true),
 				hyperlink('mailto:'.$to_email[0],$to_name[0],false,true),
-				do_template('CROP_TEXT_MOUSE_OVER',array('TEXT_LARGE'=>escape_html($row['m_message']),'TEXT_SMALL'=>escape_html($row['m_subject']))),
+				do_template('CROP_TEXT_MOUSE_OVER',array('TEXT_LARGE'=>escape_html(substr($row['m_message'],0,3000)),'TEXT_SMALL'=>escape_html($row['m_subject']))),
 			)));
 		}
 		$max_rows=$GLOBALS['SITE_DB']->query_value('logged_mail_messages','COUNT(*)');

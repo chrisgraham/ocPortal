@@ -197,6 +197,8 @@ function get_catalogue_category_entry_buildup($category_id,$catalogue_name,$cata
 		} else
 		{	
 			list($order_by,$direction)=explode(' ',$_order_by);
+			if (($direction!='ASC') && ($direction!='DESC'))
+				log_hack_attack_and_exit('ORDERBY_HACK');
 			if (($order_by!='rating') && ($order_by!='add_date'))
 			{
 				$found=false;
@@ -842,7 +844,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 				}
 				break;
 			case 'short_text':
-				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,$only_field_ids);
+				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,'short',$only_field_ids);
 				$fields[$i]['effective_value']=$fields[$i]['effective_value_pure'];
 				if (is_null($fields[$i]['effective_value']))
 				{
@@ -894,7 +896,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 	if (is_array($entry_id)) $entry_id=$entry_id['id'];
 
 	global $SITE_INFO;
-	if (((!isset($SITE_INFO['mysql_old'])) || ($SITE_INFO['mysql_old']=='0')) && ((!isset($SITE_INFO['mysql_old'])) || (!is_file(get_file_base().'/mysql_old'))))
+	if ((!running_script('ajax_tree')) && ((!isset($SITE_INFO['mysql_old'])) || ($SITE_INFO['mysql_old']=='0')) && ((!isset($SITE_INFO['mysql_old'])) || (!is_file(get_file_base().'/mysql_old'))))
 	{
 		// Pre-caching of whole entry
 		static $catalogue_entry_cache=array();
@@ -1058,7 +1060,7 @@ function get_catalogue_entries_tree($catalogue_name,$submitter=NULL,$category_id
 	}
 	$where=array('cc_id'=>$category_id);
 	if (!is_null($submitter)) $where['ce_submitter']=$submitter;
-	$erows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter'),$where,'ORDER BY ce_add_date DESC',1000/*reasonable limit*/);
+	$erows=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter'),$where,'ORDER BY ce_add_date DESC',300/*reasonable limit*/);
 	if (get_page_name()=='cms_catalogues')
 	{
 		if (count($erows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');

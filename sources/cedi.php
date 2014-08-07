@@ -262,6 +262,7 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	$_description=$page['description'];
 	$_title=$page['title'];
 
+	$GLOBALS['SITE_DB']->query_update('seedy_children',array('title'=>$title),array('title'=>get_translated_text($_title),'child_id'=>$id));
 	require_code('attachments2');
 	require_code('attachments3');
 	$GLOBALS['SITE_DB']->query_update('seedy_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'cedi_page',strval($id),NULL,true),'notes'=>$notes,'title'=>lang_remap($_title,$title)),array('id'=>$id),'',1);
