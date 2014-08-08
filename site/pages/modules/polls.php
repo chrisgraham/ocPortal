@@ -76,8 +76,8 @@ class Module_polls
 				'option3'=>'?SHORT_TRANS',	// Comcode
 				'option4'=>'?SHORT_TRANS',	// Comcode
 				'option5'=>'?SHORT_TRANS',	// Comcode
-				'option6'=>'SHORT_TRANS',	// Comcode
-				'option7'=>'SHORT_TRANS',	// Comcode
+				'option6'=>'?SHORT_TRANS',	// Comcode
+				'option7'=>'?SHORT_TRANS',	// Comcode
 				'option8'=>'?SHORT_TRANS',	// Comcode
 				'option9'=>'?SHORT_TRANS',	// Comcode
 				'option10'=>'?SHORT_TRANS',	// Comcode

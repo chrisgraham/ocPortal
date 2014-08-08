@@ -110,7 +110,19 @@ class Hook_worldpay
 			'e_length'=>NULL,
 			'e_length_units'=>'',
 		));
-		return do_template('ECOM_BUTTON_VIA_WORLDPAY',array('_GUID'=>'56c78a4e16c0e7f36fcfbe57d37bc3d3','PRODUCT'=>$product,'ITEM_NAME'=>$item_name,'DIGEST'=>$digest,'TEST_MODE'=>ecommerce_test_mode(),'PURCHASE_ID'=>$trans_id,'AMOUNT'=>float_to_raw_string($amount),'CURRENCY'=>$currency,'USERNAME'=>$username,'IPN_URL'=>$ipn_url,'EMAIL_ADDRESS'=>$email_address));
+		return do_template('ECOM_BUTTON_VIA_WORLDPAY',array(
+			'_GUID'=>'56c78a4e16c0e7f36fcfbe57d37bc3d3',
+			'PRODUCT'=>$product,
+			'ITEM_NAME'=>$item_name,
+			'DIGEST'=>$digest,
+			'TEST_MODE'=>ecommerce_test_mode(),
+			'PURCHASE_ID'=>$trans_id, // cartID in Worldpay, has to be unique so we generate a transaction ID and store true purchase_id within that
+			'AMOUNT'=>float_to_raw_string($amount),
+			'CURRENCY'=>$currency,
+			'USERNAME'=>$username,
+			'IPN_URL'=>$ipn_url,
+			'EMAIL_ADDRESS'=>$email_address,
+		));
 	}
 
 	/**
