@@ -82,9 +82,9 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_table('news',array(
 				'id'=>'*AUTO',
 				'date_and_time'=>'TIME',
-				'title'=>'SHORT_TRANS',	// Comcode
-				'news'=>'LONG_TRANS',	// Comcode
-				'news_article'=>'LONG_TRANS',	// Comcode
+				'title'=>'SHORT_TRANS__COMCODE',
+				'news'=>'LONG_TRANS__COMCODE',
+				'news_article'=>'LONG_TRANS__COMCODE',
 				'allow_rating'=>'BINARY',
 				'allow_comments'=>'SHORT_INTEGER',
 				'allow_trackbacks'=>'BINARY',

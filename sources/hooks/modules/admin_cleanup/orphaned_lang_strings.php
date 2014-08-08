@@ -30,6 +30,8 @@ class Hook_orphaned_lang_strings
 	{
 		if ($GLOBALS['SITE_DB']->query_value('translate','COUNT(*)')>10000) return NULL; // Too much, and we don't have much use for it outside development anyway
 
+		if (!multi_lang_content()) return NULL;
+
 		$info=array();
 		$info['title']=do_lang_tempcode('ORPHANED_LANG_STRINGS');
 		$info['description']=do_lang_tempcode('DESCRIPTION_ORPHANED_LANG_STRINGS');
@@ -71,7 +73,8 @@ class Hook_orphaned_lang_strings
 		$langidfields=array();
 		foreach ($all_fields as $f)
 		{
-			if (substr($f['m_type'],-6)=='_TRANS') $langidfields[]=array('m_name'=>$f['m_name'],'m_table'=>$f['m_table']);
+			if (strpos(substr($f['m_type'],-6),'_TRANS')!==false)
+				$langidfields[]=array('m_name'=>$f['m_name'],'m_table'=>$f['m_table']);
 		}
 		$langidfields[]=array('m_name'=>'config_value','m_table'=>'config');
 		foreach ($langidfields as $langidfield)

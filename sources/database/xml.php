@@ -187,6 +187,8 @@ class Database_Static_xml
 							'TIME'=>'TIME',
 							'LONG_TRANS'=>'LONG_TRANS',
 							'SHORT_TRANS'=>'SHORT_TRANS',
+							'LONG_TRANS__COMCODE'=>'integer',
+							'SHORT_TRANS__COMCODE'=>'integer',
 							'SHORT_TEXT'=>'SHORT_TEXT',
 							'LONG_TEXT'=>'LONG_TEXT',
 							'ID_TEXT'=>'ID_TEXT',
@@ -1865,7 +1867,13 @@ class Database_Static_xml
 			{
 				if (!array_key_exists($key,$record)) // Possibly an auto-generated key
 				{
-					if (preg_replace('#[^\w]#','',$val)=='AUTO')
+					if (substr($key,-10)=='__tempcode')
+					{
+						$record[$key]='';
+					} elseif (substr($key,-13)=='__source_user')
+					{
+						$record[$key]=strval(db_get_first_id());
+					} elseif (preg_replace('#[^\w]#','',$val)=='AUTO')
 					{
 						$record[$key]=isset($TABLE_BASES[$table_name])?$TABLE_BASES[$table_name]:$this->db_get_first_id(); // We always want first record as '1', because we often reference it in a hard-coded way
 						while ((file_exists($db[0].'/'.$table_name.'/'.strval($record[$key]).'.xml')) || (file_exists($db[0].'/'.$table_name.'/'.$this->_guid($schema,$record).'.xml')) || (file_exists($db[0].'/'.$table_name.'/'.strval($record[$key]).'.xml-volatile')) || (file_exists($db[0].'/'.$table_name.'/'.$this->_guid($schema,$record).'.xml-volatile')))

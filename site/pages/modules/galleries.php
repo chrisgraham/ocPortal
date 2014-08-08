@@ -110,9 +110,9 @@ class Module_galleries
 		{
 			$GLOBALS['SITE_DB']->create_table('galleries',array(
 				'name'=>'*ID_TEXT',
-				'description'=>'LONG_TRANS',	// Comcode
-				'teaser'=>'SHORT_TRANS',
-				'fullname'=>'SHORT_TRANS',
+				'description'=>'LONG_TRANS__COMCODE',
+				'teaser'=>'SHORT_TRANS__COMCODE',
+				'fullname'=>'SHORT_TRANS__COMCODE',
 				'add_date'=>'TIME',
 				'rep_image'=>'URLPATH',
 				'parent_id'=>'ID_TEXT',
@@ -142,7 +142,7 @@ class Module_galleries
 				'cat'=>'ID_TEXT',
 				'url'=>'URLPATH',
 				'thumb_url'=>'URLPATH',
-				'comments'=>'LONG_TRANS',	// Comcode
+				'comments'=>'LONG_TRANS__COMCODE',
 				'allow_rating'=>'BINARY',
 				'allow_comments'=>'SHORT_INTEGER',
 				'allow_trackbacks'=>'BINARY',
@@ -171,7 +171,7 @@ class Module_galleries
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
 		{
-			$GLOBALS['SITE_DB']->add_table_field('galleries','teaser','SHORT_TRANS',2);
+			$GLOBALS['SITE_DB']->add_table_field('galleries','teaser','SHORT_TRANS__COMCODE',2);
 			$GLOBALS['SITE_DB']->add_table_field('galleries','rep_image','URLPATH');
 			$GLOBALS['SITE_DB']->add_table_field('galleries','parent_id','ID_TEXT','root');
 			$GLOBALS['SITE_DB']->add_table_field('galleries','accept_images','BINARY',1);
@@ -197,7 +197,7 @@ class Module_galleries
 				'cat'=>'ID_TEXT',
 				'url'=>'URLPATH',
 				'thumb_url'=>'URLPATH',
-				'comments'=>'LONG_TRANS',
+				'comments'=>'LONG_TRANS__COMCODE',
 				'allow_rating'=>'BINARY',
 				'allow_comments'=>'SHORT_INTEGER',
 				'allow_trackbacks'=>'BINARY',

@@ -129,7 +129,7 @@ class Module_pointstore
 				$GLOBALS['SITE_DB']->create_table('pstore_customs',array(
 					'id'=>'*AUTO',
 					'c_title'=>'SHORT_TRANS',
-					'c_description'=>'LONG_TRANS',
+					'c_description'=>'LONG_TRANS__COMCODE',
 					'c_mail_subject'=>'SHORT_TRANS',
 					'c_mail_body'=>'LONG_TRANS',
 					'c_enabled'=>'BINARY',
@@ -140,7 +140,7 @@ class Module_pointstore
 				$GLOBALS['SITE_DB']->create_table('pstore_permissions',array(
 					'id'=>'*AUTO',
 					'p_title'=>'SHORT_TRANS',
-					'p_description'=>'LONG_TRANS',
+					'p_description'=>'LONG_TRANS__COMCODE',
 					'p_mail_subject'=>'SHORT_TRANS',
 					'p_mail_body'=>'LONG_TRANS',
 					'p_enabled'=>'BINARY',

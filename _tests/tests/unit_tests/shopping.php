@@ -48,7 +48,7 @@ class shopping_test_set extends ocp_test_case
 		$this->shopping_cart=new Module_shopping();
 
 		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$this->category_id=	actual_add_catalogue('storetesting'.strval(get_member()),insert_lang(do_lang('DEFAULT_CATALOGUE_PRODUCTS_TITLE'),2),'',0,1,'',0,1);
+		$this->category_id=actual_add_catalogue('storetesting'.strval(get_member()),insert_lang('c_title',do_lang('DEFAULT_CATALOGUE_PRODUCTS_TITLE'),2),'',0,1,'',0,1);
 
 		$fields=array(
 			//		Name							 Description			Type			  Defines order  Required  Visible  Searchable
@@ -67,8 +67,8 @@ class shopping_test_set extends ocp_test_case
 		foreach ($fields as $i=>$field)
 		{
 			actual_add_catalogue_field('storetesting'.strval(get_member()), // $c_name
-												lang_code_to_default_content($field[0],false,3), // $name
-												lang_code_to_default_content($field[1],true,3), // $description
+												lang_code_to_default_content('cf_name',$field[0],false,3), // $name
+												lang_code_to_default_content('cf_description',$field[1],true,3), // $description
 												($field[2]=='tick')?'list':$field[2], // $type
 												$i, // $order
 												$field[3], // $defines_order

@@ -164,7 +164,7 @@ class Module_cedi
 				'id'=>'*AUTO',
 				'title'=>'SHORT_TRANS',
 				'notes'=>'LONG_TEXT',
-				'description'=>'LONG_TRANS',	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
 				'add_date'=>'TIME',
 				'seedy_views'=>'INTEGER',
 				'hide_posts'=>'BINARY',
@@ -176,7 +176,16 @@ class Module_cedi
 			$GLOBALS['SITE_DB']->create_index('seedy_pages','sadd_date',array('add_date'));
 
 			$lang_key=lang_code_to_default_content('CEDI_HOME',false,1);
-			$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,'hide_posts'=>0,'seedy_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
+			$map=array(
+				'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,
+				'hide_posts'=>0,
+				'seedy_views'=>0,
+				'add_date'=>time(),
+				'notes'=>'',
+				'title'=>$lang_key,
+			);
+			$map+=insert_lang_comcode('description','',2),
+			$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 			{
@@ -188,7 +197,7 @@ class Module_cedi
 			$GLOBALS['SITE_DB']->create_table('seedy_posts',array(
 				'id'=>'*AUTO',
 				'page_id'=>'AUTO_LINK',
-				'the_message'=>'LONG_TRANS',	// Comcode
+				'the_message'=>'LONG_TRANS__COMCODE',
 				'date_and_time'=>'TIME',
 				'validated'=>'BINARY',
 				'seedy_views'=>'INTEGER',
@@ -744,8 +753,9 @@ class Module_cedi
 		check_comcode($message,NULL,false,NULL,true);
 		$post_id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',array('edit_date'=>NULL,'the_message'=>0,'the_user'=>get_member(),'date_and_time'=>time(),'page_id'=>get_param_integer('id'),'validated'=>1,'seedy_views'=>0),true);
 		require_code('attachments2');
-		$the_message=insert_lang_comcode_attachments(2,$message,'cedi_post',strval($post_id));
-		$GLOBALS['SITE_DB']->query_update('seedy_posts',array('the_message'=>$the_message),array('id'=>$post_id),'',1);
+		$map=array();
+		$map+=insert_lang_comcode_attachments('the_message',2,$message,'cedi_post',strval($post_id));
+		$GLOBALS['SITE_DB']->query_update('seedy_posts',$map,array('id'=>$post_id),'',1);
 
 		@ignore_user_abort(false);
 

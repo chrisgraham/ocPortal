@@ -320,10 +320,8 @@ class Module_admin_custom_comcode extends standard_aed_module
 			$parameters.=$val;
 		}
 
-		$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+		$map=array(
 			'tag_tag'=>$tag,
-			'tag_title'=>insert_lang(post_param('title'),3),
-			'tag_description'=>insert_lang(post_param('description'),3),
 			'tag_replace'=>post_param('replace'),
 			'tag_example'=>post_param('example'),
 			'tag_parameters'=>$parameters,
@@ -331,7 +329,10 @@ class Module_admin_custom_comcode extends standard_aed_module
 			'tag_dangerous_tag'=>post_param_integer('dangerous_tag',0),
 			'tag_block_tag'=>post_param_integer('block_tag',0),
 			'tag_textual_tag'=>post_param_integer('textual_tag',0)
-		));
+		);
+		$map+=insert_lang('tag_title',post_param('title'),3);
+		$map+=insert_lang('tag_description',post_param('description'),3);
+		$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 
 		log_it('ADD_'.$this->lang_type,$tag);
 

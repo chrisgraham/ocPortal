@@ -79,7 +79,7 @@ function _general_db_init()
 	{
 		$TABLE_LANG_FIELDS=array();
 
-		$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','SHORT_TRANS').' OR '.db_string_equal_to('m_type','LONG_TRANS').' OR '.db_string_equal_to('m_type','*SHORT_TRANS').' OR '.db_string_equal_to('m_type','*LONG_TRANS').' OR '.db_string_equal_to('m_type','?SHORT_TRANS').' OR '.db_string_equal_to('m_type','?LONG_TRANS'),NULL,NULL,true);
+		$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
 		if ($_table_lang_fields!==NULL)
 		{
 			foreach ($_table_lang_fields as $lang_field)
@@ -975,6 +975,11 @@ class database_driver
 
 		if ($DEV_MODE)
 		{
+			if ((multi_lang_content()) && (strpos($query,$this->get_table_prefix().'translate')!==false))
+			{
+				fatal_exit('Assumption of multi-lang-content being on, and it\'s not');
+			}
+
 			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (is_ocf_satellite_site()) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
 			{
 				/*file_put_contents(get_file_base().'/uploads/downloads/test.txt',var_export(debug_backtrace(),true));

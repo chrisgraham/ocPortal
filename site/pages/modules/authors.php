@@ -66,8 +66,8 @@ class Module_authors
 				'author'=>'*ID_TEXT',
 				'url'=>'URLPATH',
 				'forum_handle'=>'?USER',
-				'description'=>'LONG_TRANS',	// Comcode
-				'skills'=>'LONG_TRANS'	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
+				'skills'=>'LONG_TRANS__COMCODE'
 			));
 
 			$GLOBALS['SITE_DB']->create_index('authors','findmemberlink',array('forum_handle'));

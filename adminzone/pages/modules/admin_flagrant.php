@@ -75,7 +75,7 @@ class Module_admin_flagrant extends standard_aed_module
 			$GLOBALS['SITE_DB']->create_table('text',array(
 				'id'=>'*AUTO',
 				'user_id'=>'USER',
-				'the_message'=>'SHORT_TRANS',	// Comcode
+				'the_message'=>'SHORT_TRANS__COMCODE',
 				'days'=>'INTEGER',
 				'order_time'=>'TIME',
 				'activation_time'=>'?TIME',

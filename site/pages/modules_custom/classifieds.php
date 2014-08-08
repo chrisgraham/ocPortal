@@ -72,12 +72,13 @@ class Module_classifieds
 			foreach ($prices as $level=>$bits)
 			{
 				list($price,$days)=$bits;
-				$GLOBALS['SITE_DB']->query_insert('classifieds_prices',array(
+				$map=array(
 					'c_catalogue_name'=>'classifieds',
 					'c_days'=>$days,
-					'c_label'=>insert_lang(do_lang('CLASSIFIEDS_DEFAULT_PRICE_LEVEL_'.$level),2),
 					'c_price'=>$price,
-				));
+				);
+				$map+=insert_lang('c_label',do_lang('CLASSIFIEDS_DEFAULT_PRICE_LEVEL_'.$level),2),
+				$GLOBALS['SITE_DB']->query_insert('classifieds_prices',$map);
 			}
 		}
 	}

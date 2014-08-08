@@ -73,8 +73,8 @@ class Module_iotds
 			$GLOBALS['SITE_DB']->create_table('iotd',array(
 				'id'=>'*AUTO',
 				'url'=>'URLPATH',
-				'i_title'=>'SHORT_TRANS',
-				'caption'=>'LONG_TRANS',	// Comcode
+				'i_title'=>'SHORT_TRANS__COMCODE',
+				'caption'=>'LONG_TRANS__COMCODE',
 				'thumb_url'=>'URLPATH',
 				'is_current'=>'BINARY',
 				'allow_rating'=>'BINARY',
@@ -108,7 +108,7 @@ class Module_iotds
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
-			$GLOBALS['SITE_DB']->add_table_field('iotd','i_title','SHORT_TRANS','');
+			$GLOBALS['SITE_DB']->add_table_field('iotd','i_title','SHORT_TRANS__COMCODE','');
 		}
 	}
 

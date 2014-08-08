@@ -353,8 +353,13 @@ class Module_admin_workflow extends standard_aed_module
 		{
 			// Couldn't find any. Let's make one, with a dummy approval point.
 			// HACKHACK We should use a normalised table with an ID column
-			$workflow_id=insert_lang($name,3);
-			$GLOBALS['SITE_DB']->query_insert('workflow_requirements',array('workflow_name'=>$workflow_id,'is_default'=>0,'the_position'=>0,'workflow_approval_name'=>0));
+			$map=array(
+				'is_default'=>0,
+				'the_position'=>0,
+				'workflow_approval_name'=>0,
+			);
+			$map+=insert_lang('workflow_name',$name,3);
+			$GLOBALS['SITE_DB']->query_insert('workflow_requirements',$map);
 		}
 		else
 		{

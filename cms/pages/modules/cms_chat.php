@@ -421,8 +421,12 @@ class Module_cms_chat
 			if (!$has_mod_access) access_denied('PRIVILEGE','edit_lowrange_content');
 
 			$title=get_screen_title('EDIT_MESSAGE');
-			$_message_parsed=insert_lang_comcode(wordfilter_text(post_param('message')),4);
-			$GLOBALS['SITE_DB']->query_update('chat_messages',array('the_message'=>$_message_parsed,'text_colour'=>post_param('textcolour'),'font_name'=>post_param('fontname')),array('id'=>$message_id),'',1);
+			$map=array(
+				'text_colour'=>post_param('textcolour'),
+				'font_name'=>post_param('fontname'),
+			);
+			$map+=insert_lang_comcode('the_message',wordfilter_text(post_param('message')),4);
+			$GLOBALS['SITE_DB']->query_update('chat_messages',$map,array('id'=>$message_id),'',1);
 
 			log_it('EDIT_MESSAGE',strval($message_id),post_param('message'));
 

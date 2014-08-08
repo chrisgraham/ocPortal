@@ -1030,7 +1030,7 @@ function nice_get_langs($select_lang=NULL,$show_unset=false)
  * @param  integer		Comcode parser wrap position
  * @param  boolean		Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return integer		The id of the newly added language entry
+ * @return mixed			The ID of the newly added language entry (if multi-lang-content on), or the string itself
  */
 function insert_lang_comcode($text,$level,$connection=NULL,$insert_as_admin=false,$pass_id=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
@@ -1055,7 +1055,7 @@ function insert_lang_comcode($text,$level,$connection=NULL,$insert_as_admin=fals
  * @param  integer			Comcode parser wrap position
  * @param  boolean			Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean			Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return integer			The id of the newly added language entry
+ * @return mixed				The ID of the newly added language entry (if multi-lang-content on), or the string itself
  */
 function insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text2=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
@@ -1066,13 +1066,13 @@ function insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang
 /**
  * Remap the specified comcode language id, and return the id again - the id isn't changed.
  *
- * @param  integer		The language entries id
+ * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  ?string		The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
  * @param  ?MEMBER		The member performing the change (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
- * @return integer		The language entries id
+ * @return mixed			The ID (if multi-lang-content on), or the string itself
  */
 function lang_remap_comcode($id,$text,$connection=NULL,$pass_id=NULL,$source_member=NULL,$as_admin=false)
 {
@@ -1082,7 +1082,7 @@ function lang_remap_comcode($id,$text,$connection=NULL,$pass_id=NULL,$source_mem
 /**
  * Remap the specified language id, and return the id again - the id isn't changed.
  *
- * @param  integer		The language entries id
+ * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether it is to be parsed as comcode
@@ -1090,7 +1090,7 @@ function lang_remap_comcode($id,$text,$connection=NULL,$pass_id=NULL,$source_mem
  * @param  ?MEMBER		The member performing the change (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
- * @return integer		The language entries id
+ * @return mixed			The ID (if multi-lang-content on), or the string itself
  */
 function lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_member=NULL,$as_admin=false,$backup_string=false)
 {
@@ -1101,11 +1101,13 @@ function lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$sou
 /**
  * Delete the specified language entry from the translation table.
  *
- * @param  integer		The id
+ * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  ?object		The database connection to use (NULL: standard site connection)
  */
 function delete_lang($id,$connection=NULL)
 {
+	if (!multi_lang_content()) return;
+
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 	$connection->query_delete('translate',array('id'=>$id));
 }
@@ -1113,7 +1115,7 @@ function delete_lang($id,$connection=NULL)
 /**
  * This function is an offshoot of get_translated_text, it instead returns parsed comcode that is linked to the specified language id.
  *
- * @param  integer			The id
+ * @param  mixed				The ID (if multi-lang-content on), or the string itself
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
@@ -1123,6 +1125,8 @@ function delete_lang($id,$connection=NULL)
  */
 function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false,$as_admin=false,$clear_away_from_cache=false)
 {
+	if (!multi_lang_content()) return; // TODO: Uh oh, how does this work?
+
 	if ($entry==0) return paragraph(do_lang_tempcode('FAILED_ENTRY'),'rtgtedgrgd');
 
 	if ($connection===NULL) $connection=$GLOBALS['SITE_DB'];
@@ -1216,7 +1220,7 @@ function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false
 /**
  * Try to return the human-readable version of the language id, passed in as $entry.
  *
- * @param  integer			The id
+ * @param  mixed				The ID (if multi-lang-content on), or the string itself
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
@@ -1224,6 +1228,8 @@ function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false
  */
 function get_translated_text($entry,$connection=NULL,$lang=NULL,$force=false)
 {
+	if (!multi_lang_content()) return $entry;
+
 	if ($entry==0) return do_lang('FAILED_ENTRY');
 
 	if ($entry===NULL) fatal_exit(do_lang_tempcode('NULL_LANG_STRING'));

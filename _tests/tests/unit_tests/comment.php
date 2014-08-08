@@ -31,10 +31,8 @@ class comment_test_set extends ocp_test_case
 		$this->event_id=add_calendar_event(8,'1',NULL,0,'test_event','',3,1,2010,1,10,'day_of_month',10,15,NULL,NULL,NULL,'day_of_month',NULL,NULL,NULL,1,1,1,1,1,'',NULL,0,NULL,NULL,NULL);
 		if ('test_event'==get_translated_text($GLOBALS['SITE_DB']->query_value('calendar_events','e_title ',array('id'=>$this->event_id))))
 		{
-			$lang_id=insert_lang_comcode('test_comment_desc_1',4,$GLOBALS['FORUM_DB']);
 			$map=array(
 				'p_title'=>'test_comment1',
-				'p_post'=>$lang_id,
 				'p_ip_address'=>'127.0.0.1',
 				'p_time'=>time(),
 				'p_poster'=>0,
@@ -49,6 +47,7 @@ class comment_test_set extends ocp_test_case
 				'p_skip_sig'=>0,
 				'p_parent_id'=>NULL
 			);
+			$map+=insert_lang_comcode('p_post','test_comment_desc_1',4,$GLOBALS['FORUM_DB']);
 			$this->post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);
 		}
 		$rows=$GLOBALS['FORUM_DB']->query('SELECT p_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE t.text_original NOT LIKE \'%'.db_encode_like(do_lang('SPACER_POST_MATCHER','','','',get_site_default_lang()).'%').'\' AND ( p.id='.strval($this->post_id).') ORDER BY p.id');

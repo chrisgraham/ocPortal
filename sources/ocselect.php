@@ -166,6 +166,8 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 					case 'SHORT_TEXT':
 					case 'LONG_TRANS':
 					case 'SHORT_TRANS':
+					case 'LONG_TRANS__COMCODE':
+					case 'SHORT_TRANS__COMCODE':
 					case 'MINIID_TEXT':
 					case 'ID_TEXT':
 						if ($filter!='') $filter.=',';
@@ -289,6 +291,8 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 						case 'SHORT_TEXT':
 						case 'LONG_TRANS':
 						case 'SHORT_TRANS':
+						case 'LONG_TRANS__COMCODE':
+						case 'SHORT_TRANS__COMCODE':
 							$field_type='line';
 							break;
 						case 'MINIID_TEXT':
@@ -576,6 +580,8 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 				break;
 			case 'LONG_TRANS':
 			case 'SHORT_TRANS':
+			case 'LONG_TRANS__COMCODE':
+			case 'SHORT_TRANS__COMCODE':
 				$field_type='line';
 				static $filter_i=1;
 				$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'translate ft'.strval($filter_i).' ON ft'.strval($filter_i).'.id='.strval($filter_key);

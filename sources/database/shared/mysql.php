@@ -139,6 +139,8 @@ class Database_super_mysql
 							'TIME'=>'integer unsigned',
 							'LONG_TRANS'=>'integer unsigned',
 							'SHORT_TRANS'=>'integer unsigned',
+							'LONG_TRANS__COMCODE'=>'integer',
+							'SHORT_TRANS__COMCODE'=>'integer',
 							'SHORT_TEXT'=>'varchar(255)',
 							'LONG_TEXT'=>'longtext',
 							'ID_TEXT'=>'varchar(80)',
@@ -197,7 +199,15 @@ class Database_super_mysql
 
 			$type=$type_remap[$type];
 
-			$_fields.='	  '.$name.' '.$type.' '.$perhaps_null.','.chr(10);
+			$_fields.='	  '.$name.' '.$type;
+			if (substr($name,-10)=='__tempcode')
+			{
+				$query.=' DEFAULT \'\'';
+			} elseif (substr($name,-13)=='__source_user')
+			{
+				$query.=' DEFAULT '.strval(db_get_first_id());
+			}
+			$_fields.=' '.$perhaps_null.','."\n";
 		}
 
 		$innodb=$this->using_innodb();

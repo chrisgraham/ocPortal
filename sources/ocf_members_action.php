@@ -374,10 +374,10 @@ function get_cpf_storage_for($type)
 	switch ($storage_type)
 	{
 		case 'short_trans':
-			$_type='SHORT_TRANS';
+			$_type='SHORT_TRANS__COMCODE';
 			break;
 		case 'long_trans':
-			$_type='LONG_TRANS';
+			$_type='LONG_TRANS__COMCODE';
 			break;
 		case 'long':
 			$_type='LONG_TEXT';

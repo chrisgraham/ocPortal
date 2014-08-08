@@ -96,12 +96,19 @@ class Module_downloads
 				'parent_id'=>'?AUTO_LINK',
 				'add_date'=>'TIME',
 				'notes'=>'LONG_TEXT',
-				'description'=>'LONG_TRANS',	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
 				'rep_image'=>'URLPATH'
 			));
 
-			$lang_key=lang_code_to_default_content('DOWNLOADS_HOME');
-			$id=$GLOBALS['SITE_DB']->query_insert('download_categories',array('rep_image'=>'','parent_id'=>NULL,'add_date'=>time(),'notes'=>'','description'=>insert_lang_comcode('',3),'category'=>$lang_key),true);
+			$map=array(
+				'rep_image'=>'',
+				'parent_id'=>NULL,
+				'add_date'=>time(),
+				'notes'=>'',
+			);
+			$map+=insert_lang_comcode('description','',3);
+			$map+=lang_code_to_default_content('category','DOWNLOADS_HOME');
+			$id=$GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($id),'group_id'=>$group_id));
@@ -113,9 +120,9 @@ class Module_downloads
 				'category_id'=>'AUTO_LINK',
 				'name'=>'SHORT_TRANS',
 				'url'=>'URLPATH',
-				'description'=>'LONG_TRANS',	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
 				'author'=>'ID_TEXT',
-				'comments'=>'LONG_TRANS',	// Comcode
+				'comments'=>'LONG_TRANS__COMCODE',
 				'num_downloads'=>'INTEGER',
 				'out_mode_id'=>'?AUTO_LINK',
 				'add_date'=>'TIME',

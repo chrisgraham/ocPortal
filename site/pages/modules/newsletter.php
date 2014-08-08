@@ -93,8 +93,8 @@ class Module_newsletter
 			$GLOBALS['SITE_DB']->create_table('newsletter_archive',array(
 				'id'=>'*AUTO',
 				'date_and_time'=>'INTEGER',
-				'subject'=>'SHORT_TEXT',	// Comcode
-				'newsletter'=>'LONG_TEXT',	// Comcode
+				'subject'=>'SHORT_TEXT',
+				'newsletter'=>'LONG_TEXT',
 				'language'=>'ID_TEXT',
 				'importance_level'=>'INTEGER'
 			));

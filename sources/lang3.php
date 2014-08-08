@@ -178,10 +178,12 @@ function _nice_get_langs($select_lang=NULL,$show_unset=false)
  * @param  integer			Comcode parser wrap position
  * @param  boolean			Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean			Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return integer			The id of the newly added language entry
+ * @return mixed				The ID of the newly added language entry (if multi-lang-content on), or the string itself
  */
 function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text2=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
+	if (!multi_lang_content()) return; // TODO
+
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	if (get_mass_import_mode()) $comcode=false; // For speed, and to avoid instantly showing Comcode errors from sloppy bbcode
@@ -254,7 +256,7 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 /**
  * Remap the specified language id, and return the id again - the id isn't changed.
  *
- * @param  integer		The language entries id
+ * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether it is to be parsed as comcode
@@ -263,10 +265,12 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
  * @param  boolean		Whether to leave the source member intact, as we trust this edit (it's not an interactive user edit, just something behind-the-scenes)
- * @return integer		The language entries id
+ * @return mixed			The ID (if multi-lang-content on), or the string itself
  */
 function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false,$leave_source_member=false)
 {
+	if (!multi_lang_content()) return $text; // TODO: Updating source user etc
+
 	if ($id==0) return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
 
 	if ($text===STRING_MAGIC_NULL) return $id;
@@ -343,7 +347,7 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 /**
  * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
  *
- * @param  integer			The id
+ * @param  mixed				The ID (if multi-lang-content on), or the string itself
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
@@ -352,6 +356,8 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
  */
 function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 {
+	if (multi_lang_content()) return; // TODO
+
 	global $SEARCH__CONTENT_BITS,$LAX_COMCODE;
 
 	$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];

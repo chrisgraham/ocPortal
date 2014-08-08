@@ -70,17 +70,17 @@ class Module_polls
 		{
 			$GLOBALS['SITE_DB']->create_table('poll',array(
 				'id'=>'*AUTO',
-				'question'=>'SHORT_TRANS',	// Comcode
-				'option1'=>'SHORT_TRANS',	// Comcode
-				'option2'=>'SHORT_TRANS',	// Comcode
-				'option3'=>'?SHORT_TRANS',	// Comcode
-				'option4'=>'?SHORT_TRANS',	// Comcode
-				'option5'=>'?SHORT_TRANS',	// Comcode
-				'option6'=>'SHORT_TRANS',	// Comcode
-				'option7'=>'SHORT_TRANS',	// Comcode
-				'option8'=>'?SHORT_TRANS',	// Comcode
-				'option9'=>'?SHORT_TRANS',	// Comcode
-				'option10'=>'?SHORT_TRANS',	// Comcode
+				'question'=>'SHORT_TRANS__COMCODE',
+				'option1'=>'SHORT_TRANS__COMCODE',
+				'option2'=>'SHORT_TRANS__COMCODE',
+				'option3'=>'?SHORT_TRANS__COMCODE',
+				'option4'=>'?SHORT_TRANS__COMCODE',
+				'option5'=>'?SHORT_TRANS__COMCODE',
+				'option6'=>'?SHORT_TRANS__COMCODE',
+				'option7'=>'?SHORT_TRANS__COMCODE',
+				'option8'=>'?SHORT_TRANS__COMCODE',
+				'option9'=>'?SHORT_TRANS__COMCODE',
+				'option10'=>'?SHORT_TRANS__COMCODE',
 				'votes1'=>'INTEGER',
 				'votes2'=>'INTEGER',
 				'votes3'=>'INTEGER',
@@ -130,11 +130,11 @@ class Module_polls
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<4))
 		{
-			$GLOBALS['SITE_DB']->add_table_field('poll','option6','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option7','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option8','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option9','SHORT_TRANS');
-			$GLOBALS['SITE_DB']->add_table_field('poll','option10','SHORT_TRANS');
+			$GLOBALS['SITE_DB']->add_table_field('poll','option6','SHORT_TRANS__COMCODE');
+			$GLOBALS['SITE_DB']->add_table_field('poll','option7','SHORT_TRANS__COMCODE');
+			$GLOBALS['SITE_DB']->add_table_field('poll','option8','SHORT_TRANS__COMCODE');
+			$GLOBALS['SITE_DB']->add_table_field('poll','option9','SHORT_TRANS__COMCODE');
+			$GLOBALS['SITE_DB']->add_table_field('poll','option10','SHORT_TRANS__COMCODE');
 			$GLOBALS['SITE_DB']->add_table_field('poll','votes6','INTEGER',0);
 			$GLOBALS['SITE_DB']->add_table_field('poll','votes7','INTEGER',0);
 			$GLOBALS['SITE_DB']->add_table_field('poll','votes8','INTEGER',0);

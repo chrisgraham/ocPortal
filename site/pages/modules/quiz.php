@@ -103,8 +103,8 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_order','INTEGER');
 			$GLOBALS['SITE_DB']->add_table_field('quiz_question_answers','q_order','INTEGER');
 			$GLOBALS['SITE_DB']->add_table_field('quiz_member_last_visit','v_quiz_id','AUTO_LINK');
-			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_end_text_fail','LONG_TRANS','');
-			$GLOBALS['SITE_DB']->add_table_field('quiz_question_answers','q_explanation','LONG_TRANS','');
+			$GLOBALS['SITE_DB']->add_table_field('quizzes','q_end_text_fail','LONG_TRANS__COMCODE','');
+			$GLOBALS['SITE_DB']->add_table_field('quiz_question_answers','q_explanation','LONG_TRANS__COMCODE','');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
@@ -126,8 +126,8 @@ class Module_quiz
 				'id'=>'*AUTO',
 				'q_timeout'=>'?INTEGER', // The number of minutes to complete the test (not secure)
 				'q_name'=>'SHORT_TRANS',
-				'q_start_text'=>'LONG_TRANS',
-				'q_end_text'=>'LONG_TRANS',
+				'q_start_text'=>'LONG_TRANS__COMCODE',
+				'q_end_text'=>'LONG_TRANS__COMCODE',
 				'q_notes'=>'LONG_TEXT', // Staff notes
 				'q_percentage'=>'INTEGER', // Percentage required for successful completion, if a test
 				'q_open_time'=>'TIME',
@@ -140,7 +140,7 @@ class Module_quiz
 				'q_submitter'=>'USER',
 				'q_points_for_passing'=>'INTEGER',
 				'q_tied_newsletter'=>'?AUTO_LINK',
-				'q_end_text_fail'=>'LONG_TRANS',
+				'q_end_text_fail'=>'LONG_TRANS__COMCODE',
 			));
 			$GLOBALS['SITE_DB']->create_index('quizzes','q_validated',array('q_validated'));
 
@@ -157,7 +157,7 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->create_table('quiz_question_answers',array(
 				'id'=>'*AUTO',
 				'q_question'=>'AUTO_LINK',
-				'q_answer_text'=>'SHORT_TRANS',
+				'q_answer_text'=>'SHORT_TRANS__COMCODE',
 				'q_is_correct'=>'BINARY', // If this is the correct answer; only applies for quizzes
 				'q_order'=>'INTEGER',
 				'q_explanation'=>'LONG_TRANS',

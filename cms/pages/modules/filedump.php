@@ -488,7 +488,13 @@ class Module_filedump
 			if (!is_null($test)) delete_lang($test);
 			$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$file,'path'=>$place),'',1);
 			$description=post_param('description');
-			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$file,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
+			$map=array(
+				'name'=>$file,
+				'path'=>$place,
+				'the_member'=>get_member(),
+			);
+			$map+=insert_lang_comcode('description',$description,3),
+			$GLOBALS['SITE_DB']->query_insert('filedump',$map);
 
 			require_code('notifications');
 			$subject=do_lang('FILEDUMP_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$file,$place);

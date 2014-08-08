@@ -434,7 +434,7 @@ function install_ocf($upgrade_from=NULL)
 	if ((!is_null($upgrade_from)) && ($upgrade_from<4.0))
 	{
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_on_probation_until','?TIME',time());
-		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_pt_rules_text','LONG_TRANS','');
+		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_pt_rules_text','LONG_TRANS__COMCODE','');
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_pt_allow','SHORT_TEXT','*');
 		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_order','ID_TEXT','last_post'); // last_post,first_post,title
 		$GLOBALS['FORUM_DB']->add_table_field('f_groups','g_hidden','BINARY',0);
@@ -470,7 +470,7 @@ function install_ocf($upgrade_from=NULL)
 	{
 		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_redirection','SHORT_TEXT');
 		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_order_sub_alpha','BINARY');
-		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_intro_question','LONG_TRANS');
+		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_intro_question','LONG_TRANS__COMCODE');
 		$GLOBALS['FORUM_DB']->add_table_field('f_forums','f_intro_answer','SHORT_TEXT');
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_max_email_attach_size_mb','INTEGER',3);
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_zone_wide','BINARY',1);
@@ -590,7 +590,7 @@ function install_ocf($upgrade_from=NULL)
 			'm_primary_group'=>'GROUP',
 			'm_last_visit_time'=>'TIME', // This field is generally kept up-to-date, while the cookie 'last_visit' refers to the previous browsing session's time
 			'm_last_submit_time'=>'TIME',
-			'm_signature'=>'LONG_TRANS',	// Comcode
+			'm_signature'=>'LONG_TRANS__COMCODE',
 			'm_is_perm_banned'=>'BINARY',
 			'm_preview_posts'=>'BINARY',
 			'm_dob_day'=>'?INTEGER',
@@ -611,7 +611,7 @@ function install_ocf($upgrade_from=NULL)
 			'm_zone_wide'=>'BINARY',
 			'm_highlighted_name'=>'BINARY',
 			'm_pt_allow'=>'SHORT_TEXT',
-			'm_pt_rules_text'=>'LONG_TRANS',	// Comcode
+			'm_pt_rules_text'=>'LONG_TRANS__COMCODE',
 			'm_max_email_attach_size_mb'=>'INTEGER',
 			'm_password_change_code'=>'SHORT_TEXT',
 			'm_password_compat_scheme'=>'ID_TEXT',
@@ -765,14 +765,14 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_table('f_forums',array(
 			'id'=>'*AUTO',
 			'f_name'=>'SHORT_TEXT',
-			'f_description'=>'LONG_TRANS',	// Comcode
+			'f_description'=>'LONG_TRANS__COMCODE',
 			'f_category_id'=>'?AUTO_LINK', // Categories can exist on multiple forum levels and positions - wherever a forum exists, the category it uses exists too (but not forums in category which aren't at level and position)
 			'f_parent_forum'=>'?AUTO_LINK',
 			'f_position'=>'INTEGER', // might have been called 'f_order'=>'INTEGER' (consistent with other table's ordering fields) if we had not used f_order as a text field to determine the automatic ordering type
 			'f_order_sub_alpha'=>'BINARY',
 			'f_post_count_increment'=>'BINARY',
-			'f_intro_question'=>'LONG_TRANS',	// Comcode
-			'f_intro_answer'=>'SHORT_TEXT',	// Comcode
+			'f_intro_question'=>'LONG_TRANS__COMCODE',
+			'f_intro_answer'=>'SHORT_TEXT__COMCODE',
 			'f_cache_num_topics'=>'INTEGER',
 			'f_cache_num_posts'=>'INTEGER',
 			'f_cache_last_topic_id'=>'?AUTO_LINK',
@@ -826,7 +826,7 @@ function install_ocf($upgrade_from=NULL)
 			't_cache_first_post_id'=>'?AUTO_LINK',
 			't_cache_first_time'=>'?TIME',
 			't_cache_first_title'=>'SHORT_TEXT',
-			't_cache_first_post'=>'?LONG_TRANS',	// Comcode
+			't_cache_first_post'=>'?LONG_TRANS__COMCODE',
 			't_cache_first_username'=>'ID_TEXT',
 			't_cache_first_member_id'=>'?USER',
 			't_cache_last_post_id'=>'?AUTO_LINK',
@@ -860,7 +860,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_table('f_posts',array(
 			'id'=>'*AUTO',
 			'p_title'=>'SHORT_TEXT',
-			'p_post'=>'LONG_TRANS',	// Comcode
+			'p_post'=>'LONG_TRANS__COMCODE',
 			'p_ip_address'=>'IP',
 			'p_time'=>'TIME',
 			'p_poster'=>'USER',
@@ -969,7 +969,7 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_table('f_multi_moderations',array(
 			'id'=>'*AUTO',
 			'mm_name'=>'*SHORT_TRANS',
-			'mm_post_text'=>'LONG_TEXT',	// Comcode
+			'mm_post_text'=>'LONG_TEXT',
 			'mm_move_to'=>'?INTEGER',
 			'mm_pin_state'=>'?BINARY',
 			'mm_sink_state'=>'?BINARY',

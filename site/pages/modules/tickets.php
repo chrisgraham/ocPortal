@@ -127,7 +127,13 @@ class Module_tickets
 			$default_types=array(/*'TT_FEATURE_REQUEST','TT_FEATURE_INQUIRY','TT_MODDING_HELP','TT_REPAIR_HELP',*/'TT_OTHER',/*'TT_FINANCIAL_INQUIRY',*/'TT_COMPLAINT');
 			foreach ($default_types as $type)
 			{
-				$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang(do_lang($type),1),'guest_emails_mandatory'=>0,'search_faq'=>0,'cache_lead_time'=>NULL));
+				$map=array(
+					'guest_emails_mandatory'=>0,
+					'search_faq'=>0,
+					'cache_lead_time'=>NULL,
+				);
+				$map+=insert_lang('ticket_type',do_lang($type),1),
+				$GLOBALS['SITE_DB']->query_insert('ticket_types',$map);
 
 				foreach (array_keys($groups) as $id)
 				{

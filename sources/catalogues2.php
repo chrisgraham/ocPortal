@@ -188,7 +188,18 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	// Create
 	if (!is_integer($description)) $description=insert_lang_comcode($description,2);
 	if (!is_integer($title)) $title=insert_lang($title,1);
-	$GLOBALS['SITE_DB']->query_insert('catalogues',array('c_name'=>$name,'c_title'=>$title,'c_send_view_reports'=>$send_view_reports,'c_ecommerce'=>$ecommerce,'c_description'=>$description,'c_display_type'=>$display_type,'c_is_tree'=>$is_tree,'c_notes'=>$notes,'c_add_date'=>time(),'c_submit_points'=>$submit_points));
+	$GLOBALS['SITE_DB']->query_insert('catalogues',array(
+		'c_name'=>$name,
+		'c_title'=>$title,
+		'c_send_view_reports'=>$send_view_reports,
+		'c_ecommerce'=>$ecommerce,
+		'c_description'=>$description,
+		'c_display_type'=>$display_type,
+		'c_is_tree'=>$is_tree,
+		'c_notes'=>$notes,
+		'c_add_date'=>time(),
+		'c_submit_points'=>$submit_points,
+	));
 
 	if ($is_tree==1)
 	{
@@ -224,7 +235,20 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 {
 	if (!is_integer($description)) $description=insert_lang($description,2);
 	if (!is_integer($name)) $name=insert_lang($name,2);
-	$map=array('c_name'=>$c_name,'cf_name'=>$name,'cf_description'=>$description,'cf_type'=>$type,'cf_order'=>$order,'cf_defines_order'=>$defines_order,'cf_visible'=>$visible,'cf_searchable'=>$searchable,'cf_default'=>$default,'cf_required'=>$required,'cf_put_in_category'=>$put_in_category,'cf_put_in_search'=>$put_in_search);
+	$map=array(
+		'c_name'=>$c_name,
+		'cf_name'=>$name,
+		'cf_description'=>$description,
+		'cf_type'=>$type,
+		'cf_order'=>$order,
+		'cf_defines_order'=>$defines_order,
+		'cf_visible'=>$visible,
+		'cf_searchable'=>$searchable,
+		'cf_default'=>$default,
+		'cf_required'=>$required,
+		'cf_put_in_category'=>$put_in_category,
+		'cf_put_in_search'=>$put_in_search,
+	);
 	if (!is_null($id)) $map['id']=$id;
 	$cf_id=$GLOBALS['SITE_DB']->query_insert('catalogue_fields',$map,true);
 	if (!is_null($id)) $cf_id=$id;
@@ -466,7 +490,18 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 	if (is_null($add_date)) $add_date=time();
 	if (!is_integer($description)) $description=insert_lang_comcode($description,3);
 	if (!is_integer($title)) $title=insert_lang($title,2);
-	$map=array('cc_move_days_lower'=>$move_days_lower,'cc_move_days_higher'=>$move_days_higher,'cc_move_target'=>$move_target,'rep_image'=>$rep_image,'cc_add_date'=>$add_date,'c_name'=>$catalogue_name,'cc_title'=>$title,'cc_description'=>$description,'cc_notes'=>$notes,'cc_parent_id'=>$parent_id);
+	$map=array(
+		'cc_move_days_lower'=>$move_days_lower,
+		'cc_move_days_higher'=>$move_days_higher,
+		'cc_move_target'=>$move_target,
+		'rep_image'=>$rep_image,
+		'cc_add_date'=>$add_date,
+		'c_name'=>$catalogue_name,
+		'cc_title'=>$title,
+		'cc_description'=>$description,
+		'cc_notes'=>$notes,
+		'cc_parent_id'=>$parent_id,
+	);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('catalogue_categories',$map,true);
 

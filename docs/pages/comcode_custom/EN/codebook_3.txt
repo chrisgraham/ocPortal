@@ -172,7 +172,7 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]disable_sunk[/tt] -- set this to '1' if you want to disable the sunk-topics feature. This improves performance a little on MySQL.
  - [tt]implicit_usergroup_sync[/tt] -- set this to '1' to enable synching of implicit usergroups (see the advanced members tutorial for more information)
  - [tt]disable_password_change_mails_for_staff[/tt] -- set this to '1' if you want staff password edits to not result in emails to users.
- - [tt]google_translate_api_key[/tt] -- set this to a google translate API key for the content translation feature to work much better.
+ - [tt]google_translate_api_key[/tt] -- set this to a google translate API key for the content translation feature to work much better (if installed).
  - [tt]real_memory_available_mb[/tt] -- set this to the number of MB GD should consider available for image generation, if PHP is lying about it's memory limit.
  - [tt]md_default_sort_order[/tt] -- set this to a sort parameter to change the member directory's default sort order.
  - [tt]disable_highlight_name[/tt] -- set this to '1' to disable the member name highlighting option.
@@ -191,7 +191,6 @@ We also have the following which are either unlikely to be useful, or potentiall
  - [tt]ocselect_protected_fields[/tt] -- a comma-separated list of fields ocSelect cannot work on (above the ones hard-coded as forbidden).
  - [tt]memory_limit[/tt] -- set this to a memory limit to override ocPortal's built in one (e.g. "128M"). This will make memory bugs on your server more dangerous, so use at your own risk (a memory usage problem can take down a whole server) -- although memory bugs are unlikely given that ocPortal users report if they ever see this error.
  - [tt]no_call_home[/tt] -- disable the private sharing of your website URL to the ocPortal developers when the Admin Zone front page loads.
- - [tt]alternate_search_join_type[/tt] -- set this to '1' if your database server does 'JOIN' translate table searches intractably slowly, and 'LEFT JOIN' ones fast. This is the exact opposite of the behaviour of most MySQL versions, but we think we have seen a case of this so on some MySQL servers to make catalogue searches tractable you might need to enable this.
  - [tt]catalogue_limit_cat_field_load__<cataloguename>[/tt] -- set this to '1' if you want that catalogue to not have all fields loaded on category views, an optimisation that reduces templating flexibility
  - [tt]canonical_keep_params[/tt] -- set this to a comma-separated list of keep_ parameters that should be allowed to propagate within search engines.
  - [tt]disable_sitemap_for__*[/tt] -- disable sitemap generation for a particular page (e.g. if there's too much data in it and the server can't cope, and the data isn't so important anyway)

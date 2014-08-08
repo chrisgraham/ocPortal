@@ -89,7 +89,7 @@ class Module_banners
 				'img_url'=>'URLPATH',
 				'the_type'=>'SHORT_INTEGER', // 0=permanent|1=campaign|2=default
 				'b_title_text'=>'SHORT_TEXT',
-				'caption'=>'SHORT_TRANS',	// Comcode
+				'caption'=>'SHORT_TRANS__COMCODE',
 				'b_direct_code'=>'LONG_TEXT',
 				'campaign_remaining'=>'INTEGER',
 				'site_url'=>'URLPATH',

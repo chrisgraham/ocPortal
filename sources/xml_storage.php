@@ -618,10 +618,10 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 					$_type='LONG_TEXT';
 					break;
 				case 'short_trans':
-					$_type='?SHORT_TRANS';
+					$_type='?SHORT_TRANS__COMCODE';
 					break;
 				case 'long_trans':
-					$_type='?LONG_TRANS';
+					$_type='?LONG_TRANS__COMCODE';
 					break;
 				case 'tick':
 					$_type='BINARY';

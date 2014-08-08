@@ -61,9 +61,8 @@ if (count($_POST)!=0)
 						array(
 							'c_catalogue_name'=>$catalogue,
 							'c_days'=>intval($days),
-							'c_label'=>insert_lang($label,2),
 							'c_price'=>floatval($price),
-						)
+						)+insert_lang('c_label',$label,2)
 					);
 				}
 			} else

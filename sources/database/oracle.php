@@ -144,6 +144,8 @@ class Database_Static_oracle
 							'TIME'=>'integer',
 							'LONG_TRANS'=>'integer',
 							'SHORT_TRANS'=>'integer',
+							'LONG_TRANS__COMCODE'=>'integer',
+							'SHORT_TRANS__COMCODE'=>'integer',
 							'SHORT_TEXT'=>'text',
 							'LONG_TEXT'=>'CLOB',
 							'ID_TEXT'=>'varchar(80)',
@@ -198,7 +200,15 @@ class Database_Static_oracle
 
 			$type=$type_remap[$type];
 
-			$_fields.="	  $name $type $perhaps_null,\n";
+			$_fields.='	  '.$name.' '.$type;
+			if (substr($name,-10)=='__tempcode')
+			{
+				$query.=' DEFAULT \'\'';
+			} elseif (substr($name,-13)=='__source_user')
+			{
+				$query.=' DEFAULT '.strval(db_get_first_id());
+			}
+			$_fields.=' '.$perhaps_null.','."\n";
 		}
 
 		$this->db_query('CREATE TABLE '.$table_name.' (

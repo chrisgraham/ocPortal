@@ -117,6 +117,8 @@ function get_innodb_data_types()
 						'TIME'=>'integer unsigned',
 						'LONG_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
 						'SHORT_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
+						'LONG_TRANS__COMCODE'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
+						'SHORT_TRANS__COMCODE'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
 						'SHORT_TEXT'=>'varchar(255)',
 						'LONG_TEXT'=>'longtext',
 						'ID_TEXT'=>'varchar(80)',
@@ -410,9 +412,23 @@ function get_code_to_fix_foreign_keys() //Temp code to help fixup AUTO/AUTO_LINK
 	{
 		$table=get_table_prefix().$t['m_table'];
 		$id=$t['m_name'];
-		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL AUTO_INCREMENT;\n";
+		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
 	}
 	$temp=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'LONG_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+	foreach ($temp as $t)
+	{
+		$table=get_table_prefix().$t['m_table'];
+		$id=$t['m_name'];
+		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
+	}
+	$temp=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'SHORT_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+	foreach ($temp as $t)
+	{
+		$table=get_table_prefix().$t['m_table'];
+		$id=$t['m_name'];
+		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
+	}
+	$temp=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'LONG_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
 	foreach ($temp as $t)
 	{
 		$table=get_table_prefix().$t['m_table'];

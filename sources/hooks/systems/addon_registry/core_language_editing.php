@@ -89,6 +89,7 @@ class Hook_addon_registry_core_language_editing
 			'themes/default/images/pagepics/criticise_language.png',
 			'themes/default/images/pagepics/language.png',
 			'sources/hooks/systems/do_next_menus/language.php',
+			'sources/database_multi_lang_conv.php',
 			'themes/default/images/tableitem/translate.png'
 		);
 	}

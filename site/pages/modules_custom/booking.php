@@ -74,10 +74,10 @@ class Module_booking
 			$GLOBALS['SITE_DB']->create_table('bookable',array(
 				'id'=>'*AUTO',
 				//'num_available'=>'INTEGER',		Implied by number of bookable_codes attached to bookable_id
-				'title'=>'SHORT_TRANS',
-				'description'=>'LONG_TRANS',
+				'title'=>'SHORT_TRANS__COMCODE',
+				'description'=>'LONG_TRANS__COMCODE',
 				'price'=>'REAL',
-				'categorisation'=>'SHORT_TRANS', // (will work as a heading, for the booking form)
+				'categorisation'=>'SHORT_TRANS__COMCODE', // (will work as a heading, for the booking form)
 				'cycle_type'=>'ID_TEXT', // (same as event recurrences in the calendar addon; can be none [which would remove date chooser]) - a room cycles daily for example
 				'cycle_pattern'=>'SHORT_TEXT',
 				'user_may_choose_code'=>'BINARY',
@@ -108,7 +108,7 @@ class Module_booking
 				'blacked_to_day'=>'SHORT_INTEGER',
 				'blacked_to_month'=>'SHORT_INTEGER',
 				'blacked_to_year'=>'INTEGER',
-				'blacked_explanation'=>'LONG_TRANS',
+				'blacked_explanation'=>'LONG_TRANS__COMCODE',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('bookable_blacked_for',array(

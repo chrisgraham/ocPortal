@@ -98,8 +98,8 @@ class Module_calendar
 				'id'=>'*AUTO',
 				'e_submitter'=>'USER',
 				'e_views'=>'INTEGER',
-				'e_title'=>'SHORT_TRANS',
-				'e_content'=>'LONG_TRANS',
+				'e_title'=>'SHORT_TRANS__COMCODE',
+				'e_content'=>'LONG_TRANS__COMCODE',
 				'e_add_date'=>'TIME',
 				'e_edit_date'=>'?TIME',
 				'e_recurrence'=>'ID_TEXT', // [none, daily, weekly, monthly, yearly, xth_dotw_of_monthly] X [fractional-occurrence]. e.g. "daily yyyyynn" for weekdays
@@ -139,7 +139,7 @@ class Module_calendar
 
 			$GLOBALS['SITE_DB']->create_table('calendar_types',array(
 				'id'=>'*AUTO',
-				't_title'=>'SHORT_TRANS',
+				't_title'=>'SHORT_TRANS__COMCODE',
 				't_logo'=>'SHORT_TEXT',
 				't_external_feed'=>'URLPATH',
 			));

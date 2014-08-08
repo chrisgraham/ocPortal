@@ -2075,7 +2075,7 @@ function ensure_type($_allowed_types,$actual_type,$pos,$alt_error=NULL,$extra_st
 		}
 		if (substr($type,0,6)=='object') $type='object';
 		if ($type=='REAL') $allowed_types['float']=1;
-		if (in_array($type,array('AUTO','INTEGER','UINTEGER','SHORT_TRANS','LONG_TRANS','USER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
+		if (in_array($type,array('AUTO','INTEGER','UINTEGER','SHORT_TRANS','LONG_TRANS','SHORT_TRANS__COMCODE','LONG_TRANS__COMCODE','USER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
 		{
 			$allowed_types['integer']=1;
 		}
@@ -2113,7 +2113,7 @@ function ensure_type($_allowed_types,$actual_type,$pos,$alt_error=NULL,$extra_st
 	{
 		if (isset($allowed_types['float'])) return true;
 	}
-	if (in_array($actual_type,array('AUTO','INTEGER','UINTEGER','SHORT_TRANS','LONG_TRANS','USER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
+	if (in_array($actual_type,array('AUTO','INTEGER','UINTEGER','SHORT_TRANS','LONG_TRANS','SHORT_TRANS__COMCODE','LONG_TRANS__COMCODE','USER','MEMBER','SHORT_INTEGER','AUTO_LINK','BINARY','GROUP','TIME')))
 	{
 		if (isset($allowed_types['integer'])) return true;
 	}

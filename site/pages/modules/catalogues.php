@@ -97,7 +97,7 @@ class Module_catalogues
 			$GLOBALS['SITE_DB']->create_table('catalogues',array(
 				'c_name'=>'*ID_TEXT',
 				'c_title'=>'SHORT_TRANS',
-				'c_description'=>'LONG_TRANS',	// Comcode
+				'c_description'=>'LONG_TRANS__COMCODE',
 				'c_display_type'=>'SHORT_INTEGER', // C_DT_*
 				'c_is_tree'=>'BINARY',
 				'c_notes'=>'LONG_TEXT',
@@ -111,7 +111,7 @@ class Module_catalogues
 				'id'=>'*AUTO',
 				'c_name'=>'ID_TEXT',
 				'cc_title'=>'SHORT_TRANS',
-				'cc_description'=>'LONG_TRANS',	// Comcode
+				'cc_description'=>'LONG_TRANS__COMCODE',
 				'rep_image'=>'URLPATH',
 				'cc_notes'=>'LONG_TEXT',
 				'cc_add_date'=>'TIME',
@@ -171,7 +171,7 @@ class Module_catalogues
 				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
 				'cf_id'=>'AUTO_LINK',
 				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'LONG_TRANS', /* does your CV have value? */	// often Comcode
+				'cv_value'=>'LONG_TRANS__COMCODE', /* does your CV have value? */ // often Comcode but not always
 			));
 
 			$GLOBALS['SITE_DB']->create_table('catalogue_efv_long',array(
@@ -185,7 +185,7 @@ class Module_catalogues
 				'id'=>'*AUTO', // NEVER use this column: cf_id and ce_id also provide a key. This only exists for the SQL-server fulltext indexing. This column doesn't exist on upgraded old installs.
 				'cf_id'=>'AUTO_LINK',
 				'ce_id'=>'AUTO_LINK',
-				'cv_value'=>'SHORT_TRANS', // often Comcode
+				'cv_value'=>'SHORT_TRANS__COMCODE', // often Comcode but not always
 			));
 
 			$GLOBALS['SITE_DB']->create_table('catalogue_efv_short',array(
@@ -256,7 +256,7 @@ class Module_catalogues
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
 			// Projects
-			actual_add_catalogue('projects',lang_code_to_default_content('DEFAULT_CATALOGUE_PROJECTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PROJECTS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',30);
+			actual_add_catalogue('projects',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_PROJECTS_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_PROJECTS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',30);
 			$fields=array(
 				array('NAME','DESCRIPTION_NAME','short_trans',1,1),
 				array('MAINTAINER','DESCRIPTION_MAINTAINER','user',0,1),
@@ -264,8 +264,8 @@ class Module_catalogues
 				array('PROJECT_PROGRESS','DESCRIPTION_PROJECT_PROGRESS','integer',0,1)
 			);
 			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('projects',lang_code_to_default_content($field[0],false,3),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
-			$cat_id=actual_add_catalogue_category('projects',lang_code_to_default_content('DEFAULT_CATALOGUE_PROJECTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PROJECTS_DESCRIPTION',true,3),'',NULL,'');
+				actual_add_catalogue_field('projects',lang_code_to_default_content('cf_name',$field[0],false,3),lang_code_to_default_content('cf_description',$field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
+			$cat_id=actual_add_catalogue_category('projects',lang_code_to_default_content('cc_title','DEFAULT_CATALOGUE_PROJECTS_TITLE',false,2),lang_code_to_default_content('cc_description','DEFAULT_CATALOGUE_PROJECTS_DESCRIPTION',true,3),'',NULL,'');
 			foreach (array_keys($groups) as $group_id)
 			{
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
@@ -277,7 +277,7 @@ class Module_catalogues
 			add_menu_item_simple('collab_features',$projects,'ADD','_SEARCH:cms_catalogues:type=add_entry:catalogue_name=projects',0,0,true,do_lang('ZONE_BETWEEN'),1);
 
 			// Modifications
-			actual_add_catalogue('modifications',lang_code_to_default_content('DEFAULT_CATALOGUE_MODIFICATIONS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_MODIFICATIONS_DESCRIPTION',true,3),C_DT_TITLELIST,0,'',60);
+			actual_add_catalogue('modifications',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_MODIFICATIONS_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_MODIFICATIONS_DESCRIPTION',true,3),C_DT_TITLELIST,0,'',60);
 			$fields=array(
 				array('NAME','DESCRIPTION_NAME','short_trans',1,1),
 				array('IMAGE','DESCRIPTION_MODIFICATION_IMAGE_URL','picture',0,0),
@@ -287,21 +287,21 @@ class Module_catalogues
 				array('AUTHOR','DESCRIPTION_AUTHOR','short_text',0,1)
 			);
 			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('modifications',lang_code_to_default_content($field[0],false,3),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
+				actual_add_catalogue_field('modifications',lang_code_to_default_content('cf_name',$field[0],false,3),lang_code_to_default_content('cf_description',$field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
 			foreach (array_keys($groups) as $group_id)
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'modifications','group_id'=>$group_id));
 			add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_MODIFICATIONS_TITLE','_SEARCH:catalogues:type=index:id=modifications');
 
 			// Hosted-sites
-			actual_add_catalogue('hosted',lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',0);
+			actual_add_catalogue('hosted',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_HOSTED_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_HOSTED_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',0);
 			$fields=array(
 				array('NAME','DESCRIPTION_NAME','short_trans',1,1),
 				array('URL','DESCRIPTION_URL','url',0,0),
 				array('DESCRIPTION','DESCRIPTION_DESCRIPTION','long_trans',0,0)
 			);
 			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('hosted',lang_code_to_default_content($field[0],false,2),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
-			$cat_id=actual_add_catalogue_category('hosted',lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_HOSTED_DESCRIPTION',true,3),'',NULL,'');
+				actual_add_catalogue_field('hosted',lang_code_to_default_content('cf_name',$field[0],false,2),lang_code_to_default_content('cf_description',$field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4]);
+			$cat_id=actual_add_catalogue_category('hosted',lang_code_to_default_content('cc_title','DEFAULT_CATALOGUE_HOSTED_TITLE',false,2),lang_code_to_default_content('cc_description','DEFAULT_CATALOGUE_HOSTED_DESCRIPTION',true,3),'',NULL,'');
 			foreach (array_keys($groups) as $group_id)
 			{
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
@@ -310,7 +310,7 @@ class Module_catalogues
 			add_menu_item_simple('collab_features',NULL,'DEFAULT_CATALOGUE_HOSTED_TITLE','_SEARCH:catalogues:type=index:id=hosted');
 
 			// Links
-			$links_category=actual_add_catalogue('links',lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
+			$links_category=actual_add_catalogue('links',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
 			$fields=array(
 				// Name, Description, Type, Defines order, Required, Put in category
 				array('TITLE','DESCRIPTION_TITLE','short_trans',1,1,1),
@@ -318,7 +318,7 @@ class Module_catalogues
 				array('DESCRIPTION','DESCRIPTION_DESCRIPTION','long_trans',0,0,1)
 			);
 			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('links',lang_code_to_default_content($field[0],false,2),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4],$field[5]);
+				actual_add_catalogue_field('links',lang_code_to_default_content('cf_name',$field[0],false,2),lang_code_to_default_content('cf_description',$field[1],true,3),$field[2],$i,$field[3],1,1,'',$field[4],$field[5]);
 			foreach (array_keys($groups) as $group_id)
 			{
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($links_category),'group_id'=>$group_id));
@@ -327,15 +327,15 @@ class Module_catalogues
 			add_menu_item_simple('main_content',NULL,'DEFAULT_CATALOGUE_LINKS_TITLE','_SEARCH:catalogues:type=index:id=links');
 
 			// FAQs
-			actual_add_catalogue('faqs',lang_code_to_default_content('DEFAULT_CATALOGUE_FAQS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_FAQS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',0);
+			actual_add_catalogue('faqs',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_FAQS_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_FAQS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',0);
 			$fields=array(
 				array('QUESTION','DESCRIPTON_QUESTION','short_trans',0,1,1),
 				array('ANSWER','_DESCRIPTION_ANSWER','long_trans',0,1,1),
 				array('ORDER','DESCRIPTION_ORDER','auto_increment',1,0,0)
 			);
 			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('faqs',lang_code_to_default_content($field[0],false,2),lang_code_to_default_content($field[1],true,3),$field[2],$i,$field[3],$field[5],1,'',$field[4]);
-			$cat_id=actual_add_catalogue_category('faqs',lang_code_to_default_content('DEFAULT_CATALOGUE_FAQS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_FAQS_DESCRIPTION',true,3),'',NULL,'');
+				actual_add_catalogue_field('faqs',lang_code_to_default_content('cf_name',$field[0],false,2),lang_code_to_default_content('cf_description',$field[1],true,3),$field[2],$i,$field[3],$field[5],1,'',$field[4]);
+			$cat_id=actual_add_catalogue_category('faqs',lang_code_to_default_content('cc_title','DEFAULT_CATALOGUE_FAQS_TITLE',false,2),lang_code_to_default_content('cc_description','DEFAULT_CATALOGUE_FAQS_DESCRIPTION',true,3),'',NULL,'');
 			foreach (array_keys($groups) as $group_id)
 			{
 				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_category','category_name'=>strval($cat_id),'group_id'=>$group_id));
@@ -344,7 +344,7 @@ class Module_catalogues
 			add_menu_item_simple('main_content',NULL,'_DEFAULT_CATALOGUE_FAQS_TITLE','_SEARCH:catalogues:type=index:id=faqs',0,0,true,do_lang('DEFAULT_CATALOGUE_FAQS_TITLE'));
 
 			// Contacts
-			actual_add_catalogue('contacts',lang_code_to_default_content('CONTACTS',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_CONTACTS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',30);
+			actual_add_catalogue('contacts',lang_code_to_default_content('c_title','CONTACTS',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_CONTACTS_DESCRIPTION',true,3),C_DT_FIELDMAPS,0,'',30);
 			$fields=array(
 				array('CONTACT_FIRST_NAME','','short_text',0,1),
 				array('CONTACT_LAST_NAME','','short_text',1,1),
@@ -361,8 +361,8 @@ class Module_catalogues
 				array('CONTACT_PHOTO','','picture',0,1)
 			);
 			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('contacts',lang_code_to_default_content($field[0],false,3),insert_lang('',2),$field[2],$i,$field[3],1,1,'',$field[4]);
-			actual_add_catalogue_category('contacts',lang_code_to_default_content('CONTACTS',false,2),'','',NULL,'');
+				actual_add_catalogue_field('contacts',lang_code_to_default_content('cf_name',$field[0],false,3),insert_lang('cf_description','',2),$field[2],$i,$field[3],1,1,'',$field[4]);
+			actual_add_catalogue_category('contacts',lang_code_to_default_content('cc_title','CONTACTS',false,2),'','',NULL,'');
 			add_menu_item_simple('main_content',NULL,'CONTACTS','_SEARCH:catalogues:type=index:id=contacts');
 		}
 
@@ -388,7 +388,7 @@ class Module_catalogues
 
 		if ((is_null($upgrade_from)) || ($upgrade_from<3))
 		{
-			$cat_id=actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
+			$cat_id=actual_add_catalogue('products',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
 
 			$fields=array(
 				//		Name							 Description			Type			  Defines order  Required  Visible  Searchable
@@ -407,8 +407,8 @@ class Module_catalogues
 			foreach ($fields as $i=>$field)
 			{
 				actual_add_catalogue_field('products', // $c_name
-													lang_code_to_default_content($field[0],false,3), // $name
-													lang_code_to_default_content($field[1],true,3), // $description
+													lang_code_to_default_content('cf_name',$field[0],false,3), // $name
+													lang_code_to_default_content('cf_description',$field[1],true,3), // $description
 													($field[2]=='tick')?'list':$field[2], // $type
 													$i, // $order
 													$field[3], // $defines_order

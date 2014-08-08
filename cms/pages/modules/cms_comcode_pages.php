@@ -128,7 +128,7 @@ class Module_cms_comcode_pages
 			$GLOBALS['SITE_DB']->create_table('cached_comcode_pages',array(
 				'the_zone'=>'*ID_TEXT',
 				'the_page'=>'*ID_TEXT',
-				'string_index'=>'LONG_TRANS',	// Comcode
+				'string_index'=>'LONG_TRANS__COMCODE',
 				'the_theme'=>'*ID_TEXT',
 				'cc_page_title'=>'?SHORT_TRANS'
 			));
@@ -1033,8 +1033,9 @@ class Module_cms_comcode_pages
 			lang_remap_comcode($string_index,$new);
 		} else
 		{
-			$string_index=insert_lang_comcode($new,1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
-			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$file,'string_index'=>$string_index));
+			$map=array('the_zone'=>$zone,'the_page'=>$file);
+			$map+=insert_lang_comcode('string_index',$new,1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
+			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map);
 		}*/
 
 		require_code('permissions2');

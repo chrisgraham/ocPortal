@@ -316,6 +316,8 @@ function db_get_type_remap()
 						'TIME'=>'integer unsigned',
 						'LONG_TRANS'=>'integer unsigned',
 						'SHORT_TRANS'=>'integer unsigned',
+						'LONG_TRANS__COMCODE'=>'integer unsigned',
+						'SHORT_TRANS__COMCODE'=>'integer unsigned',
 						'SHORT_TEXT'=>'varchar(255)',
 						'LONG_TEXT'=>'longtext',
 						'ID_TEXT'=>'varchar(80)',
@@ -364,7 +366,15 @@ function db_create_table($table_name,$fields)
 
 		$type=$type_remap[$type];
 
-		$_fields.='	  '.$name.' '.$type.' '.$perhaps_null.','.chr(10);
+		$_fields.='	  '.$name.' '.$type;
+		if (substr($name,-10)=='__tempcode')
+		{
+			$query.=' DEFAULT \'\'';
+		} elseif (substr($name,-13)=='__source_user')
+		{
+			$query.=' DEFAULT '.strval(db_get_first_id());
+		}
+		$_fields.=' '.$perhaps_null.','."\n";
 	}
 
 	$query='CREATE TABLE '.get_table_prefix().$table_name.' (

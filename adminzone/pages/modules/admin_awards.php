@@ -98,7 +98,7 @@ class Module_admin_awards extends standard_aed_module
 			$GLOBALS['SITE_DB']->create_table('award_types',array(
 				'id'=>'*AUTO',
 				'a_title'=>'SHORT_TRANS',
-				'a_description'=>'LONG_TRANS',
+				'a_description'=>'LONG_TRANS__COMCODE',
 				'a_points'=>'INTEGER',
 				'a_content_type'=>'ID_TEXT', // uses same naming convention as ocp_merge importer
 				'a_hide_awardee'=>'BINARY',

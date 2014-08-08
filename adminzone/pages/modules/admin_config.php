@@ -962,9 +962,16 @@ class Module_admin_config
 			{
 				if (($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext'))
 				{
-					$_value=strval(insert_lang($value,1));
-				} else $_value=$value;
-				$GLOBALS['SITE_DB']->query_update('config',array('config_value'=>$_value,'c_set'=>1),array('the_name'=>$myrow['the_name']),'',1);
+					$_value=insert_lang('config_value',$value,1);
+					if (multi_lang_content())
+					{
+						$_value['config_value']=strval($_value['config_value']);
+					}
+				} else
+				{
+					$_value=array('config_value'=>$value);
+				}
+				$GLOBALS['SITE_DB']->query_update('config',array('c_set'=>1)+$_value,array('the_name'=>$myrow['the_name']),'',1);
 			}
 		}
 
