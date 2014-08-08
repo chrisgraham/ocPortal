@@ -328,11 +328,7 @@ class Hook_ocp_merge
 			$end_text_fail=is_integer($row['q_end_text_fail'])?$this->get_lang_string($db,$row['q_end_text_fail']):$row['q_end_text_fail'];
 
 			$map=array(
-				'q_name'=>insert_lang($this->get_lang_string($db,$row['q_name']),2),
 				'q_timeout'=>$row['q_timeout'],
-				'q_start_text'=>insert_lang($start_text,2),
-				'q_end_text'=>insert_lang($end_text,2),
-				'q_end_text_fail'=>insert_lang($end_text_fail,2),
 				'q_notes'=>$row['q_notes'],
 				'q_percentage'=>$row['q_percentage'],
 				'q_open_time'=>$row['q_open_time'],
@@ -345,6 +341,10 @@ class Hook_ocp_merge
 				'q_add_date'=>$row['q_add_date'],
 				'q_points_for_passing'=>array_key_exists('q_points_for_passing',$row)?$row['q_points_for_passing']:0,
 			);
+			$map+=insert_lang('q_name',$this->get_lang_string($db,$row['q_name']),2);
+			$map+=insert_lang('q_start_text',$start_text,2);
+			$map+=insert_lang('q_end_text',$end_text,2);
+			$map+=insert_lang('q_end_text_fail',$end_text_fail,2);
 			if (get_param_integer('keep_preserve_ids',0)==1) $map['id']=$row['id'];
 			$id_new=$GLOBALS['SITE_DB']->query_insert('quizzes',$map,true);
 
@@ -359,14 +359,15 @@ class Hook_ocp_merge
 			$quiz=import_id_remap_get('quiz',strval($row['q_quiz']),true);
 			if (is_null($quiz)) continue;
 
-			$id_new=$GLOBALS['SITE_DB']->query_insert('quiz_questions',array(
+			$map=array(
 				'q_order'=>array_key_exists('q_order',$row)?$row['q_order']:$i,
 				'q_long_input_field'=>$row['q_long_input_field'],
 				'q_num_choosable_answers'=>$row['q_num_choosable_answers'],
 				'q_quiz'=>$quiz,
-				'q_question_text'=>insert_lang($this->get_lang_string($db,$row['q_question_text']),2),
 				'q_required'=>array_key_exists('q_required',$row)?$row['q_required']:0,
-			),true);
+			);
+			$map+=insert_lang('q_question_text',$this->get_lang_string($db,$row['q_question_text']),2);
+			$id_new=$GLOBALS['SITE_DB']->query_insert('quiz_questions',$map,true);
 
 			import_id_remap_put('quiz_question',strval($row['id']),$id_new);
 		}
@@ -377,13 +378,14 @@ class Hook_ocp_merge
 			$question=import_id_remap_get('quiz_question',strval($row['q_question']),true);
 			if (is_null($question)) continue;
 
-			$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',array(
+			$map=array(
 				'q_order'=>array_key_exists('q_order',$row)?$row['q_order']:$i,
 				'q_question'=>$question,
-				'q_answer_text'=>insert_lang(array_key_exists('q_answer_text',$row)?$this->get_lang_string($db,$row['q_answer_text']):'',2),
-				'q_explanation'=>insert_lang(array_key_exists('q_explanation',$row)?$this->get_lang_string($db,$row['q_explanation']):'',2),
 				'q_is_correct'=>$row['q_is_correct'],
-			));
+			);
+			$map+=insert_lang('q_answer_text',array_key_exists('q_answer_text',$row)?$this->get_lang_string($db,$row['q_answer_text']):'',2);
+			$map+=insert_lang('q_explanation',array_key_exists('q_explanation',$row)?$this->get_lang_string($db,$row['q_explanation']):'',2);
+			$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',$map);
 		}
 
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'quiz_entries');
@@ -465,18 +467,19 @@ class Hook_ocp_merge
 				$group_id=$on_same_msn?$row['s_group_id']:import_id_remap_get('group',strval($row['s_group_id']),true);
 				if (is_null($group_id)) continue;
 
-				$id_new=$GLOBALS['SITE_DB']->query_insert('f_usergroup_subs',array(
-					's_title'=>insert_lang($this->get_lang_string($db,$row['s_title']),2),
-					's_description'=>insert_lang($this->get_lang_string($db,$row['s_description']),2),
+				$map=array(
 					's_cost'=>$row['s_cost'],
 					's_length'=>$row['s_length'],
 					's_length_units'=>$row['s_length_units'],
 					's_group_id'=>$group_id,
 					's_enabled'=>$row['s_enabled'],
-					's_mail_start'=>insert_lang($this->get_lang_string($db,$row['s_mail_start']),2),
-					's_mail_end'=>insert_lang($this->get_lang_string($db,$row['s_mail_end']),2),
-					's_mail_uhoh'=>insert_lang($this->get_lang_string($db,$row['s_mail_uhoh']),2),
-				),true);
+				);
+				$map+=insert_lang('s_title',$this->get_lang_string($db,$row['s_title']),2);
+				$map+=insert_lang('s_description',$this->get_lang_string($db,$row['s_description']),2);
+				$map+=insert_lang('s_mail_start',$this->get_lang_string($db,$row['s_mail_start']),2);
+				$map+=insert_lang('s_mail_end',$this->get_lang_string($db,$row['s_mail_end']),2);
+				$map+=insert_lang('s_mail_uhoh',$this->get_lang_string($db,$row['s_mail_uhoh']),2);
+				$id_new=$GLOBALS['SITE_DB']->query_insert('f_usergroup_subs',$map,true);
 
 				import_id_remap_put('usergroup_sub',strval($row['id']),$id_new);
 			}
@@ -611,8 +614,8 @@ class Hook_ocp_merge
 				$id_new=import_id_remap_get($remapped,$row['meta_for_id'],true);
 				if (!is_null($id_new)) $row['meta_for_id']=strval($id_new);
 			}
-			$row['meta_keywords']=insert_lang($this->get_lang_string($db,$row['meta_keywords']),2);
-			$row['meta_description']=insert_lang($this->get_lang_string($db,$row['meta_description']),2);
+			$row=insert_lang('meta_keywords',$this->get_lang_string($db,$row['meta_keywords']),2)+$row;
+			$row=insert_lang('meta_description',$this->get_lang_string($db,$row['meta_description']),2)+$row;
 			$GLOBALS['SITE_DB']->query_insert('seo_meta',$row);
 		}
 	}
@@ -702,7 +705,15 @@ class Hook_ocp_merge
 			$member=$on_same_msn?$row['gift_to']:import_id_remap_get('member',$row['gift_to'],true);
 			if (is_null($viewer_member)) $viewer_member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			if (is_null($member)) $member=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>$row['date_and_time'],'amount'=>$row['amount'],'gift_from'=>$viewer_member,'gift_to'=>$member,'reason'=>insert_lang_comcode($this->get_lang_string($db,$row['reason']),4),'anonymous'=>$row['anonymous']));
+			$map=array(
+				'date_and_time'=>$row['date_and_time'],
+				'amount'=>$row['amount'],
+				'gift_from'=>$viewer_member,
+				'gift_to'=>$member,
+				'anonymous'=>$row['anonymous'],
+			);
+			$map+=insert_lang_comcode('reason',$this->get_lang_string($db,$row['reason']),4);
+			$GLOBALS['SITE_DB']->query_insert('gifts',$map);
 		}
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'leader_board',NULL,NULL,true);
 		if (is_null($rows)) $rows=array();
@@ -913,7 +924,10 @@ class Hook_ocp_merge
 			{
 				if (import_check_if_imported('newsletter',strval($row['id']))) continue;
 
-				$new_id=$GLOBALS['SITE_DB']->query_insert('newsletters',array('title'=>insert_lang($this->get_lang_string($db,$row['title']),2),'description'=>insert_lang($this->get_lang_string($db,$row['description']),2)),true);
+				$map=array();
+				$map+=insert_lang('title',$this->get_lang_string($db,$row['title']),2);
+				$map+=insert_lang('description',$this->get_lang_string($db,$row['description']),2);
+				$new_id=$GLOBALS['SITE_DB']->query_insert('newsletters',$map,true);
 
 				import_id_remap_put('newsletter',strval($row['id']),$new_id);
 			}
@@ -994,7 +1008,16 @@ class Hook_ocp_merge
 			$user_id=$on_same_msn?$row['user_id']:import_id_remap_get('member',$row['user_id'],true);
 			if (is_null($user_id)) $user_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			unset($row['id']);
-			$GLOBALS['SITE_DB']->query_insert('text',array('user_id'=>$user_id,'the_message'=>insert_lang($this->get_lang_string($db,$row['the_message']),2),'days'=>$row['days'],'order_time'=>$row['order_time'],'activation_time'=>$row['activation_time'],'active_now'=>$row['active_now'],'notes'=>$row['notes']));
+			$map=array(
+				'user_id'=>$user_id,
+				'days'=>$row['days'],
+				'order_time'=>$row['order_time'],
+				'activation_time'=>$row['activation_time'],
+				'active_now'=>$row['active_now'],
+				'notes'=>$row['notes'],
+			);
+			$map+=insert_lang('the_message',$this->get_lang_string($db,$row['the_message']),2);
+			$GLOBALS['SITE_DB']->query_insert('text',$map);
 		}
 	}
 
@@ -1142,7 +1165,16 @@ class Hook_ocp_merge
 			}
 
 			$titlemap[$id]=$title;
-			$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',array('submitter'=>array_key_exists('submitter',$row)?$row['submitter']:get_member(),'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,'seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,'notes'=>$row['notes'],'description'=>insert_lang_comcode($this->get_lang_string($db,$row['description']),2),'add_date'=>$row['add_date'],'title'=>insert_lang($title,2)),true);
+			$map=array(
+				'submitter'=>array_key_exists('submitter',$row)?$row['submitter']:get_member(),
+				'hide_posts'=>array_key_exists('hide_posts',$row)?$row['hide_posts']:0,
+				'seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,
+				'notes'=>$row['notes'],
+				'add_date'=>$row['add_date'],
+				'title'=>insert_lang($title,2),
+			);
+			$map+=insert_lang_comcode('description',$this->get_lang_string($db,$row['description']),2);
+			$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map,true);
 
 			import_id_remap_put('cedi_page',strval($row['id']),$id);
 		}
@@ -1157,7 +1189,16 @@ class Hook_ocp_merge
 
 			$user=$on_same_msn?$row['the_user']:import_id_remap_get('member',$row['the_user'],true);
 			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
-			$id_new=$GLOBALS['SITE_DB']->query_insert('seedy_posts',array('seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,'validated'=>array_key_exists('validated',$row)?$row['validated']:1,'the_message'=>insert_lang_comcode($this->get_lang_string($db,$row['the_message']),2),'the_user'=>$user,'date_and_time'=>$row['date_and_time'],'page_id'=>$page_id,'edit_date'=>$row['edit_date']),true);
+			$map=array(
+				'seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,
+				'validated'=>array_key_exists('validated',$row)?$row['validated']:1,
+				'the_user'=>$user,
+				'date_and_time'=>$row['date_and_time'],
+				'page_id'=>$page_id,
+				'edit_date'=>$row['edit_date'],
+			);
+			$map+=insert_lang_comcode('the_message',$this->get_lang_string($db,$row['the_message']),2);
+			$id_new=$GLOBALS['SITE_DB']->query_insert('seedy_posts',$map,true);
 
 			import_id_remap_put('cedi_post',strval($row['id']),$id_new);
 		}
@@ -1208,10 +1249,8 @@ class Hook_ocp_merge
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('custom_comcode','tag_tag',array('tag_tag'=>$row['tag_tag']));
 			if (!is_null($test)) continue;
 
-			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+			$map=array(
 				'tag_tag'=>$row['tag_tag'],
-				'tag_title'=>insert_lang($this->get_lang_string($db,$row['tag_title']),3),
-				'tag_description'=>insert_lang($this->get_lang_string($db,$row['tag_description']),3),
 				'tag_replace'=>$row['tag_replace'],
 				'tag_example'=>$row['tag_example'],
 				'tag_parameters'=>$row['tag_parameters'],
@@ -1219,7 +1258,10 @@ class Hook_ocp_merge
 				'tag_dangerous_tag'=>$row['tag_dangerous_tag'],
 				'tag_block_tag'=>$row['tag_block_tag'],
 				'tag_textual_tag'=>$row['tag_textual_tag']
-			));
+			);
+			$map+=insert_lang('tag_title',$this->get_lang_string($db,$row['tag_title']),3);
+			$map+=insert_lang('tag_description',$this->get_lang_string($db,$row['tag_description']),3);
+			$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 		}
 	}
 
@@ -1394,8 +1436,12 @@ class Hook_ocp_merge
 		if (is_null($rows)) return;
 		foreach ($rows as $row)
 		{
-			$ticket_type=insert_lang($this->get_lang_string($db,$row['ticket_type']),1);
-			$GLOBALS['SITE_DB']->query_insert('ticket_types',array('search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,'ticket_type'=>$ticket_type));
+			$map=array(
+				'search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,
+				'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,
+			);
+			$map+=insert_lang('ticket_type',$this->get_lang_string($db,$row['ticket_type']),1);
+			$GLOBALS['SITE_DB']->query_insert('ticket_types',$map);
 			import_id_remap_put('ticket_type',strval($row['ticket_type']),$ticket_type);
 		}
 	}
@@ -1459,8 +1505,8 @@ class Hook_ocp_merge
 			{
 				if (!array_key_exists('zone_displayed_in_menu',$row)) $row['zone_displayed_in_menu']=1;
 				$old_title=$this->get_lang_string($db,$row['zone_title']);
-				$row['zone_title']=array_key_exists('zone_title',$row)?insert_lang($old_title,1):insert_lang($row['zone_name'],1);
-				$row['zone_header_text']=insert_lang($this->get_lang_string($db,$row['zone_header_text']),1);
+				$row=insert_lang('zone_title',array_key_exists('zone_title',$row)?$old_title:$row['zone_name'],1)+$row;
+				$row=insert_lang('zone_header_text',$this->get_lang_string($db,$row['zone_header_text']),1)+$row;
 				unset($row['access_denied_counter']); // Just to support old-version compatibility a little
 				$GLOBALS['SITE_DB']->query_insert('zones',$row);
 
@@ -1488,8 +1534,8 @@ class Hook_ocp_merge
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('catalogues','c_name',array('c_name'=>$row['c_name']));
 			if (is_null($test))
 			{
-				$row['c_title']=insert_lang($this->get_lang_string($db,$row['c_title']),2);
-				$row['c_description']=insert_lang($this->get_lang_string($db,$row['c_description']),2);
+				$row=insert_lang('c_title',$this->get_lang_string($db,$row['c_title']),2)+$row;
+				$row=insert_lang('c_description',$this->get_lang_string($db,$row['c_description']),2)+$row;
 				if (!array_key_exists('c_display_type',$row))
 				{
 					$row['c_display_type']=$row['c_own_pages'];
@@ -1505,8 +1551,8 @@ class Hook_ocp_merge
 				{
 					if (import_check_if_imported('catalogue_field',strval($row2['id']))) continue;
 
-					$row2['cf_name']=insert_lang($this->get_lang_string($db,$row2['cf_name']),2);
-					$row2['cf_description']=insert_lang($this->get_lang_string($db,$row2['cf_description']),2);
+					$row2=insert_lang('cf_name',$this->get_lang_string($db,$row2['cf_name']),2)+$row2;
+					$row2=insert_lang('cf_description',$this->get_lang_string($db,$row2['cf_description']),2)+$row2;
 					if (!array_key_exists('cf_put_in_category',$row2)) $row2['cf_put_in_category']=1;
 					if (!array_key_exists('cf_put_in_search',$row2)) $row2['cf_put_in_search']=1;
 					$old_id=$row2['id'];
@@ -1617,7 +1663,7 @@ class Hook_ocp_merge
 			if (!is_null($test)) continue;
 
 			$row['room_owner']=$on_same_msn?$row['room_owner']:import_id_remap_get('member',$row['room_owner'],true);
-			$row['c_welcome']=insert_lang($this->get_lang_string($db,$row['c_welcome']),2);
+			$row=insert_lang('c_welcome',$this->get_lang_string($db,$row['c_welcome']),2)+$row;
 
 			$_disallow_list_groups=explode(',',$row['disallow_list_groups']);
 			$row['disallow_list_groups']='';
@@ -1660,8 +1706,8 @@ class Hook_ocp_merge
 
 			if (import_check_if_imported('award_type',strval($row['id']))) continue;
 
-			$row['a_title']=insert_lang($this->get_lang_string($db,$row['a_title']),2);
-			$row['a_description']=insert_lang($this->get_lang_string($db,$row['a_description']),2);
+			$row=insert_lang('a_title',$this->get_lang_string($db,$row['a_title']),2)+$row;
+			$row=insert_lang('a_description',$this->get_lang_string($db,$row['a_description']),2)+$row;
 
 			$id_old=$row['id'];
 			unset($row['id']);
@@ -1701,7 +1747,7 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			$row['description']=insert_lang($this->get_lang_string($db,$row['description']),2);
+			$row=insert_lang('description',$this->get_lang_string($db,$row['description']),2)+$row;
 			$row['the_member']=$on_same_msn?$row['the_member']:import_id_remap_get('member',$row['the_member'],true);
 			if (is_null($row['the_member'])) $row['the_member']=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$GLOBALS['SITE_DB']->query_insert('filedump',$row);
@@ -1955,8 +2001,12 @@ class Hook_ocp_merge
 							if (is_null($cpf_id)) continue;
 							$cpf_type=$cpf_types[$cpf_id];
 							if (($cpf_type=='short_trans') || ($cpf_type=='long_trans'))
-								$val=strval(insert_lang($this->get_lang_string($db,intval($val)),3));
-							$row2['field_'.strval($cpf_id)]=$val;
+							{
+								$val=insert_lang('field_'.strval($cpf_id),$this->get_lang_string($db,intval($val)),3);
+							} else
+							{
+								$row2['field_'.strval($cpf_id)]=$val;
+							}
 						}
 					}
 					$GLOBALS['SITE_DB']->query_update('f_member_custom_fields',$row2,array('mf_member_id'=>$id_new),'',1);

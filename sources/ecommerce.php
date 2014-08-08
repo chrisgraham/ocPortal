@@ -640,19 +640,20 @@ function add_usergroup_subscription($title,$description,$cost,$length,$length_un
 	$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-	$id=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_insert('f_usergroup_subs',array(
-		's_title'=>insert_lang($title,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_description'=>insert_lang($description,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+	$map=array(
 		's_cost'=>$cost,
 		's_length'=>$length,
 		's_length_units'=>$length_units,
 		's_group_id'=>$group_id,
 		's_uses_primary'=>$uses_primary,
 		's_enabled'=>$enabled,
-		's_mail_start'=>insert_lang($mail_start,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_mail_end'=>insert_lang($mail_end,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_mail_uhoh'=>insert_lang($mail_uhoh,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-	),true);
+	);
+	$map+=insert_lang('s_title',$title,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang('s_description',$description,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang('s_mail_start',$mail_start,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang('s_mail_end',$mail_end,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang('s_mail_uhoh',$mail_uhoh,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$id=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_insert('f_usergroup_subs',$map,true);
 
 	log_it('ADD_USERGROUP_SUBSCRIPTION',strval($id),$title);
 

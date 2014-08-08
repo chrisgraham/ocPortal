@@ -203,7 +203,6 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		'm_primary_group'=>$primary_group,
 		'm_last_visit_time'=>$last_visit_time,
 		'm_last_submit_time'=>$last_submit_time,
-		'm_signature'=>insert_lang_comcode($signature,4,$GLOBALS['FORUM_DB']),
 		'm_is_perm_banned'=>$is_perm_banned,
 		'm_preview_posts'=>$preview_posts,
 		'm_notes'=>$personal_notes,
@@ -219,7 +218,6 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		'm_auto_monitor_contrib_content'=>$auto_monitor_contrib_content,
 		'm_highlighted_name'=>$highlighted_name,
 		'm_pt_allow'=>$pt_allow,
-		'm_pt_rules_text'=>insert_lang_comcode($pt_rules_text,4,$GLOBALS['FORUM_DB']),
 		'm_language'=>$language,
 		'm_ip_address'=>$ip_address,
 		'm_zone_wide'=>$zone_wide,
@@ -229,6 +227,8 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 		'm_password_compat_scheme'=>$password_compatibility_scheme,
 		'm_on_probation_until'=>NULL
 	);
+	$map+=insert_lang_comcode('m_signature',$signature,4,$GLOBALS['FORUM_DB']);
+	$map+=insert_lang_comcode('m_pt_rules_text',$pt_rules_text,4,$GLOBALS['FORUM_DB']);
 	if (!is_null($id)) $map['id']=$id;
 	$member_id=$GLOBALS['FORUM_DB']->query_insert('f_members',$map,true);
 
@@ -270,9 +270,11 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 
 		if (strpos($storage_type,'_trans')!==false)
 		{
-			$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
+			$row=insert_lang('field_'.strval($field_num),$value,3,$GLOBALS['FORUM_DB'])+$row;
+		} else
+		{
+			$row['field_'.strval($field_num)]=$value;
 		}
-		$row['field_'.strval($field_num)]=$value;
 	}
 
 	// Set custom field row
@@ -287,9 +289,11 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 			$value='';
 			if (strpos($storage_type,'_trans')!==false)
 			{
-				$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
+				$row=insert_lang('field_'.strval($field_num),$value,3,$GLOBALS['FORUM_DB'])+$row;
+			} else
+			{
+				$row['field_'.strval($field['id'])]=$value;
 			}
-			$row['field_'.strval($field['id'])]=$value;
 		}
 	}
 	$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
@@ -465,9 +469,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	}
 
 	$map=array(
-		'cf_name'=>insert_lang($name,2,$GLOBALS['FORUM_DB']),
 		'cf_locked'=>$locked,
-		'cf_description'=>insert_lang($description,2,$GLOBALS['FORUM_DB']),
 		'cf_default'=>$default,
 		'cf_public_view'=>$public_view,
 		'cf_owner_view'=>$owner_view,
@@ -480,6 +482,8 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 		'cf_only_group'=>$only_group,
 		'cf_show_on_join_form'=>$show_on_join_form
 	);
+	$map+=insert_lang('cf_name',$name,2,$GLOBALS['FORUM_DB']);
+	$map+=insert_lang('cf_description',$description,2,$GLOBALS['FORUM_DB']);
 	$id=$GLOBALS['FORUM_DB']->query_insert('f_custom_fields',$map+array('cf_encrypted'=>$encrypted),true,true);
 	if (is_null($id)) $id=$GLOBALS['FORUM_DB']->query_insert('f_custom_fields',$map,true); // Still upgrading, cf_encrypted does not exist yet
 

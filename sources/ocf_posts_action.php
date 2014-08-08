@@ -188,22 +188,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		if ((!is_null($forum_id)) && (!has_specific_permission($poster,'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
 	}
 
-	if (!$support_attachments)
-	{
-		ocp_profile_start_for('ocf_make_post:insert_lang_comcode');
-		$lang_id=insert_lang_comcode($post,4,$GLOBALS['FORUM_DB'],$insert_comcode_as_admin);
-		ocp_profile_end_for('ocf_make_post:insert_lang_comcode');
-	} else
-	{
-		@ignore_user_abort(true);
-
-		$lang_id=0;
-	}
-
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array(
 		'p_title'=>$title,
-		'p_post'=>$lang_id,
 		'p_ip_address'=>$ip_address,
 		'p_time'=>$time,
 		'p_poster'=>$anonymous?db_get_first_id():$poster,
@@ -219,15 +206,27 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		'p_parent_id'=>$parent_id
 	);
 	if (!is_null($id)) $map['id']=$id;
+
+	if (!$support_attachments)
+	{
+		ocp_profile_start_for('ocf_make_post:insert_lang_comcode');
+		$map+=insert_lang_comcode('p_post',$post,4,$GLOBALS['FORUM_DB'],$insert_comcode_as_admin);
+		ocp_profile_end_for('ocf_make_post:insert_lang_comcode');
+	} else
+	{
+		@ignore_user_abort(true);
+
+		$map['p_post']=0;
+	}
+
 	$post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);
 
 	if ($support_attachments)
 	{
 		require_code('attachments2');
 		ocp_profile_start_for('ocf_make_post:insert_lang_comcode_attachments');
-		$lang_id=insert_lang_comcode_attachments(4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB']);
+		$GLOBALS['FORUM_DB']->query_update('f_posts',insert_lang_comcode_attachments('p_post',4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB']),array('id'=>$post_id),'',1);
 		ocp_profile_end_for('ocf_make_post:insert_lang_comcode_attachments');
-		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_post'=>$lang_id),array('id'=>$post_id),'',1);
 	}
 
 	@ignore_user_abort(false);

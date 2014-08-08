@@ -71,14 +71,12 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 		}
 	} else $order=100;
 
-	$group_id=$GLOBALS['FORUM_DB']->query_insert('f_groups',array(
-		'g_name'=>insert_lang($name,2,$GLOBALS['FORUM_DB']),
+	$map=array(
 		'g_is_default'=>$is_default,
 		'g_is_presented_at_install'=>$is_presented_at_install,
 		'g_is_super_admin'=>$is_super_admin,
 		'g_is_super_moderator'=>$is_super_moderator,
 		'g_group_leader'=>$group_leader,
-		'g_title'=>insert_lang($title,2,$GLOBALS['FORUM_DB']),
 		'g_promotion_target'=>$promotion_target,
 		'g_promotion_threshold'=>$promotion_threshold,
 		'g_flood_control_submit_secs'=>$flood_control_submit_secs,
@@ -98,7 +96,10 @@ function ocf_make_group($name,$is_default=0,$is_super_admin=0,$is_super_moderato
 		'g_rank_image_pri_only'=>$rank_image_pri_only,
 		'g_open_membership'=>$open_membership,
 		'g_is_private_club'=>$is_private_club,
-	),true);
+	);
+	$map+=insert_lang('g_name',$name,2,$GLOBALS['FORUM_DB']);
+	$map+=insert_lang('g_title',$title,2,$GLOBALS['FORUM_DB']);
+	$group_id=$GLOBALS['FORUM_DB']->query_insert('f_groups',$map,true);
 
 	if (($group_id>db_get_first_id()+8) && ($is_private_club==0))
 	{

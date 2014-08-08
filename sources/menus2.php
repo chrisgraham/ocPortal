@@ -49,7 +49,7 @@ function menu_management_script()
 		{
 			if (is_null($row))
 			{
-				$changes['i_'.$key]=insert_lang($val,2);
+				$changes+=insert_lang('i_'.$key,$val,2);
 			} else
 			{
 				lang_remap($row['i_'.$key],$val);
@@ -145,19 +145,20 @@ function delete_menu_item_simple($url)
  */
 function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code='')
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('menu_items',array(
+	$map=array(
 		'i_menu'=>$menu,
 		'i_order'=>$order,
 		'i_parent'=>$parent,
-		'i_caption'=>insert_lang($caption,1),
-		'i_caption_long'=>insert_lang($caption_long,1),
 		'i_url'=>$url,
 		'i_check_permissions'=>$check_permissions,
 		'i_page_only'=>$page_only,
 		'i_expanded'=>$expanded,
 		'i_new_window'=>$new_window,
 		'i_theme_img_code'=>$theme_image_code,
-	),true);
+	);
+	$map+=insert_lang('i_caption',$caption,1);
+	$map+=insert_lang('i_caption_long',$caption_long,1);
+	$id=$GLOBALS['SITE_DB']->query_insert('menu_items',$map,true);
 
 	log_it('ADD_MENU_ITEM',strval($id),$caption);
 

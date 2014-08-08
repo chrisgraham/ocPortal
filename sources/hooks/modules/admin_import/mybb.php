@@ -1208,10 +1208,8 @@ class Hook_mybb
 				continue;
 			}
 
-			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+			$map=array(
 				'tag_tag'=>$custom_tag,
-				'tag_title'=>insert_lang($title,3),
-				'tag_description'=>insert_lang($description,3),
 				'tag_replace'=>$tag_replace,
 				'tag_example'=>'',
 				'tag_parameters'=>'',
@@ -1219,7 +1217,10 @@ class Hook_mybb
 				'tag_dangerous_tag'=>0,
 				'tag_block_tag'=>0,
 				'tag_textual_tag'=>1
-			));
+			);
+			$map+=insert_lang('tag_title',$title,3);
+			$map+=insert_lang('tag_description',$description,3);
+			$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 
 			import_id_remap_put('custom_comcode',strval($row['cid']),1);
 		}
@@ -1377,7 +1378,16 @@ class Hook_mybb
 
 			$mm_post_text=($topic_options['replysubject']!='{subject}')?preg_replace('#\{username\}#','',$topic_options['replysubject']):'';
 			$mm_post_text.=($topic_options['addreply']!='')?preg_replace('#\{username\}#','',$topic_options['addreply']):'';
-			$GLOBALS['SITE_DB']->query_insert('f_multi_moderations',array('mm_name'=>insert_lang($mm_name,3),'mm_forum_multi_code'=>$mm_forum_multi_code,'mm_sink_state'=>$mm_sink_state,'mm_open_state'=>$mm_open_state,'mm_move_to'=>$mm_move_to,'mm_title_suffix'=>$mm_title_suffix,'mm_post_text'=>$mm_post_text));
+			$map=array(
+				'mm_forum_multi_code'=>$mm_forum_multi_code,
+				'mm_sink_state'=>$mm_sink_state,
+				'mm_open_state'=>$mm_open_state,
+				'mm_move_to'=>$mm_move_to,
+				'mm_title_suffix'=>$mm_title_suffix,
+				'mm_post_text'=>$mm_post_text,
+			);
+			$map+=insert_lang('mm_name',$mm_name,3);
+			$GLOBALS['SITE_DB']->query_insert('f_multi_moderations',$map);
 		}
 	}
 

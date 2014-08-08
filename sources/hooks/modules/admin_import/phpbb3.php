@@ -1253,11 +1253,8 @@ class Hook_phpbb3
 				$parameters.=$matches[1][$i];
 			}
 
-			$GLOBALS['FORUM_DB']->query_insert('custom_comcode',array(
+			$map=array(
 				'tag_tag'=>$row['bbcode_tag'],
-				'tag_title'=>insert_lang($row['bbcode_tag'],3),
-				'tag_description'=>insert_lang($row['bbcode_helpline'],3),
-
 				'tag_replace'=>str_replace('{TEXT}','{content}',$row['bbcode_match']),
 				'tag_example'=>'',
 				'tag_parameters'=>$parameters,
@@ -1265,7 +1262,10 @@ class Hook_phpbb3
 				'tag_dangerous_tag'=>0,
 				'tag_block_tag'=>0,
 				'tag_textual_tag'=>0
-			));
+			);
+			$map+=insert_lang('tag_title',$row['bbcode_tag'],3);
+			$map+=insert_lang('tag_description',$row['bbcode_helpline'],3);
+			$GLOBALS['FORUM_DB']->query_insert('custom_comcode',$map);
 		}
 	}
 

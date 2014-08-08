@@ -132,7 +132,14 @@ function add_author($author,$url,$forum_handle,$description,$skills,$meta_keywor
 		seo_meta_set_for_explicit('authors',$author,$meta_keywords,$meta_description);
 	}
 
-	$GLOBALS['SITE_DB']->query_insert('authors',array('author'=>$author,'url'=>$url,'forum_handle'=>$forum_handle,'description'=>insert_lang_comcode($description,3),'skills'=>insert_lang_comcode($skills,3)));
+	$map=array(
+		'author'=>$author,
+		'url'=>$url,
+		'forum_handle'=>$forum_handle,
+	);
+	$map+=insert_lang_comcode('description',$description,3);
+	$map+=insert_lang_comcode('skills',$skills,3);
+	$GLOBALS['SITE_DB']->query_insert('authors',$map);
 }
 
 /**

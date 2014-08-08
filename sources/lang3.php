@@ -487,8 +487,14 @@ function _comcode_lang_string($lang_code)
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 	$looked_up=do_lang($lang_code,NULL,NULL,NULL,NULL,false);
 	if (is_null($looked_up)) return make_string_tempcode(escape_html('{!'.$lang_code.'}'));
-	$index=insert_lang_comcode($looked_up,4,NULL,true,NULL,60,false,true);
-	$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',array('the_zone'=>'!','the_page'=>$lang_code,'string_index'=>$index,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'cc_page_title'=>NULL),false,true); // Race conditions
+	$map=array(
+		'the_zone'=>'!',
+		'the_page'=>$lang_code,
+		'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),
+		'cc_page_title'=>NULL,
+	);
+	$map+=insert_lang_comcode('string_index',$looked_up,4,NULL,true,NULL,60,false,true);
+	$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map,false,true); // Race conditions
 	$parsed=get_translated_tempcode($index);
 	$COMCODE_LANG_STRING_CACHE[$lang_code]=$parsed;
 

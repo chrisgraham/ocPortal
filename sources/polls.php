@@ -287,7 +287,41 @@ function add_poll($question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_option
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
 
-	$id=$GLOBALS['SITE_DB']->query_insert('poll',array('edit_date'=>$edit_date,'poll_views'=>$views,'add_time'=>$time,'allow_trackbacks'=>$allow_trackbacks,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'notes'=>$notes,'submitter'=>$submitter,'date_and_time'=>$use_time,'votes1'=>$v1,'votes2'=>$v2,'votes3'=>$v3,'votes4'=>$v4,'votes5'=>$v5,'votes6'=>$v6,'votes7'=>$v7,'votes8'=>$v8,'votes9'=>$v9,'votes10'=>$v10,'question'=>insert_lang_comcode($question,1),'option1'=>insert_lang_comcode($a1,1),'option2'=>insert_lang_comcode($a2,1),'option3'=>insert_lang_comcode($a3,1),'option4'=>insert_lang_comcode($a4,1),'option5'=>insert_lang_comcode($a5,1),'option6'=>insert_lang_comcode($a6,1),'option7'=>insert_lang_comcode($a7,1),'option8'=>insert_lang_comcode($a8,1),'option9'=>insert_lang_comcode($a9,1),'option10'=>insert_lang_comcode($a10,1),'num_options'=>$num_options,'is_current'=>$current),true);
+	$map=array(
+		'edit_date'=>$edit_date,
+		'poll_views'=>$views,
+		'add_time'=>$time,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'date_and_time'=>$use_time,
+		'votes1'=>$v1,
+		'votes2'=>$v2,
+		'votes3'=>$v3,
+		'votes4'=>$v4,
+		'votes5'=>$v5,
+		'votes6'=>$v6,
+		'votes7'=>$v7,
+		'votes8'=>$v8,
+		'votes9'=>$v9,
+		'votes10'=>$v10,
+		'num_options'=>$num_options,
+		'is_current'=>$current,
+	);
+	$map+=insert_lang_comcode('question',$question,1);
+	$map+=insert_lang_comcode('option1',$a1,1);
+	$map+=insert_lang_comcode('option2',$a2,1);
+	$map+=insert_lang_comcode('option3',$a3,1);
+	$map+=insert_lang_comcode('option4',$a4,1);
+	$map+=insert_lang_comcode('option5',$a5,1);
+	$map+=insert_lang_comcode('option6',$a6,1);
+	$map+=insert_lang_comcode('option7',$a7,1);
+	$map+=insert_lang_comcode('option8',$a8,1);
+	$map+=insert_lang_comcode('option9',$a9,1);
+	$map+=insert_lang_comcode('option10',$a10,1);
+	$id=$GLOBALS['SITE_DB']->query_insert('poll',$map,true);
 
 	log_it('ADD_POLL',strval($id),$question);
 

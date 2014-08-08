@@ -91,7 +91,14 @@ if (!function_exists('_load_comcode_page_not_cached'))
 			$index=$GLOBALS['SITE_DB']->query_insert('translate',array('source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang),true,false,true);
 			if (get_site_default_lang()!=$lang)
 				$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$index,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$non_trans_result,'text_parsed'=>$non_trans_text2,'language'=>get_site_default_lang()),true,false,true);
-			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$codename,'string_index'=>$index,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'cc_page_title'=>insert_lang(clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true)),false,true); // Race conditions
+			$map=array(
+				'the_zone'=>$zone,
+				'the_page'=>$codename,
+				'string_index'=>$index,
+				'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),
+			);
+			$map+=insert_lang('cc_page_title',clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
+			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map,false,true); // Race conditions
 			decache('main_comcode_page_children');
 
 			// Try and insert corresponding page; will silently fail if already exists. This is only going to add a row for a page that was not created in-system

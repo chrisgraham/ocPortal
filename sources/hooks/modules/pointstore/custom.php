@@ -139,15 +139,16 @@ class Hook_pointstore_custom
 			$mail_subject=post_param('custom_mail_subject');
 			$mail_body=post_param('custom_mail_body');
 
-			$GLOBALS['SITE_DB']->query_insert('pstore_customs',array(
-				'c_title'=>insert_lang($title,2),
-				'c_description'=>insert_lang($description,2),
+			$map=array(
 				'c_enabled'=>$enabled,
 				'c_cost'=>$cost,
 				'c_one_per_member'=>$one_per_member,
-				'c_mail_subject'=>insert_lang($mail_subject,2),
-				'c_mail_body'=>insert_lang($mail_body,2),
-			));
+			);
+			$map+=insert_lang('c_title',$title,2);
+			$map+=insert_lang('c_description',$description,2);
+			$map+=insert_lang('c_mail_subject',$mail_subject,2);
+			$map+=insert_lang('c_mail_body',$mail_body,2);
+			$GLOBALS['SITE_DB']->query_insert('pstore_customs',$map);
 		}
 	}
 

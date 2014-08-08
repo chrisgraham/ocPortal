@@ -79,7 +79,14 @@ function ocf_make_emoticon($code,$theme_img_code,$relevance_level=1,$use_topics=
  */
 function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=0)
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('f_welcome_emails',array('w_name'=>$name,'w_newsletter'=>$newsletter,'w_subject'=>insert_lang($subject,2),'w_text'=>insert_lang($text,2),'w_send_time'=>$send_time),true);
+	$map=array(
+		'w_name'=>$name,
+		'w_newsletter'=>$newsletter,
+		'w_send_time'=>$send_time,
+	);
+	$map+=insert_lang('w_subject',$subject,2);
+	$map+=insert_lang('w_text',$text,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('f_welcome_emails',$map,true);
 	log_it('ADD_WELCOME_EMAIL',strval($id),$subject);
 	return $id;
 }

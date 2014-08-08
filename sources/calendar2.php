@@ -72,7 +72,6 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 	$map=array(
 		'e_submitter'=>$submitter,
 		'e_views'=>$views,
-		'e_title'=>insert_lang($title,2),
 		'e_content'=>0,
 		'e_add_date'=>$add_date,
 		'e_edit_date'=>$edit_date,
@@ -102,11 +101,12 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes
 	);
+	$map+=insert_lang('e_title',$title,2);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('calendar_events',$map,true);
 
 	require_code('attachments2');
-	$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_content'=>insert_lang_comcode_attachments(3,$content,'calendar',strval($id))),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('calendar_events',insert_lang_comcode_attachments('e_content',3,$content,'calendar',strval($id)),array('id'=>$id),'',1);
 
 	require_code('seo2');
 	seo_meta_set_for_implicit('event',strval($id),array($title,$content),$content);
@@ -295,11 +295,12 @@ function delete_calendar_event($id)
  */
 function add_event_type($title,$logo,$external_feed='')
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('calendar_types',array(
-		't_title'=>insert_lang($title,2),
+	$map=array(
 		't_logo'=>$logo,
 		't_external_feed'=>$external_feed,
-	),true);
+	);
+	$map+=insert_lang('t_title',$title,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('calendar_types',$map,true);
 
 	log_it('ADD_EVENT_TYPE',strval($id),$title);
 	return $id;

@@ -95,7 +95,17 @@ END;
 	}
 	afm_make_file($zone.'/pages/comcode_custom/EN/'.filter_naughty($default_page).'.txt','[title]'.do_lang('YOUR_NEW_ZONE').'[/title]'.chr(10).chr(10).do_lang('YOUR_NEW_ZONE_PAGE',$zone.':'.$default_page).chr(10).chr(10).'[block]main_comcode_page_children[/block]',true);
 
-	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($title,1),'zone_default_page'=>$default_page,'zone_header_text'=>insert_lang($header_text,1),'zone_theme'=>$theme,'zone_wide'=>$wide,'zone_require_session'=>$require_session,'zone_displayed_in_menu'=>$displayed_in_menu));
+	$map=array(
+		'zone_name'=>$zone,
+		'zone_default_page'=>$default_page,
+		'zone_theme'=>$theme,
+		'zone_wide'=>$wide,
+		'zone_require_session'=>$require_session,
+		'zone_displayed_in_menu'=>$displayed_in_menu,
+	);
+	$map+=insert_lang('zone_title',$title,1);
+	$map+=insert_lang('zone_header_text',$header_text,1);
+	$GLOBALS['SITE_DB']->query_insert('zones',$map);
 
 	require_code('menus2');
 	$menu_item_count=$GLOBALS['SITE_DB']->query_value('menu_items','COUNT(*)',array('i_menu'=>'zone_menu'));

@@ -107,10 +107,10 @@ class Hook_orphaned_lang_strings
 				{
 					if (($fix) && (!array_key_exists($id,$missing_lang_strings)))
 					{
-						$new_id=insert_lang('',2,NULL,false,$id);
-						if ($id!=$new_id)
+						$new_id=insert_lang($langidfield['m_name'],'',2,NULL,false,$id);
+						if ($id[$langidfield['m_name']]!=$new_id)
 						{
-							$GLOBALS['SITE_DB']->query_update($langidfield['m_table'],array($langidfield['m_name']=>$new_id),$of,'',1);
+							$GLOBALS['SITE_DB']->query_update($langidfield['m_table'],$new_id,$of,'',1);
 						}
 					}
 
@@ -125,7 +125,7 @@ class Hook_orphaned_lang_strings
 						$of=$_of[0];
 						//$GLOBALS['SITE_DB']->query_delete($langidfield['m_table'],$of,'',1);
 						$of_orig=$of;
-						$of[$langidfield['m_name']]=insert_lang($looked_up,2);
+						$of=insert_lang($langidfield['m_name'],$looked_up,2)+$of;
 						//$GLOBALS['SITE_DB']->query_insert($langidfield['m_table'],$of);
 						$GLOBALS['SITE_DB']->query_update($langidfield['m_table'],$of,$of_orig,'',1);
 					}

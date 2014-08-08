@@ -241,7 +241,14 @@ function dload_script()
  */
 function add_download_category($category,$parent_id,$description,$notes,$rep_image='',$id=NULL)
 {
-	$map=array('rep_image'=>$rep_image,'add_date'=>time(),'notes'=>$notes,'category'=>insert_lang($category,2),'parent_id'=>$parent_id,'description'=>insert_lang_comcode($description,2));
+	$map=array(
+		'rep_image'=>$rep_image,
+		'add_date'=>time(),
+		'notes'=>$notes,
+		'parent_id'=>$parent_id,
+	);
+	$map+=insert_lang('category',$category,2);
+	$map+=insert_lang_comcode('description',$description,2);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
 
@@ -686,7 +693,33 @@ function add_download($category_id,$name,$url,$description,$author,$comments,$ou
 	$data_mash=($url=='')?'':create_data_mash($url,NULL,get_file_extension($original_filename));
 	if (function_exists('set_time_limit')) @set_time_limit($met);
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'rep_image'=>'','edit_date'=>$edit_date,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'original_filename'=>$original_filename,'download_views'=>$views,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'default_pic'=>1,'num_downloads'=>$num_downloads,'out_mode_id'=>$out_mode_id,'category_id'=>$category_id,'name'=>insert_lang($name,2),'url'=>$url,'description'=>insert_lang_comcode($description,3),'author'=>$author,'comments'=>insert_lang_comcode($comments,3),'validated'=>$validated,'add_date'=>$add_date,'file_size'=>$file_size);
+	$map=array(
+		'download_data_mash'=>$data_mash,
+		'download_licence'=>$licence,
+		'rep_image'=>'',
+		'edit_date'=>$edit_date,
+		'download_submitter_gets_points'=>$submitter_gets_points,
+		'download_cost'=>$cost,
+		'original_filename'=>$original_filename,
+		'download_views'=>$views,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'default_pic'=>1,
+		'num_downloads'=>$num_downloads,
+		'out_mode_id'=>$out_mode_id,
+		'category_id'=>$category_id,
+		'url'=>$url,
+		'author'=>$author,
+		'validated'=>$validated,
+		'add_date'=>$add_date,
+		'file_size'=>$file_size,
+	);
+	$map+=insert_lang('name',$name,2);
+	$map+=insert_lang_comcode('description',$description,3);
+	$map+=insert_lang_comcode('comments',$comments,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
 

@@ -68,15 +68,13 @@ function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_
 		if ((!is_null($parent_forum)) && (function_exists('ocf_ensure_forum_exists'))) ocf_ensure_forum_exists($parent_forum);
 	}
 
-	$forum_id=$GLOBALS['FORUM_DB']->query_insert('f_forums',array(
+	$map=array(
 		'f_name'=>$name,
-		'f_description'=>insert_lang($description,2,$GLOBALS['FORUM_DB']),
 		'f_category_id'=>$category_id,
 		'f_parent_forum'=>$parent_forum,
 		'f_position'=>$position,
 		'f_order_sub_alpha'=>$order_sub_alpha,
 		'f_post_count_increment'=>$post_count_increment,
-		'f_intro_question'=>insert_lang($intro_question,3,$GLOBALS['FORUM_DB']),
 		'f_intro_answer'=>$intro_answer,
 		'f_cache_num_topics'=>0,
 		'f_cache_num_posts'=>0,
@@ -89,7 +87,10 @@ function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_
 		'f_redirection'=>$redirection,
 		'f_order'=>$order,
 		'f_is_threaded'=>$is_threaded,
-	),true);
+	);
+	$map+=insert_lang('f_description',$description,2,$GLOBALS['FORUM_DB']);
+	$map+=insert_lang('f_intro_question',$intro_question,3,$GLOBALS['FORUM_DB']);
+	$forum_id=$GLOBALS['FORUM_DB']->query_insert('f_forums',$map,true);
 
 	// Set permissions
 	if (!is_null($access_mapping))

@@ -97,10 +97,8 @@ class Hook_ipb2 extends Hook_ipb_base
 				continue;
 			}
 
-			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+			$map=array(
 				'tag_tag'=>$row['bbcode_tag'],
-				'tag_title'=>insert_lang($row['bbcode_title'],3),
-				'tag_description'=>insert_lang($row['bbcode_desc'],3),
 				'tag_replace'=>$row['bbcode_replace'],
 				'tag_example'=>$row['bbcode_example'],
 				'tag_parameters'=>'',
@@ -108,7 +106,10 @@ class Hook_ipb2 extends Hook_ipb_base
 				'tag_dangerous_tag'=>0,
 				'tag_block_tag'=>0,
 				'tag_textual_tag'=>1
-			));
+			);
+			$map+=insert_lang('tag_title',$row['bbcode_title'],3);
+			$map+=insert_lang('tag_description',$row['bbcode_desc'],3);
+			$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 
 			import_id_remap_put('custom_comcode',strval($row['bbcode_id']),1);
 		}

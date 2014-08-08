@@ -111,7 +111,17 @@ function init__site()
 		$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$real_zone),'',1);
 		if ((!array_key_exists(0,$zones)) && (is_dir(get_file_base().'/'.$real_zone.'/'.'pages')))
 		{
-			$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$real_zone,'zone_title'=>insert_lang($real_zone,1),'zone_default_page'=>'start','zone_header_text'=>insert_lang($real_zone,1),'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>0,'zone_displayed_in_menu'=>0));
+			$map=array(
+				'zone_name'=>$real_zone,
+				'zone_default_page'=>'start',
+				'zone_theme'=>'default',
+				'zone_wide'=>0,
+				'zone_require_session'=>0,
+				'zone_displayed_in_menu'=>0,
+			);
+			$map+=insert_lang('zone_title',$real_zone,1);
+			$map+=insert_lang('zone_header_text',$real_zone,1);
+			$GLOBALS['SITE_DB']->query_insert('zones',$map);
 			require_code('menus2');
 			add_menu_item_simple('zone_menu',NULL,$real_zone,$real_zone.':',0,1);
 			$zones=$GLOBALS['SITE_DB']->query_select('zones z LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND z.zone_header_text=t.id',array('z.*','text_original AS zone_header_text_trans'),array('zone_name'=>$real_zone),'',1);

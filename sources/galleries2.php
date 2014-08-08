@@ -387,7 +387,22 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	if (is_null($add_date)) $add_date=time();
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'image_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'comments'=>insert_lang_comcode($comments,3),'cat'=>$cat,'validated'=>$validated);
+	$map=array(
+		'edit_date'=>$edit_date,
+		'image_views'=>$views,
+		'add_date'=>$add_date,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+		'cat'=>$cat,
+		'validated'=>$validated,
+	);
+	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang_comcode('comments',$comments,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('images',$map,true);
 
@@ -690,7 +705,25 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 	$url=transcode_video($url,'videos','url',NULL,'video_width','video_height');
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'video_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'comments'=>insert_lang_comcode($comments,3),'cat'=>$cat,'validated'=>$validated,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height);
+	$map=array(
+		'edit_date'=>$edit_date,
+		'video_views'=>$views,
+		'add_date'=>$add_date,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+		'cat'=>$cat,
+		'validated'=>$validated,
+		'video_length'=>$video_length,
+		'video_width'=>$video_width,
+		'video_height'=>$video_height,
+	);
+	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang_comcode('comments',$comments,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
 
@@ -967,16 +1000,29 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 		if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 	}
 
-	$GLOBALS['SITE_DB']->query_insert('galleries',
-		array('name'=>$name,'add_date'=>$add_date,'description'=>insert_lang_comcode($description,2),'teaser'=>insert_lang_comcode($teaser,2),'notes'=>$notes,
-				'fullname'=>insert_lang($fullname,1),
-				'watermark_top_left'=>$watermark_top_left,'watermark_top_right'=>$watermark_top_right,
-				'watermark_bottom_left'=>$watermark_bottom_left,'watermark_bottom_right'=>$watermark_bottom_right,
-				'parent_id'=>$parent_id,'accept_images'=>$accept_images,'rep_image'=>$rep_image,
-				'accept_videos'=>$accept_videos,'is_member_synched'=>$is_member_synched,'flow_mode_interface'=>$flow_mode_interface,
-				'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'g_owner'=>$g_owner,
-				'gallery_views'=>0,
-				));
+	$map=array(
+		'name'=>$name,
+		'add_date'=>$add_date,
+		'notes'=>$notes,
+		'watermark_top_left'=>$watermark_top_left,
+		'watermark_top_right'=>$watermark_top_right,
+		'watermark_bottom_left'=>$watermark_bottom_left,
+		'watermark_bottom_right'=>$watermark_bottom_right,
+		'parent_id'=>$parent_id,
+		'accept_images'=>$accept_images,
+		'rep_image'=>$rep_image,
+		'accept_videos'=>$accept_videos,
+		'is_member_synched'=>$is_member_synched,
+		'flow_mode_interface'=>$flow_mode_interface,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'g_owner'=>$g_owner,
+		'gallery_views'=>0,
+	);
+	$map+=insert_lang_comcode('description',$description,2);
+	$map+=insert_lang_comcode('teaser',$teaser,2);
+	$map+=insert_lang('fullname',$fullname,1);
+	$GLOBALS['SITE_DB']->query_insert('galleries',$map);
 
 	log_it('ADD_GALLERY',$name,$fullname);
 

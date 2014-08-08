@@ -27,7 +27,13 @@
  */
 function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 {
-	$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang($ticket_type,1),'guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'cache_lead_time'=>NULL));
+	$map=array(
+		'guest_emails_mandatory'=>$guest_emails_mandatory,
+		'search_faq'=>$search_faq,
+		'cache_lead_time'=>NULL,
+	);
+	$map+=insert_lang('ticket_type',$ticket_type,1);
+	$GLOBALS['SITE_DB']->query_insert('ticket_types',$map);
 
 	log_it('ADD_TICKET_TYPE',$ticket_type);
 }

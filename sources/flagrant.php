@@ -30,7 +30,16 @@
 function add_flagrant($message,$days,$notes,$validated)
 {
 	$order_time=time();
-	$id=$GLOBALS['SITE_DB']->query_insert('text',array('notes'=>$notes,'activation_time'=>NULL,'active_now'=>0,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>$order_time,'user_id'=>get_member()),true);
+	$map=array(
+		'notes'=>$notes,
+		'activation_time'=>NULL,
+		'active_now'=>0,
+		'days'=>$days,
+		'order_time'=>$order_time,
+		'user_id'=>get_member(),
+	);
+	$map+=insert_lang_comcode('the_message',$message,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('text',$map,true);
 	log_it('ADD_FLAGRANT',strval($id),$message);
 	if ($validated==1) choose_flagrant($id);
 	return $id;

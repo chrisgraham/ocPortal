@@ -1481,10 +1481,10 @@ function version_specific()
 			$GLOBALS['SITE_DB']->query('ALTER TABLE '.get_table_prefix().'translate TYPE=MYISAM'); // Just in case it's not
 			$GLOBALS['SITE_DB']->create_index('translate','#search',array('text_original'));
 
-			$trans4=insert_lang(do_lang('A_SITE_ABOUT','???'),1);
-			$trans8=insert_lang(do_lang('GUIDES'),1);
-			$GLOBALS['SITE_DB']->query_insert('zones',array(/*'zone_title'=>insert_lang(do_lang('SITE'),1),*/'zone_name'=>'membersonly','zone_default_page'=>'start','zone_header_text'=>$trans4,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
-			$GLOBALS['SITE_DB']->query_insert('zones',array(/*'zone_title'=>insert_lang(do_lang('GUIDES'),1),*/'zone_default_page'=>'userguide','zone_header_text'=>$trans8,'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0));
+			$map=array('zone_name'=>'membersonly','zone_default_page'=>'start','zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0)+insert_lang('zone_title',do_lang('SITE'),1)+insert_lang('zone_header_text',do_lang('A_SITE_ABOUT','???'),1);
+			$GLOBALS['SITE_DB']->query_insert('zones',$map);
+			$map=array('zone_default_page'=>'userguide','zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>0)+insert_lang('zone_title',do_lang('GUIDES'),1)+insert_lang('zone_header_text',do_lang('GUIDES'),1);
+			$GLOBALS['SITE_DB']->query_insert('zones',$map);
 		}
 		if ($version_database<3.0)
 		{
@@ -1493,7 +1493,8 @@ function version_specific()
 			if (file_exists(get_file_base().'/collaboration')) fu_rename_zone('supermembercentre','collaboration');
 			fu_rename_zone('membercentre','site',true); // Merged into 'site' (formerly membersonly)
 			actual_delete_zone_lite('seedy');
-			$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'cms','zone_title'=>insert_lang(do_lang('CMS'),1),'zone_default_page'=>'cms','zone_header_text'=>insert_lang(do_lang('CMS'),1),'zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>1));
+			$map=array('zone_name'=>'cms','zone_default_page'=>'cms','zone_theme'=>'-1','zone_wide'=>0,'zone_require_session'=>1)+insert_lang('zone_title',do_lang('CMS'),1)+insert_lang('zone_header_text',do_lang('CMS'),1);
+			$GLOBALS['SITE_DB']->query_insert('zones',$map);
 
 			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'admin_cleanup'),array('module_the_name'=>'admin_caches'));
 			$GLOBALS['SITE_DB']->query_update('modules',array('module_the_name'=>'seedy_page'),array('module_the_name'=>'cedi'));

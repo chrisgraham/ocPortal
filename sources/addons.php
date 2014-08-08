@@ -586,7 +586,17 @@ function install_addon($file,$files=NULL)
 				{
 					require_code('menus2');
 					add_menu_item_simple('zone_menu',NULL,$zone,$zone.':',0,1);
-					$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($zone,1),'zone_default_page'=>'start','zone_header_text'=>insert_lang('???',2),'zone_theme'=>'default','zone_wide'=>0,'zone_require_session'=>0,'zone_displayed_in_menu'=>1));
+					$map=array(
+						'zone_name'=>$zone,
+						'zone_default_page'=>'start',
+						'zone_theme'=>'default',
+						'zone_wide'=>0,
+						'zone_require_session'=>0,
+						'zone_displayed_in_menu'=>1,
+					);
+					$map+=insert_lang('zone_title',$zone,1);
+					$map+=insert_lang('zone_header_text','???',2);
+					$GLOBALS['SITE_DB']->query_insert('zones',$map);
 
 					$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 					foreach (array_keys($groups) as $group_id)

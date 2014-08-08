@@ -423,13 +423,17 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 
 	if (!is_null($default_st))
 	{
-		$rows=$this_ref->_query('SELECT * FROM '.$this_ref->get_table_prefix().$table_name);
-		foreach ($rows as $row)
+		$start=0;
+		do
 		{
-			$lang=insert_lang($default_st,$lang_level);
-
-			$this_ref->query_update($table_name,array($name=>$lang),$row);
+			$rows=$this_ref->_query('SELECT * FROM '.$this_ref->get_table_prefix().$table_name,1000,$start);
+			foreach ($rows as $row)
+			{
+				$this_ref->query_update($table_name,insert_lang($name,$default_st,$lang_level),$row);
+			}
+			$start+=1000;
 		}
+		while (count($rows)>0);
 	}
 
 	$this_ref->query_insert('db_meta',array('m_table'=>$table_name,'m_name'=>$name,'m_type'=>$_type));
@@ -542,12 +546,12 @@ function _helper_promote_text_field_to_comcode($this_ref,$table_name,$name,$key=
 	{
 		if ($in_assembly)
 		{
-			$turned=insert_lang('',$level,$this_ref,true,NULL,NULL,false,NULL,$row[$name]);
-			$this_ref->query_update($table_name,array($name=>$turned),array($key=>$row[$key]));
+			$map=insert_lang($name,'',$level,$this_ref,true,NULL,NULL,false,NULL,$row[$name]);
 		} else
 		{
-			$this_ref->query_update($table_name,array($name=>insert_lang($row[$name],$level,$this_ref)),array($key=>$row[$key]));
+			$map=insert_lang($name,$row[$name],$level,$this_ref);
 		}
+		$this_ref->query_update($table_name,$map,array($key=>$row[$key]));
 	}
 
 	if (function_exists('persistent_cache_delete'))

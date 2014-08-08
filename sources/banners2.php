@@ -267,7 +267,7 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 	if (!is_null($test)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$GLOBALS['SITE_DB']->query_insert('banners',array(
+	$map=array(
 		'b_title_text'=>$title_text,
 		'b_direct_code'=>$direct_code,
 		'b_type'=>$b_type,
@@ -278,7 +278,6 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 		'submitter'=>$submitter,
 		'name'=>$name,
 		'img_url'=>$imgurl,
-		'caption'=>insert_lang_comcode($caption,2),
 		'campaign_remaining'=>$campaignremaining,
 		'site_url'=>$site_url,
 		'importance_modulus'=>$importancemodulus,
@@ -288,7 +287,9 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 		'hits_to'=>$hits_to,
 		'views_from'=>$views_from,
 		'views_to'=>$views_to
-	));
+	);
+	$map+=insert_lang_comcode('caption',$caption,2);
+	$GLOBALS['SITE_DB']->query_insert('banners',$map);
 
 	decache('main_banner_wave');
 	decache('main_topsites');

@@ -85,7 +85,13 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
 		lang_remap($rows[0]['meta_description'],$description);
 	} else
 	{
-		$GLOBALS['SITE_DB']->query_insert('seo_meta',array('meta_for_type'=>$type,'meta_for_id'=>$id,'meta_keywords'=>insert_lang($keywords,2),'meta_description'=>insert_lang($description,2)));
+		$map=array(
+			'meta_for_type'=>$type,
+			'meta_for_id'=>$id,
+		);
+		$map+=insert_lang('meta_keywords',$keywords,2);
+		$map+=insert_lang('meta_description',$description,2);
+		$GLOBALS['SITE_DB']->query_insert('seo_meta',$map);
 	}
 
 	if (function_exists('decache')) decache('side_tag_cloud');

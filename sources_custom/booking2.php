@@ -361,9 +361,9 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 
 	$title=$bookable_details['title'];
 
-	$bookable_details['title']=insert_lang($bookable_details['title'],1);
-	$bookable_details['description']=insert_lang($bookable_details['description'],1);
-	$bookable_details['categorisation']=insert_lang($bookable_details['categorisation'],1);
+	$bookable_details=insert_lang('title',$bookable_details['title'],1)+$bookable_details;
+	$bookable_details=insert_lang('description',$bookable_details['description'],1)+$bookable_details;
+	$bookable_details=insert_lang('categorisation',$bookable_details['categorisation'],1)+$bookable_details;
 
 	$bookable_details['calendar_type']=NULL;
 	$bookable_details['add_date']=$add_date;
@@ -528,7 +528,7 @@ function add_bookable_supplement($details,$bookables=NULL)
 
 	$title=$details['title'];
 
-	$details['title']=insert_lang($details['title'],1);
+	$details=insert_lang('title',$details['title'],1)+$details;
 
 	$supplement_id=$GLOBALS['SITE_DB']->query_insert('bookable_supplement',$details,true);
 
@@ -615,7 +615,7 @@ function add_bookable_blacked($details,$bookables=NULL)
 
 	$blacked_explanation=$details['blacked_explanation'];
 
-	$details['blacked_explanation']=insert_lang($details['blacked_explanation'],1);
+	$details=insert_lang('blacked_explanation',$details['blacked_explanation'],1)+$details;
 
 	$blacked_id=$GLOBALS['SITE_DB']->query_insert('bookable_blacked',$details,true);
 

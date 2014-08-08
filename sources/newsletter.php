@@ -495,7 +495,10 @@ function newsletter_shutdown_function()
  */
 function add_newsletter($title,$description)
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('newsletters',array('title'=>insert_lang($title,2),'description'=>insert_lang($description,2)),true);
+	$map=array();
+	$map+=insert_lang('title',$title,2);
+	$map+=insert_lang('description',$description,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('newsletters',$map,true);
 	log_it('ADD_NEWSLETTER',strval($id),$title);
 	return $id;
 }

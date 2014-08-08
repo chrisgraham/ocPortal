@@ -225,9 +225,7 @@ class Hook_pointstore_permission
 			$mail_subject=post_param('permission_mail_subject');
 			$mail_body=post_param('permission_mail_body');
 
-			$GLOBALS['SITE_DB']->query_insert('pstore_permissions',array(
-				'p_title'=>insert_lang($title,2),
-				'p_description'=>insert_lang($description,2),
+			$map=array(
 				'p_enabled'=>$enabled,
 				'p_cost'=>$cost,
 				'p_hours'=>$hours,
@@ -237,9 +235,12 @@ class Hook_pointstore_permission
 				'p_page'=>$page,
 				'p_module'=>$module,
 				'p_category'=>$category,
-				'p_mail_subject'=>insert_lang($mail_subject,2),
-				'p_mail_body'=>insert_lang($mail_body,2),
-			));
+			);
+			$map+=insert_lang('p_title',$title,2);
+			$map+=insert_lang('p_description',$description,2);
+			$map+=insert_lang('p_mail_subject',$mail_subject,2);
+			$map+=insert_lang('p_mail_body',$mail_body,2);
+			$GLOBALS['SITE_DB']->query_insert('pstore_permissions',$map);
 		}
 	}
 

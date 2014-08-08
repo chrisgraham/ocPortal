@@ -281,7 +281,18 @@ function read_in_chat_perm_fields()
  */
 function add_chatroom($welcome,$roomname,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang,$is_im=0)
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('chat_rooms',array('is_im'=>$is_im,'c_welcome'=>insert_lang($welcome,2),'room_name'=>$roomname,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),true);
+	$map=array(
+		'is_im'=>$is_im,
+		'room_name'=>$roomname,
+		'room_owner'=>$room_owner,
+		'allow_list'=>$allow2,
+		'allow_list_groups'=>$allow2_groups,
+		'disallow_list'=>$disallow2,
+		'disallow_list_groups'=>$disallow2_groups,
+		'room_language'=>$roomlang,
+	);
+	$map+=insert_lang('c_welcome',$welcome,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('chat_rooms',$map,true);
 
 	log_it('ADD_CHATROOM',strval($id),$roomname);
 

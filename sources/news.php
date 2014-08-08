@@ -81,7 +81,12 @@ function render_news_box($row,$zone='_SEARCH')
  */
 function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 {
-	$map=array('nc_title'=>insert_lang($title,1),'nc_img'=>$img,'notes'=>$notes,'nc_owner'=>$owner);
+	$map=array(
+		'nc_img'=>$img,
+		'notes'=>$notes,
+		'nc_owner'=>$owner,
+	);
+	$map+=insert_lang('nc_title',$title,1);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
 
@@ -241,9 +246,14 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		{
 			if (!has_specific_permission(get_member(),'have_personal_category','cms_news')) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-			$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
+			$map=array(
+				'nc_img'=>'newscats/community',
+				'notes'=>'',
+				'nc_owner'=>$submitter,
+			);
+			$map+=insert_lang('nc_title',do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
 
-			$main_news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>$p_nc_title,'nc_img'=>'newscats/community','notes'=>'','nc_owner'=>$submitter),true);
+			$main_news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
 			$already_created_personal_category=true;
 
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -257,7 +267,23 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	}
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('news_image'=>$image,'edit_date'=>$edit_date,'news_category'=>$main_news_category_id,'news_views'=>$views,'news_article'=>0,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'validated'=>$validated,'date_and_time'=>$time,'title'=>insert_lang_comcode($title,1),'news'=>insert_lang_comcode($news,1),'author'=>$author);
+	$map=array(
+		'news_image'=>$image,
+		'edit_date'=>$edit_date,
+		'news_category'=>$main_news_category_id,
+		'news_views'=>$views,
+		'news_article'=>0,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'validated'=>$validated,
+		'date_and_time'=>$time,
+		'author'=>$author,
+	);
+	$map+=insert_lang_comcode('title',$title,1);
+	$map+=insert_lang_comcode('news',$news,1);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('news',$map,true);
 
@@ -267,8 +293,13 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		{
 			if ((is_null($value)) && (!$already_created_personal_category))
 			{
-				$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
-				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>$p_nc_title,'nc_img'=>'newscats/community','notes'=>'','nc_owner'=>$submitter),true);
+				$map=array(
+					'nc_img'=>'newscats/community',
+					'notes'=>'',
+					'nc_owner'=>$submitter,
+				);
+				$map+=insert_lang('nc_title'=>,do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
+				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
 
 				$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
@@ -286,7 +317,8 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	}
 
 	require_code('attachments2');
-	$map=array('news_article'=>insert_lang_comcode_attachments(2,$news_article,'news',strval($id)));
+	$map=array();
+	$map+=insert_lang_comcode_attachments('news_article',2,$news_article,'news',strval($id));
 	$GLOBALS['SITE_DB']->query_update('news',$map,array('id'=>$id),'',1);
 
 	log_it('ADD_NEWS',strval($id),$title);

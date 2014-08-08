@@ -1184,16 +1184,17 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 		$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
 		if (is_null($current))
 		{
+			$map=array();
 			if ($type=='posting_field')
 			{
 				require_code('attachments2');
-				$current=insert_lang_comcode_attachments(3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+				$map+=insert_lang_comcode_attachments('field_'.strval(intval($field),3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
 			} else
 			{
-				$current=insert_lang_comcode($value,3,$GLOBALS['FORUM_DB']);
+				$map+=insert_lang_comcode('field_'.strval(intval($field),$value,3,$GLOBALS['FORUM_DB']);
 			}
 
-			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',array('field_'.strval(intval($field))=>$current),array('mf_member_id'=>$member_id),'',1);
+			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$map,array('mf_member_id'=>$member_id),'',1);
 		} else
 		{
 			if ($type=='posting_field')

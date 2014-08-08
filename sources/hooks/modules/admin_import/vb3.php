@@ -1149,10 +1149,8 @@ class Hook_vb3
 				continue;
 			}
 
-			$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+			$map=array(
 				'tag_tag'=>$row['bbcodetag'],
-				'tag_title'=>insert_lang($row['title'],3),
-				'tag_description'=>insert_lang($row['bbcodeexplanation'],3),
 				'tag_replace'=>$row['bbcodereplacement'],
 				'tag_example'=>$row['bbcodeexample'],
 				'tag_parameters'=>'',
@@ -1160,7 +1158,10 @@ class Hook_vb3
 				'tag_dangerous_tag'=>0,
 				'tag_block_tag'=>0,
 				'tag_textual_tag'=>1
-			));
+			);
+			$map+=insert_lang('tag_title',$row['title'],3);
+			$map+=insert_lang('tag_description',$row['bbcodeexplanation'],3);
+			$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 
 			import_id_remap_put('custom_comcode',strval($row['bbcodeid']),1);
 		}
@@ -1284,7 +1285,15 @@ adminlog
 			$member=import_id_remap_get('member',strval($row['userid']),true);
 			$reason=$row['reason'];
 			$anonymous=0;
-			$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>$time,'amount'=>$amount,'gift_from'=>$viewer_member,'gift_to'=>$member,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>$anonymous));
+			$map=array(
+				'date_and_time'=>$time,
+				'amount'=>$amount,
+				'gift_from'=>$viewer_member,
+				'gift_to'=>$member,
+				'anonymous'=>$anonymous,
+			);
+			$map+=insert_lang_comcode('reason',$reason,4);
+			$GLOBALS['SITE_DB']->query_insert('gifts',$map);
 
 			import_id_remap_put('points',strval($row['reputationid']),-1);
 		}

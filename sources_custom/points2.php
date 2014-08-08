@@ -30,7 +30,15 @@ if (!function_exists('system_gift_transfer'))
 		if (is_guest($member_id)) return;
 		if ($amount==0) return;
 
-		$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>time(),'amount'=>$amount,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'gift_to'=>$member_id,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>1));
+		$map=array(
+			'date_and_time'=>time(),
+			'amount'=>$amount,
+			'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),
+			'gift_to'=>$member_id,
+			'anonymous'=>1,
+		);
+		$map+=insert_lang_comcode('reason',$reason,4);
+		$GLOBALS['SITE_DB']->query_insert('gifts',$map);
 		$_before=point_info($member_id);
 		$before=array_key_exists('points_gained_given',$_before)?$_before['points_gained_given']:0;
 		$new=strval($before+$amount);
@@ -48,7 +56,15 @@ if (!function_exists('system_gift_transfer'))
 		if(isset($mentor_id) && !is_null($mentor_id) && (intval($mentor_id) != 0))
 		{
 			//give points to mentor too
-			$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>time(),'amount'=>$amount,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'gift_to'=>$mentor_id,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>1));
+			$map=array(
+				'date_and_time'=>time(),
+				'amount'=>$amount,
+				'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),
+				'gift_to'=>$mentor_id,
+				'anonymous'=>1,
+			);
+			$map+=insert_lang_comcode('reason',$reason,4);
+			$GLOBALS['SITE_DB']->query_insert('gifts',$map);
 			$_before=point_info($mentor_id);
 			$before=array_key_exists('points_gained_given',$_before)?$_before['points_gained_given']:0;
 			$new=strval($before+$amount);

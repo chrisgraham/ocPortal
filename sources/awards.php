@@ -133,7 +133,15 @@ function give_award($award_id,$content_id,$time=NULL)
  */
 function add_award_type($title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('award_types',array('a_title'=>insert_lang_comcode($title,2),'a_description'=>insert_lang($description,2),'a_points'=>$points,'a_content_type'=>filter_naughty_harsh($content_type),'a_hide_awardee'=>$hide_awardee,'a_update_time_hours'=>$update_time_hours),true);
+	$map=array(
+		'a_points'=>$points,
+		'a_content_type'=>filter_naughty_harsh($content_type),
+		'a_hide_awardee'=>$hide_awardee,
+		'a_update_time_hours'=>$update_time_hours,
+	);
+	$map+=insert_lang_comcode('a_title',$title,2);
+	$map+=insert_lang('a_description',$description,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('award_types',$map,true);
 	log_it('ADD_AWARD_TYPE',strval($id),$title);
 	return $id;
 }

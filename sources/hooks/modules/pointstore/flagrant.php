@@ -160,7 +160,16 @@ class Hook_pointstore_flagrant
 		}
 
 		// Add this to the database
-		$GLOBALS['SITE_DB']->query_insert('text',array('notes'=>'','activation_time'=>NULL,'active_now'=>0,'user_id'=>$member_id,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>time()));
+		$map=array(
+			'notes'=>'',
+			'activation_time'=>NULL,
+			'active_now'=>0,
+			'user_id'=>$member_id,
+			'days'=>$days,
+			'order_time'=>time(),
+		);
+		$map+=insert_lang_comcode('the_message',$message,2);
+		$GLOBALS['SITE_DB']->query_insert('text',$map);
 
 		// Mail off the notice
 		require_code('notifications');
