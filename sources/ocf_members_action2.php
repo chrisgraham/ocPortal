@@ -1182,7 +1182,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 
 	if (strpos($storage_type,'_trans')!==false)
 	{
-		$map=array();
+		$change=array();
 
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
 
@@ -1192,10 +1192,10 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			if ($type=='posting_field')
 			{
 				require_code('attachments2');
-				$map+=insert_lang_comcode_attachments($db_fieldname,3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+				$change+=insert_lang_comcode_attachments($db_fieldname,3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
 			} else
 			{
-				$map+=insert_lang_comcode($db_fieldname,$value,3,$GLOBALS['FORUM_DB']);
+				$change+=insert_lang_comcode($db_fieldname,$value,3,$GLOBALS['FORUM_DB']);
 			}
 		} else
 		{
@@ -1203,23 +1203,20 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			{
 				require_code('attachments2');
 				require_code('attachments3');
-				$map+=update_lang_comcode_attachments($db_fieldname,$current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);
+				$change+=update_lang_comcode_attachments($db_fieldname,$current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);
 			} else
 			{
-				$map+=lang_remap_comcode($db_fieldname,$current,$value,$GLOBALS['FORUM_DB']);
+				$change+=lang_remap_comcode($db_fieldname,$current,$value,$GLOBALS['FORUM_DB']);
 			}
 		}
-
-		$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$map,array('mf_member_id'=>$member_id),'',1);
 	} else
 	{
 		$change=array($db_fieldname=>$value);
-		if (!$defer)
-			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$change,array('mf_member_id'=>$member_id),'',1);
-		return $change;
 	}
 
-	return NULL;
+	if (!$defer)
+		$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$change,array('mf_member_id'=>$member_id),'',1);
+	return $change;
 }
 
 /**

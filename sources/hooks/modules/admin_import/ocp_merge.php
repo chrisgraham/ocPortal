@@ -2002,7 +2002,7 @@ class Hook_ocp_merge
 							$cpf_type=$cpf_types[$cpf_id];
 							if (($cpf_type=='short_trans') || ($cpf_type=='long_trans'))
 							{
-								$val=insert_lang('field_'.strval($cpf_id),$this->get_lang_string($db,intval($val)),3);
+								$row2=insert_lang('field_'.strval($cpf_id),$this->get_lang_string($db,intval($val)),3)+$row;
 							} else
 							{
 								$row2['field_'.strval($cpf_id)]=$val;
