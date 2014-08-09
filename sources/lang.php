@@ -131,18 +131,6 @@ function init__lang()
 		$HTML_ESCAPE_1_STRREP=array('&'/*,'ì','î'*/,'"','\'','<','>'/*,'£'*/);
 		$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 	}
-
-	global $OPTIONS;
-	if (isset($OPTIONS))
-	{
-		if (user_lang()!=get_site_default_lang())
-		{
-			foreach ($OPTIONS as $name=>$option)
-			{
-				unset($OPTIONS[$name]['config_value_translated']);
-			}
-		}
-	}
 }
 
 // ====

@@ -76,7 +76,6 @@ class Hook_orphaned_lang_strings
 			if (strpos(substr($f['m_type'],-6),'_TRANS')!==false)
 				$langidfields[]=array('m_name'=>$f['m_name'],'m_table'=>$f['m_table']);
 		}
-		$langidfields[]=array('m_name'=>'config_value','m_table'=>'config');
 		foreach ($langidfields as $langidfield)
 		{
 			if ($langidfield['m_table']=='config')
@@ -96,12 +95,6 @@ class Hook_orphaned_lang_strings
 			{
 				$id=$of[$langidfield['m_name']];
 				if (is_null($id)) continue;
-				if (($langidfield['m_table']=='config') && ($langidfield['m_name']=='config_value'))
-				{
-					if (($of['the_type']!='transline') && ($of['the_type']!='transtext')) continue;
-					if ($id=='') continue;
-					$id=intval($id);
-				}
 
 				if (!array_key_exists($id,$all_ids))
 				{

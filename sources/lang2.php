@@ -121,7 +121,6 @@ function find_lang_content_names($ids)
 					$langidfields[$i]['key']=$f['m_name'];
 			}
 		}
-		$langidfields[]=array('m_name'=>'config_value','m_table'=>'config','key'=>'the_name');
 	}
 
 	$ret=array();

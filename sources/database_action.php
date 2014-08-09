@@ -241,7 +241,7 @@ function add_config_option($human_name,$name,$type,$eval,$category,$group,$share
 	if (!in_array($type,array('float','integer','tick','line','text','transline','transtext','list','date','?forum','forum','category','usergroup','colour')))
 		fatal_exit('Invalid config option type');
 
-	$map=array('c_set'=>0,'config_value'=>'','the_name'=>$name,'human_name'=>$human_name,'the_type'=>$type,'eval'=>$eval,'the_page'=>$category,'section'=>$group,'explanation'=>'CONFIG_OPTION_'.$name,'shared_hosting_restricted'=>$shared_hosting_restricted,'c_data'=>$data);
+	$map=array('c_set'=>0,'config_value'=>'','config_value_trans'=>NULL,'the_name'=>$name,'human_name'=>$human_name,'the_type'=>$type,'eval'=>$eval,'the_page'=>$category,'section'=>$group,'explanation'=>'CONFIG_OPTION_'.$name,'shared_hosting_restricted'=>$shared_hosting_restricted,'c_data'=>$data);
 	if ($GLOBALS['IN_MINIKERNEL_VERSION']==0)
 	{
 		$GLOBALS['SITE_DB']->query_insert('config',$map,false,true); // Allow failure in case the config option got auto-installed through searching (can happen if the option is referenced efore the module installs right)
@@ -257,10 +257,6 @@ function add_config_option($human_name,$name,$type,$eval,$category,$group,$share
 	} else
 	{
 		$OPTIONS[$name]=$map;
-		if (multi_lang())
-		{
-			unset($OPTIONS[$name]['config_value_translated']);
-		}
 	}
 }
 
@@ -275,9 +271,9 @@ function delete_config_option($name)
 	if (array_key_exists(0,$rows))
 	{
 		$myrow=$rows[0];
-		if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (is_numeric($myrow['config_value'])))
+		if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (!is_null($myrow['config_value_trans'])))
 		{
-			delete_lang($myrow['config_value']);
+			delete_lang($myrow['config_value_trans']);
 		}
 		$GLOBALS['SITE_DB']->query_delete('config',array('the_name'=>$name),'',1);
 		/*global $OPTIONS;  Don't do this, it will cause problems in some parts of the code

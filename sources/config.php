@@ -157,14 +157,12 @@ function load_options()
 	global $OPTIONS;
 	$OPTIONS=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
 	if (is_array($OPTIONS)) return;
-	if (strpos(get_db_type(),'mysql')!==false)
-	{
-		global $SITE_INFO;
-		$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'',NULL,NULL,true);
-	} else
-	{
-		$OPTIONS=$GLOBALS['SITE_DB']->query_select('config',array('the_name','config_value','the_type','c_set'),NULL,'',NULL,NULL,true);
-	}
+
+	global $SITE_INFO;
+	$lang=array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN';
+	$table='config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON c.config_value_trans=t.id AND '.db_string_equal_to('t.language',$lang).' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').')';
+	$select=array('c.the_name','c.config_value','c.config_value_trans','c.the_type','c.c_set','t.text_original AS config_value_effective');
+	$OPTIONS=$GLOBALS['SITE_DB']->query_select($table,$select,array(),'',NULL,NULL,true);
 
 	if ($OPTIONS===NULL) critical_error('DATABASE_FAIL');
 	$OPTIONS=list_to_map('the_name',$OPTIONS);
@@ -325,21 +323,19 @@ function get_option($name,$missing_ok=false)
 
 	$option=&$OPTIONS[$name];
 
-	// The master of redundant quick exit points. Has to be after the above IF due to weird PHP isset/NULL bug on some 5.1.4 (and possibly others)
-	if (isset($option['config_value_translated']))
+	// The master of redundant quick exit points
+	if (isset($option['config_value_effective'])) // i.e. is not null, meaning we got it from our config_value_trans JOIN, or we have cached it from an earlier call
 	{
-		if ($option['config_value_translated']=='<null>') return NULL;
-		return $option['config_value_translated'];
+		if ($option['config_value_effective']=='<null>') return NULL;
+		return $option['config_value_effective'];
 	}
 
 	// Redundant, quick exit points
 	$type=$option['the_type'];
-	if (!isset($option['c_set'])) $option['c_set']=($option['config_value']===NULL)?0:1; // for compatibility during upgrades
-	if (($option['c_set']==1) && ($type!='transline') && ($type!='transtext'))
+	if (($option['c_set']==1) && ($type!='transline') && ($type!='transtext')) // Non-trans
 	{
-		//@print_r($OPTIONS);	exit($name.'='.gettype($option['config_value_translated']));
-		$option['config_value_translated']=$option['config_value']; // Allows slightly better code path next time
-		if ($option['config_value_translated']===NULL) $option['config_value_translated']='<null>';
+		$option['config_value_effective']=$option['config_value']; // Allows slightly better code path next time
+		if ($option['config_value_effective']===NULL) $option['config_value_effective']='<null>';
 		$OPTIONS[$name]=$option;
 		if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$OPTIONS);
 		if ($option['config_value']=='<null>') return NULL;
@@ -352,36 +348,39 @@ function get_option($name,$missing_ok=false)
 	// Find default if not set
 	if ($option['c_set']==0)
 	{
-		if (($type=='transline') || ($type=='transtext'))
+		if (($type=='transline') || ($type=='transtext')) // Trans...
 		{
 			if (defined('HIPHOP_PHP'))
 			{
 				require_code('hooks/systems/config_default/'.$name);
 				$hook=object_factory('Hook_config_default_'.$name);
-				$option['config_value_translated']=$hook->get_default();
+				$option['config_value_effective']=$hook->get_default();
 			} else
 			{
 				if (!isset($option['eval']))
 				{
 					global $SITE_INFO;
-					$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
+					$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON c.config_value_trans=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').')',array('c.the_name','c.config_value','c.config_value_trans','c.eval','c.the_type','c.c_set','t.text_original AS config_value_effective'),array(),'');
 					$OPTIONS=list_to_map('the_name',$OPTIONS);
 					$option=&$OPTIONS[$name];
 				}
 				$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
-				$option['config_value_translated']=eval($option['eval'].';');
+				$option['config_value_effective']=eval($option['eval'].';');
 				$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
-				if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
-				if ((get_value('setup_wizard_completed')==='1') && ($option['config_value_translated']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+				if (is_object($option['config_value_effective'])) $option['config_value_effective']=$option['config_value_effective']->evaluate();
+				if ((get_value('setup_wizard_completed')==='1') && ($option['config_value_effective']!==NULL)/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 				{
 					require_code('config2');
-					set_option($name,$option['config_value_translated']);
+					set_option($name,$option['config_value_effective']);
 				}
 			}
-			if (is_object($option['config_value_translated'])) $option['config_value_translated']=$option['config_value_translated']->evaluate();
+			if (is_object($option['config_value_effective'])) $option['config_value_effective']=$option['config_value_effective']->evaluate();
 			$GET_OPTION_LOOP=0;
-			return $option['config_value_translated'];
+			return $option['config_value_effective'];
 		}
+
+		// Non-trans...
+
 //		if ((!function_exists('do_lang')) && (strpos($option['eval'],'do_lang')!==false)) @debug_print_backtrace();
 		if (defined('HIPHOP_PHP'))
 		{
@@ -393,7 +392,7 @@ function get_option($name,$missing_ok=false)
 			if (!isset($option['eval']))
 			{
 				global $SITE_INFO;
-				$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_translated'),array(),'');
+				$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_effective'),array(),'');
 				$OPTIONS=list_to_map('the_name',$OPTIONS);
 				$option=&$OPTIONS[$name];
 			}
@@ -402,7 +401,7 @@ function get_option($name,$missing_ok=false)
 				$GLOBALS['REQUIRE_LANG_LOOP']=10; // LEGACY Workaround for corrupt webhost installers
 				$option['config_value']=eval($option['eval'].';');
 				$GLOBALS['REQUIRE_LANG_LOOP']=0; // LEGACY
-				if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_translated']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
+				if ((get_value('setup_wizard_completed')==='1') && (isset($option['config_value_effective']))/*Don't save a NULL, means it is unreferencable yet rather than an actual value*/)
 				{
 					require_code('config2');
 					set_option($name,$option['config_value']);
@@ -416,18 +415,18 @@ function get_option($name,$missing_ok=false)
 		return $option['config_value'];
 	}
 
-	// Translations if needed
+	// Trans
 	if (($type=='transline') || ($type=='transtext'))
 	{
-		if (!isset($option['config_value_translated']))
+		if (!isset($option['config_value_effective']))
 		{
-			$option['config_value_translated']=get_translated_text(intval($option['config_value']));
+			$option['config_value_effective']=get_translated_text($option['config_value_trans']);
 			$OPTIONS[$name]=$option;
 			persistent_cache_set('OPTIONS',$OPTIONS);
 		}
 		// Answer
 		$GET_OPTION_LOOP=0;
-		return $option['config_value_translated'];
+		return $option['config_value_effective'];
 	}
 
 	// Answer

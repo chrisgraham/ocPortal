@@ -78,7 +78,6 @@ function find_lost_option($name)
 		$matches=array();
 		foreach ($search as $s)
 		{
-//			echo $s.'<br />';
 			$code=file_get_contents($s);
 			if (preg_match('#add_config_option\(\'\w+\',\''.str_replace('#','\#',preg_quote($name)).'\',\'\w+\',\'.+\',\'\w+\',\'\w+\'(,1)?\);#',$code,$matches)>0)
 			{
@@ -88,7 +87,6 @@ function find_lost_option($name)
 
 				load_options();
 				break;
-//				fatal_exit(do_ lang_tempcode('CONFIG_OPTION_FETCHED',escape_html($name)));	 CONFIG_OPTION_FETCHED=A config option ({1}) was missing, but has been hunted down and installed. This is an unexpected inconsistency, please refresh the page, and hopefully it has been permanently corrected.
 			}
 		}
 	}
@@ -114,32 +112,31 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 		if ($GET_OPTION_LOOP!=1)
 			get_option($name); // Ensure it's installed
 
-		$type=$OPTIONS[$name]['the_type']; //$type=$GLOBALS['SITE_DB']->query_value('config','the_type',array('the_name'=>$name));
+		$type=$OPTIONS[$name]['the_type'];
 	}
 
 	if (($type=='transline') || ($type=='transtext'))
 	{
-//		$current_value=$GLOBALS['SITE_DB']->query_value('config','config_value',array('the_name'=>$name));
-
-		if ((array_key_exists('c_set',$OPTIONS[$name])) && ($OPTIONS[$name]['c_set']==0))
+		$map=array('c_set'=>1);
+		if (is_null($OPTIONS[$name]['config_value_trans']))
 		{
-			$GLOBALS['SITE_DB']->query_update('config',array('config_value'=>strval(insert_lang($value,1)),'c_set'=>1),array('the_name'=>$name),'',1);
+			$map+=insert_lang('config_value_trans',$value,1);
 		} else
 		{
-			$current_value=$OPTIONS[$name]['config_value'];
-			if (!is_null($current_value)) // Should never happen, but might during upgrading
-				lang_remap(intval($current_value),$value);
+			$map+=lang_remap('config_value_trans',$OPTIONS[$name]['config_value_trans'],$value);
 		}
+		$GLOBALS['SITE_DB']->query_update('config',$map,array('the_name'=>$name),'',1);
+
+		$OPTIONS[$name]['config_value_trans']=$map['config_value_trans'];
 	} else
 	{
-		$map=array('config_value'=>$value);
-		if (array_key_exists('c_set',$OPTIONS[$name])) $map['c_set']=1;
+		$map=array('config_value'=>$value,'c_set'=>1);
 		$GLOBALS['SITE_DB']->query_update('config',$map,array('the_name'=>$name),'',1);
 
 		$OPTIONS[$name]['config_value']=$value;
 	}
 
-	$OPTIONS[$name]['config_value_translated']=$value;
+	$OPTIONS[$name]['config_value_effective']=$value;
 
 	if (function_exists('log_it'))
 	{

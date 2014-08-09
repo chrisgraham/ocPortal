@@ -948,9 +948,9 @@ class Module_admin_config
 			}
 			elseif ($myrow['c_set']==1)
 			{
-				if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (is_numeric($myrow['config_value'])))
+				if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (!is_null($myrow['config_value_trans'])))
 				{
-					$old_value=get_translated_text(intval($myrow['config_value']));
+					$old_value=get_translated_text($myrow['config_value_trans']);
 				} else $old_value=$myrow['config_value'];
 
 				// If the option was changed
@@ -960,18 +960,15 @@ class Module_admin_config
 				}
 			} else
 			{
+				$map=array('c_set'=>1);
 				if (($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext'))
 				{
-					$_value=insert_lang('config_value',$value,1);
-					if (multi_lang_content())
-					{
-						$_value['config_value']=strval($_value['config_value']);
-					}
+					$map+=insert_lang('config_value_trans',$value,1);
 				} else
 				{
-					$_value=array('config_value'=>$value);
+					$map['config_value']=$value;
 				}
-				$GLOBALS['SITE_DB']->query_update('config',array('c_set'=>1)+$_value,array('the_name'=>$myrow['the_name']),'',1);
+				$GLOBALS['SITE_DB']->query_update('config',$map,array('the_name'=>$myrow['the_name']),'',1);
 			}
 		}
 
