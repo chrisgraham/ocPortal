@@ -34,8 +34,8 @@ class Hook_tickets
 		{
 			require_code('tickets');
 			require_code('tickets2');
-			$ticket_type=get_param_integer('ticket_type',NULL);
-			$tickets=get_tickets(get_member(),$ticket_type);
+			$ticket_type_id=get_param_integer('ticket_type_id',NULL);
+			$tickets=get_tickets(get_member(),$ticket_type_id);
 			return md5(serialize($tickets))!=$data;
 		}
 
@@ -44,8 +44,8 @@ class Hook_tickets
 		require_code('tickets2');
 		$forum=0;
 		$topic_id=0;
-		$ticket_type=0;
-		$_comments=get_ticket_posts($id,$forum,$topic_id,$ticket_type);
+		$ticket_type_id=0;
+		$_comments=get_ticket_posts($id,$forum,$topic_id,$ticket_type_id);
 		return md5(serialize($_comments))!=$data;
 	}
 

@@ -1440,9 +1440,9 @@ class Hook_ocp_merge
 				'search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,
 				'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,
 			);
-			$map+=insert_lang('ticket_type',$this->get_lang_string($db,$row['ticket_type']),1);
-			$GLOBALS['SITE_DB']->query_insert('ticket_types',$map);
-			import_id_remap_put('ticket_type',strval($row['ticket_type']),$ticket_type);
+			$map+=insert_lang('ticket_type_name',$this->get_lang_string($db,$row['ticket_type_name']),1);
+			$ticket_type_id=$GLOBALS['SITE_DB']->query_insert('ticket_types',$map,true);
+			import_id_remap_put('ticket_type',strval($row['id']),$ticket_type_id);
 		}
 	}
 

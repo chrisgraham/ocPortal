@@ -14,10 +14,10 @@
 		{+START,SET,EXTRA_COMMENTS_FIELDS_1}
 			<tr>
 				<th class="de_th">
-					<span class="field_name"><label for="ticket_type">{!TICKET_TYPE}:</label></span>
+					<span class="field_name"><label for="ticket_type_id">{!TICKET_TYPE}:</label></span>
 				</th>
 				<td>
-					<select id="ticket_type" name="ticket_type" class="input_list_required wide_field">
+					<select id="ticket_type_id" name="ticket_type_id" class="input_list_required wide_field">
 						<option value="">---</option>
 						{+START,LOOP,TYPES}
 							<option value="{TICKET_TYPE*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
@@ -62,7 +62,7 @@
 		{+END}
 	{+END}
 
-	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type']) || (check_field_for_blankness(this.elements['ticket_type'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
+	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type_id']) || (check_field_for_blankness(this.elements['ticket_type_id'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
 		{COMMENT_FORM}
 	</form>
 {+END}

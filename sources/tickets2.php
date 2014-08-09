@@ -24,69 +24,75 @@
  * @param  SHORT_TEXT		The ticket type
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
+ * @return AUTO_LINK			The ticket type ID
  */
-function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
+function add_ticket_type($ticket_type_name,$guest_emails_mandatory=0,$search_faq=0)
 {
 	$map=array(
 		'guest_emails_mandatory'=>$guest_emails_mandatory,
 		'search_faq'=>$search_faq,
 		'cache_lead_time'=>NULL,
 	);
-	$map+=insert_lang('ticket_type',$ticket_type,1);
-	$GLOBALS['SITE_DB']->query_insert('ticket_types',$map);
+	$map+=insert_lang('ticket_type_name',$ticket_type_name,1);
+	$ticket_type_id=$GLOBALS['SITE_DB']->query_insert('ticket_types',$map,true);
 
-	log_it('ADD_TICKET_TYPE',$ticket_type);
+	log_it('ADD_TICKET_TYPE',strval($ticket_type_id),$ticket_type_name);
+
+	return $ticket_type_id;
 }
 
 /**
  * Edit a ticket type, keeping the integer ID the same.
  *
- * @param  integer			The old ticket type
- * @param  ?SHORT_TEXT		The new ticket type (NULL: do not change)
+ * @param  AUTO_LINK			The ticket type ID
+ * @param  SHORT_TEXT		The ticket type name
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
  */
-function edit_ticket_type($old_ticket_type,$new_ticket_type,$guest_emails_mandatory,$search_faq)
+function edit_ticket_type($ticket_type_id,$ticket_type_name,$guest_emails_mandatory,$search_faq)
 {
-	$GLOBALS['SITE_DB']->query_update('ticket_types',array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq),array('ticket_type'=>$old_ticket_type),'',1);
+	$map=array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq);
+	$map+=lang_remap('ticket_type_name',$ticket_type_id,$ticket_type_name);
+	$GLOBALS['SITE_DB']->query_update('ticket_types',$map,array('id'=>$ticket_type_id),'',1);
 
-	if (!is_null($new_ticket_type))
-		lang_remap($old_ticket_type,$new_ticket_type);
-
-	log_it('EDIT_TICKET_TYPE',strval($old_ticket_type));
+	log_it('EDIT_TICKET_TYPE',strval($ticket_type_id),$ticket_type_name);
 }
 
 /**
  * Delete a ticket type.
  *
- * @param  integer		The ticket type
+ * @param  AUTO_LINK			The ticket type ID
  */
-function delete_ticket_type($ticket_type)
+function delete_ticket_type($ticket_type_id)
 {
-	$_ticket_type=get_translated_text($ticket_type);
-	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
-	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($ticket_type_id)));
+	$GLOBALS['SITE_DB']->query_delete('gsp',array('module_the_name'=>'tickets','category_name'=>strval($ticket_type_id)));
 
-	//delete_lang($ticket_type);	Needed for if existing ticket looked up
+	$ticket_type_name=$GLOBALS['SITE_DB']->query_value('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
+	$_ticket_type_name=get_translated_text($ticket_type_name);
+	delete_lang($ticket_type_name);
 
-	$GLOBALS['SITE_DB']->query_delete('ticket_types',array('ticket_type'=>$ticket_type),'',1);
+	$GLOBALS['SITE_DB']->query_delete('ticket_types',array('id'=>$ticket_type_id),'',1);
 
-	log_it('DELETE_TICKET_TYPE',strval($ticket_type),$_ticket_type);
+	log_it('DELETE_TICKET_TYPE',strval($ticket_type_id),$_ticket_type_name);
 }
 
 /**
  * Get a map of properties for the given ticket type.
  *
- * @param  ?integer		The ticket type (NULL: fallback for old tickets)
+ * @param  ?AUTO_LINK	The ticket type (NULL: fallback for old tickets)
  * @return ?array			Array of properties (NULL: ticket type not found)
  */
-function get_ticket_type($ticket_type)
+function get_ticket_type($ticket_type_id)
 {
-	if (is_null($ticket_type)) return array('ticket_type'=>NULL,'guest_emails_mandatory'=>false,'search_faq'=>false,'cache_lead_time'=>NULL);
+	if (is_null($ticket_type_id))
+	{
+		return array('id'=>NULL,'ticket_type_name'=>NULL,'guest_emails_mandatory'=>0,'search_faq'=>0,'cache_lead_time'=>NULL);
+	}
 
-	$row=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL,array('ticket_type'=>$ticket_type),'',1);
-	if (count($row)==0) return NULL;
-	return $row[0];
+	$rows=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL,array('id'=>$ticket_type_id),'',1);
+	if (count($rows)==0) return NULL;
+	return $rows[0];
 }
 
 /**
@@ -96,14 +102,14 @@ function get_ticket_type($ticket_type)
 function update_ticket_type_lead_times()
 {
 	require_code('feedback');
-	$ticket_types=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL);
 
+	$ticket_types=$GLOBALS['SITE_DB']->query_select('ticket_types',array('*'));
 	foreach ($ticket_types as $ticket_type)
 	{
 		$total_lead_time=0;
 		$tickets_counted=0;
-		$tickets=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_type'=>$ticket_type['ticket_type']));
 
+		$tickets=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_type'=>$ticket_type['id']));
 		foreach ($tickets as $ticket)
 		{
 			$max_rows=0;
@@ -116,8 +122,8 @@ function update_ticket_type_lead_times()
 				continue;
 
 			$ticket_id=extract_topic_identifier($topic['description']);
-			$_forum=1; $_topic_id=1; $_ticket_type=1; // These will be returned by reference
-			$posts=get_ticket_posts($ticket_id,$_forum,$_topic_id,$_ticket_type);
+			$_forum=1; $_topic_id=1; $_ticket_type_id=1; // These will be returned by reference
+			$posts=get_ticket_posts($ticket_id,$_forum,$_topic_id,$_ticket_type_id);
 
 			// Differentiate between old- and new-style tickets
 			if ($topic['firstusername']==do_lang('SYSTEM')) $first_key=1;
@@ -136,7 +142,7 @@ function update_ticket_type_lead_times()
 
 		/* Calculate the new lead time and store it in the DB */
 		if ($tickets_counted>0)
-			$GLOBALS['SITE_DB']->query_update('ticket_types',array('cache_lead_time'=>$total_lead_time/$tickets_counted),array('ticket_type'=>$ticket_type['ticket_type']),'',1);
+			$GLOBALS['SITE_DB']->query_update('ticket_types',array('cache_lead_time'=>$total_lead_time/$tickets_counted),array('id'=>$ticket_type['id']),'',1);
 	}
 }
 
@@ -150,7 +156,7 @@ function update_ticket_type_lead_times()
  * @param  boolean		Whether to skip showing errors, returning NULL instead
  * @return array			Array of tickets, empty on failure
  */
-function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=false,$silent_error_handling=false)
+function get_tickets($member,$ticket_type_id=NULL,$override_view_others_tickets=false,$silent_error_handling=false)
 {
 	$restrict='';
 	$restrict_description='';
@@ -161,9 +167,12 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 		$restrict_description=do_lang('SUPPORT_TICKET').': #'.$restrict;
 	} else
 	{
-		if ((!is_null($ticket_type)) && (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type))))
+		if ((!is_null($ticket_type_id)) && (!has_category_access(get_member(),'tickets',strval($ticket_type_id))))
 			return array();
 	}
+
+	if (!is_null($ticket_type_id))
+		$ticket_type_name=$GLOBALS['SITE_DB']->query_value('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
 
 	if ((get_option('ticket_member_forums')=='1') || (get_option('ticket_type_forums')=='1'))
 	{
@@ -172,14 +181,14 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 			$fid=($view_others_tickets)?get_ticket_forum_id(NULL,NULL,false,$silent_error_handling):get_ticket_forum_id(get_member(),NULL,false,$silent_error_handling);
 			if (is_null($fid)) return array();
 
-			if (is_null($ticket_type))
+			if (is_null($ticket_type_id))
 			{
 				require_code('ocf_forums');
 				$forums=ocf_get_all_subordinate_forums($fid,NULL,NULL,true);
 			}
 			else
 			{
-				$query='SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE '.db_string_equal_to('f_name',get_translated_text($ticket_type)).' AND ';
+				$query='SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE '.db_string_equal_to('f_name',get_translated_text($ticket_type_name)).' AND ';
 				if ($view_others_tickets) $query.='f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_parent_forum='.strval((integer)$fid).')';
 				else $query.='f_parent_forum='.strval((integer)$fid);
 
@@ -187,7 +196,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 				$forums=collapse_2d_complexity('id','id',$rows);
 			}
 		}
-		else $forums=array(get_ticket_forum_id($member,$ticket_type,false,$silent_error_handling));
+		else $forums=array(get_ticket_forum_id($member,$ticket_type_id,false,$silent_error_handling));
 	}
 	else $forums=array(get_ticket_forum_id(NULL,NULL,false,$silent_error_handling));
 
@@ -200,7 +209,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 	{
 		$fp=$topic['firstpost'];
 		unset($topic['firstpost']); // To stop Tempcode randomly making serialization sometimes change such that the refresh_if_changed is triggered
-		if ((is_null($ticket_type)) || (strpos($fp->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type))!==false))
+		if ((is_null($ticket_type_id)) || (strpos($fp->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type_name))!==false))
 		{
 			$filtered_topics[]=$topic;
 		}
@@ -215,21 +224,21 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
  * @param  string			The ticket ID
  * @param  AUTO_LINK		Return location for the forum ID
  * @param  AUTO_LINK		Return location for the topic ID
- * @param  integer		Return location for the ticket type
+ * @param  AUTO_LINK		Return location for the ticket type
  * @param  integer		Start offset in pagination
  * @param  ?integer		Max per page in pagination (NULL: no limit)
  * @return mixed			The array of maps (Each map is: title, message, member, date) (NULL: no such ticket)
  */
-function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$max=NULL)
+function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type_id,$start=0,$max=NULL)
 {
 	$ticket=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_id'=>$ticket_id),'',1,NULL,true);
 	if (count($ticket)==1) // We know about it, so grab details from tickets table
 	{
-		$ticket_type=$ticket[0]['ticket_type'];
+		$ticket_type_id=$ticket[0]['ticket_type'];
 
 		if (has_specific_permission(get_member(),'view_others_tickets'))
 		{
-			if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type)))
+			if (!has_category_access(get_member(),'tickets',strval($ticket_type_id)))
 				access_denied('CATEGORY_ACCESS_LEVEL');
 		}
 
@@ -242,7 +251,7 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$
 	// It must be an old-style ticket, residing in the root ticket forum
 	$forum=get_ticket_forum_id();
 	$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('ticket_forum_name'),$ticket_id);
-	$ticket_type=NULL;
+	$ticket_type_id=NULL;
 	$count=0;
 	return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count);
 }
@@ -263,17 +272,17 @@ function delete_ticket_by_topic_id($topic_id)
  *
  * @param  AUTO_LINK		The member ID
  * @param  string			The ticket ID (doesn't have to exist)
- * @param  integer		The ticket type
+ * @param  AUTO_LINK		The ticket type
  * @param  LONG_TEXT		The post title
  * @param  LONG_TEXT		The post content in Comcode format
  * @param  string			The home URL
  * @param  boolean		Whether the reply is staff only (invisible to ticket owner, only on OCF)
  */
-function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_url,$staff_only=false)
+function ticket_add_post($member,$ticket_id,$ticket_type_id,$title,$post,$ticket_url,$staff_only=false)
 {
 	// Get the forum ID first
 	$fid=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','forum_id',array('ticket_id'=>$ticket_id));
-	if (is_null($fid)) $fid=get_ticket_forum_id($member,$ticket_type);
+	if (is_null($fid)) $fid=get_ticket_forum_id($member,$ticket_type_id);
 
 	$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
 		$fid,
@@ -295,9 +304,9 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_ur
 	);
 	$topic_id=$GLOBALS['LAST_TOPIC_ID'];
 	$is_new=$GLOBALS['LAST_TOPIC_IS_NEW'];
-	if (($is_new) && ($ticket_type!=-1))
+	if (($is_new) && ($ticket_type_id!=-1))
 	{
-		$GLOBALS['SITE_DB']->query_insert('tickets',array('ticket_id'=>$ticket_id,'forum_id'=>$fid,'topic_id'=>$topic_id,'ticket_type'=>$ticket_type));
+		$GLOBALS['SITE_DB']->query_insert('tickets',array('ticket_id'=>$ticket_id,'forum_id'=>$fid,'topic_id'=>$topic_id,'ticket_type'=>$ticket_type_id));
 	}
 }
 
@@ -309,9 +318,9 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_ur
  * @param  LONG_TEXT		The ticket post's content
  * @param  mixed			The home URL (to view the ticket) (URLPATH or Tempcode URL)
  * @param  string			Ticket owner's e-mail address, in the case of a new ticket
- * @param  integer		The new ticket type, or -1 if it is a reply to an existing ticket
+ * @param  AUTO_LINK		The new ticket type, or -1 if it is a reply to an existing ticket
  */
-function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_type_if_new)
+function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_type_id_if_new)
 {
 	require_lang('tickets');
 	require_code('notifications');
@@ -321,23 +330,34 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 	$username=$GLOBALS['FORUM_DRIVER']->get_username($uid);
 	if (is_null($username)) $username=do_lang('UNKNOWN');
 
-	$new_ticket=($ticket_type_if_new!=-1);
+	$new_ticket=($ticket_type_id_if_new!=-1);
 
-	$ticket_type_id=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$ticket_id));
-
-	$ticket_type_text=mixed();
+	// Find details of ticket type
+	if ($new_ticket)
+	{
+		$ticket_type_id=$ticket_type_id_if_new;
+	} else
+	{
+		$ticket_type_id=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+	}
+	$_ticket_type_name=$GLOBALS['SITE_DB']->query_value_null_ok('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
+	if (is_null($_ticket_type_name))
+	{
+		$ticket_type_name=do_lang('UNKNOWN');
+	} else
+	{
+		$ticket_type_name=get_translated_text($_ticket_type_name);
+	}
 
 	if (($uid!=get_member()) && (!is_guest($uid)))
 	{
 		// Reply from staff, notification to user
-		$ticket_type_text=$GLOBALS['SITE_DB']->query_value_null_ok('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
-		if (is_null($ticket_type_text)) $ticket_type_text=do_lang('UNKNOWN');
 		$their_lang=get_lang($uid);
-		$subject=do_lang('TICKET_REPLY',$ticket_type_text,$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,$their_lang);
+		$subject=do_lang('TICKET_REPLY',$ticket_type_name,$ticket_type_name,($title=='')?do_lang('UNKNOWN'):$title,$their_lang);
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
-			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_text)),$their_lang);
+			$message=do_lang('TICKET_REPLY_MESSAGE',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member())),$post,comcode_escape($ticket_type_name)),$their_lang);
 			dispatch_notification('ticket_reply',is_null($ticket_type_id)?'':strval($ticket_type_id),$subject,$message,array($uid));
 		}
 	}
@@ -346,13 +366,8 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$email,$ticket_ty
 		// Reply from user, notification to staff
 		if (is_object($ticket_url)) $ticket_url=$ticket_url->evaluate();
 
-		if (is_null($ticket_type_text))
-		{
-			$ticket_type_text=($ticket_type_if_new==-1)?'':get_translated_text($ticket_type_if_new);
-		}
-
-		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_text,($title=='')?do_lang('UNKNOWN'):$title,NULL,get_site_default_lang());
-		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_text)),get_site_default_lang());
+		$subject=do_lang($new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',$ticket_type_name,($title=='')?do_lang('UNKNOWN'):$title,NULL,get_site_default_lang());
+		$message=do_lang($new_ticket?'TICKET_NEW_MESSAGE_FOR_STAFF':'TICKET_REPLY_MESSAGE_FOR_STAFF',comcode_escape(($title=='')?do_lang('UNKNOWN'):$title),comcode_escape($ticket_url),array(comcode_escape($username),$post,comcode_escape($ticket_type_name)),get_site_default_lang());
 		dispatch_notification($new_ticket?'ticket_new_staff':'ticket_reply_staff',strval($ticket_type_id),$subject,$message);
 
 		// Tell user that their message was received

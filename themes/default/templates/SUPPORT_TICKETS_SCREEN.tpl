@@ -7,9 +7,9 @@
 {+START,IF,{$NOT,{$IS_GUEST}}}
 	<div class="box box___support_tickets_screen"><div class="box_inner vertical_alignment">
 		<form title="{!FILTER}" class="float_surrounder" id="ticket_type_form" action="{$URL_FOR_GET_FORM*,{$SELF_URL,0,1}}" method="get" onsubmit="try { window.scrollTo(0,0); } catch(e) {};">
-			{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},ticket_type}
-			<label class="field_name" for="ticket_type">{!TICKET_TYPE}:</label>
-			<select id="ticket_type" name="ticket_type" class="input_list_required">
+			{$HIDDENS_FOR_GET_FORM,{$SELF_URL,0,1},ticket_type_id}
+			<label class="field_name" for="ticket_type_id">{!TICKET_TYPE}:</label>
+			<select id="ticket_type_id" name="ticket_type_id" class="input_list_required">
 				<option value="">&mdash;</option>
 				{+START,LOOP,TYPES}
 					<option value="{TICKET_TYPE*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
