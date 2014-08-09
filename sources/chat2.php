@@ -318,7 +318,17 @@ function edit_chatroom($id,$welcome,$roomname,$room_owner,$allow2,$allow2_groups
 {
 	$c_welcome=$GLOBALS['SITE_DB']->query_value('chat_rooms','c_welcome',array('id'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('chat_rooms',array('c_welcome'=>lang_remap($c_welcome,$welcome),'room_name'=>$roomname,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),array('id'=>$id),'',1);
+	$map=array(
+		'room_name'=>$roomname,
+		'room_owner'=>$room_owner,
+		'allow_list'=>$allow2,
+		'allow_list_groups'=>$allow2_groups,
+		'disallow_list'=>$disallow2,
+		'disallow_list_groups'=>$disallow2_groups,
+		'room_language'=>$roomlang,
+	);
+	$map+=lang_remap('c_welcome',$c_welcome,$welcome);
+	$GLOBALS['SITE_DB']->query_update('chat_rooms',$map,array('id'=>$id),'',1);
 
 	decache('side_shoutbox');
 

@@ -57,7 +57,12 @@ function edit_flagrant($id,$message,$notes,$validated)
 {
 	$_message=$GLOBALS['SITE_DB']->query_value('text','the_message',array('id'=>$id));
 	log_it('EDIT_FLAGRANT',strval($id),$message);
-	$GLOBALS['SITE_DB']->query_update('text',array('notes'=>$notes,'the_message'=>lang_remap_comcode($_message,$message),'active_now'=>$validated),array('id'=>$id),'',1);
+	$map=array(
+		'notes'=>$notes,
+		'active_now'=>$validated,
+	);
+	$map+=lang_remap_comcode('the_message',$_message,$message);
+	$GLOBALS['SITE_DB']->query_update('text',$map,array('id'=>$id),'',1);
 	if ($validated==1) choose_flagrant($id); else persistent_cache_delete('FLAGRANT');
 }
 

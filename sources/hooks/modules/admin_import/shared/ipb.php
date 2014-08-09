@@ -823,7 +823,7 @@ class Hook_ipb_base
 						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>'ocf_post','r_referer_id'=>strval($post_id),'a_id'=>$_a_id));
 						$post.="\n\n".'[attachment]'.strval($_a_id).'[/attachment]';
 						ocf_over_msn();
-						update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
+						$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 						ocf_over_local();
 					}
 				} elseif (count($a_id)!=0)
@@ -839,7 +839,7 @@ class Hook_ipb_base
 						$i++;
 					}
 					ocf_over_msn();
-					update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
+					$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 					ocf_over_local();
 				}
 

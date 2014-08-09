@@ -508,7 +508,7 @@ class Module_cms_cedi
 					} else
 					{
 						if (get_translated_text($title_id)!=$title)
-							$GLOBALS['SITE_DB']->query_update('seedy_pages',array('title'=>lang_remap($title_id,$title)),array('id'=>$child_id),'',1);
+							$GLOBALS['SITE_DB']->query_update('seedy_pages',lang_remap('title',$title_id,$title),array('id'=>$child_id),'',1);
 					}
 				}
 				else // New

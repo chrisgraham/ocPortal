@@ -46,9 +46,8 @@ if (count($_POST)!=0)
 						array(
 							'c_catalogue_name'=>$catalogue,
 							'c_days'=>intval($days),
-							'c_label'=>lang_remap($_label,$label),
 							'c_price'=>floatval($price),
-						),
+						)+lang_remap('c_label',$_label,$label),
 						array('id'=>intval($matches[2])),
 						'',
 						1

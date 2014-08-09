@@ -52,7 +52,7 @@ function menu_management_script()
 				$changes+=insert_lang('i_'.$key,$val,2);
 			} else
 			{
-				lang_remap($row['i_'.$key],$val);
+				$changes+=lang_remap('i_'.$key,$row['i_'.$key],$val);
 			}
 		} elseif (($key=='url') || ($key=='theme_img_code'))
 		{
@@ -186,18 +186,19 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
 	$_caption=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption',array('id'=>$id));
 	$_caption_long=$GLOBALS['SITE_DB']->query_value('menu_items','i_caption_long',array('id'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('menu_items',array(
+	$map=array(
 		'i_menu'=>$menu,
 		'i_order'=>$order,
 		'i_parent'=>$parent,
-		'i_caption'=>lang_remap($_caption,$caption),
-		'i_caption_long'=>lang_remap($_caption_long,$caption_long),
 		'i_url'=>$url,
 		'i_check_permissions'=>$check_permissions,
 		'i_page_only'=>$page_only,
 		'i_expanded'=>$expanded,
 		'i_new_window'=>$new_window,
-	),array('id'=>$id),'',1);
+	);
+	$map+=lang_remap('i_caption',$_caption,$caption);
+	$map+=lang_remap('i_caption_long',$_caption_long,$caption_long);
+	$GLOBALS['SITE_DB']->query_update('menu_items',$map,array('id'=>$id),'',1);
 
 	log_it('EDIT_MENU_ITEM',strval($id),$caption);
 }

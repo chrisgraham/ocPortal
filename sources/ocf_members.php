@@ -325,7 +325,7 @@ function ocf_get_custom_field_mappings($member_id)
 		if (!array_key_exists(0,$query)) // Repair
 		{
 			$all_fields_regardless=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'));
-			$row=array('mf_member_id'=>$member_id);
+			$map=array('mf_member_id'=>$member_id);
 			foreach ($all_fields_regardless as $field)
 			{
 				$ob=get_fields_hook($field['cf_type']);
@@ -333,13 +333,19 @@ function ocf_get_custom_field_mappings($member_id)
 
 				if (strpos($storage_type,'_trans')!==false)
 				{
-					$row['field_'.strval($field['id'])]=intval($default);
+					if (!is_null($default))
+					{
+						$map+=insert_lang_comcode('field_'.strval($field['id']),$default,3,$db);
+					} else
+					{
+						$map['field_'.strval($field['id'])]=NULL;
+					}
 				} else
 				{
-					$row['field_'.strval($field['id'])]=$default;
+					$map['field_'.strval($field['id'])]=$default;
 				}
 			}
-			$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
+			$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$map);
 			$query=array($row);
 		}
 		$MEMBER_CACHE_FIELD_MAPPINGS[$member_id]=$query[0];

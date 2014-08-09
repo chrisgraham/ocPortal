@@ -471,7 +471,20 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 		send_content_validated_notification('image',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('images',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'comments'=>lang_remap_comcode($_comments,$comments),'url'=>$url,'thumb_url'=>$thumb_url),array('id'=>$id),'',1);
+	$map=array(
+		'edit_date'=>time(),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'cat'=>$cat,
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+	);
+	$map+=lang_remap_comcode('title',$_title,$title);
+	$map+=lang_remap_comcode('comments',$_comments,$comments);
+	$GLOBALS['SITE_DB']->query_update('images',$map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 
@@ -793,7 +806,23 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 		send_content_validated_notification('video',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('videos',array('title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'cat'=>$cat,'comments'=>lang_remap_comcode($_comments,$comments),'url'=>$url,'thumb_url'=>$thumb_url,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height),array('id'=>$id),'',1);
+	$map=array(
+		'edit_date'=>time(),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'cat'=>$cat,
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+		'video_length'=>$video_length,
+		'video_width'=>$video_width,
+		'video_height'=>$video_height,
+	);
+	$map+=lang_remap_comcode('title',$_title,$title);
+	$map+=lang_remap_comcode('comments',$_comments,$comments);
+	$GLOBALS['SITE_DB']->query_update('videos',$map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
 
@@ -1118,10 +1147,21 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$myrows[0];
 
-	$map=array('name'=>$name,'notes'=>$notes,'fullname'=>lang_remap($myrow['fullname'],$fullname),
-					'description'=>lang_remap_comcode($myrow['description'],$description),'teaser'=>lang_remap_comcode($myrow['teaser'],$teaser),'parent_id'=>$parent_id,'accept_images'=>$accept_images,
-					'accept_videos'=>$accept_videos,'is_member_synched'=>$is_member_synched,'flow_mode_interface'=>$flow_mode_interface,
-					'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'g_owner'=>$g_owner);
+	$map=array(
+		'name'=>$name,
+		'notes'=>$notes,
+		'parent_id'=>$parent_id,
+		'accept_images'=>$accept_images,
+		'accept_videos'=>$accept_videos,
+		'is_member_synched'=>$is_member_synched,
+		'flow_mode_interface'=>$flow_mode_interface,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'g_owner'=>$g_owner,
+	);
+	$map+=lang_remap('fullname',$myrow['fullname'],$fullname);
+	$map+=lang_remap_comcode('description',$myrow['description'],$description);
+	$map+=lang_remap_comcode('teaser',$myrow['teaser'],$teaser);
 
 	require_code('files2');
 

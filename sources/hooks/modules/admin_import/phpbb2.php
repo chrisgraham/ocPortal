@@ -717,7 +717,7 @@ class Hook_phpbb2
 					$post.="\n\n".'[attachment="'.$row['comment'].'"]'.strval($a_id).'[/attachment]';
 
 					ocf_over_msn();
-					update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
+					$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 					ocf_over_local();
 				}
 

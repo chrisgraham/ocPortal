@@ -167,14 +167,15 @@ function handle_quiz_answers($id,$text,$type)
 			}
 		} else // We're replacing an existing question
 		{
-			$GLOBALS['SITE_DB']->query_update('quiz_questions',array(
+			$map=array(
 				'q_long_input_field'=>$long_input_field,
 				'q_num_choosable_answers'=>$num_choosable_answers,
 				'q_quiz'=>$id,
-				'q_question_text'=>lang_remap($existing[$i]['q_question_text'],$question),
 				'q_order'=>$i,
 				'q_required'=>$required,
-			),array('id'=>$existing[$i]['id']));
+			);
+			$map+=lang_remap('q_question_text',$existing[$i]['q_question_text'],$question);
+			$GLOBALS['SITE_DB']->query_update('quiz_questions',$map,array('id'=>$existing[$i]['id']));
 
 			// Now we add the answers
 			$_existing_a=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$existing[$i]['id']),'ORDER BY q_order');
@@ -213,9 +214,9 @@ function handle_quiz_answers($id,$text,$type)
 					$map=array(
 						'q_is_correct'=>$is_correct,
 						'q_order'=>$x,
-						'q_answer_text'=>lang_remap($existing_a[$x]['q_answer_text'],$a),
-						'q_explanation'=>lang_remap($existing_a[$x]['q_explanation'],$explanation,2),
 					);
+					$map+=lang_remap('q_answer_text',$existing_a[$x]['q_answer_text'],$a);
+					$map+=lang_remap('q_explanation',$existing_a[$x]['q_explanation'],$explanation,2);
 					$GLOBALS['SITE_DB']->query_update('quiz_question_answers',$map,array('id'=>$existing_a[$x]['id']),'',1);
 				} else
 				{
@@ -356,12 +357,8 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		send_content_validated_notification('quiz',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('quizzes',array(
-		'q_name'=>lang_remap($_name,$name),
+	$map=array(
 		'q_timeout'=>$timeout,
-		'q_start_text'=>lang_remap($_start_text,$start_text),
-		'q_end_text'=>lang_remap($_end_text,$end_text),
-		'q_end_text_fail'=>lang_remap($_end_text_fail,$end_text_fail),
 		'q_notes'=>$notes,
 		'q_percentage'=>$percentage,
 		'q_open_time'=>$open_time,
@@ -372,7 +369,12 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		'q_validated'=>$validated,
 		'q_points_for_passing'=>$points_for_passing,
 		'q_tied_newsletter'=>$tied_newsletter,
-	),array('id'=>$id));
+	);
+	$map+=lang_remap('q_name',$_name,$name);
+	$map+=lang_remap('q_start_text',$_start_text,$start_text);
+	$map+=lang_remap('q_end_text',$_end_text,$end_text);
+	$map+=lang_remap('q_end_text_fail',$_end_text_fail,$end_text_fail);
+	$GLOBALS['SITE_DB']->query_update('quizzes',$map,array('id'=>$id));
 
 	handle_quiz_answers($id,$text,$type);
 

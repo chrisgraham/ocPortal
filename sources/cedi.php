@@ -170,7 +170,12 @@ function cedi_edit_post($id,$message,$validated,$member=NULL)
 		send_content_validated_notification('cedi_post',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('seedy_posts',array('validated'=>$validated,'edit_date'=>time(),'the_message'=>update_lang_comcode_attachments($_message,$message,'cedi_post',strval($id),NULL,true,$original_poster)),array('id'=>$id),'',1);
+	$map=array(
+		'validated'=>$validated,
+		'edit_date'=>time(),
+	);
+	$map+=update_lang_comcode_attachments('the_message',$_message,$message,'cedi_post',strval($id),NULL,true,$original_poster);
+	$GLOBALS['SITE_DB']->query_update('seedy_posts',$map,array('id'=>$id),'',1);
 
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'the_user'=>$member,'date_and_time'=>time()));
 
@@ -309,7 +314,13 @@ function cedi_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	$GLOBALS['SITE_DB']->query_update('seedy_children',array('title'=>$title),array('title'=>get_translated_text($_title),'child_id'=>$id));
 	require_code('attachments2');
 	require_code('attachments3');
-	$GLOBALS['SITE_DB']->query_update('seedy_pages',array('hide_posts'=>$hide_posts,'description'=>update_lang_comcode_attachments($_description,$description,'cedi_page',strval($id),NULL,true,$original_poster),'notes'=>$notes,'title'=>lang_remap($_title,$title)),array('id'=>$id),'',1);
+	$map=array(
+		'hide_posts'=>$hide_posts,
+		'notes'=>$notes,
+	);
+	$map+=update_lang_comcode_attachments('description',$_description,$description,'cedi_page',strval($id),NULL,true,$original_poster);
+	$map+=lang_remap('title',$_title,$title);
+	$GLOBALS['SITE_DB']->query_update('seedy_pages',$map,array('id'=>$id),'',1);
 	$GLOBALS['SITE_DB']->query_insert('seedy_changes',array('the_action'=>'CEDI_EDIT_PAGE','the_page'=>$id,'date_and_time'=>time(),'ip'=>get_ip_address(),'the_user'=>$member));
 
 	require_code('seo2');

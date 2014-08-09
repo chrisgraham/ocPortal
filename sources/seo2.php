@@ -81,8 +81,10 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
 	$rows=$GLOBALS['SITE_DB']->query_select('seo_meta',array('meta_keywords','meta_description'),array('meta_for_type'=>$type,'meta_for_id'=>$id),'',1);
 	if (array_key_exists(0,$rows))
 	{
-		lang_remap($rows[0]['meta_keywords'],$keywords);
-		lang_remap($rows[0]['meta_description'],$description);
+		$map=array();
+		$map+=lang_remap('meta_keywords',$rows[0]['meta_keywords'],$keywords);
+		$map+=lang_remap('meta_description',$rows[0]['meta_description'],$description);
+		$GLOBALS['SITE_DB']->query_update('seo_meta',$map,array('meta_for_type'=>$type,'meta_for_id'=>$id),'',1);
 	} else
 	{
 		$map=array(

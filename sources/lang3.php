@@ -271,7 +271,10 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 {
 	if (!multi_lang_content()) return $text; // TODO: Updating source user etc
 
-	if ($id==0) return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
+	if ($id==0)
+	{
+		return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
+	}
 
 	if ($text===STRING_MAGIC_NULL) return $id;
 

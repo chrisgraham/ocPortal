@@ -137,7 +137,13 @@ function edit_news_category($id,$title,$img,$notes,$owner=NULL)
 	if (is_null($img)) $img=$myrow['nc_img'];
 	if (is_null($notes)) $notes=$myrow['notes'];
 
-	$GLOBALS['SITE_DB']->query_update('news_categories',array('nc_title'=>lang_remap($myrow['nc_title'],$title),'nc_img'=>$img,'notes'=>$notes,'nc_owner'=>$owner),array('id'=>$id),'',1);
+	$map=array(
+		'nc_img'=>$img,
+		'notes'=>$notes,
+		'nc_owner'=>$owner,
+	);
+	$map+=lang_remap('nc_title',$myrow['nc_title'],$title);
+	$GLOBALS['SITE_DB']->query_update('news_categories',$map,array('id'=>$id),'',1);
 
 	require_code('themes2');
 	tidy_theme_img_code($img,$myrow['nc_img'],'news_categories','nc_img');
@@ -182,14 +188,14 @@ function delete_news_category($id)
 	// Sync meta keywords, if we have auto-sync for these
 	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
 	{
-		$sql='SELECT meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
+		$sql='SELECT meta_for_type,meta_for_id,meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
 		$affected_news=$GLOBALS['SITE_DB']->query($sql);
 		foreach ($affected_news as $af_row)
 		{
 			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#','',$af_row['text_original']));
 			if (substr($new_meta,0,1)==',') $new_meta=substr($new_meta,1);
 			if (substr($new_meta,-1)==',') $new_meta=substr($new_meta,0,strlen($new_meta)-1);
-			lang_remap($af_row['meta_keywords'],$new_meta);
+			$GLOBALS['SITE_DB']->query_update('seo_meta',lang_remap('meta_keywords',$af_row['meta_keywords'],$new_meta),array('meta_for_type'=>$af_row['meta_for_type'],'meta_for_id'=>$af_row['meta_for_id']),'',1);
 		}
 	}
 
@@ -473,7 +479,19 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 		send_content_validated_notification('news',strval($id));
 	}
 
-	$map=array('news_category'=>$main_news_category,'news_article'=>update_lang_comcode_attachments($_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'validated'=>$validated,'title'=>lang_remap_comcode($_title,$title),'news'=>lang_remap_comcode($_news,$news),'author'=>$author);
+	$map=array(
+		'news_category'=>$main_news_category,
+		'edit_date'=>time(),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'author'=>$author,
+	);
+	$map+=update_lang_comcode_attachments('news_article',$_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']);
+	$map+=lang_remap_comcode('title',$_title,$title);
+	$map+=lang_remap_comcode('news',$_news,$news);
 
 	if (!is_null($time)) $map['date_and_time']=$time;
 

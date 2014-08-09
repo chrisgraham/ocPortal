@@ -190,9 +190,7 @@ class Hook_pointstore_permission
 				$GLOBALS['SITE_DB']->query_delete('pstore_permissions',array('id'=>$id),'',1);
 			} else
 			{
-				$GLOBALS['SITE_DB']->query_update('pstore_permissions',array(
-					'p_title'=>lang_remap($_title,$title),
-					'p_description'=>lang_remap($_description,$description),
+				$map=array(
 					'p_enabled'=>$enabled,
 					'p_cost'=>$cost,
 					'p_hours'=>$hours,
@@ -202,9 +200,12 @@ class Hook_pointstore_permission
 					'p_page'=>$page,
 					'p_module'=>$module,
 					'p_category'=>$category,
-					'p_mail_subject'=>lang_remap($_mail_subject,$mail_subject),
-					'p_mail_body'=>lang_remap($_mail_body,$mail_body),
-				),array('id'=>$id),'',1);
+				);
+				$map+=lang_remap('p_title',$_title,$title);
+				$map+=lang_remap('p_description',$_description,$description);
+				$map+=lang_remap('p_mail_subject',$_mail_subject,$mail_subject);
+				$map+=lang_remap('p_mail_body',$_mail_body,$mail_body);
+				$GLOBALS['SITE_DB']->query_update('pstore_permissions',$map,array('id'=>$id),'',1);
 			}
 			$i++;
 		}

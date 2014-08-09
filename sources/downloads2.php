@@ -297,7 +297,12 @@ function edit_download_category($category,$parent_id,$description,$category_id,$
 	$_category=$rows[0]['category'];
 	$_description=$rows[0]['description'];
 
-	$map=array('notes'=>$notes,'category'=>lang_remap($_category,$category),'parent_id'=>$parent_id,'description'=>lang_remap_comcode($_description,$description));
+	$map=array(
+		'notes'=>$notes,
+		'parent_id'=>$parent_id,
+	);
+	$map+=lang_remap('category',$_category,$category);
+	$map+=lang_remap_comcode('description',$_description,$description);
 	if (!is_null($rep_image))
 	{
 		$map['rep_image']=$rep_image;
@@ -865,7 +870,28 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$comment
 		send_content_validated_notification('download',strval($id));
 	}
 
-	$map=array('download_data_mash'=>$data_mash,'download_licence'=>$licence,'original_filename'=>$original_filename,'download_submitter_gets_points'=>$submitter_gets_points,'download_cost'=>$cost,'edit_date'=>time(),'file_size'=>$file_size,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'name'=>lang_remap($myrow['name'],$name),'description'=>lang_remap_comcode($myrow['description'],$description),'comments'=>lang_remap_comcode($myrow['comments'],$comments),'validated'=>$validated,'category_id'=>$category_id,'url'=>$url,'author'=>$author,'default_pic'=>$default_pic,'out_mode_id'=>$out_mode_id);
+	$map=array(
+		'download_data_mash'=>$data_mash,
+		'download_licence'=>$licence,
+		'original_filename'=>$original_filename,
+		'download_submitter_gets_points'=>$submitter_gets_points,
+		'download_cost'=>$cost,
+		'edit_date'=>time(),
+		'file_size'=>$file_size,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'validated'=>$validated,
+		'category_id'=>$category_id,
+		'url'=>$url,
+		'author'=>$author,
+		'default_pic'=>$default_pic,
+		'out_mode_id'=>$out_mode_id,
+	);
+	$map+=lang_remap('name',$myrow['name'],$name);
+	$map+=lang_remap_comcode('description',$myrow['description'],$description);
+	$map+=lang_remap_comcode('comments',$myrow['comments'],$comments);
 	$GLOBALS['SITE_DB']->query_update('download_downloads',$map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);

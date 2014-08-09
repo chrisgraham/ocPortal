@@ -77,19 +77,29 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 
 	if (get_translated_text($_title)!=$title)
 	{
-		// Update menu item
-		$i_caption=$GLOBALS['SITE_DB']->query_value_null_ok('menu_items','i_caption',array('i_menu'=>'zone_menu','i_url'=>$zone.':'));
-		if (!is_null($i_caption))
+		// Update menu item(s)
+		$menu_items=$GLOBALS['SITE_DB']->query_select('menu_items',array('id','i_caption'),array('i_menu'=>'zone_menu','i_url'=>$zone.':'));
+		foreach ($menu_items as $menu_item)
 		{
-			if (get_translated_text($i_caption)==get_translated_text($_title))
+			if (get_translated_text($menu_item['i_caption'])==get_translated_text($_title))
 			{
-				lang_remap($i_caption,$title);
+				$GLOBALS['SITE_DB']->query_update('menu_items',lang_remap('i_caption',$i_caption,$title),array('id'=>$menu_item['id']),'',1);
 				decache('side_stored_menu');
 			}
 		}
 	}
 
-	$GLOBALS['SITE_DB']->query_update('zones',array('zone_name'=>$new_zone,'zone_title'=>lang_remap($_title,$title),'zone_default_page'=>$default_page,'zone_header_text'=>lang_remap($_header_text,$header_text),'zone_theme'=>$theme,'zone_wide'=>$wide,'zone_require_session'=>$require_session,'zone_displayed_in_menu'=>$displayed_in_menu),array('zone_name'=>$zone),'',1);
+	$map=array(
+		'zone_name'=>$new_zone,
+		'zone_default_page'=>$default_page,
+		'zone_theme'=>$theme,
+		'zone_wide'=>$wide,
+		'zone_require_session'=>$require_session,
+		'zone_displayed_in_menu'=>$displayed_in_menu,
+	);
+	$map+=lang_remap('zone_title',$_title,$title);
+	$map+=lang_remap('zone_header_text',$_header_text,$header_text);
+	$GLOBALS['SITE_DB']->query_update('zones',$map,array('zone_name'=>$zone),'',1);
 
 	if ($new_zone!=$zone)
 	{

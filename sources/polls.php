@@ -370,7 +370,26 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 	$_a9=$rows[0]['option9'];
 	$_a10=$rows[0]['option10'];
 
-	$GLOBALS['SITE_DB']->query_update('poll',array('edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'num_options'=>$num_options,'question'=>lang_remap_comcode($_question,$question),'option1'=>lang_remap_comcode($_a1,$a1),'option2'=>lang_remap_comcode($_a2,$a2),'option3'=>lang_remap_comcode($_a3,$a3),'option4'=>lang_remap_comcode($_a4,$a4),'option5'=>lang_remap_comcode($_a5,$a5),'option6'=>lang_remap_comcode($_a6,$a6),'option7'=>lang_remap_comcode($_a7,$a7),'option8'=>lang_remap_comcode($_a8,$a8),'option9'=>lang_remap_comcode($_a9,$a9),'option10'=>lang_remap_comcode($_a10,$a10)),array('id'=>$id),'',1);
+	$map=array(
+		'edit_date'=>time(),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'num_options'=>$num_options,
+	);
+	$map+=lang_remap_comcode('question',$_question,$question);
+	$map+=lang_remap_comcode('option1',$_a1,$a1);
+	$map+=lang_remap_comcode('option2',$_a2,$a2);
+	$map+=lang_remap_comcode('option3',$_a3,$a3);
+	$map+=lang_remap_comcode('option4',$_a4,$a4);
+	$map+=lang_remap_comcode('option5',$_a5,$a5);
+	$map+=lang_remap_comcode('option6',$_a6,$a6);
+	$map+=lang_remap_comcode('option7',$_a7,$a7);
+	$map+=lang_remap_comcode('option8',$_a8,$a8);
+	$map+=lang_remap_comcode('option9',$_a9,$a9);
+	$map+=lang_remap_comcode('option10',$_a10,$a10);
+	$GLOBALS['SITE_DB']->query_update('poll',$map,array('id'=>$id),'',1);
 	decache('main_poll');
 
 	require_code('urls2');

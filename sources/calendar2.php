@@ -188,9 +188,7 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		send_content_validated_notification('event',strval($id));
 	}
 
-	$GLOBALS['SITE_DB']->query_update('calendar_events',array(
-		'e_title'=>lang_remap($myrow['e_title'],$title),
-		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
+	$map=array(
 		'e_edit_date'=>time(),
 		'e_recurrence'=>$recurrence,
 		'e_recurrences'=>$recurrences,
@@ -217,7 +215,10 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes
-	),array('id'=>$id),'',1);
+	);
+	$map+=lang_remap('e_title',$myrow['e_title'],$title);
+	$map+=update_lang_comcode_attachments('e_content',$myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']);
+	$GLOBALS['SITE_DB']->query_update('calendar_events',$map,array('id'=>$id),'',1);
 
 	$self_url=build_url(array('page'=>'calendar','type'=>'view','id'=>$id),get_module_zone('calendar'),NULL,false,false,true);
 
@@ -323,11 +324,12 @@ function edit_event_type($id,$title,$logo,$external_feed)
 	require_code('urls2');
 	suggest_new_idmoniker_for('calendar','misc',strval($id),$title);
 
-	$GLOBALS['SITE_DB']->query_update('calendar_types',array(
-		't_title'=>lang_remap($myrow['t_title'],$title),
+	$map=array(
 		't_logo'=>$logo,
 		't_external_feed'=>$external_feed,
-	),array('id'=>$id),'',1);
+	);
+	$map+=lang_remap('t_title',$myrow['t_title'],$title);
+	$GLOBALS['SITE_DB']->query_update('calendar_types',$map,array('id'=>$id),'',1);
 
 	require_code('themes2');
 	tidy_theme_img_code($logo,$myrow['t_logo'],'calendar_types','t_logo');

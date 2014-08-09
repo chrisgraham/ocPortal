@@ -214,37 +214,38 @@ class Module_admin_version
 			foreach ($rows as $row)
 			{
 				$zone=$row['zone_name'];
-				$st=$row['zone_title'];
 
-				$_zone=ucfirst($zone);
+				$zone_title=ucfirst($zone);
 				switch ($zone)
 				{
 					case 'docs':
-						$_zone=do_lang('GUIDES');
+						$zone_title=do_lang('GUIDES');
 						break;
 					case 'forum':
-						$_zone=do_lang('SECTION_FORUMS');
+						$zone_title=do_lang('SECTION_FORUMS');
 						break;
 					case '':
-						$_zone=do_lang('_WELCOME');
+						$zone_title=do_lang('_WELCOME');
 						break;
 					case 'site':
-						$_zone=do_lang('SITE');
+						$zone_title=do_lang('SITE');
 						break;
 					case 'cms':
-						$_zone=do_lang('CMS');
+						$zone_title=do_lang('CMS');
 						break;
 					case 'collaboration':
-						$_zone=do_lang('collaboration');
+						$zone_title=do_lang('collaboration');
 						break;
 					case 'adminzone':
-						$_zone=do_lang('ADMIN_ZONE');
+						$zone_title=do_lang('ADMIN_ZONE');
+						break;
+					default:
+						$_lang2=do_lang('ZONE_'.$zone,NULL,NULL,NULL,NULL,false);
+						if (!is_null($_lang2)) $zone_title=$_lang2;
 						break;
 				}
-				$_lang2=do_lang('ZONE_'.$zone,NULL,NULL,NULL,NULL,false);
-				if (!is_null($_lang2)) $_zone=$_lang2;
 
-				lang_remap($st,$_zone);
+				$GLOBALS['SITE_DB']->query_update('zones',lang_remap('zone_title',$row['zone_title'],$zone_title),array('zone_name'=>$zone),'',1);
 			}
 		}
 

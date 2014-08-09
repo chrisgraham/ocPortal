@@ -67,7 +67,6 @@ class Hook_fields_long_trans
 		if (!is_null($required))
 		{
 			if (($required) && ($default=='')) $default='default';
-			$default=strval(insert_lang_comcode($default,3,$db));
 		}
 		return array('long_trans',$default,'long_trans');
 	}

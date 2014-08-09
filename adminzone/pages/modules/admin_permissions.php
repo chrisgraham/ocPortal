@@ -587,10 +587,11 @@ class Module_admin_permissions
 					)+insert_lang('k_message',post_param('msg_'.$id),2));
 				} else
 				{
-					$GLOBALS['SITE_DB']->query_insert('match_key_messages',array(
-						'k_message'=>lang_remap($mkeylang[intval($id)],post_param('msg_'.$id)),
+					$map=array(
 						'k_match_key'=>$val
-					));
+					);
+					$map+=lang_remap('k_message',$mkeylang[intval($id)],post_param('msg_'.$id));
+					$GLOBALS['SITE_DB']->query_insert('match_key_messages',$map);
 					unset($mkeylang[intval($id)]);
 				}
 			}

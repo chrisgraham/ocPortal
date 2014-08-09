@@ -74,13 +74,13 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 	$_title=$_group_info[0]['g_title'];
 
 	$map=array();
-	if (!is_null($name)) $map['g_name']=lang_remap($_name,$name,$GLOBALS['FORUM_DB']);
+	if (!is_null($name)) $map+=lang_remap('g_name',$_name,$name,$GLOBALS['FORUM_DB']);
 	if (!is_null($is_default)) $map['g_is_default']=$is_default;
 	if (!is_null($is_presented_at_install)) $map['g_is_presented_at_install']=$is_presented_at_install;
 	if (!is_null($is_super_admin)) $map['g_is_super_admin']=$is_super_admin;
 	if (!is_null($is_super_moderator)) $map['g_is_super_moderator']=$is_super_moderator;
 	$map['g_group_leader']=$group_leader;
-	if (!is_null($title)) $map['g_title']=lang_remap($_title,$title,$GLOBALS['FORUM_DB']);
+	if (!is_null($title)) $map+=lang_remap('g_title',$_title,$title,$GLOBALS['FORUM_DB']);
 	$map['g_promotion_target']=$promotion_target;
 	$map['g_promotion_threshold']=$promotion_threshold;
 	if (!is_null($flood_control_submit_secs)) $map['g_flood_control_submit_secs']=$flood_control_submit_secs;

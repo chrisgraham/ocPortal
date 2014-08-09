@@ -351,7 +351,7 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		send_content_validated_notification('banner',$name);
 	}
 
-	$GLOBALS['SITE_DB']->query_update('banners',array(
+	$map=array(
 		'b_title_text'=>$title_text,
 		'b_direct_code'=>$direct_code,
 		'edit_date'=>time(),
@@ -360,14 +360,15 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 		'submitter'=>$submitter,
 		'name'=>$name,
 		'img_url'=>$imgurl,
-		'caption'=>lang_remap_comcode($_caption,$caption),
 		'campaign_remaining'=>$campaignremaining,
 		'site_url'=>$site_url,
 		'importance_modulus'=>$importancemodulus,
 		'notes'=>$notes,
 		'validated'=>$validated,
 		'b_type'=>$b_type
-	),array('name'=>$old_name),'',1);
+	);
+	$map+=lang_remap_comcode('caption',$_caption,$caption);
+	$GLOBALS['SITE_DB']->query_update('banners',$map,array('name'=>$old_name),'',1);
 }
 
 /**

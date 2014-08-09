@@ -299,22 +299,31 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 		$entries=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('c_name'=>$c_name),'',300,$start));
 		foreach ($entries as $entry)
 		{
-			$_default=mixed();
+			$default=mixed();
 
-			list($raw_type,$_default,$_type)=$ob->get_field_value_row_bits($map+array('id'=>$cf_id),$required==1,$default);
+			list($raw_type,$default,$_type)=$ob->get_field_value_row_bits($map+array('id'=>$cf_id),$required==1,$default);
 
-			if (strpos($raw_type,'trans')!==false) $_default=intval($_default);
-
-			if ($_type=='float')
+			$map=array('cf_id'=>$cf_id,'ce_id'=>$entry);
+			if (strpos($_type,'_trans')!==false)
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:floatval($_default));
+				if (!is_null($default))
+				{
+					$map+=insert_lang_comcode('cv_value',$default,3,$db);
+				} else
+				{
+					$map['cv_value']=NULL;
+				}
+			}
+			elseif ($_type=='float')
+			{
+				$map['cv_value']=((is_null($default)) || ($default==''))?NULL:floatval($default);
 			}
 			elseif ($_type=='integer')
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>((is_null($_default)) || ($_default==''))?NULL:intval($_default));
+				$map['cv_value']=((is_null($default)) || ($default==''))?NULL:intval($default);
 			} else
 			{
-				$map=array('cf_id'=>$cf_id,'ce_id'=>$entry,'cv_value'=>$_default);
+				$map['cv_value']=$default;
 			}
 			$GLOBALS['SITE_DB']->query_insert('catalogue_efv_'.$_type,$map);
 		}
@@ -362,7 +371,18 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 	$_description=$myrow['c_description'];
 
 	// Edit
-	$GLOBALS['SITE_DB']->query_update('catalogues',array('c_send_view_reports'=>$send_view_reports,'c_display_type'=>$display_type,'c_ecommerce'=>$ecommerce,'c_name'=>$name,'c_title'=>lang_remap($_title,$title),'c_description'=>lang_remap_comcode($_description,$description),'c_notes'=>$notes,'c_add_date'=>time(),'c_submit_points'=>$submit_points),array('c_name'=>$old_name),'',1);
+	$map=array(
+		'c_send_view_reports'=>$send_view_reports,
+		'c_display_type'=>$display_type,
+		'c_ecommerce'=>$ecommerce,
+		'c_name'=>$name,
+		'c_notes'=>$notes,
+		'c_add_date'=>time(),
+		'c_submit_points'=>$submit_points,
+	);
+	$map+=lang_remap('c_title',$_title,$title);
+	$map+=lang_remap_comcode('c_description',$_description,$description);
+	$GLOBALS['SITE_DB']->query_update('catalogues',$map,array('c_name'=>$old_name),'',1);
 
 	// If we're renaming, then we better change a load of references
 	if ($name!=$old_name)
@@ -477,7 +497,19 @@ function actual_edit_catalogue_field($id,$c_name,$name,$description,$order,$defi
 	$_name=$myrow['cf_name'];
 	$_description=$myrow['cf_description'];
 
-	$map=array('c_name'=>$c_name,'cf_name'=>lang_remap($_name,$name),'cf_description'=>lang_remap($_description,$description),'cf_order'=>$order,'cf_defines_order'=>$defines_order,'cf_visible'=>$visible,'cf_searchable'=>$searchable,'cf_default'=>$default,'cf_required'=>$required,'cf_put_in_category'=>$put_in_category,'cf_put_in_search'=>$put_in_search);
+	$map=array(
+		'c_name'=>$c_name,
+		'cf_order'=>$order,
+		'cf_defines_order'=>$defines_order,
+		'cf_visible'=>$visible,
+		'cf_searchable'=>$searchable,
+		'cf_default'=>$default,
+		'cf_required'=>$required,
+		'cf_put_in_category'=>$put_in_category,
+		'cf_put_in_search'=>$put_in_search,
+	);
+	$map+=lang_remap('cf_name',$_name,$name);
+	$map+=lang_remap('cf_description',$_description,$description);
 	if (!is_null($type)) $map['cf_type']=$type;
 
 	$GLOBALS['SITE_DB']->query_update('catalogue_fields',$map,array('id'=>$id),'',1);
@@ -706,7 +738,15 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 
 	store_in_catalogue_cat_treecache($id,$parent_id);
 
-	$map=array('cc_move_days_lower'=>$move_days_lower,'cc_move_days_higher'=>$move_days_higher,'cc_move_target'=>$move_target,'cc_title'=>lang_remap($_title,$title),'cc_description'=>lang_remap_comcode($_description,$description),'cc_notes'=>$notes,'cc_parent_id'=>$parent_id);
+	$map=array(
+		'cc_move_days_lower'=>$move_days_lower,
+		'cc_move_days_higher'=>$move_days_higher,
+		'cc_move_target'=>$move_target,
+		'cc_notes'=>$notes,
+		'cc_parent_id'=>$parent_id,
+	);
+	$map+=lang_remap('cc_title',$_title,$title);
+	$map+=lang_remap_comcode('cc_description',$_description,$description);
 
 	if (!is_null($rep_image))
 	{

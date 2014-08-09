@@ -841,7 +841,7 @@ class Hook_vb3
 				$post.="\n\n".'[attachment]'.strval($a_id).'[/attachment]';
 
 				ocf_over_msn();
-				update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
+				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 				ocf_over_local();
 
 				import_id_remap_put('post_files',strval($row['attachmentid']),1);

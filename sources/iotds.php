@@ -89,7 +89,18 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	delete_upload('uploads/iotds','iotd','url','id',$id,$url);
 	delete_upload('uploads/iotds_thumbs','iotd','thumb_url','id',$id,$thumb_url);
 
-	$GLOBALS['SITE_DB']->query_update('iotd',array('i_title'=>lang_remap_comcode($_title,$title),'edit_date'=>time(),'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'caption'=>lang_remap_comcode($_caption,$caption),'thumb_url'=>$thumb_url,'url'=>$url),array('id'=>$id),'',1);
+	$map=array(
+		'edit_date'=>time(),
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'thumb_url'=>$thumb_url,
+		'url'=>$url,
+	);
+	$map+=lang_remap_comcode('i_title',$_title,$title);
+	$map+=lang_remap_comcode('caption',$_caption,$caption);
+	$GLOBALS['SITE_DB']->query_update('iotd',$map,array('id'=>$id),'',1);
 
 	require_code('urls2');
 	suggest_new_idmoniker_for('iotds','view',strval($id),$title);

@@ -514,7 +514,10 @@ function edit_newsletter($id,$title,$description)
 {
 	$_title=$GLOBALS['SITE_DB']->query_value('newsletters','title',array('id'=>$id));
 	$_description=$GLOBALS['SITE_DB']->query_value('newsletters','description',array('id'=>$id));
-	$GLOBALS['SITE_DB']->query_update('newsletters',array('title'=>lang_remap($_title,$title),'description'=>lang_remap($_description,$description)),array('id'=>$id),'',1);
+	$map=array();
+	$map+=lang_remap('title',$_title,$title);
+	$map+=lang_remap('description',$_description,$description);
+	$GLOBALS['SITE_DB']->query_update('newsletters',$map,array('id'=>$id),'',1);
 	log_it('EDIT_NEWSLETTER',strval($id),$_title);
 }
 

@@ -423,9 +423,9 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 
 	$title=$bookable_details['title'];
 
-	$bookable_details['title']=lang_remap($_old_bookable[0]['title'],$bookable_details['title']);
-	$bookable_details['description']=lang_remap($_old_bookable[0]['description'],$bookable_details['description']);
-	$bookable_details['categorisation']=lang_remap($_old_bookable[0]['categorisation'],$bookable_details['categorisation']);
+	$bookable_details+=lang_remap('title',$_old_bookable[0]['title'],$bookable_details['title']);
+	$bookable_details+=lang_remap('description',$_old_bookable[0]['description'],$bookable_details['description']);
+	$bookable_details+=lang_remap('categorisation',$_old_bookable[0]['categorisation'],$bookable_details['categorisation']);
 
 	$bookable_details['edit_date']=time();
 
@@ -561,7 +561,7 @@ function edit_bookable_supplement($supplement_id,$details,$bookables=NULL)
 	$_old_supplement=$GLOBALS['SITE_DB']->query_select('bookable_supplement',array('*'),array('id'=>$supplement_id),'',1);
 	if (!array_key_exists(0,$_old_supplement)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	lang_remap($_old_supplement[0]['title'],$details['title']);
+	$_old_supplement[0]+=lang_remap('title',$_old_supplement[0]['title'],$details['title']);
 	unset($details['title']);
 
 	$GLOBALS['SITE_DB']->query_update('bookable_supplement',$details,array('id'=>$supplement_id),'',1);
@@ -646,7 +646,7 @@ function edit_bookable_blacked($blacked_id,$details,$bookables=NULL)
 	$_old_blacked=$GLOBALS['SITE_DB']->query_select('bookable_blacked',array('*'),array('id'=>$blacked_id),'',1);
 	if (!array_key_exists(0,$_old_blacked)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	lang_remap($_old_blacked[0]['blacked_explanation'],$details['blacked_explanation']);
+	$_old_blacked[0]+=lang_remap('blacked_explanation',$_old_blacked[0]['blacked_explanation'],$details['blacked_explanation']);
 	unset($details['blacked_explanation']);
 
 	$GLOBALS['SITE_DB']->query_update('bookable_blacked',$details,array('id'=>$blacked_id),'',1);

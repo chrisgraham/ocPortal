@@ -1026,18 +1026,6 @@ class Module_cms_comcode_pages
 
 		$completion_text=($validated==0)?do_lang_tempcode('SUBMIT_UNVALIDATED'):do_lang_tempcode('SUCCESS');
 
-		// Update cache  NO WE CAN'T - THEY'RE MULTI-THEME NOW
-	/*	$string_index=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
-		if (!is_null($string_index))
-		{
-			lang_remap_comcode($string_index,$new);
-		} else
-		{
-			$map=array('the_zone'=>$zone,'the_page'=>$file);
-			$map+=insert_lang_comcode('string_index',$new,1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
-			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map);
-		}*/
-
 		require_code('permissions2');
 		set_page_permissions_from_environment($zone,$file);
 
