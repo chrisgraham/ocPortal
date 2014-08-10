@@ -45,13 +45,6 @@ class Hook_comcode
 	 */
 	function run()
 	{
-		/*		$rows=$GLOBALS['SITE_DB']->query_select('translate',array('*'));
-		foreach ($rows as $row)
-		{
-			$text_parsed=comcode_to_tempcode($row['text_original'],$row['source_user']);
-			$text_parsed=$text_parsed->to_assembly();
-			$GLOBALS['SITE_DB']->query_update('translate',array('text_parsed'=>$text_parsed),array('id'=>$row['id'],'language'=>$row['language']));
-		}*/
 		require_code('view_modes');
 		erase_comcode_cache();
 

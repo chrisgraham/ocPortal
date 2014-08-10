@@ -58,6 +58,10 @@ In ocPortal almost [i]everything[/i] (*) can be translated, but obviously you wo
 
 (*) A few things cannot be translated such as forum names. The reasoning is that you [i]do not want[/i] such things translated, but rather you should have a different copy of each forum for each language. This is an exceptional situation, and is only designed like this due to the way forums are used. Other kinds of category may be translated as described above.
 
+[title="2"]Additional requirements[/title]
+
+All sites on an ocPortal multi-site-network must have the same multi-lang-content status (i.e. all have it, or all not have it).
+
 [title="2"]See also[/title]
 
  - [page="_SEARCH:tut_intl"]Localisation and internationalisation[/page]

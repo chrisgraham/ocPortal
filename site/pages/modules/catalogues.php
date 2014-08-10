@@ -581,26 +581,26 @@ class Module_catalogues
 			$rows=array();
 		} else
 		{
-			$query='SELECT c.c_title,c.c_name,t.text_original FROM '.get_table_prefix().'catalogues c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.c_title=t.id';
+			$query='SELECT c.c_title,c.c_name FROM '.get_table_prefix().'catalogues c';
 //			if (db_has_subqueries($GLOBALS['SITE_DB']->connection_read))		Actually we want empty ones in site trees
 //				$query.=' WHERE EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.c_name=c.c_name)';
-			$rows=$GLOBALS['SITE_DB']->query($query);
+			$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
 		}
 		foreach ($rows as $row)
 		{
 			if (substr($row['c_name'],0,1)=='_') continue;
 
-			if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
+			$row_title=get_translated_text($row['c_title']);
 			$kids=array();
 			if ((!is_null($max_depth)) || ($max_depth>1))
 			{
 				$adjusted_max_depth=is_null($max_depth)?NULL:(is_null($category_id)?($max_depth-2):($max_depth-1));
 				$kids=get_catalogue_category_tree($row['c_name'],$category_id,NULL,NULL,$adjusted_max_depth,false);
 			}
-			$children[]=array('_SELF:_SELF:type=index:id='.$row['c_name'],'catalogues_catalogue',$row['c_name'],$row['text_original'],$kids,'_SELF:_SELF:type=category:id=!','catalogues_category',true);
+			$children[]=array('_SELF:_SELF:type=index:id='.$row['c_name'],'catalogues_catalogue',$row['c_name'],$row_title,$kids,'_SELF:_SELF:type=category:id=!','catalogues_category',true);
 			if (!$require_permission_support)
 			{
-				$children[]=array('_SELF:_SELF:type=atoz:catalogue_name='.$row['c_name'],'catalogues_catalogue',$row['c_name'],do_lang('DEFAULT__CATALOGUE_CATEGORY_ATOZ',$row['text_original']));
+				$children[]=array('_SELF:_SELF:type=atoz:catalogue_name='.$row['c_name'],'catalogues_catalogue',$row['c_name'],do_lang('DEFAULT__CATALOGUE_CATEGORY_ATOZ',$row_title));
 			}
 		}
 
@@ -651,7 +651,7 @@ class Module_catalogues
 		// We read in all data for efficiency
 		if (is_null($category_data))
 		{
-			$query='SELECT c_name,d.id,t.text_original AS title,cc_add_date AS edit_date';
+			$query='SELECT c_name,d.id,cc_title,cc_add_date AS edit_date';
 			$lots=($GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','COUNT(*)')>1000) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read));
 			if ($lots)
 			{
@@ -660,13 +660,13 @@ class Module_catalogues
 			{
 				$query.=',cc_parent_id AS parent_id';
 			}
-			$query.=' FROM '.get_table_prefix().'catalogue_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.cc_title';
+			$query.=' FROM '.get_table_prefix().'catalogue_categories d';
 			$query.=' WHERE d.c_name NOT LIKE \''.db_encode_like('\_%').'\'';
 			if ($lots)
 			{
 				$query.=' AND EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.cc_id=d.id)';
 			}
-			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query($query));
+			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('cc_title')));
 		}
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())
@@ -686,6 +686,8 @@ class Module_catalogues
 		{
 			if (((!is_null($row['parent_id'])) && (strval($row['parent_id'])==$parent_attributes['id'])) || ((is_null($parent_pagelink_orig)) && (is_null($row['parent_id']))))
 			{
+				$row['title']=get_translated_text($row['cc_title']);
+
 				$pagelink=$pagelink_stub.'category:'.strval($row['id']);
 				if (__CLASS__!='')
 				{

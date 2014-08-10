@@ -72,28 +72,30 @@ class Hook_choose_cedi_page
 					$where.='p.id<>'.strval((integer)$seen);
 				}
 
-				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/);
+				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
 			} else
 			{
-				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/);
+				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
+				foreach ($orphans as &$orphan)
+				{
+					$orphan['_title']=get_translated_text($orphan['title']);
+				}
 				if (count($orphans)<50)
 				{
 					global $M_SORT_KEY;
-					$M_SORT_KEY='text_original';
+					$M_SORT_KEY='_title';
 					usort($orphans,'multi_sort');
 				}
 			}
 
-			foreach ($orphans as $orphan)
+			foreach ($orphans as &$orphan)
 			{
 				if (!has_category_access(get_member(),'seedy_page',strval($orphan['id']))) continue;
 
 				if ($orphan['id']==db_get_first_id()) continue;
 
-				if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($orphan['text_original'])) $orphan['text_original']=get_translated_text($orphan['title']);
-
 				$_id=strval($orphan['id']);
-				$title=$orphan['text_original'];
+				$title=$orphan['_title'];
 				$has_children=($GLOBALS['SITE_DB']->query_value('seedy_children','COUNT(*)',array('parent_id'=>$orphan['id']))!=0);
 				$selectable=true;
 

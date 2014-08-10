@@ -290,17 +290,17 @@ class Module_calendar
 		if (!$require_permission_support)
 		{
 			$tree=array();
-			$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('calendar_types c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.t_title=t.id',array('c.id','text_original','c.t_title'),NULL,'ORDER BY text_original');
+			$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('calendar_types c',array('c.id','c.t_title'),NULL,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('t_title'));
 			if (($max_depth>0) || (is_null($max_depth)))
 			{
 				foreach ($rows as $row)
 				{
 					if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($row['id']))) continue;
 
-					if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['t_title']);
+					$title=get_translated_text($row['t_title']);
 
 					if (($row['id']!=db_get_first_id()) || (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (cron_installed()))) // Filters system commands
-						$tree[]=array('_SELF:_SELF:type=misc:int_'.strval($row['id']).'=1','calendar',$row['id'],$row['text_original'],array());
+						$tree[]=array('_SELF:_SELF:type=misc:int_'.strval($row['id']).'=1','calendar',$row['id'],$title,array());
 				}
 			}
 		}
@@ -324,7 +324,7 @@ class Module_calendar
 	{
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('calendar_types c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.t_title',array('c.t_title','c.id','t.text_original AS title'));
+			$category_data=$GLOBALS['SITE_DB']->query_select('calendar_types c',array('c.t_title','c.id'));
 
 		// This is where we start
 		if (is_null($parent_pagelink))
@@ -338,7 +338,7 @@ class Module_calendar
 
 				if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($row['id']))) continue;
 
-				if (is_null($row['title'])) $row['title']=get_translated_text($row['t_title']);
+				$row['title']=get_translated_text($row['t_title']);
 
 				$pagelink=$pagelink_stub.'misc:int_'.strval($row['id']).'=1';
 				if (__CLASS__!='')
@@ -365,13 +365,13 @@ class Module_calendar
 					{
 						if (substr($key,0,4)=='int_') $parent_id=intval(substr($key,4));
 					}
-					$entry_data=$GLOBALS['SITE_DB']->query_select('calendar_events d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.e_title',array('d.e_title','d.id','t.text_original AS title','e_type AS category_id','e_add_date AS add_date','e_edit_date AS edit_date'),array('e_type'=>intval($parent_id)),'',500,$start);
+					$entry_data=$GLOBALS['SITE_DB']->query_select('calendar_events d',array('d.e_title','d.id','e_type AS category_id','e_add_date AS add_date','e_edit_date AS edit_date'),array('e_type'=>intval($parent_id)),'',500,$start);
 
 					foreach ($entry_data as $row)
 					{
 						if (!has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'calendar',strval($row['category_id']))) continue;
 
-						if (is_null($row['title'])) $row['title']=get_translated_text($row['e_title']);
+						$row['title']=get_translated_text($row['e_title']);
 
 						$pagelink=$pagelink_stub.'view:'.strval($row['id']);
 						call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.6,$row['title'])); // Callback

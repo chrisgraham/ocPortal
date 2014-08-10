@@ -282,13 +282,15 @@ class Module_downloads
 
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('download_categories d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.category',array('d.id','t.text_original AS title','parent_id','add_date AS edit_date'));
+			$category_data=$GLOBALS['SITE_DB']->query_select('download_categories d',array('d.id','d.category','parent_id','add_date AS edit_date'));
 
 		// Subcategories
 		foreach ($category_data as $row)
 		{
 			if ((!is_null($row['parent_id'])) && (strval($row['parent_id'])==$parent_attributes['id']))
 			{
+				$row['title']=get_translated_text($row['category']);
+
 				$pagelink=$pagelink_stub.'misc:'.strval($row['id']);
 				if (__CLASS__!='')
 				{
@@ -313,10 +315,12 @@ class Module_downloads
 			$start=0;
 			do
 			{
-				$entry_data=$GLOBALS['SITE_DB']->query_select('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.name',array('d.id','t.text_original AS title','category_id','add_date','edit_date'),array('category_id'=>intval($parent_attributes['id'])),'',500,$start);
+				$entry_data=$GLOBALS['SITE_DB']->query_select('download_downloads d',array('d.id','d.name','category_id','add_date','edit_date'),array('category_id'=>intval($parent_attributes['id'])),'',500,$start);
 
 				foreach ($entry_data as $row)
 				{
+					$row['title']=get_translated_text($row['name']);
+
 					$pagelink=$pagelink_stub.'entry:'.strval($row['id']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
 				}
@@ -386,7 +390,7 @@ class Module_downloads
 
 		if (!has_category_access(get_member(),'downloads',strval($id))) access_denied('CATEGORY_ACCESS');
 
-		$cat_order=get_param('cat_order','t.text_original ASC');
+		$cat_order=get_param('cat_order','category ASC');
 		$order=get_param('order',NULL);
 
 		$subcategories=get_download_sub_categories($id,$root,get_zone_name(),$cat_order);
@@ -416,8 +420,8 @@ class Module_downloads
 
 		// Sorting
 		$_selectors=array(
-			't.text_original ASC'=>'ALPHABETICAL_FORWARD',
-			't.text_original DESC'=>'ALPHABETICAL_BACKWARD',
+			'name ASC'=>'ALPHABETICAL_FORWARD',
+			'name DESC'=>'ALPHABETICAL_BACKWARD',
 			'file_size ASC'=>'SMALLEST_FIRST',
 			'file_size DESC'=>'LARGEST_FIRST',
 			'num_downloads DESC'=>'POPULARITY',
@@ -487,11 +491,11 @@ class Module_downloads
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$cats=array();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE validated=1 AND ('.$sql_filter.') ORDER BY text_original ASC');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT p.* FROM '.get_table_prefix().'download_downloads p WHERE validated=1 AND ('.$sql_filter.') ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('name').' ASC',NULL,NULL,false,false,array('name'));
 		foreach ($rows as $row)
 		{
-			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['name']);
-			$letter=strtoupper(substr($row['text_original'],0,1));
+			$download_name=get_translated_text($row['name']);
+			$letter=strtoupper(substr($download_name,0,1));
 
 			if (!has_category_access(get_member(),'downloads',strval($row['category_id']))) continue;
 

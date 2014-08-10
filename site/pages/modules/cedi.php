@@ -289,14 +289,14 @@ class Module_cedi
 		// We read in all data for efficiency
 		if (is_null($category_data))
 		{
-			$category_data=$GLOBALS['SITE_DB']->query_select('seedy_pages c LEFT JOIN '.get_table_prefix().'seedy_children x ON x.child_id=c.id LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.title',array('c.title AS _title','c.id','t.text_original AS title','parent_id','add_date'));
+			$category_data=$GLOBALS['SITE_DB']->query_select('seedy_pages c LEFT JOIN '.get_table_prefix().'seedy_children x ON x.child_id=c.id',array('c.title AS _title','c.id','parent_id','add_date'));
 			$category_data=remove_duplicate_rows($category_data,'id');
 		}
 
 		// Subcategories
 		foreach ($category_data as $row)
 		{
-			if (is_null($row['title'])) $row['title']=get_translated_text($row['_title']);
+			$row['title']=get_translated_text($row['_title']);
 
 			if ((!is_null($row['parent_id'])) && (strval($row['parent_id'])==$parent_attributes['id']))
 			{
@@ -408,7 +408,7 @@ class Module_cedi
 		$find=get_param('find','');
 		if ($find!='')	// Allow quick 'find' remapping to a real id
 		{
-			$id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON p.title=t.id','p.id',array('text_original'=>$find));
+			$id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages p','p.id',array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$find));
 			if (is_null($id))
 			{
 				$title=get_screen_title('ERROR_OCCURRED');

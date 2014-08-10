@@ -250,12 +250,12 @@ class Hook_smf2
 	function import_ocf_remove_old_groups()
 	{
 		$delete_groups=array('Local hero','Regular','Local','Old timer');
-		$rows=$GLOBALS['SITE_DB']->query('SELECT g.id,t.text_original FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_groups AS g INNER JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate AS t ON g.g_name=t.id');
+		$rows=$GLOBALS['SITE_DB']->query_select('f_groups',array('id','g_name'));
 		if ($rows!==NULL)
 		{
 			foreach ($rows as $row)
 			{
-				if (!in_array($row['text_original'],$delete_groups)) continue;
+				if (!in_array(get_translated_text($row['g_name']),$delete_groups)) continue;
 				ocf_delete_group($row['id']);
 			}
 		}
@@ -302,7 +302,7 @@ class Hook_smf2
 			$is_super_admin=0;
 			$is_super_moderator=0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$group_name),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$group_name),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($group_name,0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$leader,5,0,5,$max_attachments_upload,$avatar_max_width,$avatar_max_height,30000); //Edited by Duck
@@ -500,7 +500,7 @@ class Hook_smf2
 			if (import_check_if_imported('cpf',$row['id_field'])) continue;
 
 			$name=$row['field_name'];
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
 			if (is_null($id_new))
 			{
 				$default=$row['default_value'];
@@ -961,7 +961,7 @@ class Hook_smf2
 		// Admins always have access so no need to do and we skip Guests cause this is for Regular Members in SMF not guests
 		$ignore_groups=array('Guests','Administrators');
 		// Get the query
-		$rows=$GLOBALS['SITE_DB']->query('SELECT g.id,t.text_original FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_groups AS g INNER JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate AS t ON g.g_name=t.id');
+		$rows=$GLOBALS['SITE_DB']->query_select('f_groups',array('id','g_name'));
 		// Added this in cause of import issues in the past.
 		if ($rows!==NULL)
 		{
@@ -969,7 +969,7 @@ class Hook_smf2
 			foreach ($rows as $row)
 			{
 				// K Skip Admins and guests
-				if (in_array($row['text_original'],$ignore_groups)) continue;
+				if (in_array(get_translated_text($row['g_name']),$ignore_groups)) continue;
 				$gid=(integer)$row['id'];
 				// Set them to view
 				$this->set_forum_view_accesss($gid,$fid);
@@ -1218,14 +1218,13 @@ class Hook_smf2
 
 				$post_id=import_id_remap_get('post',strval($row['id_msg']));
 
-				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON p.p_post=t.id',array('p_time','text_original','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
 				if (!array_key_exists(0,$post_row))
 				{
 					import_id_remap_put('post_files',strval($row['id_attach']),1);
 					continue; // Orphaned post
 				}
-				$post=$post_row[0]['text_original'];
-				$lang_id=$post_row[0]['p_post'];
+				$post=get_translated_text($post_row[0]['p_post']);
 				$member_id=$post_row[0]['p_poster'];
 				$ext='.'.$row['fileext'];
 				$filename=$row['id_attach'].'_'.$row['file_hash'];
@@ -1236,7 +1235,7 @@ class Hook_smf2
 				$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>'ocf_post','r_referer_id'=>strval($post_id),'a_id'=>$a_id));
 				$post.="\n\n".'[attachment]'.strval($a_id).'[/attachment]';
 
-				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
+				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$post_row[0]['p_post'],$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 
 				import_id_remap_put('post_files',strval($row['id_attach']),1);
 			}

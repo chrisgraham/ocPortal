@@ -615,10 +615,8 @@ function site_tree_script()
 		{
 			if ((get_option('collapse_user_zones')=='1') && ($_zone['zone_name']=='site')) continue;
 
-			$_zone['text_original']=get_translated_text($_zone['zone_title']);
-
 			$zone=$_zone['zone_name'];
-			$zone_title=$_zone['text_original'];
+			$zone_title=get_translated_text($_zone['zone_title']);
 
 			if ($content_centric==1)
 			{

@@ -239,13 +239,13 @@ class Module_quiz
 			$start=0;
 			do
 			{
-				$rows=$GLOBALS['SITE_DB']->query_select('quizzes c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.q_name',array('c.q_name','c.id','t.text_original AS title','q_add_date AS add_time','q_timeout'),array('q_validated'=>1),'',500,$start);
+				$rows=$GLOBALS['SITE_DB']->query_select('quizzes c',array('c.q_name','c.id','q_add_date AS add_time','q_timeout'),array('q_validated'=>1),'',500,$start);
 
 				foreach ($rows as $row)
 				{
 					if (is_null($row['q_timeout']))
 					{
-						if (is_null($row['title'])) $row['title']=get_translated_text($row['q_name']);
+						$row['title']=get_translated_text($row['q_name']);
 
 						$pagelink=$pagelink_stub.'do:'.strval($row['id']);
 						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['add_time'],NULL,0.2,$row['title'])); // Callback

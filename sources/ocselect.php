@@ -489,7 +489,7 @@ function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
 	$ob=get_fields_hook($fields[intval($field_in_seq)]['cf_type']);
 	list(,,$table)=$ob->get_field_value_row_bits($fields[$field_in_seq]);
 
-	if (strpos($table,'_trans')!==false)
+	if ((strpos($table,'_trans')!==false) && (multi_lang_content()))
 	{
 		$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'catalogue_efv_'.$table.' f'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.ce_id=r.id AND f'.strval($field_in_seq).'.cf_id='.strval($fields[$field_in_seq]['id']).' LEFT JOIN '.$db->get_table_prefix().'translate t'.strval($field_in_seq).' ON f'.strval($field_in_seq).'.cv_value=t'.strval($field_in_seq).'.id';
 		return array('t'.strval($field_in_seq).'.text_original',$table,$filter_val);
@@ -583,10 +583,13 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 			case 'LONG_TRANS__COMCODE':
 			case 'SHORT_TRANS__COMCODE':
 				$field_type='line';
-				static $filter_i=1;
-				$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'translate ft'.strval($filter_i).' ON ft'.strval($filter_i).'.id='.strval($filter_key);
-				$filter_key='ft'.strval($filter_i).'.text_original';
-				$filter_i++;
+				if (multi_lang_content())
+				{
+					static $filter_i=1;
+					$extra_join[$filter_key]=' LEFT JOIN '.$db->get_table_prefix().'translate ft'.strval($filter_i).' ON ft'.strval($filter_i).'.id='.strval($filter_key);
+					$filter_key='ft'.strval($filter_i).'.text_original';
+					$filter_i++;
+				}
 				break;
 		}
 	} else

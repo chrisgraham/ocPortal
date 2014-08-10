@@ -194,7 +194,7 @@ class Hook_phpbb2
 			$is_super_admin=0;
 			$is_super_moderator=0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['group_name']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['group_name']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$INFO['avatar_max_width'],$INFO['avatar_max_height'],30000,$INFO['max_sig_chars']);
@@ -690,14 +690,13 @@ class Hook_phpbb2
 					$post_id=import_id_remap_get('post',strval($row['post_id']));
 				}
 
-				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON p.p_post=t.id',array('p_time','text_original','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
 				if (!array_key_exists(0,$post_row))
 				{
 					import_id_remap_put('post_files',strval($row['attach_id']),1);
 					continue; // Orphaned post
 				}
-				$post=$post_row[0]['text_original'];
-				$lang_id=$post_row[0]['p_post'];
+				$post=get_translated_text($post_row[0]['p_post']);
 				$member_id=import_id_remap_get('member',strval($row['user_id_1']),true);
 				if (is_null($member_id)) $member_id=$post_row[0]['p_poster'];
 
@@ -717,7 +716,7 @@ class Hook_phpbb2
 					$post.="\n\n".'[attachment="'.$row['comment'].'"]'.strval($a_id).'[/attachment]';
 
 					ocf_over_msn();
-					$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
+					$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$post_row[0]['p_post'],$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 					ocf_over_local();
 				}
 

@@ -521,7 +521,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$select,
 			if (!is_null($bits))
 			{
 				list($new_key,)=$bits;
-				if (strpos($new_key,'.text_original')!==false)
+				if ((strpos($new_key,'.text_original')!==false) && (multi_lang_content()))
 				{
 					$num_entries=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause);
 					if ($num_entries>300) // For large data sets too slow as after two MySQL joins it can't then use index for ordering
@@ -1321,14 +1321,14 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),array('c_name'=>$catalogue_name,'cc_parent_id'=>$category_id),'ORDER BY id DESC',300/*reasonable limit to stop it dying*/);
 	foreach ($rows as $i=>$child)
 	{
-		$rows[$i]['text_original']=get_translated_text($child['cc_title']);
+		$rows[$i]['_cc_title']=get_translated_text($child['cc_title']);
 	}
 	if (get_page_name()=='cms_catalogues')
 	{
 		if (count($rows)==300) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(300))),'warn');
 	}
 	global $M_SORT_KEY;
-	$M_SORT_KEY='text_original';
+	$M_SORT_KEY='_cc_title';
 	usort($rows,'multi_sort');
 	$no_root=!array_key_exists(0,$children);
 	if (!$no_root) $children[0]['child_count']=count($rows);
@@ -1337,7 +1337,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 		foreach ($rows as $child)
 		{
 			$child_id=$child['id'];
-			$child_title=$child['text_original'];
+			$child_title=$child['_cc_title'];
 			$child_breadcrumbs=new ocp_tempcode();
 			$child_breadcrumbs->attach($breadcrumbs2);
 

@@ -288,7 +288,7 @@ class Hook_smf
 			$is_super_admin=($row['groupName']=='Administrator')?1:0;
 			$is_super_moderator=($row['groupName']=='Global Moderator')?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['groupName']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['groupName']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['groupName'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$avatar_max_width,$avatar_max_height,30000);
@@ -924,14 +924,13 @@ class Hook_smf
 
 				$post_id=import_id_remap_get('post',strval($row['ID_MSG']));
 
-				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON p.p_post=t.id',array('p_time','text_original','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
 				if (!array_key_exists(0,$post_row))
 				{
 					import_id_remap_put('post_files',strval($row['ID_ATTACH']),1);
 					continue; // Orphaned post
 				}
-				$post=$post_row[0]['text_original'];
-				$lang_id=$post_row[0]['p_post'];
+				$post=get_translated_text($post_row[0]['p_post']);
 				$member_id=$post_row[0]['p_poster'];
 
 				$url=$this->data_to_disk('',$row['filename'],'attachments',$db,$table_prefix, '',$file_base,$row['ID_ATTACH']);
@@ -941,7 +940,7 @@ class Hook_smf
 				$post.="\n\n".'[attachment]'.strval($a_id).'[/attachment]';
 
 				ocf_over_msn();
-				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
+				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$post_row[0]['p_post'],$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 				ocf_over_local();
 
 				import_id_remap_put('post_files',strval($row['ID_ATTACH']),1);

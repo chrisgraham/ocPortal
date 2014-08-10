@@ -13,7 +13,14 @@ require_code('ocf_members');
 echo '<div class="wide_table_wrap"><table class="wide_table results_table spaced_table autosized_table">';
 echo '<tr><th>Avatar</th><th>Details</th><th>Signature</th></tr>';
 
-$gifts=$GLOBALS['SITE_DB']->query('SELECT gift_to,SUM(amount) as cnt FROM '.get_table_prefix().'gifts g LEFT JOIN '.get_table_prefix().'translate t ON t.id=g.reason WHERE text_original LIKE \''.db_encode_like($map['param']).': %\' AND gift_from<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' GROUP BY gift_to ORDER BY cnt DESC',10);
+if (multi_lang_content())
+{
+	$sql='SELECT gift_to,SUM(amount) as cnt FROM '.get_table_prefix().'gifts g LEFT JOIN '.get_table_prefix().'translate t ON t.id=g.reason WHERE text_original LIKE \''.db_encode_like($map['param']).': %\' AND gift_from<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' GROUP BY gift_to ORDER BY cnt DESC';
+} else
+{
+	$sql='SELECT gift_to,SUM(amount) as cnt FROM '.get_table_prefix().'gifts g WHERE reason LIKE \''.db_encode_like($map['param']).': %\' AND gift_from<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' GROUP BY gift_to ORDER BY cnt DESC';
+}
+$gifts=$GLOBALS['SITE_DB']->query($sql,10);
 $count=0;
 foreach ($gifts as $gift)
 {

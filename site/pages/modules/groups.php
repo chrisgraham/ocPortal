@@ -70,14 +70,14 @@ class Module_groups
 		$tree=array();
 		if ((!$require_permission_support) && (($max_depth>0) || (is_null($max_depth))))
 		{
-			$rows=$dont_care_about_categories?array():$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.g_name','g.id','text_original'),array('g_is_private_club'=>0,'g_is_hidden'=>0));
+			$rows=$dont_care_about_categories?array():$GLOBALS['FORUM_DB']->query_select('f_groups g',array('g.g_name','g.id'),array('g_is_private_club'=>0,'g_is_hidden'=>0));
 			foreach ($rows as $row)
 			{
-				if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+				$name=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
 				if ($row['id']!=db_get_first_id())
 				{
-					$tree[]=array('_SELF:_SELF:type=view:id='.strval($row['id']),NULL,NULL,$row['text_original'],array());
+					$tree[]=array('_SELF:_SELF:type=view:id='.strval($row['id']),NULL,NULL,$name,array());
 				}
 			}
 		}
@@ -102,11 +102,11 @@ class Module_groups
 			$start=0;
 			do
 			{
-				$groups=$GLOBALS['FORUM_DB']->query_select('f_groups c LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.g_name',array('c.g_name','c.id','t.text_original AS title'),array('g_hidden'=>0),'',500,$start);
+				$groups=$GLOBALS['FORUM_DB']->query_select('f_groups c',array('c.g_name','c.id'),array('g_hidden'=>0),'',500,$start);
 
 				foreach ($groups as $row)
 				{
-					if (is_null($row['title'])) $row['title']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+					$row['title']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
 					if ($row['id']!=db_get_first_id())
 					{
@@ -163,7 +163,7 @@ class Module_groups
 
 		foreach ($groups as $g_id=>$row)
 		{
-			$groups[$g_id]['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+			$groups[$g_id]['_name']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 		}
 
 		// Categorise
@@ -244,7 +244,7 @@ class Module_groups
 				continue;
 			}
 			if ($i>$start+$max) break;
-			$name=$row['text_original'];
+			$name=$row['_name'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 			$staff->attach(results_entry(array(hyperlink($url,escape_html($name)),escape_html($num_members))));
@@ -269,14 +269,14 @@ class Module_groups
 					continue;
 				}
 				if ($i>$start+$max) break;
-				$name=$row['text_original'];
+				$name=$row['_name'];
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 				$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 				$_p_t=$row['g_promotion_threshold'];
 				$p_t=new ocp_tempcode();
 				if ((!is_null($_p_t)) && (array_key_exists($row['g_promotion_target'],$_rank)))
 				{
-					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['text_original']));
+					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['_name'],$GLOBALS['FORUM_DB']));
 				}
 				$rank->attach(results_entry(array(hyperlink($url,escape_html($name)),escape_html($num_members),$p_t)));
 			}
@@ -300,15 +300,13 @@ class Module_groups
 			$query_start=0;
 		}
 		if ($query_max<0) $query_max=0;
-		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id',array('g.*','text_original'),$map,'ORDER BY g_order,g.id',$query_max,$query_start));
+		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g',array('g.*'),$map,'ORDER BY g_order,g.id',$query_max,$query_start));
 		$max_rows+=$GLOBALS['FORUM_DB']->query_value('f_groups g','COUNT(*)',$map);
 		$fields_title=results_field_title(array(do_lang_tempcode('NAME'),do_lang_tempcode('COUNT_MEMBERS')),$sortables);
 		$others=new ocp_tempcode();
 		foreach ($_others as $row)
 		{
-			$row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
-
-			$name=$row['text_original'];
+			$name=$row['_name'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 			$others->attach(results_entry(array(hyperlink($url,escape_html($name)),escape_html($num_members))));
@@ -473,7 +471,7 @@ class Module_groups
 		$club_forum=NULL;
 		if ($group['g_is_private_club']==1)
 		{
-			$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$name)));
+			$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>do_lang('FORUM_FOR_CLUB',$name)));
 		}
 
 		$group_name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
@@ -519,7 +517,7 @@ class Module_groups
 			$id=intval($_id);
 		} else // Collaboration zone has a text link like this
 		{
-			$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+			$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>$_id));
 			if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 
@@ -596,7 +594,7 @@ class Module_groups
 				$id=intval($_id);
 			} else // Collaboration zone has a text link like this
 			{
-				$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+				$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$_id));
 				if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			}
 			if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));

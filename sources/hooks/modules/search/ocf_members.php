@@ -101,11 +101,11 @@ class Hook_search_ocf_members
 		$group_titles=array();
 		foreach ($rows as $row)
 		{
-			$row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+			$name=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
 			if ($row['id']==db_get_first_id()) continue;
-			$groups->attach(form_input_list_entry(strval($row['id']),strval($row['id'])==$default_group,$row['text_original']));
-			$group_titles[$row['id']]=$row['text_original'];
+			$groups->attach(form_input_list_entry(strval($row['id']),strval($row['id'])==$default_group,$name));
+			$group_titles[$row['id']]=$name;
 		}
 		if (strpos($default_group,',')!==false)
 		{
@@ -228,7 +228,7 @@ class Hook_search_ocf_members
 				{
 					$temp=db_like_assemble($param);
 				}
-				if (($row['cf_type']=='short_trans') || ($row['cf_type']=='long_trans'))
+				if ((($row['cf_type']=='short_trans') || ($row['cf_type']=='long_trans')) && (multi_lang_content()))
 				{
 					$where_clause.=preg_replace('#\?#','t'.strval(count($trans_fields)+1).'.text_original',$temp);
 				} else

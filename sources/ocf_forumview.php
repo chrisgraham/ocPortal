@@ -826,26 +826,20 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	elseif ($order=='title') $order2='t_cache_first_title ASC';
 	if (get_value('disable_sunk')!=='1')
 		$order2='t_sunk ASC,'.$order2;
+	if (is_guest())
+	{
+		$query='SELECT ttop.*,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+	} else
+	{
+		$query='SELECT ttop.*,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+	}
 	if ($start<200)
 	{
-		if (is_guest())
-		{
-			$query='SELECT ttop.*,t.text_parsed AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
-		} else
-		{
-			$query='SELECT ttop.*,t.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
-		}
+		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('t_cache_first_post'));
 	} else // deep search, so we need to make offset more efficient, trade-off is more queries
 	{
-		if (is_guest())
-		{
-			$query='SELECT ttop.*,NULL AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
-		} else
-		{
-			$query='SELECT ttop.*,NULL AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
-		}
+		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start);
 	}
-	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start);
 	if (($start==0) && (count($topic_rows)<$max)) $max_rows=$max; // We know that they're all on this screen
 	else $max_rows=$GLOBALS['FORUM_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where);
 	$topics=array();

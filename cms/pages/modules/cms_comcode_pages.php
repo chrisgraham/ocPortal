@@ -384,7 +384,7 @@ class Module_cms_comcode_pages
 			switch ($sortable)
 			{
 				case 'page_title':
-					$orderer='t.text_original '.$sort_order;
+					$orderer=$GLOBALS['SITE_DB']->translate_field_ref('cc_page_title').' '.$sort_order;
 					break;
 				case 'page':
 					$orderer='c.the_page '.$sort_order;
@@ -403,8 +403,8 @@ class Module_cms_comcode_pages
 			$where_map='('.db_string_equal_to('language',$lang).' OR language IS NULL)';
 			if (!has_specific_permission(get_member(),'edit_highrange_content'))
 				$where_map.=' AND submitter='.strval(get_member());
-			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
-			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start);
+			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone';
+			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start,NULL,NULL,false,false,array('cc_page_title'));
 			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT c.the_zone,c.the_page) FROM '.$ttable.' WHERE '.$where_map);
 
 			$filesarray=array();

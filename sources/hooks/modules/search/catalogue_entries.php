@@ -245,14 +245,26 @@ class Hook_search_catalogue_entries
 						case 'long_trans':
 							$trans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_long_trans f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
-							$search_field='t'.strval(count($trans_fields)-1).'.text_original';
-							//$extra_select.=',t'.strval(count($trans_fields)-1).'.text_original AS f'.strval($i).'_actual_value';
+							if (multi_lang_content())
+							{
+								$search_field='t'.strval(count($trans_fields)-1).'.text_original';
+								//$extra_select.=',t'.strval(count($trans_fields)-1).'.text_original AS f'.strval($i).'_actual_value';
+							} else
+							{
+								$search_field='f'.strval($i).'.cv_value';
+							}
 							break;
 						case 'short_trans':
 							$trans_fields[]='f'.strval($i).'.cv_value';
 							$table.=' JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_efv_short_trans f'.strval($i).' ON (f'.strval($i).'.ce_id=r.id AND f'.strval($i).'.cf_id='.strval($row['id']).')';
-							$search_field='t'.strval(count($trans_fields)-1).'.text_original';
-							//$extra_select.=',t'.strval(count($trans_fields)-1).'.text_original AS f'.strval($i).'_actual_value';
+							if (multi_lang_content())
+							{
+								$search_field='t'.strval(count($trans_fields)-1).'.text_original';
+								//$extra_select.=',t'.strval(count($trans_fields)-1).'.text_original AS f'.strval($i).'_actual_value';
+							} else
+							{
+								$search_field='f'.strval($i).'.cv_value';
+							}
 							break;
 						case 'long':
 							$nontrans_fields[]='f'.strval($i).'.cv_value';

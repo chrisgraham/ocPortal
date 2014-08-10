@@ -337,7 +337,7 @@ class Module_cms_blogs extends standard_aed_module
 		if (addon_installed('calendar'))
 		{
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
-			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array('text_original'=>$schedule_code),'',1);
+			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events e',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array($GLOBALS['SITE_DB']->translate_field_ref('e_content')=>$schedule_code),'',1);
 			$scheduled=array_key_exists(0,$past_event)?array($past_event[0]['e_start_minute'],$past_event[0]['e_start_hour'],$past_event[0]['e_start_month'],$past_event[0]['e_start_day'],$past_event[0]['e_start_year']):NULL;
 			if ((!is_null($scheduled)) && ($scheduled<time())) $scheduled=NULL;
 		} else
@@ -483,7 +483,7 @@ class Module_cms_blogs extends standard_aed_module
 		{
 			require_code('calendar2');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
-			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events e LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON e.e_content=t.id','e.id',array('text_original'=>$schedule_code));
+			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events e','e.id',array($GLOBALS['SITE_DB']->translate_field_ref('e_content')=>$schedule_code));
 			require_code('calendar');
 			if (!is_null($past_event))
 			{

@@ -787,7 +787,7 @@ class Module_admin_config
 				case 'usergroup':
 					if (get_forum_type()=='ocf')
 					{
-						$tmp_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>get_option($myrow['the_name'])));
+						$tmp_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('name')=>get_option($myrow['the_name'])));
 
 						require_code('ocf_groups');
 						$_list=ocf_nice_get_usergroups($tmp_value);
@@ -932,8 +932,14 @@ class Module_admin_config
 			}
 			elseif (($myrow['the_type']=='usergroup') && (get_forum_type()=='ocf'))
 			{
-				$value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','text_original',array('g.id'=>post_param_integer($myrow['the_name'])));
-				if (is_null($value)) $value='';
+				$_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','name',array('g.id'=>post_param_integer($myrow['the_name'])));
+				if (is_null($value))
+				{
+					$value='';
+				} else
+				{
+					$value=get_translated_text($_value);
+				}
 			} else
 			{
 				$value=post_param($myrow['the_name'],'');

@@ -46,7 +46,7 @@ class Hook_rss_catalogues
 		$_categories=$GLOBALS['SITE_DB']->query('SELECT id,c_name,cc_title FROM '.get_table_prefix().'catalogue_categories WHERE '.$filters_1,300);
 		foreach ($_categories as $i=>$_category)
 		{
-			$_categories[$i]['text_original']=get_translated_text($_category['cc_title']);
+			$_categories[$i]['_title']=get_translated_text($_category['cc_title']);
 		}
 		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_entries WHERE ce_add_date>'.strval(time()-$cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND ce_validated=1 ':'').' AND '.$filters.' ORDER BY ce_add_date DESC',$max);
 		$categories=array();
@@ -99,7 +99,7 @@ class Hook_rss_catalogues
 				}
 				$news='';
 
-				$category=$_category['text_original'];
+				$category=$_category['_title'];
 				$category_raw=strval($row['cc_id']);
 
 				$view_url=build_url(array('page'=>'catalogues','type'=>'entry','id'=>$row['id']),get_module_zone('catalogues'),NULL,false,false,true);

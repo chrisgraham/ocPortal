@@ -92,7 +92,7 @@ function points_profile($member_id_of,$member_id_viewing)
 			log_hack_attack_and_exit('ORDERBY_HACK');
 
 		$max_rows=$GLOBALS['SITE_DB']->query_value('chargelog','COUNT(*)',array('user_id'=>$member_id_of));
-		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('user_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$rows=$GLOBALS['SITE_DB']->query_select('chargelog',array('*'),array('user_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$charges=new ocp_tempcode();
 		$fromname=get_site_name();
 		$toname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
@@ -202,7 +202,7 @@ function points_get_transactions($type,$member_id_of,$member_id_viewing)
 	$NON_CANONICAL_PARAMS[]='gift_sort_'.$type;
 	$NON_CANONICAL_PARAMS[]='gift_start_'.$type;
 	$max_rows=$GLOBALS['SITE_DB']->query_value('gifts','COUNT(*)',$where);
-	$rows=$GLOBALS['SITE_DB']->query_select('gifts g LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=g.reason',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+	$rows=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),$where,'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 	$out=new ocp_tempcode();
 	$viewing_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 	if (is_null($viewing_name)) $viewing_name=do_lang('UNKNOWN');

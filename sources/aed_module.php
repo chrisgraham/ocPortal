@@ -744,8 +744,7 @@ class standard_aed_module
 		$db=((substr($table,0,2)=='f_') && (!$force_site_db) && (get_forum_type()!='none'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 		if (($orderer_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
 		{
-			$table.=' LEFT JOIN '.$db->get_table_prefix().'translate t ON t.id=r.'.preg_replace('# (ASC|DESC)$#','',$orderer).' AND '.db_string_equal_to('language',user_lang());
-			$orderer='t.text_original';
+			$orderer=$GLOBALS['SITE_DB']->translate_field_ref(preg_replace('# (ASC|DESC)$#','',$orderer));
 		}
 		if ($force_site_db)
 		{

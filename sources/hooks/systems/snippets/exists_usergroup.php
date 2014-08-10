@@ -30,7 +30,7 @@ class Hook_exists_usergroup
 	{
 		$val=get_param('name');
 
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$val),'g.id');
+		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$val),'g.id');
 		if (is_null($test)) return new ocp_tempcode();
 
 		return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));

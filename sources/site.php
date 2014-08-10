@@ -124,19 +124,17 @@ function init__site()
 			$GLOBALS['SITE_DB']->query_insert('zones',$map);
 			require_code('menus2');
 			add_menu_item_simple('zone_menu',NULL,$real_zone,$real_zone.':',0,1);
-			$zones=$GLOBALS['SITE_DB']->query_select('zones z LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND z.zone_header_text=t.id',array('z.*','text_original AS zone_header_text_trans'),array('zone_name'=>$real_zone),'',1);
+			$zones=$GLOBALS['SITE_DB']->query_select('zones z',array('z.*'),array('zone_name'=>$real_zone),'',1);
 		}
 		if (array_key_exists(0,$zones))
 		{
 			$ZONE=$zones[0];
-			$ZONE['zone_header_text_trans']=get_translated_text($ZONE['zone_header_text']);
 			persistent_cache_set(array('ZONE',$real_zone),$ZONE);
 		}
 		if ($ZONE===NULL)
 		{
 			$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>''),'',1);
 			$ZONE=$zones[0];
-			$ZONE['zone_header_text_trans']=get_translated_text($ZONE['zone_header_text']);
 			warn_exit(do_lang_tempcode('BAD_ZONE',escape_html($real_zone)));
 		}
 		unset($zones);

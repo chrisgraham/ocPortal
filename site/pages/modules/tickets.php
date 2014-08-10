@@ -185,12 +185,12 @@ class Module_tickets
 
 		$permission_page='tickets';
 		$tree=array();
-		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('ticket_types c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.ticket_type_name=t.id',array('id','text_original'));
+		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('ticket_types c',array('id','ticket_type_name'));
 		foreach ($rows as $row)
 		{
-			if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['ticket_type_name']);
+			$ticket_type_name=get_translated_text($row['ticket_type_name']);
 
-			$tree[]=array('_SELF:_SELF:type=ticket:default='.strval($row['id']),'tickets',$row['text_original'],$row['text_original'],array());
+			$tree[]=array('_SELF:_SELF:type=ticket:default='.strval($row['id']),'tickets',strval($row['id']),$ticket_type_name,array());
 		}
 		return array($tree,$permission_page);
 	}
@@ -213,7 +213,7 @@ class Module_tickets
 
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('ticket_types c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.ticket_type_name=t.id',array('id','text_original AS title'));
+			$category_data=$GLOBALS['SITE_DB']->query_select('ticket_types c',array('id','ticket_type_name'));
 
 		// This is where we start
 		if (is_null($parent_pagelink))
@@ -223,7 +223,7 @@ class Module_tickets
 			// Subcategories
 			foreach ($category_data as $row)
 			{
-				if (is_null($row['title'])) $row['title']=get_translated_text($row['id']);
+				$row['title']=get_translated_text($row['ticket_type_name']);
 
 				if (!has_category_access($member_id,'tickets',$row['title'])) continue;
 
@@ -432,7 +432,7 @@ class Module_tickets
 	{
 		if (is_null($ticket_types_to_let_through)) $ticket_types_to_let_through=array();
 
-		$_types=$GLOBALS['SITE_DB']->query_select('ticket_types LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate ON id=ticket_type',array('id','text_original','cache_lead_time'),NULL,'ORDER BY text_original');
+		$_types=$GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name','cache_lead_time'),NULL,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('ticket_type_name'));
 		$types=array();
 		foreach ($_types as $type)
 		{
@@ -441,7 +441,7 @@ class Module_tickets
 
 			if (is_null($type['cache_lead_time'])) $lead_time=do_lang('UNKNOWN');
 			else $lead_time=display_time_period($type['cache_lead_time']);
-			$types[$type['id']]=array('TICKET_TYPE'=>strval($type['id']),'SELECTED'=>($type['id']===$selected_ticket_type),'NAME'=>$type['text_original'],'LEAD_TIME'=>$lead_time);
+			$types[$type['id']]=array('TICKET_TYPE'=>strval($type['id']),'SELECTED'=>($type['id']===$selected_ticket_type),'NAME'=>get_translated_text($type['ticket_type_name']),'LEAD_TIME'=>$lead_time);
 		}
 		return $types;
 	}

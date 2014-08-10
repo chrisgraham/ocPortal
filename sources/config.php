@@ -158,14 +158,12 @@ function load_options()
 	$OPTIONS=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
 	if (is_array($OPTIONS)) return;
 
-	global $SITE_INFO;
-	$lang=array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN';
-	$table='config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON c.config_value_trans=t.id AND '.db_string_equal_to('t.language',$lang).' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').')';
-	$select=array('c.the_name','c.config_value','c.config_value_trans','c.the_type','c.c_set','t.text_original AS config_value_effective');
-	$OPTIONS=$GLOBALS['SITE_DB']->query_select($table,$select,array(),'',NULL,NULL,true);
+	$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c',array('c.*'),array(),'',NULL,NULL,true);
 
 	if ($OPTIONS===NULL) critical_error('DATABASE_FAIL');
+
 	$OPTIONS=list_to_map('the_name',$OPTIONS);
+
 	if (function_exists('persistent_cache_set')) persistent_cache_set('OPTIONS',$OPTIONS);
 }
 
@@ -359,8 +357,7 @@ function get_option($name,$missing_ok=false)
 			{
 				if (!isset($option['eval']))
 				{
-					global $SITE_INFO;
-					$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON c.config_value_trans=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').')',array('c.the_name','c.config_value','c.config_value_trans','c.eval','c.the_type','c.c_set','t.text_original AS config_value_effective'),array(),'');
+					$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c',array('c.*'));
 					$OPTIONS=list_to_map('the_name',$OPTIONS);
 					$option=&$OPTIONS[$name];
 				}
@@ -391,8 +388,7 @@ function get_option($name,$missing_ok=false)
 		{
 			if (!isset($option['eval']))
 			{
-				global $SITE_INFO;
-				$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON (c.config_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND ('.db_string_equal_to('c.the_type','transtext').' OR '.db_string_equal_to('c.the_type','transline').'))',array('c.the_name','c.config_value','c.eval','c.the_type','c.c_set','t.text_original AS config_value_effective'),array(),'');
+				$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c',array('c.*'));
 				$OPTIONS=list_to_map('the_name',$OPTIONS);
 				$option=&$OPTIONS[$name];
 			}

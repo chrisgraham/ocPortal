@@ -383,12 +383,12 @@ class Module_galleries
 		if (is_null($image_data))
 		{
 			$image_data_count=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)');
-			$image_data=($image_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('images d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
+			$image_data=($image_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('images d',array('d.title','d.id','cat AS category_id','add_date','edit_date'));
 		}
 		if (is_null($video_data))
 		{
 			$video_data_count=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)');
-			$video_data=($video_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('videos d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS ntitle','cat AS category_id','add_date','edit_date'));
+			$video_data=($video_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('videos d',array('d.title','d.id','cat AS category_id','add_date','edit_date'));
 		}
 
 		// Subcategories
@@ -422,7 +422,7 @@ class Module_galleries
 				if ($row['category_id']==$parent_attributes['id'])
 				{
 					$pagelink=$pagelink_stub.'image:'.strval($row['id']);
-					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
+					$row['ntitle']=get_translated_text($row['title']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
 				}
 			}
@@ -431,7 +431,7 @@ class Module_galleries
 				if ($row['category_id']==$parent_attributes['id'])
 				{
 					$pagelink=$pagelink_stub.'video:'.strval($row['id']);
-					if (is_null($row['title'])) $row['ntitle']=get_translated_text($row['title']);
+					$row['ntitle']=get_translated_text($row['title']);
 					call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.2,$row['ntitle'])); // Callback
 				}
 			}

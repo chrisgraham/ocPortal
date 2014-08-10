@@ -1925,7 +1925,7 @@ class Hook_ocp_merge
 			if (import_check_if_imported('group',strval($row['id']))) continue;
 
 			$name=$this->get_lang_string($db,$row['g_name']);
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$name),'g.id');
 			if (is_null($id_new))
 			{
 				$title=$this->get_lang_string($db,$row['g_title']);
@@ -2061,7 +2061,7 @@ class Hook_ocp_merge
 			if (import_check_if_imported('cpf',strval($row['id']))) continue;
 
 			$name=$this->get_lang_string($db,$row['cf_name']);
-			$existing=$GLOBALS['FORUM_DB']->query_select('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id',array('f.id','cf_type'),array('text_original'=>$name),'',1);
+			$existing=$GLOBALS['FORUM_DB']->query_select('f_custom_fields f',array('f.id','cf_type'),array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name),'',1);
 			if ((!array_key_exists(0,$existing)) || ($existing[0]['cf_type']!=$row['cf_type']))
 			{
 				$only_group=$row['cf_only_group'];
@@ -2460,7 +2460,7 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			$name=$this->get_lang_string($db,$row['mm_name']);
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_multi_moderations m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON m.mm_name=t.id','m.id',array('text_original'=>$name));
+			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_multi_moderations m','m.id',array($GLOBALS['FORUM_DB']->translate_field_ref('mm_name')=>$name));
 			if (is_null($test))
 			{
 				$move_to=is_null($row['mm_move_to'])?NULL:import_id_remap_get('forum',strval($row['mm_move_to']),true);

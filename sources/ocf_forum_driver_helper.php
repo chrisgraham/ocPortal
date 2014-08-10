@@ -281,18 +281,18 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') '.$topic_filter.$topic_filter_sup;
 	}
 
-	$post_query_select='p.p_title,t.text_parsed,t.id,p.p_poster,p.p_poster_name_if_guest';
-	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts('t.text_original');
-	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
+	$post_query_select='p.p_title,t.id,p.p_poster,p.p_poster_name_if_guest';
+	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
+	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p';
 	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
-	$post_query_sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$post_query_where.' ORDER BY p_time,p.id';
+	$post_query_sql.=' WHERE '.$post_query_where.' ORDER BY p_time,p.id';
 
 	if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result)
 		$query.=' AND EXISTS('.$post_query_sql.')';
 
 	$max_rows=$this_ref->connection->query_value_null_ok_full(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
 	if ($limit==0) return array();
-	$rows=$this_ref->connection->query($query.' ORDER BY '.(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC',$limit,$start,false,true);
+	$rows=$this_ref->connection->query($query.' ORDER BY '.(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC',$limit,$start,false,true,array('p_post'));
 
 	$out=array();
 	foreach ($rows as $i=>$r)
@@ -394,7 +394,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 
 	$where='('.ocf_get_topic_where($topic_id).')';
 	if (!$load_spacer_posts_too)
-		$where.=not_like_spacer_posts('t.text_original');
+		$where.=not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
 	$where.=$extra_where;
 	if (!has_specific_permission(get_member(),'see_unvalidated')) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval((integer)get_member()).'))';
 	$index=(strpos(get_db_type(),'mysql')!==false && !is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))))?'USE INDEX (in_topic)':'';
@@ -410,7 +410,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 		$select='p.id,p.p_parent_id,p.p_intended_solely_for,p.p_poster';
 	} else
 	{
-		$select='p.*,text_parsed,text_original';
+		$select='p.*';
 		if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
 		{
 			$select.=',h.h_post_id';
@@ -422,12 +422,12 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	}
 	if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
 	{
-		$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start);
+		$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start,false,false,array('p_post'));
 	} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
 	{
-		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY '.$order,$max,$start);
+		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where.' ORDER BY '.$order,$max,$start,false,false,array('p_post'));
 	}
-	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where);
+	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where,NULL,NULL,false,false,array('p_post'));
 
 	$out=array();
 	foreach ($rows as $myrow)

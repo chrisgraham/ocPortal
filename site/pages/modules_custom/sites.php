@@ -169,7 +169,7 @@ class Module_sites
 		$hostingcopy_form=do_template('FORM',array('HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_NAME'=>$submit_name));
 
 		// Put together details about releases
-		$t=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','name',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d','name',array($GLOBALS['SITE_DB']->translate_field_ref('comments')=>'This is the latest version.'));
 		if (!is_null($t))
 		{
 			$releases=new ocp_tempcode();
@@ -204,7 +204,7 @@ class Module_sites
 	 */
 	function do_release($name,$prefix,$version_must_be_newer_than=NULL)
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT d.description as d_description,d.id AS d_id,num_downloads,file_size,text_original FROM '.get_table_prefix().'download_downloads d USE INDEX(downloadauthor) LEFT JOIN '.get_table_prefix().'translate t ON d.name=t.id WHERE '.db_string_equal_to('author','ocProducts').' AND validated=1 AND t.text_original LIKE \''.db_encode_like('%'.$name).'\' ORDER BY add_date DESC',1);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT d.*,d.id AS d_id FROM '.get_table_prefix().'download_downloads d USE INDEX(downloadauthor) WHERE '.db_string_equal_to('author','ocProducts').' AND validated=1 AND '.$GLOBALS['SITE_DB']->translate_field_ref('name').' LIKE \''.db_encode_like('%'.$name).'\' ORDER BY add_date DESC',1,NULL,false,false,array('name'));
 		if (!array_key_exists(0,$rows)) return NULL; // Shouldn't happen, but let's avoid transitional errors
 
 		if (!is_null($version_must_be_newer_than))
@@ -219,7 +219,7 @@ class Module_sites
 		$keep=symbol_tempcode('KEEP');
 		$url=find_script('dload',false,1).'?id='.strval($id).$keep->evaluate();
 		require_code('version2');
-		$version=get_version_dotted__from_anything($myrow['text_original']);
+		$version=get_version_dotted__from_anything(get_translated_text($myrow['name']));
 		$filesize=clean_file_size($myrow['file_size']);
 
 		if (!is_null($version_must_be_newer_than))
@@ -359,7 +359,7 @@ class Module_sites
 		}
 
 		// Find latest version
-		$t=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.comments','url',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d','url',array($GLOBALS['SITE_DB']->translate_field_ref('comments')=>'This is the latest version.'));
 		if (is_null($t)) warn_exit(do_lang_tempcode('ARCHIVE_NOT_AVAILABLE'));
 		if (url_is_local($t)) $t=get_custom_file_base().'/'.rawurldecode($t);
 

@@ -66,7 +66,7 @@ if (!$is_bleeding_edge)
 // Add downloads (assume uploaded already)
 
 require_code('downloads2');
-$releases_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>db_get_first_id(),'text_original'=>'Releases'));
+$releases_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id',array('parent_id'=>db_get_first_id(),$GLOBALS['SITE_DB']->translate_field_ref('category')=>'Releases'));
 if (is_null($releases_category_id))
 {
 	$releases_category_id=add_download_category('Releases',db_get_first_id(),'','');
@@ -74,7 +74,7 @@ if (is_null($releases_category_id))
 		$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($releases_category_id),'group_id'=>$group_id));
 }
 
-$release_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>$releases_category_id,'text_original'=>'Version '.strval(intval($version_dotted))));
+$release_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id',array('parent_id'=>$releases_category_id,$GLOBALS['SITE_DB']->translate_field_ref('category')=>'Version '.strval(intval($version_dotted))));
 if (is_null($release_category_id))
 {
 	$release_category_id=add_download_category('Version '.strval(intval($version_dotted)),$releases_category_id,'','');
@@ -82,7 +82,7 @@ if (is_null($release_category_id))
 		$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($release_category_id),'group_id'=>$group_id));
 }
 
-$installatron_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>$releases_category_id,'text_original'=>'Installatron integration'));
+$installatron_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id',array('parent_id'=>$releases_category_id,$GLOBALS['SITE_DB']->translate_field_ref('category')=>'Installatron integration'));
 if (is_null($installatron_category_id))
 {
 	$installatron_category_id=add_download_category('Installatron integration',$releases_category_id,'','');
@@ -90,7 +90,7 @@ if (is_null($installatron_category_id))
 		$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($installatron_category_id),'group_id'=>$group_id));
 }
 
-$microsoft_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>$releases_category_id,'text_original'=>'Microsoft integration'));
+$microsoft_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id',array('parent_id'=>$releases_category_id,$GLOBALS['SITE_DB']->translate_field_ref('category')=>'Microsoft integration'));
 if (is_null($microsoft_category_id))
 {
 	$microsoft_category_id=add_download_category('Microsoft integration',$releases_category_id,'','');
@@ -161,7 +161,7 @@ foreach ($all_downloads_to_add as $i=>$d)
 	$comments=$d['comments'];
 	$category_id=$d['category_id'];
 
-	$download_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON t.id=d.name','d.id',array('category_id'=>$category_id,'text_original'=>$name));
+	$download_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d','d.id',array('category_id'=>$category_id,$GLOBALS['SITE_DB']->translate_field_ref('name')=>$name));
 	if (is_null($download_id))
 	{
 		$download_id=add_download($category_id,$name,$url,$description,'ocProducts',$comments,NULL,1,0,0,0,'',$original_filename,$file_size,0,0);
@@ -181,14 +181,14 @@ foreach ($all_downloads_to_add as $i=>$d)
 
 if ((!$is_bleeding_edge) && (!$is_old_tree) && (isset($all_downloads_to_add[0]['download_id'])))
 {
-	$last_version_str=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','t.id',array('text_original'=>'This is the latest version.'),' AND d.id<>'.strval($all_downloads_to_add[0]['download_id']));
+	$last_version_str=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d','t.id',array($GLOBALS['SITE_DB']->translate_field_ref('comments')=>'This is the latest version.'),' AND d.id<>'.strval($all_downloads_to_add[0]['download_id']));
 	if (!is_null($last_version_str))
 	{
-		$last_version_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d JOIN '.get_table_prefix().'translate t ON d.comments=t.id','d.id',array('text_original'=>'This is the latest version.'),' AND d.id<>'.strval($all_downloads_to_add[0]['download_id']));
+		$last_version_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d','d.id',array($GLOBALS['SITE_DB']->translate_field_ref('comments')=>'This is the latest version.'),' AND d.id<>'.strval($all_downloads_to_add[0]['download_id']));
 		if (!is_null($last_version_id))
 		{
 			$description="A new version, {$version_pretty} is available. Upgrading to {$version_pretty} is considered {$needed} by ocProducts{$justification}. There may have been other upgrades since {$version_pretty} - see [url=\"the ocProducts news archive\" target=\"_blank\"]http://ocportal.com/site/pg/news[/url].";
-			$GLOBALS['SITE_DB']->query_update('translate',array('text_original'=>$description),array('id'=>$last_version_str),'',1);
+			$GLOBALS['SITE_DB']->query_update('downloads',lang_remap($last_version_str,'description',$description),array('id'=>$last_version_id),'',1);
 		}
 	}
 }
@@ -229,7 +229,7 @@ To upgrade follow the steps in your website's [tt]http://mybaseurl/upgrader.php[
 
 {$changes}";
 
-$news_category=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories c JOIN '.get_table_prefix().'translate t ON c.nc_title=t.id','c.id',array('text_original'=>'New releases'));
+$news_category=$GLOBALS['SITE_DB']->query_value_null_ok('news_categories c','c.id',array($GLOBALS['SITE_DB']->translate_field_ref('nc_title')=>'New releases'));
 if (is_null($news_category))
 {
 	$news_category=add_news_category('New releases','newscats/general','');
@@ -237,7 +237,7 @@ if (is_null($news_category))
 		$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'news','category_name'=>strval($news_category),'group_id'=>$group_id));
 }
 
-$news_id=$GLOBALS['SITE_DB']->query_value_null_ok('news d JOIN '.get_table_prefix().'translate t ON t.id=d.title','d.id',array('news_category'=>$news_category,'text_original'=>$news_title));
+$news_id=$GLOBALS['SITE_DB']->query_value_null_ok('news d','d.id',array('news_category'=>$news_category,$GLOBALS['SITE_DB']->translate_field_ref('title')=>$news_title));
 if (is_null($news_id))
 {
 	$news_id=add_news($news_title,$summary,'ocProducts',1,0,1,0,'',$article,$news_category);

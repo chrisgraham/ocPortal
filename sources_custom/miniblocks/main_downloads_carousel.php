@@ -11,11 +11,10 @@ require_javascript('javascript_dyn_comcode');
 $subdownloads=new ocp_tempcode();
 require_code('ocfiltering');
 $filter_where=ocfilter_to_sqlfragment(strval($id).'*','id','download_categories','parent_id','category_id','id');
-$all_rows=$GLOBALS['SITE_DB']->query('SELECT d.*,text_original FROM '.get_table_prefix().'download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND d.name=t.id WHERE '.$filter_where,20);
+$all_rows=$GLOBALS['SITE_DB']->query('SELECT d.* FROM '.get_table_prefix().'download_downloads d WHERE '.$filter_where,20,NULL,false,false,array('name','description'));
 shuffle($all_rows);
 foreach ($all_rows as $d_row)
 {
-	if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($d_row['text_original'])) $d_row['text_original']=get_translated_text($d_row['description']);
 	$d_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$d_row['id']),get_module_zone('downloads'));
 	if (addon_installed('galleries'))
 	{

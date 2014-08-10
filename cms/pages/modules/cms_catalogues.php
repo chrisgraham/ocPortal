@@ -866,10 +866,10 @@ class Module_cms_catalogues extends standard_aed_module
 
 		// Find out what categories we have in the catalogue
 		$categories=array();
-		$catsrow=$GLOBALS['SITE_DB']->query("SELECT t1.id,t2.text_original,t1.cc_parent_id FROM ".$GLOBALS['SITE_DB']->get_table_prefix()."catalogue_categories t1,".$GLOBALS['SITE_DB']->get_table_prefix()."translate t2 WHERE t1.cc_title=t2.id AND t1.c_name='".db_escape_string($catalogue_name)."'");
+		$catsrow=$GLOBALS['SITE_DB']->query('catalogue_categories c',array('c.*'),array('c_name'=>$catalogue_name));
 		foreach($catsrow as $values)
 		{
-			$categories[$values['text_original']]=$values['id'];
+			$categories[get_translated_text($values['cc_title'])]=$values['id'];
 
 			// Root category is 'default' category for catalogue importing (category with same name as catalogue)
 			if ((!array_key_exists($catalogue_name,$categories)) && (is_null($values['cc_parent_id'])))
@@ -1108,7 +1108,7 @@ class Module_cms_catalogues extends standard_aed_module
 								break;
 							case 'short_trans':
 							case 'long_trans':
-								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type.' f JOIN '.get_table_prefix().'translate t ON t.id=f.cv_value','f.id',array('text_original'=>$key));
+								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type.' f','f.id',array($GLOBALS['SITE_DB']->translate_field_ref('cv_value')=>$key));
 								break;
 							default:
 								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type,'id',array('cv_value'=>$key));

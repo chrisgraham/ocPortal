@@ -41,7 +41,7 @@ $id_float=floatval($version);
 do
 {
 	$str='Version './*preg_replace('#\.0$#','',*/float_to_raw_string($id_float,1)/*)*/;
-	$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=c.category','c.id',array('parent_id'=>3,'text_original'=>$str));
+	$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','c.id',array('parent_id'=>3,$GLOBALS['SITE_DB']->translate_field_ref('category')=>$str));
 	if (is_null($_id)) $id_float-=0.1;
 }
 while ((is_null($_id)) && ($id_float!=0.0));
@@ -66,7 +66,7 @@ foreach (array_keys($_GET) as $x)
 
 		$addon_times[intval(substr($x,6))]=array(NULL,NULL,NULL,$addon_name);
 
-		$result=$GLOBALS['SITE_DB']->query('SELECT d.id,url,text_original FROM '.get_table_prefix().'download_downloads d JOIN '.get_table_prefix().'translate t ON t.id=d.name WHERE '.db_string_equal_to('text_original',$addon_name).' AND ('.$filter_sql.')');
+		$result=$GLOBALS['SITE_DB']->query('SELECT d.id,url,name FROM '.get_table_prefix().'download_downloads WHERE '.db_string_equal_to($GLOBALS['SITE_DB']->translate_field_ref('name'),$addon_name).' AND ('.$filter_sql.')',NULL,NULL,false,false,array('name'));
 		if (array_key_exists(0,$result))
 		{
 			$url=$result[0]['url'];
@@ -80,10 +80,10 @@ foreach (array_keys($_GET) as $x)
 			}
 			if ($last_date===false) continue;
 
-			$text_original=$result[0]['text_original'];
+			$name=get_translated_text($result[0]['name']);
 			$url=$result[0]['url'];
 			$id=$result[0]['id'];
-			$addon_times[intval(substr($x,6))]=array($last_date,$id,$url,$text_original);
+			$addon_times[intval(substr($x,6))]=array($last_date,$id,$url,$name);
 		}
 	}
 }

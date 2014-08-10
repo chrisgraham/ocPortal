@@ -289,7 +289,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 			if (is_null($PROBATION_GROUP))
 			{
 				$probation_group=get_option('probation_usergroup');
-				$PROBATION_GROUP=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$probation_group));
+				$PROBATION_GROUP=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('name')=>$probation_group));
 				if (is_null($PROBATION_GROUP)) $PROBATION_GROUP=false;
 			}
 			if ($PROBATION_GROUP!==false) return array($PROBATION_GROUP=>1);

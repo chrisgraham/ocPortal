@@ -89,7 +89,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		$NON_CANONICAL_PARAMS[]='sort';
 
 		$max_rows=$GLOBALS['SITE_DB']->query_value('chargelog','COUNT(*)',array('user_id'=>$member_id_of));
-		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('user_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$rows=$GLOBALS['SITE_DB']->query_select('chargelog',array('*'),array('user_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$charges=new ocp_tempcode();
 		$fromname=get_site_name();
 		$toname=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);

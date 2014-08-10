@@ -73,13 +73,13 @@ class Block_main_download_category
 		if ((!is_null($cat_order)) && (strpos($cat_order,' ')===false)) $cat_order.=' ASC';
 		if (!is_null($order))
 		{
-			if (($order!='t.text_original ASC') && ($order!='t.text_original DESC') && ($order!='t.text_original ASC') && ($order!='t.text_original DESC') && ($order!='file_size ASC') && ($order!='file_size DESC')
+			if (($order!='name ASC') && ($order!='name DESC') && ($order!='file_size ASC') && ($order!='file_size DESC')
 				&& ($order!='num_downloads DESC') && ($order!='add_date ASC')
 				&& ($order!='add_date DESC')) $order=NULL;
 		}
 		if (!is_null($cat_order))
 		{
-			if (($cat_order!='t.text_original ASC') && ($cat_order!='t.text_original DESC') && ($cat_order!='add_date ASC') && ($order!='add_date DESC')) $cat_order=NULL;
+			if (($cat_order!='category ASC') && ($cat_order!='category DESC') && ($cat_order!='add_date ASC') && ($order!='add_date DESC')) $cat_order=NULL;
 		}
 		$subcategories=get_download_sub_categories($category_id,NULL,NULL,$cat_order);
 		$downloads=get_category_downloads($category_id,$category_id,$order);

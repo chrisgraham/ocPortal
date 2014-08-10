@@ -191,7 +191,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 
 		$name=$field['m_name'];
 		$value='';
-		if (strpos($field['m_type'],'TRANS')!==false) // Translation layer integration.
+		if ((strpos($field['m_type'],'TRANS')!==false) && (multi_lang_content())) // Translation layer integration.
 		{
 			$translate_rows=$GLOBALS['SITE_DB']->query_select('translate',array('*'),array('id'=>$row[$name]));
 			foreach ($translate_rows as $t)
@@ -560,7 +560,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 		foreach ($all_fields[$table[0]] as $field) if ($field['m_name']==$row_tag) break;
 		if ($field['m_name']!=$row_tag) continue; // No such field
 
-		if (strpos($field['m_type'],'TRANS')!==false) // Translation layer integration.
+		if ((strpos($field['m_type'],'TRANS')!==false) && (multi_lang_content())) // Translation layer integration.
 		{
 			if ($update) // Update in lang layer
 			{

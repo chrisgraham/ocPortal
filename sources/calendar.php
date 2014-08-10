@@ -571,9 +571,9 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 			if (($_event_type['t_external_feed']!='') && ((is_null($filter)) || (!array_key_exists($_event_type['id'],$filter)) || ($filter[$_event_type['id']]==1)) && (has_category_access(get_member(),'calendar',strval($_event_type['id']))))
 				$feed_urls_todo[$_event_type['t_external_feed']]=$_event_type['id'];
 
-			$_event_types[$j]['text_original']=get_translated_text($_event_type['t_title']);
+			$_event_types[$j]['_title']=get_translated_text($_event_type['t_title']);
 		}
-		$event_types=collapse_2d_complexity('text_original','t_logo',$_event_types);
+		$event_types=collapse_2d_complexity('_title','t_logo',$_event_types);
 
 		// Overlay it
 		foreach ($feed_urls_todo as $feed_url=>$event_type)

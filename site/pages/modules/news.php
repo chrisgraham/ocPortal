@@ -209,12 +209,12 @@ class Module_news
 
 		$permission_page='cms_news';
 		$tree=array();
-		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('news_categories c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.nc_title=t.id',array('c.nc_title','c.id','text_original'),array('nc_owner'=>NULL),'ORDER BY text_original ASC');
+		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.nc_title','c.id'),array('nc_owner'=>NULL),'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('nc_title').' ASC');
 		if (($max_depth>0) || (is_null($max_depth)))
 		{
 			foreach ($rows as $row)
 			{
-				if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['nc_title']);
+				$title=get_translated_text($row['nc_title']);
 
 				$page_link_under='_SELF:_SELF:type=misc:id='.strval($row['id']);
 				if (!is_null($start_at))
@@ -222,7 +222,7 @@ class Module_news
 					if (strpos($start_at,':blog=0')!==false) $page_link_under.=':blog=0';
 					if (strpos($start_at,':blog=1')!==false) $page_link_under.=':blog=1';
 				}
-				$tree[]=array($page_link_under,'news',$row['id'],$row['text_original'],array());
+				$tree[]=array($page_link_under,'news',$row['id'],$title,array());
 			}
 		}
 		return array($tree,$permission_page);
@@ -251,10 +251,10 @@ class Module_news
 			$start=0;
 			do
 			{
-				$category_data=$GLOBALS['SITE_DB']->query_select('news_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.nc_title',array('c.nc_title','c.id','t.text_original AS title'),NULL,'',300,$start);
+				$category_data=$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.nc_title','c.id'),NULL,'',300,$start);
 				foreach ($category_data as $row)
 				{
-					if (is_null($row['title'])) $row['title']=get_translated_text($row['nc_title']);
+					$row['title']=get_translated_text($row['nc_title']);
 
 					$pagelink=$pagelink_stub.'misc:'.strval($row['id']);
 					if (__CLASS__!='')
@@ -285,13 +285,13 @@ class Module_news
 				$start=0;
 				do
 				{
-					$entry_data=$GLOBALS['SITE_DB']->query_select('news d LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=d.title',array('d.title','d.id','t.text_original AS title','news_category AS category_id','date_and_time AS add_date','edit_date'),NULL,'',500,$start);
+					$entry_data=$GLOBALS['SITE_DB']->query_select('news d',array('d.title','d.id','news_category AS category_id','date_and_time AS add_date','edit_date'),NULL,'',500,$start);
 
 					foreach ($entry_data as $row)
 					{
 						if (strval($row['category_id'])==$parent_attributes['id'])
 						{
-							if (is_null($row['title'])) $row['title']=get_translated_text($row['title']);
+							$row['title']=get_translated_text($row['title']);
 
 							$pagelink=$pagelink_stub.'view:'.strval($row['id']);
 							call_user_func_array($callback,array($pagelink,$parent_pagelink,$row['add_date'],$row['edit_date'],0.8,$row['title'])); // Callback
@@ -367,23 +367,17 @@ class Module_news
 		if (is_null($blogs))
 		{
 			$map=array();
-			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.nc_title',array('c.*','text_original'),$map,'ORDER BY nc_owner',$max,$start); // Ordered to show non-blogs first (nc_owner=NULL)
+			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.*'),$map,'ORDER BY nc_owner,'.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered to show non-blogs first (nc_owner=NULL)
 			$max_rows=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',$map);
 		} elseif ($blogs==1)
 		{
-			$categories=$GLOBALS['SITE_DB']->query('SELECT c.*,text_original FROM '.get_table_prefix().'news_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.nc_title WHERE nc_owner IS NOT NULL ORDER BY nc_owner DESC',$max,$start); // Ordered to show newest blogs first
-			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NOT NULL');
+			$categories=$GLOBALS['SITE_DB']->query('SELECT c.* FROM '.get_table_prefix().'news_categories c WHERE nc_owner IS NOT NULL ORDER BY nc_owner DESC,'.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered to show newest blogs first
+			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NOT NULL',NULL,NULL,false,false,array('nc_title'));
 		} else
 		{
 			$map=array('nc_owner'=>NULL);
-			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.nc_title',array('c.*','text_original'),$map,'ORDER BY text_original ASC',$max,$start); // Ordered by title (can do efficiently as limited numbers of non-blogs)
+			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.*'),$map,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered by title (can do efficiently as limited numbers of non-blogs)
 			$max_rows=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',$map);
-		}
-		if ($max_rows==count($categories)) // We'll implement better title-based sorting only if we can show all rows on one screen, otherwise too slow
-		{
-			global $M_SORT_KEY;
-			$M_SORT_KEY='text_original';
-			usort($categories,'multi_sort');
 		}
 		$content=new ocp_tempcode();
 		$join=' LEFT JOIN '.get_table_prefix().'news_category_entries d ON d.news_entry=p.id';
@@ -408,12 +402,10 @@ class Module_news
 				$count=$GLOBALS['SITE_DB']->query_value_null_ok_full($query);
 				if ($count>0)
 				{
-					if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($category['text_original'])) $category['text_original']=get_translated_text($category['nc_title']);
-
 					$url_map=array('page'=>'_SELF','type'=>'misc','id'=>$category['id']);
 					if (!is_null($blogs)) $url_map['blog']=$blogs;
 					$url=build_url($url_map+propagate_ocselect(),'_SELF');
-					$name=$category['text_original'];
+					$name=get_translated_text($category['nc_title']);
 					$description=do_lang_tempcode('CATEGORY_SUBORDINATE_2',integer_format($count));
 					$img=($category['nc_img']=='')?'':find_theme_image($category['nc_img']);
 					if ($blogs===1)
@@ -473,8 +465,8 @@ class Module_news
 				$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
 				if (array_key_exists(0,$news_cat_title))
 				{
-					$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
-					$title=get_screen_title($news_cat_title[0]['text_original'],false);
+					$nc_title=get_translated_text($news_cat_title[0]['nc_title']);
+					$title=get_screen_title($nc_title,false);
 				} else
 				{
 					$title=get_screen_title('NEWS_ARCHIVE');
@@ -657,8 +649,8 @@ class Module_news
 				$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
 				if (array_key_exists(0,$news_cat_title))
 				{
-					$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
-					$parent_title=make_string_tempcode(escape_html($news_cat_title[0]['text_original']));
+					$nc_title=get_translated_text($news_cat_title[0]['nc_title']);
+					$parent_title=make_string_tempcode(escape_html($nc_title));
 				} else
 				{
 					$parent_title=do_lang_tempcode('NEWS_ARCHIVE');

@@ -153,11 +153,11 @@ class Module_iotds
 		// Entries
 		if ($depth>=DEPTH__ENTRIES)
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('iotd c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.i_title',array('c.i_title','c.id','t.text_original AS title','add_date','edit_date'),array('used'=>1));
+			$rows=$GLOBALS['SITE_DB']->query_select('iotd c',array('c.i_title','c.id','add_date','edit_date'),array('used'=>1));
 
 			foreach ($rows as $row)
 			{
-				if (is_null($row['title'])) $row['title']=get_translated_text($row['i_title']);
+				$row['title']=get_translated_text($row['i_title']);
 				$pagelink=$pagelink_stub.'view:'.strval($row['id']);
 				call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['add_date'],$row['edit_date'],0.2,$row['title'])); // Callback
 			}

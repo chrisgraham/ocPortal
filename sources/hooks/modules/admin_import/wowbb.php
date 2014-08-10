@@ -198,7 +198,7 @@ class Hook_wowbb
 			$group_name_remap=array('Unregistered'=>'Guests','Moderators'=>'Super-members','Super Moderators'=>'Super-moderators');
 			if (array_key_exists($row['user_group_name'],$group_name_remap)) $row['user_group_name']=$group_name_remap[$row['user_group_name']];
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['user_group_name']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['user_group_name']),'g.id');
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['user_group_name'],0,$is_super_admin,$is_super_moderator,$row['user_group_title'],'',NULL,NULL,NULL,constant('FLOOD_INTERVAL'),0,($row['post_attachments']==0)?0:5,5,constant('AVATAR_DIMENSIONS_MAX'),constant('AVATAR_DIMENSIONS_MAX'),30000,700,25,$row['add_mana']);
@@ -622,15 +622,14 @@ class Hook_wowbb
 				if (!is_null($post_id))
 				{
 					$post_id=import_id_remap_get('post',$post_id);
-					$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON p.p_post=t.id',array('p_time','text_original','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+					$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
 				}
 				if (!array_key_exists(0,$post_row))
 				{
 					import_id_remap_put('post_files',strval($row['attachment_id']),1);
 					continue; // Orphaned post
 				}
-				$post=$post_row[0]['text_original'];
-				$lang_id=$post_row[0]['p_post'];
+				$post=get_translated_text($post_row[0]['p_post']);
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) $member_id=$post_row[0]['p_poster'];
 
@@ -643,7 +642,7 @@ class Hook_wowbb
 				$post.="\n\n".'[attachment=""]'.strval($a_id).'[/attachment]';
 
 				ocf_over_msn();
-				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
+				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$post_row[0]['p_post'],$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 				ocf_over_local();
 
 				import_id_remap_put('post_files',strval($row['attachment_id']),1);

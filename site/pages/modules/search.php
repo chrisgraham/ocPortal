@@ -125,19 +125,18 @@ class Module_search
 					$rows=array();
 				} else
 				{
-					$query='SELECT c.c_title,c.c_name,t.text_original FROM '.get_table_prefix().'catalogues c';
+					$query='SELECT c.c_title,c.c_name FROM '.get_table_prefix().'catalogues c';
 					if (can_arbitrary_groupby())
 						$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name';
-					$query.=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.c_title=t.id';
 					if (can_arbitrary_groupby())
 						$query.=' GROUP BY c.c_name';
-					$rows=$GLOBALS['SITE_DB']->query($query);
+					$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
 				}
 				foreach ($rows as $row)
 				{
-					if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
+					$title=get_translated_text($row['c_title']);
 
-					$kids[]=array('_SELF:_SELF:type=misc:id=catalogue_entries:catalogue_name='.$row['c_name'],NULL,NULL,$row['text_original'],array());
+					$kids[]=array('_SELF:_SELF:type=misc:id=catalogue_entries:catalogue_name='.$row['c_name'],NULL,NULL,$title,array());
 				}
 
 				return array($kids,$permission_page);
@@ -166,21 +165,20 @@ class Module_search
 							$rows=array();
 						} else
 						{
-							$query='SELECT c.c_title,c.c_name,t.text_original FROM '.get_table_prefix().'catalogues c';
+							$query='SELECT c.c_title,c.c_name FROM '.get_table_prefix().'catalogues c';
 							if (can_arbitrary_groupby())
 								$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name';
-							$query.=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.c_title=t.id';
 							if (can_arbitrary_groupby())
 								$query.=' GROUP BY c.c_name';
-							$rows=$GLOBALS['SITE_DB']->query($query);
+							$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
 						}
 						foreach ($rows as $row)
 						{
 							if (!has_category_access(get_member(),'catalogues_catalogue',$row['c_name'])) continue;
 
-							if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
+							$title=get_translated_text($row['c_title']);
 
-							$kids[]=array('_SELF:_SELF:type=misc:id='.$hook.':catalogue_name='.$row['c_name'],NULL,NULL,$row['text_original'],array());
+							$kids[]=array('_SELF:_SELF:type=misc:id='.$hook.':catalogue_name='.$row['c_name'],NULL,NULL,$title,array());
 						}
 					}
 					$tree[]=array('_SELF:_SELF:type=misc:id='.$hook,NULL,NULL,$info['lang'],$kids,'','',$hook=='catalogue_entries');
@@ -220,21 +218,20 @@ class Module_search
 				$kids=array();
 				if ($hook=='catalogue_entries')
 				{
-					$query='SELECT c.c_title,c.c_name,t.text_original FROM '.get_table_prefix().'catalogues c';
+					$query='SELECT c.c_title,c.c_name FROM '.get_table_prefix().'catalogues c';
 					if (can_arbitrary_groupby())
 						$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name';
-					$query.=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.c_title=t.id';
 					if (can_arbitrary_groupby())
 						$query.=' GROUP BY c.c_name';
-					$rows=$GLOBALS['SITE_DB']->query($query);
+					$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
 					foreach ($rows as $row)
 					{
 						if (!has_category_access($member_id,'catalogues_catalogue',$row['c_name'])) continue;
 
-						if (is_null($row['text_original'])) $row['text_original']=get_translated_text($row['c_title']);
+						$title=get_translated_text($row['c_title']);
 
 						$pagelink=$pagelink_stub.'misc:id='.$hook.':catalogue_name='.$row['c_name'];
-						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc:id='.$hook,NULL,NULL,0.2,$row['text_original'])); // Callback
+						call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc:id='.$hook,NULL,NULL,0.2,$title)); // Callback
 					}
 				}
 

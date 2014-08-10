@@ -271,14 +271,6 @@ class Block_main_multi_content
 			$where.=$extra_where;
 		}
 
-		if ($mode=='all')
-		{
-			if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
-			{
-				$query.=' LEFT JOIN '.get_table_prefix().'translate t ON t.id=r.'.$info['title_field'].' AND '.db_string_equal_to('t.language',user_lang());
-			}
-		}
-
 		if ($where.$x1.$x2!='')
 		{
 			if ($where=='') $where='1=1';
@@ -319,7 +311,7 @@ class Block_main_multi_content
 				{
 					if ($info['title_field_dereference'])
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY t.text_original ASC',$max,NULL);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref($info['title_field']).' ASC',$max,NULL);
 					} else
 					{
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['title_field'].' ASC',$max,NULL);

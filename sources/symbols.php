@@ -626,7 +626,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					} else
 					{
 						if ($ZONE!==NULL)
-							$value=$ZONE['zone_header_text_trans'];
+							$value=get_translated_text($ZONE['zone_header_text']);
 					}
 				} else // Take from SEO title
 				{
@@ -642,7 +642,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'ZONE_HEADER_TEXT':
-				$value=$GLOBALS['ZONE']['zone_header_text_trans'];
+				$value=get_translated_text($GLOBALS['ZONE']['zone_header_text']);
 				break;
 
 			case 'CANONICAL_URL':

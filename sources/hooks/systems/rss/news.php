@@ -47,9 +47,9 @@ class Hook_rss_news
 		$_categories=$GLOBALS['SITE_DB']->query_select('news_categories',array('id','nc_title'),array('nc_owner'=>NULL));
 		foreach ($_categories as $i=>$_category)
 		{
-			$_categories[$i]['text_original']=get_translated_text($_category['nc_title']);
+			$_categories[$i]['_title']=get_translated_text($_category['nc_title']);
 		}
-		$categories=collapse_2d_complexity('id','text_original',$_categories);
+		$categories=collapse_2d_complexity('id','_title',$_categories);
 
 		$content=new ocp_tempcode();
 		foreach ($rows as $row)

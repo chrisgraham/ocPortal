@@ -218,7 +218,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$breadcrumbs=NULL,
 	$children[0]['breadcrumbs']=$breadcrumbs;
 
 	// Children of this category
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.category AND '.db_string_equal_to('language',user_lang()),array('c.id','c.category'),array('parent_id'=>$category_id),'ORDER BY text_original',300/*reasonable limit*/);
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c',array('c.id','c.category'),array('parent_id'=>$category_id),'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('category'),300/*reasonable limit*/);
 	if (count($rows)==300) $rows=array();
 	$where=array('category_id'=>$category_id);
 	if (!is_null($submitter)) $where['submitter']=$submitter;
@@ -497,26 +497,26 @@ function get_category_downloads($category_id,$root,$order=NULL)
 		{
 			if ($max_rows<1000)
 			{
-				$order='t.text_original ASC';
+				$order='name ASC';
 			} else
 			{
 				$order='num_downloads DESC';
 			}
 		}
 	}
-	if ((strtoupper($order)!=strtoupper('t.text_original ASC')) && (strtoupper($order)!=strtoupper('t.text_original DESC')) && (strtoupper($order)!=strtoupper('file_size ASC')) && (strtoupper($order)!=strtoupper('file_size DESC'))
+	if ((strtoupper($order)!=strtoupper('name ASC')) && (strtoupper($order)!=strtoupper('name DESC')) && (strtoupper($order)!=strtoupper('file_size ASC')) && (strtoupper($order)!=strtoupper('file_size DESC'))
 		&& (strtoupper($order)!=strtoupper('num_downloads DESC')) && (strtoupper($order)!=strtoupper('add_date ASC'))
 		&& (strtoupper($order)!=strtoupper('add_date DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
 	global $NON_CANONICAL_PARAMS;
 	$NON_CANONICAL_PARAMS[]='order';
 
 	// Fetch
-	$rows=$GLOBALS['SITE_DB']->query('SELECT r.*,t.text_original'.$extra_select_sql.' FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('t.language',user_lang()).' AND r.name=t.id WHERE '.$map.' ORDER BY '.$order,$max,$start);
+	$sql='SELECT r.*'.$extra_select_sql.' FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' WHERE '.$map;
+	$sql.=' ORDER BY '.(($order=='name ASC' || $order=='name DESC')?$GLOBALS['SITE_DB']->translate_field_ref('name'):$order);
+	$rows=$GLOBALS['SITE_DB']->query($sql,$max,$start,false,false,array('name'));
 	$out=new ocp_tempcode();
 	foreach ($rows as $myrow)
 	{
-		if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($myrow['text_original'])) $myrow['text_original']=get_translated_text($myrow['description']);
-
 		$out->attach(render_download_box($myrow,true,false));
 	}
 	if ($out->is_empty()) return $out;
@@ -537,27 +537,23 @@ function get_category_downloads($category_id,$root,$order=NULL)
  */
 function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=NULL)
 {
-	if (is_null($order)) $order='t.text_original ASC';
+	if (is_null($order)) $order='category ASC';
 	if (is_null($root)) $root=db_get_first_id();
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.category=t.id',array('c.*','text_original'),array('parent_id'=>$category_id),(($order=='t.text_original ASC')?'':('ORDER BY '.$order)),400/*reasonable limit*/);
-	if ($order=='t.text_original ASC')
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c',array('c.*'),array('parent_id'=>$category_id),'ORDER BY '.(($order=='category ASC')?$GLOBALS['SITE_DB']->translate_field_ref('category'):$order),400/*reasonable limit*/);
+	foreach ($rows as &$myrow)
 	{
-		global $M_SORT_KEY;
-		$M_SORT_KEY='text_original';
-		usort($rows,'multi_sort');
+		$myrow['_category']=get_translated_text($myrow['category']);
 	}
 	if (count($rows)==400) $rows=array(); // Too much, performance issue
 	$out=new ocp_tempcode();
-	foreach ($rows as $myrow)
+	foreach ($rows as &$myrow)
 	{
 		if (!has_category_access(get_member(),'downloads',strval($myrow['id']))) continue;
 
-		if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($myrow['text_original'])) $myrow['text_original']=get_translated_text($myrow['category']);
-
 		$child_id=$myrow['id'];
-		$child_title=$myrow['text_original'];
+		$child_title=$myrow['_category'];
 
 		$info=count_download_category_children($child_id);
 		$num_children=$info['num_children'];

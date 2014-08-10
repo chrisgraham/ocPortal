@@ -87,7 +87,7 @@ class upon_query_insults
 							require_code('points2');
 							require_lang('insults');
 
-							$rows=$GLOBALS['FORUM_DB']->query('SELECT g.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gifts g LEFT JOIN '.get_table_prefix().'translate t ON t.id=g.reason WHERE t.text_original LIKE "'.db_encode_like('%'.$insult.'%').'" AND g.gift_to='.strval($poster_id),1, NULL,true);
+							$rows=$GLOBALS['FORUM_DB']->query('SELECT g.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gifts g WHERE '.$GLOBALS['FORUM_DB']->translate_field_ref('reason').' LIKE \''.db_encode_like('%'.$insult.'%').'\' AND g.gift_to='.strval($poster_id),1, NULL,true);
 
 							//if the member doesn't get reward yet, give him/her his award
 							if(!isset($rows[0]['id']))

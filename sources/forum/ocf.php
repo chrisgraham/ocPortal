@@ -382,11 +382,11 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
 
-		$field_bits=$this->connection->query_select('f_custom_fields f LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON t.id=f.cf_name',array('f.id','f.cf_type'),array('text_original'=>'ocp_'.$field));
+		$field_bits=$this->connection->query_select('f_custom_fields f',array('f.id','f.cf_type'),array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>'ocp_'.$field));
 		if (!array_key_exists(0,$field_bits)) // Should never happen, but sometimes on upgrades/corruption...
 		{
 			$this->install_create_custom_field($field,10);
-			$field_bits=$this->connection->query_select('f_custom_fields f LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON t.id=f.cf_name',array('f.id','f.cf_type'),array('text_original'=>'ocp_'.$field));
+			$field_bits=$this->connection->query_select('f_custom_fields f',array('f.id','f.cf_type'),array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>'ocp_'.$field));
 			if (!array_key_exists(0,$field_bits)) return; // Possible on an MSN, and there's an inconsistency (e.g. no points addon)
 		}
 		$field_type=$field_bits[0]['cf_type'];
@@ -1168,7 +1168,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		$where=$only_permissive?' WHERE g_is_private_club=0':'';
 
-		$select='g.id,text_original,g_name';
+		$select='g.id,g_name';
 		if ($hide_hidden) $select.=',g.g_hidden';
 		$sup=' ORDER BY g_order,g.id';
 		if (running_script('upgrader')) $sup='';
@@ -1186,8 +1186,8 @@ class forum_driver_ocf extends forum_driver_base
 			}
 		}
 		if (!function_exists('require_lang')) require_code('lang');
-		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id'.$where.$sup;
-		$rows=$this->connection->query($query);
+		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g'.$where.$sup;
+		$rows=$this->connection->query($query,NULL,NULL,false,false,array('g_name'));
 		if ($hide_hidden)
 		{
 			require_lang('ocf');
@@ -1195,7 +1195,7 @@ class forum_driver_ocf extends forum_driver_base
 		$out=array();
 		foreach ($rows as $row)
 		{
-			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+			$name=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
 			if (($hide_hidden) && ($row['g_hidden']==1))
 			{
@@ -1203,7 +1203,7 @@ class forum_driver_ocf extends forum_driver_base
 				$out[$row['id']]=do_lang('SECRET_GROUP',strval($row['id']));
 			} else
 			{
-				$out[$row['id']]=$row['text_original'];
+				$out[$row['id']]=$name;
 			}
 		}
 		return $out;

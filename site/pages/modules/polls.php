@@ -218,11 +218,11 @@ class Module_polls
 		// Entries
 		if ($depth>=DEPTH__ENTRIES)
 		{
-			$rows=$GLOBALS['SITE_DB']->query('SELECT c.question,c.id,t.text_original AS title,add_time,edit_date AS edit_time FROM '.get_table_prefix().'poll c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.question WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0');
+			$rows=$GLOBALS['SITE_DB']->query('SELECT c.question,c.id,add_time,edit_date AS edit_time FROM '.get_table_prefix().'poll c WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0');
 
 			foreach ($rows as $row)
 			{
-				if (is_null($row['title'])) $row['title']=get_translated_text($row['question']);
+				$row['title']=get_translated_text($row['question']);
 
 				$pagelink=$pagelink_stub.'view:'.strval($row['id']);
 				call_user_func_array($callback,array($pagelink,$pagelink_stub.'misc',$row['add_time'],$row['edit_time'],0.2,$row['title'])); // Callback

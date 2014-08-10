@@ -44,9 +44,9 @@ class Hook_rss_calendar
 		$_categories=$GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types c WHERE '.$filters,NULL,NULL,false,false,array('t_title'));
 		foreach ($_categories as $i=>$_category)
 		{
-			$_categories[$i]['text_original']=get_translated_text($_category['t_title']);
+			$_categories[$i]['_title']=get_translated_text($_category['t_title']);
 		}
-		$categories=collapse_2d_complexity('id','text_original',$_categories);
+		$categories=collapse_2d_complexity('id','_title',$_categories);
 		//$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_events WHERE e_add_date>'.strval((integer)$cutoff).' ORDER BY e_add_date DESC',$max);
 		$period_start=utctime_to_usertime($cutoff);
 		$period_end=utctime_to_usertime(time()*2-$cutoff);

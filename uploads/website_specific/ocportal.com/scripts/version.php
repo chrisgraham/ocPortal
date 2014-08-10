@@ -424,7 +424,11 @@ function load_news_rows()
 			);
 		} else
 		{
-			$NEWS_ROWS=$GLOBALS['SITE_DB']->query('SELECT n.*,text_original AS nice_title,date_and_time AS add_date FROM '.get_table_prefix().'news n LEFT JOIN '.get_table_prefix().'translate t ON t.id=n.title WHERE validated=1 AND news_category=29 ORDER BY add_date');
+			$NEWS_ROWS=$GLOBALS['SITE_DB']->query_select('news',array('n.*','date_and_time AS add_date'),array('validated'=>1,'news_category'=>29),'ORDER BY add_date');
+			foreach ($NEWS_ROWS as &$row)
+			{
+				$row['nice_title']=get_translated_text($row['title']);
+			}
 		}
 	}
 }
@@ -446,7 +450,13 @@ function load_download_rows()
 			);
 		} else
 		{
-			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query('SELECT d.*,t.text_original AS nice_title,t2.text_original AS nice_description,t2.text_parsed AS nice_description_parsed,add_date FROM '.get_table_prefix().'download_downloads d FORCE INDEX (recent_downloads) LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name LEFT JOIN '.get_table_prefix().'translate t2 ON t2.id=d.description WHERE validated=1 AND t.text_original LIKE \''.db_encode_like('ocPortal Version %').'\' ORDER BY add_date');
+			$sql='SELECT d.* FROM '.get_table_prefix().'download_downloads d FORCE INDEX (recent_downloads) WHERE validated=1 AND '.$GLOBALS['SITE_DB']->translate_field_ref('name').' LIKE \''.db_encode_like('ocPortal Version %').'\' ORDER BY add_date';
+			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('name','description'));
+			foreach ($DOWNLOAD_ROWS as &$row)
+			{
+				$row['nice_title']=get_translated_text($row['name']);
+				$row['nice_description']=get_translated_text($row['description']);
+			}
 		}
 	}
 }
@@ -461,14 +471,14 @@ function old_style()
 	$dotted=get_version_dotted__from_anything(get_param('version'));
 	$version_pretty=get_version_pretty__from_dotted($dotted);
 
-	$rows=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.name',array('*'),array('validated'=>1,'text_original'=>'ocPortal Version '.$version_pretty));
+	$rows=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d',array('d.*'),array('validated'=>1,$GLOBALS['SITE_DB']->translate_field_ref('name')=>'ocPortal Version '.$version_pretty));
 
 	if (!array_key_exists(0,$rows))
 	{
 		echo do_lang('OC_NON_EXISTANT_VERSION');
 	} else
 	{
-		$description=get_translated_tempcode($rows[0]['description']);
+		$description=get_translated_tempcode($rows[0],'description');
 		echo $description->evaluate();
 	}
 }

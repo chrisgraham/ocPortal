@@ -520,25 +520,28 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 				$where.='p.id<>'.strval((integer)$seen);
 			}
 
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/);
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
 		} else
 		{
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'seedy_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/);
-			if (count($orphans)<50)
-			{
-				global $M_SORT_KEY;
-				$M_SORT_KEY='text_original';
-				usort($orphans,'multi_sort');
-			}
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
 		}
 
-		foreach ($orphans as $orphan)
+		foreach ($orphans as &$orphan)
+		{
+			$orphan['_title']=get_translated_text($orphan['title']);
+		}
+		if (count($orphans)<50)
+		{
+			global $M_SORT_KEY;
+			$M_SORT_KEY='_title';
+			usort($orphans,'multi_sort');
+		}
+
+		foreach ($orphans as &$orphan)
 		{
 			if (!has_category_access(get_member(),'seedy_page',strval($orphan['id']))) continue;
 
-			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($orphan['text_original'])) $orphan['text_original']=get_translated_text($orphan['title']);
-
-			$title=$orphan['text_original'];
+			$title=$orphan['_title'];
 			//$out->attach(form_input_list_entry(strval($orphan['id']),($select==$orphan['id']),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'e3eb3decfac32382cdcb5b745ef0ad7e','BREADCRUMBS'=>'?','TITLE'=>$title,'ID'=>$orphan['id']))));
 //			$out.='<option value="'.$orphan['id'].'"> ? '.$title.'</option>';
 			$out->attach(form_input_list_entry($ins_format?(strval($orphan['id']).'!'.$title):strval($orphan['id']),false,do_lang('CEDI_ORPHANED').' > '.$title));

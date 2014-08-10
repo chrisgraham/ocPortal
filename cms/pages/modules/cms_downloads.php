@@ -248,7 +248,7 @@ class Module_cms_downloads extends standard_aed_module
 				if ($make_subfolders)
 				{
 					// Do we need to make new category, or is it already existant?
-					$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
+					$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id AS id',array('parent_id'=>$dest_cat,$GLOBALS['SITE_DB']->translate_field_ref('category')=>$entry));
 					if (is_null($category_id))
 					{
 						// Add the directory
@@ -378,7 +378,7 @@ class Module_cms_downloads extends standard_aed_module
 						if ($make_subfolders)
 						{
 							// Do we need to make new category, or is it already existant?
-							$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,'text_original'=>$entry));
+							$category_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id AS id',array('parent_id'=>$dest_cat,$GLOBALS['SITE_DB']->translate_field_ref('category')=>$entry));
 							if (is_null($category_id))
 							{
 								// Add the directory

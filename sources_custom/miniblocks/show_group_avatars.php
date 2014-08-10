@@ -29,7 +29,7 @@ if (isset($map['param']))
 		$group_id=intval($map['param']);
 	} else
 	{
-		$group_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$map['param']));
+		$group_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$map['param']));
 		if (is_null($group_id))
 		{
 			$ret=paragraph(do_lang_tempcode('MISSING_RESOURCE'),'','nothing_here');
