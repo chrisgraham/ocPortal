@@ -1123,7 +1123,7 @@ function _access_denied($class,$param,$force_login)
 	require_lang('permissions');
 	require_lang('ocf_config');
 
-	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'));
+	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('*'));
 	global $M_SORT_KEY;
 	$M_SORT_KEY='k_match_key';
 	usort($match_keys,'strlen_sort');
@@ -1133,7 +1133,7 @@ function _access_denied($class,$param,$force_login)
 	{
 		if (match_key_match($match_key['k_match_key']))
 		{
-			$message=get_translated_tempcode($match_key['k_message']);
+			$message=get_translated_tempcode($match_key,'k_message');
 		}
 	}
 	if (is_null($message))

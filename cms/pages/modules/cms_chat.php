@@ -212,7 +212,7 @@ class Module_cms_chat
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['user_id']);
 			if (is_null($username)) $username='';//do_lang('UNKNOWN');
 
-			$message=get_translated_tempcode($myrow['the_message']);
+			$message=get_translated_tempcode($myrow,'the_message');
 
 			$link_time=hyperlink($url,escape_html(get_timezoned_date($myrow['date_and_time'])));
 
@@ -368,7 +368,7 @@ class Module_cms_chat
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$myrow['id'],'room_id'=>$room_id),'_SELF');
 
-		$message=get_translated_tempcode($myrow['the_message']);
+		$message=get_translated_tempcode($myrow,'the_message');
 
 		require_code('form_templates');
 
@@ -477,7 +477,6 @@ class Module_cms_chat
 			return warn_screen($title,do_lang_tempcode('MISSING_RESOURCE'));
 		}
 		$myrow=$rows[0];
-		$message=$myrow['the_message'];
 
 		$room_id=$myrow['room_id'];
 		check_chatroom_access($room_id);
@@ -492,8 +491,8 @@ class Module_cms_chat
 
 		decache('side_shoutbox');
 
-		$message2=get_translated_tempcode($message);
-		delete_lang($message);
+		$message2=get_translated_tempcode($myrow,'the_message');
+		delete_lang($myrow['the_message']);
 
 		log_it('DELETE_MESSAGE',strval($message_id),$message2->evaluate());
 

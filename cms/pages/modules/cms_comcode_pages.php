@@ -639,8 +639,11 @@ class Module_cms_comcode_pages
 				fclose($tmp);
 				if (is_null(get_param('restore_from',NULL)))
 				{
-					$string_index=$GLOBALS['SITE_DB']->query_value_null_ok('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
-					if (!is_null($string_index)) $parsed=get_translated_tempcode($string_index,NULL,$lang);
+					$comcode_page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$file),'',1);
+					if (array_key_exists(0,$comcode_page_rows))
+					{
+						$parsed=get_translated_tempcode($comcode_page_rows[0],'string_index',NULL,$lang);
+					}
 				}
 
 				$new=false;

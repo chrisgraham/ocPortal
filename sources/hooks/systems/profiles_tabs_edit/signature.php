@@ -65,7 +65,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		// UI
 
-		$_signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
+		$_signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of),'m_signature',$GLOBALS['FORUM_DB']);
 		$signature=($_signature->is_empty())?do_lang_tempcode('NONE_EM'):$_signature;
 		$_signature_original=get_translated_text($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
 

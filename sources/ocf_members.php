@@ -216,7 +216,13 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 
 		if (strpos($storage_type,'_trans')!==false)
 		{
-			if ((is_null($member_value)) || ($member_value==0)) $member_value=''; else $member_value=get_translated_tempcode($member_value,$GLOBALS['FORUM_DB']); // This is meant to be '' for blank, not new ocp_tempcode()
+			if ((is_null($member_value)) || ($member_value===0))
+			{
+				$member_value='';
+			} else
+			{
+				$member_value=get_translated_tempcode($member_mappings,'field_'.strval($field_to_show['id']),$GLOBALS['FORUM_DB']); // This is meant to be '' for blank, not new ocp_tempcode()
+			}
 			if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
 		}
 

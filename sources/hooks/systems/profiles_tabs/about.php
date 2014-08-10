@@ -250,7 +250,7 @@ class Hook_Profiles_Tabs_about
 		$primary_group_id=ocf_get_member_primary_group($member_id_of);
 		$primary_group=ocf_get_group_link($primary_group_id,$member_id_of!=$member_id_viewing);
 
-		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
+		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of),'m_signature',$GLOBALS['FORUM_DB']);
 
 		$last_visit_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_last_visit_time');
 		if (member_is_online($member_id_of))

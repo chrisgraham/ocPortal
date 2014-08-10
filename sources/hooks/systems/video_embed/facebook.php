@@ -64,10 +64,8 @@ class Hook_video_embed_facebook
 	 */
 	function add_custom_comcode_field()
 	{
-		$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+		$map=array(
 			'tag_tag'=>'facebook_video',
-			'tag_title'=>lang_code_to_default_content('custom_comcode:FACEBOOK_TAG_TITLE'),
-			'tag_description'=>lang_code_to_default_content('custom_comcode:FACEBOOK_TAG_DESCRIPTION'),
 			'tag_replace'=>'{$SET,VIDEO,{$PREG_REPLACE,(http://.*\?v=)?(\w+)(.*)?,$\{2\},{content}}}<object width="640" height="385"><param name="movie" value="http://www.facebook.com/v/{$GET*,VIDEO};hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.facebook.com/v/{$GET*,VIDEO};hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="640" height="385"></embed></object>',
 			'tag_example'=>'[facebook_video]http://www.facebook.com/video/video.php?v=10150307159560581[/facebook_video]',
 			'tag_parameters'=>'',
@@ -75,7 +73,10 @@ class Hook_video_embed_facebook
 			'tag_dangerous_tag'=>0,
 			'tag_block_tag'=>1,
 			'tag_textual_tag'=>0
-		));
+		);
+		$map+=lang_code_to_default_content('tag_title','custom_comcode:FACEBOOK_TAG_TITLE');
+		$map+=lang_code_to_default_content('tag_description','custom_comcode:FACEBOOK_TAG_DESCRIPTION');
+		$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 	}
 
 }

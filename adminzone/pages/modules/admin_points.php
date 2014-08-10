@@ -106,7 +106,7 @@ class Module_admin_points
 		foreach ($rows as $myrow)
 		{
 			$date=get_timezoned_date($myrow['date_and_time']);
-			$reason=get_translated_tempcode($myrow['reason']);
+			$reason=get_translated_tempcode($myrow,'reason');
 			if (is_guest($myrow['gift_to']))
 			{
 				$to=do_lang_tempcode('USER_SYSTEM');

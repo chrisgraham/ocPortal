@@ -120,15 +120,7 @@ function render_post_box($row,$use_post_title=false)
 	$breadcrumbs=ocf_forum_breadcrumbs($row['p_cache_forum_id']);
 	$post_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$row['id']),get_module_zone('topicview'));
 	$post_url->attach('#post_'.strval($row['id']));
-	if ((get_page_name()!='search') && (array_key_exists('text_parsed',$row)) && (!is_null($row['text_parsed'])) && ($row['text_parsed']!='') && ($row['p_post']!=0))
-	{
-		$post=new ocp_tempcode();
-		if (!$post->from_assembly($row['text_parsed'],true))
-			$post=get_translated_tempcode($row['p_post'],$GLOBALS['FORUM_DB']);
-	} else
-	{
-		$post=get_translated_tempcode($row['p_post'],$GLOBALS['FORUM_DB']);
-	}
+	$post=get_translated_tempcode($row,'p_post',$GLOBALS['FORUM_DB']);
 	$post_date=get_timezoned_date($row['p_time']);
 	$post_date_raw=$row['p_time'];
 	if ($use_post_title)

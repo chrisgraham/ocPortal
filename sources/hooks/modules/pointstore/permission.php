@@ -267,7 +267,7 @@ class Hook_pointstore_permission
 			if ($this->bought($row)) continue;
 
 			$next_url=build_url(array('page'=>'_SELF','type'=>'action','id'=>$class,'sub_id'=>$row['id']),'_SELF');
-			$items[]=do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url,'TITLE'=>get_translated_text($row['p_title']),'DESCRIPTION'=>get_translated_tempcode($row['p_description'])));
+			$items[]=do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url,'TITLE'=>get_translated_text($row['p_title']),'DESCRIPTION'=>get_translated_tempcode($row,'p_description')));
 		}
 		return $items;
 	}

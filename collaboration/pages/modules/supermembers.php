@@ -132,9 +132,10 @@ class Module_supermembers
 			if (addon_installed('authors'))
 			{
 				// Work out their skills from their author profile
-				$_skills=$GLOBALS['SITE_DB']->query_value_null_ok('authors','skills',array('forum_handle'=>$id));
-				if (is_null($_skills)) $_skills=$GLOBALS['SITE_DB']->query_value_null_ok('authors','skills',array('author'=>$name));
-				$skills=(!is_null($_skills))?get_translated_tempcode($_skills):new ocp_tempcode();
+				$author_rows=$GLOBALS['SITE_DB']->query_value_null_ok('authors',array('*'),array('forum_handle'=>$id),'',1);
+				if (!array_key_exists(0,$author_rows))
+					$author_rows=$GLOBALS['SITE_DB']->query_value_null_ok('authors',array('*'),array('author'=>$name),'',1);
+				$skills=array_key_exists(0,$author_rows)?get_translated_tempcode($author_rows[0],'skills'):new ocp_tempcode();
 			} else $skills=new ocp_tempcode();
 
 			$days=intval(round(floatval(time()-$GLOBALS['FORUM_DRIVER']->pnamelast_visit($r))/(60.0*60.0*24.0)));

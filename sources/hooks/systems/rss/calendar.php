@@ -74,7 +74,7 @@ class Hook_rss_calendar
 			$edit_date=is_null($row['e_edit_date'])?date($date_string,$row['e_add_date']):date($date_string,$row['e_edit_date']);
 
 			$news_title=xmlentities(escape_html(get_translated_text($row['e_title'])));
-			$_summary=get_translated_tempcode($row['e_content']);
+			$_summary=get_translated_tempcode($row,'e_content');
 			$summary=xmlentities($_summary->evaluate());
 			$news='';
 

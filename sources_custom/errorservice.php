@@ -57,29 +57,25 @@ function get_problem_match()
 function get_problem_match_worker($error_message)
 {
 	// Find matches. Stored in forum topics.
-	$_data=$GLOBALS['FORUM_DB']->query_select('f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=p.p_post',array('text_original','text_parsed','p.id','p_title','t.id AS l_id'),array('p_cache_forum_id'=>OCP_SOLUTION_FORUM));
+	$_data=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('p_cache_forum_id'=>OCP_SOLUTION_FORUM));
 	$matches=array();
 	foreach ($_data as $d)
 	{
 		$regexp=str_replace('\.\.\.','.*',str_replace('xxx','.*',str_replace('#','\#',preg_quote($d['p_title']))));
 		if (preg_match('#'.$regexp.'#',$error_message)!=0)
-			$matches[$d['p_title']]=array($d['id'],$d['text_original'],$d['text_parsed'],$d['l_id']);
+		{
+			$matches[$d['p_title']]=array(
+				$d['id'],
+				get_translated_text($d['p_post'],$GLOBALS['FORUM_DB']),
+				get_translated_tempcode($d,'p_post',$GLOBALS['FORUM_DB'])
+			);
+		}
 	}
 
 	// Sort by how good the match is (string length)
 	uksort($matches,'strlen_sort');
 
 	// Return best-match result, after a cleanup
-	$ret=array_pop($matches);
-	if (!is_null($ret))
-	{
-		if ($ret[2]!='')
-		{
-			$tempcode=new ocp_tempcode();
-			$tempcode->from_assembly($ret[2]);
-			$ret[2]=$tempcode;
-		} else $ret[2]=get_translated_tempcode($ret[3]);
-	}
-	return $ret;
+	return array_pop($matches);
 }
 

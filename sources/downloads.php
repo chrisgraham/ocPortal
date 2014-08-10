@@ -64,7 +64,7 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 	// Details
 	$filesize=$row['file_size'];
 	$filesize=($filesize>0)?clean_file_size($filesize):do_lang('UNKNOWN');
-	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode($row['description']);
+	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode($row,'description');
 	$root=get_param_integer('root',db_get_first_id(),true);
 	if (array_key_exists('id',$row))
 	{
@@ -148,7 +148,7 @@ function render_download_category_box($row,$zone='_SEARCH',$put_in_box=true)
 		$title=get_translated_text($row['category']);
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>get_translated_tempcode($row['description']),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>get_translated_tempcode($row,'description'),'URL'=>$url));
 }
 
 /**
@@ -541,7 +541,7 @@ function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=N
 	if (is_null($root)) $root=db_get_first_id();
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.category=t.id',array('rep_image','c.id','category','text_original','description'),array('parent_id'=>$category_id),(($order=='t.text_original ASC')?'':('ORDER BY '.$order)),400/*reasonable limit*/);
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND c.category=t.id',array('c.*','text_original'),array('parent_id'=>$category_id),(($order=='t.text_original ASC')?'':('ORDER BY '.$order)),400/*reasonable limit*/);
 	if ($order=='t.text_original ASC')
 	{
 		global $M_SORT_KEY;
@@ -574,7 +574,7 @@ function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=N
 
 		$ajax_edit_url='_SEARCH:cms_downloads:type=__ec:id='.strval($child_id);
 
-		$description=get_translated_tempcode($myrow['description']);
+		$description=get_translated_tempcode($myrow,'description');
 
 		$out->attach(do_template('CATEGORY_ENTRY',array('_GUID'=>'8bfb36d75a85e2a7fbf5222f8fc61c7d','DESCRIPTION'=>$description,'ID'=>strval($child_id),'NAME_FIELD'=>'category','AJAX_EDIT_URL'=>$ajax_edit_url,'URL'=>$url,'REP_IMAGE'=>$rep_image,'CHILDREN'=>$display_string,'NAME'=>$child_title,'NAME_PLAIN'=>$child_title)));
 	}

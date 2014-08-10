@@ -1134,13 +1134,9 @@ function actual_delete_catalogue_entry($id)
 		}
 		if (is_null($title))
 		{
-			if (($storage_type=='long_trans') || ($storage_type=='short_trans'))
-			{
-				$title=get_translated_text(intval($value));
-			} else
-			{
-				$title=$value;
-			}
+			$target=array();
+			_resolve_catalogue_entry_field($field,$id,NULL,$target);
+			$title=$target['effective_value_pure'];
 		}
 	}
 

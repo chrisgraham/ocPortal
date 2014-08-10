@@ -41,9 +41,13 @@ class Hook_members_booking
 		{
 			$from=get_timezoned_date(mktime(0,0,0,$r['start_month'],$r['start_day'],$r['start_year']),false);
 			$to=get_timezoned_date(mktime(0,0,0,$r['end_month'],$r['end_day'],$r['end_year']),false);
+
+			$bookable=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),array('id'=>$r['bookable_id']),'',1);
+			if (!array_key_exists(0,$bookable)) continue;
+
 			$links[]=array(
 				'content',
-				do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode($GLOBALS['SITE_DB']->query_value('bookable','title',array('id'=>$r['bookable_id'])))),
+				do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode($bookable[0],'title')),
 				build_url(array('page'=>'cms_booking','type'=>'_eb','id'=>strval($member_id).'_'.strval($i)),$zone),
 			);
 		}

@@ -174,7 +174,7 @@ class Hook_pointstore_custom
 			}
 
 			$next_url=build_url(array('page'=>'_SELF','type'=>'action','id'=>$class,'sub_id'=>$row['id']),'_SELF');
-			$items[]=do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url,'TITLE'=>get_translated_text($row['c_title']),'DESCRIPTION'=>get_translated_tempcode($row['c_description'])));
+			$items[]=do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url,'TITLE'=>get_translated_text($row['c_title']),'DESCRIPTION'=>get_translated_tempcode($row,'c_description')));
 		}
 		return $items;
 	}

@@ -166,7 +166,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 				$sig=$SIGNATURES_CACHE[$_postdetails['p_poster']];
 			} else
 			{
-				$sig=get_translated_tempcode($GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_signature'),$GLOBALS['FORUM_DB']);
+				$sig=get_translated_tempcode($GLOBALS['OCF_DRIVER']->get_member_row($_postdetails,'p_poster','m_signature'),$GLOBALS['FORUM_DB']);
 				$SIGNATURES_CACHE[$_postdetails['p_poster']]=$sig;
 			}
 			$post['signature']=$sig;
@@ -414,15 +414,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 
 			// Load post
-			if ((get_page_name()=='search') || (is_null($_postdetails['text_parsed'])) || ($_postdetails['text_parsed']=='') || ($_postdetails['p_post']==0))
-			{
-				$_postdetails['message']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
-			} else
-			{
-				$_postdetails['message']=new ocp_tempcode();
-				if (!$_postdetails['message']->from_assembly($_postdetails['text_parsed'],true))
-					$_postdetails['message']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
-			}
+			$_postdetails['message']=get_translated_tempcode($_postdetails,'p_post',$GLOBALS['FORUM_DB']);
 
 			// Fake a quoted post? (kind of a nice 'tidy up' feature if a forum's threading has been turned off, leaving things for flat display)
 			if ((!is_null($_postdetails['p_parent_id'])) && (strpos($_postdetails['message_comcode'],'[quote')===false))
@@ -433,22 +425,14 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 					$p=$_postdetailss[$_postdetails['p_parent_id']];
 
 					// Load post
-					if ((get_page_name()=='search') || (is_null($p['text_parsed'])) || ($p['text_parsed']=='') || ($p['p_post']==0))
-					{
-						$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
-					} else
-					{
-						$p['message']=new ocp_tempcode();
-						if (!$p['message']->from_assembly($p['text_parsed'],true))
-							$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
-					}
+					$p['message']=get_translated_tempcode($p,'p_post',$GLOBALS['FORUM_DB']);
 				} else // Drat, we need to load it
 				{
 					$_p=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>$_postdetails['p_parent_id']),'',1);
 					if (array_key_exists(0,$_p))
 					{
 						$p=$_p[0];
-						$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
+						$p['message']=get_translated_tempcode($p,'p_post',$GLOBALS['FORUM_DB']);
 					}
 				}
 				$temp=$_postdetails['message'];

@@ -1288,7 +1288,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 				if ((!$support_smart_decaching) || ((($comcode_page[0]['p_edit_date']!==NULL) && ($comcode_page[0]['p_edit_date']>=$mtime)) || (($comcode_page[0]['p_edit_date']===NULL) && ($comcode_page[0]['p_add_date']!==NULL) && ($comcode_page[0]['p_add_date']>=$mtime)))) // Make sure it has not been edited since last edited or created
 				{
 					$comcode_page_row=$comcode_page[0];
-					$db_set=get_translated_tempcode($comcode_page[0]['string_index'],NULL,user_lang(),true,true/*,true*/);
+					$db_set=get_translated_tempcode($comcode_page[0],'string_index',NULL,user_lang(),true,true/*,true*/);
 					//unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
 				} else
 				{

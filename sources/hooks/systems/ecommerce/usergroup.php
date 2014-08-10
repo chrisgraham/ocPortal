@@ -187,8 +187,12 @@ class Hook_usergroup
 		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
 		$id=intval(substr($product,9));
-		$_description=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_value('f_usergroup_subs','s_description',array('id'=>$id));
-		$ret=get_translated_tempcode($_description,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+
+		$db=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB'];
+		$sub=$db->query_select('f_usergroup_subs',array('*'),array('id'=>$id),'',1);
+		if (!array_key_exists(0,$sub)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+		$ret=get_translated_tempcode($sub[0],'s_description',$db);
 
 		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
 

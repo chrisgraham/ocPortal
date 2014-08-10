@@ -106,14 +106,15 @@ class Module_admin_awards extends standard_aed_module
 			));
 
 			require_lang('awards');
-			$GLOBALS['SITE_DB']->query_insert('award_types',array(
-				'a_title'=>lang_code_to_default_content('DOTW'),
-				'a_description'=>lang_code_to_default_content('DESCRIPTION_DOTW'),
+			$map=array(
 				'a_points'=>0,
 				'a_content_type'=>'download',
 				'a_hide_awardee'=>1,
 				'a_update_time_hours'=>168
-			));
+			);
+			$map+=lang_code_to_default_content('a_title','DOTW');
+			$map+=lang_code_to_default_content('a_description','DESCRIPTION_DOTW');
+			$GLOBALS['SITE_DB']->query_insert('award_types',$map);
 		}
 	}
 

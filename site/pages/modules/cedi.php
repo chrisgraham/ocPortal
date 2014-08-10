@@ -175,15 +175,14 @@ class Module_cedi
 			$GLOBALS['SITE_DB']->create_index('seedy_pages','sps',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('seedy_pages','sadd_date',array('add_date'));
 
-			$lang_key=lang_code_to_default_content('CEDI_HOME',false,1);
 			$map=array(
 				'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,
 				'hide_posts'=>0,
 				'seedy_views'=>0,
 				'add_date'=>time(),
 				'notes'=>'',
-				'title'=>$lang_key,
 			);
+			$map+=lang_code_to_default_content('title','CEDI_HOME',false,1);
 			$map+=insert_lang_comcode('description','',2),
 			$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -454,7 +453,7 @@ class Module_cedi
 		seo_meta_load_for('seedy_page',strval($id),$title_to_use_2);
 
 		// Description
-		$description=get_translated_tempcode($page['description']);
+		$description=get_translated_tempcode($page,'description');
 		$description_comcode=get_translated_text($page['description']);
 
 		// Build up navigation tree
@@ -526,7 +525,7 @@ class Module_cedi
 			$post_comcode=get_translated_text($myrow['the_message']);
 			$include_expansion_here=(strpos($post_comcode,'[attachment')!==false);
 			if ($include_expansion_here) $include_expansion=true;
-			$post=get_translated_tempcode($myrow['the_message']);
+			$post=get_translated_tempcode($myrow,'the_message');
 			if ((has_edit_permission('low',get_member(),$poster,'cms_cedi',array('seedy_page',$id))) && (($id!=db_get_first_id()) || (has_specific_permission(get_member(),'feature'))))
 			{
 				$edit_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain,'post_id'=>$post_id),'_SELF');
@@ -882,7 +881,7 @@ class Module_cedi
 
 			// If we are editing, we need to retrieve the message
 			$message=get_translated_text($myrow['the_message']);
-			$parsed=get_translated_tempcode($myrow['the_message']);
+			$parsed=get_translated_tempcode($myrow,'the_message');
 
 			if (has_delete_permission('low',get_member(),$original_poster,'cms_cedi',array('seedy_page',$myrow['page_id'])))
 			{

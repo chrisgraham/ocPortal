@@ -549,7 +549,7 @@ class Module_topicview
 			$map=array('page'=>'topics','type'=>'new_post','id'=>$id);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 			$more_url=build_url($map,get_module_zone('topics'));
-			$_postdetails=array_key_exists('first_post',$topic_info)?get_translated_tempcode($topic_info['first_post'],$GLOBALS['FORUM_DB']):new ocp_tempcode();
+			$_postdetails=array_key_exists('first_post',$topic_info)?get_translated_tempcode($topic_info,'first_post',$GLOBALS['FORUM_DB']):new ocp_tempcode();
 			$first_post=$_postdetails;
 			$first_post_url=$GLOBALS['FORUM_DRIVER']->post_url($topic_info['first_post_id'],is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),true);
 			$display='block';

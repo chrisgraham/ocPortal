@@ -382,7 +382,7 @@ class Module_downloads
 		}
 		$category=$rows[0];
 
-		$description=get_translated_tempcode($category['description']);
+		$description=get_translated_tempcode($category,'description');
 
 		if (!has_category_access(get_member(),'downloads',strval($id))) access_denied('CATEGORY_ACCESS');
 
@@ -645,7 +645,7 @@ class Module_downloads
 		$add_date=get_timezoned_date($myrow['add_date'],false);
 
 		// Additional information
-		$additional_details=get_translated_tempcode($myrow['comments']);
+		$additional_details=get_translated_tempcode($myrow,'comments');
 
 		// Edit date
 		if (!is_null($myrow['edit_date']))
@@ -677,7 +677,7 @@ class Module_downloads
 				if ($image_url=='') $image_url=$row['url'];
 				if (url_is_local($view_url)) $view_url=get_custom_base_url().'/'.$view_url;
 				$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-				$comment=get_translated_tempcode($row['comments']);
+				$comment=get_translated_tempcode($row,'comments');
 				$thumb=do_image_thumb($thumb_url,'');
 				if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries','download_'.strval($id)))))
 				{
@@ -737,7 +737,7 @@ class Module_downloads
 			'image'=>$image_url,
 		);
 
-		return do_template('DOWNLOAD_SCREEN',array('_GUID'=>'a9af438f84783d0d38c20b5f9a62dbdb','ORIGINAL_FILENAME'=>$myrow['original_filename'],'URL'=>$myrow['url'],'NUM_IMAGES'=>strval($counter),'TAGS'=>get_loaded_tags('downloads'),'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink,'SUBMITTER'=>strval($myrow['submitter']),'EDIT_DATE'=>$edit_date,'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'VIEWS'=>integer_format($myrow['download_views']),'NAME'=>$name,'DATE'=>$add_date,'DATE_RAW'=>strval($myrow['add_date']),'NUM_DOWNLOADS'=>integer_format($myrow['num_downloads']),'TITLE'=>$title,'OUTMODE_URL'=>$outmode_url,'WARNING_DETAILS'=>$warning_details,'EDIT_URL'=>$edit_url,'ADD_IMG_URL'=>$add_img_url,'DESCRIPTION'=>get_translated_tempcode($myrow['description']),'ADDITIONAL_DETAILS'=>$additional_details,'IMAGES_DETAILS'=>$images_details,'ID'=>strval($id),'FILE_SIZE'=>clean_file_size($myrow['file_size']),'AUTHOR_URL'=>$author_url,'AUTHOR'=>$author,'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details));
+		return do_template('DOWNLOAD_SCREEN',array('_GUID'=>'a9af438f84783d0d38c20b5f9a62dbdb','ORIGINAL_FILENAME'=>$myrow['original_filename'],'URL'=>$myrow['url'],'NUM_IMAGES'=>strval($counter),'TAGS'=>get_loaded_tags('downloads'),'LICENCE'=>is_null($licence)?NULL:strval($licence),'LICENCE_TITLE'=>$licence_title,'LICENCE_HYPERLINK'=>$licence_hyperlink,'SUBMITTER'=>strval($myrow['submitter']),'EDIT_DATE'=>$edit_date,'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'VIEWS'=>integer_format($myrow['download_views']),'NAME'=>$name,'DATE'=>$add_date,'DATE_RAW'=>strval($myrow['add_date']),'NUM_DOWNLOADS'=>integer_format($myrow['num_downloads']),'TITLE'=>$title,'OUTMODE_URL'=>$outmode_url,'WARNING_DETAILS'=>$warning_details,'EDIT_URL'=>$edit_url,'ADD_IMG_URL'=>$add_img_url,'DESCRIPTION'=>get_translated_tempcode($myrow,'description'),'ADDITIONAL_DETAILS'=>$additional_details,'IMAGES_DETAILS'=>$images_details,'ID'=>strval($id),'FILE_SIZE'=>clean_file_size($myrow['file_size']),'AUTHOR_URL'=>$author_url,'AUTHOR'=>$author,'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details));
 	}
 
 	/**

@@ -23,7 +23,7 @@ foreach ($gifts as $gift)
 	{
 		$link=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id);
 		$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_signature'),$GLOBALS['FORUM_DB']);
+		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row($member_id),'m_signature',$GLOBALS['FORUM_DB']);
 		$points=$gift['cnt'];
 		$rank=get_translated_text(ocf_get_group_property(ocf_get_member_primary_group($member_id),'name'),$GLOBALS['FORUM_DB']);
 		if ($avatar_url=='')

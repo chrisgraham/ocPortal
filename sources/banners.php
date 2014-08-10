@@ -243,7 +243,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 
 		// Display!
 		$img=$rows[$i]['img_url'];
-		$caption=get_translated_tempcode($rows[$i]['caption']);
+		$caption=get_translated_tempcode($rows[$i],'caption');
 		$content=show_banner($name,$rows[$i]['b_title_text'],$caption,array_key_exists('b_direct_code',$rows[$i])?$rows[$i]['b_direct_code']:'',$img,$source,$rows[$i]['site_url'],$rows[$i]['b_type'],$rows[$i]['submitter']);
 		if ($ret) return $content;
 		$echo=do_template('BASIC_HTML_WRAP',array('_GUID'=>'d23424ded86c850f4ae0006241407ff9','TITLE'=>do_lang_tempcode('BANNER'),'CONTENT'=>$content));

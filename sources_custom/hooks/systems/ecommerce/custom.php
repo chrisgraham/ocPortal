@@ -130,7 +130,7 @@ class Hook_custom
 		if (array_key_exists(0,$rows))
 		{
 			$row=$rows[0];
-			return get_translated_tempcode($row['c_description']);
+			return get_translated_tempcode($row,'c_description');
 		}
 		return new ocp_tempcode();
 	}

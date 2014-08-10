@@ -429,7 +429,7 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 
 		if ((is_null($topic_row['_trans_post'])) || ($topic_row['_trans_post']==''))
 		{
-			if (!is_null($topic_row['t_cache_first_post'])) $topic['first_post']=get_translated_tempcode($topic_row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
+			if (!is_null($topic_row['t_cache_first_post'])) $topic['first_post']=get_translated_tempcode($topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
 			else $topic['first_post']=new ocp_tempcode();
 		} else
 		{
@@ -750,9 +750,9 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 			$subforum=array();
 			$subforum['id']=$subforum_row['id'];
 			$subforum['name']=$subforum_row['f_name'];
-			$subforum['description']=get_translated_tempcode($subforum_row['f_description'],$GLOBALS['FORUM_DB']);
+			$subforum['description']=get_translated_tempcode($subforum_row,'f_description',$GLOBALS['FORUM_DB']);
 			$subforum['redirection']=$subforum_row['f_redirection'];
-			$subforum['intro_question']=get_translated_tempcode($subforum_row['f_intro_question'],$GLOBALS['FORUM_DB']);
+			$subforum['intro_question']=get_translated_tempcode($subforum_row,'f_intro_question',$GLOBALS['FORUM_DB']);
 			$subforum['intro_answer']=$subforum_row['f_intro_answer'];
 
 			if (is_numeric($subforum_row['f_redirection']))
@@ -866,7 +866,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$topics[]=ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,in_array($topic_row['id'],$involved));
 	}
 
-	$description=get_translated_tempcode($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
+	$description=get_translated_tempcode($forum_info[0],'f_description',$GLOBALS['FORUM_DB']);
 	$description_text=get_translated_text($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
 	$out=array('name'=>$forum_info[0]['f_name'],
 					'description'=>$description,
@@ -889,7 +889,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	);
 
 	// Is there a question/answer situation?
-	$question=get_translated_tempcode($forum_info[0]['f_intro_question'],$GLOBALS['FORUM_DB']);
+	$question=get_translated_tempcode($forum_info[0],'f_intro_question',$GLOBALS['FORUM_DB']);
 	if (!$question->is_empty())
 	{
 		$is_guest=($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id());

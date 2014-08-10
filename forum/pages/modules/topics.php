@@ -1509,7 +1509,7 @@ class Module_topics
 		if (get_value('disable_pt_restrict')!=='1')
 		{
 			$agreed=get_param_integer('agreed',0);
-			$rules=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_pt_rules_text'),$GLOBALS['FORUM_DB']);
+			$rules=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row($member_id),'m_pt_rules_text',$GLOBALS['FORUM_DB']);
 			if (($agreed==0) && (!$rules->is_empty()))
 			{
 				$url=get_self_url(false,false,array('agreed'=>'1'));
@@ -2673,7 +2673,7 @@ END;
 
 		if (is_null(get_param('post',NULL)))
 		{
-			$parsed=get_translated_tempcode($post_details[0]['p_post'],$GLOBALS['FORUM_DB']);
+			$parsed=get_translated_tempcode($post_details[0],'p_post',$GLOBALS['FORUM_DB']);
 		} else $parsed=NULL;
 		$posting_form=get_posting_form(do_lang('SAVE'),$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,$parsed,$this->_post_javascript());
 

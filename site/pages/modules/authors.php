@@ -144,7 +144,7 @@ class Module_authors
 
 		seo_meta_load_for('authors',$author);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('url','description','skills'),array('author'=>$author),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('*'),array('author'=>$author),'',1);
 		if (!array_key_exists(0,$rows))
 		{
 			if ((has_actual_page_access(get_member(),'cms_authors')) && (has_edit_author_permission(get_member(),$author)))
@@ -195,10 +195,10 @@ class Module_authors
 		else $url_details=new ocp_tempcode();
 
 		// (Self?) description
-		$description=is_null($details['description'])?new ocp_tempcode():get_translated_tempcode($details['description']);
+		$description=empty($details['description'])?new ocp_tempcode():get_translated_tempcode($details,'description');
 
 		// Skills
-		$skills=is_null($details['skills'])?new ocp_tempcode():get_translated_tempcode($details['skills']);
+		$skills=empty($details['skills'])?new ocp_tempcode():get_translated_tempcode($details,'skills');
 
 		// Edit link, for staff
 		if (has_edit_author_permission(get_member(),$author))
@@ -257,7 +257,7 @@ class Module_authors
 					if (has_category_access(get_member(),'news',strval($row['news_category'])))
 					{
 						$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news'));
-						$_title=get_translated_tempcode($row['title']);
+						$_title=get_translated_tempcode($row,'title');
 						$title_plain=get_translated_text($row['title']);
 						$seo_bits=seo_meta_get_for('news',strval($row['id']));
 						$map=array('ID'=>strval($row['id']),'TAGS'=>get_loaded_tags('news',explode(',',$seo_bits[0])),'SUBMITTER'=>strval($row['submitter']),'DATE'=>get_timezoned_date($row['date_and_time']),'DATE_RAW'=>strval($row['date_and_time']),'URL'=>$url,'TITLE_PLAIN'=>$title_plain,'TITLE'=>$_title);

@@ -84,7 +84,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 		$topic['num_posts']=$topic_row['t_cache_num_posts'];
 		$topic['first_time']=$topic_row['t_cache_first_time'];
 		$topic['first_title']=$topic_row['t_cache_first_title'];
-		$topic['first_post']=(is_null($topic_row['t_cache_first_post']))?new ocp_tempcode():get_translated_tempcode($topic_row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
+		$topic['first_post']=(is_null($topic_row['t_cache_first_post']))?new ocp_tempcode():get_translated_tempcode($topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
 		$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));
 		$topic['first_username']=$topic_row['t_cache_first_username'];
 		$topic['first_member_id']=$topic_row['t_cache_first_member_id'];

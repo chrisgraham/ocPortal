@@ -100,16 +100,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		{
 			$date=get_timezoned_date($myrow['date_and_time']);
 			$amount=$myrow['amount'];
-
-			if ((get_page_name()!='search') && (array_key_exists('text_parsed',$myrow)) && (!is_null($myrow['text_parsed'])) && ($myrow['text_parsed']!='') && ($myrow['reason']!=0))
-			{
-				$reason=new ocp_tempcode();
-				if (!$reason->from_assembly($myrow['text_parsed'],true))
-					$reason=get_translated_tempcode($myrow['reason']);
-			} else
-			{
-				$reason=get_translated_tempcode($myrow['reason']);
-			}
+			$reason=get_translated_tempcode($myrow,'reason');
 
 			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
 		}

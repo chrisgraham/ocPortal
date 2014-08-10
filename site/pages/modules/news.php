@@ -118,7 +118,13 @@ class Module_news
 			require_lang('news');
 			foreach ($default_categories as $category)
 			{
-				$GLOBALS['SITE_DB']->query_insert('news_categories',array('notes'=>'','nc_img'=>'newscats/'.$category,'nc_owner'=>NULL,'nc_title'=>lang_code_to_default_content('NC_'.$category)));
+				$map=array(
+					'notes'=>'',
+					'nc_img'=>'newscats/'.$category,
+					'nc_owner'=>NULL,
+				);
+				$map+=lang_code_to_default_content('nc_title','NC_'.$category);
+				$GLOBALS['SITE_DB']->query_insert('news_categories',$map);
 			}
 
 			$GLOBALS['SITE_DB']->create_table('news_rss_cloud',array(
@@ -547,8 +553,8 @@ class Module_news
 				if (!is_null($blog)) $map['blog']=$blog;
 				$map+=propagate_ocselect();
 				$url=build_url($map,'_SELF');
-				$_title=get_translated_tempcode($myrow['title']);
-				$_title_plain=get_translated_text($myrow['title']);
+				$_title=get_translated_tempcode($myrow,'title');
+				$_title_plain=get_translated_text($myrow,'title');
 				$author_url=((addon_installed('authors')) && (!$member_based))?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author'])+propagate_ocselect(),get_module_zone('authors')):new ocp_tempcode();
 				$author=$myrow['author'];
 				if (!array_key_exists($myrow['news_category'],$NEWS_CATS))
@@ -573,8 +579,8 @@ class Module_news
 					if (url_is_local($img)) $img=get_base_url().'/'.$img;
 				}
 
-				$summary=get_translated_tempcode($myrow['news']);
-				if ($summary->is_empty()) $summary=get_translated_tempcode($myrow['news_article']);
+				$summary=get_translated_tempcode($myrow,'news');
+				if ($summary->is_empty()) $summary=get_translated_tempcode($myrow,'news_article');
 				$seo_bits=seo_meta_get_for('news',strval($myrow['id']));
 				$map=array('_GUID'=>'a29bbea4a703287793e2b3b190114ec3','TAGS'=>(get_option('show_content_tagging_inline')=='1')?get_loaded_tags('news',explode(',',$seo_bits[0])):NULL,'CATEGORY'=>$category,'IMG'=>$img,'AUTHOR_URL'=>$author_url,'AUTHOR'=>$author,'TRUNCATE'=>$truncate,'BLOG'=>$blog===1,'NEWS'=>$summary,'SUMMARY'=>$summary,'ID'=>strval($myrow['p_id']),'VIEWS'=>strval($myrow['news_views']),'SUBMITTER'=>strval($myrow['submitter']),'DATE'=>$date,'DATE_RAW'=>strval($myrow['date_and_time']),'EDIT_DATE_RAW'=>is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),'FULL_URL'=>$url,'URL'=>$url,'TITLE_PLAIN'=>$_title_plain,'NEWS_TITLE'=>$_title,'TITLE'=>$_title);
 				if ((get_option('is_on_comments')=='1') && (!has_no_forum()) && ($myrow['allow_comments']>=1)) $map['COMMENT_COUNT']='1';
@@ -679,7 +685,7 @@ class Module_news
 			$awards=find_awards_for('news',strval($id));
 		} else $awards=array();
 
-		$_title=get_translated_tempcode($myrow['title']);
+		$_title=get_translated_tempcode($myrow,'title');
 		$title_to_use=do_lang_tempcode(($blog===1)?'BLOG__NEWS':'_NEWS',$_title);
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 
@@ -707,11 +713,11 @@ class Module_news
 		$date=get_timezoned_date($myrow['date_and_time']);
 		$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author']),get_module_zone('authors')):new ocp_tempcode();
 		$author=$myrow['author'];
-		$news_full=get_translated_tempcode($myrow['news_article']);
+		$news_full=get_translated_tempcode($myrow,'news_article');
 		$news_full_plain=get_translated_text($myrow['news_article']);
 		if ($news_full->is_empty())
 		{
-			$news_full=get_translated_tempcode($myrow['news']);
+			$news_full=get_translated_tempcode($myrow,'news');
 			$news_full_plain=get_translated_text($myrow['news']);
 		}
 
@@ -798,7 +804,7 @@ class Module_news
 			}
 		}
 
-		breadcrumb_set_self(get_translated_tempcode($myrow['title']));
+		breadcrumb_set_self(get_translated_tempcode($myrow,'title'));
 
 		$GLOBALS['META_DATA']+=array(
 			'created'=>date('Y-m-d',$myrow['date_and_time']),

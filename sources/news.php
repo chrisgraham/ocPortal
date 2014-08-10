@@ -28,7 +28,7 @@
 function render_news_box($row,$zone='_SEARCH')
 {
 	$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),$zone);
-	$title=get_translated_tempcode($row['title']);
+	$title=get_translated_tempcode($row,'title');
 	$title_plain=get_translated_text($row['title']);
 
 	global $NEWS_CATS;
@@ -51,10 +51,10 @@ function render_news_box($row,$zone='_SEARCH')
 	}
 	$category=get_translated_text($news_cat_row['nc_title']);
 
-	$news=get_translated_tempcode($row['news']);
+	$news=get_translated_tempcode($row,'news');
 	if ($news->is_empty())
 	{
-		$news=get_translated_tempcode($row['news_article']);
+		$news=get_translated_tempcode($row,'news_article');
 		$truncate=true;
 	} else $truncate=false;
 	$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),get_module_zone('authors')):new ocp_tempcode();

@@ -69,7 +69,7 @@ class Hook_awards_comcode_page
 			request_page($row['the_page'],false,$row['the_zone'],NULL,true);
 		}
 
-		$row2=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('cc_page_title','string_index'),array('the_zone'=>$row['the_zone'],'the_page'=>$row['the_page']),'',1);
+		$row2=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),array('the_zone'=>$row['the_zone'],'the_page'=>$row['the_page']),'',1);
 		if (array_key_exists(0,$row2))
 		{
 			$cc_page_title=get_translated_text($row2[0]['cc_page_title'],NULL,NULL,true);
@@ -77,7 +77,7 @@ class Hook_awards_comcode_page
 
 			if ($summary=='')
 			{
-				$summary=get_translated_tempcode($row2[0]['string_index']);
+				$summary=get_translated_tempcode($row2[0],'string_index');
 			}
 		} else
 		{

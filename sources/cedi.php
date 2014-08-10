@@ -43,7 +43,7 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
 		$title=do_lang_tempcode('CEDI_POST');
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode($row['the_message']),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode($row,'the_message'),'URL'=>$url));
 }
 
 /**
@@ -56,7 +56,7 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
  */
 function render_cedi_page_box($row,$zone='_SEARCH',$put_in_box=true)
 {
-	$content=paragraph(get_translated_tempcode($row['description']),'tyrtfjhggfdf');
+	$content=paragraph(get_translated_tempcode($row,'description'),'tyrtfjhggfdf');
 	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$row['id']),$zone);
 
 	$breadcrumbs=mixed();

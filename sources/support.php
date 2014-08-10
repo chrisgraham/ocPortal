@@ -1178,13 +1178,13 @@ function get_flagrant()
 		$_flagrant=persistent_cache_get('FLAGRANT');
 		if ($_flagrant===NULL)
 		{
-			$flagrant=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT the_message FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
-			if ($flagrant===NULL)
+			$flagrant=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
+			if (count($flagrant)==0)
 			{
 				persistent_cache_set('FLAGRANT',false);
 			} else
 			{
-				$_flagrant=get_translated_tempcode($flagrant);
+				$_flagrant=get_translated_tempcode($flagrant[0],'the_message');
 				persistent_cache_set('FLAGRANT',$_flagrant);
 			}
 		}
