@@ -162,6 +162,14 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 	// Then safely update our own
 	$this_ref->table_exists_cache[$table_name]=true;
 
+	foreach ($fields_copy as $name=>$type)
+	{
+		if (strpos($type,'_TRANS')!==false)
+		{
+			$GLOBALS['SITE_DB']->create_index($table_name,'#search_'.$name,array($name));
+		}
+	}
+
 	if (function_exists('persistent_cache_delete'))
 		persistent_cache_delete('TABLE_LANG_FIELDS');
 }
@@ -437,6 +445,11 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 	}
 
 	$this_ref->query_insert('db_meta',array('m_table'=>$table_name,'m_name'=>$name,'m_type'=>$_type));
+
+	if (strpos($_type,'_TRANS')!==false)
+	{
+		$GLOBALS['SITE_DB']->create_index($table_name,'#search_'.$name,array($name));
+	}
 
 	if (function_exists('persistent_cache_delete'))
 		persistent_cache_delete('TABLE_LANG_FIELDS');
