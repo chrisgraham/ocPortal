@@ -51,7 +51,7 @@ class comment_test_set extends ocp_test_case
 			);
 			$this->post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);
 		}
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT p_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE t.text_original NOT LIKE \'%'.db_encode_like(do_lang('SPACER_POST_MATCHER','','','',get_site_default_lang()).'%').'\' AND ( p.id='.strval($this->post_id).') ORDER BY p.id');
+		$rows=$GLOBALS['FORUM_DB']->query('SELECT p_title FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=p.p_post WHERE t.text_original NOT LIKE \'%'.db_encode_like(do_lang('SPACER_POST_MATCHER','','','',get_site_default_lang()).'%').'\' AND ( p.id='.strval($this->post_id).') ORDER BY p.id');
 		$title=$rows[0]['p_title'];
 		// Test the forum was actually created
 		$this->assertTrue('test_comment1'==$title);
