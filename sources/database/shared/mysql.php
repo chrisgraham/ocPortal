@@ -200,7 +200,7 @@ class Database_super_mysql
 			$type=$type_remap[$type];
 
 			$_fields.='	  '.$name.' '.$type;
-			if (substr($name,-10)=='__tempcode')
+			if (substr($name,-10)=='__text_parsed')
 			{
 				$query.=' DEFAULT \'\'';
 			} elseif (substr($name,-13)=='__source_user')

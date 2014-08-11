@@ -83,7 +83,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 								if (($table=='translate') && ($name=='text_parsed')) $value='';
 							} else
 							{
-								if (strpos($name,'__tempcode')!==false) $value='';
+								if (strpos($name,'__text_parsed')!==false) $value='';
 							}
 
 							if (is_null($value)) continue;

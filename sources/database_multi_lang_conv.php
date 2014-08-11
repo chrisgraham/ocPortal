@@ -39,11 +39,11 @@ function disable_content_translation()
 		if (strpos($field['m_type','__COMCODE')!==false)
 		{
 			// Add new implied fields for holding extra Comcode details, and new field to hold main Comcode
-			foreach (array('tempcode'=>'LONG_TEXT','source_user'=>'USER','new'=>'LONG_TEXT') as $sub_name=>$sub_type)
+			foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER','new'=>'LONG_TEXT') as $sub_name=>$sub_type)
 			{
 				$sub_name=$field['m_name'].'__'.$sub_name;
 				$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' ADD '.$sub_name.' '.$type_remap[$sub_type];
-				if ($sub_name=='tempcode')
+				if ($sub_name=='text_parsed')
 				{
 					$query.=' DEFAULT \'\'';
 				} elseif ($sub_name=='new')
@@ -111,7 +111,7 @@ function enable_content_translation()
 		// Copy to translate table
 		$query='INSERT INTO '.$db->table_prefix.'translate ';
 		$query.='(language,importance_level,text_original,text_parsed,broken,source_user) VALUES ';
-		$query.='(SELECT \''.db_escape_string(get_site_default_lang()).'\',3,'.$field['m_name'].'__old,'.$field['m_name'].'__tempcode,0,'.$field['m_name'].'__source_user FROM'.$db->table_prefix.$field['m_table'].')';
+		$query.='(SELECT \''.db_escape_string(get_site_default_lang()).'\',3,'.$field['m_name'].'__old,'.$field['m_name'].'__text_parsed,0,'.$field['m_name'].'__source_user FROM'.$db->table_prefix.$field['m_table'].')';
 		$db->_query($query,NULL,NULL,true);
 
 		// Delete old fields
@@ -119,7 +119,7 @@ function enable_content_translation()
 		if (strpos($field['m_type','__COMCODE')!==false)
 		{
 			// Delete old implied fields for holding extra Comcode details
-			$to_delete=array_merge($to_delete,array('tempcode','source_user'));
+			$to_delete=array_merge($to_delete,array('text_parsed','source_user'));
 		}
 		foreach ($to_delete as $sub_name)
 		{

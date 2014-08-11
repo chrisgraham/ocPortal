@@ -1867,7 +1867,7 @@ class Database_Static_xml
 			{
 				if (!array_key_exists($key,$record)) // Possibly an auto-generated key
 				{
-					if (substr($key,-10)=='__tempcode')
+					if (substr($key,-10)=='__text_parsed')
 					{
 						$record[$key]='';
 					} elseif (substr($key,-13)=='__source_user')

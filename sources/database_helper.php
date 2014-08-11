@@ -140,7 +140,7 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 				if (strpos($type,'__COMCODE')!==false)
 				{
 					$fields+=array(
-						$name.'__tempcode'=>'LONG_TEXT',
+						$name.'__text_parsed'=>'LONG_TEXT',
 						$name.'__source_user'=>'USER',
 					);
 				}
@@ -376,11 +376,11 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 		{
 			if (strpos($_type,'__COMCODE')!==false)
 			{
-				foreach (array('tempcode'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
+				foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
 				{
 					$sub_name=$name.'__'.$sub_name;
 					$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$sub_name.' '.$type_remap[$sub_type];
-					if ($sub_name=='tempcode')
+					if ($sub_name=='text_parsed')
 					{
 						$query.=' DEFAULT \'\'';
 					} elseif ($sub_name=='source_user')
@@ -457,12 +457,12 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 
 	if ((strpos($_type,'__COMCODE')!==false) && (!is_null($new_name)) && ($new_name!=$name))
 	{
-		foreach (array('tempcode'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
+		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
 		{
 			$sub_name=$name.'__'.$sub_name;
 			$sub_new_name=$new_name.'__'.$sub_name;
 			$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' CHANGE '.$sub_name.' '.$sub_new_name.' '.$type_remap[$sub_type];
-			if ($sub_name=='tempcode')
+			if ($sub_name=='text_parsed')
 			{
 				$query.=' DEFAULT \'\'';
 			} elseif ($sub_name=='source_user')
@@ -581,7 +581,7 @@ function _helper_delete_table_field($this_ref,$table_name,$name)
 	{
 		if (!multi_lang_content())
 		{
-			$cols_to_delete[]=$name.'__tempcode';
+			$cols_to_delete[]=$name.'__text_parsed';
 			$cols_to_delete[]=$name.'__source_user';
 		}
 	}
