@@ -90,7 +90,7 @@ class Block_side_tag_cloud
 			$where='1=1';
 		}
 		$where.=' AND '.db_string_not_equal_to($GLOBALS['SITE_DB']->translate_field_ref('meta_keywords'),'');
-		$meta_rows=$GLOBALS['SITE_DB']->query('SELECT meta_for_type,meta_for_id,meta_keywords FROM '.get_table_prefix().'seo_meta m WHERE '.$where.' ORDER BY m.id DESC',300/*reasonable limit*/,NULL,false,false,array('meta_keywords'));
+		$meta_rows=$GLOBALS['SITE_DB']->query('SELECT meta_for_type,meta_for_id,meta_keywords FROM '.get_table_prefix().'seo_meta m WHERE '.$where.' ORDER BY m.id DESC',300/*reasonable limit*/,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
 		foreach ($meta_rows as $mr)
 		{
 			$keywords=explode(',',get_translated_text($mr['meta_keywords']));

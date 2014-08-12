@@ -44,7 +44,7 @@ function _helper_install_create_custom_field($this_ref,$name,$length,$locked=1,$
 	require_code('ocf_members_action');
 
 	$name='ocp_'.$name;
-	$id=$this_ref->connection->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>$name));
+	$id=$this_ref->connection->query_value_null_ok('f_custom_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>$name));
 	if (is_null($id))
 	{
 		if (is_null($default))

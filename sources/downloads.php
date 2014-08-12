@@ -513,7 +513,7 @@ function get_category_downloads($category_id,$root,$order=NULL)
 	// Fetch
 	$sql='SELECT r.*'.$extra_select_sql.' FROM '.get_table_prefix().'download_downloads r'.$extra_join_sql.' WHERE '.$map;
 	$sql.=' ORDER BY '.(($order=='name ASC' || $order=='name DESC')?$GLOBALS['SITE_DB']->translate_field_ref('name'):$order);
-	$rows=$GLOBALS['SITE_DB']->query($sql,$max,$start,false,false,array('name'));
+	$rows=$GLOBALS['SITE_DB']->query($sql,$max,$start,false,false,array('name'=>'SHORT_TRANS'));
 	$out=new ocp_tempcode();
 	foreach ($rows as $myrow)
 	{

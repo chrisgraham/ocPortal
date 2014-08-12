@@ -371,8 +371,8 @@ class Module_news
 			$max_rows=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',$map);
 		} elseif ($blogs==1)
 		{
-			$categories=$GLOBALS['SITE_DB']->query('SELECT c.* FROM '.get_table_prefix().'news_categories c WHERE nc_owner IS NOT NULL ORDER BY nc_owner DESC,'.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered to show newest blogs first
-			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NOT NULL',NULL,NULL,false,false,array('nc_title'));
+			$categories=$GLOBALS['SITE_DB']->query('SELECT c.* FROM '.get_table_prefix().'news_categories c WHERE nc_owner IS NOT NULL ORDER BY nc_owner DESC,'.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start,false,false,array('nc_title'=>'SHORT_TRANS')); // Ordered to show newest blogs first
+			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(*) FROM '.get_table_prefix().'news_categories WHERE nc_owner IS NOT NULL',NULL,NULL,false,false,array('nc_title'=>'SHORT_TRANS'));
 		} else
 		{
 			$map=array('nc_owner'=>NULL);

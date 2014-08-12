@@ -307,7 +307,7 @@ class Hook_mybb
 			$is_super_admin=($row['title']=='Administrator')?1:0;
 			$is_super_moderator=($row['title']=='Universal Moderator')?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$avatar_max_width,$avatar_max_height,30000);
@@ -1244,7 +1244,7 @@ class Hook_mybb
 			if ($row['type']=='text') $type='short_text';
 			elseif ($row['type']=='textarea') $type='long_text';
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['name']));
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['name']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['name'],0,$row['description'],'',1-$row['hidden'],1-$row['hidden'],$row['editable'],0,$type,$row['required'],0,0,$row['disporder'],'',true);

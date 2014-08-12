@@ -292,7 +292,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 
 	$max_rows=$this_ref->connection->query_value_null_ok_full(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
 	if ($limit==0) return array();
-	$rows=$this_ref->connection->query($query.' ORDER BY '.(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC',$limit,$start,false,true,array('p_post'));
+	$rows=$this_ref->connection->query($query.' ORDER BY '.(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC',$limit,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 
 	$out=array();
 	foreach ($rows as $i=>$r)
@@ -422,12 +422,12 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	}
 	if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
 	{
-		$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start,false,false,array('p_post'));
+		$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start,false,false,array('p_post'=>'LONG_TRANS__COMCODE'));
 	} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
 	{
-		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where.' ORDER BY '.$order,$max,$start,false,false,array('p_post'));
+		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where.' ORDER BY '.$order,$max,$start,false,false,array('p_post'=>'LONG_TRANS__COMCODE'));
 	}
-	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where,NULL,NULL,false,false,array('p_post'));
+	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where,NULL,NULL,false,false,array('p_post'=>'LONG_TRANS__COMCODE'));
 
 	$out=array();
 	foreach ($rows as $myrow)

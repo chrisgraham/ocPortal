@@ -10,7 +10,7 @@
 $max=array_key_exists('max',$map)?intval($map['max']):10;
 $truncate_to=array_key_exists('truncate_to',$map)?intval($map['truncate_to']):5;
 
-$gifts=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'gifts g WHERE gift_from<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' ORDER BY g.id DESC',$max,NULL,false,false,array('reason'));
+$gifts=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'gifts g WHERE gift_from<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' ORDER BY g.id DESC',$max,NULL,false,false,array('reason'=>'SHORT_TRANS__COMCODE'));
 echo '<div class="wide_table_wrap"><table class="results_table wide_table autosized_table" summary="'.do_lang('COLUMNED_TABLE').'">';
 
 echo '<thead><tr>';

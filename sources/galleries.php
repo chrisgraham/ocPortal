@@ -456,10 +456,10 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 	$query='FROM '.get_table_prefix().'galleries g WHERE '.db_string_equal_to('parent_id',$category_id);
 	if (current(current($GLOBALS['SITE_DB']->query('SELECT COUNT(*) '.$query)))>=300)
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY add_date',300,NULL,false,false,array('fullname'));
+		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY add_date',300,NULL,false,false,array('fullname'=>'SHORT_TRANS__COMCODE'));
 	} else
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('fullname').' ASC',NULL,NULL,false,false,array('fullname'));
+		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('fullname').' ASC',NULL,NULL,false,false,array('fullname'=>'SHORT_TRANS__COMCODE'));
 	}
 	if (((is_null($filter)) || (call_user_func_array($filter,array($category_id,$member_id,count($rows))))) && ((!$must_accept_images) || (($accept_images) && (!$is_member_synched))) && ((!$must_accept_videos) || (($accept_videos) && (!$is_member_synched))))
 	{

@@ -116,7 +116,7 @@ class Module_forumview
 			$category_data=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name AS title','f_parent_forum AS parent_id','f_cache_last_time AS edit_date'),NULL,'',300);
 			if (count($category_data)==300) // Ah, we need to limit things then
 			{
-				$category_data=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name AS title','f_parent_forum AS parent_id','f_cache_last_time AS edit_date'),array('f_cache_num_posts'),'',300);
+				$category_data=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_name AS title','f_parent_forum AS parent_id','f_cache_last_time AS edit_date'),NULL,'',300);
 			}
 		}
 

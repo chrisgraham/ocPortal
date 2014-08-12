@@ -41,13 +41,13 @@ class Hook_choose_download
 				do
 				{
 					$str='Version './*preg_replace('#\.0$#','',*/float_to_raw_string($id_float,1)/*)*/;
-					$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id',array('parent_id'=>3,$GLOBALS['SITE_DB']->translate_field_ref('category')=>$str));
+					$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','id',array('parent_id'=>3,$GLOBALS['SITE_DB']->translate_field_ref('category')=>$str));
 					if (is_null($_id)) $id_float-=0.1;
 				}
 				while ((is_null($_id)) && ($id_float!=0.0));
 			} else
 			{
-				$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories c','c.id',array($GLOBALS['SITE_DB']->translate_field_ref('category')=>$id));
+				$_id=$GLOBALS['SITE_DB']->query_value_null_ok('download_categories','id',array($GLOBALS['SITE_DB']->translate_field_ref('category')=>$id));
 			}
 			if (is_null($_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$id=strval($_id);

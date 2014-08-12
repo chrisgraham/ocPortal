@@ -787,7 +787,7 @@ class Module_admin_config
 				case 'usergroup':
 					if (get_forum_type()=='ocf')
 					{
-						$tmp_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('name')=>get_option($myrow['the_name'])));
+						$tmp_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('name')=>get_option($myrow['the_name'])));
 
 						require_code('ocf_groups');
 						$_list=ocf_nice_get_usergroups($tmp_value);

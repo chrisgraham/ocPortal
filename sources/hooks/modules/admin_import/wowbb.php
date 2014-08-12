@@ -198,7 +198,7 @@ class Hook_wowbb
 			$group_name_remap=array('Unregistered'=>'Guests','Moderators'=>'Super-members','Super Moderators'=>'Super-moderators');
 			if (array_key_exists($row['user_group_name'],$group_name_remap)) $row['user_group_name']=$group_name_remap[$row['user_group_name']];
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['user_group_name']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['user_group_name']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['user_group_name'],0,$is_super_admin,$is_super_moderator,$row['user_group_title'],'',NULL,NULL,NULL,constant('FLOOD_INTERVAL'),0,($row['post_attachments']==0)?0:5,5,constant('AVATAR_DIMENSIONS_MAX'),constant('AVATAR_DIMENSIONS_MAX'),30000,700,25,$row['add_mana']);

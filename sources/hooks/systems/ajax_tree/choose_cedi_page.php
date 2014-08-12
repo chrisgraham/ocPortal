@@ -72,10 +72,10 @@ class Hook_choose_cedi_page
 					$where.='p.id<>'.strval((integer)$seen);
 				}
 
-				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
+				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'=>'SHORT_TRANS'));
 			} else
 			{
-				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
+				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'=>'SHORT_TRANS'));
 				foreach ($orphans as &$orphan)
 				{
 					$orphan['_title']=get_translated_text($orphan['title']);

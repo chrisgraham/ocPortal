@@ -365,7 +365,7 @@ class Hook_Profiles_Tabs_about
 				}
 
 				$club_name=get_translated_text($club_row['g_name']);
-				$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>do_lang('FORUM_FOR_CLUB',$club_name)));
+				$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>do_lang('FORUM_FOR_CLUB',$club_name)));
 
 				$clubs[]=array(
 					'CLUB_NAME'=>$club_name,

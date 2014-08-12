@@ -194,7 +194,7 @@ class Hook_phpbb2
 			$is_super_admin=0;
 			$is_super_moderator=0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['group_name']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['group_name']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$INFO['avatar_max_width'],$INFO['avatar_max_height'],30000,$INFO['max_sig_chars']);

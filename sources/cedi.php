@@ -532,10 +532,10 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 				$where.='p.id<>'.strval((integer)$seen);
 			}
 
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'=>'SHORT_TRANS'));
 		} else
 		{
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'));
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'=>'SHORT_TRANS'));
 		}
 
 		foreach ($orphans as &$orphan)

@@ -238,7 +238,7 @@ class Hook_vb3
 			$is_super_admin=(($row['adminpermissions']&2)!=0)?1:0;
 			$is_super_moderator=(($row['adminpermissions']&1)!=0)?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,$row['usertitle'],'',$row_promotion_target,$row['reputation'],$row_group_leader,5,0,5,$row['attachlimit'],$row['avatarmaxwidth'],$row['avatarmaxheight'],$INFO['postmaxchars'],array_key_exists('sigmax',$INFO)?$INFO['sigmax']:700);
@@ -487,7 +487,7 @@ class Hook_vb3
 				$row['title']=$db->query_value_null_ok_full('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_title'));
 				$row['description']=$db->query_value_null_ok_full('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_desc'));
 			}
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['title']));
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['title'],0,$row['description'],'',1-$row['hidden'],1-$row['hidden'],$row['editable'],0,$type,$row['required'],$row['memberlist'],$row['memberlist'],$row['displayorder'],'',true);

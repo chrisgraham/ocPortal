@@ -578,7 +578,7 @@ function erase_comcode_cache()
 		global $TABLE_LANG_FIELDS;
 		foreach ($TABLE_LANG_FIELDS as $table=>$fields)
 		{
-			foreach ($fields as $field)
+			foreach (array_keys($fields) as $field)
 			{
 				if (strpos($field,'__COMCODE')!==false)
 				{

@@ -369,7 +369,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 	{
 		if ($start<200)
 		{
-			$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('p_post')));
+			$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('p_post'=>'LONG_TRANS__COMCODE')));
 		} else // deep search, so we need to make offset more efficient, trade-off is more queries
 		{
 			$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start));
@@ -538,7 +538,7 @@ function ocf_cache_member_details($members)
 	}
 	if ($member_or_list!='')
 	{
-		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.$member_or_list,NULL,NULL,false,false,array('m_signature'));
+		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.$member_or_list,NULL,NULL,false,false,array('m_signature'=>'LONG_TRANS__COMCODE'));
 		global $TABLE_LANG_FIELDS;
 		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,false,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_member_custom_fields']:array());
 		$member_rows_3=$GLOBALS['FORUM_DB']->query('SELECT gm_group_id,gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members WHERE gm_validated=1 AND ('.str_replace('m.id','gm_member_id',$member_or_list).')');

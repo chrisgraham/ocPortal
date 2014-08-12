@@ -48,9 +48,9 @@ function set_coordinates()
 	$coords=explode('_',$_coords);
 
 
-	$latitude_cpf_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>'ocp_latitude'));
+	$latitude_cpf_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>'ocp_latitude'));
 
-	$longitude_cpf_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>'ocp_longitude'));
+	$longitude_cpf_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>'ocp_longitude'));
 
 	//are there latitude and longtitude custom profile fields ?
 	if(is_null($longitude_cpf_id) || is_null($latitude_cpf_id)) return;

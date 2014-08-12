@@ -191,7 +191,7 @@ class Hook_aef
 			$is_super_admin=($row['mem_gr_name']=='Administrator')?1:0;
 			$is_super_moderator=($row['mem_gr_name']=='Universal Moderator')?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['mem_gr_name']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['mem_gr_name']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['mem_gr_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$INFO['av_width'],$INFO['av_height'],30000,$INFO['usersiglen']);

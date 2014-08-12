@@ -120,7 +120,7 @@ class Hook_ipb_base
 				$promotion_threshold=NULL;
 			}
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['g_title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['g_title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group(@html_entity_decode($row['g_title'],ENT_QUOTES,get_charset()),0,$row['g_access_cp'],$row['g_is_supmod'],'','',$promotion_target,$promotion_threshold,NULL,$row['g_avoid_flood']?0:$row['g_search_flood'],0,5,5,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode);
@@ -527,7 +527,7 @@ class Hook_ipb_base
 			if ($row['ftype']=='text') $type='short_text';
 			elseif ($row['ftype']=='area') $type='long_text';
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['ftitle']));
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['ftitle']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['ftitle'],0,$row['fdesc'],'',1-$row['fhide'],1-$row['fhide'],$row['fedit'],0,$type,$row['freq'],0,0,$row['forder'],'',true);

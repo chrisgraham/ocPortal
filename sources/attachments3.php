@@ -151,11 +151,9 @@ function update_lang_comcode_attachments($field_name,$lang_id,$text,$type,$id,$c
 	}
 
 	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
 	if ((is_null($for_member)) || ($GLOBALS['FORUM_DRIVER']->get_username($for_member)===NULL))
 		$for_member=$member;
-
-	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$for_member);
-	$text_parsed='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
 
 	/*
 	We set the Comcode user to the editing user (not the content owner) if the editing user does not have full HTML/Dangerous-Comcode privileges.
@@ -167,6 +165,9 @@ function update_lang_comcode_attachments($field_name,$lang_id,$text,$type,$id,$c
 		$source_user=$member;
 	else
 		$source_user=$for_member; // Reset to latest submitter for main record
+
+	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$source_user);
+	$text_parsed='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
 
 	if (multi_lang())
 	{

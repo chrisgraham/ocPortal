@@ -471,7 +471,7 @@ class Module_groups
 		$club_forum=NULL;
 		if ($group['g_is_private_club']==1)
 		{
-			$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>do_lang('FORUM_FOR_CLUB',$name)));
+			$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums','id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>do_lang('FORUM_FOR_CLUB',$name)));
 		}
 
 		$group_name=get_translated_text($group['g_name'],$GLOBALS['FORUM_DB']);
@@ -517,7 +517,7 @@ class Module_groups
 			$id=intval($_id);
 		} else // Collaboration zone has a text link like this
 		{
-			$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>$_id));
+			$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>$_id));
 			if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 
@@ -594,7 +594,7 @@ class Module_groups
 				$id=intval($_id);
 			} else // Collaboration zone has a text link like this
 			{
-				$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$_id));
+				$id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$_id));
 				if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			}
 			if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));

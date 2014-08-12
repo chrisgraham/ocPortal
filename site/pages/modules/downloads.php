@@ -491,7 +491,7 @@ class Module_downloads
 			warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
 
 		$cats=array();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT p.* FROM '.get_table_prefix().'download_downloads p WHERE validated=1 AND ('.$sql_filter.') ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('name').' ASC',NULL,NULL,false,false,array('name'));
+		$rows=$GLOBALS['SITE_DB']->query('SELECT p.* FROM '.get_table_prefix().'download_downloads p WHERE validated=1 AND ('.$sql_filter.') ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('name').' ASC',NULL,NULL,false,false,array('name'=>'SHORT_TRANS'));
 		foreach ($rows as $row)
 		{
 			$download_name=get_translated_text($row['name']);

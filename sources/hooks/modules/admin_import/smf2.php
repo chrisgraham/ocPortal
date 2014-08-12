@@ -302,7 +302,7 @@ class Hook_smf2
 			$is_super_admin=0;
 			$is_super_moderator=0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$group_name),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$group_name));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($group_name,0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$leader,5,0,5,$max_attachments_upload,$avatar_max_width,$avatar_max_height,30000); //Edited by Duck
@@ -500,7 +500,7 @@ class Hook_smf2
 			if (import_check_if_imported('cpf',$row['id_field'])) continue;
 
 			$name=$row['field_name'];
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
 			if (is_null($id_new))
 			{
 				$default=$row['default_value'];

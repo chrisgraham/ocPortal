@@ -32,7 +32,6 @@ function disable_content_translation()
 
 	$type_remap=$db->static_ob->db_get_type_remap();
 
-	global $TABLE_LANG_FIELDS;
 	$_table_lang_fields=$db->query('SELECT m_name,m_table,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
 	foreach ($_table_lang_fields as $field)
 	{
@@ -93,7 +92,6 @@ function enable_content_translation()
 
 	$type_remap=$db->static_ob->db_get_type_remap();
 
-	global $TABLE_LANG_FIELDS;
 	$_table_lang_fields=$db->query('SELECT m_name,m_table,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
 	foreach ($_table_lang_fields as $field)
 	{

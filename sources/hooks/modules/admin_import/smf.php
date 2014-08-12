@@ -288,7 +288,7 @@ class Hook_smf
 			$is_super_admin=($row['groupName']=='Administrator')?1:0;
 			$is_super_moderator=($row['groupName']=='Global Moderator')?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['groupName']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['groupName']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['groupName'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,NULL,5,0,5,5,$avatar_max_width,$avatar_max_height,30000);

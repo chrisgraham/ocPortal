@@ -483,7 +483,7 @@ class Module_cms_blogs extends standard_aed_module
 		{
 			require_code('calendar2');
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
-			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events e','e.id',array($GLOBALS['SITE_DB']->translate_field_ref('e_content')=>$schedule_code));
+			$past_event=$GLOBALS['SITE_DB']->query_value_null_ok('calendar_events','id',array($GLOBALS['SITE_DB']->translate_field_ref('e_content')=>$schedule_code));
 			require_code('calendar');
 			if (!is_null($past_event))
 			{

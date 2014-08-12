@@ -130,7 +130,7 @@ class Module_search
 						$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name';
 					if (can_arbitrary_groupby())
 						$query.=' GROUP BY c.c_name';
-					$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
+					$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'=>'SHORT_TRANS'));
 				}
 				foreach ($rows as $row)
 				{
@@ -170,7 +170,7 @@ class Module_search
 								$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name';
 							if (can_arbitrary_groupby())
 								$query.=' GROUP BY c.c_name';
-							$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
+							$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'=>'SHORT_TRANS'));
 						}
 						foreach ($rows as $row)
 						{
@@ -223,7 +223,7 @@ class Module_search
 						$query.=' JOIN '.get_table_prefix().'catalogue_entries e ON e.c_name=c.c_name';
 					if (can_arbitrary_groupby())
 						$query.=' GROUP BY c.c_name';
-					$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
+					$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'=>'SHORT_TRANS'));
 					foreach ($rows as $row)
 					{
 						if (!has_category_access($member_id,'catalogues_catalogue',$row['c_name'])) continue;

@@ -271,7 +271,7 @@ class Hook_phpbb3
 			if ($row['group_name']=='REGISTERED') $id_new=9;
 			elseif ($row['group_name']=='REGISTERED_COPPA') $id_new=9;
 			elseif ($row['group_name']=='GLOBAL_MODERATORS') $id_new=3;
-			else $id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$row['group_name']),'g.id');
+			else $id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['group_name']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,5,0,5,5,$row['group_avatar_width'],$row['group_avatar_height'],30000,$row['group_sig_chars']);
@@ -1321,7 +1321,7 @@ class Hook_phpbb3
 			if (import_check_if_imported('cpf',$row['field_ident'])) continue;
 
 			$name=$row['field_name'];
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
 			if (is_null($id_new))
 			{
 				$default=$row['field_default_value'];

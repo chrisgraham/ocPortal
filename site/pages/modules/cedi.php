@@ -408,7 +408,7 @@ class Module_cedi
 		$find=get_param('find','');
 		if ($find!='')	// Allow quick 'find' remapping to a real id
 		{
-			$id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages p','p.id',array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$find));
+			$id=$GLOBALS['SITE_DB']->query_value_null_ok('seedy_pages','id',array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$find));
 			if (is_null($id))
 			{
 				$title=get_screen_title('ERROR_OCCURRED');

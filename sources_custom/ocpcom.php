@@ -96,7 +96,7 @@ function get_bug_category_id($version_pretty)
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'catalogues_catalogue','category_name'=>'bugs','group_id'=>$group_id));
 	}
 
-	$bug_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories c','c.id',array($GLOBALS['SITE_DB']->translate_field_ref('cc_title')=>strval($version_pretty)));
+	$bug_category_id=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_categories','id',array($GLOBALS['SITE_DB']->translate_field_ref('cc_title')=>strval($version_pretty)));
 	if (is_null($bug_category_id))
 	{
 		$bug_category_id=actual_add_catalogue_category('bugs',strval($version_pretty),'','',NULL);

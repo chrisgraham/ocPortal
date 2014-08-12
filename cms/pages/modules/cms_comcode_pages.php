@@ -404,7 +404,7 @@ class Module_cms_comcode_pages
 			if (!has_specific_permission(get_member(),'edit_highrange_content'))
 				$where_map.=' AND submitter='.strval(get_member());
 			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone';
-			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start,NULL,NULL,false,false,array('cc_page_title'));
+			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start,NULL,NULL,false,false,array('cc_page_title'=>'?SHORT_TRANS'));
 			$max_rows=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT COUNT(DISTINCT c.the_zone,c.the_page) FROM '.$ttable.' WHERE '.$where_map);
 
 			$filesarray=array();

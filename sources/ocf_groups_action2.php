@@ -65,7 +65,7 @@ function ocf_may_control_group($group_id,$member_id)
  */
 function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club)
 {
-	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$name),'g.id');
+	$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$name));
 	if ((!is_null($test)) && ($test!=$group_id)) warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
 
 	$_group_info=$GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','g_title','g_rank_image'),array('id'=>$group_id),'',1);

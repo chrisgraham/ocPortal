@@ -1187,7 +1187,7 @@ class forum_driver_ocf extends forum_driver_base
 		}
 		if (!function_exists('require_lang')) require_code('lang');
 		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g'.$where.$sup;
-		$rows=$this->connection->query($query,NULL,NULL,false,false,array('g_name'));
+		$rows=$this->connection->query($query,NULL,NULL,false,false,array('g_name'=>'SHORT_TRANS'));
 		if ($hide_hidden)
 		{
 			require_lang('ocf');

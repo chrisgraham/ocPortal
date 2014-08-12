@@ -1925,7 +1925,7 @@ class Hook_ocp_merge
 			if (import_check_if_imported('group',strval($row['id']))) continue;
 
 			$name=$this->get_lang_string($db,$row['g_name']);
-			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g WHERE '.db_string_equal_to($GLOBALS['FORUM_DB']->translate_field_ref('g_name'),$name),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$name));
 			if (is_null($id_new))
 			{
 				$title=$this->get_lang_string($db,$row['g_title']);
@@ -2460,7 +2460,7 @@ class Hook_ocp_merge
 		foreach ($rows as $row)
 		{
 			$name=$this->get_lang_string($db,$row['mm_name']);
-			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_multi_moderations m','m.id',array($GLOBALS['FORUM_DB']->translate_field_ref('mm_name')=>$name));
+			$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_multi_moderations','id',array($GLOBALS['FORUM_DB']->translate_field_ref('mm_name')=>$name));
 			if (is_null($test))
 			{
 				$move_to=is_null($row['mm_move_to'])?NULL:import_id_remap_get('forum',strval($row['mm_move_to']),true);

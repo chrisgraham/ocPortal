@@ -659,7 +659,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$forum_id=db_get_first_id();
 	}/* else*/
 	{
-		$forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('f.id'=>$forum_id),'',1,NULL,false,array('f_description','f_intro_question'));
+		$forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('f.id'=>$forum_id),'',1,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 		if (!array_key_exists(0,$forum_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		if (($forum_info[0]['f_redirection']!='') && (looks_like_url($forum_info[0]['f_redirection'])))
@@ -684,11 +684,11 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$_max_forum_inspect=get_value('max_forum_inspect');
 		$max_forum_inspect=is_null($_max_forum_inspect)?300:intval($_max_forum_inspect);
 
-		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$order,$max_forum_inspect,NULL,false,false,array('f_description','f_intro_question'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$order,$max_forum_inspect,NULL,false,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 		if (count($subforum_rows)==$max_forum_inspect) $subforum_rows=array(); // Will cause performance breakage
 	} else
 	{
-		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$order,NULL,NULL,false,array('f_description','f_intro_question'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$order,NULL,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 	}
 
 	$unread_forums=array();
@@ -861,7 +861,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	}
 	if ($start<200)
 	{
-		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('t_cache_first_post'));
+		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('t_cache_first_post'=>'LONG_TRANS__COMCODE'));
 	} else // deep search, so we need to make offset more efficient, trade-off is more queries
 	{
 		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start);

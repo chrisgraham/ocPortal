@@ -454,7 +454,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 
 	if ($no_name_dupe)
 	{
-		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields f','f.id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
+		$test=$GLOBALS['FORUM_DB']->query_value_null_ok('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
 		if (!is_null($test))
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;

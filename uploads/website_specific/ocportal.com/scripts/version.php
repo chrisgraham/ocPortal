@@ -451,7 +451,7 @@ function load_download_rows()
 		} else
 		{
 			$sql='SELECT d.* FROM '.get_table_prefix().'download_downloads d FORCE INDEX (recent_downloads) WHERE validated=1 AND '.$GLOBALS['SITE_DB']->translate_field_ref('name').' LIKE \''.db_encode_like('ocPortal Version %').'\' ORDER BY add_date';
-			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('name','description'));
+			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('name'=>'SHORT_TRANS','description'=>'LONG_TRANS__COMCODE'));
 			foreach ($DOWNLOAD_ROWS as &$row)
 			{
 				$row['nice_title']=get_translated_text($row['name']);
@@ -471,7 +471,7 @@ function old_style()
 	$dotted=get_version_dotted__from_anything(get_param('version'));
 	$version_pretty=get_version_pretty__from_dotted($dotted);
 
-	$rows=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads d',array('d.*'),array('validated'=>1,$GLOBALS['SITE_DB']->translate_field_ref('name')=>'ocPortal Version '.$version_pretty));
+	$rows=$GLOBALS['SITE_DB']->query_value_null_ok('download_downloads',array('*'),array('validated'=>1,$GLOBALS['SITE_DB']->translate_field_ref('name')=>'ocPortal Version '.$version_pretty));
 
 	if (!array_key_exists(0,$rows))
 	{

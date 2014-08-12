@@ -41,7 +41,7 @@ class Hook_rss_calendar
 		$filters=ocfilter_to_sqlfragment($_filters,'c.id','calendar_types',NULL,'e_type','id');
 
 		$content=new ocp_tempcode();
-		$_categories=$GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types c WHERE '.$filters,NULL,NULL,false,false,array('t_title'));
+		$_categories=$GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types c WHERE '.$filters,NULL,NULL,false,false,array('t_title'=>'SHORT_TRANS__COMCODE'));
 		foreach ($_categories as $i=>$_category)
 		{
 			$_categories[$i]['_title']=get_translated_text($_category['t_title']);

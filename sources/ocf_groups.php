@@ -138,7 +138,7 @@ function ocf_ensure_groups_cached($groups)
 		}
 	}
 	if ($counter==0) return;
-	$extra_groups=$GLOBALS['FORUM_DB']->query('SELECT g.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g WHERE '.$groups_to_load,NULL,NULL,false,false,array('g_name','g_title'));
+	$extra_groups=$GLOBALS['FORUM_DB']->query('SELECT g.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g WHERE '.$groups_to_load,NULL,NULL,false,false,array('g_name'=>'SHORT_TRANS','g_title'=>'SHORT_TRANS'));
 
 	if (count($extra_groups)!=$counter) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
@@ -289,7 +289,7 @@ function ocf_get_members_groups($member_id=NULL,$skip_secret=false,$handle_proba
 			if (is_null($PROBATION_GROUP))
 			{
 				$probation_group=get_option('probation_usergroup');
-				$PROBATION_GROUP=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','g.id',array($GLOBALS['FORUM_DB']->translate_field_ref('name')=>$probation_group));
+				$PROBATION_GROUP=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('name')=>$probation_group));
 				if (is_null($PROBATION_GROUP)) $PROBATION_GROUP=false;
 			}
 			if ($PROBATION_GROUP!==false) return array($PROBATION_GROUP=>1);

@@ -124,7 +124,7 @@ function edit_news_category($id,$title,$img,$notes,$owner=NULL)
 		$sql.=db_string_equal_to('meta_for_type','news');
 		$meta_keywords_field=$GLOBALS['SITE_DB']->translate_field_ref('name');
 		$sql.=' AND ('.$meta_keywords_field.' LIKE \''.db_encode_like($old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title).'\')';
-		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'));
+		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
 		foreach ($affected_news as $af_row)
 		{
 			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',','.$title.',',get_translated_text($af_row['meta_keywords'])));
@@ -169,7 +169,7 @@ function delete_news_category($id)
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 
-	$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT c.id FROM '.get_table_prefix().'news_categories c WHERE c.id<>'.strval($id).' AND '.db_string_equal_to($GLOBALS['SITE_DB']->translate_field_ref('nc_title'),do_lang('news:NC_general')));
+	$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT c.id FROM '.get_table_prefix().'news_categories c WHERE c.id<>'.strval($id).' AND '.db_string_equal_to($GLOBALS['SITE_DB']->translate_field_ref('nc_title'),do_lang('news:NC_general')),false,false,array('nc_title'=>'SHORT_TRANS'));
 	if (is_null($min))
 		$min=$GLOBALS['SITE_DB']->query_value_null_ok_full('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval((integer)$id));
 	if (is_null($min))
@@ -193,7 +193,7 @@ function delete_news_category($id)
 	{
 		$meta_keywords_field=$GLOBALS['SITE_DB']->translate_field_ref('meta_keywords');
 		$sql='SELECT meta_for_type,meta_for_id,meta_keywords FROM '.get_table_prefix().'seo_meta m WHERE '.db_string_equal_to('meta_for_type','news').' AND ('.$meta_keywords_field.' LIKE \''.db_encode_like($old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title).'\')';
-		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'));
+		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
 		foreach ($affected_news as $af_row)
 		{
 			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#','',get_translated_text($af_row['meta_keywords'])));

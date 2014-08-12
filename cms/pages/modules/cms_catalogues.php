@@ -1108,7 +1108,7 @@ class Module_cms_catalogues extends standard_aed_module
 								break;
 							case 'short_trans':
 							case 'long_trans':
-								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type.' f','f.id',array($GLOBALS['SITE_DB']->translate_field_ref('cv_value')=>$key));
+								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type,'id',array($GLOBALS['SITE_DB']->translate_field_ref('cv_value')=>$key));
 								break;
 							default:
 								$has_match=$GLOBALS['SITE_DB']->query_value_null_ok('catalogue_efv_'.$db_type,'id',array('cv_value'=>$key));

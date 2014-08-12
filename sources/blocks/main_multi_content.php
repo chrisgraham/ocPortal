@@ -311,7 +311,7 @@ class Block_main_multi_content
 				{
 					if ($info['title_field_dereference'])
 					{
-						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref($info['title_field']).' ASC',$max,NULL);
+						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref($info['title_field']).' ASC',$max,NULL,false,false,array($info['title_field']=>'SHORT_TRANS'));
 					} else
 					{
 						$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['title_field'].' ASC',$max,NULL);

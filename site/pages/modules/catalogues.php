@@ -584,7 +584,7 @@ class Module_catalogues
 			$query='SELECT c.c_title,c.c_name FROM '.get_table_prefix().'catalogues c';
 //			if (db_has_subqueries($GLOBALS['SITE_DB']->connection_read))		Actually we want empty ones in site trees
 //				$query.=' WHERE EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.c_name=c.c_name)';
-			$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'));
+			$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('c_title'=>'SHORT_TRANS'));
 		}
 		foreach ($rows as $row)
 		{
@@ -666,7 +666,7 @@ class Module_catalogues
 			{
 				$query.=' AND EXISTS (SELECT * FROM '.get_table_prefix().'catalogue_entries e WHERE e.cc_id=d.id)';
 			}
-			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('cc_title')));
+			$category_data=list_to_map('id',$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array('cc_title'=>'SHORT_TRANS')));
 		}
 		$query='SELECT c.* FROM '.get_table_prefix().'catalogues c';
 		if (can_arbitrary_groupby())

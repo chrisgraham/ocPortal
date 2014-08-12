@@ -1012,6 +1012,7 @@ function nice_get_langs($select_lang=NULL,$show_unset=false)
 /**
  * Insert a comcode language entry into the translation table, and returns the id.
  *
+ * @param  ID_TEXT		The field name
  * @param  string			The text
  * @param  integer		The level of importance this language string holds
  * @set    1 2 3 4
@@ -1020,19 +1021,20 @@ function nice_get_langs($select_lang=NULL,$show_unset=false)
  * @param  ?string		The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
  * @param  integer		Comcode parser wrap position
  * @param  boolean		Whether to generate a fatal error if there is invalid Comcode
- * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return mixed			The ID of the newly added language entry (if multi-lang-content on), or the string itself
+ * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
+ * @return array			The language ID save fields
  */
-function insert_lang_comcode($text,$level,$connection=NULL,$insert_as_admin=false,$pass_id=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
+function insert_lang_comcode($field_name,$text,$level,$connection=NULL,$insert_as_admin=false,$pass_id=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
-	return insert_lang($text,$level,$connection,true,NULL,NULL,$insert_as_admin,$pass_id,NULL,$wrap_pos,$preparse_mode,$save_as_volatile);
+	return insert_lang($field_name,$text,$level,$connection,true,NULL,NULL,$insert_as_admin,$pass_id,NULL,$wrap_pos,$preparse_mode,$save_as_volatile);
 }
 
 /**
  * Insert a language entry into the translation table, and returns the id.
  *
+ * @param  ID_TEXT			The field name
  * @param  string				The text
  * @param  integer			The level of importance this language string holds
  * @set    1 2 3 4
@@ -1045,48 +1047,50 @@ function insert_lang_comcode($text,$level,$connection=NULL,$insert_as_admin=fals
  * @param  ?string			Assembled Tempcode portion (NULL: work it out)
  * @param  integer			Comcode parser wrap position
  * @param  boolean			Whether to generate a fatal error if there is invalid Comcode
- * @param  boolean			Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return mixed				The ID of the newly added language entry (if multi-lang-content on), or the string itself
+ * @param  boolean			Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
+ * @return array				The language ID save fields
  */
-function insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text2=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
+function insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text_parsed=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
 	require_code('lang3');
-	return _insert_lang($text,$level,$connection,$comcode,$id,$lang,$insert_as_admin,$pass_id,$text2,$wrap_pos,$preparse_mode,$save_as_volatile);
+	return _insert_lang($field_name,$text,$level,$connection,$comcode,$id,$lang,$insert_as_admin,$pass_id,$text_parsed,$wrap_pos,$preparse_mode,$save_as_volatile);
 }
 
 /**
  * Remap the specified comcode language id, and return the id again - the id isn't changed.
  *
+ * @param  ID_TEXT		The field name
  * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  ?string		The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
- * @param  ?MEMBER		The member performing the change (NULL: current member)
+ * @param  ?MEMBER		The member that owns the content this is for (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
- * @return mixed			The ID (if multi-lang-content on), or the string itself
+ * @return array			The language ID save fields
  */
-function lang_remap_comcode($id,$text,$connection=NULL,$pass_id=NULL,$source_member=NULL,$as_admin=false)
+function lang_remap_comcode($field_name,$id,$text,$connection=NULL,$pass_id=NULL,$source_member=NULL,$as_admin=false)
 {
-	return lang_remap($id,$text,$connection,true,$pass_id,$source_member,$as_admin);
+	return lang_remap($field_name,$id,$text,$connection,true,$pass_id,$source_member,$as_admin);
 }
 
 /**
  * Remap the specified language id, and return the id again - the id isn't changed.
  *
+ * @param  ID_TEXT		The field name
  * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether it is to be parsed as comcode
  * @param  ?string		The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
- * @param  ?MEMBER		The member performing the change (NULL: current member)
+ * @param  ?MEMBER		The member that owns the content this is for (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
- * @return mixed			The ID (if multi-lang-content on), or the string itself
+ * @return array			The language ID save fields
  */
-function lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_member=NULL,$as_admin=false,$backup_string=false)
+function lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_member=NULL,$as_admin=false,$backup_string=false)
 {
 	require_code('lang3');
-	return _lang_remap($id,$text,$connection,$comcode,$pass_id,$source_member,$as_admin,$backup_string);
+	return _lang_remap($field_name,$id,$text,$connection,$comcode,$pass_id,$source_member,$as_admin,$backup_string);
 }
 
 /**
@@ -1116,7 +1120,7 @@ function delete_lang($id,$connection=NULL)
  * @param  boolean			Whether to remove from the Tempcode cache when we're done, for performance reasons (normally don't bother with this, but some code knows it won't be needed again -- esp Comcode cache layer -- and saves RAM by removing it)
  * @return ?tempcode			The parsed comcode (NULL: the text couldn't be looked up)
  */
-function get_translated_tempcode($table,$row,$field,$connection=NULL,$lang=NULL,$force=false,$as_admin=false,$clear_away_from_cache=false)
+function get_translated_tempcode($table,$row,$field_name,$connection=NULL,$lang=NULL,$force=false,$as_admin=false,$clear_away_from_cache=false)
 {
 	if ($connection===NULL) $connection=$GLOBALS['SITE_DB'];
 
@@ -1124,7 +1128,7 @@ function get_translated_tempcode($table,$row,$field,$connection=NULL,$lang=NULL,
 
 	if (multi_lang_content())
 	{
-		$entry=$row[$field];
+		$entry=$row[$field_name];
 
 		if ($entry==0) return paragraph(do_lang_tempcode('FAILED_ENTRY'),'rtgtedgrgd');
 
@@ -1202,28 +1206,28 @@ function get_translated_tempcode($table,$row,$field,$connection=NULL,$lang=NULL,
 			if (get_value('really_want_highlighting')==='1')
 			{
 				require_code('comcode_from_html');
-				$row[$field]=force_clean_comcode($row[$field]); // Highlighting only works with pure Comcode
+				$row[$field_name]=force_clean_comcode($row[$field_name]); // Highlighting only works with pure Comcode
 			}
 
-			$ret=comcode_to_tempcode($row[$field],$row[$field.'__source_member'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+			$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_member'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
 			$LAX_COMCODE=$temp;
 			return $ret;
 		}
 
-		$result=$row[$field.'__text_parsed'];
+		$result=$row[$field_name.'__text_parsed'];
 	}
 
 	if (($result===NULL) || ($result=='') || (is_browser_decacheing())) // Not cached
 	{
 		require_code('lang3');
-		return parse_translated_text($table,$row,$field,$connection,$lang,$force,$as_admin);
+		return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
 	}
 
 	$parsed=new ocp_tempcode();
 	if (!$parsed->from_assembly($result,true)) // Corrupted
 	{
 		require_code('lang3');
-		return parse_translated_text($table,$row,$field,$connection,$lang,$force,$as_admin);
+		return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
 	}
 
 	if (multi_lang_content())
