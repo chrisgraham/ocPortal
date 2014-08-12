@@ -54,7 +54,7 @@ class Hook_rss_cedi
 			$edit_date='';
 
 			$news_title=xmlentities(escape_html(get_translated_text($row['title'])));
-			$_summary=get_translated_tempcode($row,'description');
+			$_summary=get_translated_tempcode('seedy_pages'/*TODO: Change in v10*/,$row,'description');
 			$summary=xmlentities($_summary->evaluate());
 			$news='';
 

@@ -720,7 +720,7 @@ class Module_calendar
 			// Fill in stream gaps as appropriate
 			$title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 			$down=strval($to_h-$from_h);
-			$description=(intval($down)<3)?new ocp_tempcode():(is_numeric($event['e_content'])?get_translated_tempcode($event,'e_content'):$event['e_content']);
+			$description=(intval($down)<3)?new ocp_tempcode():(is_numeric($event['e_content'])?get_translated_tempcode('calendar_events',$event,'e_content'):$event['e_content']);
 			$priority_lang=do_lang_tempcode('PRIORITY_'.strval($event['e_priority']));
 			$priority_icon='calendar/priority_'.strval($event['e_priority']);
 			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none');
@@ -1359,7 +1359,7 @@ class Module_calendar
 		$title_to_use_2=do_lang('CALENDAR_EVENT',$_title);
 		$title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
 		seo_meta_load_for('event',strval($id),$title_to_use_2);
-		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode($event,'e_content');
+		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode('calendar_events',$event,'e_content');
 		$type=get_translated_text($event['t_title']);
 		$priority=$event['e_priority'];
 		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));

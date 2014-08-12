@@ -124,7 +124,8 @@ class Hook_orphaned_lang_strings
 					}
 					$fused_lang_strings[$id]=$looked_up;
 				}
-				if ($langidfield['m_name']!='t_cache_first_post') $ids_seen_so_far[$id]=1;
+				if ($langidfield['m_name']!='t_cache_first_post') // 'if..!=' is for special exception for one that may be re-used in a cache position
+					$ids_seen_so_far[$id]=1;
 			}
 		}
 		$orphaned_lang_strings=array_diff(array_keys($all_ids),array_keys($ids_seen_so_far));

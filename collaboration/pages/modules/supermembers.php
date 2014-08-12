@@ -135,7 +135,7 @@ class Module_supermembers
 				$author_rows=$GLOBALS['SITE_DB']->query_value_null_ok('authors',array('*'),array('forum_handle'=>$id),'',1);
 				if (!array_key_exists(0,$author_rows))
 					$author_rows=$GLOBALS['SITE_DB']->query_value_null_ok('authors',array('*'),array('author'=>$name),'',1);
-				$skills=array_key_exists(0,$author_rows)?get_translated_tempcode($author_rows[0],'skills'):new ocp_tempcode();
+				$skills=array_key_exists(0,$author_rows)?get_translated_tempcode('authors',$author_rows[0],'skills'):new ocp_tempcode();
 			} else $skills=new ocp_tempcode();
 
 			$days=intval(round(floatval(time()-$GLOBALS['FORUM_DRIVER']->pnamelast_visit($r))/(60.0*60.0*24.0)));

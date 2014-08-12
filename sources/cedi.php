@@ -43,7 +43,7 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
 		$title=do_lang_tempcode('CEDI_POST');
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode($row,'the_message'),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode('seedy_posts'/*TODO: Change in v10*/$row,'the_message'),'URL'=>$url));
 }
 
 /**
@@ -56,7 +56,7 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
  */
 function render_cedi_page_box($row,$zone='_SEARCH',$put_in_box=true)
 {
-	$content=paragraph(get_translated_tempcode($row,'description'),'tyrtfjhggfdf');
+	$content=paragraph(get_translated_tempcode('seedy_pages'/*TODO: Change in v10*/,$row,'description'),'tyrtfjhggfdf');
 	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$row['id']),$zone);
 
 	$breadcrumbs=mixed();
@@ -97,12 +97,18 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	$map=array(
 		'validated'=>$validated,
 		'edit_date'=>NULL,
-		'the_message'=>0,
 		'the_user'=>$member,
 		'date_and_time'=>time(),
 		'page_id'=>$page_id,
 		'seedy_views'=>0,
 	);
+	if (multi_lang_content())
+	{
+		$map['the_message']=0;
+	} else
+	{
+		$map['the_message']='';
+	}
 	$id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',$map,true);
 	require_code('attachments2');
 	$GLOBALS['SITE_DB']->query_update('seedy_posts',insert_lang_comcode_attachments('the_message',2,$message,'cedi_post',strval($id)),array('id'=>$id),'',1);
@@ -248,9 +254,15 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL,$send
 			'hide_posts'=>$hide_posts,
 			'seedy_views'=>0,
 			'notes'=>$notes,
-			'description'=>0,
 			'add_date'=>time(),
 		);
+		if (multi_lang_content())
+		{
+			$map['description']=0;
+		} else
+		{
+			$map['description']='';
+		}
 		$map+=insert_lang('title',$title,2);
 		$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map,true);
 

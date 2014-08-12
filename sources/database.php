@@ -806,8 +806,6 @@ class database_driver
 						if (($value==='') && ($this->static_ob->db_empty_is_null())) /*$where.=$key.' IS NULL';*/ $value=' ';
 						/*else */
 
-						if ($key=='text_original') $table=str_replace(' LEFT JOIN '.$this->get_table_prefix().'translate ',' JOIN '.$this->get_table_prefix().'translate ',$table);
-
 						$where.=db_string_equal_to($key,$value);
 					}
 				}

@@ -226,7 +226,7 @@ class Hook_search_ocf_members
 					$temp=db_full_text_assemble('"'.$param.'"',true);
 				} else
 				{
-					$temp=db_like_assemble($param);
+					list($temp,)=db_like_assemble($param);
 				}
 				if ((($row['cf_type']=='short_trans') || ($row['cf_type']=='long_trans')) && (multi_lang_content()))
 				{
@@ -235,7 +235,7 @@ class Hook_search_ocf_members
 				{
 					if ($index_issue) // MySQL limit for fulltext index querying
 					{
-						$temp=db_like_assemble($param);
+						list($temp,)=db_like_assemble($param);
 					}
 					$where_clause.=preg_replace('#\?#','field_'.strval($row['id']),$temp);
 				}

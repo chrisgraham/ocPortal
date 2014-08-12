@@ -912,13 +912,13 @@ function collapse_2d_complexity($key,$value,$list)
  */
 function collapse_1d_complexity($key,$list)
 {
-	$new_map=array();
+	$new_array=array();
 	foreach ($list as $map)
 	{
-		$new_map[]=$map[$key];
+		$new_array[]=$map[$key];
 	}
 
-	return $new_map;
+	return $new_array;
 }
 
 /**
@@ -1184,7 +1184,7 @@ function get_flagrant()
 				persistent_cache_set('FLAGRANT',false);
 			} else
 			{
-				$_flagrant=get_translated_tempcode($flagrant[0],'the_message');
+				$_flagrant=get_translated_tempcode('text'/*TODO: Change in v10*/,$flagrant[0],'the_message');
 				persistent_cache_set('FLAGRANT',$_flagrant);
 			}
 		}

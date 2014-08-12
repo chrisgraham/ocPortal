@@ -100,7 +100,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		{
 			$date=get_timezoned_date($myrow['date_and_time']);
 			$amount=$myrow['amount'];
-			$reason=get_translated_tempcode($myrow,'reason');
+			$reason=get_translated_tempcode('chargelog',$myrow,'reason');
 
 			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($fromname),escape_html($toname),$reason)));
 		}

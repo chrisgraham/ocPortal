@@ -41,7 +41,7 @@ function rules_script()
 
 		require_lang('ocf');
 
-		$question=get_translated_tempcode($forum_row,'f_intro_question',$GLOBALS['FORUM_DB']);
+		$question=get_translated_tempcode('f_forums',$forum_row,'f_intro_question',$GLOBALS['FORUM_DB']);
 		$answer=$forum_row['f_intro_answer'];
 
 		$output=do_template('OCF_FORUM_INTRO_QUESTION_POPUP',array('_GUID'=>'6f2dc12b616219ff982654b73ef979b2','QUESTION'=>$question,'ANSWER'=>$answer));

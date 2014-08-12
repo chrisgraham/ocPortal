@@ -94,7 +94,7 @@ class Module_awards
 			{
 				$url=build_url(array('page'=>'_SELF','type'=>'award','id'=>$myrow['id']),'_SELF');
 				$_title=get_translated_text($myrow['a_title']);
-				$description=get_translated_tempcode($myrow,'a_description');
+				$description=get_translated_tempcode('award_types',$myrow,'a_description');
 
 				$out->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'0974df260d7521edebf33f5397cab7f4','NAME'=>$_title,'URL'=>$url,'DESCRIPTION'=>$description,'TITLE'=>'')));
 			}
@@ -132,7 +132,7 @@ class Module_awards
 			if (is_null($info)) continue;
 
 			$_title=get_translated_text($award_type_row['a_title']);
-			$description=paragraph(get_translated_tempcode($award_type_row,'a_description'),'grdgdfghdfgodfs');
+			$description=paragraph(get_translated_tempcode('award_types',$award_type_row,'a_description'),'grdgdfghdfgodfs');
 
 			$rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>$award_type_row['id']),'ORDER BY date_and_time DESC',1);
 			foreach ($rows as $myrow)
@@ -192,7 +192,7 @@ class Module_awards
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
 		$title=get_screen_title('_AWARD',true,array(escape_html(get_translated_text($award_type_row['a_title']))));
-		$description=paragraph(get_translated_tempcode($award_type_row,'a_description'),'grdgdfghdfgodfs');
+		$description=paragraph(get_translated_tempcode('award_types',$award_type_row,'a_description'),'grdgdfghdfgodfs');
 
 		$rows=$GLOBALS['SITE_DB']->query_select('award_archive',array('*'),array('a_type_id'=>$id),'ORDER BY date_and_time DESC',$max,$start);
 		$max_rows=$GLOBALS['SITE_DB']->query_value('award_archive','COUNT(*)',array('a_type_id'=>$id));

@@ -454,6 +454,7 @@ function _check_attachment_count()
 /**
  * Insert some comcode content that may contain attachments, and return the language id.
  *
+ * @param  ID_TEXT		The field name
  * @param  integer		The level of importance this language string holds
  * @set    1 2 3 4
  * @param  LONG_TEXT		The comcode content
@@ -462,7 +463,7 @@ function _check_attachment_count()
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether to insert it as an admin (any comcode parsing will be carried out with admin privileges)
  * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
- * @return integer		The language id
+ * @return array			The language ID save fields
  */
 function insert_lang_comcode_attachments($level,$text,$type,$id,$connection=NULL,$insert_as_admin=false,$for_member=NULL)
 {
@@ -473,25 +474,52 @@ function insert_lang_comcode_attachments($level,$text,$type,$id,$connection=NULL
 	_check_attachment_count();
 
 	$_info=do_comcode_attachments($text,$type,$id,false,$connection,$insert_as_admin,$for_member);
-	$text2=$_info['tempcode']->to_assembly();
-	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
+	$text_parsed=$_info['tempcode']->to_assembly();
+	$source_user=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
 
 	$lang_id=NULL;
-	if (user_lang()=='Gibb') // Debug code to help us spot language layer bugs. We expect &keep_lang=EN to show EnglishEnglish content, but otherwise no EnglishEnglish content.
+	if (multi_lang_content())
 	{
-		$lang_id=$connection->query_insert('translate',array('source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'),true);
-	}
-	if (is_null($lang_id))
-	{
-		$lang_id=$connection->query_insert('translate',array('source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>$_info['comcode'],'text_parsed'=>$text2,'language'=>user_lang()),true);
+		if (user_lang()=='Gibb') // Debug code to help us spot language layer bugs. We expect &keep_lang=EN to show EnglishEnglish content, but otherwise no EnglishEnglish content.
+		{
+			$lang_id=$connection->query_insert('translate',array('source_user'=>$source_user,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'),true);
+		}
+		if (is_null($lang_id))
+		{
+			$lang_id=$connection->query_insert('translate',array(
+				'source_user'=>$source_user,
+				'broken'=>0,
+				'importance_level'=>$level,
+				'text_original'=>$_info['comcode'],
+				'text_parsed'=>$text_parsed,
+				'language'=>user_lang(),
+			),true);
+		} else
+		{
+			$connection->query_insert('translate',array(
+				'id'=>$lang_id,
+				'source_user'=>$source_user,
+				'broken'=>0,
+				'importance_level'=>$level,
+				'text_original'=>$_info['comcode'],
+				'text_parsed'=>$text_parsed,
+				'language'=>user_lang(),
+			));
+		}
 	} else
 	{
-		$connection->query_insert('translate',array('id'=>$lang_id,'source_user'=>$member,'broken'=>0,'importance_level'=>$level,'text_original'=>$_info['comcode'],'text_parsed'=>$text2,'language'=>user_lang()));
+		return array(
+			$field_name=>$_info['comcode'],
+			$field_name.'__text_parsed'=>$text_parsed,
+			$field_name.'__source_user'=>$source_user,
+		);
 	}
 
 	final_attachments_from_preview($id,$connection);
 
-	return $lang_id;
+	return array(
+		$field_name=>$lang_id,
+	);
 }
 
 /**

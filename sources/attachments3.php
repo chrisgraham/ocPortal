@@ -79,7 +79,7 @@ function delete_comcode_attachments($type,$id,$connection=NULL)
 /**
  * This function is the same as delete_comcode_attachments, except that it deletes the language code as well.
  *
- * @param  integer		The language id
+ * @param  mixed			The language ID
  * @param  ID_TEXT		The arbitrary type that the attached is for (e.g. download)
  * @param  ID_TEXT		The id in the set of the arbitrary types that the attached is for
  * @param  ?object		The database connection to use (NULL: standard site connection)
@@ -89,24 +89,30 @@ function delete_lang_comcode_attachments($lang_id,$type,$id,$connection=NULL)
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	delete_comcode_attachments($type,$id,$connection);
-	$connection->query_delete('translate',array('id'=>$lang_id),'',1);
+
+	if (multi_lang_content())
+		$connection->query_delete('translate',array('id'=>$lang_id),'',1);
 }
 
 /**
  * Update a language code, in such a way that new attachments are created if they were specified.
  *
- * @param  integer		The language id
+ * @param  ID_TEXT		The field name
+ * @param  mixed			The language ID
  * @param  LONG_TEXT		The new text
  * @param  ID_TEXT		The arbitrary type that the attached is for (e.g. download)
  * @param  ID_TEXT		The id in the set of the arbitrary types that the attached is for
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether to backup the language string before changing it
- * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
- * @return integer		The language id
+ * @param  ?MEMBER		The member that owns the content this is for (NULL: current member)
+ * @return array			The language ID save fields
  */
-function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NULL,$backup_string=false,$for_member=NULL)
+function update_lang_comcode_attachments($field_name,$lang_id,$text,$type,$id,$connection=NULL,$backup_string=false,$for_member=NULL)
 {
-	if ($lang_id==0) return insert_lang_comcode_attachments(3,$text,$type,$id,$connection,false,$for_member);
+	if ($lang_id===0)
+	{
+		return insert_lang_comcode_attachments($field_name,3,$text,$type,$id,$connection,false,$for_member);
+	}
 
 	if ($text===STRING_MAGIC_NULL) return $lang_id;
 
@@ -116,14 +122,22 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 
 	_check_attachment_count();
 
-	$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$id,'language'=>user_lang()));
-
 	if ($backup_string)
 	{
-		$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id,'language'=>user_lang()));
-		if (!array_key_exists(0,$current))
+		if (multi_lang())
 		{
-			$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id));
+			$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id,'language'=>user_lang()));
+			if (!array_key_exists(0,$current))
+			{
+				$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id));
+			}
+		} else
+		{
+			$current=array(array(
+				'language'=>user_lang(),
+				'text_original'=>$lang_id,
+				'broken'=>0,
+			));
 		}
 
 		$connection->query_insert('translate_history',array(
@@ -141,8 +155,7 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 		$for_member=$member;
 
 	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$for_member);
-	$text2='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
-	$remap=array('text_original'=>$_info['comcode'],'text_parsed'=>$text2);
+	$text_parsed='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
 
 	/*
 	We set the Comcode user to the editing user (not the content owner) if the editing user does not have full HTML/Dangerous-Comcode privileges.
@@ -151,16 +164,36 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 	 – yet also, if the source_user is changed, when admin edits it has to change back again.
 	*/
 	if (((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_specific_permission($member,'allow_html')) || (!has_specific_permission($member,'use_very_dangerous_comcode')))
-		$remap['source_user']=$member;
+		$source_user=$member;
 	else
-		$remap['source_user']=$for_member; // Reset to latest submitter for main record
+		$source_user=$for_member; // Reset to latest submitter for main record
 
-	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
+	if (multi_lang())
 	{
-		$connection->query_update('translate',$remap,array('id'=>$lang_id,'language'=>user_lang()));
-	} else // Darn, we'll have to save over whatever we did load from
+		$remap=array(
+			'text_original'=>$_info['comcode'],
+			'text_parsed'=>$text_parsed,
+			'source_user'=>$source_user,
+		);
+
+		$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$id,'language'=>user_lang()));
+		if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
+		{
+			$connection->query_update('translate',$remap,array('id'=>$lang_id,'language'=>user_lang()));
+		} else // Darn, we'll have to save over whatever we did load from
+		{
+			$connection->query_update('translate',$remap,array('id'=>$lang_id));
+		}
+	} else
 	{
-		$connection->query_update('translate',$remap,array('id'=>$lang_id));
+		return array(
+			$field_name=>$_info['comcode'],
+			$field_name.'__text_parsed'=>$text_parsed,
+			$field_name.'__source_user'=>$source_user,
+		);
 	}
-	return $lang_id;
+
+	return array(
+		$field_name=>$lang_id,
+	);
 }

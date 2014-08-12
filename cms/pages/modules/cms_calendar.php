@@ -666,7 +666,7 @@ class Module_cms_calendar extends standard_aed_module
 		}
 		$myrow=$rows[0];
 
-		$parsed=get_translated_tempcode($myrow,'e_content');
+		$parsed=get_translated_tempcode('calendar_events',$myrow,'e_content');
 
 		check_edit_permission(($myrow['e_is_public']==1)?'mid':'low',$myrow['e_submitter']);
 		$content=get_translated_text($myrow['e_content']);

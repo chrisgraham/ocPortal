@@ -478,7 +478,7 @@ function old_style()
 		echo do_lang('OC_NON_EXISTANT_VERSION');
 	} else
 	{
-		$description=get_translated_tempcode($rows[0],'description');
+		$description=get_translated_tempcode('download_downloads',$rows[0],'description');
 		echo $description->evaluate();
 	}
 }

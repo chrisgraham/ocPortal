@@ -42,67 +42,89 @@ function ocf_get_pp_rows($limit=5)
 
 //	return $GLOBALS['FORUM_DB']->query_select('f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.p_topic_id=t.id',array('*'),NULL,'',1); // For testing
 	$query='';
-	global $SITE_INFO;
-	if (((isset($SITE_INFO['mysql_old'])) && ($SITE_INFO['mysql_old']=='1')) || ((!isset($SITE_INFO['mysql_old'])) && (is_file(get_file_base().'/mysql_old'))))
+
+	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
+	if (!multi_lang_content())
 	{
-		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
-		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_intended_solely_for ='.strval($member_id).')
-		WHERE
-		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
-		(t_pt_from ='.strval($member_id).' OR t_pt_to ='.strval($member_id).' OR p_intended_solely_for ='.strval($member_id).')
-		AND (l_time IS NULL OR l_time < p_time)
-		'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
-	} else
-	{
-		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
-		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
-		WHERE
-		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
-		t_pt_from ='.strval($member_id).'
-		AND (l_time IS NULL OR l_time < p_time)
-		'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
-
-		$query.=' UNION ';
-
-		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
-		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
-		WHERE
-		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
-		t_pt_to ='.strval($member_id).'
-		AND (l_time IS NULL OR l_time < p_time)
-		'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
-
-		$query.=' UNION ';
-
-		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
-		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
-		WHERE
-		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
-		p_intended_solely_for ='.strval($member_id).'
-		AND (l_time IS NULL OR l_time < p_time)
-		'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
-
-		$query.=' UNION ';
-
-		$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id FROM
-		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access i ON (i.s_topic_id=t.id)
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')
-		WHERE
-		t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
-		i.s_member_id ='.strval($member_id).'
-		AND (l_time IS NULL OR l_time < p_time)
-		'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
+		$query.=',p2.p_post AS t_cache_first_post,p2.p_post__text_parsed AS t_cache_first_post__text_parsed,p2.p_post__source_user AS t_cache_first_post__source_user';
 	}
+	$query.=' FROM
+	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l_topic_id AND l_member_id ='.strval($member_id).'
+	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+	if (!multi_lang_content())
+	{
+		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
+	}
+	$query.='WHERE
+	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
+	t_pt_from ='.strval($member_id).'
+	AND (l_time IS NULL OR l_time < p_time)
+	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
+
+	$query.=' UNION ';
+
+	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
+	if (!multi_lang_content())
+	{
+		$query.=',p2.p_post AS t_cache_first_post,p2.p_post__text_parsed AS t_cache_first_post__text_parsed,p2.p_post__source_user AS t_cache_first_post__source_user';
+	}
+	$query.=' FROM
+	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l_topic_id AND l_member_id ='.strval($member_id).'
+	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+	if (!multi_lang_content())
+	{
+		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
+	}
+	$query.='WHERE
+	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
+	t_pt_to ='.strval($member_id).'
+	AND (l_time IS NULL OR l_time < p_time)
+	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
+
+	$query.=' UNION ';
+
+	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
+	if (!multi_lang_content())
+	{
+		$query.=',p2.p_post AS t_cache_first_post,p2.p_post__text_parsed AS t_cache_first_post__text_parsed,p2.p_post__source_user AS t_cache_first_post__source_user';
+	}
+	$query.=' FROM
+	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l_topic_id AND l_member_id ='.strval($member_id).'
+	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+	if (!multi_lang_content())
+	{
+		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
+	}
+	$query.='WHERE
+	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
+	p_intended_solely_for ='.strval($member_id).'
+	AND (l_time IS NULL OR l_time < p_time)
+	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
+
+	$query.=' UNION ';
+
+	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
+	if (!multi_lang_content())
+	{
+		$query.=',p2.p_post AS t_cache_first_post,p2.p_post__text_parsed AS t_cache_first_post__text_parsed,p2.p_post__source_user AS t_cache_first_post__source_user';
+	}
+	$query.=' FROM
+	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access i ON (i.s_topic_id=t.id)
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l_topic_id AND l_member_id ='.strval($member_id).'
+	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+	if (!multi_lang_content())
+	{
+		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
+	}
+	$query.='WHERE
+	t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND
+	i.s_member_id ='.strval($member_id).'
+	AND (l_time IS NULL OR l_time < p_time)
+	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
 
 	$query.=' ORDER BY t_cache_last_time DESC';
 
@@ -176,7 +198,7 @@ function generate_notifications($member_id)
 			$time_raw=$unread_pp['p_time'];
 			$time=get_timezoned_date($unread_pp['p_time']);
 			$topic_url=$GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'],NULL,true);
-			$post=get_translated_tempcode($unread_pp,'p_post',$GLOBALS['FORUM_DB']);
+			$post=get_translated_tempcode('f_posts',$unread_pp,'p_post',$GLOBALS['FORUM_DB']);
 			$description=$unread_pp['t_description'];
 			if ($description!='') $description=' ('.$description.')';
 			$profile_link=is_guest($by_id)?new ocp_tempcode():$GLOBALS['OCF_DRIVER']->member_profile_url($by_id,false,true);

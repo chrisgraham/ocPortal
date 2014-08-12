@@ -51,12 +51,12 @@ class Hook_rss_polls
 			$news_date=date($date_string,$row['add_time']);
 			$edit_date=is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
 
-			$_news_title=get_translated_tempcode($row,'question');
+			$_news_title=get_translated_tempcode('poll',$row,'question');
 			$news_title=xmlentities($_news_title->evaluate());
 			$answers=array();
 			for ($i=1;$i<=5;$i++)
 			{
-				$answers[]=get_translated_tempcode($row,'option'.strval($i));
+				$answers[]=get_translated_tempcode('poll',$row,'option'.strval($i));
 			}
 			$_summary=do_template('POLL_RSS_SUMMARY',array('_GUID'=>'db39d44c1fa871122e1ae717e4947244','ANSWERS'=>$answers));
 			$summary=xmlentities($_summary->evaluate());

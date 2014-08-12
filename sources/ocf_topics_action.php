@@ -97,7 +97,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 		't_is_open'=>$open,
 		't_poll_id'=>NULL,
 		't_cache_first_post_id'=>NULL,
-		't_cache_first_post'=>NULL,
+		't_cache_first_post'=>multi_lang_content()?NULL:'',
 		't_cache_first_time'=>NULL,
 		't_cache_first_title'=>'',
 		't_cache_first_username'=>'',

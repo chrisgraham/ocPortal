@@ -631,18 +631,21 @@ function require_all_lang($lang=NULL,$only_if_for_lang=false)
  * @param  ID_TEXT		The language codename
  * @param  boolean		Whether the given codes value is to be parsed as comcode
  * @param  integer		The level of importance this language string holds
- * @return integer		The language ID
+ * @return array			The language ID save fields
  */
 function lang_code_to_default_content($code,$comcode=false,$level=2)
 {
 	$lang_key=insert_lang(do_lang($code),$level,NULL,$comcode);
-	$langs=find_all_langs();
-	foreach ($langs as $lang=>$lang_type)
+	if (multi_lang_content())
 	{
-		if ($lang!=user_lang())
+		$langs=find_all_langs();
+		foreach ($langs as $lang=>$lang_type)
 		{
-			if (is_file(get_file_base().'/'.$lang_type.'/'.$lang.'/critical_error.ini')) // Make sure it's a reasonable looking pack, not just a stub (Google Translate addon can be made to go nuts otherwise)
-				insert_lang(do_lang($code,'','','',$lang),$level,NULL,true,$lang_key,$lang);
+			if ($lang!=user_lang())
+			{
+				if (is_file(get_file_base().'/'.$lang_type.'/'.$lang.'/critical_error.ini')) // Make sure it's a reasonable looking pack, not just a stub (Google Translate addon can be made to go nuts otherwise)
+					insert_lang(do_lang($code,'','','',$lang),$level,NULL,true,$lang_key,$lang);
+			}
 		}
 	}
 	return $lang_key;
@@ -1103,7 +1106,9 @@ function delete_lang($id,$connection=NULL)
 /**
  * This function is an offshoot of get_translated_text, it instead returns parsed comcode that is linked to the specified language id.
  *
- * @param  mixed				The ID (if multi-lang-content on), or the string itself
+ * @param  ID_TEXT			The table name
+ * @param  array				The database row
+ * @param  ID_TEXT			The field name
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
@@ -1111,51 +1116,83 @@ function delete_lang($id,$connection=NULL)
  * @param  boolean			Whether to remove from the Tempcode cache when we're done, for performance reasons (normally don't bother with this, but some code knows it won't be needed again -- esp Comcode cache layer -- and saves RAM by removing it)
  * @return ?tempcode			The parsed comcode (NULL: the text couldn't be looked up)
  */
-function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false,$as_admin=false,$clear_away_from_cache=false)
+function get_translated_tempcode($table,$row,$field,$connection=NULL,$lang=NULL,$force=false,$as_admin=false,$clear_away_from_cache=false)
 {
-	if (!multi_lang_content()) return; // TODO: Uh oh, how does this work?
-
-	if ($entry==0) return paragraph(do_lang_tempcode('FAILED_ENTRY'),'rtgtedgrgd');
-
 	if ($connection===NULL) $connection=$GLOBALS['SITE_DB'];
-
-	global $RECORD_LANG_STRINGS_CONTENT;
-	if ($RECORD_LANG_STRINGS_CONTENT)
-	{
-		global $RECORDED_LANG_STRINGS_CONTENT;
-		$RECORDED_LANG_STRINGS_CONTENT[$entry]=($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write);
-	}
 
 	if ($lang===NULL) $lang=user_lang();
 
-	if ($lang=='xxx') return make_string_tempcode('!!!'); // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
-
-	if ((isset($connection->text_lookup_cache[$entry])) && ($lang==user_lang()))
+	if (multi_lang_content())
 	{
-		$ret=$connection->text_lookup_cache[$entry];
-		if ($ret!=='')
+		$entry=$row[$field];
+
+		if ($entry==0) return paragraph(do_lang_tempcode('FAILED_ENTRY'),'rtgtedgrgd');
+
+		global $RECORD_LANG_STRINGS_CONTENT;
+		if ($RECORD_LANG_STRINGS_CONTENT)
 		{
-			if (is_string($ret))
-			{
-				$connection->text_lookup_cache[$entry]=new ocp_tempcode();
-				$connection->text_lookup_cache[$entry]->from_assembly($ret);
-				$ret=$connection->text_lookup_cache[$entry];
-			}
-			if ($clear_away_from_cache)
-			{
-				unset($connection->text_lookup_cache[$entry]);
-				unset($connection->text_lookup_original_cache[$entry]);
-			}
-			return $ret;
+			global $RECORDED_LANG_STRINGS_CONTENT;
+			$RECORDED_LANG_STRINGS_CONTENT[$entry]=($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write);
 		}
-	}
 
-	global $SEARCH__CONTENT_BITS;
+		if ($lang=='xxx') return make_string_tempcode('!!!'); // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
 
-	if ($SEARCH__CONTENT_BITS!==NULL) // Doing a search so we need to reparse, with highlighting on
+		if ((isset($connection->text_lookup_cache[$entry])) && ($lang==user_lang()))
+		{
+			$ret=$connection->text_lookup_cache[$entry];
+			if ($ret!=='')
+			{
+				if (is_string($ret))
+				{
+					$connection->text_lookup_cache[$entry]=new ocp_tempcode();
+					$connection->text_lookup_cache[$entry]->from_assembly($ret);
+					$ret=$connection->text_lookup_cache[$entry];
+				}
+				if ($clear_away_from_cache)
+				{
+					unset($connection->text_lookup_cache[$entry]);
+					unset($connection->text_lookup_original_cache[$entry]);
+				}
+				return $ret;
+			}
+		}
+
+		global $SEARCH__CONTENT_BITS;
+		if ($SEARCH__CONTENT_BITS!==NULL) // Doing a search so we need to reparse, with highlighting on
+		{
+			$_result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
+			if (array_key_exists(0,$_result))
+			{
+				global $LAX_COMCODE;
+				$temp=$LAX_COMCODE;
+				$LAX_COMCODE=true;
+				$result=$_result[0];
+
+				if (get_value('really_want_highlighting')==='1')
+				{
+					require_code('comcode_from_html');
+					$result['text_original']=force_clean_comcode($result['text_original']); // Highlighting only works with pure Comcode
+				}
+
+				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+				$LAX_COMCODE=$temp;
+				return $ret;
+			}
+		}
+
+		$_result=$connection->query_select('translate',array('text_parsed','text_original'),array('id'=>$entry,'language'=>$lang),'',1);
+		$result=isset($_result[0])?$_result[0]['text_parsed']:NULL;
+		if (isset($_result[0]))
+		{
+			if ($lang==user_lang())
+			{
+				$connection->text_lookup_original_cache[$entry]=$_result[0]['text_original'];
+			}
+		}
+	} else
 	{
-		$_result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
-		if (array_key_exists(0,$_result))
+		global $SEARCH__CONTENT_BITS;
+		if ($SEARCH__CONTENT_BITS!==NULL) // Doing a search so we need to reparse, with highlighting on
 		{
 			global $LAX_COMCODE;
 			$temp=$LAX_COMCODE;
@@ -1165,41 +1202,36 @@ function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false
 			if (get_value('really_want_highlighting')==='1')
 			{
 				require_code('comcode_from_html');
-				$result['text_original']=force_clean_comcode($result['text_original']); // Highlighting only works with pure Comcode
+				$row[$field]=force_clean_comcode($row[$field]); // Highlighting only works with pure Comcode
 			}
 
-			$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+			$ret=comcode_to_tempcode($row[$field],$row[$field.'__source_member'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
 			$LAX_COMCODE=$temp;
 			return $ret;
 		}
-	}
 
-	$_result=$connection->query_select('translate',array('text_parsed','text_original'),array('id'=>$entry,'language'=>$lang),'',1);
-	$result=isset($_result[0])?$_result[0]['text_parsed']:NULL;
-	if (isset($_result[0]))
-	{
-		if ($lang==user_lang())
-		{
-			$connection->text_lookup_original_cache[$entry]=$_result[0]['text_original'];
-		}
+		$result=$row[$field.'__text_parsed'];
 	}
 
 	if (($result===NULL) || ($result=='') || (is_browser_decacheing())) // Not cached
 	{
 		require_code('lang3');
-		return parse_translated_text($entry,$connection,$lang,$force,$as_admin);
+		return parse_translated_text($table,$row,$field,$connection,$lang,$force,$as_admin);
 	}
 
 	$parsed=new ocp_tempcode();
-	if (!$parsed->from_assembly($result,true))
+	if (!$parsed->from_assembly($result,true)) // Corrupted
 	{
 		require_code('lang3');
-		return parse_translated_text($entry,$connection,$lang,$force,$as_admin);
+		return parse_translated_text($table,$row,$field,$connection,$lang,$force,$as_admin);
 	}
 
-	if ($lang==user_lang())
+	if (multi_lang_content())
 	{
-		$connection->text_lookup_cache[$entry]=$parsed;
+		if ($lang==user_lang())
+		{
+			$connection->text_lookup_cache[$entry]=$parsed;
+		}
 	}
 
 	return $parsed;

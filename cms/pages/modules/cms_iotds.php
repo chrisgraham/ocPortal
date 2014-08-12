@@ -224,7 +224,7 @@ class Module_cms_iotds extends standard_aed_module
 		$previews=new ocp_tempcode();
 		foreach ($rows as $myrow)
 		{
-			$caption=get_translated_tempcode($myrow,'i_title');
+			$caption=get_translated_tempcode('iotd',$myrow,'i_title');
 			$choose_url=build_url(array('page'=>'_SELF','type'=>'_choose'),'_SELF');
 			$delete_url=build_url(array('page'=>'_SELF','type'=>'_delete'),'_SELF');
 			$edit_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$myrow['id']),'_SELF');

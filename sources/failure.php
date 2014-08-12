@@ -1133,7 +1133,7 @@ function _access_denied($class,$param,$force_login)
 	{
 		if (match_key_match($match_key['k_match_key']))
 		{
-			$message=get_translated_tempcode($match_key,'k_message');
+			$message=get_translated_tempcode('match_key_messages',$match_key,'k_message');
 		}
 	}
 	if (is_null($message))

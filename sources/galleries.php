@@ -45,7 +45,7 @@ function render_image_box($row,$zone='_SEARCH')
 	require_code('images');
 	$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),$zone);
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-	$description=get_translated_tempcode($row,'comments');
+	$description=get_translated_tempcode('images',$row,'comments');
 	$thumb=do_image_thumb($thumb_url,$description,true);
 	$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
 
@@ -78,7 +78,7 @@ function render_video_box($row,$zone='_SEARCH')
 	require_code('images');
 	$url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),$zone);
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
-	$description=get_translated_tempcode($row,'comments');
+	$description=get_translated_tempcode('videos',$row,'comments');
 	$thumb=do_image_thumb($thumb_url,$description,true);
 	$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
 
@@ -222,7 +222,7 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 	$is_member=!is_null($member_id);
 	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$add_date=get_timezoned_date($child['add_date'],false);
-	$comments=get_translated_tempcode($child,'description');
+	$comments=get_translated_tempcode('galleries',$child,'description');
 	if ($show_member_stats_if_appropriate)
 	{
 		if (($is_member) && (get_forum_type()=='ocf'))

@@ -323,7 +323,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['firsttitle']=$fp_rows[0]['p_title'];
 		if ($show_first_posts)
 		{
-			$out[$i]['firstpost']=get_translated_tempcode($fp_rows[0],'p_post',$GLOBALS['FORUM_DB']);
+			$out[$i]['firstpost']=get_translated_tempcode('f_posts',$fp_rows[0],'p_post',$GLOBALS['FORUM_DB']);
 		}
 	}
 	if (count($out)!=0) return $out;
@@ -441,7 +441,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 			if ((!$light_if_threaded) || (!$is_threaded))
 			{
 				$temp['title']=$myrow['p_title'];
-				$temp['message']=get_translated_tempcode($myrow,'p_post',$GLOBALS['FORUM_DB']);
+				$temp['message']=get_translated_tempcode('f_posts',$myrow,'p_post',$GLOBALS['FORUM_DB']);
 				$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
 				$temp['user']=$myrow['p_poster'];
 				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];

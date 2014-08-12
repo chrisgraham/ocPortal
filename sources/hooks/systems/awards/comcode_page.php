@@ -77,7 +77,7 @@ class Hook_awards_comcode_page
 
 			if ($summary=='')
 			{
-				$summary=get_translated_tempcode($row2[0],'string_index');
+				$summary=get_translated_tempcode('cached_comcode_pages',$row2[0],'string_index');
 			}
 		} else
 		{

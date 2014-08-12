@@ -67,7 +67,7 @@ function get_problem_match_worker($error_message)
 			$matches[$d['p_title']]=array(
 				$d['id'],
 				get_translated_text($d['p_post'],$GLOBALS['FORUM_DB']),
-				get_translated_tempcode($d,'p_post',$GLOBALS['FORUM_DB'])
+				get_translated_tempcode('f_posts',$d,'p_post',$GLOBALS['FORUM_DB'])
 			);
 		}
 	}

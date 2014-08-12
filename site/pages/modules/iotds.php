@@ -210,7 +210,7 @@ class Module_iotds
 			$date=get_timezoned_date($myrow['date_and_time']);
 			$url=build_url(array('page'=>'_SELF','type'=>'view','wide'=>1,'id'=>$myrow['id']),'_SELF');
 			$thumb_url=$myrow['thumb_url'];
-			$caption=get_translated_tempcode($myrow,'i_title');
+			$caption=get_translated_tempcode('iotd',$myrow,'i_title');
 
 			require_code('images');
 			$thumb_url=ensure_thumbnail($myrow['url'],$thumb_url,'iotds','iotd',$myrow['id']);
@@ -298,7 +298,7 @@ class Module_iotds
 			'image'=>$url,
 		);
 
-		return do_template('IOTD_ENTRY_SCREEN',array('_GUID'=>'f508d483459b88fab44cd8b9f4db780b','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'I_TITLE'=>get_translated_tempcode($myrow,'i_title'),'CAPTION'=>get_translated_tempcode($myrow,'caption'),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['iotd_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'URL'=>$url));
+		return do_template('IOTD_ENTRY_SCREEN',array('_GUID'=>'f508d483459b88fab44cd8b9f4db780b','TITLE'=>$title,'SUBMITTER'=>strval($myrow['submitter']),'I_TITLE'=>get_translated_tempcode('iotd',$myrow,'i_title'),'CAPTION'=>get_translated_tempcode('iotd',$myrow,'caption'),'DATE_RAW'=>$date_raw,'ADD_DATE_RAW'=>$add_date_raw,'EDIT_DATE_RAW'=>$edit_date_raw,'DATE'=>$date,'ADD_DATE'=>$add_date,'EDIT_DATE'=>$edit_date,'VIEWS'=>integer_format($myrow['iotd_views']),'TRACKBACK_DETAILS'=>$trackback_details,'RATING_DETAILS'=>$rating_details,'COMMENT_DETAILS'=>$comment_details,'EDIT_URL'=>$edit_url,'URL'=>$url));
 	}
 
 }

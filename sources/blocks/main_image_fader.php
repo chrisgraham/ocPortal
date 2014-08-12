@@ -77,8 +77,8 @@ class Block_main_image_fader
 		$images_full=array();
 		$titles=array();
 		$html=array();
-		$image_rows=$GLOBALS['SITE_DB']->query('SELECT r.* FROM '.get_table_prefix().'images r WHERE '.$cat_select.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/);
-		$video_rows=$GLOBALS['SITE_DB']->query('SELECT r.*, thumb_url AS url FROM '.get_table_prefix().'videos r WHERE '.$cat_select.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/);
+		$image_rows=$GLOBALS['SITE_DB']->query('SELECT r.*,\'images\' AS table FROM '.get_table_prefix().'images r WHERE '.$cat_select.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/);
+		$video_rows=$GLOBALS['SITE_DB']->query('SELECT r.*,\'videos\' AS table, thumb_url AS url FROM '.get_table_prefix().'videos r WHERE '.$cat_select.' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/);
 		$all_rows=array();
 		if ($order!='')
 		{
@@ -127,7 +127,7 @@ class Block_main_image_fader
 			$images_full[]=$full_url;
 
 			$titles[]=get_translated_text($row['title']);
-			$html[]=get_translated_tempcode($row,'comments');
+			$html[]=get_translated_tempcode($row['table'],$row,'comments');
 		}
 
 		if (count($images)==0)

@@ -155,7 +155,7 @@ class Hook_permission
 		if (array_key_exists(0,$rows))
 		{
 			$row=$rows[0];
-			return get_translated_tempcode($row,'p_description');
+			return get_translated_tempcode('pstore_permissions',$row,'p_description');
 		}
 		return new ocp_tempcode();
 	}

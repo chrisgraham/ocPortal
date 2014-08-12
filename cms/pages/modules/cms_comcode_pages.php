@@ -642,7 +642,7 @@ class Module_cms_comcode_pages
 					$comcode_page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$file),'',1);
 					if (array_key_exists(0,$comcode_page_rows))
 					{
-						$parsed=get_translated_tempcode($comcode_page_rows[0],'string_index',NULL,$lang);
+						$parsed=get_translated_tempcode('cached_comcode_pages',$comcode_page_rows[0],'string_index',NULL,$lang);
 					}
 				}
 

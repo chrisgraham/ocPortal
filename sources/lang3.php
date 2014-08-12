@@ -350,26 +350,30 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 /**
  * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
  *
- * @param  mixed				The ID (if multi-lang-content on), or the string itself
+ * @param  ID_TEXT			The table name
+ * @param  array				The database row
+ * @param  ID_TEXT			The field name
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
  * @param  boolean			Whether to force as_admin, even if the lang string isn't stored against an admin (designed for comcode page cacheing)
  * @return ?tempcode			The parsed comcode (NULL: the text couldn't be looked up)
  */
-function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
+function parse_translated_text($table,$row,$field,$connection,$lang,$force,$as_admin)
 {
-	if (multi_lang_content()) return; // TODO
-
 	global $SEARCH__CONTENT_BITS,$LAX_COMCODE;
 
 	$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	$result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
-	$result=array_key_exists(0,$result)?$result[0]:NULL;
+	$result=mixed();
+	if (multi_lang_content())
+	{
+		$_result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
+		if (array_key_exists(0,$_result)) $result=$_result[0];
+	}
 
-	if (is_null($result)) // A missing translation
+	if ((is_null($result)) && (multi_lang_content())) // A missing translation
 	{
 		if ($force)
 		{
@@ -411,7 +415,7 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 				return $ret;
 			}
 			$LAX_COMCODE=$temp;
-			$ret=get_translated_tempcode($entry,$connection,$lang);
+			$ret=get_translated_tempcode($row,$field,$connection,$lang);
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}
@@ -434,9 +438,13 @@ function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}
-		_lang_remap($entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+		$map=_lang_remap($entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+		if (!multi_lang_content())
+		{
+			$connection->query_update($table,$map,$row,'',1);
+		}
 		$LAX_COMCODE=$temp;
-		$ret=get_translated_tempcode($entry,$connection,$lang);
+		$ret=get_translated_tempcode($row,$field,$connection,$lang);
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 		return $ret;
 	}
@@ -455,35 +463,50 @@ function _comcode_lang_string($lang_code)
 
 	if ((substr($lang_code,0,4)=='DOC_') && (is_wide()==1)) return new ocp_tempcode(); // Not needed if wide, and we might be going wide to reduce chance of errors occuring
 
-	$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=string_index AND '.db_string_equal_to('t.language',user_lang()),array('string_index','text_parsed'),array('the_page'=>$lang_code,'the_zone'=>'!'),'',1);
-	if ((array_key_exists(0,$comcode_page)) && (!is_browser_decacheing()))
+	if (multi_lang_content())
 	{
-		if ((!is_null($comcode_page[0]['text_parsed'])) && ($comcode_page[0]['text_parsed']!=''))
+		$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=string_index AND '.db_string_equal_to('t.language',user_lang()),array('string_index','text_parsed'),array('the_page'=>$lang_code,'the_zone'=>'!'),'',1);
+		if ((array_key_exists(0,$comcode_page)) && (!is_browser_decacheing()))
 		{
-			$parsed=new ocp_tempcode();
-			if (!$parsed->from_assembly($comcode_page[0]['text_parsed'],true))
+			if ((!is_null($comcode_page[0]['text_parsed'])) && ($comcode_page[0]['text_parsed']!=''))
 			{
-				$ret=get_translated_tempcode($comcode_page[0]['string_index']);
+				$parsed=new ocp_tempcode();
+				if (!$parsed->from_assembly($comcode_page[0]['text_parsed'],true))
+				{
+					$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page[0],'string_index');
+					unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
+				}
+			} else
+			{
+				$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page[0],'string_index',NULL,NULL,true);
+				if (is_null($ret)) // Not existent in our language, we'll need to lookup and insert, and get again
+				{
+					$looked_up=do_lang($lang_code,NULL,NULL,NULL,NULL,false);
+					$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$comcode_page[0]['string_index'],'source_user'=>get_member(),'broken'=>0,'importance_level'=>1,'text_original'=>$looked_up,'text_parsed'=>'','language'=>user_lang()),true,false,true);
+					$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page[0],'string_index');
+				}
 				unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
+				return $ret;
 			}
-		} else
+			$COMCODE_LANG_STRING_CACHE[$lang_code]=$parsed;
+			return $parsed;
+		} elseif (array_key_exists(0,$comcode_page))
 		{
-			$ret=get_translated_tempcode($comcode_page[0]['string_index'],NULL,NULL,true);
-			if (is_null($ret)) // Not existent in our language, we'll need to lookup and insert, and get again
-			{
-				$looked_up=do_lang($lang_code,NULL,NULL,NULL,NULL,false);
-				$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$comcode_page[0]['string_index'],'source_user'=>get_member(),'broken'=>0,'importance_level'=>1,'text_original'=>$looked_up,'text_parsed'=>'','language'=>user_lang()),true,false,true);
-				$ret=get_translated_tempcode($comcode_page[0]['string_index']);
-			}
-			unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
-			return $ret;
+			$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_page'=>$lang_code,'the_zone'=>'!'));
+			delete_lang($comcode_page[0]['string_index']);
 		}
-		$COMCODE_LANG_STRING_CACHE[$lang_code]=$parsed;
-		return $parsed;
-	} elseif (array_key_exists(0,$comcode_page))
+	} else
 	{
-		$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_page'=>$lang_code,'the_zone'=>'!'));
-		delete_lang($comcode_page[0]['string_index']);
+		$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),array('the_page'=>$lang_code,'the_zone'=>'!'),'',1);
+		if ((array_key_exists(0,$comcode_page)) && (!is_browser_decacheing()))
+		{
+			$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page[0],'string_index');
+			$COMCODE_LANG_STRING_CACHE[$lang_code]=$ret;
+			return $ret;
+		} elseif (array_key_exists(0,$comcode_page))
+		{
+			$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_page'=>$lang_code,'the_zone'=>'!'));
+		}
 	}
 
 	$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
@@ -498,7 +521,7 @@ function _comcode_lang_string($lang_code)
 	);
 	$map+=insert_lang_comcode('string_index',$looked_up,4,NULL,true,NULL,60,false,true);
 	$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map,false,true); // Race conditions
-	$parsed=get_translated_tempcode($index);
+	$parsed=get_translated_tempcode('cached_comcode_pages',$map,'string_index');
 	$COMCODE_LANG_STRING_CACHE[$lang_code]=$parsed;
 
 	$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;

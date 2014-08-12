@@ -307,7 +307,7 @@ class Hook_search_catalogue_entries
 								$temp=db_full_text_assemble($param,true);
 							} else
 							{
-								$temp=db_like_assemble($param);
+								list($temp,)=db_like_assemble($param);
 							}
 							$where_clause.=preg_replace('#\?#',$search_field,$temp);
 						}

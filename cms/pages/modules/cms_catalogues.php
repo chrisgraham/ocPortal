@@ -157,7 +157,7 @@ class Module_cms_catalogues extends standard_aed_module
 
 		require_code('fields');
 
-		return do_next_manager(($catalogue_name!='')?get_screen_title(escape_html(get_translated_text($cat_title)),false):get_screen_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode($cat_rows[0],'c_description'):comcode_lang_string('DOC_CATALOGUES'),
+		return do_next_manager(($catalogue_name!='')?get_screen_title(escape_html(get_translated_text($cat_title)),false):get_screen_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode('catalogues',$cat_rows[0],'c_description'):comcode_lang_string('DOC_CATALOGUES'),
 					array_merge(array(
 						/*	 type							  page	 params													 zone	  */
 						(has_specific_permission(get_member(),'submit_cat_highrange_content','cms_catalogues') && ($catalogue_name==''))?array('add_one_catalogue',array('_SELF',array_merge($extra_map,array('type'=>'add_catalogue')),'_SELF'),do_lang('ADD_CATALOGUE')):NULL,

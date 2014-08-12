@@ -72,7 +72,6 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 	$map=array(
 		'e_submitter'=>$submitter,
 		'e_views'=>$views,
-		'e_content'=>0,
 		'e_add_date'=>$add_date,
 		'e_edit_date'=>$edit_date,
 		'e_recurrence'=>$recurrence,
@@ -101,6 +100,13 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes
 	);
+	if (multi_lang_content())
+	{
+		$map['e_content']=0;
+	} else
+	{
+		$map['e_content']='';
+	}
 	$map+=insert_lang('e_title',$title,2);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('calendar_events',$map,true);

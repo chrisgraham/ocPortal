@@ -51,7 +51,7 @@ function get_staff_actions_list()
 			'lang_'.$lang=>$tcode.((count($all_langs)==1)?'':(': '.lookup_language_full_name($lang))),
 		);
 	}
-	if (multi_lang())
+	if ((multi_lang()) && (multi_lang_content()))
 	{
 		$tcontent=do_lang('TRANSLATE_CONTENT');
 		foreach (array_keys($all_langs) as $lang)

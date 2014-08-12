@@ -881,7 +881,7 @@ class Module_catalogues
 				else
 					$rep_image=new ocp_tempcode();
 
-				$description=get_translated_tempcode($sc,'cc_description');
+				$description=get_translated_tempcode('catalogue_categories',$sc,'cc_description');
 				$ajax_edit_url='_SEARCH:cms_catalogues:type=__edit_category:id='.strval($sc['id']);
 				$subcategories->attach(do_template('CATEGORY_'.$tpl_set.'_ENTRY',array('_GUID'=>'871f5f5195fcb426fac716e35569d6a3','ID'=>strval($sc['id']),'NAME_FIELD'=>'title','AJAX_EDIT_URL'=>$ajax_edit_url,'URL'=>$url,'REP_IMAGE'=>$rep_image,'CHILDREN'=>$display_string,'NAME'=>$sc['cc_title'],'NAME_PLAIN'=>$sc['cc_title'],'DESCRIPTION'=>$description,'NUM_CHILDREN'=>integer_format($num_children),'NUM_CHILDREN_RECURSIVE'=>integer_format($child_counts['num_children_children']),'NUM_ENTRIES'=>integer_format($num_entries),'NUM_ENTRIES_DIRECT'=>integer_format($child_counts['num_entries'])),NULL,false,'CATEGORY_ENTRY'));
 			} else
@@ -991,7 +991,7 @@ class Module_catalogues
 				break;
 		}
 
-		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('ID'=>strval($id),'DISPLAY_TYPE'=>$display_type,'ADD_DATE_RAW'=>strval($category['cc_add_date']),'TITLE'=>$title,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'PAGINATION'=>$pagination,'SORTING'=>$sorting,'ADD_ENTRY_URL'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$entry_buildup,'SUBCATEGORIES'=>$subcategories,'DESCRIPTION'=>get_translated_tempcode($category,'cc_description'),'CART_LINK'=>$cart_link,'BREADCRUMBS'=>$breadcrumbs),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
+		return do_template('CATALOGUE_'.$tpl_set.'_CATEGORY_SCREEN',array('ID'=>strval($id),'DISPLAY_TYPE'=>$display_type,'ADD_DATE_RAW'=>strval($category['cc_add_date']),'TITLE'=>$title,'_TITLE'=>$_title,'TAGS'=>get_loaded_tags('catalogue_categories'),'CATALOGUE'=>$catalogue_name,'PAGINATION'=>$pagination,'SORTING'=>$sorting,'ADD_ENTRY_URL'=>$add_link,'ADD_CAT_URL'=>$add_cat_url,'EDIT_CAT_URL'=>$edit_cat_url,'EDIT_CATALOGUE_URL'=>$edit_catalogue_url,'ENTRIES'=>$entry_buildup,'SUBCATEGORIES'=>$subcategories,'DESCRIPTION'=>get_translated_tempcode('catalogue_categories',$category,'cc_description'),'CART_LINK'=>$cart_link,'BREADCRUMBS'=>$breadcrumbs),NULL,false,'CATALOGUE_DEFAULT_CATEGORY_SCREEN');
 	}
 
 	/**
@@ -1123,7 +1123,7 @@ class Module_catalogues
 		$catalogue_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name'=>$catalogue_name),'',1);
 		if (!array_key_exists(0,$catalogue_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$catalogue=$catalogue_rows[0];
-		$description=get_translated_tempcode($catalogue,'c_description');
+		$description=get_translated_tempcode('catalogues',$catalogue,'c_description');
 		$description_2=get_translated_text($catalogue,'c_description');
 		$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])));
 		$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])),NULL,NULL,NULL,false);
@@ -1158,7 +1158,7 @@ class Module_catalogues
 
 			$url=build_url(array('page'=>'_SELF','id'=>$myrow['id'],'type'=>'category'),'_SELF');
 			$name=$myrow['cc_title'];
-			$description=get_translated_tempcode($myrow,'cc_description');
+			$description=get_translated_tempcode('catalogue_categories',$myrow,'cc_description');
 			$child_counts=count_catalogue_category_children($myrow['id']);
 			$num_children=$child_counts['num_children'];
 			$num_entries=$child_counts['num_entries_children'];
@@ -1188,7 +1188,7 @@ class Module_catalogues
 			'description'=>$description_2,
 		);
 
-		$catalogue_description=get_translated_tempcode($catalogue,'c_description');
+		$catalogue_description=get_translated_tempcode('catalogues',$catalogue,'c_description');
 
 		return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID'=>'9ac6f5967177b020bebfe8b4ace35eff','PRE'=>$catalogue_description,'POST'=>'','TITLE'=>$title,'CATALOGUE'=>$catalogue_name,'DESCRIPTION'=>$description,'ADD_CAT_URL'=>$add_cat_url,'CONTENT'=>$out,'EDIT_URL'=>$edit_url));
 	}
@@ -1238,7 +1238,7 @@ class Module_catalogues
 			$num_children=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$myrow['c_name']));
 			if ($myrow['c_is_tree']==1) $num_children--;
 
-			$description=get_translated_tempcode($myrow,'c_description');
+			$description=get_translated_tempcode('catalogues',$myrow,'c_description');
 
 			$display_string=do_lang_tempcode(($myrow['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',integer_format($num_entries),integer_format($num_children));
 

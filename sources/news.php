@@ -28,7 +28,7 @@
 function render_news_box($row,$zone='_SEARCH')
 {
 	$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),$zone);
-	$title=get_translated_tempcode($row,'title');
+	$title=get_translated_tempcode('news',$row,'title');
 	$title_plain=get_translated_text($row['title']);
 
 	global $NEWS_CATS;
@@ -51,10 +51,10 @@ function render_news_box($row,$zone='_SEARCH')
 	}
 	$category=get_translated_text($news_cat_row['nc_title']);
 
-	$news=get_translated_tempcode($row,'news');
+	$news=get_translated_tempcode('news',$row,'news');
 	if ($news->is_empty())
 	{
-		$news=get_translated_tempcode($row,'news_article');
+		$news=get_translated_tempcode('news',$row,'news_article');
 		$truncate=true;
 	} else $truncate=false;
 	$author_url=addon_installed('authors')?build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),get_module_zone('authors')):new ocp_tempcode();
@@ -282,7 +282,6 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		'edit_date'=>$edit_date,
 		'news_category'=>$main_news_category_id,
 		'news_views'=>$views,
-		'news_article'=>0,
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
@@ -292,6 +291,13 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		'date_and_time'=>$time,
 		'author'=>$author,
 	);
+	if (multi_lang_content())
+	{
+		$map['news_article']=0;
+	} else
+	{
+		$map['news_article']='';
+	}
 	$map+=insert_lang_comcode('title',$title,1);
 	$map+=insert_lang_comcode('news',$news,1);
 	if (!is_null($id)) $map['id']=$id;

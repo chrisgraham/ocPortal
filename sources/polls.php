@@ -195,7 +195,7 @@ function render_poll_box($results,$myrow,$zone='_SEARCH')
 	$tpl=new ocp_tempcode();
 	for ($i=1;$i<=$num_options;$i++)
 	{
-		$answer=get_translated_tempcode($myrow,'option'.strval($i));
+		$answer=get_translated_tempcode('poll',$myrow,'option'.strval($i));
 		$answer_plain=get_translated_text($myrow['option'.strval($i)]);
 		if (!$results)
 		{
@@ -215,7 +215,7 @@ function render_poll_box($results,$myrow,$zone='_SEARCH')
 	} else $submit_url=new ocp_tempcode();
 
 	// Do our final template
-	$question=get_translated_tempcode($myrow,'question');
+	$question=get_translated_tempcode('poll',$myrow,'question');
 	$question_plain=get_translated_text($myrow['question']);
 	$archive_url=build_url(array('page'=>'polls','type'=>'misc'),$zone);
 	$full_url=new ocp_tempcode();

@@ -41,7 +41,19 @@ class Hook_rss_ocf_forumview
 
 		$filters=ocfilter_to_sqlfragment($_filters,'t_forum_id','f_forums','f_parent_forum','t_forum_id','id',true,true,$GLOBALS['FORUM_DB']); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval($cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND t_validated=1 ':'').' AND '.$filters.' ORDER BY t_cache_last_time DESC',$max);
+		$sql='SELECT t.*';
+		if (!multi_lang_content())
+		{
+			$sql.=',p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
+		}
+		$sql.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t';
+		if (!multi_lang_content())
+		{
+			$sql.=' LEFT JOIN '$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+		}
+		$sql.=' WHERE t_cache_last_time>'.strval($cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND t_validated=1 ':'').' AND '.$filters;
+		$sql.=' ORDER BY t_cache_last_time DESC';
+		$rows=$GLOBALS['FORUM_DB']->query($sql,$max);
 		$categories=collapse_2d_complexity('id','f_name',$GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_cache_num_posts>0'));
 
 		$content=new ocp_tempcode();
@@ -57,7 +69,7 @@ class Hook_rss_ocf_forumview
 				if ($edit_date==$news_date) $edit_date='';
 
 				$news_title=xmlentities($row['t_cache_first_title']);
-				$_summary=get_translated_tempcode($row,'t_cache_first_post');
+				$_summary=get_translated_tempcode('f_posts',$row,'t_cache_first_post');
 				$summary=xmlentities($_summary->evaluate());
 				$news='';
 

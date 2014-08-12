@@ -833,7 +833,7 @@ class Module_tickets
 		// Category filter
 		$where_clause='r.'.$info['category'].'='.strval($catalogue_id);
 		$boolean_operator='OR';
-		$content_where=build_content_where($content,true,$boolean_operator);
+		list($content_where)=build_content_where($content,true,$boolean_operator);
 		$hook_results=$object->run($content,false,'ASC',$max,0,false,$content_where,'',NULL,NULL,'relevance',NULL,$boolean_operator,$where_clause,NULL,true);
 		if ((is_null($hook_results)) || (count($hook_results)==0)) return NULL;
 

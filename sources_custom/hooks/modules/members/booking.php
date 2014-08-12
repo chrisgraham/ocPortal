@@ -47,7 +47,7 @@ class Hook_members_booking
 
 			$links[]=array(
 				'content',
-				do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode($bookable[0],'title')),
+				do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode('bookable',$bookable[0],'title')),
 				build_url(array('page'=>'cms_booking','type'=>'_eb','id'=>strval($member_id).'_'.strval($i)),$zone),
 			);
 		}

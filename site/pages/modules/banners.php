@@ -449,7 +449,7 @@ class Module_banners
 
 		$map_table=do_template('MAP_TABLE',array('_GUID'=>'eb97a46d8e9813da7081991d5beed270','WIDTH'=>'300','FIELDS'=>$fields));
 
-		$banner=show_banner($myrow['name'],$myrow['b_title_text'],get_translated_tempcode($myrow,'caption'),$myrow['b_direct_code'],$myrow['img_url'],$source,$myrow['site_url'],$myrow['b_type'],$myrow['submitter']);
+		$banner=show_banner($myrow['name'],$myrow['b_title_text'],get_translated_tempcode('banners',$myrow,'caption'),$myrow['b_direct_code'],$myrow['img_url'],$source,$myrow['site_url'],$myrow['b_type'],$myrow['submitter']);
 
 		$edit_url=new ocp_tempcode();
 		if ((has_actual_page_access(NULL,'cms_banners',NULL,NULL)) && (has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_banners')))

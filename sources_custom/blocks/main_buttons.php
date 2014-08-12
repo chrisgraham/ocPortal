@@ -141,7 +141,7 @@ class Block_main_buttons
 
 		foreach ($banners as $i=>$banner)
 		{
-			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode($banner,'caption'),$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
+			$bd=show_banner($banner['name'],$banner['b_title_text'],get_translated_tempcode('banners',$banner,'caption'),$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
 			$more_coming=($i<count($banners)-1);
 			$assemble->attach(do_template('BLOCK_MAIN_BANNER_WAVE_BWRAP_CUSTOM',array('EXTRA'=>$map['extra'],'TYPE'=>$map['param'],'BANNER'=>$bd,'MORE_COMING'=>$more_coming)));
 		}

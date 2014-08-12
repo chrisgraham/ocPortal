@@ -49,7 +49,7 @@ function init__catalogues()
  */
 function render_catalogue_category_box($row,$zone='_SEARCH',$give_title=true)
 {
-	$content=paragraph(get_translated_tempcode($row,'cc_description'),'yghjgfjftgerr');
+	$content=paragraph(get_translated_tempcode('catalogue_categories',$row,'cc_description'),'yghjgfjftgerr');
 	$url=build_url(array('page'=>'catalogues','type'=>'category','id'=>$row['id']),$zone);
 
 	$breadcrumbs=catalogue_category_breadcrumbs($row['id']);
@@ -971,7 +971,7 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 				$target['effective_value_pure']=do_lang('INTERNAL_ERROR');
 			} else
 			{
-				$target['effective_value']=get_translated_tempcode($temp,'cv_value');
+				$target['effective_value']=get_translated_tempcode('catalogue_efv_'.$raw_type,$temp,'cv_value');
 				$target['effective_value_pure']=get_translated_text($temp['cv_value']);
 			}
 			break;

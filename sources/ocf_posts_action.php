@@ -216,7 +216,13 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	{
 		@ignore_user_abort(true);
 
-		$map['p_post']=0;
+		if (multi_lang_content())
+		{
+			$map['p_post']=0;
+		} else
+		{
+			$map['p_post']='';
+		}
 	}
 
 	$post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);

@@ -415,26 +415,32 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 {
 	$topic=array();
 
-	if ((is_null($topic_row['t_cache_first_post'])) || ($topic_row['t_cache_first_post']===0))
+	if (multi_lang_content())
 	{
-		$topic['first_post']=new ocp_tempcode();
-	} else
-	{
-		if ((!is_null($topic_row['_trans_post'])) && ($topic_row['_trans_post']!=''))
+		if ((is_null($topic_row['t_cache_first_post'])) || ($topic_row['t_cache_first_post']==0))
 		{
 			$topic['first_post']=new ocp_tempcode();
-			if (!$topic['first_post']->from_assembly($topic_row['_trans_post']))
-				$topic_row['_trans_post']=NULL;
-		}
-
-		if ((is_null($topic_row['_trans_post'])) || ($topic_row['_trans_post']==''))
-		{
-			if (!is_null($topic_row['t_cache_first_post'])) $topic['first_post']=get_translated_tempcode($topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
-			else $topic['first_post']=new ocp_tempcode();
 		} else
 		{
-			$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));
+			if ((!is_null($topic_row['_trans_post'])) && ($topic_row['_trans_post']!=''))
+			{
+				$topic['first_post']=new ocp_tempcode();
+				if (!$topic['first_post']->from_assembly($topic_row['_trans_post']))
+					$topic_row['_trans_post']=NULL;
+			}
+
+			if ((is_null($topic_row['_trans_post'])) || ($topic_row['_trans_post']==''))
+			{
+				if (!is_null($topic_row['t_cache_first_post'])) $topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
+				else $topic['first_post']=new ocp_tempcode();
+			} else
+			{
+				$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));
+			}
 		}
+	} else
+	{
+		$topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
 	}
 
 	$topic['id']=$topic_row['id'];
@@ -697,7 +703,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 			$child_or_list=ocf_get_all_subordinate_forums($forum_id,'t_forum_id',$tree);
 		} else $child_or_list='';
 		if ($child_or_list!='') $child_or_list.=' AND ';
-		$query='SELECT DISTINCT t_forum_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l_topic_id AND l_member_id='.strval((integer)get_member()).') WHERE t_forum_id IS NOT NULL AND '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
+		$query='SELECT DISTINCT t_forum_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l_topic_id AND l_member_id='.strval((integer)get_member()).' WHERE t_forum_id IS NOT NULL AND '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
 		if (!has_specific_permission(get_member(),'see_unvalidated')) $query.=' AND t_validated=1';
 		$unread_forums=array_flip(collapse_1d_complexity('t_forum_id',$GLOBALS['FORUM_DB']->query($query)));
 	}
@@ -750,9 +756,9 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 			$subforum=array();
 			$subforum['id']=$subforum_row['id'];
 			$subforum['name']=$subforum_row['f_name'];
-			$subforum['description']=get_translated_tempcode($subforum_row,'f_description',$GLOBALS['FORUM_DB']);
+			$subforum['description']=get_translated_tempcode('f_forums',$subforum_row,'f_description',$GLOBALS['FORUM_DB']);
 			$subforum['redirection']=$subforum_row['f_redirection'];
-			$subforum['intro_question']=get_translated_tempcode($subforum_row,'f_intro_question',$GLOBALS['FORUM_DB']);
+			$subforum['intro_question']=get_translated_tempcode('f_forums',$subforum_row,'f_intro_question',$GLOBALS['FORUM_DB']);
 			$subforum['intro_answer']=$subforum_row['f_intro_answer'];
 
 			if (is_numeric($subforum_row['f_redirection']))
@@ -828,10 +834,30 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$order2='t_sunk ASC,'.$order2;
 	if (is_guest())
 	{
-		$query='SELECT ttop.*,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+		$query='SELECT ttop.*,NULL AS l_time';
+		if (!multi_lang_content())
+		{
+			$query.=',p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
+		}
+		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop';
+		if (!multi_lang_content())
+		{
+			$query.=' LEFT JOIN '$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+		}
+		$query.=' WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
 	} else
 	{
-		$query='SELECT ttop.*,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
+		$query='SELECT ttop.*,l_time';
+		if (!multi_lang_content())
+		{
+			$query.=',p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
+		}
+		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member());
+		if (!multi_lang_content())
+		{
+			$query.=' LEFT JOIN '$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+		}
+		$query.=' WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
 	}
 	if ($start<200)
 	{
@@ -860,7 +886,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$topics[]=ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,in_array($topic_row['id'],$involved));
 	}
 
-	$description=get_translated_tempcode($forum_info[0],'f_description',$GLOBALS['FORUM_DB']);
+	$description=get_translated_tempcode('f_forums',$forum_info[0],'f_description',$GLOBALS['FORUM_DB']);
 	$description_text=get_translated_text($forum_info[0]['f_description'],$GLOBALS['FORUM_DB']);
 	$out=array('name'=>$forum_info[0]['f_name'],
 					'description'=>$description,
@@ -883,7 +909,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	);
 
 	// Is there a question/answer situation?
-	$question=get_translated_tempcode($forum_info[0],'f_intro_question',$GLOBALS['FORUM_DB']);
+	$question=get_translated_tempcode('f_forums',$forum_info[0],'f_intro_question',$GLOBALS['FORUM_DB']);
 	if (!$question->is_empty())
 	{
 		$is_guest=($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id());

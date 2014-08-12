@@ -404,7 +404,7 @@ class Module_cms_news extends standard_aed_module
 
 		list($fields,$hidden,,,,,$fields2)=$this->get_form_fields($cat,$categories,get_translated_text($myrow['title']),get_translated_text($myrow['news']),$myrow['author'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],0,$myrow['notes'],$myrow['news_image'],$scheduled);
 
-		return array($fields,$hidden,new ocp_tempcode(),'',false,get_translated_text($myrow['news_article']),$fields2,get_translated_tempcode($myrow,'news_article'));
+		return array($fields,$hidden,new ocp_tempcode(),'',false,get_translated_text($myrow['news_article']),$fields2,get_translated_tempcode('news',$myrow,'news_article'));
 	}
 
 	/**

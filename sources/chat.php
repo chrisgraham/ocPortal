@@ -1273,7 +1273,7 @@ function chat_get_room_content($room_id,$_rooms,$cutoff=NULL,$dereference=false,
 		$rows[$i]['username']=$GLOBALS['FORUM_DRIVER']->get_username($rows[$i]['member_id']);
 		if (is_null($rows[$i]['username'])) $rows[$i]['username']=do_lang('UNKNOWN');
 		$rows[$i]['date_and_time_nice']=get_timezoned_date($rows[$i]['date_and_time']);
-		$message=get_translated_tempcode($rows[$i],'the_message');
+		$message=get_translated_tempcode('chat_messages',$rows[$i],'the_message');
 
 		// Extra access check
 		if ($room_id==-1)

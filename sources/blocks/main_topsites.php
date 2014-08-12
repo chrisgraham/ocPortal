@@ -74,7 +74,7 @@ class Block_main_topsites
 
 		foreach ($_banners as $banner)
 		{
-			$description=get_translated_tempcode($banner,'caption');
+			$description=get_translated_tempcode('banners',$banner,'caption');
 
 			$bd=show_banner($banner['name'],$banner['b_title_text'],$description,$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
 

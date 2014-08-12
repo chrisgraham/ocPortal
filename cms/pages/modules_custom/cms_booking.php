@@ -132,8 +132,8 @@ class Module_cms_booking extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$fr=array();
-			$fr[]=protect_from_escaping(get_translated_tempcode($row,'title'));
-			$fr[]=protect_from_escaping(get_translated_tempcode($row,'categorisation'));
+			$fr[]=protect_from_escaping(get_translated_tempcode('bookable',$row,'title'));
+			$fr[]=protect_from_escaping(get_translated_tempcode('bookable',$row,'categorisation'));
 			$fr[]=float_format($row['price']);
 			$fr[]=get_timezoned_date(mktime($row['active_from_month'],$row['active_from_day'],$row['active_from_year']),false,true,false,true);
 			$fr[]=get_timezoned_date(mktime($row['active_to_month'],$row['active_to_day'],$row['active_to_year']),false,true,false,true);
@@ -378,7 +378,7 @@ class Module_cms_booking_supplements extends standard_aed_module
 			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
 
 			$fr=array();
-			$fr[]=protect_from_escaping(get_translated_tempcode($row,'title'));
+			$fr[]=protect_from_escaping(get_translated_tempcode('bookable_supplement',$row,'title'));
 			$fr[]=float_format($row['price']);
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
@@ -574,7 +574,7 @@ class Module_cms_booking_blacks extends standard_aed_module
 			$fr=array();
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['blacked_from_month'],$row['blacked_from_day'],$row['blacked_from_year']),false);
 			$fr[]=get_timezoned_date(mktime(0,0,0,$row['blacked_to_month'],$row['blacked_to_day'],$row['blacked_to_year']),false);
-			$fr[]=protect_from_escaping(get_translated_tempcode($row,'blacked_explanation'));
+			$fr[]=protect_from_escaping(get_translated_tempcode('bookable_blacked',$row,'blacked_explanation'));
 			$fr[]=protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT')));
 
 			$fields->attach(results_entry($fr,true));
@@ -972,14 +972,14 @@ class Module_cms_booking_bookings extends standard_aed_module
 				$notes=$details['supplements'][$supplement_row['id']]['notes'];
 			}
 
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SUPPLEMENT',get_translated_tempcode($supplement_row,'title')))));
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('SUPPLEMENT',get_translated_tempcode('bookable_supplement',$supplement_row,'title')))));
 
 			if ($supplement_row['supports_quantities']==1)
 			{
 				$fields->attach(form_input_integer(do_lang_tempcode('QUANTITY'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity,true));
 			} else
 			{
-				$fields->attach(form_input_tick(get_translated_tempcode($supplement_row,'title'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity==1));
+				$fields->attach(form_input_tick(get_translated_tempcode('bookable_supplement',$supplement_row,'title'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_quantity',$quantity==1));
 			}
 			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),'','bookable_'.strval($details['bookable_id']).'_supplement_'.strval($supplement_row['id']).'_notes',$notes,false));
 		}
