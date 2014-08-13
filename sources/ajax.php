@@ -473,7 +473,8 @@ function ajax_tree_script()
 	$_options=get_param('options','',true);
 	if ($_options=='') $_options=serialize(array());
 	secure_serialized_data($_options);
-	$options=unserialize($_options);
+	$options=@unserialize($_options);
+	if ($options===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 	$val=$object->run($id,$options,get_param('default',NULL,true));
 	echo str_replace('</body>','<br id="ended" /></body>',$val);
 	echo ($html_mask?'</html>':'</request>');
