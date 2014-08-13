@@ -1171,8 +1171,8 @@ class Hook_ocp_merge
 				'seedy_views'=>array_key_exists('seedy_views',$row)?$row['seedy_views']:0,
 				'notes'=>$row['notes'],
 				'add_date'=>$row['add_date'],
-				'title'=>insert_lang($title,2),
 			);
+			$map+=insert_lang('title',$title,2);
 			$map+=insert_lang_comcode('description',$this->get_lang_string($db,$row['description']),2);
 			$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map,true);
 

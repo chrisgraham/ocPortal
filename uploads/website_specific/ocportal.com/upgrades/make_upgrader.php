@@ -156,10 +156,10 @@ function load_download_rows()
 		} else
 		{
 			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('validated'=>1),'ORDER BY add_date');
-			foreach ($DOWNLOAD_ROWS as &$row)
+			foreach ($DOWNLOAD_ROWS as $i=>$row)
 			{
-				$row['nice_title']=get_translated_text($row['name']);
-				$row['nice_description']=get_translated_text($row['description']);
+				$DOWNLOAD_ROWS[$i]['nice_title']=get_translated_text($row['name']);
+				$DOWNLOAD_ROWS[$i]['nice_description']=get_translated_text($row['description']);
 			}
 		}
 	}

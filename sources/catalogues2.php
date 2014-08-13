@@ -137,7 +137,7 @@ function catalogue_file_script()
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	error_reporting(0);
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	// Send actual data
 	$myfile=fopen($_full,'rb');
@@ -308,7 +308,7 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 			{
 				if (!is_null($default))
 				{
-					$map+=insert_lang_comcode('cv_value',$default,3,$db);
+					$map+=insert_lang_comcode('cv_value',$default,3);
 				} else
 				{
 					$map['cv_value']=NULL;
@@ -934,11 +934,11 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 
 			if ($sup_table_name=='float')
 			{
-				$smap['cv_value']=((is_null($val)) || ($val==''))?NULL:floatval($val));
+				$smap['cv_value']=((is_null($val)) || ($val==''))?NULL:floatval($val);
 			}
 			elseif ($sup_table_name=='integer')
 			{
-				$smap['cv_value']=((is_null($val)) || ($val==''))?NULL:intval($val));
+				$smap['cv_value']=((is_null($val)) || ($val==''))?NULL:intval($val);
 			} else
 			{
 				$smap['cv_value']=$val;

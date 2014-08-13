@@ -58,7 +58,7 @@ if (!function_exists('init__comcode_text'))
 function obscure_html_callback($matches)
 {
 	global $OBSCURE_REPLACEMENTS;
-	$rep=uniqid('');
+	$rep=uniqid('',true);
 	$OBSCURE_REPLACEMENTS[$rep]=$matches[0];
 	return $rep;
 }

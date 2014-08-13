@@ -235,7 +235,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		$select=array('t.*','f.f_is_threaded');
 		if (!multi_lang_content())
 		{
-			$table.=' JOIN '$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+			$table.=' JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
 			$select[]='p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
 		}
 		$_topic_info=$GLOBALS['FORUM_DB']->query_select($table,$select,array('t.id'=>$topic_id),'',1);

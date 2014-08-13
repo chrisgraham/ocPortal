@@ -35,7 +35,7 @@ function disable_content_translation()
 	$_table_lang_fields=$db->query('SELECT m_name,m_table,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
 	foreach ($_table_lang_fields as $field)
 	{
-		if (strpos($field['m_type','__COMCODE')!==false)
+		if (strpos($field['m_type'],'__COMCODE')!==false)
 		{
 			// Add new implied fields for holding extra Comcode details, and new field to hold main Comcode
 			foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER','new'=>'LONG_TEXT') as $sub_name=>$sub_type)
@@ -100,7 +100,6 @@ function enable_content_translation()
 		$db->_query($query,NULL,NULL,true);
 
 		// Add new field for translate reference
-		$sub_name=$field['m_name'].'__'.$sub_name;
 		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' ADD '.$field['m_name'].' '.$type_remap[$field['m_type']];
 		$query.=' DEFAULT '.strval(db_get_first_id());
 		$query.=' NOT NULL';
@@ -114,7 +113,7 @@ function enable_content_translation()
 
 		// Delete old fields
 		$to_delete=array('old');
-		if (strpos($field['m_type','__COMCODE')!==false)
+		if (strpos($field['m_type'],'__COMCODE')!==false)
 		{
 			// Delete old implied fields for holding extra Comcode details
 			$to_delete=array_merge($to_delete,array('text_parsed','source_user'));

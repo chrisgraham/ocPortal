@@ -231,7 +231,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	{
 		require_code('attachments2');
 		ocp_profile_start_for('ocf_make_post:insert_lang_comcode_attachments');
-		$GLOBALS['FORUM_DB']->query_update('f_posts',insert_lang_comcode_attachments('p_post',4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB']),array('id'=>$post_id),'',1);
+		$map=insert_lang_comcode_attachments('p_post',4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB'])+$map;
+		$GLOBALS['FORUM_DB']->query_update('f_posts',$map,array('id'=>$post_id),'',1);
 		ocp_profile_end_for('ocf_make_post:insert_lang_comcode_attachments');
 	}
 
@@ -245,7 +246,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		{
 			// send_validation_mail is used for other content - but forum is special
 			$subject=do_lang('POST_REQUIRING_VALIDATION_MAIL_SUBJECT',$topic_title,NULL,NULL,get_site_default_lang());
-			$post_text=get_translated_text($lang_id,$GLOBALS['FORUM_DB'],get_site_default_lang());
+			$post_text=get_translated_text($map['p_post'],$GLOBALS['FORUM_DB'],get_site_default_lang());
 			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),$post_text);
 			require_code('notifications');
 			dispatch_notification('needs_validation',NULL/*'ocf_forum:'.strval($forum_id)*/,$subject,$mail);
@@ -254,7 +255,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	{
 		if ($send_notification)
 		{
-			$post_comcode=get_translated_text($lang_id,$GLOBALS['FORUM_DB']);
+			$post_comcode=get_translated_text($map['p_post'],$GLOBALS['FORUM_DB']);
 
 			require_code('ocf_posts_action2');
 			ocp_profile_start_for('ocf_make_post:ocf_send_topic_notification');
@@ -314,7 +315,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			{
 				require_code('ocf_posts_action2');
 				ocp_profile_start_for('ocf_make_post:ocf_force_update_topic_cacheing');
-				ocf_force_update_topic_cacheing($topic_id,1,true,$is_starter,$post_id,$time,$title,$lang_id,$poster_name_if_guest,$poster);
+				ocf_force_update_topic_cacheing($topic_id,1,true,$is_starter,$post_id,$time,$title,$map['p_post'],$poster_name_if_guest,$poster);
 				ocp_profile_end_for('ocf_make_post:ocf_force_update_topic_cacheing');
 			}
 			if ($validated==1)

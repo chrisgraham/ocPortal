@@ -83,7 +83,7 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$wide,$
 		{
 			if (get_translated_text($menu_item['i_caption'])==get_translated_text($_title))
 			{
-				$GLOBALS['SITE_DB']->query_update('menu_items',lang_remap('i_caption',$i_caption,$title),array('id'=>$menu_item['id']),'',1);
+				$GLOBALS['SITE_DB']->query_update('menu_items',lang_remap('i_caption',$_title,$title),array('id'=>$menu_item['id']),'',1);
 				decache('side_stored_menu');
 			}
 		}

@@ -276,7 +276,7 @@ class Module_groups
 				$p_t=new ocp_tempcode();
 				if ((!is_null($_p_t)) && (array_key_exists($row['g_promotion_target'],$_rank)))
 				{
-					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['_name'],$GLOBALS['FORUM_DB']));
+					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['_name']));
 				}
 				$rank->attach(results_entry(array(hyperlink($url,escape_html($name)),escape_html($num_members),$p_t)));
 			}

@@ -1158,7 +1158,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 
 	ocf_get_custom_field_mappings($member_id); // This will do an auto-repair if CPF storage row is missing
 
-	$db_fieldname='field_'.strval(intval($field);
+	$db_fieldname='field_'.strval($field);
 
 	global $ANY_FIELD_ENCRYPTED;
 	if ($ANY_FIELD_ENCRYPTED===NULL)
@@ -1170,7 +1170,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 		if ($encrypted)
 		{
 			require_code('encryption');
-			$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields',$db_fieldname),array('mf_member_id'=>$member_id));
+			$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields',$db_fieldname,array('mf_member_id'=>$member_id));
 			if ((remove_magic_encryption_marker($value)==remove_magic_encryption_marker($current)) && (is_data_encrypted($current))) return NULL;
 			$value=encrypt_data($value);
 		}
@@ -1186,7 +1186,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
 
-		$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields',$db_fieldname),array('mf_member_id'=>$member_id));
+		$current=$GLOBALS['FORUM_DB']->query_value('f_member_custom_fields',$db_fieldname,array('mf_member_id'=>$member_id));
 		if (is_null($current))
 		{
 			if ($type=='posting_field')

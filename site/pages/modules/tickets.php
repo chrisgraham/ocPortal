@@ -140,7 +140,7 @@ class Module_tickets
 					'search_faq'=>0,
 					'cache_lead_time'=>NULL,
 				);
-				$map+=insert_lang('ticket_type_name',do_lang($ticket_type_name),1),
+				$map+=insert_lang('ticket_type_name',do_lang($ticket_type_name),1);
 				$ticket_type_id=$GLOBALS['SITE_DB']->query_insert('ticket_types',$map,true);
 
 				foreach (array_keys($groups) as $id)
@@ -441,7 +441,7 @@ class Module_tickets
 
 			if (is_null($type['cache_lead_time'])) $lead_time=do_lang('UNKNOWN');
 			else $lead_time=display_time_period($type['cache_lead_time']);
-			$types[$type['id']]=array('TICKET_TYPE'=>strval($type['id']),'SELECTED'=>($type['id']===$selected_ticket_type),'NAME'=>get_translated_text($type['ticket_type_name']),'LEAD_TIME'=>$lead_time);
+			$types[$type['id']]=array('TICKET_TYPE'=>strval($type['id']),'SELECTED'=>($type['id']===$selected_ticket_type_id),'NAME'=>get_translated_text($type['ticket_type_name']),'LEAD_TIME'=>$lead_time);
 		}
 		return $types;
 	}
@@ -494,7 +494,7 @@ class Module_tickets
 			} else
 			{
 				$ticket_type_id=$GLOBALS['SITE_DB']->query_value_null_ok('tickets','ticket_type',array('ticket_id'=>$id));
-				$ticket_type_details=get_ticket_type($ticket_type);
+				$ticket_type_details=get_ticket_type($ticket_type_id);
 				$ticket_type_name=get_translated_text($ticket_type_details['ticket_type_name']);
 
 				$forum=1; $topic_id=1; $_ticket_type_id=1; // These will be returned by reference

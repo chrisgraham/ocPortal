@@ -315,7 +315,7 @@ class Module_booking
 
 			if (is_null($max_max_date)) $max_max_date=MAX_AHEAD_BOOKING_DATE;
 
-			$description=get_translated_tempcode('bookable',$bookable,'description'];
+			$description=get_translated_tempcode('bookable',$bookable,'description');
 
 			if ((!$description->is_empty()) || (count($messages)>0)) $has_details=true;
 

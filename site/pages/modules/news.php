@@ -546,7 +546,7 @@ class Module_news
 				$map+=propagate_ocselect();
 				$url=build_url($map,'_SELF');
 				$_title=get_translated_tempcode('news',$myrow,'title');
-				$_title_plain=get_translated_text($myrow,'title');
+				$_title_plain=get_translated_text($myrow['title']);
 				$author_url=((addon_installed('authors')) && (!$member_based))?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author'])+propagate_ocselect(),get_module_zone('authors')):new ocp_tempcode();
 				$author=$myrow['author'];
 				if (!array_key_exists($myrow['news_category'],$NEWS_CATS))

@@ -542,13 +542,13 @@ function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=N
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
 	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c',array('c.*'),array('parent_id'=>$category_id),'ORDER BY '.(($order=='category ASC')?$GLOBALS['SITE_DB']->translate_field_ref('category'):$order),400/*reasonable limit*/);
-	foreach ($rows as &$myrow)
+	foreach ($rows as $i=>$myrow)
 	{
-		$myrow['_category']=get_translated_text($myrow['category']);
+		$rows[$i]['_category']=get_translated_text($myrow['category']);
 	}
 	if (count($rows)==400) $rows=array(); // Too much, performance issue
 	$out=new ocp_tempcode();
-	foreach ($rows as &$myrow)
+	foreach ($rows as $myrow)
 	{
 		if (!has_category_access(get_member(),'downloads',strval($myrow['id']))) continue;
 

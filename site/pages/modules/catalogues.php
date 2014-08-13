@@ -1124,7 +1124,7 @@ class Module_catalogues
 		if (!array_key_exists(0,$catalogue_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$catalogue=$catalogue_rows[0];
 		$description=get_translated_tempcode('catalogues',$catalogue,'c_description');
-		$description_2=get_translated_text($catalogue,'c_description');
+		$description_2=get_translated_text($catalogue['c_description']);
 		$title_to_use=do_lang_tempcode($catalogue_name.'__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])));
 		$title_to_use_2=do_lang($catalogue_name.'__CATALOGUE_INDEX',escape_html(get_translated_text($catalogue['c_title'])),NULL,NULL,NULL,false);
 		if (is_null($title_to_use_2))

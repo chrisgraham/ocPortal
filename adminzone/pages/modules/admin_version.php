@@ -739,7 +739,7 @@ class Module_admin_version
 			{
 				foreach ($fields as $field)
 				{
-					$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta SET m_type=m_type+\'__COMCODE\' WHERE '.db_string_equal_to('m_table',$table).' AND '.db_string_equal_to('m_name',$field);
+					$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta SET m_type=m_type+\'__COMCODE\' WHERE '.db_string_equal_to('m_table',$table).' AND '.db_string_equal_to('m_name',$field));
 				}
 			}
 			$comcode_lang_fields=array(
@@ -754,15 +754,12 @@ class Module_admin_version
 					'f_description',
 					'f_intro_question',
 				),
-				'f_posts'=>array(
-					'p_post',
-				),
 			);
 			foreach ($comcode_lang_fields as $table=>$fields)
 			{
 				foreach ($fields as $field)
 				{
-					$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'db_meta SET m_type=m_type+\'__COMCODE\' WHERE '.db_string_equal_to('m_table',$table).' AND '.db_string_equal_to('m_name',$field);
+					$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'db_meta SET m_type=m_type+\'__COMCODE\' WHERE '.db_string_equal_to('m_table',$table).' AND '.db_string_equal_to('m_name',$field));
 				}
 			}
 		}

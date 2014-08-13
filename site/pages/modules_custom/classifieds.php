@@ -77,7 +77,7 @@ class Module_classifieds
 					'c_days'=>$days,
 					'c_price'=>$price,
 				);
-				$map+=insert_lang('c_label',do_lang('CLASSIFIEDS_DEFAULT_PRICE_LEVEL_'.$level),2),
+				$map+=insert_lang('c_label',do_lang('CLASSIFIEDS_DEFAULT_PRICE_LEVEL_'.$level),2);
 				$GLOBALS['SITE_DB']->query_insert('classifieds_prices',$map);
 			}
 		}

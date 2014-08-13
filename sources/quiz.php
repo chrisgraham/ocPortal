@@ -216,7 +216,7 @@ function handle_quiz_answers($id,$text,$type)
 						'q_order'=>$x,
 					);
 					$map+=lang_remap('q_answer_text',$existing_a[$x]['q_answer_text'],$a);
-					$map+=lang_remap('q_explanation',$existing_a[$x]['q_explanation'],$explanation,2);
+					$map+=lang_remap('q_explanation',$existing_a[$x]['q_explanation'],$explanation);
 					$GLOBALS['SITE_DB']->query_update('quiz_question_answers',$map,array('id'=>$existing_a[$x]['id']),'',1);
 				} else
 				{
@@ -298,7 +298,7 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 	);
 	$map+=insert_lang('q_name',$name,2);
 	$map+=insert_lang('q_start_text',$start_text,2);
-	$map+=insert_lang('q_end_text',$end_text,2):
+	$map+=insert_lang('q_end_text',$end_text,2);
 	$map+=insert_lang('q_end_text_fail',$end_text_fail,2);
 	$id=$GLOBALS['SITE_DB']->query_insert('quizzes',$map,true);
 

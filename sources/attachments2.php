@@ -465,7 +465,7 @@ function _check_attachment_count()
  * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
  * @return array			The language ID save fields
  */
-function insert_lang_comcode_attachments($level,$text,$type,$id,$connection=NULL,$insert_as_admin=false,$for_member=NULL)
+function insert_lang_comcode_attachments($field_name,$level,$text,$type,$id,$connection=NULL,$insert_as_admin=false,$for_member=NULL)
 {
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
@@ -481,11 +481,11 @@ function insert_lang_comcode_attachments($level,$text,$type,$id,$connection=NULL
 	{
 		final_attachments_from_preview($id,$connection);
 
-		return array(
-			$field_name=>$_info['comcode'],
-			$field_name.'__text_parsed'=>$text_parsed,
-			$field_name.'__source_user'=>$source_user,
-		);
+		$ret=array();
+		$ret[$field_name]=$_info['comcode'];
+		$ret[$field_name.'__text_parsed']=$text_parsed;
+		$ret[$field_name.'__source_user']=$source_user;
+		return $ret;
 	}
 
 	$lang_id=NULL;

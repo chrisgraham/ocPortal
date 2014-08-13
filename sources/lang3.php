@@ -216,11 +216,11 @@ function _insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$
 
 	if (!multi_lang_content())
 	{
-		return array(
-			$field_name=>$text,
-			$field_name.'__text_parsed'=>$text_parsed,
-			$field_name.'__source_user'=>$source_user,
-		);
+		$ret=array();
+		$ret[$field_name]=$text;
+		$ret[$field_name.'__text_parsed']=$text_parsed;
+		$ret[$field_name.'__source_user']=$source_user;
+		return $ret;
 	}
 
 	if ((is_null($id)) && (multi_lang())) // Needed as MySQL auto-increment works separately for each combo of other key values (i.e. language in this case). We can't let a language string ID get assigned to something entirely different in another language. This MySQL behaviour is not well documented, it may work differently on different versions.
@@ -258,7 +258,7 @@ function _insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$
 		}
 	}
 
-	return array(,
+	return array(
 		$field_name=>$id
 	);
 }
@@ -280,11 +280,9 @@ function _insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$
  */
 function _lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false,$leave_source_user=false)
 {
-	if (!multi_lang_content()) return $text; // TODO: Updating source user etc
-
-	if ($id==0)
+	if ($id===0)
 	{
-		return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
+		return insert_lang($field_name,$text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
 	}
 
 	if ($text===STRING_MAGIC_NULL) return $id;
@@ -342,10 +340,9 @@ function _lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass
 
 	if (!multi_lang_content())
 	{
-		$ret=array(
-			$field_name=>$text,
-			$field_name.'__text_parsed'=>$text_parsed,
-		)
+		$ret=array();
+		$ret[$field_name]=$text;
+		$ret[$field_name.'__text_parsed']=$text_parsed;
 		if (!is_null($source_user))
 			$ret[$field_name.'__source_user']=$source_user;
 		return $ret;
@@ -375,7 +372,7 @@ function _lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass
 
 	$connection->text_lookup_original_cache[$id]=$text;
 
-	return array(,
+	return array(
 		$field_name=>$id
 	);
 }
@@ -398,6 +395,8 @@ function parse_translated_text($table,$row,$field_name,$connection,$lang,$force,
 
 	$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 	$GLOBALS['NO_QUERY_LIMIT']=true;
+
+	$entry=$row[$field_name];
 
 	$result=mixed();
 	if (multi_lang_content())
@@ -439,7 +438,7 @@ function parse_translated_text($table,$row,$field_name,$connection,$lang,$force,
 
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			_lang_remap($entry,is_null($result)?'':$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+			_lang_remap($field_name,$entry,is_null($result)?'':$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 			if (!is_null($SEARCH__CONTENT_BITS))
 			{
 				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
@@ -448,7 +447,7 @@ function parse_translated_text($table,$row,$field_name,$connection,$lang,$force,
 				return $ret;
 			}
 			$LAX_COMCODE=$temp;
-			$ret=get_translated_tempcode($row,$field_name,$connection,$lang);
+			$ret=get_translated_tempcode($table,$row,$field_name,$connection,$lang);
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}
@@ -471,13 +470,13 @@ function parse_translated_text($table,$row,$field_name,$connection,$lang,$force,
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}
-		$map=_lang_remap($entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+		$map=_lang_remap($field_name,$entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 		if (!multi_lang_content())
 		{
 			$connection->query_update($table,$map,$row,'',1);
 		}
 		$LAX_COMCODE=$temp;
-		$ret=get_translated_tempcode($row,$field_name,$connection,$lang);
+		$ret=get_translated_tempcode($table,$row,$field_name,$connection,$lang);
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 		return $ret;
 	}

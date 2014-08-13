@@ -817,7 +817,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 						$where_clause_or.=preg_replace('#\?#',$where_clause_or_fields,$__where);
 					}
 
-					if ($where_clause_and=='') $where_clause_and.=' '.$operator.' ';
+					if ($where_clause_and=='') $where_clause_and.=' '.$boolean_operator.' ';
 					$where_clause_and.='('.$where_clause_or.')';
 				}
 			}
@@ -839,7 +839,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
 
 			// Work out our queries
-			$query=' FROM '.$_table_clause.' WHERE '.(($where_clause=='')?'':($where_clause.((($where_clause_and=='')?'':' AND ')));
+			$query=' FROM '.$_table_clause.' WHERE '.(($where_clause=='')?'':($where_clause.(($where_clause_and=='')?'':' AND ')));
 			if ($where_clause_and!='') $query.='('.$where_clause_and.')';
 			if ($group_by_ok && false/*Actually we cannot assume that r.id exists*/)
 			{
@@ -1195,10 +1195,15 @@ function db_like_assemble($content,$boolean_operator='AND',$full_coverage=false)
 
 	// $content_where combines all
 	$content_where='';
-	if ($include_where!='')
+	if ($body_words!=array())
 	{
 		if ($content_where!='') $content_where.=' AND ';
-		$content_where.='('.$include_where.')';
+		$content_where.='('.implode($boolean_operator,$include_where).')';
+	}
+	if ($include_where!=array())
+	{
+		if ($content_where!='') $content_where.=' AND ';
+		$content_where.='('.implode(' AND ',$include_where).')';
 	}
 	if ($disclude_where!='')
 	{

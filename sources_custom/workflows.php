@@ -499,7 +499,7 @@ function get_workflow_form($workflow_content_id)
 	$workflow_hidden->attach(form_input_hidden('return_url',get_self_url(true)));
 
 	// Add all of these to the form
-	$workflow_form->attach(do_template('FORM',array('_GUID'=>'9eb9a74add2b4fea737d0af7b65a2d85','FIELDS'=>$workflow_fields,'HIDDEN'=>$workflow_hidden,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SUBMIT_WORKFLOW_CHANGES'),'SKIP_REQUIRED'=>true)));
+	$workflow_form=do_template('FORM',array('_GUID'=>'9eb9a74add2b4fea737d0af7b65a2d85','FIELDS'=>$workflow_fields,'HIDDEN'=>$workflow_hidden,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SUBMIT_WORKFLOW_CHANGES'),'SKIP_REQUIRED'=>true));
 
 	// Then pass it to whoever wanted it
 	return do_template('WORKFLOW_BOX',array('_GUID'=>'cc80db735825a058c0d90e40e783ed30','FORM'=>$workflow_form));
@@ -732,7 +732,7 @@ function workflow_update_handler()
 	if (($content_is_validated[0][$content_validated_field]==1)!=$all_points_approved)
 	{
 		$success_message=$all_points_approved? do_lang('APPROVAL_COMPLETE') : do_lang('APPROVAL_REVOKED');
-		$GLOBALS['SITE_DB']->query_update($content_table,array($content_validated_field=>$all_points_approved?1:0),array($content_field=>$content_field=>$info['id_field_numeric']?intval($content_details[0]['content_id']):$content_details[0]['content_id']),'',1);
+		$GLOBALS['SITE_DB']->query_update($content_table,array($content_validated_field=>$all_points_approved?1:0),array($content_field=>$info['id_field_numeric']?intval($content_details[0]['content_id']):$content_details[0]['content_id']),'',1);
 	}
 
 	///////////////////////////////////////////

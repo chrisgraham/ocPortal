@@ -940,7 +940,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 
 		if ((!is_null($only_fields)) && (!in_array($i,$only_fields))) continue;
 
-		_resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$fields[$i]);
+		_resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,$fields[$i]);
 	}
 
 	return $fields;

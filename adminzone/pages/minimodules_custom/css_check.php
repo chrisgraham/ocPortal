@@ -37,7 +37,7 @@ function find_existing()
 {
 	$out=array();
 	$d=opendir(get_file_base().'/themes/default/css');
-	while ($e=readdir($d))
+	while (($e=readdir($d))!==false)
 	{
 		if (substr($e,-4)=='.css')
 		{
@@ -58,7 +58,7 @@ function find_used()
 {
 	$out=array();
 	$d=opendir(get_file_base().'/themes/default/templates');
-	while ($e=readdir($d))
+	while (($e=readdir($d))!==false)
 	{
 		if (substr($e,-4)=='.tpl')
 		{

@@ -138,7 +138,7 @@ class Module_admin_tickets
 
 		// Permissions
 		require_code('permissions2');
-		set_category_permissions_from_environment('tickets',$ticket_type_id);
+		set_category_permissions_from_environment('tickets',strval($ticket_type_id));
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
@@ -170,7 +170,7 @@ class Module_admin_tickets
 		$fields->attach(form_input_line(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type_name',$ticket_type_name,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',$details['guest_emails_mandatory']));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',$details['search_faq']));
-		$fields->attach(get_category_permissions_for_environment('tickets',$type_text));
+		$fields->attach(get_category_permissions_for_environment('tickets',strval($ticket_type_id)));
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 

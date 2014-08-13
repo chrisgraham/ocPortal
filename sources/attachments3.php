@@ -187,11 +187,11 @@ function update_lang_comcode_attachments($field_name,$lang_id,$text,$type,$id,$c
 		}
 	} else
 	{
-		return array(
-			$field_name=>$_info['comcode'],
-			$field_name.'__text_parsed'=>$text_parsed,
-			$field_name.'__source_user'=>$source_user,
-		);
+		$ret=array();
+		$ret[$field_name]=$_info['comcode'];
+		$ret[$field_name.'__text_parsed']=$text_parsed;
+		$ret[$field_name.'__source_user']=$source_user;
+		return $ret;
 	}
 
 	return array(

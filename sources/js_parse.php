@@ -24,8 +24,8 @@
 function init__js_parse()
 {
 	// In precendence order. Note REFERENCE==BW_AND (it gets converted, for clarity). Ditto QUESTION==UNARY_IF
-	global $OPS;
-	$OPS=array('QUESTION','UNARY_IF','BOOLEAN_OR','BOOLEAN_AND','BW_OR','BW_XOR','OBJECT_OPERATOR','BW_AND','IS_EQUAL','IS_NOT_EQUAL','IS_IDENTICAL','IS_NOT_IDENTICAL','IS_SMALLER','IS_SMALLER_OR_EQUAL','IS_GREATER','IS_GREATER_OR_EQUAL','SL','SR','ZSR','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER');
+	global $JS_OPS;
+	$JS_OPS=array('QUESTION','UNARY_IF','BOOLEAN_OR','BOOLEAN_AND','BW_OR','BW_XOR','OBJECT_OPERATOR','BW_AND','IS_EQUAL','IS_NOT_EQUAL','IS_IDENTICAL','IS_NOT_IDENTICAL','IS_SMALLER','IS_SMALLER_OR_EQUAL','IS_GREATER','IS_GREATER_OR_EQUAL','SL','SR','ZSR','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER');
 }
 
 /**
@@ -485,14 +485,14 @@ function _js_parse_expression()
 {
 // Choice{expression_inner | expression_inner binary_operation expression_inner | expression_inner QUESTION expression_inner COLON expression_inner}
 
-	global $OPS;
+	global $JS_OPS;
 
 	$expression=_js_parse_expression_inner();
 	if (is_null($expression)) return NULL;
 	$op_list=array($expression);
 
 	$next=parser_peek();
-	while (in_array($next,$OPS))
+	while (in_array($next,$JS_OPS))
 	{
 		parser_next();
 		if ($next=='QUESTION')
@@ -538,9 +538,9 @@ function precedence_sort($op_list)
 		return $new;
 	}
 
-	global $OPS;
+	global $JS_OPS;
 
-	foreach ($OPS as $op_try)
+	foreach ($JS_OPS as $op_try)
 	{
 		foreach ($op_list as $JS_PARSE_POSITION=>$op)
 		{

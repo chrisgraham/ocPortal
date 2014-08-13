@@ -341,7 +341,7 @@ function ocf_get_custom_field_mappings($member_id)
 				{
 					if (!is_null($default))
 					{
-						$map+=insert_lang_comcode('field_'.strval($field['id']),$default,3,$db);
+						$map+=insert_lang_comcode('field_'.strval($field['id']),$default,3,$GLOBALS['FORUM_DB']);
 					} else
 					{
 						$map['field_'.strval($field['id'])]=NULL;
@@ -352,7 +352,7 @@ function ocf_get_custom_field_mappings($member_id)
 				}
 			}
 			$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$map);
-			$query=array($row);
+			$query=array($map);
 		}
 		$MEMBER_CACHE_FIELD_MAPPINGS[$member_id]=$query[0];
 	}

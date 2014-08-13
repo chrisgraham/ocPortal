@@ -26,7 +26,7 @@
  */
 function _pagelink_to_static($pagelink,$parent_pagelink,$add_date,$edit_date,$priority,$title,$accessible=true)
 {
-	if (($accessible) && (strpos($page_link,':static_export')===false))
+	if (($accessible) && (strpos($pagelink,':static_export')===false))
 	{
 		global $STATIC_EXPORT_TAR,$STATIC_EXPORT_WARNINGS;
 

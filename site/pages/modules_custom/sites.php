@@ -230,7 +230,13 @@ class Module_sites
 			}
 		}
 
-		return array($prefix.'VERSION'=>$version,$prefix.'NAME'=>$name,$prefix.'FILESIZE'=>$filesize,$prefix.'NUM_DOWNLOADS'=>number_format($num_downloads),$prefix.'URL'=>$url);
+		$ret=array();
+		$ret[$prefix.'VERSION']=$version;
+		$ret[$prefix.'NAME']=$name;
+		$ret[$prefix.'FILESIZE']=$filesize;
+		$ret[$prefix.'NUM_DOWNLOADS']=number_format($num_downloads);
+		$ret[$prefix.'URL']=$url;
+		return $ret;
 	}
 
 	/**
@@ -247,7 +253,7 @@ class Module_sites
 		if ($directory[strlen($directory)-1]!='/') $directory.='/';
 
 		$list=new ocp_tempcode();
-		if (!@ftp_chdir($conn_id,$directory.'/'.$entry)) return $list; // Can't rely on ftp_nlist if not a directory
+		if (!@ftp_chdir($conn_id,$directory)) return $list; // Can't rely on ftp_nlist if not a directory
 		$contents=ftp_nlist($conn_id,$directory);
 		if ($contents===false) return $list;
 		$list->attach(form_input_list_entry($directory,($directory=='/public_html/') || ($directory=='/www/') || ($directory=='/httpdocs/') || ($directory=='/htdocs/')));

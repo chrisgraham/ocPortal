@@ -425,9 +425,9 @@ function load_news_rows()
 		} else
 		{
 			$NEWS_ROWS=$GLOBALS['SITE_DB']->query_select('news',array('n.*','date_and_time AS add_date'),array('validated'=>1,'news_category'=>29),'ORDER BY add_date');
-			foreach ($NEWS_ROWS as &$row)
+			foreach ($NEWS_ROWS as $i=>$row)
 			{
-				$row['nice_title']=get_translated_text($row['title']);
+				$NEWS_ROWS[$i]['nice_title']=get_translated_text($row['title']);
 			}
 		}
 	}
@@ -452,10 +452,10 @@ function load_download_rows()
 		{
 			$sql='SELECT d.* FROM '.get_table_prefix().'download_downloads d FORCE INDEX (recent_downloads) WHERE validated=1 AND '.$GLOBALS['SITE_DB']->translate_field_ref('name').' LIKE \''.db_encode_like('ocPortal Version %').'\' ORDER BY add_date';
 			$DOWNLOAD_ROWS=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('name'=>'SHORT_TRANS','description'=>'LONG_TRANS__COMCODE'));
-			foreach ($DOWNLOAD_ROWS as &$row)
+			foreach ($DOWNLOAD_ROWS as $i=>$row)
 			{
-				$row['nice_title']=get_translated_text($row['name']);
-				$row['nice_description']=get_translated_text($row['description']);
+				$DOWNLOAD_ROWS[$i]['nice_title']=get_translated_text($row['name']);
+				$DOWNLOAD_ROWS[$i]['nice_description']=get_translated_text($row['description']);
 			}
 		}
 	}

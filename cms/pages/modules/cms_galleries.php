@@ -503,8 +503,7 @@ class Module_cms_galleries extends standard_aed_module
 	/**
 	 * Sort a directory of gallery media being imported.
 	 *
-	 * @param  array		The unsorted media
-	 * @return array		The sorted media
+	 * @param  array		The unsorted media, will be saved by reference
 	 */
 	function _sort_media(&$directory)
 	{

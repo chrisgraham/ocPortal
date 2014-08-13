@@ -49,7 +49,7 @@ class Hook_rss_ocf_forumview
 		$sql.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t';
 		if (!multi_lang_content())
 		{
-			$sql.=' LEFT JOIN '$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+			$sql.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
 		}
 		$sql.=' WHERE t_cache_last_time>'.strval($cutoff).((!has_specific_permission(get_member(),'see_unvalidated'))?' AND t_validated=1 ':'').' AND '.$filters;
 		$sql.=' ORDER BY t_cache_last_time DESC';

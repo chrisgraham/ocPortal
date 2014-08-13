@@ -564,7 +564,7 @@ function erase_comcode_cache()
 
 	ocp_profile_start_for('erase_comcode_cache');
 
-	if (has_multi_content())
+	if (multi_lang_content())
 	{
 		if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_value_null_ok('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
 		{

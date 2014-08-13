@@ -120,7 +120,7 @@ function edit_news_category($id,$title,$img,$notes,$owner=NULL)
 	// Sync meta keywords, if we have auto-sync for these
 	if (get_value('disable_seo')==='1') // TODO: Update to get_option in v10
 	{
-		$sql='SELECT meta_keywords FROM '.get_table_prefix().'seo_meta m WHERE ';
+		$sql='SELECT * FROM '.get_table_prefix().'seo_meta m WHERE ';
 		$sql.=db_string_equal_to('meta_for_type','news');
 		$meta_keywords_field=$GLOBALS['SITE_DB']->translate_field_ref('name');
 		$sql.=' AND ('.$meta_keywords_field.' LIKE \''.db_encode_like($old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title).'\')';
@@ -130,7 +130,7 @@ function edit_news_category($id,$title,$img,$notes,$owner=NULL)
 			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',','.$title.',',get_translated_text($af_row['meta_keywords'])));
 			if (substr($new_meta,0,1)==',') $new_meta=substr($new_meta,1);
 			if (substr($new_meta,-1)==',') $new_meta=substr($new_meta,0,strlen($new_meta)-1);
-			lang_remap($af_row['meta_keywords'],$new_meta);
+			$GLOBALS['SITE_DB']->query_update('seo_meta',lang_remap('meta_keywords',$af_row['meta_keywords'],$new_meta),$af_row);
 		}
 	}
 
@@ -314,7 +314,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 					'notes'=>'',
 					'nc_owner'=>$submitter,
 				);
-				$map+=insert_lang('nc_title'=>,do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
+				$map+=insert_lang('nc_title',do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter)),2);
 				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
 
 				$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);

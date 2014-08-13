@@ -139,10 +139,8 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 			{
 				if (strpos($type,'__COMCODE')!==false)
 				{
-					$fields+=array(
-						$name.'__text_parsed'=>'LONG_TEXT',
-						$name.'__source_user'=>'USER',
-					);
+					$fields[$name.'__text_parsed']='LONG_TEXT';
+					$fields[$name.'__source_user']='USER';
 				}
 
 				$fields[$name]='LONG_TEXT'; // In the DB layer, it must now save as such
@@ -366,6 +364,8 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 		}
 	}
 
+	$type_remap=$this_ref->static_ob->db_get_type_remap();
+
 	if (strpos($_type,'_TRANS')!==false)
 	{
 		if ((is_null($default)) && (strpos($_type,'?')===false))
@@ -417,7 +417,6 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 		$tag=' NOT NULL';
 		$type=$_type;
 	}
-	$type_remap=$this_ref->static_ob->db_get_type_remap();
 	$extra='';
 	if (($_type!='LONG_TEXT') || (get_db_type()=='postgresql')) $extra=is_null($default)?'DEFAULT NULL':(' DEFAULT '.(is_string($default)?('\''.db_escape_string($default).'\''):strval($default)));
 	$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$name.' '.$type_remap[$type].' '.$extra.' '.$tag;

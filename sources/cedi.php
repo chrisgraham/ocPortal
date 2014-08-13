@@ -43,7 +43,7 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
 		$title=do_lang_tempcode('CEDI_POST');
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode('seedy_posts'/*TODO: Change in v10*/$row,'the_message'),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode('seedy_posts'/*TODO: Change in v10*/,$row,'the_message'),'URL'=>$url));
 }
 
 /**
@@ -538,9 +538,9 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'=>'SHORT_TRANS'));
 		}
 
-		foreach ($orphans as &$orphan)
+		foreach ($orphans as $i=>$orphan)
 		{
-			$orphan['_title']=get_translated_text($orphan['title']);
+			$orphans[$i]['_title']=get_translated_text($orphan['title']);
 		}
 		if (count($orphans)<50)
 		{
@@ -549,7 +549,7 @@ function cedi_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 			usort($orphans,'multi_sort');
 		}
 
-		foreach ($orphans as &$orphan)
+		foreach ($orphans as $i=>$orphan)
 		{
 			if (!has_category_access(get_member(),'seedy_page',strval($orphan['id']))) continue;
 

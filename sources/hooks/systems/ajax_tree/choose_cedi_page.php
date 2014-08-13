@@ -76,9 +76,9 @@ class Hook_choose_cedi_page
 			} else
 			{
 				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'seedy_pages p WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'seedy_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'=>'SHORT_TRANS'));
-				foreach ($orphans as &$orphan)
+				foreach ($orphans as $i=>$orphan)
 				{
-					$orphan['_title']=get_translated_text($orphan['title']);
+					$orphans[$i]['_title']=get_translated_text($orphan['title']);
 				}
 				if (count($orphans)<50)
 				{
@@ -88,7 +88,7 @@ class Hook_choose_cedi_page
 				}
 			}
 
-			foreach ($orphans as &$orphan)
+			foreach ($orphans as $orphan)
 			{
 				if (!has_category_access(get_member(),'seedy_page',strval($orphan['id']))) continue;
 

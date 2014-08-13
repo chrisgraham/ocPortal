@@ -35,7 +35,7 @@ This notification hook was created using the classifieds notification hook as a 
 		if ($debug_mode!='0' && $debug_mode!='1' && $debug_mode!='2') $debug_mode='0';
 		if ($debug_mode=='2') 
 		{
-			$cron_interval=.01; // Sets interval to 36 seconds
+			$cron_interval=0.01; // Sets interval to 36 seconds
 			$debug=TRUE;
 		}
 		else 

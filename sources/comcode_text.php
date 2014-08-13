@@ -157,7 +157,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 	$allowed_html_seqs=array( // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
 		'<table>',
-		'<table( class="[^"<>]*")?( summary="[^"<>]*")?>',
+		'<table( class="[^"<>]*")?( summary="[^"<>]*")?'.'>',
 		'</table>',
 		'<tr>',
 		'</tr>',
@@ -197,10 +197,10 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 		'</del>',
 		'<s>',
 		'</s>',
-		'<font( color="[^"<>]*")?( face="[^"<>]*")?( size="[^"<>]*")?>',
+		'<font( color="[^"<>]*")?( face="[^"<>]*")?( size="[^"<>]*")?'.'>',
 		'</font>',
 		'<!--',
-		'<h1( class="screen_title")?( id="screen_title")?>',
+		'<h1( class="screen_title")?( id="screen_title")?'.'>',
 		'</h1>',
 		'<h2>',
 		'</h2>',

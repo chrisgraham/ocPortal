@@ -1010,7 +1010,7 @@ function _parse_expression_inner()
 				$expression=array('EMBEDDED_ASSIGNMENT','EQUAL',$target,$_expression,$GLOBALS['i']);
 				pparse__parser_expect('BRACKET_CLOSE');
 			}
-			elseif (in_array($next_2,array('INTEGER','BOOLEAN','FLOAT','ARRAY','OBJECT','STRING')))
+			elseif ((in_array($next_2,array('INTEGER','BOOLEAN','FLOAT','ARRAY','OBJECT','STRING'))) && ($next_3=='BRACKET_CLOSE'))
 			{
 				pparse__parser_next();
 				pparse__parser_next();
@@ -1470,7 +1470,10 @@ function pparse__parser_expect($token)
 		return pparse__parser_expect($token);
 	}
 	$i++;
-	if ($next[0]!=$token) parser_error('Expected '.$token.' but got '.$next[0].' ('.$next[1].')',$tokens,$i);
+	if ($next[0]!=$token)
+	{
+		parser_error('Expected '.$token.' but got '.$next[0].' ('.$next[1].')',$tokens,$i);
+	}
 	return $next[1];
 }
 

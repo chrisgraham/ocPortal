@@ -29,6 +29,7 @@
  * @param  array			Language string bits
  * @param  AUTO_LINK		The ID of the workflow to add this requirement to
  * @param  ?integer		The position in the workflow that this requirement will have. NULL adds it to the end (NULL: default)
+ * @return AUTO_LINK		Requirement ID
  */
 function add_requirement_to_workflow($bits,$workflow_id,$position=NULL)
 {

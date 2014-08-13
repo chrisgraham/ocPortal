@@ -199,3 +199,20 @@ function log_special($type,$value)
 	//fclose($GLOBALS[$$type]);
 }
 
+/**
+ * Find whether the specified string is alphanumeric or not.
+ *
+ * @param  string			The string to test
+ * @param  boolean		Whether to check stricter identifier-validity
+ * @return boolean		Whether the string is alphanumeric or not
+ */
+function is_alphanumeric($string,$strict=false)
+{
+	if ($strict)
+		return preg_match('#^[\w\-]*$#',$string)!=0;
+
+	$test=@preg_match('#^[\pL\w\-\.]*$#u',$string)!=0; // unicode version, may fail on some servers
+	if ($test!==false) return $test;
+	return preg_match('#^[\w\-\.]*$#',$string)!=0;
+}
+

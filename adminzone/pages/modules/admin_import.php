@@ -778,7 +778,6 @@ class Module_admin_import
 		$map=array(
 			'zone_name'=>'forum',
 			'zone_default_page'=>'forumview',
-			'zone_header_text'=>$trans5,
 			'zone_theme'=>'-1',
 			'zone_wide'=>NULL,
 			'zone_require_session'=>0,

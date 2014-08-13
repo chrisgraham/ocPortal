@@ -179,7 +179,7 @@ class Module_admin_workflow extends standard_aed_module
 	function get_points_in_edited_workflow()
 	{
 		// Grab all of the requested points
-		$points=array_map('trim',explode("\n",post_param('points')));
+		$point_names=array_map('trim',explode("\n",post_param('points')));
 		$temp_point_names=array();
 		foreach ($point_names as $p)
 		{
@@ -314,9 +314,9 @@ class Module_admin_workflow extends standard_aed_module
 		$all_points=get_all_approval_points();
 
 		// See if we need to define any
-		foreach ($points as $p)
+		foreach ($point_names as $p)
 		{
-			if (!in_array($p,$all_points) // This point has not been defined previously...
+			if (!in_array($p,$all_points)) // This point has not been defined previously...
 				return true;
 		}
 
@@ -514,7 +514,7 @@ class Module_admin_workflow extends standard_aed_module
 			{
 				// This doesn't exist yet. Create it.
 
-				$point_id=add_approval_point_to_workflow(insert_lang($point_name,3),$workflow_id);
+				$point_id=add_approval_point_to_workflow(insert_lang('workflow_approval_name',$point_name,3),$workflow_id);
 				$point_ids[$point_id]=$point_name;
 			}
 

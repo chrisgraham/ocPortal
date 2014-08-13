@@ -493,7 +493,7 @@ class Module_filedump
 				'path'=>$place,
 				'the_member'=>get_member(),
 			);
-			$map+=insert_lang_comcode('description',$description,3),
+			$map+=insert_lang_comcode('description',$description,3);
 			$GLOBALS['SITE_DB']->query_insert('filedump',$map);
 
 			require_code('notifications');

@@ -47,7 +47,7 @@ class Hook_rss_ocf_unread_topics
 		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member());
 		if (!multi_lang_content())
 		{
-			$query.=' LEFT JOIN '$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
 		}
 		$query.=' WHERE ('.$condition.') AND t_forum_id IS NOT NULL '.((!has_specific_permission(get_member(),'see_unvalidated'))?' AND t_validated=1 ':'').' ORDER BY t_cache_last_time DESC';
 		$rows=$GLOBALS['FORUM_DB']->query($query,$max,false,array('t_cache_first_post'));

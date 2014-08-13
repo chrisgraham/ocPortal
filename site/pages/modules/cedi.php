@@ -183,7 +183,7 @@ class Module_cedi
 				'notes'=>'',
 			);
 			$map+=lang_code_to_default_content('title','CEDI_HOME',false,1);
-			$map+=insert_lang_comcode('description','',2),
+			$map+=insert_lang_comcode('description','',2);
 			$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)

@@ -174,10 +174,10 @@ class Database_Static_sqlite
 			$_fields.='	  '.$name.' '.$type;
 			if (substr($name,-10)=='__text_parsed')
 			{
-				$query.=' DEFAULT \'\'';
+				$_fields.=' DEFAULT \'\'';
 			} elseif (substr($name,-13)=='__source_user')
 			{
-				$query.=' DEFAULT '.strval(db_get_first_id());
+				$_fields.=' DEFAULT '.strval(db_get_first_id());
 			}
 			$_fields.=' '.$perhaps_null.','."\n";
 		}

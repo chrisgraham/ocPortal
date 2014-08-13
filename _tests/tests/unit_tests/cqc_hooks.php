@@ -23,6 +23,6 @@ class cqc_hooks_test_set extends ocp_test_case
 		if (function_exists('set_time_limit')) @set_time_limit(0);
 		$result=http_download_file(get_base_url().'/_tests/codechecker/code_quality.php?subdir=sources/hooks&api=1',NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,10000.0);
 		foreach (explode('<br />',$result) as $line)
-			$this->assertTrue((trim($line)=='' || substr($line,0,5)=='SKIP:' || substr($line,0,5)=='DONE ' || substr($line,0,6)=='FINAL ' || strpos($line,'TODO')!==false || strpos($line,'HACKHACK')!==false),$line);
+			$this->assertTrue((trim($line)=='' || substr($line,0,5)=='SKIP:' || substr($line,0,5)=='DONE ' || substr($line,0,6)=='FINAL ' || strpos($line,'TODO')!==false || strpos($line,'HACKHACK')!==false || strpos($line,'It is best to only have')!==false),$line);
 	}
 }

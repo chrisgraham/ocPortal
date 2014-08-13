@@ -579,7 +579,7 @@ class Module_ocworld
 			{
 				$fortnights=(time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp(get_member()))/(60*60*24*7*2);
 				$made=$GLOBALS['SITE_DB']->query_value('w_realms','COUNT(*)',array('owner'=>get_member()));
-				$left=round($fortnights-$made);
+				$left=intval(round($fortnights-$made));
 
 				$_qa=new ocp_tempcode();
 				for ($i=1;$i<=30;$i++)

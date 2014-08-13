@@ -120,7 +120,7 @@ class Module_chat
 				'room_language'=>get_site_default_lang(),
 				'room_owner'=>NULL,
 			);
-			$map+=insert_lang('c_welcome','',2),
+			$map+=insert_lang('c_welcome','',2);
 			$GLOBALS['SITE_DB']->query_insert('chat_rooms',$map);
 
 			$GLOBALS['SITE_DB']->create_table('chat_messages',array(

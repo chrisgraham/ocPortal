@@ -46,7 +46,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics';
 	if (!multi_lang_content())
 	{
-		$query.=' LEFT JOIN '$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
 	}
 	$query.=' WHERE '.$where;
 	$max_rows=0;

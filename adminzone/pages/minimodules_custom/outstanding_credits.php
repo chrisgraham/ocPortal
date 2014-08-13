@@ -15,7 +15,6 @@
 
 $start=get_param_integer('start',0);
 $max=get_param_integer('max',50);
-if($start == $max) $max = $start += 50;
 $csv=get_param_integer('csv',0)==1;
 if ($csv)
 {
@@ -48,7 +47,8 @@ if(!is_null($field_id)){
 	global $NON_CANONICAL_PARAMS;
 	$NON_CANONICAL_PARAMS[]='sort';
 	$orderby = 'CAST(field_'.$field_id.' AS UNSIGNED)';
-	switch ($sortable) {
+	switch ($sortable)
+	{
 		case 'username':
 			$orderby = 'm_username';
 			break;
