@@ -197,10 +197,6 @@ class Module_admin_workflow extends standard_aed_module
 	 */
 	function get_form_fields($id=NULL)
 	{
-		/////////////////////////////////
-		// Get all of our requirements //
-		/////////////////////////////////
-
 		require_code('form_templates');
 
 		// These will hold our form elements, visible & hidden
@@ -233,8 +229,7 @@ class Module_admin_workflow extends standard_aed_module
 			$approval_points=get_all_approval_points($id);
 		} else
 		{
-			// -1 indicates an invalid ID
-			$id=-1;
+			$id=NULL;
 		}
 
 		////////////////////
@@ -243,9 +238,8 @@ class Module_admin_workflow extends standard_aed_module
 
 		// First we must be given a name (defaulting to the given name if
 		// it has been passed). We want to show the user which names are
-		// unavailable, so scrape the database for this information.
+		// unavailable, so search the database for this information.
 		$workflows=get_all_workflows();
-
 		if (count($workflows)>0)
 		{
 			$defined_names=do_lang('DEFINED_WORKFLOWS',implode(', ',$workflows));
@@ -256,14 +250,7 @@ class Module_admin_workflow extends standard_aed_module
 
 		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('WORKFLOW_NAME_DESCRIPTION',$defined_names),'name',$workflow_name,true));
 
-		// Now we must handle the ID for this workflow.
-		// This must be handled during the form processing,
-		// since we don't have access to the string until then. Since we
-		// want ID to be a number we will set it to an invalid value (-1)
-		// to indicate a NULL status.
-		$hidden->attach(form_input_hidden('workflow_id',strval($id)));
-
-		$all_points=get_all_approval_points($id);		// We need to display which points are available
+		$all_points=is_null($id)?array():get_all_approval_points($id);		// We need to display which points are available
 		if ($all_points==array())
 		{
 			$points_list=do_lang('APPROVAL_POINTS_DESCRIPTION_EMPTY_LIST');
@@ -298,6 +285,9 @@ class Module_admin_workflow extends standard_aed_module
 	 */
 	function need_second_screen()
 	{
+		if (post_param_integer('redefined',0)==1)
+			return false;
+
 		// We need to show the second screen if it has been specifically requested
 		// via the edit form
 		if (post_param_integer('redefine_points',0)==1)
@@ -311,7 +301,8 @@ class Module_admin_workflow extends standard_aed_module
 		$point_names=$this->get_points_in_edited_workflow();
 
 		// Find any points which are already defined
-		$all_points=get_all_approval_points();
+		$workflow_id=get_param_integer('id',NULL);
+		$all_points=($workflow_id===NULL)?array():get_all_approval_points($workflow_id);
 
 		// See if we need to define any
 		foreach ($point_names as $p)
@@ -336,7 +327,8 @@ class Module_admin_workflow extends standard_aed_module
 		$point_names=$this->get_points_in_edited_workflow();
 
 		// Find any points which are already defined
-		$all_points=array_flip(get_all_approval_points());
+		$workflow_id=get_param_integer('id',NULL);
+		$all_points=($workflow_id===NULL)?array():get_all_approval_points($workflow_id);
 
 		// This will hold new points
 		$clarify_points=array();
@@ -365,6 +357,11 @@ class Module_admin_workflow extends standard_aed_module
 		foreach (array('points','is_default','name') as $n)
 		{
 			$hidden->attach(form_input_hidden($n,post_param($n,'')));
+		}
+		$hidden->attach(form_input_hidden('redefined','1'));
+		if (!is_null($workflow_id))
+		{
+			$hidden->attach(form_input_hidden('id',strval($workflow_id)));
 		}
 
 		// We need a list of groups so that the user can choose those to give
@@ -404,7 +401,7 @@ class Module_admin_workflow extends standard_aed_module
 			)));
 
 			// These points already exist, so look them up
-			$all_points=array_flip(get_all_approval_points());
+			$all_points=($workflow_id===NULL)?array():array_flip(get_all_approval_points($workflow_id));
 
 			foreach ($redefine_points as $seq_id=>$p)
 			{
@@ -481,18 +478,23 @@ class Module_admin_workflow extends standard_aed_module
 		$name=post_param('name');
 		$is_default=(post_param_integer('is_default',0)==1);
 
-		$workflow_id=post_param_integer('workflow_id');
-		if ($workflow_id==-1)
+		$workflow_id=either_param_integer('id',NULL);
+		$map=array('is_default'=>$is_default?1:0);
+		if ($workflow_id===NULL)
 		{
 			if ($insert_if_needed) // Adding
 			{
-				$map=array();
 				$map+=insert_lang('workflow_name',$name,3);
 				$workflow_id=$GLOBALS['SITE_DB']->query_insert('workflows',$map,true);
 			} else
 			{
 				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 			}
+		} else
+		{
+			$old_name=$GLOBALS['SITE_DB']->query_value('workflows','workflow_name',array('id'=>$workflow_id));
+			$map+=lang_remap('workflow_name',$old_name,$name);
+			$GLOBALS['SITE_DB']->query_update('workflows',$map,array('id'=>$workflow_id));
 		}
 
 		$point_names=$this->get_points_in_edited_workflow();

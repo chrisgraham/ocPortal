@@ -448,7 +448,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		}
 	}
 
-	if (($only_titles) && (array_key_exists(0,$fields)) && ($fields[0]=='')) return array();
+	if (key($fields)=='')
+	{
+		if (($only_titles) && (count($fields)!=0)) return array();
+	}
 
 	if (is_null($raw_fields)) $raw_fields=array();
 
@@ -476,7 +479,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		if (multi_lang_content())
 		{
 			$keywords_where=preg_replace('#\?#','tm.text_original',$meta_content_where);
-			$keywords_where=str_replace(' AND (tm.text_original IS NOT NULL)','',$keywords_where); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
 		} else
 		{
 			$keywords_where=preg_replace('#\?#','meta_keywords',$meta_content_where);
@@ -494,7 +496,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$extra_join='';
 			if (multi_lang_content())
 			{
-				foreach ($fields as $i=>$field) // Translatable fields present in 'select'
+				foreach (array_keys($fields) as $i=>$field) // Translatable fields present in 'select'
 				{
 					if (($field=='') || ($field=='!') || (strpos($select,'t1.text_original')===false)) continue;
 
@@ -566,7 +568,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			{
 				// Each of the fields represents an 'OR' match, so we put it together into a list ($where_alternative_matches) of specifiers for each. Hopefully we will 'UNION' them rather than 'OR' them as it is much more efficient in terms of table index usage
 
-				foreach ($fields as $i=>$field) // Referenced fields in where condition must result in the shared table clause having a reference to the translate for that
+				foreach (array_keys($fields) as $i=>$field) // Referenced fields in where condition must result in the shared table clause having a reference to the translate for that
 				{
 					if ((strpos($select,'t'.strval($i).'.text_original')!==false) || (strpos($where_clause,'t'.strval($i).'.text_original')!==false))
 					{
@@ -574,7 +576,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 						$orig_table_clause.=$tc_add;
 					}
 				}
-				foreach ($fields as $i=>$field) // Translatable fields
+				foreach (array_keys($fields) as $i=>$field) // Translatable fields
 				{
 					if (($field=='') || ($field=='!')) continue;
 
@@ -586,7 +588,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 					if (($only_titles) && ($i!=0)) break;
 
 					$where_clause_2=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where);
-					$where_clause_2=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$where_clause_2); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
 					$where_clause_3=$where_clause;
 					if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
 						$where_clause_3.=(($where_clause=='')?'':' AND ').'NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
@@ -594,7 +595,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 					if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
 					{
 						$_select=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where).' AS contextual_relevance';
-						$_select=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$_select); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
 					} else
 					{
 						$_select='';
@@ -774,11 +774,14 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			list(,$boolean_operator,$body_where,$include_where,$disclude_where)=build_content_where($content,$boolean_search,$boolean_operator);
 
 			$where_clause_and='';
-			$all_fields=array_merge($raw_fields,$fields);
+			$all_fields=array_merge($raw_fields,array_keys($fields));
 			reset($raw_fields);
 			reset($fields);
-			foreach (array($include_where=>'AND',$body_where=>$boolean_operator) as $_where=>$_operator)
+			$search_clause_sets=array(array($include_where,'AND'),array($body_where,$boolean_operator));
+			foreach ($search_clause_sets as $search_clause_set)
 			{
+				list($_where,$_operator)=$search_clause_set;
+
 				foreach ($_where as $__where)
 				{
 					$where_clause_or='';
@@ -787,7 +790,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 					{
 						if (($field=='') || ($field=='!')) continue;
 
-						if (($only_titles) && ($field!==current($raw_fields)) && ($field!==current($fields))) break;
+						if (($only_titles) && ($field!==current($raw_fields)) && ($field!==key($fields))) break;
 
 						if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
 						{
@@ -796,7 +799,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 							$where_clause_or.=' AND NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
 						} else
 						{
-							if (strpos($__where,' AGAINST ')!==false)
+							/*if (strpos($__where,' AGAINST ')!==false)	Does not work, as needs a compound fulltext index
 							{
 								if ($where_clause_or_fields!='')
 								{
@@ -804,10 +807,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 								}
 								$where_clause_or_fields.=$field;
 							} else
-							{
+							{*/
 								if ($where_clause_or!='') $where_clause_or.=' OR ';
 								$where_clause_or.=preg_replace('#\?#',$field,$__where);
-							}
+							/*}*/
 						}
 					}
 
@@ -817,7 +820,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 						$where_clause_or.=preg_replace('#\?#',$where_clause_or_fields,$__where);
 					}
 
-					if ($where_clause_and=='') $where_clause_and.=' '.$boolean_operator.' ';
+					if ($where_clause_and!='') $where_clause_and.=' '.$boolean_operator.' ';
 					$where_clause_and.='('.$where_clause_or.')';
 				}
 			}
@@ -827,7 +830,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				{
 					if (($field=='') || ($field=='!')) continue;
 
-					if (($only_titles) && ($field!==current($raw_fields)) && ($field!==current($fields))) break;
+					if (($only_titles) && ($field!==current($raw_fields)) && ($field!==key($fields))) break;
 
 					if ($where_clause!='')
 						$where_clause.=' AND ';
@@ -839,7 +842,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
 
 			// Work out our queries
-			$query=' FROM '.$_table_clause.' WHERE '.(($where_clause=='')?'':($where_clause.(($where_clause_and=='')?'':' AND ')));
+			$query=' FROM '.$table_clause.' WHERE '.(($where_clause=='')?'':($where_clause.(($where_clause_and=='')?'':' AND ')));
 			if ($where_clause_and!='') $query.='('.$where_clause_and.')';
 			if ($group_by_ok && false/*Actually we cannot assume that r.id exists*/)
 			{
@@ -849,7 +852,6 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$_count_query_main_search='SELECT COUNT(*)'.$query;
 			}
 			$query='SELECT '.$select.$query.($group_by_ok?' GROUP BY r.id':'');
-			$query.=' LIMIT '.strval($max+$start);
 			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
 			{
 				$query.=' ORDER BY '.$order;
@@ -875,7 +877,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$t_count+=$t_main_search_rows_count;
 
 			ocp_profile_start_for('SEARCH:t_main_search_rows');
-			$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
+			$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true,$fields);
 			ocp_profile_end_for('SEARCH:t_main_search_rows',$query);
 			if ($t_main_search_rows===NULL) $t_main_search_rows=array(); // In case of a failed search query
 
@@ -1133,7 +1135,7 @@ function build_content_where($content,$boolean_search,&$boolean_operator,$full_c
 		{
 			$content_where=db_full_text_assemble($content,false);
 			$body_where=array($content_where);
-			$include_where=array($content_where);
+			$include_where=array();
 			$disclude_where='';
 		}
 		$boolean_operator='OR';

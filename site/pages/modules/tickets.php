@@ -102,7 +102,7 @@ class Module_tickets
 				'ticket_id'=>'*SHORT_TEXT',
 				'topic_id'=>'AUTO_LINK',
 				'forum_id'=>'AUTO_LINK',
-				'ticket_type'=>'SHORT_TRANS'
+				'ticket_type'=>'AUTO_LINK'
 			));
 		}
 		if ((!is_null($upgrade_from)) && ($upgrade_from<2))

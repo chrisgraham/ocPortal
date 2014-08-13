@@ -122,10 +122,10 @@ class Hook_search_comcode_pages
 		// Calculate and perform query
 		if ($g_or=='')
 		{
-			$rows=get_search_rows('comcode_page','the_zone:the_page',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'cached_comcode_pages r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages q ON (q.the_zone=r.the_zone AND q.the_page=r.the_page)',array('r.cc_page_title','r.string_index'),$where_clause,$content_where,$remapped_orderer,'r.*');
+			$rows=get_search_rows('comcode_page','the_zone:the_page',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'cached_comcode_pages r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages q ON (q.the_zone=r.the_zone AND q.the_page=r.the_page)',array('r.cc_page_title'=>'SHORT_TRANS','r.string_index'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
 		} else
 		{
-			$rows=get_search_rows('comcode_page','the_zone:the_page',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'cached_comcode_pages r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages q ON (q.the_zone=r.the_zone AND q.the_page=r.the_page) LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_zone_access z ON (z.zone_name=r.the_zone AND ('.str_replace('group_id','z.group_id',$g_or).'))',array('r.cc_page_title','r.string_index'),$where_clause,$content_where,$remapped_orderer,'r.*');
+			$rows=get_search_rows('comcode_page','the_zone:the_page',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'cached_comcode_pages r LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages q ON (q.the_zone=r.the_zone AND q.the_page=r.the_page) LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_zone_access z ON (z.zone_name=r.the_zone AND ('.str_replace('group_id','z.group_id',$g_or).'))',array('r.cc_page_title'=>'SHORT_TRANS','r.string_index'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
 		}
 
 		if (addon_installed('redirects_editor'))

@@ -97,7 +97,7 @@ class Hook_search_cedi_pages
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('seedy_page','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'seedy_pages r',array('r.title','r.description'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'seedy_page','id');
+		$rows=get_search_rows('seedy_page','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'seedy_pages r',array('r.title'=>'SHORT_TRANS','r.description'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'seedy_page','id');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

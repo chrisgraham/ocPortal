@@ -101,12 +101,12 @@ class Database_super_mysql
 			$content=str_replace('"','',$content);
 			if ((strtoupper($content)==$content) && (!is_numeric($content)))
 			{
-				return 'MATCH (?) AGAINST (_latin1\''.$this->db_escape_string($content).'\' COLLATE latin1_general_cs)'.((get_value('alternate_search_join_type')==='1')?' AND (? IS NOT NULL)':'');
+				return 'MATCH (?) AGAINST (_latin1\''.$this->db_escape_string($content).'\' COLLATE latin1_general_cs)';
 			}
-			return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\') AND (? IS NOT NULL)';
+			return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\')';
 		}
 
-		return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\' IN BOOLEAN MODE)'.((get_value('alternate_search_join_type')==='1')?' AND (? IS NOT NULL)':'');
+		return 'MATCH (?) AGAINST (\''.$this->db_escape_string($content).'\' IN BOOLEAN MODE)';
 	}
 
 	/**

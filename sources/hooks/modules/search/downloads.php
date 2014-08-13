@@ -122,7 +122,7 @@ class Hook_search_downloads
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('downloads_download','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_downloads r',array('r.name','r.description','r.comments'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.original_filename','r.download_data_mash'),'downloads','category_id');
+		$rows=get_search_rows('downloads_download','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_downloads r',array('r.name'=>'SHORT_TRANS','r.description'=>'LONG_TRANS__COMCODE','r.comments'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.original_filename','r.download_data_mash'),'downloads','category_id');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

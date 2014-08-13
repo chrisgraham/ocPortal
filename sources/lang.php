@@ -1069,9 +1069,9 @@ function insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$i
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @return array			The language ID save fields
  */
-function lang_remap_comcode($field_name,$id,$text,$connection=NULL,$pass_id=NULL,$source_member=NULL,$as_admin=false)
+function lang_remap_comcode($field_name,$id,$text,$connection=NULL,$pass_id=NULL,$source_user=NULL,$as_admin=false)
 {
-	return lang_remap($field_name,$id,$text,$connection,true,$pass_id,$source_member,$as_admin);
+	return lang_remap($field_name,$id,$text,$connection,true,$pass_id,$source_user,$as_admin);
 }
 
 /**
@@ -1088,10 +1088,10 @@ function lang_remap_comcode($field_name,$id,$text,$connection=NULL,$pass_id=NULL
  * @param  boolean		Whether to backup the language string before changing it
  * @return array			The language ID save fields
  */
-function lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_member=NULL,$as_admin=false,$backup_string=false)
+function lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_user=NULL,$as_admin=false,$backup_string=false)
 {
 	require_code('lang3');
-	return _lang_remap($field_name,$id,$text,$connection,$comcode,$pass_id,$source_member,$as_admin,$backup_string);
+	return _lang_remap($field_name,$id,$text,$connection,$comcode,$pass_id,$source_user,$as_admin,$backup_string);
 }
 
 /**
@@ -1209,7 +1209,7 @@ function get_translated_tempcode($table,$row,$field_name,$connection=NULL,$lang=
 				$row[$field_name]=force_clean_comcode($row[$field_name]); // Highlighting only works with pure Comcode
 			}
 
-			$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_member'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+			$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
 			$LAX_COMCODE=$temp;
 			return $ret;
 		}

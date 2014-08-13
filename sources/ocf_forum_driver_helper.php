@@ -281,10 +281,10 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') '.$topic_filter.$topic_filter_sup;
 	}
 
-	$post_query_select='p.p_title,t.id,p.p_poster,p.p_poster_name_if_guest';
+	$post_query_select='p.p_title,top.id,p.p_poster,p.p_poster_name_if_guest,p.id AS p_id,p_post';
 	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
 	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p';
-	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
+	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.=' USE INDEX(in_topic) ';
 	$post_query_sql.=' WHERE '.$post_query_where.' ORDER BY p_time,p.id';
 
 	if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result)
@@ -312,7 +312,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['forum_id']=$r['t_forum_id'];
 
 		$_post_query_sql=str_replace('top.id',strval($out[$i]['id']),$post_query_sql);
-		$fp_rows=$this_ref->connection->query($_post_query_sql,1);
+		$fp_rows=$this_ref->connection->query($_post_query_sql,1,NULL,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 		if (!array_key_exists(0,$fp_rows))
 		{
 			unset($out[$i]);
@@ -323,7 +323,16 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['firsttitle']=$fp_rows[0]['p_title'];
 		if ($show_first_posts)
 		{
-			$out[$i]['firstpost']=get_translated_tempcode('f_posts',$fp_rows[0],'p_post',$GLOBALS['FORUM_DB']);
+			$post_row=array(
+				'id'=>$fp_rows[0]['p_id'],
+				'p_post'=>$fp_rows[0]['p_post'],
+			);
+			if (!multi_lang_content())
+			{
+				$post_row['p_post__text_parsed']=$fp_rows[0]['p_post__text_parsed'];
+				$post_row['p_post__source_user']=$fp_rows[0]['p_post__source_user'];
+			}
+			$out[$i]['firstpost']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 		}
 	}
 	if (count($out)!=0) return $out;
@@ -427,7 +436,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	{
 		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where.' ORDER BY '.$order,$max,$start,false,false,array('p_post'=>'LONG_TRANS__COMCODE'));
 	}
-	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where,NULL,NULL,false,false,array('p_post'=>'LONG_TRANS__COMCODE'));
+	$count=$this_ref->connection->query_value_null_ok_full('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where,false,false,array('p_post'=>'LONG_TRANS__COMCODE'));
 
 	$out=array();
 	foreach ($rows as $myrow)
@@ -441,7 +450,18 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 			if ((!$light_if_threaded) || (!$is_threaded))
 			{
 				$temp['title']=$myrow['p_title'];
-				$temp['message']=get_translated_tempcode('f_posts',$myrow,'p_post',$GLOBALS['FORUM_DB']);
+
+				$post_row=array(
+					'id'=>$myrow['id'],
+					'p_post'=>$myrow['p_post'],
+				);
+				if (!multi_lang_content())
+				{
+					$post_row['p_post__text_parsed']=$myrow['p_post__text_parsed'];
+					$post_row['p_post__source_user']=$myrow['p_post__source_user'];
+				}
+				$temp['message']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+
 				$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
 				$temp['user']=$myrow['p_poster'];
 				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];

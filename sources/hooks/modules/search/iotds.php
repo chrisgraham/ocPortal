@@ -99,7 +99,7 @@ class Hook_search_iotds
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'iotd r',array('','r.caption'),$where_clause,$content_where,$remapped_orderer,'r.*');
+		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'iotd r',array(''=>'','r.caption'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

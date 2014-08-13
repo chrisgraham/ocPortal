@@ -246,7 +246,7 @@ class Hook_search_ocf_members
 					$raw_fields[]='field_'.strval($row['id']);
 			} else
 			{
-				$trans_fields[]='field_'.strval($row['id']);
+				$trans_fields['field_'.strval($row['id'])]='LONG_TRANS__COMCODE';
 			}
 		}
 		$age_range=get_param('option__age_range',get_param('option__age_range_from','').'-'.get_param('option__age_range_to',''));
@@ -292,7 +292,7 @@ class Hook_search_ocf_members
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_members r JOIN '.get_table_prefix().'f_member_custom_fields a ON r.id=a.mf_member_id'.$table,array('!','m_signature')+$trans_fields,$where_clause,$content_where,$remapped_orderer,'r.*,a.*,r.id AS id',$raw_fields);
+		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_members r JOIN '.get_table_prefix().'f_member_custom_fields a ON r.id=a.mf_member_id'.$table,array('!'=>'!','m_signature'=>'LONG_TRANS__COMCODE')+$trans_fields,$where_clause,$content_where,$remapped_orderer,'r.*,a.*,r.id AS id',$raw_fields);
 
 		$out=array();
 		foreach ($rows as $i=>$row)

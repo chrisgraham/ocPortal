@@ -431,8 +431,13 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 
 			if ((is_null($topic_row['_trans_post'])) || ($topic_row['_trans_post']==''))
 			{
-				if (!is_null($topic_row['t_cache_first_post'])) $topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
-				else $topic['first_post']=new ocp_tempcode();
+				if (!is_null($topic_row['t_cache_first_post']))
+				{
+					$topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
+				} else
+				{
+					$topic['first_post']=new ocp_tempcode();
+				}
 			} else
 			{
 				$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));

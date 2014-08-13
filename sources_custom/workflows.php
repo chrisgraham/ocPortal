@@ -98,7 +98,7 @@ function get_all_workflows()
 	$output=array();
 	foreach ($workflows as $w)
 	{
-		$output[$w]=get_translated_text($w['workflow_name']);
+		$output[]=get_translated_text($w['workflow_name']);
 	}
 	return $output;
 }
@@ -857,7 +857,7 @@ function add_content_to_workflow($content_type='',$content_id='',$workflow_id=NU
  */
 function get_all_approval_points($workflow_id)
 {
-	$workflow_approval_points=$GLOBALS['SITE_DB']->query_select('workflow_approval_points',array('id','workflow_approval_name'));
+	$workflow_approval_points=$GLOBALS['SITE_DB']->query_select('workflow_approval_points',array('id','workflow_approval_name'),array('workflow_id'=>$workflow_id),'ORDER BY the_position');
 	$approval_points=array();
 	foreach ($workflow_approval_points as $r)
 	{
