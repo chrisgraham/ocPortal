@@ -183,7 +183,7 @@ class Database_Static_access
 			$type=$type_remap[$type];
 
 			$_fields.='	  '.$name.' '.$type;
-			if (substr($name,-10)=='__text_parsed')
+			if (substr($name,-13)=='__text_parsed')
 			{
 				$_fields.=' DEFAULT \'\'';
 			} elseif (substr($name,-13)=='__source_user')

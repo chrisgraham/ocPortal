@@ -42,9 +42,12 @@ class Hook_rss_ocf_forumview
 		$filters=ocfilter_to_sqlfragment($_filters,'t_forum_id','f_forums','f_parent_forum','t_forum_id','id',true,true,$GLOBALS['FORUM_DB']); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
 		$sql='SELECT t.*';
-		if (!multi_lang_content())
+		if (multi_lang_content())
 		{
-			$sql.=',p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
+			$sql.=',t_cache_first_post AS p_post';
+		} else
+		{
+			$sql.=',p_post,p_post__text_parsed,p_post__source_user';
 		}
 		$sql.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t';
 		if (!multi_lang_content())
@@ -69,7 +72,16 @@ class Hook_rss_ocf_forumview
 				if ($edit_date==$news_date) $edit_date='';
 
 				$news_title=xmlentities($row['t_cache_first_title']);
-				$_summary=get_translated_tempcode('f_posts',$row,'t_cache_first_post');
+				$post_row=array(
+					'id'=>$row['p_cache_first_post_id'],
+					'p_post'=>$row['p_post'],
+				);
+				if (!multi_lang_content())
+				{
+					$post_row['p_post__text_parsed']=$row['p_post__text_parsed'];
+					$post_row['p_post__source_user']=$row['p_post__source_user'];
+				}
+				$_summary=get_translated_tempcode('f_posts',$post_row,'p_post');
 				$summary=xmlentities($_summary->evaluate());
 				$news='';
 

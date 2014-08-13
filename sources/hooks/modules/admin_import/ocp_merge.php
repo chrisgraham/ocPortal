@@ -342,9 +342,9 @@ class Hook_ocp_merge
 				'q_points_for_passing'=>array_key_exists('q_points_for_passing',$row)?$row['q_points_for_passing']:0,
 			);
 			$map+=insert_lang('q_name',$this->get_lang_string($db,$row['q_name']),2);
-			$map+=insert_lang('q_start_text',$start_text,2);
-			$map+=insert_lang('q_end_text',$end_text,2);
-			$map+=insert_lang('q_end_text_fail',$end_text_fail,2);
+			$map+=insert_lang_comcode('q_start_text',$start_text,2);
+			$map+=insert_lang_comcode('q_end_text',$end_text,2);
+			$map+=insert_lang_comcode('q_end_text_fail',$end_text_fail,2);
 			if (get_param_integer('keep_preserve_ids',0)==1) $map['id']=$row['id'];
 			$id_new=$GLOBALS['SITE_DB']->query_insert('quizzes',$map,true);
 
@@ -383,7 +383,7 @@ class Hook_ocp_merge
 				'q_question'=>$question,
 				'q_is_correct'=>$row['q_is_correct'],
 			);
-			$map+=insert_lang('q_answer_text',array_key_exists('q_answer_text',$row)?$this->get_lang_string($db,$row['q_answer_text']):'',2);
+			$map+=insert_lang_comcode('q_answer_text',array_key_exists('q_answer_text',$row)?$this->get_lang_string($db,$row['q_answer_text']):'',2);
 			$map+=insert_lang('q_explanation',array_key_exists('q_explanation',$row)?$this->get_lang_string($db,$row['q_explanation']):'',2);
 			$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',$map);
 		}
@@ -1016,7 +1016,7 @@ class Hook_ocp_merge
 				'active_now'=>$row['active_now'],
 				'notes'=>$row['notes'],
 			);
-			$map+=insert_lang('the_message',$this->get_lang_string($db,$row['the_message']),2);
+			$map+=insert_lang_comcode('the_message',$this->get_lang_string($db,$row['the_message']),2);
 			$GLOBALS['SITE_DB']->query_insert('text',$map);
 		}
 	}
@@ -1535,7 +1535,7 @@ class Hook_ocp_merge
 			if (is_null($test))
 			{
 				$row=insert_lang('c_title',$this->get_lang_string($db,$row['c_title']),2)+$row;
-				$row=insert_lang('c_description',$this->get_lang_string($db,$row['c_description']),2)+$row;
+				$row=insert_lang_comcode('c_description',$this->get_lang_string($db,$row['c_description']),2)+$row;
 				if (!array_key_exists('c_display_type',$row))
 				{
 					$row['c_display_type']=$row['c_own_pages'];
@@ -1707,7 +1707,7 @@ class Hook_ocp_merge
 			if (import_check_if_imported('award_type',strval($row['id']))) continue;
 
 			$row=insert_lang('a_title',$this->get_lang_string($db,$row['a_title']),2)+$row;
-			$row=insert_lang('a_description',$this->get_lang_string($db,$row['a_description']),2)+$row;
+			$row=insert_lang_comcode('a_description',$this->get_lang_string($db,$row['a_description']),2)+$row;
 
 			$id_old=$row['id'];
 			unset($row['id']);
@@ -2002,7 +2002,7 @@ class Hook_ocp_merge
 							$cpf_type=$cpf_types[$cpf_id];
 							if (($cpf_type=='short_trans') || ($cpf_type=='long_trans'))
 							{
-								$row2=insert_lang('field_'.strval($cpf_id),$this->get_lang_string($db,intval($val)),3)+$row;
+								$row2=insert_lang_comcode('field_'.strval($cpf_id),$this->get_lang_string($db,intval($val)),3)+$row;
 							} else
 							{
 								$row2['field_'.strval($cpf_id)]=$val;

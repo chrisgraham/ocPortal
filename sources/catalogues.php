@@ -738,11 +738,8 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 			$map['_FIELD_'.strval($field['id'])]=$use_ev;
 			$map['FIELD_'.strval($i).'_PLAIN']=$ev;
 			$map['_FIELD_'.strval($field['id']).'_PLAIN']=$ev;
-			if (array_key_exists('effective_value_pure',$field))
-			{
-				$map['FIELD_'.strval($i).'_PURE']=$field['effective_value_pure'];
-				$map['_FIELD_'.strval($field['id']).'_PURE']=$field['effective_value_pure'];
-			}
+			$map['FIELD_'.strval($i).'_PURE']=$field['effective_value_pure'];
+			$map['_FIELD_'.strval($field['id']).'_PURE']=$field['effective_value_pure'];
 			$field_name=get_translated_text($field['cf_name']);
 			$map['FIELDNAME_'.strval($i)]=$field_name;
 			$fields_2d[]=array('NAME'=>$field_name,'VALUE'=>$use_ev);
@@ -1001,7 +998,7 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 			} else
 			{
 				$target['effective_value']=float_to_raw_string($temp['cv_value']);
-				$target['effective_pure']=$target['effective_value'];
+				$target['effective_value_pure']=$target['effective_value'];
 			}
 			break;
 		case 'integer_unescaped':
@@ -1014,7 +1011,7 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 			} else
 			{
 				$target['effective_value']=strval($temp['cv_value']);
-				$target['effective_pure']=$target['effective_value'];
+				$target['effective_value_pure']=$target['effective_value'];
 			}
 			break;
 		default:
@@ -1048,7 +1045,17 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 			foreach (array('catalogue_efv_float','catalogue_efv_integer','catalogue_efv_long','catalogue_efv_long_trans','catalogue_efv_short','catalogue_efv_short_trans',) as $table)
 			{
 				if ($query!='') $query.=' UNION ';
-				$query.='SELECT f.id AS f_id,v.*';
+				$query.='SELECT f.id AS f_id,v.cv_value';
+				if (!multi_lang_content())
+				{
+					if (strpos($table,'_trans')!==false)
+					{
+						$query.=',v.cv_value__text_parsed,v.cv_value__source_user';
+					} else
+					{
+						$query.=',NULL AS cv_value__text_parsed,NULL AS cv_value__source_user';
+					}
+				}
 				$query.=' FROM '.get_table_prefix().'catalogue_fields f JOIN '.get_table_prefix().$table.' v ON v.cf_id=f.id';
 				$query.=' WHERE v.ce_id='.strval($entry_id);
 				if (!is_null($only_field_ids))

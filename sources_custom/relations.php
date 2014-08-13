@@ -391,6 +391,10 @@ function get_relation_map()
 		'members_gifts.gift_id'=>'gifts.id',
 		'temp_block_permissions.p_session_id'=>'sessions.id',
 		'credit_purchases.member_id'=>'f_members.id',
+		'workflow_approval_points.workflow_id'=>'workflows.id',
+		'workflow_content.workflow_id'=>'workflows.id',
+		'workflow_content_status.workflow_approval_point_id'=>'workflow_approval_points.id',
+		'workflow_permissions.workflow_approval_point_id'=>'workflow_approval_points.id',
 	);
 
 	return $relation_map;

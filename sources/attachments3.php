@@ -122,7 +122,7 @@ function update_lang_comcode_attachments($field_name,$lang_id,$text,$type,$id,$c
 
 	_check_attachment_count();
 
-	if ($backup_string)
+	if (($backup_string) && (multi_lang_content()))
 	{
 		if (multi_lang())
 		{

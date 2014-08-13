@@ -21,7 +21,7 @@ if (!function_exists('parse_translated_text'))
 	 * @param  boolean			Whether to force as_admin, even if the lang string isn't stored against an admin (designed for comcode page cacheing)
 	 * @return ?tempcode			The parsed comcode (NULL: the text couldn't be looked up)
 	 */
-	function parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin)
+	function parse_translated_text($table,&$row,$field_name,$connection,$lang,$force,$as_admin)
 	{
 		global $SEARCH__CONTENT_BITS;
 		global $LAX_COMCODE;
@@ -94,17 +94,17 @@ if (!function_exists('parse_translated_text'))
 			require_code('comcode'); // might not have been loaded for a quick-boot
 			require_code('permissions');
 
-			global $LAX_COMCODE;
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			$map=_lang_remap($field_name,$entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+			$map=_lang_remap($field_name,$entry,$row[$field_name],$connection,true,NULL,$row[$field_name.'__source_user'],$as_admin,false,true);
 			if (!multi_lang_content())
 			{
 				$connection->query_update($table,$map,$row,'',1);
+				$row=$map+$row;
 			}
 			if (!is_null($SEARCH__CONTENT_BITS))
 			{
-				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+				$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
 				$LAX_COMCODE=$temp;
 				$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 				return $ret;

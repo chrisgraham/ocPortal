@@ -67,6 +67,22 @@ function init__database()
 }
 
 /**
+ * Find whether to run in multi-lang mode for content translations.
+ *
+ * @return boolean		Whether to run in multi-lang mode for content translations.
+ */
+function multi_lang_content()
+{
+	static $ret=NULL;
+	if ($ret===NULL)
+	{
+		global $SITE_INFO;
+		$ret=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):true;
+	}
+	return $ret;
+}
+
+/**
  * Called once our DB connection becomes active.
  */
 function _general_db_init()
@@ -77,23 +93,32 @@ function _general_db_init()
 	$TABLE_LANG_FIELDS=function_exists('persistent_cache_get')?persistent_cache_get('TABLE_LANG_FIELDS'):NULL;
 	if ($TABLE_LANG_FIELDS===NULL)
 	{
-		$TABLE_LANG_FIELDS=array();
-
-		$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table,m_type FROM '.get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
-		if ($_table_lang_fields!==NULL)
-		{
-			foreach ($_table_lang_fields as $lang_field)
-			{
-				if (!isset($TABLE_LANG_FIELDS[$lang_field['m_table']]))
-					$TABLE_LANG_FIELDS[$lang_field['m_table']]=array();
-
-				$TABLE_LANG_FIELDS[$lang_field['m_table']][$lang_field['m_name']]=$lang_field['m_type'];
-			}
-		}
-
-		if (function_exists('persistent_cache_set'))
-			persistent_cache_set('TABLE_LANG_FIELDS',$TABLE_LANG_FIELDS);
+		reload_lang_fields();
 	}
+}
+
+/**
+ * Reload language fields from the database.
+ */
+function reload_lang_fields()
+{
+	global $TABLE_LANG_FIELDS;
+	$TABLE_LANG_FIELDS=array();
+
+	$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table,m_type FROM '.get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
+	if ($_table_lang_fields!==NULL)
+	{
+		foreach ($_table_lang_fields as $lang_field)
+		{
+			if (!isset($TABLE_LANG_FIELDS[$lang_field['m_table']]))
+				$TABLE_LANG_FIELDS[$lang_field['m_table']]=array();
+
+			$TABLE_LANG_FIELDS[$lang_field['m_table']][$lang_field['m_name']]=$lang_field['m_type'];
+		}
+	}
+
+	if (function_exists('persistent_cache_set'))
+		persistent_cache_set('TABLE_LANG_FIELDS',$TABLE_LANG_FIELDS);
 }
 
 /**
@@ -1053,77 +1078,80 @@ class database_driver
 			ocp_profile_end_for('_query:HIGH_VOLUME_ALERT');
 		}
 
-		if (multi_lang_content())
+		$lang_strings_expecting=array();
+		if ($lang_fields!==NULL)
 		{
-			$lang_strings_expecting=array();
-			if ((count($lang_fields)!=0) && ((strpos($query,'text_original')!==false) || (function_exists('user_lang')) && ((is_null($start)) || ($start<200))))
+			if (multi_lang_content())
 			{
-				$lang=function_exists('user_lang')?user_lang():get_site_default_lang(); // We can we assume this, as we will cache against it -- if subsequently code wants something else it'd be a cache miss which is fine
-
-				foreach ($lang_fields as $field=>$field_type)
+				if ((strpos($query,'text_original')!==false) || (function_exists('user_lang')) && ((is_null($start)) || ($start<200)))
 				{
-					$join=' LEFT JOIN '.$this->table_prefix.'translate t_'.$field.' ON t_'.$field.'.id='.$field_prefix.$field;
-					if (strpos($query,'t_'.$field.'.text_original')===false)
-						$join.=' AND '.db_string_equal_to('t_'.$field.'.language',$lang);
+					$lang=function_exists('user_lang')?user_lang():get_site_default_lang(); // We can we assume this, as we will cache against it -- if subsequently code wants something else it'd be a cache miss which is fine
 
-					$_query=strtoupper($query);
-					$from_pos=strpos($_query,' FROM ');
-					$where_pos=strpos($_query,' WHERE ');
-					if ($where_pos===false)
+					foreach ($lang_fields as $field=>$field_type)
 					{
-						$_where_pos=0;
-						do
+						$join=' LEFT JOIN '.$this->table_prefix.'translate t_'.$field.' ON t_'.$field.'.id='.$field_prefix.$field;
+						if (strpos($query,'t_'.$field.'.text_original')===false)
+							$join.=' AND '.db_string_equal_to('t_'.$field.'.language',$lang);
+
+						$_query=strtoupper($query);
+						$from_pos=strrpos($_query,' FROM ');
+						$where_pos=strrpos($_query,' WHERE ');
+						if ($where_pos===false)
 						{
-							$_where_pos=strpos($_query,' GROUP BY ',$_where_pos+1);
-							if ($_where_pos!==false) $where_pos=$_where_pos;
+							$_where_pos=0;
+							do
+							{
+								$_where_pos=strpos($_query,' GROUP BY ',$_where_pos+1);
+								if ($_where_pos!==false) $where_pos=$_where_pos;
+							}
+							while ($_where_pos!==false);
 						}
-						while ($_where_pos!==false);
-					}
-					if ($where_pos===false)
-					{
-						$_where_pos=0;
-						do
+						if ($where_pos===false)
 						{
-							$_where_pos=strpos($_query,' ORDER BY ',$_where_pos+1);
-							if ($_where_pos!==false) $where_pos=$_where_pos;
+							$_where_pos=0;
+							do
+							{
+								$_where_pos=strpos($_query,' ORDER BY ',$_where_pos+1);
+								if ($_where_pos!==false) $where_pos=$_where_pos;
+							}
+							while ($_where_pos!==false);
 						}
-						while ($_where_pos!==false);
-					}
-					if ($where_pos!==false)
-					{
-						$query=substr($query,0,$where_pos).$join.substr($query,$where_pos);
-					} else
-					{
-						$query.=$join;
-					}
+						if ($where_pos!==false)
+						{
+							$query=substr($query,0,$where_pos).$join.substr($query,$where_pos);
+						} else
+						{
+							$query.=$join;
+						}
 
-					$before_from=substr($query,0,$from_pos);
-					if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)
-					{
-						$original='t_'.$field.'.text_original AS t_'.$field.'__text_original';
-						$parsed='t_'.$field.'.text_parsed AS t_'.$field.'__text_parsed';
+						$before_from=substr($query,0,$from_pos);
+						if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)
+						{
+							$original='t_'.$field.'.text_original AS t_'.$field.'__text_original';
+							$parsed='t_'.$field.'.text_parsed AS t_'.$field.'__text_parsed';
 
-						$query=$before_from.','.$original.','.$parsed.substr($query,$from_pos);
+							$query=$before_from.','.$original.','.$parsed.substr($query,$from_pos);
 
-						$lang_strings_expecting[]=array($field,'t_'.$field.'__text_original','t_'.$field.'__text_parsed');
+							$lang_strings_expecting[]=array($field,'t_'.$field.'__text_original','t_'.$field.'__text_parsed');
+						}
 					}
 				}
-			}
-		} else
-		{
-			foreach ($lang_fields as $field=>$field_type)
+			} else
 			{
-				if (strpos($field_type,'__COMCODE')!==false)
+				foreach ($lang_fields as $field=>$field_type)
 				{
-					$from_pos=strpos(strtoupper($query),' FROM ');
-					$before_from=substr($query,0,$from_pos);
-
-					if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)
+					if (strpos($field_type,'__COMCODE')!==false)
 					{
-						$source_user='t_'.$field.'.source_user AS t_'.$field.'__source_user';
-						$parsed='t_'.$field.'.text_parsed AS t_'.$field.'__text_parsed';
+						$from_pos=strrpos(strtoupper($query),' FROM ');
+						$before_from=substr($query,0,$from_pos);
 
-						$query=$before_from.','.$original.','.$parsed.substr($query,$from_pos);
+						if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)
+						{
+							$source_user=$field.'__source_user';
+							$parsed=$field.'__text_parsed';
+
+							$query=$before_from.','.$source_user.','.$parsed.substr($query,$from_pos);
+						}
 					}
 				}
 			}

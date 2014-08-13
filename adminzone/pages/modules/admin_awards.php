@@ -113,7 +113,7 @@ class Module_admin_awards extends standard_aed_module
 				'a_update_time_hours'=>168
 			);
 			$map+=lang_code_to_default_content('a_title','DOTW');
-			$map+=lang_code_to_default_content('a_description','DESCRIPTION_DOTW');
+			$map+=lang_code_to_default_content('a_description','DESCRIPTION_DOTW',true);
 			$GLOBALS['SITE_DB']->query_insert('award_types',$map);
 		}
 	}

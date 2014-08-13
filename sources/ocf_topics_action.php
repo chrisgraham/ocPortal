@@ -97,7 +97,6 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 		't_is_open'=>$open,
 		't_poll_id'=>NULL,
 		't_cache_first_post_id'=>NULL,
-		't_cache_first_post'=>multi_lang_content()?NULL:'',
 		't_cache_first_time'=>NULL,
 		't_cache_first_title'=>'',
 		't_cache_first_username'=>'',
@@ -111,6 +110,15 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 		't_pt_from_category'=>'',
 		't_pt_to_category'=>''
 	);
+	if (multi_lang_content())
+	{
+		$map['t_cache_first_post']=NULL;
+	} else
+	{
+		$map['t_cache_first_post']='';
+		$map['t_cache_first_post__text_parsed']='';
+		$map['t_cache_first_post__source_user']=db_get_first_id();
+	}
 	if (!is_null($id)) $map['id']=$id;
 
 	return $GLOBALS['FORUM_DB']->query_insert('f_topics',$map,true);

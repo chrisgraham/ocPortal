@@ -222,6 +222,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		} else
 		{
 			$map['p_post']='';
+			$map['p_post__text_parsed']='';
+			$map['p_post__source_user']=db_get_first_id();
 		}
 	}
 

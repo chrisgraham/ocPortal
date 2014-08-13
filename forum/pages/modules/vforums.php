@@ -158,7 +158,7 @@ class Module_vforums
 		foreach (is_array($condition)?$condition:array($condition) as $_condition)
 		{
 			$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).' WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL ORDER BY '.$order;
-			if ($start<200)
+			if (($start<200) && (multi_lang_content()))
 			{
 				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,l_time'.$query,$max,$start,NULL,NULL,false,false,array('t_cache_first_post'=>'?LONG_TRANS__COMCODE')));
 			} else // deep search, so we need to make offset more efficient, trade-off is more queries

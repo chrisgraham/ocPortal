@@ -333,13 +333,15 @@ if (!function_exists('get_translated_text'))
 	/**
 	 * Try to return the human-readable version of the language id, passed in as $entry.
 	 *
-	 * @param  integer			The id
+	 * @param  mixed				The ID (if multi-lang-content on), or the string itself
 	 * @param  ?object			The database connection to use (NULL: standard site connection)
 	 * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
 	 * @return string				The human-readable version
 	 */
 	function get_translated_text($entry,$connection=NULL,$lang=NULL)
 	{
+		if (!multi_lang_content()) return $entry;
+
 		if ($entry==0) return do_lang('FAILED_ENTRY');
 
 		if ($entry===NULL) fatal_exit(do_lang_tempcode('NULL_LANG_STRING'));

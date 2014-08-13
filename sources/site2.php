@@ -368,7 +368,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 		{
 			$map['string_index']=$result;
 			$map['string_index__source_user']=$page_submitter;
-			$map['string_index__tempcode']=$text2;
+			$map['string_index__text_parsed']=$text2;
 		}
 		$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map,false,true); // Race conditions
 
@@ -417,7 +417,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 			$map+=insert_lang('cc_page_title',clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
 			$map['string_index']=$result;
 			$map['string_index__source_user']=$page_submitter;
-			$map['string_index__tempcode']=$text2;
+			$map['string_index__text_parsed']=$text2;
 			$GLOBALS['SITE_DB']->query_update('cached_comcode_pages',$map,array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()),'',1);
 		}
 	}

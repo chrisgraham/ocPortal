@@ -90,7 +90,7 @@ function _check_sizes($primary_key,$fields,$id_name,$skip_size_check=false,$skip
 		{
 			fatal_exit('You may not have a NULL string field');
 		}
-		if (($key) && (substr($id_name,0,1)!='#') && (!$size_restricted) && (($field=='LONG_TEXT') || ($field=='LONG_TRANS__COMCODE'))) fatal_exit('You may not use a '.$field.' field for part of a key');
+		//if (($key) && (substr($id_name,0,1)!='#') && (!$size_restricted) && (($field=='LONG_TEXT') || ($field=='LONG_TRANS__COMCODE'))) fatal_exit('You may not use a '.$field.' field for part of a key');
 		if (($key) && ($primary_key) && ($null)) fatal_exit('No field that may be NULL may be a part of a primary key');
 		if (in_array(strtoupper($name),$keywords)) fatal_exit($name.' is a keyword');
 		if ((preg_match('#^[\w]+$#',$name)==0) || (strlen($name)>DB_MAX_FIELD_IDENTIFIER_SIZE)) fatal_exit('Inappropriate identifier: '.$name);
@@ -152,6 +152,7 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 		$this_ref->connection_write=call_user_func_array(array($this_ref->static_ob,'db_get_connection'),$this_ref->connection_write);
 		_general_db_init();
 	}
+
 	$this_ref->static_ob->db_create_table($this_ref->table_prefix.$table_name,$fields,$this_ref->connection_write);
 
 	// Considering tabes in a DB reference may be in multiple (if they point to same actual DB's), make sure all our DB objects have their cache cleared
@@ -164,12 +165,11 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 	{
 		if (strpos($type,'_TRANS')!==false)
 		{
-			$GLOBALS['SITE_DB']->create_index($table_name,'#search_'.$name,array($name));
+			$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
 		}
 	}
 
-	if (function_exists('persistent_cache_delete'))
-		persistent_cache_delete('TABLE_LANG_FIELDS');
+	reload_lang_fields();
 }
 
 /**
@@ -205,13 +205,18 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 
 	$keywords=get_db_keywords();
 	if (in_array(strtoupper($index_name),$keywords)) fatal_exit($index_name.' is a keyword');
-	if ((preg_match('#^[\#\w]+$#',$index_name)==0) || (strlen($index_name)+7>DB_MAX_IDENTIFIER_SIZE)) fatal_exit('Inappropriate identifier: '.$index_name);
+	if (preg_match('#^[\#\w]+$#',$index_name)==0) fatal_exit('Inappropriate identifier: '.$index_name);
+	if (strlen($index_name)+7>DB_MAX_IDENTIFIER_SIZE) fatal_exit('Inappropriate identifier, too long: '.$index_name);
 
 	$_fields='';
 	foreach ($fields as $field)
 	{
 		if ($_fields!='') $_fields.=',';
 		$_fields.=$field;
+
+		global $TABLE_LANG_FIELDS;
+		if (isset($TABLE_LANG_FIELDS[$table_name][$field]))
+			$_fields.='(255)';
 	}
 	$this_ref->query_insert('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name,'i_fields'=>$_fields),false,true); // Allow errors because sometimes bugs when developing can call for this happening twice
 
@@ -366,6 +371,7 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 
 	$type_remap=$this_ref->static_ob->db_get_type_remap();
 
+	$final_type=$_type;
 	if (strpos($_type,'_TRANS')!==false)
 	{
 		if ((is_null($default)) && (strpos($_type,'?')===false))
@@ -382,43 +388,21 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 			}
 		} else
 		{
-			if (strpos($_type,'__COMCODE')!==false)
-			{
-				foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
-				{
-					$sub_name=$name.'__'.$sub_name;
-					$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$sub_name.' '.$type_remap[$sub_type];
-					if ($sub_name=='text_parsed')
-					{
-						$query.=' DEFAULT \'\'';
-					} elseif ($sub_name=='source_user')
-					{
-						$query.=' DEFAULT '.strval(db_get_first_id());
-					}
-					$query.=' NOT NULL';
-					$this_ref->_query($query);
-
-					if (isset($GLOBALS['XML_CHAIN_DB']))
-					{
-						// DB chaining: It's a write query, so needs doing on chained DB too
-						$GLOBALS['XML_CHAIN_DB']->_query($query);
-					}
-				}
-			}
+			$final_type='LONG_TEXT'; // In the DB layer, it must now save as such
 		}
 	}
 
-	if ($_type[0]=='?')
+	if ($final_type[0]=='?')
 	{
-		$type=substr($_type,1);
+		$type=substr($final_type,1);
 		$tag=' NULL';
 	} else
 	{
 		$tag=' NOT NULL';
-		$type=$_type;
+		$type=$final_type;
 	}
 	$extra='';
-	if (($_type!='LONG_TEXT') || (get_db_type()=='postgresql')) $extra=is_null($default)?'DEFAULT NULL':(' DEFAULT '.(is_string($default)?('\''.db_escape_string($default).'\''):strval($default)));
+	if (($final_type!='LONG_TEXT') || (get_db_type()=='postgresql')) $extra=is_null($default)?'DEFAULT NULL':(' DEFAULT '.(is_string($default)?('\''.db_escape_string($default).'\''):strval($default)));
 	$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$name.' '.$type_remap[$type].' '.$extra.' '.$tag;
 	$this_ref->_query($query);
 
@@ -428,26 +412,54 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 		$GLOBALS['XML_CHAIN_DB']->_query($query);
 	}
 
-	if (!is_null($default_st))
+	if (multi_lang_content())
 	{
-		$start=0;
-		do
+		if (!is_null($default_st))
 		{
-			$rows=$this_ref->_query('SELECT * FROM '.$this_ref->get_table_prefix().$table_name,1000,$start);
-			foreach ($rows as $row)
+			$start=0;
+			do
 			{
-				$this_ref->query_update($table_name,insert_lang($name,$default_st,$lang_level),$row);
+				$rows=$this_ref->_query('SELECT * FROM '.$this_ref->get_table_prefix().$table_name,1000,$start);
+				foreach ($rows as $row)
+				{
+					$this_ref->query_update($table_name,insert_lang($name,$default_st,$lang_level),$row);
+				}
+				$start+=1000;
 			}
-			$start+=1000;
+			while (count($rows)>0);
 		}
-		while (count($rows)>0);
 	}
 
 	$this_ref->query_insert('db_meta',array('m_table'=>$table_name,'m_name'=>$name,'m_type'=>$_type));
+	reload_lang_fields();
 
 	if (strpos($_type,'_TRANS')!==false)
 	{
-		$GLOBALS['SITE_DB']->create_index($table_name,'#search_'.$name,array($name));
+		$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
+	}
+
+	if ((!multi_lang_content()) && (strpos($_type,'__COMCODE')!==false))
+	{
+		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
+		{
+			$sub_name=$name.'__'.$sub_name;
+			$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$sub_name.' '.$type_remap[$sub_type];
+			if ($sub_name=='text_parsed')
+			{
+				$query.=' DEFAULT \'\'';
+			} elseif ($sub_name=='source_user')
+			{
+				$query.=' DEFAULT '.strval(db_get_first_id());
+			}
+			$query.=' NOT NULL';
+			$this_ref->_query($query);
+
+			if (isset($GLOBALS['XML_CHAIN_DB']))
+			{
+				// DB chaining: It's a write query, so needs doing on chained DB too
+				$GLOBALS['XML_CHAIN_DB']->_query($query);
+			}
+		}
 	}
 
 	if (function_exists('persistent_cache_delete'))

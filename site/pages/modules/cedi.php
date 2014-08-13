@@ -764,6 +764,8 @@ class Module_cedi
 		} else
 		{
 			$map['the_message']='';
+			$map['the_message__text_parsed']='';
+			$map['the_message__source_user']=get_member();
 		}
 		$post_id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',$map,true);
 		require_code('attachments2');

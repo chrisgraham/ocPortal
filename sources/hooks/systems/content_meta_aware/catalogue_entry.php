@@ -77,6 +77,6 @@ function generate_catalogue_entry_moniker($url_parts)
 	require_code('catalogues');
 	$fields=get_catalogue_entry_field_values(NULL,intval($url_parts['id']),array(0),NULL);
 	$field=array_shift($fields);
-	$value=array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['effective_value'];
+	$value=$field['effective_value_pure'];
 	return strip_comcode($value);
 }

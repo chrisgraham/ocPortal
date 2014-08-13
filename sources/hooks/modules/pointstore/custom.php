@@ -146,7 +146,7 @@ class Hook_pointstore_custom
 				'c_one_per_member'=>$one_per_member,
 			);
 			$map+=insert_lang('c_title',$title,2);
-			$map+=insert_lang('c_description',$description,2);
+			$map+=insert_lang_comcode('c_description',$description,2);
 			$map+=insert_lang('c_mail_subject',$mail_subject,2);
 			$map+=insert_lang('c_mail_body',$mail_body,2);
 			$GLOBALS['SITE_DB']->query_insert('pstore_customs',$map);

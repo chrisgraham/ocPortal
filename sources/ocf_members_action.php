@@ -270,7 +270,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 
 		if (strpos($storage_type,'_trans')!==false)
 		{
-			$row=insert_lang('field_'.strval($field_num),$value,3,$GLOBALS['FORUM_DB'])+$row;
+			$row=insert_lang_comcode('field_'.strval($field_num),$value,3,$GLOBALS['FORUM_DB'])+$row;
 		} else
 		{
 			$row['field_'.strval($field_num)]=$value;
@@ -289,7 +289,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 			$value='';
 			if (strpos($storage_type,'_trans')!==false)
 			{
-				$row+=insert_lang('field_'.strval($field_num),$value,3,$GLOBALS['FORUM_DB'])+$row;
+				$row=insert_lang_comcode('field_'.strval($field_num),$value,3,$GLOBALS['FORUM_DB'])+$row;
 			} else
 			{
 				$row['field_'.strval($field['id'])]=$value;

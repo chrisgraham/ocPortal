@@ -166,7 +166,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 				$sig=$SIGNATURES_CACHE[$_postdetails['p_poster']];
 			} else
 			{
-				$sig=get_translated_tempcode('f_members',$GLOBALS['OCF_DRIVER']->get_member_row($_postdetails,'p_poster','m_signature'),$GLOBALS['FORUM_DB']);
+				$sig=get_translated_tempcode('f_members',$GLOBALS['OCF_DRIVER']->get_member_row($_postdetails['p_poster']),'m_signature',$GLOBALS['FORUM_DB']);
 				$SIGNATURES_CACHE[$_postdetails['p_poster']]=$sig;
 			}
 			$post['signature']=$sig;
@@ -233,10 +233,13 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 	{
 		$table='f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f ON f.id=t.t_forum_id';
 		$select=array('t.*','f.f_is_threaded');
-		if (!multi_lang_content())
+		if (multi_lang_content())
+		{
+			$select[]='t_cache_first_post AS p_post';
+		} else
 		{
 			$table.=' JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
-			$select[]='p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
+			$select[]='p_post,p_post__text_parsed,p_post__source_user';
 		}
 		$_topic_info=$GLOBALS['FORUM_DB']->query_select($table,$select,array('t.id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$_topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -296,7 +299,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			'description_link'=>$topic_info['t_description_link'],
 			'emoticon'=>$topic_info['t_emoticon'],
 			'forum_id'=>$topic_info['t_forum_id'],
-			'first_post'=>$topic_info['t_cache_first_post'],
+			'first_post'=>$topic_info['p_post'],
 			'first_poster'=>$topic_info['t_cache_first_member_id'],
 			'first_post_id'=>$topic_info['t_cache_first_post_id'],
 			'pt_from'=>$topic_info['t_pt_from'],
@@ -316,6 +319,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 				'numcomments'=>strval($topic_info['t_cache_num_posts']),
 				'image'=>find_theme_image('bigicons/forums'),
 			),
+			'row'=>$topic_info,
 		);
 
 		// Poll?

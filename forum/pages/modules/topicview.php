@@ -549,7 +549,7 @@ class Module_topicview
 			$map=array('page'=>'topics','type'=>'new_post','id'=>$id);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 			$more_url=build_url($map,get_module_zone('topics'));
-			$_postdetails=array_key_exists('first_post',$topic_info)?get_translated_tempcode('f_posts',$topic_info,'first_post',$GLOBALS['FORUM_DB']):new ocp_tempcode();
+			$_postdetails=isset($topic_info['first_post'])?get_translated_tempcode('f_posts',$topic_info['row'],'p_post',$GLOBALS['FORUM_DB']):new ocp_tempcode();
 			$first_post=$_postdetails;
 			$first_post_url=$GLOBALS['FORUM_DRIVER']->post_url($topic_info['first_post_id'],is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),true);
 			$display='block';
@@ -685,7 +685,15 @@ class Module_topicview
 		{
 			member_tracking_update('forumview','',strval($topic_info['forum_id']));
 		}
-		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('topicview','',strval($id),true);
+		if (is_null($id))
+		{
+			$num_guests=NULL;
+			$num_members=NULL;
+			$members_viewing=new ocp_tempcode();
+		} else
+		{
+			list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('topicview','',strval($id),true);
+		}
 
 		if (!is_null($id))
 			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang(is_null($topic_info['forum_id'])?'VIEW_PRIVATE_TOPIC':'VIEW_TOPIC').'</span>'));
@@ -730,7 +738,7 @@ class Module_topicview
 			'TITLE'=>$title,
 			'SERIALIZED_OPTIONS'=>$serialized_options,
 			'HASH'=>$hash,
-			'ID'=>strval($id),
+			'ID'=>is_null($id)?'':strval($id),
 			'_TITLE'=>$topic_info['title'],
 			'MAY_DOUBLE_POST'=>has_specific_permission(get_member(),'double_post'),
 			'LAST_POSTER'=>array_key_exists('last_poster',$topic_info)?(is_null($topic_info['last_poster'])?'':strval($topic_info['last_poster'])):'',
@@ -738,8 +746,8 @@ class Module_topicview
 			'MAX'=>strval($max),
 			'MAY_CHANGE_MAX'=>array_key_exists('may_change_max',$topic_info),
 			'ACTION_URL'=>$action_url,
-			'NUM_GUESTS'=>integer_format($num_guests),
-			'NUM_MEMBERS'=>integer_format($num_members),
+			'NUM_GUESTS'=>is_null($num_guests)?'':integer_format($num_guests),
+			'NUM_MEMBERS'=>is_null($num_members)?'':integer_format($num_members),
 			'MEMBERS_VIEWING'=>$members_viewing,
 			'PAGINATION'=>$pagination,
 			'MODERATOR_ACTIONS'=>$moderator_actions,

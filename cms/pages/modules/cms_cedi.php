@@ -301,37 +301,40 @@ class Module_cms_cedi
 			$fields2->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 		}
 
-		$restore_from=get_param_integer('restore_from',-1);
-		if ($restore_from!=-1)
-		{
-			$description=$GLOBALS['SITE_DB']->query_value('translate_history','text_original',array('id'=>$restore_from,'lang_id'=>$page['description'])); // Double selection to stop hacking
-			$_description=NULL;
-		}
-
-		$posting_form=get_posting_form(do_lang('SAVE'),$description,$edit_url,new ocp_tempcode(),$fields,do_lang_tempcode('PAGE_TEXT'),'',$fields2,$_description,NULL,NULL,false);
-
 		// Revision history
 		$revision_history=new ocp_tempcode();
-		$revisions=$GLOBALS['SITE_DB']->query_select('translate_history',array('*'),array('lang_id'=>$page['description']),'ORDER BY action_time DESC');
-		$last_description=$description;
-		foreach ($revisions as $revision)
+		if (multi_lang_content())
 		{
-			$time=$revision['action_time'];
-			$date=get_timezoned_date($time);
-			$editor=$GLOBALS['FORUM_DRIVER']->get_username($revision['action_member']);
-			$restore_url=build_url(array('page'=>'_SELF','type'=>'edit_page','id'=>get_param('id',false,true),'restore_from'=>$revision['id']),'_SELF');
-			$size=strlen($revision['text_original']);
-			require_code('diff');
-			if (function_exists('diff_simple_2'))
+			$restore_from=get_param_integer('restore_from',-1);
+			if ($restore_from!=-1)
 			{
-				$rendered_diff=diff_simple_2($revision['text_original'],$last_description);
-				$last_description=$revision['text_original'];
-				$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'a46de8a930ecfb814695a50b1c4931ac','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>'','SIZE'=>clean_file_size($size))));
+				$description=$GLOBALS['SITE_DB']->query_value('translate_history','text_original',array('id'=>$restore_from,'lang_id'=>$page['description'])); // Double selection to stop hacking
+				$_description=NULL;
+			}
+
+			$revisions=$GLOBALS['SITE_DB']->query_select('translate_history',array('*'),array('lang_id'=>$page['description']),'ORDER BY action_time DESC');
+			$last_description=$description;
+			foreach ($revisions as $revision)
+			{
+				$time=$revision['action_time'];
+				$date=get_timezoned_date($time);
+				$editor=$GLOBALS['FORUM_DRIVER']->get_username($revision['action_member']);
+				$restore_url=build_url(array('page'=>'_SELF','type'=>'edit_page','id'=>get_param('id',false,true),'restore_from'=>$revision['id']),'_SELF');
+				$size=strlen($revision['text_original']);
+				require_code('diff');
+				if (function_exists('diff_simple_2'))
+				{
+					$rendered_diff=diff_simple_2($revision['text_original'],$last_description);
+					$last_description=$revision['text_original'];
+					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'a46de8a930ecfb814695a50b1c4931ac','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>'','SIZE'=>clean_file_size($size))));
+				}
 			}
 		}
 		if ((!$revision_history->is_empty()) && ($restore_from==-1))
 			$revision_history=do_template('REVISION_HISTORY_WRAP',array('_GUID'=>'1fc38d9d7ec57af110759352446e533d','CONTENT'=>$revision_history));
 		elseif (!$revision_history->is_empty()) $revision_history=do_template('REVISION_RESTORE');
+
+		$posting_form=get_posting_form(do_lang('SAVE'),$description,$edit_url,new ocp_tempcode(),$fields,do_lang_tempcode('PAGE_TEXT'),'',$fields2,$_description,NULL,NULL,false);
 
 		list($warning_details,$ping_url)=handle_conflict_resolution();
 

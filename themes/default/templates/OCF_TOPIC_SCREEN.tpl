@@ -57,19 +57,21 @@
 		{+END}
 	{+END}
 
-	<div class="box box___ocf_topic_screen"><div class="box_inner">
-		{+START,IF_NON_EMPTY,{MEMBERS_VIEWING}}
-			{+START,IF,{$NEQ,{NUM_MEMBERS},0}}
-				{!MEMBERS_VIEWING,{NUM_GUESTS*},{NUM_MEMBERS*},{MEMBERS_VIEWING}}
+	{+START,IF_NON_EMPTY,{ID}}
+		<div class="box box___ocf_topic_screen"><div class="box_inner">
+			{+START,IF_NON_EMPTY,{MEMBERS_VIEWING}}
+				{+START,IF,{$NEQ,{NUM_MEMBERS},0}}
+					{!MEMBERS_VIEWING,{NUM_GUESTS*},{NUM_MEMBERS*},{MEMBERS_VIEWING}}
+				{+END}
+				{+START,IF,{$EQ,{NUM_MEMBERS},0}}
+					{!_MEMBERS_VIEWING,{NUM_GUESTS*},{NUM_MEMBERS*},{MEMBERS_VIEWING}}
+				{+END}
 			{+END}
-			{+START,IF,{$EQ,{NUM_MEMBERS},0}}
-				{!_MEMBERS_VIEWING,{NUM_GUESTS*},{NUM_MEMBERS*},{MEMBERS_VIEWING}}
+			{+START,IF_EMPTY,{MEMBERS_VIEWING}}
+				{!TOO_MANY_USERS_ONLINE}
 			{+END}
-		{+END}
-		{+START,IF_EMPTY,{MEMBERS_VIEWING}}
-			{!TOO_MANY_USERS_ONLINE}
-		{+END}
-	</div></div>
+		</div></div>
+	{+END}
 	{+START,IF_EMPTY,{POSTS}}
 		<p class="nothing_here">
 			{!NO_ENTRIES}

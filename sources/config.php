@@ -59,22 +59,6 @@ function init__config()
 }
 
 /**
- * Find whether to run in multi-lang mode for content translations.
- *
- * @return boolean		Whether to run in multi-lang mode for content translations.
- */
-function multi_lang_content()
-{
-	static $ret=NULL;
-	if ($ret===NULL)
-	{
-		global $SITE_INFO;
-		$ret=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):true;
-	}
-	return $ret;
-}
-
-/**
  * Find whether to run in multi-lang mode.
  *
  * @return boolean		Whether to run in multi-lang mode.

@@ -440,7 +440,13 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 		}
 	} else
 	{
-		$topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
+		$post_row=array(
+			'id'=>$topic_row['id'],
+			'p_post'=>$topic_row['p_post'],
+			'p_post__text_parsed'=>$topic_row['p_post__text_parsed'],
+			'p_post__source_user'=>$topic_row['p_post__source_user'],
+		);
+		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 	}
 
 	$topic['id']=$topic_row['id'];
@@ -835,31 +841,37 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 	if (is_guest())
 	{
 		$query='SELECT ttop.*,NULL AS l_time';
-		if (!multi_lang_content())
+		if (multi_lang_content())
 		{
-			$query.=',p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
+			$query.=',t_cache_first_post AS p_post';
+		} else
+		{
+			$query.=',p_post,p_post__text_parsed,p_post__source_user';
 		}
 		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop';
 		if (!multi_lang_content())
 		{
-			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=ttop.t_cache_first_post_id';
 		}
 		$query.=' WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
 	} else
 	{
 		$query='SELECT ttop.*,l_time';
-		if (!multi_lang_content())
+		if (multi_lang_content())
 		{
-			$query.=',p_post AS t_cache_first_post,p_post__text_parsed AS t_cache_first_post__text_parsed,p_post__source_user AS t_cache_first_post__source_user';
+			$query.=',t_cache_first_post AS p_post';
+		} else
+		{
+			$query.=',p_post,p_post__text_parsed,p_post__source_user';
 		}
 		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member());
 		if (!multi_lang_content())
 		{
-			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=ttop.t_cache_first_post_id';
 		}
 		$query.=' WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$order2;
 	}
-	if ($start<200)
+	if (($start<200) && (multi_lang_content()))
 	{
 		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('t_cache_first_post'=>'LONG_TRANS__COMCODE'));
 	} else // deep search, so we need to make offset more efficient, trade-off is more queries

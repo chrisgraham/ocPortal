@@ -1178,7 +1178,7 @@ function get_flagrant()
 		$_flagrant=persistent_cache_get('FLAGRANT');
 		if ($_flagrant===NULL)
 		{
-			$flagrant=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),true/*in case tablemissing*/);
+			$flagrant=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'text WHERE active_now=1 AND activation_time+days*60*60*24>'.strval(time()),NULL,NULL,true/*in case table missing*/);
 			if (count($flagrant)==0)
 			{
 				persistent_cache_set('FLAGRANT',false);

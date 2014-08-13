@@ -297,6 +297,8 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	} else
 	{
 		$map['news_article']='';
+		$map['news_article__text_parsed']='';
+		$map['news_article__source_user']=get_member();
 	}
 	$map+=insert_lang_comcode('title',$title,1);
 	$map+=insert_lang_comcode('news',$news,1);

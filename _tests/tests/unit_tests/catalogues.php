@@ -343,7 +343,6 @@ class catalogues_test_set extends ocp_test_case
 			'new_field_9_put_in_search'=>'1',
 			'tick_on_form__new_field_9_put_in_search'=>'0',
 			'require__new_field_9_put_in_search'=>'0',
-			'http_referer'=>'http://localhost/~manu/nomosa/cms/cms_catalogues/add_catalogue.htm',
 			'description__is_wysiwyg'=>'1',
 		);
 

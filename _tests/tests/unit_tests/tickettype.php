@@ -25,13 +25,15 @@ class tickettype_test_set extends ocp_test_case
 		parent::setUp();
 		require_code('tickets2');
 		$this->tickettype_id=add_ticket_type('platinum',0,0);
-		$this->assertTrue('platinum'==get_translated_text($this->tickettype_id));
+		$ticket_type_name=$GLOBALS['SITE_DB']->query_value('ticket_types','ticket_type_name',array('id'=>$this->tickettype_id));
+		$this->assertTrue('platinum'==get_translated_text($ticket_type_name));
 	}
 
 	function testEditTicketType()
 	{
 		edit_ticket_type($this->tickettype_id,'gold',0,0);
-		$this->assertTrue('gold'==get_translated_text($this->tickettype_id));;
+		$ticket_type_name=$GLOBALS['SITE_DB']->query_value('ticket_types','ticket_type_name',array('id'=>$this->tickettype_id));
+		$this->assertTrue('gold'==get_translated_text($ticket_type_name));;
 	}
 
 

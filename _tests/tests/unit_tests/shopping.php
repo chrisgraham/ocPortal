@@ -68,7 +68,7 @@ class shopping_test_set extends ocp_test_case
 		{
 			actual_add_catalogue_field('storetesting'.strval(get_member()), // $c_name
 												lang_code_to_default_content('cf_name',$field[0],false,3), // $name
-												lang_code_to_default_content('cf_description',$field[1],true,3), // $description
+												lang_code_to_default_content('cf_description',$field[1],false,3), // $description
 												($field[2]=='tick')?'list':$field[2], // $type
 												$i, // $order
 												$field[3], // $defines_order

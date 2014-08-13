@@ -108,6 +108,8 @@ function cedi_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	} else
 	{
 		$map['the_message']='';
+		$map['the_message__text_parsed']='';
+		$map['the_message__source_user']=get_member();
 	}
 	$id=$GLOBALS['SITE_DB']->query_insert('seedy_posts',$map,true);
 	require_code('attachments2');
@@ -262,6 +264,8 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL,$send
 		} else
 		{
 			$map['description']='';
+			$map['description__text_parsed']='';
+			$map['description__source_user']=get_member();
 		}
 		$map+=insert_lang('title',$title,2);
 		$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map,true);
@@ -277,7 +281,7 @@ function cedi_add_page($title,$description,$notes,$hide_posts,$member=NULL,$send
 			'notes'=>$notes,
 			'add_date'=>time(),
 		);
-		$map+=insert_lang('description',$description,2);
+		$map+=insert_lang_comcode('description',$description,2);
 		$map+=insert_lang('title',$title,2);
 		$id=$GLOBALS['SITE_DB']->query_insert('seedy_pages',$map,true);
 	}

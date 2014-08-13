@@ -361,9 +361,9 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 
 	$title=$bookable_details['title'];
 
-	$bookable_details=insert_lang('title',$bookable_details['title'],1)+$bookable_details;
-	$bookable_details=insert_lang('description',$bookable_details['description'],1)+$bookable_details;
-	$bookable_details=insert_lang('categorisation',$bookable_details['categorisation'],1)+$bookable_details;
+	$bookable_details=insert_lang_comcode('title',$bookable_details['title'],1)+$bookable_details;
+	$bookable_details=insert_lang_comcode('description',$bookable_details['description'],1)+$bookable_details;
+	$bookable_details=insert_lang_comcode('categorisation',$bookable_details['categorisation'],1)+$bookable_details;
 
 	$bookable_details['calendar_type']=NULL;
 	$bookable_details['add_date']=$add_date;
@@ -423,9 +423,9 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked=NULL,$supp
 
 	$title=$bookable_details['title'];
 
-	$bookable_details+=lang_remap('title',$_old_bookable[0]['title'],$bookable_details['title']);
-	$bookable_details+=lang_remap('description',$_old_bookable[0]['description'],$bookable_details['description']);
-	$bookable_details+=lang_remap('categorisation',$_old_bookable[0]['categorisation'],$bookable_details['categorisation']);
+	$bookable_details+=lang_remap_comcode('title',$_old_bookable[0]['title'],$bookable_details['title']);
+	$bookable_details+=lang_remap_comcode('description',$_old_bookable[0]['description'],$bookable_details['description']);
+	$bookable_details+=lang_remap_comcode('categorisation',$_old_bookable[0]['categorisation'],$bookable_details['categorisation']);
 
 	$bookable_details['edit_date']=time();
 
@@ -528,7 +528,7 @@ function add_bookable_supplement($details,$bookables=NULL)
 
 	$title=$details['title'];
 
-	$details=insert_lang('title',$details['title'],1)+$details;
+	$details=insert_lang_comcode('title',$details['title'],1)+$details;
 
 	$supplement_id=$GLOBALS['SITE_DB']->query_insert('bookable_supplement',$details,true);
 
@@ -615,7 +615,7 @@ function add_bookable_blacked($details,$bookables=NULL)
 
 	$blacked_explanation=$details['blacked_explanation'];
 
-	$details=insert_lang('blacked_explanation',$details['blacked_explanation'],1)+$details;
+	$details=insert_lang_comcode('blacked_explanation',$details['blacked_explanation'],1)+$details;
 
 	$blacked_id=$GLOBALS['SITE_DB']->query_insert('bookable_blacked',$details,true);
 
@@ -646,7 +646,7 @@ function edit_bookable_blacked($blacked_id,$details,$bookables=NULL)
 	$_old_blacked=$GLOBALS['SITE_DB']->query_select('bookable_blacked',array('*'),array('id'=>$blacked_id),'',1);
 	if (!array_key_exists(0,$_old_blacked)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	$_old_blacked[0]+=lang_remap('blacked_explanation',$_old_blacked[0]['blacked_explanation'],$details['blacked_explanation']);
+	$_old_blacked[0]+=lang_remap_comcode('blacked_explanation',$_old_blacked[0]['blacked_explanation'],$details['blacked_explanation']);
 	unset($details['blacked_explanation']);
 
 	$GLOBALS['SITE_DB']->query_update('bookable_blacked',$details,array('id'=>$blacked_id),'',1);

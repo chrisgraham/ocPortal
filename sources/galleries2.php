@@ -401,7 +401,7 @@ function add_image($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 		'cat'=>$cat,
 		'validated'=>$validated,
 	);
-	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang('title',$title,2);
 	$map+=insert_lang_comcode('comments',$comments,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('images',$map,true);
@@ -482,7 +482,7 @@ function edit_image($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 		'url'=>$url,
 		'thumb_url'=>$thumb_url,
 	);
-	$map+=lang_remap_comcode('title',$_title,$title);
+	$map+=lang_remap('title',$_title,$title);
 	$map+=lang_remap_comcode('comments',$_comments,$comments);
 	$GLOBALS['SITE_DB']->query_update('images',$map,array('id'=>$id),'',1);
 
@@ -735,7 +735,7 @@ function add_video($title,$cat,$comments,$url,$thumb_url,$validated,$allow_ratin
 		'video_width'=>$video_width,
 		'video_height'=>$video_height,
 	);
-	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang('title',$title,2);
 	$map+=insert_lang_comcode('comments',$comments,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
@@ -820,7 +820,7 @@ function edit_video($id,$title,$cat,$comments,$url,$thumb_url,$validated,$allow_
 		'video_width'=>$video_width,
 		'video_height'=>$video_height,
 	);
-	$map+=lang_remap_comcode('title',$_title,$title);
+	$map+=lang_remap('title',$_title,$title);
 	$map+=lang_remap_comcode('comments',$_comments,$comments);
 	$GLOBALS['SITE_DB']->query_update('videos',$map,array('id'=>$id),'',1);
 
@@ -1050,7 +1050,7 @@ function add_gallery($name,$fullname,$description,$teaser,$notes,$parent_id,$acc
 	);
 	$map+=insert_lang_comcode('description',$description,2);
 	$map+=insert_lang_comcode('teaser',$teaser,2);
-	$map+=insert_lang('fullname',$fullname,1);
+	$map+=insert_lang_comcode('fullname',$fullname,1);
 	$GLOBALS['SITE_DB']->query_insert('galleries',$map);
 
 	log_it('ADD_GALLERY',$name,$fullname);
@@ -1159,7 +1159,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$teaser,$notes,$par
 		'allow_comments'=>$allow_comments,
 		'g_owner'=>$g_owner,
 	);
-	$map+=lang_remap('fullname',$myrow['fullname'],$fullname);
+	$map+=lang_remap_comcode('fullname',$myrow['fullname'],$fullname);
 	$map+=lang_remap_comcode('description',$myrow['description'],$description);
 	$map+=lang_remap_comcode('teaser',$myrow['teaser'],$teaser);
 

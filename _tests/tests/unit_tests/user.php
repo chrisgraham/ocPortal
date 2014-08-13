@@ -29,6 +29,10 @@ class user_test_set extends ocp_test_case
 		require_code('ocf_members_action2');
 		require_lang('ocf');
 
+		$this->user_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username('testuser');
+		if (!is_null($this->user_id))
+			ocf_delete_member($this->user_id);
+
 		$this->user_id=ocf_make_member('testuser','123456','test@test.com',array(),10,1,1980,array(),NULL,NULL,1,NULL,NULL,'',NULL,'',0,0,1,'','','',1,1,NULL,1,1,'',NULL,'',true,NULL,'',1,NULL,NULL,0,'*','');
 
 		// Test the forum was actually created

@@ -584,13 +584,13 @@ class Module_admin_permissions
 				{
 					$GLOBALS['SITE_DB']->query_insert('match_key_messages',array(
 						'k_match_key'=>$val
-					)+insert_lang('k_message',post_param('msg_'.$id),2));
+					)+insert_lang_comcode('k_message',post_param('msg_'.$id),2));
 				} else
 				{
 					$map=array(
 						'k_match_key'=>$val
 					);
-					$map+=lang_remap('k_message',$mkeylang[intval($id)],post_param('msg_'.$id));
+					$map+=lang_remap_comcode('k_message',$mkeylang[intval($id)],post_param('msg_'.$id));
 					$GLOBALS['SITE_DB']->query_insert('match_key_messages',$map);
 					unset($mkeylang[intval($id)]);
 				}

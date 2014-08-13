@@ -238,7 +238,7 @@ class Hook_pointstore_permission
 				'p_category'=>$category,
 			);
 			$map+=insert_lang('p_title',$title,2);
-			$map+=insert_lang('p_description',$description,2);
+			$map+=insert_lang_comcode('p_description',$description,2);
 			$map+=insert_lang('p_mail_subject',$mail_subject,2);
 			$map+=insert_lang('p_mail_body',$mail_body,2);
 			$GLOBALS['SITE_DB']->query_insert('pstore_permissions',$map);

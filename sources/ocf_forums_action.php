@@ -88,8 +88,8 @@ function ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_
 		'f_order'=>$order,
 		'f_is_threaded'=>$is_threaded,
 	);
-	$map+=insert_lang('f_description',$description,2,$GLOBALS['FORUM_DB']);
-	$map+=insert_lang('f_intro_question',$intro_question,3,$GLOBALS['FORUM_DB']);
+	$map+=insert_lang_comcode('f_description',$description,2,$GLOBALS['FORUM_DB']);
+	$map+=insert_lang_comcode('f_intro_question',$intro_question,3,$GLOBALS['FORUM_DB']);
 	$forum_id=$GLOBALS['FORUM_DB']->query_insert('f_forums',$map,true);
 
 	// Set permissions

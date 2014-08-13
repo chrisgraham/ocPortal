@@ -59,7 +59,7 @@ function password_censor($auto=false,$display=true,$days_ago=30)
 			}
 
 			if ($auto)
-				$GLOBALS['FORUM_DB']->query($update_query);
+				$GLOBALS['FORUM_DB']->query($update_query,NULL,NULL,false,true);
 
 			if ($display)
 				echo $text_start."\n\n-------->\n\n".$text_after."\n\n-------------\n\n".$update_query."\n\n<-----------\n\n\n\n\n";

@@ -471,16 +471,16 @@ class Module_admin_menus
 		// Save
 		if (array_key_exists($id,$old_menu_bits))
 		{
-			$menu_save_map+=lang_remap('i_caption',$old_menu_bits[$id]['i_caption'],$caption);
-			$menu_save_map+=lang_remap('i_caption_long',$old_menu_bits[$id]['i_caption_long'],$caption_long);
+			$menu_save_map+=lang_remap_comcode('i_caption',$old_menu_bits[$id]['i_caption'],$caption);
+			$menu_save_map+=lang_remap_comcode('i_caption_long',$old_menu_bits[$id]['i_caption_long'],$caption_long);
 			$GLOBALS['SITE_DB']->query_update('menu_items',$menu_save_map,array('id'=>$id));
 
 			unset($old_menu_bits[$id]);
 			$insert_id=$id;
 		} else
 		{
-			$menu_save_map+=insert_lang('i_caption',$caption,1);
-			$menu_save_map+=insert_lang('i_caption_long',$caption_long,1);
+			$menu_save_map+=insert_lang_comcode('i_caption',$caption,1);
+			$menu_save_map+=insert_lang_comcode('i_caption_long',$caption_long,1);
 			$insert_id=$GLOBALS['SITE_DB']->query_insert('menu_items',$menu_save_map,true);
 		}
 

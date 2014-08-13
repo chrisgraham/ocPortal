@@ -150,7 +150,7 @@ class Module_calendar
 					't_external_feed'=>'',
 					't_logo'=>'calendar/'.$type,
 				);
-				$map+=lang_code_to_default_content('t_title','DEFAULT_CALENDAR_TYPE__'.$type);
+				$map+=lang_code_to_default_content('t_title','DEFAULT_CALENDAR_TYPE__'.$type,true);
 				$GLOBALS['SITE_DB']->query_insert('calendar_types',$map);
 			}
 

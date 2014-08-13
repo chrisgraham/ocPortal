@@ -837,6 +837,7 @@ function step_4()
 	$text=new ocp_tempcode();
 	$options=new ocp_tempcode();
 	$hidden=new ocp_tempcode();
+	$hidden->attach(form_input_hidden('multi_lang_content','0'));
 	$options->attach(make_option(do_lang_tempcode('DOMAIN'),example('DOMAIN_EXAMPLE','DOMAIN_TEXT'),'domain',$domain,false,true));
 	$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
 	if (post_param('db_type')!='xml')
@@ -1468,7 +1469,6 @@ function step_5_write_config()
 	fwrite($info,"\$SITE_INFO['no_disk_sanity_checks']='0';\n");
 	fwrite($info,"\$SITE_INFO['hardcode_common_module_zones']='0';\n");
 	fwrite($info,"\$SITE_INFO['prefer_direct_code_call']='0';\n");
-	fwrite($info,"\$SITE_INFO['multi_lang_content']='0';\n");
 	if ($info===false)
 		warn_exit(do_lang_tempcode('INSTALL_WRITE_ERROR',escape_html($info_file)));
 

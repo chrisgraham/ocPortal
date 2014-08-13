@@ -1202,7 +1202,6 @@ function get_translated_tempcode($table,$row,$field_name,$connection=NULL,$lang=
 			global $LAX_COMCODE;
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			$result=$_result[0];
 
 			if (get_value('really_want_highlighting')==='1')
 			{
@@ -1218,7 +1217,7 @@ function get_translated_tempcode($table,$row,$field_name,$connection=NULL,$lang=
 		$result=$row[$field_name.'__text_parsed'];
 	}
 
-	if (($result===NULL) || ($result=='') || (is_browser_decacheing())) // Not cached
+	if (($result===NULL) || ($result=='')/* || (is_browser_decacheing())*/) // Not cached
 	{
 		require_code('lang3');
 		return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
