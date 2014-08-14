@@ -218,7 +218,7 @@ function get_downloads_tree($submitter=NULL,$category_id=NULL,$breadcrumbs=NULL,
 	$children[0]['breadcrumbs']=$breadcrumbs;
 
 	// Children of this category
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c',array('c.id','c.category'),array('parent_id'=>$category_id),'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('category'),300/*reasonable limit*/);
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category'),array('parent_id'=>$category_id),'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('category'),300/*reasonable limit*/);
 	if (count($rows)==300) $rows=array();
 	$where=array('category_id'=>$category_id);
 	if (!is_null($submitter)) $where['submitter']=$submitter;
@@ -541,7 +541,7 @@ function get_download_sub_categories($category_id,$root=NULL,$zone=NULL,$order=N
 	if (is_null($root)) $root=db_get_first_id();
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories c',array('c.*'),array('parent_id'=>$category_id),'ORDER BY '.(($order=='category ASC')?$GLOBALS['SITE_DB']->translate_field_ref('category'):$order),400/*reasonable limit*/);
+	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('parent_id'=>$category_id),'ORDER BY '.(($order=='category ASC')?$GLOBALS['SITE_DB']->translate_field_ref('category'):$order),400/*reasonable limit*/);
 	foreach ($rows as $i=>$myrow)
 	{
 		$rows[$i]['_category']=get_translated_text($myrow['category']);

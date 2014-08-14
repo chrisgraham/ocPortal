@@ -209,7 +209,7 @@ class Module_news
 
 		$permission_page='cms_news';
 		$tree=array();
-		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.nc_title','c.id'),array('nc_owner'=>NULL),'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('nc_title').' ASC');
+		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title','id'),array('nc_owner'=>NULL),'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('nc_title').' ASC');
 		if (($max_depth>0) || (is_null($max_depth)))
 		{
 			foreach ($rows as $row)
@@ -367,7 +367,7 @@ class Module_news
 		if (is_null($blogs))
 		{
 			$map=array();
-			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.*'),$map,'ORDER BY nc_owner,'.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered to show non-blogs first (nc_owner=NULL)
+			$categories=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),$map,'ORDER BY nc_owner,'.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered to show non-blogs first (nc_owner=NULL)
 			$max_rows=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',$map);
 		} elseif ($blogs==1)
 		{
@@ -376,7 +376,7 @@ class Module_news
 		} else
 		{
 			$map=array('nc_owner'=>NULL);
-			$categories=$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.*'),$map,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered by title (can do efficiently as limited numbers of non-blogs)
+			$categories=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),$map,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('nc_title'),$max,$start); // Ordered by title (can do efficiently as limited numbers of non-blogs)
 			$max_rows=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',$map);
 		}
 		$content=new ocp_tempcode();

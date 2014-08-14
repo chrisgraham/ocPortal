@@ -23,6 +23,8 @@
  */
 function disable_content_translation()
 {
+	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+
 	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 	if (!multi_lang_content()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
@@ -32,7 +34,7 @@ function disable_content_translation()
 
 	$type_remap=$db->static_ob->db_get_type_remap();
 
-	$_table_lang_fields=$db->query('SELECT m_name,m_table,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
+	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'');
 	foreach ($_table_lang_fields as $field)
 	{
 		if (strpos($field['m_type'],'__COMCODE')!==false)
@@ -53,7 +55,7 @@ function disable_content_translation()
 					$query.=' DEFAULT '.strval(db_get_first_id());
 				}
 				$query.=' NOT NULL';
-				$db->_query($query,NULL,NULL,true);
+				$db->_query($query);
 			}
 		}
 
@@ -61,15 +63,17 @@ function disable_content_translation()
 		$query='UPDATE '.$db->table_prefix.$field['m_table'].' a SET ';
 		$query.='a.'.$field['m_name'].'__new=(SELECT b.text_original FROM '.$db->table_prefix.'translate b WHERE b.id=a.'.$field['m_name'].' ORDER BY broken), ';
 		$query.='a.'.$field['m_name'].'__source_user=(SELECT b.source_user FROM '.$db->table_prefix.'translate b WHERE b.id=a.'.$field['m_name'].' ORDER BY broken)';
-		$db->_query($query,NULL,NULL,true);
+		$db->_query($query);
 
 		// Delete old main field
 		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' DROP COLUMN '.$field['m_name'];
-		$db->_query($query,NULL,NULL,true);
+		$db->_query($query);
 
 		// Rename Comcode field to main field, and don't put default of '' on it anymore
 		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' CHANGE '.$field['m_name'].'__new '.$field['m_name'].' '.$type_remap['LONG_TEXT'];
-		$db->_query($query,NULL,NULL,true);
+		$db->_query($query);
+
+		reload_lang_fields();
 	}
 
 	// Empty translate table
@@ -83,6 +87,8 @@ function disable_content_translation()
  */
 function enable_content_translation()
 {
+	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+
 	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 	if (multi_lang_content()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
@@ -92,28 +98,50 @@ function enable_content_translation()
 
 	$type_remap=$db->static_ob->db_get_type_remap();
 
-	$_table_lang_fields=$db->query('SELECT m_name,m_table,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
+	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'');
 	foreach ($_table_lang_fields as $field)
 	{
 		// Rename main field to temporary one
-		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' CHANGE '.$field['m_name'].'__old '.$field['m_name'].' '.$type_remap['LONG_TEXT'];
-		$db->_query($query,NULL,NULL,true);
+		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' CHANGE '.$field['m_name'].' '.$field['m_name'].'__old '.$type_remap['LONG_TEXT'];
+		$db->_query($query);
+
+		$_type=$field['m_type'];
+		if (substr($_type,0,1)=='*') $_type=substr($_type,1);
+		if (substr($_type,0,1)=='?') $_type=substr($_type,1);
 
 		// Add new field for translate reference
-		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' ADD '.$field['m_name'].' '.$type_remap[$field['m_type']];
+		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' ADD '.$field['m_name'].' '.$type_remap[$_type];
 		$query.=' DEFAULT '.strval(db_get_first_id());
-		$query.=' NOT NULL';
-		$db->_query($query,NULL,NULL,true);
+		if (substr($_type,0,1)!='?') $query.=' NOT NULL';
+		$db->_query($query);
+
+		$has_comcode=(strpos($field['m_type'],'__COMCODE')!==false);
 
 		// Copy to translate table
-		$query='INSERT INTO '.$db->table_prefix.'translate ';
-		$query.='(language,importance_level,text_original,text_parsed,broken,source_user) VALUES ';
-		$query.='(SELECT \''.db_escape_string(get_site_default_lang()).'\',3,'.$field['m_name'].'__old,'.$field['m_name'].'__text_parsed,0,'.$field['m_name'].'__source_user FROM'.$db->table_prefix.$field['m_table'].')';
-		$db->_query($query,NULL,NULL,true);
+		$start=0;
+		do
+		{
+			$trans=$db->query_select($field['m_table'],array('*'),NULL,'',100,$start,false,array()/*Needs to disable auto-field-grabbing as DB state is currently inconsistent*/);
+			foreach ($trans as $t)
+			{
+				$insert_map=array(
+					'language'=>get_site_default_lang(),
+					'importance_level'=>3,
+					'text_original'=>$t[$field['m_name'].'__old'],
+					'text_parsed'=>$has_comcode?$t[$field['m_name'].'__text_parsed']:'',
+					'broken'=>0,
+					'source_user'=>$has_comcode?$t[$field['m_name'].'__source_user']:$GLOBALS['FORUM_DRIVER']->get_guest_id(),
+				);
+				$ins_id=$db->query_insert('translate',$insert_map,true);
+				$GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name']=>$ins_id),$t,'',1);
+			}
+			$start+=100;
+		}
+		while (count($trans)>0);
 
 		// Delete old fields
 		$to_delete=array('old');
-		if (strpos($field['m_type'],'__COMCODE')!==false)
+		if ($has_comcode)
 		{
 			// Delete old implied fields for holding extra Comcode details
 			$to_delete=array_merge($to_delete,array('text_parsed','source_user'));
@@ -122,8 +150,10 @@ function enable_content_translation()
 		{
 			$sub_name=$field['m_name'].'__'.$sub_name;
 			$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' DROP COLUMN '.$sub_name;
-			$db->_query($query,NULL,NULL,true);
+			$db->_query($query);
 		}
+
+		reload_lang_fields();
 	}
 
 	_update_base_config_for_content_translation(true);
@@ -140,12 +170,14 @@ function _update_base_config_for_content_translation($new_setting)
 	$config_file=file_get_contents($config_path); // TODO: _config.php in v10
 	$has='$SITE_INFO[\'multi_lang_content\']=\''.($new_setting?'0':'1').'\';';
 	$wants='$SITE_INFO[\'multi_lang_content\']=\''.($new_setting?'1':'0').'\';';
-	if (strpos($config_file,$has)!==false)
+	if (strpos($config_file,$has)!==false || strpos($config_file,$wants)!==false)
 	{
 		$config_file=str_replace($has,$wants,$config_file);
+		$config_file=str_replace($wants,$wants,$config_file);
 	} else
 	{
 		$config_file=rtrim($config_file)."\n".$wants."\n";
 	}
 	file_put_contents($config_path,$config_file);
+	sync_file($config_path);
 }

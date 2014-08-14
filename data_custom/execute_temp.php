@@ -55,4 +55,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	require_code('database_multi_lang_conv');
+	enable_content_translation();
 }

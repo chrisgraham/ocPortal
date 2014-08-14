@@ -290,7 +290,7 @@ class Module_calendar
 		if (!$require_permission_support)
 		{
 			$tree=array();
-			$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('calendar_types c',array('c.id','c.t_title'),NULL,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('t_title'));
+			$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'),NULL,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('t_title'));
 			if (($max_depth>0) || (is_null($max_depth)))
 			{
 				foreach ($rows as $row)

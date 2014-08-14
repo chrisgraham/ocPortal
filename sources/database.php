@@ -1031,7 +1031,7 @@ class database_driver
 
 		if ($DEV_MODE)
 		{
-			if ((multi_lang_content()) && (strpos($query,$this->get_table_prefix().'translate')!==false))
+			if ((!multi_lang_content()) && (strpos($query,$this->get_table_prefix().'translate')!==false))
 			{
 				fatal_exit('Assumption of multi-lang-content being on, and it\'s not');
 			}

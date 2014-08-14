@@ -337,7 +337,7 @@ class Module_cms_blogs extends standard_aed_module
 		if (addon_installed('calendar'))
 		{
 			$schedule_code=':$GLOBALS[\'SITE_DB\']->query_update(\'news\',array(\'date_and_time\'=>$GLOBALS[\'event_timestamp\'],\'validated\'=>1),array(\'id\'=>'.strval($id).'),\'\',1);';
-			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events e',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array($GLOBALS['SITE_DB']->translate_field_ref('e_content')=>$schedule_code),'',1);
+			$past_event=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_start_day','e_start_month','e_start_year','e_start_hour','e_start_minute'),array($GLOBALS['SITE_DB']->translate_field_ref('e_content')=>$schedule_code),'',1);
 			$scheduled=array_key_exists(0,$past_event)?array($past_event[0]['e_start_minute'],$past_event[0]['e_start_hour'],$past_event[0]['e_start_month'],$past_event[0]['e_start_day'],$past_event[0]['e_start_year']):NULL;
 			if ((!is_null($scheduled)) && ($scheduled<time())) $scheduled=NULL;
 		} else

@@ -28,7 +28,7 @@ function ocf_list_multi_moderations($forum_id)
 {
 	if (!addon_installed('ocf_multi_moderations')) return array();
 
-	$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations m',array('m.*'),NULL,'ORDER BY '.$GLOBALS['FORUM_DB']->translate_field_ref('mm_name'));
+	$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),NULL,'ORDER BY '.$GLOBALS['FORUM_DB']->translate_field_ref('mm_name'));
 	$out=array();
 	if (count($rows)==0) return $out;
 

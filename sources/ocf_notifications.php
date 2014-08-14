@@ -44,7 +44,7 @@ function ocf_get_pp_rows($limit=5)
 	$query='';
 
 	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
-	if (!multi_lang_content())
+	if (multi_lang_content())
 	{
 		$query.=',t_cache_first_post AS p_post';
 	} else
@@ -68,7 +68,7 @@ function ocf_get_pp_rows($limit=5)
 	$query.=' UNION ';
 
 	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
-	if (!multi_lang_content())
+	if (multi_lang_content())
 	{
 		$query.=',t_cache_first_post AS p_post';
 	} else
@@ -92,7 +92,7 @@ function ocf_get_pp_rows($limit=5)
 	$query.=' UNION ';
 
 	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
-	if (!multi_lang_content())
+	if (multi_lang_content())
 	{
 		$query.=',t_cache_first_post AS p_post';
 	} else
@@ -116,7 +116,7 @@ function ocf_get_pp_rows($limit=5)
 	$query.=' UNION ';
 
 	$query.='SELECT t.*,l.*,p.*,p.id AS p_id,t.id as t_id';
-	if (!multi_lang_content())
+	if (multi_lang_content())
 	{
 		$query.=',t_cache_first_post AS p_post';
 	} else

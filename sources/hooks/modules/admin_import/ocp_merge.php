@@ -2061,7 +2061,7 @@ class Hook_ocp_merge
 			if (import_check_if_imported('cpf',strval($row['id']))) continue;
 
 			$name=$this->get_lang_string($db,$row['cf_name']);
-			$existing=$GLOBALS['FORUM_DB']->query_select('f_custom_fields f',array('f.id','cf_type'),array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name),'',1);
+			$existing=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'),array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name),'',1);
 			if ((!array_key_exists(0,$existing)) || ($existing[0]['cf_type']!=$row['cf_type']))
 			{
 				$only_group=$row['cf_only_group'];
