@@ -968,7 +968,7 @@ function install_ocf($upgrade_from=NULL)
 
 		$GLOBALS['FORUM_DB']->create_table('f_multi_moderations',array(
 			'id'=>'*AUTO',
-			'mm_name'=>'*SHORT_TRANS',
+			'mm_name'=>'SHORT_TRANS',
 			'mm_post_text'=>'LONG_TEXT',	// Comcode
 			'mm_move_to'=>'?INTEGER',
 			'mm_pin_state'=>'?BINARY',

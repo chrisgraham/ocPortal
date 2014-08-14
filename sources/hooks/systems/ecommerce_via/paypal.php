@@ -193,12 +193,12 @@ class Hook_paypal
 			if (post_param_integer('recurring')!=1) my_exit(do_lang('IPN_SUB_RECURRING_WRONG'));
 			$txn_id=post_param('subscr_id');
 		}
-		elseif ($txn_type=='subscr_eot')
+		elseif ($txn_type=='subscr_eot' || $txn_type=='recurring_payment_suspended_due_to_max_failed_payment')
 		{
 			$payment_status='SCancelled';
 			$txn_id=post_param('subscr_id').'-c';
 		}
-		elseif ($txn_type=='subscr_cancel')
+		elseif ($txn_type=='subscr_payment' || $txn_type=='subscr_failed' || $txn_type=='subscr_cancel')
 		{
 			exit();
 		}
