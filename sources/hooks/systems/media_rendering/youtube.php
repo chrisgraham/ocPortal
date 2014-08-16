@@ -60,7 +60,7 @@ class Hook_media_rendering_youtube
 	 */
 	function recognises_url($url)
 	{
-		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$url)!=0) || (preg_match('#^https?://youtu\.be/([\w\-]+)#',$url)!=0))
+		if ((preg_match('#^https?://(www|m)\.youtube\.com/watch\?v=([\w\-]+)#',$url)!=0) || (preg_match('#^https?://youtu\.be/([\w\-]+)#',$url)!=0))
 			return MEDIA_RECOG_PRECEDENCE_HIGH;
 		return MEDIA_RECOG_PRECEDENCE_NONE;
 	}
@@ -74,9 +74,9 @@ class Hook_media_rendering_youtube
 	function get_video_thumbnail($src_url)
 	{
 		$matches=array();
-		if ((preg_match('#^https?://www\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^http://youtu\.be/([\w\-]+)#',$src_url,$matches)!=0))
+		if ((preg_match('#^https?://(www|m)\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^http://(youtu\.be)/([\w\-]+)#',$src_url,$matches)!=0))
 		{
-			return 'http://img.youtube.com/vi/'.rawurldecode($matches[1]).'/0.jpg';
+			return 'http://img.youtube.com/vi/'.rawurldecode($matches[2]).'/0.jpg';
 		}
 		return NULL;
 	}
@@ -94,7 +94,7 @@ class Hook_media_rendering_youtube
 	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
 	{
 		if (is_object($url)) $url=$url->evaluate();
-		$attributes['remote_id']=preg_replace('#^(https?://www\.youtube\.com/watch\?v=|https?://youtu\.be/)([\w\-]+)#','${2}',$url);
+		$attributes['remote_id']=preg_replace('#^(https?://(www|m)\.youtube\.com/watch\?v=|https?://youtu\.be/)([\w\-]+)#','${3}',$url);
 		return do_template('MEDIA_YOUTUBE',array('_GUID'=>'f7c4c015b208e13bf0cd9326d9133175','HOOK'=>'youtube')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
 	}
 }
