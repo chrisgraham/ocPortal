@@ -27,6 +27,9 @@ function init__database()
 {
 	if (defined('DB_MAX_KEY_SIZE')) return;
 
+	global $HAS_MULTI_LANG_CONTENT;
+	$HAS_MULTI_LANG_CONTENT=NULL;
+
 	global $QUERY_LIST,$QUERY_COUNT,$NO_QUERY_LIMIT,$NO_DB_SCOPE_CHECK,$QUERY_FILE_LOG,$SITE_INFO;
 	$QUERY_LIST=array();
 	$QUERY_COUNT=0;
@@ -73,13 +76,13 @@ function init__database()
  */
 function multi_lang_content()
 {
-	static $ret=NULL;
-	if ($ret===NULL)
+	global $HAS_MULTI_LANG_CONTENT;
+	if ($HAS_MULTI_LANG_CONTENT===NULL)
 	{
 		global $SITE_INFO;
-		$ret=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):true;
+		$HAS_MULTI_LANG_CONTENT=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):true;
 	}
-	return $ret;
+	return $HAS_MULTI_LANG_CONTENT;
 }
 
 /**
@@ -911,7 +914,7 @@ class database_driver
 		// Optimisation for entirely automatic translate table linkage (only done on non-joins, as this removes a whole lot of potential complexities -- if people are doing joins they go a little further to do this manually anyway; also we make sure we're operating on our site's table prefix so we don't collect meta info for the wrong table set)
 		if ($lang_fields===NULL)
 		{
-			if (($table!='translate') && (strpos($table,' ')===false) && (isset($GLOBALS['SITE_DB'])) && ($this->table_prefix==$GLOBALS['SITE_DB']->table_prefix))
+			if (($table!='translate') && (strpos($table,' ')===false) && ((isset($GLOBALS['SITE_DB'])) && ($this->table_prefix==$GLOBALS['SITE_DB']->table_prefix) || (get_forum_type()=='ocf')))
 			{
 				global $TABLE_LANG_FIELDS;
 				$lang_fields_provisional=isset($TABLE_LANG_FIELDS[$table])?$TABLE_LANG_FIELDS[$table]:array();
@@ -957,7 +960,11 @@ class database_driver
 
 					foreach ($lang_fields_provisional as $lang_field=>$field_type)
 					{
-						if ((in_array($field_prefix.$lang_field,$select)) || (in_array($field_prefix.'*',$select)))
+						if (
+							(in_array($field_prefix.$lang_field,$select)) || 
+							((!is_null($where_map)) && (array_key_exists('t_'.$lang_field.'.text_original',$where_map))) || 
+							(in_array($field_prefix.'*',$select))
+						)
 						{
 							$lang_fields[$lang_field]=$field_type;
 						}
@@ -1031,17 +1038,20 @@ class database_driver
 
 		if ($DEV_MODE)
 		{
-			if ((!multi_lang_content()) && (strpos($query,$this->get_table_prefix().'translate')!==false))
+			if (!$GLOBALS['NO_DB_SCOPE_CHECK'])
 			{
-				fatal_exit('Assumption of multi-lang-content being on, and it\'s not');
-			}
+				if ((!multi_lang_content()) && (strpos($query,$this->get_table_prefix().'translate')!==false) && (strpos($query,'DROP INDEX')===false) && (strpos($query,'ALTER TABLE')===false) && (strpos($query,'CREATE TABLE')===false))
+				{
+					fatal_exit('Assumption of multi-lang-content being on, and it\'s not');
+				}
 
-			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (is_ocf_satellite_site()) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
-			{
-				/*file_put_contents(get_file_base().'/uploads/downloads/test.txt',var_export(debug_backtrace(),true));
-				@exit($query);
-				@debug_print_backtrace();*/
-				fatal_exit('Using OCF queries on the wrong driver');
+				if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (is_ocf_satellite_site()))
+				{
+					/*file_put_contents(get_file_base().'/uploads/downloads/test.txt',var_export(debug_backtrace(),true));
+					@exit($query);
+					@debug_print_backtrace();*/
+					fatal_exit('Using OCF queries on the wrong driver');
+				}
 			}
 		}
 
@@ -1267,6 +1277,8 @@ class database_driver
 
 					foreach ($ret as $i=>$row)
 					{
+						if (!isset($row[$field])) continue; // Probably dereferenced to text_original in WHERE, but not selected
+
 						$entry=$row[$field];
 
 						if (($row[$original]!==NULL) && ($cnt_orig<=1000))

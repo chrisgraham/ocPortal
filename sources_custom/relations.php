@@ -369,6 +369,7 @@ function get_relation_map()
 		'tests.t_inherit_section'=>'test_sections.id',
 		'tickets.topic_id'=>'f_topics.id',
 		'tickets.forum_id'=>'f_forums.id',
+		'tickets.ticket_type'=>'ticket_types.id',
 		'poll_votes.v_poll_id'=>'poll.poll_id',
 		'reported_content.r_session_id'=>'sessions.id',
 		'bookable.calendar_type'=>'calendar_types.id',

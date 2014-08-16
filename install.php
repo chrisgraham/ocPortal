@@ -837,7 +837,6 @@ function step_4()
 	$text=new ocp_tempcode();
 	$options=new ocp_tempcode();
 	$hidden=new ocp_tempcode();
-	$hidden->attach(form_input_hidden('multi_lang_content','0'));
 	$options->attach(make_option(do_lang_tempcode('DOMAIN'),example('DOMAIN_EXAMPLE','DOMAIN_TEXT'),'domain',$domain,false,true));
 	$options->attach(make_option(do_lang_tempcode('BASE_URL'),example('BASE_URL_EXAMPLE','BASE_URL_TEXT'),'base_url',$base_url,false,true));
 	if (post_param('db_type')!='xml')
@@ -850,6 +849,7 @@ function step_4()
 //	$options->attach(make_tick(do_lang_tempcode('MULTI_LANG'),example('','MULTI_LANG_TEXT'),'multi_lang',true));
 	require_lang('config');
 	$options->attach(make_tick(do_lang_tempcode('SEND_ERROR_EMAILS_OCPRODUCTS'),example('','CONFIG_OPTION_send_error_emails_ocproducts'),'allow_reports_default',1));
+	$options->attach(make_tick(do_lang_tempcode('MULTI_LANG_CONTENT'),example('','MULTI_LANG_CONTENT_TEXT'),'multi_lang_content',0));
 	$sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('_GUID'=>'f051465e86a7a53ec078e0d9de773993','HIDDEN'=>$hidden,'TITLE'=>$title,'TEXT'=>$text,'OPTIONS'=>$options)));
 
 	$hidden=new ocp_tempcode();

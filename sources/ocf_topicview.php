@@ -413,7 +413,18 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 
 			// Load post
-			$_postdetails['message']=get_translated_tempcode('f_posts',$_postdetails,'p_post',$GLOBALS['FORUM_DB']);
+			$post_row=array(
+				'id'=>$_postdetails['id'],
+				'p_post'=>$_postdetails['p_post'],
+			);
+			if (!multi_lang_content())
+			{
+				$post_row+=array(
+					'p_post__text_parsed'=>$_postdetails['p_post__text_parsed'],
+					'p_post__source_user'=>$_postdetails['p_post__source_user'],
+				);
+			}
+			$_postdetails['message']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 
 			// Fake a quoted post? (kind of a nice 'tidy up' feature if a forum's threading has been turned off, leaving things for flat display)
 			if ((!is_null($_postdetails['p_parent_id'])) && (strpos($_postdetails['message_comcode'],'[quote')===false))

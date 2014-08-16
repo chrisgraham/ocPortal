@@ -19,6 +19,21 @@
  */
 
 /**
+ * Rebuild database indices, using correct rules for new field types.
+ */
+function rebuild_indices()
+{
+	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+
+	$indices=$GLOBALS['SITE_DB']->query_select('db_meta_indices',array('*'));
+	foreach ($indices as $index)
+	{
+		$GLOBALS['SITE_DB']->delete_index_if_exists($index['i_table'],$index['i_name']);
+		$GLOBALS['SITE_DB']->create_index($index['i_table'],$index['i_name'],explode(',',$index['i_fields']));
+	}
+}
+
+/**
  * Disable content translation.
  */
 function disable_content_translation()
@@ -37,32 +52,38 @@ function disable_content_translation()
 	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'');
 	foreach ($_table_lang_fields as $field)
 	{
+		// Add new implied fields for holding extra Comcode details, and new field to hold main Comcode
+		$to_add=array('new'=>'LONG_TEXT');
 		if (strpos($field['m_type'],'__COMCODE')!==false)
 		{
-			// Add new implied fields for holding extra Comcode details, and new field to hold main Comcode
-			foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER','new'=>'LONG_TEXT') as $sub_name=>$sub_type)
+			$to_add+=array('text_parsed'=>'LONG_TEXT','source_user'=>'USER');
+		}
+		foreach ($to_add as $sub_name=>$sub_type)
+		{
+			$sub_name=$field['m_name'].'__'.$sub_name;
+			$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' ADD '.$sub_name.' '.$type_remap[$sub_type];
+			if ($sub_name=='text_parsed')
 			{
-				$sub_name=$field['m_name'].'__'.$sub_name;
-				$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' ADD '.$sub_name.' '.$type_remap[$sub_type];
-				if ($sub_name=='text_parsed')
-				{
-					$query.=' DEFAULT \'\'';
-				} elseif ($sub_name=='new')
-				{
-					$query.=' DEFAULT \'\''; // Has a default of '' for now, will be removed further down
-				} elseif ($sub_name=='source_user')
-				{
-					$query.=' DEFAULT '.strval(db_get_first_id());
-				}
-				$query.=' NOT NULL';
-				$db->_query($query);
+				$query.=' DEFAULT \'\'';
+			} elseif ($sub_name=='new')
+			{
+				$query.=' DEFAULT \'\''; // Has a default of '' for now, will be removed further down
+			} elseif ($sub_name=='source_user')
+			{
+				$query.=' DEFAULT '.strval(db_get_first_id());
 			}
+			$query.=' NOT NULL';
+			$db->_query($query);
 		}
 
 		// Copy from translate table
 		$query='UPDATE '.$db->table_prefix.$field['m_table'].' a SET ';
-		$query.='a.'.$field['m_name'].'__new=(SELECT b.text_original FROM '.$db->table_prefix.'translate b WHERE b.id=a.'.$field['m_name'].' ORDER BY broken), ';
-		$query.='a.'.$field['m_name'].'__source_user=(SELECT b.source_user FROM '.$db->table_prefix.'translate b WHERE b.id=a.'.$field['m_name'].' ORDER BY broken)';
+		$query.='a.'.$field['m_name'].'__new=IFNULL((SELECT b.text_original FROM '.$db->table_prefix.'translate b WHERE b.id=a.'.$field['m_name'].' ORDER BY broken), \'\')';
+		if (strpos($field['m_type'],'__COMCODE')!==false)
+		{
+			$query.=', a.'.$field['m_name'].'__source_user=IFNULL((SELECT b.source_user FROM '.$db->table_prefix.'translate b WHERE b.id=a.'.$field['m_name'].' ORDER BY broken), '.strval(db_get_first_id()).')';
+			$query.=', a.'.$field['m_name'].'__text_parsed=\'\'';
+		}
 		$db->_query($query);
 
 		// Delete old main field
@@ -70,16 +91,24 @@ function disable_content_translation()
 		$db->_query($query);
 
 		// Rename Comcode field to main field, and don't put default of '' on it anymore
-		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' CHANGE '.$field['m_name'].'__new '.$field['m_name'].' '.$type_remap['LONG_TEXT'];
+		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' CHANGE '.$field['m_name'].'__new '.$field['m_name'].' '.$type_remap['LONG_TEXT'].' NOT NULL';
 		$db->_query($query);
+
+		// Create fulltext search index
+		$GLOBALS['SITE_DB']->create_index($field['m_table'],'#'.$field['m_name'],array($field['m_name']));
 
 		reload_lang_fields();
 	}
+
+	global $HAS_MULTI_LANG_CONTENT;
+	$HAS_MULTI_LANG_CONTENT=false;
 
 	// Empty translate table
 	$GLOBALS['SITE_DB']->query_delete('translate');
 
 	_update_base_config_for_content_translation(false);
+
+	rebuild_indices();
 }
 
 /**
@@ -101,6 +130,9 @@ function enable_content_translation()
 	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'');
 	foreach ($_table_lang_fields as $field)
 	{
+		// Remove old fulltext search index
+		$GLOBALS['SITE_DB']->delete_index_if_exists($field['m_table'],'#'.$field['m_name']);
+
 		// Rename main field to temporary one
 		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' CHANGE '.$field['m_name'].' '.$field['m_name'].'__old '.$type_remap['LONG_TEXT'];
 		$db->_query($query);
@@ -111,8 +143,12 @@ function enable_content_translation()
 
 		// Add new field for translate reference
 		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' ADD '.$field['m_name'].' '.$type_remap[$_type];
-		$query.=' DEFAULT '.strval(db_get_first_id());
-		if (substr($_type,0,1)!='?') $query.=' NOT NULL';
+		$query.=' DEFAULT 0';
+		if (substr($field['m_type'],0,1)!='?') $query.=' NOT NULL';
+		$db->_query($query);
+		// Now alter it without the default
+		$query='ALTER TABLE '.$db->table_prefix.$field['m_table'].' CHANGE '.$field['m_name'].' '.$field['m_name'].' '.$type_remap[$_type];
+		if (substr($field['m_type'],0,1)!='?') $query.=' NOT NULL';
 		$db->_query($query);
 
 		$has_comcode=(strpos($field['m_type'],'__COMCODE')!==false);
@@ -156,7 +192,12 @@ function enable_content_translation()
 		reload_lang_fields();
 	}
 
+	global $HAS_MULTI_LANG_CONTENT;
+	$HAS_MULTI_LANG_CONTENT=true;
+
 	_update_base_config_for_content_translation(true);
+
+	rebuild_indices();
 }
 
 /**

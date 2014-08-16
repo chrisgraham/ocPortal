@@ -165,8 +165,8 @@ function catalogue_file_script()
  * Add a catalogue using all the specified values.
  *
  * @param  ID_TEXT			The codename of the catalogue
- * @param  mixed				The title of the catalogue (either language code or string)
- * @param  mixed				A description (either language code or string)
+ * @param  mixed				The title of the catalogue (either language string map or string)
+ * @param  mixed				A description (either language string map or string)
  * @param  SHORT_INTEGER	The display type
  * @param  BINARY				Whether the catalogue uses a tree system (as opposed to mere categories in an index)
  * @param  LONG_TEXT			Hidden notes pertaining to this catalogue
@@ -240,8 +240,8 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
  * Add a field to the specified catalogue, without disturbing any other data in that catalogue.
  *
  * @param  ID_TEXT		The codename of the catalogue the field is for
- * @param  mixed			The name of the field (either language code or string)
- * @param  mixed			A description (either language code or string)
+ * @param  mixed			The name of the field (either language string map or string)
+ * @param  mixed			A description (either language string map or string)
  * @param  ID_TEXT		The type of the field
  * @param  integer		The field order (the field order determines what order the fields are displayed within an entry)
  * @param  BINARY			Whether this field defines the catalogue order
@@ -538,8 +538,8 @@ function actual_delete_catalogue_field($id)
  * Add a catalogue category
  *
  * @param  ID_TEXT		The codename of the catalogue the category is in
- * @param  mixed			The title of this category (either language code or string)
- * @param  mixed			A description (either language code or string)
+ * @param  mixed			The title of this category (either language string map or string)
+ * @param  mixed			A description (either language string map or string)
  * @param  LONG_TEXT		Hidden notes pertaining to this category
  * @param  ?AUTO_LINK	The ID of this categories parent (NULL: a root category, or not a tree catalogue)
  * @param  URLPATH		The representative image for the category (blank: none)
@@ -582,7 +582,7 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 
 	calculate_category_child_count_cache($parent_id);
 
-	log_it('ADD_CATALOGUE_CATEGORY',strval($id),get_translated_text($title));
+	log_it('ADD_CATALOGUE_CATEGORY',strval($id),get_translated_text($map['cc_title']));
 
 	require_code('seo2');
 	if (!is_array($title))

@@ -161,11 +161,14 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 	// Then safely update our own
 	$this_ref->table_exists_cache[$table_name]=true;
 
-	foreach ($fields_copy as $name=>$type)
+	if (!multi_lang_content())
 	{
-		if (strpos($type,'_TRANS')!==false)
+		foreach ($fields_copy as $name=>$type)
 		{
-			$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
+			if (strpos($type,'_TRANS')!==false)
+			{
+				$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
+			}
 		}
 	}
 
@@ -214,11 +217,14 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 		if ($_fields!='') $_fields.=',';
 		$_fields.=$field;
 
-		global $TABLE_LANG_FIELDS;
-		if (isset($TABLE_LANG_FIELDS[$table_name][$field]))
-			$_fields.='(255)';
+		if (!multi_lang_content())
+		{
+			global $TABLE_LANG_FIELDS;
+			if (isset($TABLE_LANG_FIELDS[$table_name][$field]))
+				$_fields.='(255)';
+		}
 	}
-	$this_ref->query_insert('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name,'i_fields'=>$_fields),false,true); // Allow errors because sometimes bugs when developing can call for this happening twice
+	$this_ref->query_insert('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name,'i_fields'=>implode(',',$fields)),false,true); // Allow errors because sometimes bugs when developing can call for this happening twice
 
 	if (count($this_ref->connection_write)>4) // Okay, we can't be lazy anymore
 	{
@@ -238,6 +244,7 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
  */
 function _helper_delete_index_if_exists($this_ref,$table_name,$index_name)
 {
+	$full_index_name=$index_name;
 	if (substr($index_name,0,1)=='#') $index_name=substr($index_name,1);
 	$query='DROP INDEX '.$index_name.' ON '.$this_ref->get_table_prefix().$table_name;
 	$this_ref->query($query,NULL,NULL,true);
@@ -248,7 +255,7 @@ function _helper_delete_index_if_exists($this_ref,$table_name,$index_name)
 		$GLOBALS['XML_CHAIN_DB']->_query($query,NULL,NULL,true);
 	}
 
-	$this_ref->query_delete('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name));
+	$this_ref->query_delete('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$full_index_name));
 }
 
 /**
@@ -433,9 +440,12 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 	$this_ref->query_insert('db_meta',array('m_table'=>$table_name,'m_name'=>$name,'m_type'=>$_type));
 	reload_lang_fields();
 
-	if (strpos($_type,'_TRANS')!==false)
+	if (!multi_lang_content())
 	{
-		$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
+		if (strpos($_type,'_TRANS')!==false)
+		{
+			$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
+		}
 	}
 
 	if ((!multi_lang_content()) && (strpos($_type,'__COMCODE')!==false))

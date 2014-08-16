@@ -549,7 +549,24 @@ class Module_topicview
 			$map=array('page'=>'topics','type'=>'new_post','id'=>$id);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 			$more_url=build_url($map,get_module_zone('topics'));
-			$_postdetails=isset($topic_info['first_post'])?get_translated_tempcode('f_posts',$topic_info['row'],'p_post',$GLOBALS['FORUM_DB']):new ocp_tempcode();
+			if (isset($topic_info['first_post']))
+			{
+				$post_row=array(
+					'id'=>$topic_info['row']['id'],
+					'p_post'=>$topic_info['row']['p_post'],
+				);
+				if (!multi_lang_content())
+				{
+					$post_row+=array(
+						'p_post__text_parsed'=>$topic_info['row']['p_post__text_parsed'],
+						'p_post__source_user'=>$topic_info['row']['p_post__source_user'],
+					);
+				}
+				$_postdetails=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+			} else
+			{
+				$_postdetails=new ocp_tempcode();
+			}
 			$first_post=$_postdetails;
 			$first_post_url=$GLOBALS['FORUM_DRIVER']->post_url($topic_info['first_post_id'],is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),true);
 			$display='block';

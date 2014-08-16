@@ -469,19 +469,34 @@ function parse_translated_text($table,&$row,$field_name,$connection,$lang,$force
 
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
-		$map=_lang_remap($field_name,$entry,$row[$field_name],$connection,true,NULL,$row[$field_name.'__source_user'],$as_admin,false,true);
-		if (!multi_lang_content())
+
+		if (multi_lang_content())
 		{
+			_lang_remap($field_name,$entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+
+			if (!is_null($SEARCH__CONTENT_BITS))
+			{
+				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+				$LAX_COMCODE=$temp;
+				$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
+				return $ret;
+			}
+		} else
+		{
+			$map=_lang_remap($field_name,$entry,$row[$field_name],$connection,true,NULL,$row[$field_name.'__source_user'],$as_admin,false,true);
+
 			$connection->query_update($table,$map,$row,'',1);
 			$row=$map+$row;
+
+			if (!is_null($SEARCH__CONTENT_BITS))
+			{
+				$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+				$LAX_COMCODE=$temp;
+				$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
+				return $ret;
+			}
 		}
-		if (!is_null($SEARCH__CONTENT_BITS))
-		{
-			$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
-			$LAX_COMCODE=$temp;
-			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
-			return $ret;
-		}
+
 		$LAX_COMCODE=$temp;
 		$ret=get_translated_tempcode($table,$row,$field_name,$connection,$lang);
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
@@ -507,22 +522,30 @@ function _comcode_lang_string($lang_code)
 		$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages p LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON t.id=string_index AND '.db_string_equal_to('t.language',user_lang()),array('string_index','text_parsed'),array('the_page'=>$lang_code,'the_zone'=>'!'),'',1);
 		if ((array_key_exists(0,$comcode_page)) && (!is_browser_decacheing()))
 		{
+			$comcode_page_row_cached_only=array(
+				'the_zone'=>$comcode_page_rows[0]['the_zone'],
+				'the_page'=>$comcode_page_rows[0]['the_page'],
+				'the_theme'=>$comcode_page_rows[0]['the_theme'],
+				'string_index'=>$comcode_page_rows[0]['string_index'],
+				'string_index__text_parsed'=>$comcode_page_rows[0]['string_index__text_parsed'],
+				'string_index__source_user'=>$comcode_page_rows[0]['string_index__source_user'],
+			);
 			if ((!is_null($comcode_page[0]['text_parsed'])) && ($comcode_page[0]['text_parsed']!=''))
 			{
 				$parsed=new ocp_tempcode();
 				if (!$parsed->from_assembly($comcode_page[0]['text_parsed'],true))
 				{
-					$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page[0],'string_index');
+					$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index');
 					unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
 				}
 			} else
 			{
-				$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page[0],'string_index',NULL,NULL,true);
+				$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index',NULL,NULL,true);
 				if (is_null($ret)) // Not existent in our language, we'll need to lookup and insert, and get again
 				{
 					$looked_up=do_lang($lang_code,NULL,NULL,NULL,NULL,false);
 					$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$comcode_page[0]['string_index'],'source_user'=>get_member(),'broken'=>0,'importance_level'=>1,'text_original'=>$looked_up,'text_parsed'=>'','language'=>user_lang()),true,false,true);
-					$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page[0],'string_index');
+					$ret=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index');
 				}
 				unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);
 				return $ret;
