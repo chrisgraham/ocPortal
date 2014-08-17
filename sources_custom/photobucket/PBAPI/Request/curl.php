@@ -60,7 +60,7 @@ class PBAPI_Request_curl extends PBAPI_Request {
         }
         
         $ch = curl_init();
-        curl_setopt_array($ch, $curl_opts);
+        @curl_setopt_array($ch, $curl_opts);
 
         $data = $this->curl_request($ch, $url);
         curl_close($ch);

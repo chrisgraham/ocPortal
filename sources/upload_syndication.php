@@ -226,7 +226,10 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 			}
 
 			sort_maps_by($remote_urls,1);
-			$new_url=reset(end($remote_urls)); // The first element (URL in URL pair) of the last URL pair element
+
+			// The first element (URL in URL pair) of the last URL pair element
+			$last_url=end($remote_urls);
+			$new_url=reset($last_url);
 		}
 	}
 
