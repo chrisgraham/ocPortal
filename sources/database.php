@@ -70,6 +70,31 @@ function init__database()
 }
 
 /**
+ * Extract certain fields, including any Tempcode details for them, from a DB table row array.
+ *
+ * @param  array			DB table row.
+ * @param  array			List of fields to copy through.
+ * @return array			Map of fields.
+ */
+function db_map_restrict($row,$fields)
+{
+	$out=array();
+	foreach ($fields as $field)
+	{
+		$out[$field]=$row[$field];
+		if (isset($row[$field.'__text_parsed']))
+		{
+			$out[$field.'__text_parsed']=$row[$field.'__text_parsed'];
+		}
+		if (isset($row[$field.'__source_user']))
+		{
+			$out[$field.'__source_user']=$row[$field.'__source_user'];
+		}
+	}
+	return $out;
+}
+
+/**
  * Find whether to run in multi-lang mode for content translations.
  *
  * @return boolean		Whether to run in multi-lang mode for content translations.

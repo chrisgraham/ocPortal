@@ -323,15 +323,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['firsttitle']=$fp_rows[0]['p_title'];
 		if ($show_first_posts)
 		{
-			$post_row=array(
-				'id'=>$fp_rows[0]['p_id'],
-				'p_post'=>$fp_rows[0]['p_post'],
-			);
-			if (!multi_lang_content())
-			{
-				$post_row['p_post__text_parsed']=$fp_rows[0]['p_post__text_parsed'];
-				$post_row['p_post__source_user']=$fp_rows[0]['p_post__source_user'];
-			}
+			$post_row=db_map_restrict($fp_rows[0],array('p_post'))+array('id'=>$fp_rows[0]['p_id']);
 			$out[$i]['firstpost']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 		}
 	}
@@ -451,15 +443,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 			{
 				$temp['title']=$myrow['p_title'];
 
-				$post_row=array(
-					'id'=>$myrow['id'],
-					'p_post'=>$myrow['p_post'],
-				);
-				if (!multi_lang_content())
-				{
-					$post_row['p_post__text_parsed']=$myrow['p_post__text_parsed'];
-					$post_row['p_post__source_user']=$myrow['p_post__source_user'];
-				}
+				$post_row=db_map_restrict($myrow,array('id','p_post'));
 				$temp['message']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 
 				$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);

@@ -170,25 +170,27 @@ class Block_main_news
 
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
+				$just_news_row=db_map_restrict($myrow,array('id','title','news','news_article'));
+
 				$id=$myrow['p_id'];
 				$date=get_timezoned_date($myrow['date_and_time']);
 				$author_url=((addon_installed('authors')) && (!$member_based))?build_url(array('page'=>'authors','type'=>'misc','id'=>$myrow['author']),get_module_zone('authors')):new ocp_tempcode();
 				$author=$myrow['author'];
-				$news_title=get_translated_tempcode('news',$myrow,'title');
+				$news_title=get_translated_tempcode('news',$just_news_row,'title');
 				if ((array_key_exists('show_in_full',$map)) && ($map['show_in_full']=='1'))
 				{
-					$news=get_translated_tempcode('news',$myrow,'news_article');
+					$news=get_translated_tempcode('news',$just_news_row,'news_article');
 					$truncate=false;
 					if ($news->is_empty())
 					{
-						$news=get_translated_tempcode('news',$myrow,'news');
+						$news=get_translated_tempcode('news',$just_news_row,'news');
 					}
 				} else
 				{
-					$news=get_translated_tempcode('news',$myrow,'news');
+					$news=get_translated_tempcode('news',$just_news_row,'news');
 					if ($news->is_empty())
 					{
-						$news=get_translated_tempcode('news',$myrow,'news_article');
+						$news=get_translated_tempcode('news',$just_news_row,'news_article');
 						$truncate=true;
 					} else $truncate=false;
 				}
@@ -230,13 +232,15 @@ class Block_main_news
 
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
+				$just_news_row=db_map_restrict($myrow,array('id','title','news','news_article'));
+
 				$date=get_timezoned_date($myrow['date_and_time']);
 				$tmp=array('page'=>'news','type'=>'view','id'=>$myrow['p_id']);
 				if ($filter!='*') $tmp['filter']=$filter;
 				if (($filter_and!='*') && ($filter_and!='')) $tmp['filter_and']=$filter_and;
 				if ($blogs!=-1) $tmp['blog']=$blogs;
 				$url=build_url($tmp,$zone);
-				$title=get_translated_tempcode('news',$myrow,'title');
+				$title=get_translated_tempcode('news',$just_news_row,'title');
 				$title_plain=get_translated_text($myrow['title']);
 
 				$seo_bits=seo_meta_get_for('news',strval($myrow['p_id']));

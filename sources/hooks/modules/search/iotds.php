@@ -120,10 +120,12 @@ class Hook_search_iotds
 	 */
 	function render($row)
 	{
+		$just_iotd_row=db_map_restrict($row,array('id','i_title'));
+
 		require_code('images');
 		$url=build_url(array('page'=>'iotds','type'=>'view','id'=>$row['id']),get_module_zone('iotds'));
 		$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'iotds','iotd',$row['id']);
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('IOTD'),'SUMMARY'=>hyperlink($url,do_image_thumb($thumb_url,get_translated_tempcode('iotd',$row,'i_title'),true))));
+		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('IOTD'),'SUMMARY'=>hyperlink($url,do_image_thumb($thumb_url,get_translated_tempcode('iotd',$just_iotd_row,'i_title'),true))));
 	}
 
 }

@@ -415,24 +415,13 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 {
 	$topic=array();
 
-	if (multi_lang_content())
+	if (!is_null($topic_row['p_post']))
 	{
-		if (!is_null($topic_row['t_cache_first_post']))
-		{
-			$topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
-		} else
-		{
-			$topic['first_post']=new ocp_tempcode();
-		}
+		$post_row=db_map_restrict($topic_row,array('p_post'))+array('id'=>$topic_row['p_cache_first_post_id']);
+		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 	} else
 	{
-		$post_row=array(
-			'id'=>$topic_row['id'],
-			'p_post'=>$topic_row['p_post'],
-			'p_post__text_parsed'=>$topic_row['p_post__text_parsed'],
-			'p_post__source_user'=>$topic_row['p_post__source_user'],
-		);
-		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+		$topic['first_post']=new ocp_tempcode();
 	}
 
 	$topic['id']=$topic_row['id'];
@@ -651,7 +640,7 @@ function ocf_get_forum_view($start=0,$max=NULL,$forum_id=NULL)
 		$forum_id=db_get_first_id();
 	}/* else*/
 	{
-		$forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('f.id'=>$forum_id),'',1,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
+		$forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('id'=>$forum_id),'',1,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 		if (!array_key_exists(0,$forum_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		if (($forum_info[0]['f_redirection']!='') && (looks_like_url($forum_info[0]['f_redirection'])))

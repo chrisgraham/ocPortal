@@ -32,6 +32,8 @@ The concept of a chain is crucial to proper understanding of the Wiki+ system. P
  */
 function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
 {
+	$just_wiki_post_row=db_map_restrict($row,array('id','the_message'));
+
 	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$row['page_id']),$zone);
 	$url->attach('#post_'.strval($row['id']));
 
@@ -43,7 +45,7 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
 		$title=do_lang_tempcode('CEDI_POST');
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode('seedy_posts'/*TODO: Change in v10*/,$row,'the_message'),'URL'=>$url));
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'f271c035af57eb45b7f3b37e437baf3c','TITLE'=>$title,'BREADCRUMBS'=>$breadcrumbs,'SUMMARY'=>get_translated_tempcode('seedy_posts'/*TODO: Change in v10*/,$just_wiki_post_row,'the_message'),'URL'=>$url));
 }
 
 /**
@@ -56,7 +58,9 @@ function render_cedi_post_box($row,$zone='_SEARCH',$put_in_box=true)
  */
 function render_cedi_page_box($row,$zone='_SEARCH',$put_in_box=true)
 {
-	$content=paragraph(get_translated_tempcode('seedy_pages'/*TODO: Change in v10*/,$row,'description'),'tyrtfjhggfdf');
+	$just_wiki_page_row=db_map_restrict($row,array('id','description'));
+
+	$content=paragraph(get_translated_tempcode('seedy_pages'/*TODO: Change in v10*/,$just_wiki_page_row,'description'),'tyrtfjhggfdf');
 	$url=build_url(array('page'=>'cedi','type'=>'misc','id'=>$row['id']),$zone);
 
 	$breadcrumbs=mixed();

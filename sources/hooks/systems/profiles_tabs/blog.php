@@ -90,15 +90,17 @@ class Hook_Profiles_Tabs_blog
 				if ($i<$start) continue;
 				if ($done==$max) break;
 
+				$just_news_row=db_map_restrict($row,array('id','title','news','news_article'));
+
 				$news_id=$myrow['id'];
 				$news_date=get_timezoned_date($myrow['date_and_time']);
 				$author_url='';
 				$author=$myrow['author'];
-				$news_title=get_translated_tempcode('news',$myrow,'title');
-				$news_summary=get_translated_tempcode('news',$myrow,'news');
+				$news_title=get_translated_tempcode('news',$just_news_row,'title');
+				$news_summary=get_translated_tempcode('news',$just_news_row,'news');
 				if ($news_summary->is_empty())
 				{
-					$news_summary=get_translated_tempcode('news',$myrow,'news_article');
+					$news_summary=get_translated_tempcode('news',$just_news_row,'news_article');
 					$truncate=true;
 				} else $truncate=false;
 				$news_full_url=build_url(array('page'=>'news','type'=>'view','id'=>$news_id,'filter'=>$news_cat[0]['id'],'blog'=>1),get_module_zone('news'));

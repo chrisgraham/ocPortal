@@ -62,11 +62,13 @@ class Hook_awards_forum
 	{
 		unset($zone);
 
+		$just_forum_row=db_map_restrict($row,array('id','f_description'));
+
 		$view_map=array('page'=>'forumview');
 		if ($row['id']!=db_get_first_id()) $view_map['id']=$row['id'];
 		$url=build_url($view_map,get_module_zone('forumview'));
 
-		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['f_name'],'SUMMARY'=>get_translated_tempcode('f_forums',$row,'f_description'),'URL'=>$url));
+		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>$row['f_name'],'SUMMARY'=>get_translated_tempcode('f_forums',$just_forum_row,'f_description'),'URL'=>$url));
 	}
 
 }

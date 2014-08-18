@@ -1238,7 +1238,9 @@ class Module_catalogues
 			$num_children=$GLOBALS['SITE_DB']->query_value('catalogue_categories','COUNT(*)',array('c_name'=>$myrow['c_name']));
 			if ($myrow['c_is_tree']==1) $num_children--;
 
-			$description=get_translated_tempcode('catalogues',$myrow,'c_description');
+			$just_catalogue_row=db_map_restrict($myrow,array('c_name','c_description'));
+
+			$description=get_translated_tempcode('catalogues',$just_catalogue_row,'c_description');
 
 			$display_string=do_lang_tempcode(($myrow['c_is_tree']==1)?'CATEGORY_SUBORDINATE':'CATEGORY_SUBORDINATE_2',integer_format($num_entries),integer_format($num_children));
 

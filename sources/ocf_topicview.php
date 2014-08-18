@@ -413,17 +413,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 
 			// Load post
-			$post_row=array(
-				'id'=>$_postdetails['id'],
-				'p_post'=>$_postdetails['p_post'],
-			);
-			if (!multi_lang_content())
-			{
-				$post_row+=array(
-					'p_post__text_parsed'=>$_postdetails['p_post__text_parsed'],
-					'p_post__source_user'=>$_postdetails['p_post__source_user'],
-				);
-			}
+			$post_row=db_map_restrict($_postdetails,array('id','p_post'));
 			$_postdetails['message']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 
 			// Fake a quoted post? (kind of a nice 'tidy up' feature if a forum's threading has been turned off, leaving things for flat display)
@@ -435,7 +425,8 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 					$p=$_postdetailss[$_postdetails['p_parent_id']];
 
 					// Load post
-					$p['message']=get_translated_tempcode('f_posts',$p,'p_post',$GLOBALS['FORUM_DB']);
+					$_p=db_map_restrict($p,array('id','p_post'));
+					$p['message']=get_translated_tempcode('f_posts',$_p,'p_post',$GLOBALS['FORUM_DB']);
 				} else // Drat, we need to load it
 				{
 					$_p=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>$_postdetails['p_parent_id']),'',1);

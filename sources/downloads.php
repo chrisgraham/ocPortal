@@ -61,10 +61,12 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
+	$just_download_row=db_map_restrict($row,array('id','description'));
+
 	// Details
 	$filesize=$row['file_size'];
 	$filesize=($filesize>0)?clean_file_size($filesize):do_lang('UNKNOWN');
-	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode('download_downloads',$row,'description');
+	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode('download_downloads',$just_download_row,'description');
 	$root=get_param_integer('root',db_get_first_id(),true);
 	if (array_key_exists('id',$row))
 	{
@@ -148,7 +150,9 @@ function render_download_category_box($row,$zone='_SEARCH',$put_in_box=true)
 		$title=get_translated_text($row['category']);
 	}
 
-	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>get_translated_tempcode('download_categories',$row,'description'),'URL'=>$url));
+	$just_download_category_row=db_map_restrict($row,array('id','description'));
+
+	return do_template('SIMPLE_PREVIEW_BOX',array('_GUID'=>'aaea5f7f64297ab46aa3b3182fb57c37','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'SUMMARY'=>get_translated_tempcode('download_categories',$just_download_category_row,'description'),'URL'=>$url));
 }
 
 /**

@@ -77,15 +77,7 @@ class Hook_awards_comcode_page
 
 			if ($summary=='')
 			{
-				$comcode_page_row_cached_only=array(
-					'the_zone'=>$row2[0]['the_zone'],
-					'the_page'=>$row2[0]['the_page'],
-					'the_theme'=>$row2[0]['the_theme'],
-					'string_index'=>$row2[0]['string_index'],
-					'string_index__text_parsed'=>$row2[0]['string_index__text_parsed'],
-					'string_index__source_user'=>$row2[0]['string_index__source_user'],
-				);
-				$summary=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index');
+				$summary=get_translated_tempcode('cached_comcode_pages',$row2[0],'string_index');
 			}
 		} else
 		{

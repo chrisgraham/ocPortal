@@ -642,15 +642,7 @@ class Module_cms_comcode_pages
 					$comcode_page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$file),'',1);
 					if (array_key_exists(0,$comcode_page_rows))
 					{
-						$comcode_page_row_cached_only=array(
-							'the_zone'=>$comcode_page_rows[0]['the_zone'],
-							'the_page'=>$comcode_page_rows[0]['the_page'],
-							'the_theme'=>$comcode_page_rows[0]['the_theme'],
-							'string_index'=>$comcode_page_rows[0]['string_index'],
-							'string_index__text_parsed'=>$comcode_page_rows[0]['string_index__text_parsed'],
-							'string_index__source_user'=>$comcode_page_rows[0]['string_index__source_user'],
-						);
-						$parsed=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index',NULL,$lang);
+						$parsed=get_translated_tempcode('cached_comcode_pages',$comcode_page_rows[0],'string_index',NULL,$lang);
 					}
 				}
 

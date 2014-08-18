@@ -30,6 +30,8 @@ function render_post_box($row,$use_post_title=false)
 	require_code('ocf_groups');
 	require_css('ocf');
 
+	$just_post_row=db_map_restrict($row,array('id','p_post'));
+
 	static $poster_details_cache=array();
 	if (isset($poster_details_cache[$row['p_poster']]))
 	{
@@ -120,7 +122,7 @@ function render_post_box($row,$use_post_title=false)
 	$breadcrumbs=ocf_forum_breadcrumbs($row['p_cache_forum_id']);
 	$post_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$row['id']),get_module_zone('topicview'));
 	$post_url->attach('#post_'.strval($row['id']));
-	$post=get_translated_tempcode('f_posts',$row,'p_post',$GLOBALS['FORUM_DB']);
+	$post=get_translated_tempcode('f_posts',$just_post_row,'p_post',$GLOBALS['FORUM_DB']);
 	$post_date=get_timezoned_date($row['p_time']);
 	$post_date_raw=$row['p_time'];
 	if ($use_post_title)

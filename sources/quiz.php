@@ -30,8 +30,10 @@ function render_quiz_box($row,$zone='_SEARCH')
 	$date=get_timezoned_date($row['q_add_date']);
 	$url=build_url(array('page'=>'quiz','type'=>'do','id'=>$row['id']),$zone);
 
+	$just_quiz_row=db_map_restrict($row,array('id','q_start_text'));
+
 	$name=get_translated_text($row['q_name']);
-	$start_text=get_translated_tempcode('quizzes',$row,'q_start_text');
+	$start_text=get_translated_tempcode('quizzes',$just_quiz_row,'q_start_text');
 
 	$timeout=is_null($row['q_timeout'])?'':display_time_period($row['q_timeout']*60);
 	$redo_time=((is_null($row['q_redo_time'])) || ($row['q_redo_time']==0))?'':display_time_period($row['q_redo_time']*60*60);

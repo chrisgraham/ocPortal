@@ -120,8 +120,10 @@ class Hook_search_polls
 	 */
 	function render($row)
 	{
+		$just_poll_row=db_map_restrict($row,array('id','question'));
+
 		$url=build_url(array('page'=>'polls','type'=>'view','id'=>$row['id']),get_module_zone('polls'));
-		$question=get_translated_tempcode('poll',$row,'question');
+		$question=get_translated_tempcode('poll',$just_poll_row,'question');
 
 		return do_template('SIMPLE_PREVIEW_BOX',array('TITLE'=>do_lang_tempcode('POLL'),'SUMMARY'=>hyperlink($url,$question)));
 	}

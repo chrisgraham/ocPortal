@@ -42,10 +42,12 @@ function render_image_box($row,$zone='_SEARCH')
 {
 	require_css('galleries');
 
+	$just_image_row=db_map_restrict($row,array('id','comments'));
+
 	require_code('images');
 	$url=build_url(array('page'=>'galleries','type'=>'image','id'=>$row['id']),$zone);
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-	$description=get_translated_tempcode('images',$row,'comments');
+	$description=get_translated_tempcode('images',$just_image_row,'comments');
 	$thumb=do_image_thumb($thumb_url,$description,true);
 	$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
 
@@ -75,10 +77,12 @@ function render_video_box($row,$zone='_SEARCH')
 {
 	require_css('galleries');
 
+	$just_video_row=db_map_restrict($row,array('id','comments'));
+
 	require_code('images');
 	$url=build_url(array('page'=>'galleries','type'=>'video','id'=>$row['id']),$zone);
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
-	$description=get_translated_tempcode('videos',$row,'comments');
+	$description=get_translated_tempcode('videos',$just_video_row,'comments');
 	$thumb=do_image_thumb($thumb_url,$description,true);
 	$breadcrumbs=gallery_breadcrumbs($row['cat'],'root',false,$zone);
 
@@ -213,6 +217,8 @@ function show_video_details($myrow)
  */
 function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=false,$zone='_SEARCH',$quit_if_empty=true,$preview=false)
 {
+	$just_gallery_row=db_map_restrict($child,array('name','description'));
+
 	$member_id=get_member_id_from_gallery_name($child['name'],$child,true);
 	$url_map=array('page'=>'galleries','type'=>'misc','root'=>($root=='root')?NULL:$root,'id'=>$child['name']);
 	if (get_page_name()=='galleries') $url_map+=propagate_ocselect();
@@ -222,7 +228,7 @@ function show_gallery_box($child,$root='root',$show_member_stats_if_appropriate=
 	$is_member=!is_null($member_id);
 	if (($pic=='') && ($is_member)) $pic=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 	$add_date=get_timezoned_date($child['add_date'],false);
-	$comments=get_translated_tempcode('galleries',$child,'description');
+	$comments=get_translated_tempcode('galleries',$just_gallery_row,'description');
 	if ($show_member_stats_if_appropriate)
 	{
 		if (($is_member) && (get_forum_type()=='ocf'))

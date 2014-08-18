@@ -593,6 +593,7 @@ function require_lang($codename,$lang=NULL,$type=NULL,$ignore_errors=false) // $
  */
 function require_all_lang($lang=NULL,$only_if_for_lang=false)
 {
+	global $SITE_INFO;
 	$support_smart_decaching=(!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0');
 	if ($support_smart_decaching)
 		$GLOBALS['SITE_INFO']['disable_smart_decaching']='1'; // We'll temporarily set this to stop hundreds of disk checks happening
@@ -645,7 +646,7 @@ function lang_code_to_default_content($field_name,$code,$comcode=false,$level=2)
 			if ($lang!=user_lang())
 			{
 				if (is_file(get_file_base().'/'.$lang_type.'/'.$lang.'/critical_error.ini')) // Make sure it's a reasonable looking pack, not just a stub (Google Translate addon can be made to go nuts otherwise)
-					insert_lang($field_name,do_lang($code,'','','',$lang),$level,NULL,true,$lang_key,$lang);
+					insert_lang($field_name,do_lang($code,'','','',$lang),$level,NULL,true,$insert_map[$field_name],$lang);
 			}
 		}
 	}
@@ -1112,7 +1113,7 @@ function delete_lang($id,$connection=NULL)
  * This function is an offshoot of get_translated_text, it instead returns parsed comcode that is linked to the specified language id.
  *
  * @param  ID_TEXT			The table name
- * @param  array				The database row
+ * @param  array				The table row. Must not have aspects of other tables in it (i.e. joins). Pre-filter using 'db_map_restrict' if required
  * @param  ID_TEXT			The field name
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)

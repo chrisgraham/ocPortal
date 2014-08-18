@@ -49,7 +49,9 @@ function init__catalogues()
  */
 function render_catalogue_category_box($row,$zone='_SEARCH',$give_title=true)
 {
-	$content=paragraph(get_translated_tempcode('catalogue_categories',$row,'cc_description'),'yghjgfjftgerr');
+	$just_category_row=db_map_restrict($row,array('id','cc_description'));
+
+	$content=paragraph(get_translated_tempcode('catalogue_categories',$just_category_row,'cc_description'),'yghjgfjftgerr');
 	$url=build_url(array('page'=>'catalogues','type'=>'category','id'=>$row['id']),$zone);
 
 	$breadcrumbs=catalogue_category_breadcrumbs($row['id']);
