@@ -239,7 +239,7 @@ class Module_quiz
 			$start=0;
 			do
 			{
-				$rows=$GLOBALS['SITE_DB']->query_select('quizzes c',array('c.q_name','c.id','q_add_date AS add_time','q_timeout'),array('q_validated'=>1),'',500,$start);
+				$rows=$GLOBALS['SITE_DB']->query_select('quizzes',array('q_name','id','q_add_date AS add_time','q_timeout'),array('q_validated'=>1),'',500,$start);
 
 				foreach ($rows as $row)
 				{

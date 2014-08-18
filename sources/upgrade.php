@@ -1538,8 +1538,8 @@ function version_specific()
 		}
 		if ($version_database<10.0)
 		{
-			$GLOBALS['SITE_DB']->add_table_field('config','config_value_trans','?LONG_TRANS');
-			$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'config SET config_value_trans=config_value,config_value=\'\' WHERE '.db_string_not_equal_to('config_value','').' AND ('.db_string_equal_to('the_type','transtext').' OR '.db_string_equal_to('the_type','transline').')');
+			$GLOBALS['SITE_DB']->add_table_field('config','c_value_trans','?LONG_TRANS');
+			$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'config SET c_value_trans=config_value,config_value=\'\' WHERE '.db_string_not_equal_to('config_value','').' AND ('.db_string_equal_to('the_type','transtext').' OR '.db_string_equal_to('the_type','transline').')');
 		}
 		set_value('version',float_to_raw_string($version_files,10,true));
 

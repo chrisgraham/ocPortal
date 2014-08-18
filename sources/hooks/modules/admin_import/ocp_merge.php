@@ -742,7 +742,7 @@ class Hook_ocp_merge
 			$value=$row['config_value'];
 			if ((!is_null($value)) && ((!array_key_exists('c_set',$row)) || ($row['c_set']==1)))
 			{
-				if (strpos($row['the_type'],'trans')!==false) $value=$this->get_lang_string($db,$row['config_value_trans']);
+				if (strpos($row['the_type'],'trans')!==false) $value=$this->get_lang_string($db,$row['c_value_trans']);
 				$test=get_option($name,true);
 				if (!is_null($test))
 					set_option($name,$value);

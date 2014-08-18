@@ -324,7 +324,7 @@ class Module_calendar
 	{
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('calendar_types c',array('c.t_title','c.id'));
+			$category_data=$GLOBALS['SITE_DB']->query_select('calendar_types',array('t_title','id'));
 
 		// This is where we start
 		if (is_null($parent_pagelink))
@@ -365,7 +365,7 @@ class Module_calendar
 					{
 						if (substr($key,0,4)=='int_') $parent_id=intval(substr($key,4));
 					}
-					$entry_data=$GLOBALS['SITE_DB']->query_select('calendar_events d',array('d.e_title','d.id','e_type AS category_id','e_add_date AS add_date','e_edit_date AS edit_date'),array('e_type'=>intval($parent_id)),'',500,$start);
+					$entry_data=$GLOBALS['SITE_DB']->query_select('calendar_events',array('e_title','id','e_type AS category_id','e_add_date AS add_date','e_edit_date AS edit_date'),array('e_type'=>intval($parent_id)),'',500,$start);
 
 					foreach ($entry_data as $row)
 					{

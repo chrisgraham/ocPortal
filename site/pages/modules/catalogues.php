@@ -714,7 +714,7 @@ class Module_catalogues
 			$start=0;
 			do
 			{
-				$entry_data=$GLOBALS['SITE_DB']->query_select('catalogue_entries d',array('c_name','id','cc_id AS category_id','ce_add_date AS add_date','ce_edit_date AS edit_date','d.*'),array('cc_id'=>intval($parent_attributes['id'])),'',500,$start);
+				$entry_data=$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('c_name','id','cc_id AS category_id','ce_add_date AS add_date','ce_edit_date AS edit_date','*'),array('cc_id'=>intval($parent_attributes['id'])),'',500,$start);
 
 				foreach ($entry_data as $row)
 				{

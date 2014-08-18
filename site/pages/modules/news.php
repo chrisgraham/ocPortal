@@ -251,7 +251,7 @@ class Module_news
 			$start=0;
 			do
 			{
-				$category_data=$GLOBALS['SITE_DB']->query_select('news_categories c',array('c.nc_title','c.id'),NULL,'',300,$start);
+				$category_data=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title','id'),NULL,'',300,$start);
 				foreach ($category_data as $row)
 				{
 					$row['title']=get_translated_text($row['nc_title']);
@@ -285,7 +285,7 @@ class Module_news
 				$start=0;
 				do
 				{
-					$entry_data=$GLOBALS['SITE_DB']->query_select('news d',array('d.title','d.id','news_category AS category_id','date_and_time AS add_date','edit_date'),NULL,'',500,$start);
+					$entry_data=$GLOBALS['SITE_DB']->query_select('news',array('title','id','news_category AS category_id','date_and_time AS add_date','edit_date'),NULL,'',500,$start);
 
 					foreach ($entry_data as $row)
 					{

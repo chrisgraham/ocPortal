@@ -282,7 +282,7 @@ class Module_downloads
 
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('download_categories d',array('d.id','d.category','parent_id','add_date AS edit_date'));
+			$category_data=$GLOBALS['SITE_DB']->query_select('download_categories',array('id','category','parent_id','add_date AS edit_date'));
 
 		// Subcategories
 		foreach ($category_data as $row)
@@ -315,7 +315,7 @@ class Module_downloads
 			$start=0;
 			do
 			{
-				$entry_data=$GLOBALS['SITE_DB']->query_select('download_downloads d',array('d.id','d.name','category_id','add_date','edit_date'),array('category_id'=>intval($parent_attributes['id'])),'',500,$start);
+				$entry_data=$GLOBALS['SITE_DB']->query_select('download_downloads',array('id','name','category_id','add_date','edit_date'),array('category_id'=>intval($parent_attributes['id'])),'',500,$start);
 
 				foreach ($entry_data as $row)
 				{

@@ -244,7 +244,7 @@ function add_config_option($human_name,$name,$type,$eval,$category,$group,$share
 	$map=array(
 		'c_set'=>0,
 		'config_value'=>'',
-		'config_value_trans'=>multi_lang_content()?NULL:'',
+		'c_value_trans'=>multi_lang_content()?NULL:'',
 		'the_name'=>$name,
 		'human_name'=>$human_name,
 		'the_type'=>$type,
@@ -284,9 +284,9 @@ function delete_config_option($name)
 	if (array_key_exists(0,$rows))
 	{
 		$myrow=$rows[0];
-		if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (!is_null($myrow['config_value_trans'])))
+		if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (!is_null($myrow['c_value_trans'])))
 		{
-			delete_lang($myrow['config_value_trans']);
+			delete_lang($myrow['c_value_trans']);
 		}
 		$GLOBALS['SITE_DB']->query_delete('config',array('the_name'=>$name),'',1);
 		/*global $OPTIONS;  Don't do this, it will cause problems in some parts of the code

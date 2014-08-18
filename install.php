@@ -1614,7 +1614,7 @@ function step_5_core()
 		'human_name'=>'ID_TEXT',
 		'c_set'=>'BINARY',
 		'config_value'=>'LONG_TEXT',
-		'config_value_trans'=>'?LONG_TRANS',
+		'c_value_trans'=>'?LONG_TRANS',
 		'the_type'=>'ID_TEXT',
 		'eval'=>'SHORT_TEXT',
 		'the_page'=>'ID_TEXT', // Now called an 'option category'

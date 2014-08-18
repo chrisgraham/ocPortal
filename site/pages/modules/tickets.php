@@ -185,7 +185,7 @@ class Module_tickets
 
 		$permission_page='tickets';
 		$tree=array();
-		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('ticket_types c',array('id','ticket_type_name'));
+		$rows=$dont_care_about_categories?array():$GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name'));
 		foreach ($rows as $row)
 		{
 			$ticket_type_name=get_translated_text($row['ticket_type_name']);
@@ -213,7 +213,7 @@ class Module_tickets
 
 		// We read in all data for efficiency
 		if (is_null($category_data))
-			$category_data=$GLOBALS['SITE_DB']->query_select('ticket_types c',array('id','ticket_type_name'));
+			$category_data=$GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name'));
 
 		// This is where we start
 		if (is_null($parent_pagelink))

@@ -142,7 +142,7 @@ function load_options()
 	$OPTIONS=function_exists('persistent_cache_get')?persistent_cache_get('OPTIONS'):NULL;
 	if (is_array($OPTIONS)) return;
 
-	$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c',array('c.*'),array(),'',NULL,NULL,true);
+	$OPTIONS=$GLOBALS['SITE_DB']->query_select('config',array('*'),array(),'',NULL,NULL,true);
 
 	if ($OPTIONS===NULL) critical_error('DATABASE_FAIL');
 
@@ -306,7 +306,7 @@ function get_option($name,$missing_ok=false)
 	$option=&$OPTIONS[$name];
 
 	// The master of redundant quick exit points
-	if (isset($option['config_value_effective'])) // i.e. is not null, meaning we got it from our config_value_trans JOIN, or we have cached it from an earlier call
+	if (isset($option['config_value_effective'])) // i.e. is not null, meaning we got it from our c_value_trans JOIN, or we have cached it from an earlier call
 	{
 		if ($option['config_value_effective']=='<null>') return NULL;
 		return $option['config_value_effective'];
@@ -341,7 +341,7 @@ function get_option($name,$missing_ok=false)
 			{
 				if (!isset($option['eval']))
 				{
-					$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c',array('c.*'));
+					$OPTIONS=$GLOBALS['SITE_DB']->query_select('config',array('*'));
 					$OPTIONS=list_to_map('the_name',$OPTIONS);
 					$option=&$OPTIONS[$name];
 				}
@@ -372,7 +372,7 @@ function get_option($name,$missing_ok=false)
 		{
 			if (!isset($option['eval']))
 			{
-				$OPTIONS=$GLOBALS['SITE_DB']->query_select('config c',array('c.*'));
+				$OPTIONS=$GLOBALS['SITE_DB']->query_select('config',array('*'));
 				$OPTIONS=list_to_map('the_name',$OPTIONS);
 				$option=&$OPTIONS[$name];
 			}
@@ -400,7 +400,7 @@ function get_option($name,$missing_ok=false)
 	{
 		if (!isset($option['config_value_effective']))
 		{
-			$option['config_value_effective']=get_translated_text($option['config_value_trans']);
+			$option['config_value_effective']=get_translated_text($option['c_value_trans']);
 			$OPTIONS[$name]=$option;
 			persistent_cache_set('OPTIONS',$OPTIONS);
 		}

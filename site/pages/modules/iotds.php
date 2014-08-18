@@ -153,7 +153,7 @@ class Module_iotds
 		// Entries
 		if ($depth>=DEPTH__ENTRIES)
 		{
-			$rows=$GLOBALS['SITE_DB']->query_select('iotd c',array('c.i_title','c.id','add_date','edit_date'),array('used'=>1));
+			$rows=$GLOBALS['SITE_DB']->query_select('iotd',array('i_title','id','add_date','edit_date'),array('used'=>1));
 
 			foreach ($rows as $row)
 			{

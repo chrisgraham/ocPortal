@@ -124,7 +124,7 @@ function init__site()
 			$GLOBALS['SITE_DB']->query_insert('zones',$map);
 			require_code('menus2');
 			add_menu_item_simple('zone_menu',NULL,$real_zone,$real_zone.':',0,1);
-			$zones=$GLOBALS['SITE_DB']->query_select('zones z',array('z.*'),array('zone_name'=>$real_zone),'',1);
+			$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$real_zone),'',1);
 		}
 		if (array_key_exists(0,$zones))
 		{

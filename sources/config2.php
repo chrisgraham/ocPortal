@@ -118,16 +118,16 @@ function set_option($name,$value,$type=NULL,$current_value=NULL)
 	if (($type=='transline') || ($type=='transtext'))
 	{
 		$map=array('c_set'=>1);
-		if (is_null($OPTIONS[$name]['config_value_trans']))
+		if (is_null($OPTIONS[$name]['c_value_trans']))
 		{
-			$map+=insert_lang('config_value_trans',$value,1);
+			$map+=insert_lang('c_value_trans',$value,1);
 		} else
 		{
-			$map+=lang_remap('config_value_trans',$OPTIONS[$name]['config_value_trans'],$value);
+			$map+=lang_remap('c_value_trans',$OPTIONS[$name]['c_value_trans'],$value);
 		}
 		$GLOBALS['SITE_DB']->query_update('config',$map,array('the_name'=>$name),'',1);
 
-		$OPTIONS[$name]['config_value_trans']=$map['config_value_trans'];
+		$OPTIONS[$name]['c_value_trans']=$map['c_value_trans'];
 	} else
 	{
 		$map=array('config_value'=>$value,'c_set'=>1);

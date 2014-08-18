@@ -933,7 +933,7 @@ class Module_admin_config
 			elseif (($myrow['the_type']=='usergroup') && (get_forum_type()=='ocf'))
 			{
 				$_value=$GLOBALS['FORUM_DB']->query_value_null_ok('f_groups g','name',array('g.id'=>post_param_integer($myrow['the_name'])));
-				if (is_null($value))
+				if (is_null($_value))
 				{
 					$value='';
 				} else
@@ -954,9 +954,9 @@ class Module_admin_config
 			}
 			elseif ($myrow['c_set']==1)
 			{
-				if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (!is_null($myrow['config_value_trans'])))
+				if ((($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext')) && (!is_null($myrow['c_value_trans'])))
 				{
-					$old_value=get_translated_text($myrow['config_value_trans']);
+					$old_value=get_translated_text($myrow['c_value_trans']);
 				} else $old_value=$myrow['config_value'];
 
 				// If the option was changed
@@ -969,7 +969,7 @@ class Module_admin_config
 				$map=array('c_set'=>1);
 				if (($myrow['the_type']=='transline') || ($myrow['the_type']=='transtext'))
 				{
-					$map+=insert_lang('config_value_trans',$value,1);
+					$map+=insert_lang('c_value_trans',$value,1);
 				} else
 				{
 					$map['config_value']=$value;

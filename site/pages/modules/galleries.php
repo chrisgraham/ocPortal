@@ -383,12 +383,12 @@ class Module_galleries
 		if (is_null($image_data))
 		{
 			$image_data_count=$GLOBALS['SITE_DB']->query_value('images','COUNT(*)');
-			$image_data=($image_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('images d',array('d.title','d.id','cat AS category_id','add_date','edit_date'));
+			$image_data=($image_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('images',array('title','id','cat AS category_id','add_date','edit_date'));
 		}
 		if (is_null($video_data))
 		{
 			$video_data_count=$GLOBALS['SITE_DB']->query_value('videos','COUNT(*)');
-			$video_data=($video_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('videos d',array('d.title','d.id','cat AS category_id','add_date','edit_date'));
+			$video_data=($video_data_count>2000)?array():$GLOBALS['SITE_DB']->query_select('videos',array('title','id','cat AS category_id','add_date','edit_date'));
 		}
 
 		// Subcategories
