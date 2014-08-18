@@ -824,7 +824,7 @@ class Hook_vb3
 				$post_id=import_id_remap_get('post',strval($row['postid']),true);
 				if (is_null($post_id)) continue;
 
-				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_time','p_poster','p_post'),array('id'=>$post_id),'',1);
 				if (!array_key_exists(0,$post_row))
 				{
 					import_id_remap_put('post_files',strval($row['attachmentid']),1);

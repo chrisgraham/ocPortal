@@ -70,7 +70,7 @@ class Module_groups
 		$tree=array();
 		if ((!$require_permission_support) && (($max_depth>0) || (is_null($max_depth))))
 		{
-			$rows=$dont_care_about_categories?array():$GLOBALS['FORUM_DB']->query_select('f_groups g',array('g.g_name','g.id'),array('g_is_private_club'=>0,'g_is_hidden'=>0));
+			$rows=$dont_care_about_categories?array():$GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','id'),array('g_is_private_club'=>0,'g_is_hidden'=>0));
 			foreach ($rows as $row)
 			{
 				$name=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
@@ -102,7 +102,7 @@ class Module_groups
 			$start=0;
 			do
 			{
-				$groups=$GLOBALS['FORUM_DB']->query_select('f_groups c',array('c.g_name','c.id'),array('g_hidden'=>0),'',500,$start);
+				$groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','id'),array('g_hidden'=>0),'',500,$start);
 
 				foreach ($groups as $row)
 				{
@@ -300,7 +300,7 @@ class Module_groups
 			$query_start=0;
 		}
 		if ($query_max<0) $query_max=0;
-		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups g',array('g.*'),$map,'ORDER BY g_order,g.id',$query_max,$query_start));
+		$_others=array_merge($_others,$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),$map,'ORDER BY g_order,id',$query_max,$query_start));
 		$max_rows+=$GLOBALS['FORUM_DB']->query_value('f_groups g','COUNT(*)',$map);
 		$fields_title=results_field_title(array(do_lang_tempcode('NAME'),do_lang_tempcode('COUNT_MEMBERS')),$sortables);
 		$others=new ocp_tempcode();
