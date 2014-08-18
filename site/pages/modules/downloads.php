@@ -455,10 +455,10 @@ class Module_downloads
 			$sort=get_param('sort',NULL);
 			if (is_null($sort))
 			{
-				$sort='t.text_original ASC';
+				$sort='name ASC';
 			}
 		}
-		if ((strtoupper($sort)!=strtoupper('t.text_original ASC')) && (strtoupper($sort)!=strtoupper('t.text_original DESC'))
+		if ((strtoupper($sort)!=strtoupper('name ASC')) && (strtoupper($sort)!=strtoupper('name DESC'))
 			&& (strtoupper($sort)!=strtoupper('file_size ASC')) && (strtoupper($sort)!=strtoupper('file_size DESC'))
 			&& (strtoupper($sort)!=strtoupper('num_downloads DESC')) && (strtoupper($sort)!=strtoupper('add_date ASC'))
 			&& (strtoupper($sort)!=strtoupper('compound_rating DESC')) && (strtoupper($sort)!=strtoupper('compound_rating ASC'))
@@ -466,7 +466,7 @@ class Module_downloads
 			&& (strtoupper($sort)!=strtoupper('fixed_random ASC'))
 			&& (strtoupper($sort)!=strtoupper('add_date DESC'))) log_hack_attack_and_exit('sortBY_HACK');
 		$_selectors=array(
-			't.text_original ASC'=>'TITLE',
+			'name ASC'=>'TITLE',
 			'file_size ASC'=>'SMALLEST_FIRST',
 			'file_size DESC'=>'LARGEST_FIRST',
 			'num_downloads DESC'=>'MOST_DOWNLOADED',

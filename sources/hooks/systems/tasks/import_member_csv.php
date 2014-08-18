@@ -44,9 +44,9 @@ class Hook_task_import_member_csv
 		$all_cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_default','cf_type','cf_name'),NULL,'ORDER BY cf_order');
 		foreach ($all_cpfs as $i=>$c) // CPFs take precedence over normal fields of the same name
 		{
-			$c['text_original']=get_translated_text($c['cf_name'],$GLOBALS['FORUM_DB']);
+			$c['_cf_name']=get_translated_text($c['cf_name'],$GLOBALS['FORUM_DB']);
 			$all_cpfs[$i]=$c;
-			$headings[$c['text_original']]=NULL;
+			$headings[$c['_cf_name']]=NULL;
 		}
 		$_all_groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,true);
 		$all_groups=array_flip($_all_groups);
@@ -267,8 +267,8 @@ class Hook_task_import_member_csv
 			$custom_fields=array();
 			foreach ($all_cpfs as $cpf)
 			{
-				$custom_fields[$cpf['id']]=array_key_exists($cpf['text_original'],$line)?$line[$cpf['text_original']]:$cpf['cf_default'];
-				if ((!array_key_exists($cpf['text_original'],$line)) && ($cpf['cf_type']=='list'))
+				$custom_fields[$cpf['id']]=array_key_exists($cpf['_cf_name'],$line)?$line[$cpf['_cf_name']]:$cpf['cf_default'];
+				if ((!array_key_exists($cpf['_cf_name'],$line)) && ($cpf['cf_type']=='list'))
 				{
 					$parts=explode($custom_fields[$cpf['id']],'|');
 					$custom_fields[$cpf['id']]=$parts[0];
@@ -310,7 +310,7 @@ class Hook_task_import_member_csv
 						$custom_fields[$cpf['id']]=floatval($custom_fields[$cpf['id']]);
 					}
 				}
-				unset($line[$cpf['text_original']]);
+				unset($line[$cpf['_cf_name']]);
 			}
 			foreach (array_keys($headings) as $h) unset($line[$h]);
 			unset($line[$email_address_key]);
@@ -322,7 +322,7 @@ class Hook_task_import_member_csv
 				$cpf_edit_url=$_cpf_edit_url->evaluate();
 				$outputted_messages->attach(do_lang_tempcode('MEMBER_IMPORT_CPF_ADDED',escape_html($h),escape_html($cpf_edit_url)));
 				$custom_fields[$cf_id]=$f;
-				$all_cpfs[]=array('id'=>$cf_id,'cf_default'=>'','text_original'=>$h,'cf_type'=>'short_line');
+				$all_cpfs[]=array('id'=>$cf_id,'cf_default'=>'','_cf_name'=>$h,'cf_type'=>'short_line');
 			}
 			if ($new_member)
 			{

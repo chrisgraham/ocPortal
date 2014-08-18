@@ -865,7 +865,15 @@ class Module_topicview
 			member_tracking_update('forumview','',strval($topic_info['forum_id']));
 		}
 		require_code('users2');
-		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('topicview','',strval($id),true);
+		if (is_null($id))
+		{
+			$num_guests=mixed();
+			$num_members=mixed();
+			$members_viewing=new ocp_tempcode();
+		} else
+		{
+			list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('topicview','',strval($id),true);
+		}
 
 		if (($topic_info['validated']==0) && (addon_installed('unvalidated')))
 		{

@@ -258,7 +258,7 @@ class Module_catalogues
 			}
 
 			// Links
-			actual_add_catalogue('links',lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
+			actual_add_catalogue('links',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_LINKS_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_LINKS_DESCRIPTION',true,3),C_DT_TABULAR,1,'',0);
 			$links_category=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name'=>'links'));
 			$fields=array(
 				// Name, Description, Type, Defines order, Required, Put in category
@@ -308,10 +308,10 @@ class Module_catalogues
 				array('CONTACT_PHOTO','','picture',0,1)
 			);
 			foreach ($fields as $i=>$field)
-				actual_add_catalogue_field('contacts',lang_code_to_default_content($field[0],false,3),insert_lang('',2),$field[2],$i,$field[3],1,1,'',$field[4]);
-			actual_add_catalogue_category('contacts',lang_code_to_default_content('CONTACTS',false,2),'','',NULL,'');
+				actual_add_catalogue_field('contacts',lang_code_to_default_content('cf_name',$field[0],false,3),insert_lang('cf_description','',2),$field[2],$i,$field[3],1,1,'',$field[4]);
+			actual_add_catalogue_category('contacts',lang_code_to_default_content('cc_title','CONTACTS',false,2),'','',NULL,'');
 
-			actual_add_catalogue('products',lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
+			actual_add_catalogue('products',lang_code_to_default_content('c_title','DEFAULT_CATALOGUE_PRODUCTS_TITLE',false,2),lang_code_to_default_content('c_description','DEFAULT_CATALOGUE_PRODUCTS_DESCRIPTION',false,2),C_DT_GRID,1,'',0,1);
 			$cat_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name'=>'products'));
 
 			$fields=array(

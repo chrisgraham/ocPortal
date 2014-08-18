@@ -122,8 +122,8 @@ class Module_admin_version
 				'i_menu'=>'ID_TEXT', // Foreign key in the future - currently it just binds together
 				'i_order'=>'INTEGER',
 				'i_parent'=>'?AUTO_LINK',
-				'i_caption'=>'SHORT_TRANS', // Comcode
-				'i_caption_long'=>'SHORT_TRANS', // Comcode
+				'i_caption'=>'SHORT_TRANS__COMCODE',
+				'i_caption_long'=>'SHORT_TRANS__COMCODE',
 				'i_url'=>'SHORT_TEXT', // Supports page-links
 				'i_check_permissions'=>'BINARY',
 				'i_expanded'=>'BINARY',
@@ -514,6 +514,147 @@ class Module_admin_version
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
 		{
+			$comcode_lang_fields=array(
+				'award_types'=>array(
+					'a_description',
+				),
+				'text'=>array(
+					'the_message',
+				),
+				'match_key_messages'=>array(
+					'k_message',
+				),
+				'menu_items'=>array(
+					'i_caption',
+					'i_caption_long',
+				),
+				'cached_comcode_pages'=>array(
+					'string_index',
+				),
+				'authors'=>array(
+					'description',
+					'skills'
+				),
+				'banners'=>array(
+					'caption',
+				),
+				'calendar_types'=>array(
+					't_title',
+				),
+				'calendar_events'=>array(
+					'e_title',
+					'e_content',
+				),
+				'catalogue_efv_long_trans'=>array(
+					'cv_value',
+				),
+				'catalogue_efv_short_trans'=>array(
+					'cv_value',
+				),
+				'catalogues'=>array(
+					'c_description',
+				),
+				'catalogue_categories'=>array(
+					'cc_description',
+				),
+				'seedy_posts'=>array(
+					'the_message',
+				),
+				'seedy_pages'=>array(
+					'description',
+				),
+				'chat_messages'=>array(
+					'the_message',
+				),
+				'download_downloads'=>array(
+					'description',
+					'comments',
+				),
+				'download_categories'=>array(
+					'description',
+				),
+				'videos'=>array(
+					'comments',
+				),
+				'galleries'=>array(
+					'description',
+					'teaser',
+					'fullname',
+				),
+				'images'=>array(
+					'comments',
+				),
+				'iotd'=>array(
+					'i_title',
+					'caption',
+				),
+				'news'=>array(
+					'title',
+					'news',
+					'news_article',
+				),
+				'chargelog'=>array(
+					'reason',
+				),
+				'gifts'=>array(
+					'reason',
+				),
+				'pstore_customs'=>array(
+					'c_description',
+				),
+				'pstore_permissions'=>array(
+					'p_description',
+				),
+				'poll'=>array(
+					'question',
+					'option1',
+					'option2',
+					'option3',
+					'option4',
+					'option5',
+					'option6',
+					'option7',
+					'option8',
+					'option9',
+					'option10',
+				),
+				'quiz_question_answers'=>array(
+					'q_answer_text',
+				),
+				'quizzes'=>array(
+					'q_start_text',
+					'q_end_text',
+					'q_end_text_fail',
+				),
+				'bookable'=>array(
+					'title',
+					'description',
+					'categorisation',
+				),
+				'bookable_blacked'=>array(
+					'blacked_explanation',
+				),
+				'f_posts'=>array(
+					'p_post',
+				),
+				'f_members'=>array(
+					'm_signature',
+					'm_pt_rules_text',
+				),
+				'f_forums'=>array(
+					'f_description',
+					'f_intro_question',
+				),
+			);
+			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+			foreach ($comcode_lang_fields as $table=>$fields)
+			{
+				foreach ($fields as $field)
+				{
+					$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta SET m_type=m_type+\'__COMCODE\' WHERE '.db_string_equal_to('m_table',$table).' AND '.db_string_equal_to('m_name',$field));
+				}
+			}
+
 			$GLOBALS['SITE_DB']->rename_table('security_images','captchas');
 
 			$GLOBALS['SITE_DB']->alter_table_field('cache','langs_required','LONG_TEXT','dependencies');

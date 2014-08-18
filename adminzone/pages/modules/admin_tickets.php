@@ -137,16 +137,16 @@ class Module_admin_tickets
 
 		$list=new ocp_tempcode();
 		require_code('form_templates');
-		$ticket_types=collapse_1d_complexity('ticket_type',$GLOBALS['SITE_DB']->query_select('ticket_types',array('*'),NULL,'ORDER BY ticket_type'));
-		foreach ($ticket_types as $ticket_type)
+		$ticket_types=collapse_2d_complexity('id','ticket_type_name',$GLOBALS['SITE_DB']->query_select('ticket_types',array('*'),NULL,'ORDER BY id'));
+		foreach ($ticket_types as $ticket_type_id=>$ticket_type_name)
 		{
-			$list->attach(form_input_list_entry(strval($ticket_type),false,get_translated_text($ticket_type)));
+			$list->attach(form_input_list_entry(strval($ticket_type_id),false,get_translated_text($ticket_type_name)));
 		}
 		if (!$list->is_empty())
 		{
 			$edit_url=build_url(array('page'=>'_SELF','type'=>'edit'),'_SELF',NULL,false,true);
 			$submit_name=do_lang_tempcode('EDIT');
-			$fields=form_input_list(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type',$list);
+			$fields=form_input_list(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type_id',$list);
 
 			$tpl=do_template('FORM',array('_GUID'=>'2d2e76f5cfc397a78688db72170918d4','TABINDEX'=>strval(get_form_field_tabindex()),'GET'=>true,'HIDDEN'=>'','TEXT'=>'','FIELDS'=>$fields,'URL'=>$edit_url,'SUBMIT_ICON'=>'menu___generic_admin__edit_this_category','SUBMIT_NAME'=>$submit_name));
 		} else $tpl=new ocp_tempcode();
@@ -178,12 +178,12 @@ class Module_admin_tickets
 	 */
 	function add_ticket_type()
 	{
-		$ticket_type=post_param('ticket_type',post_param('ticket_type_2'));
-		add_ticket_type($ticket_type,post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
+		$ticket_type_name=post_param('ticket_type_name',post_param('ticket_type_name_2'));
+		$ticket_type_id=add_ticket_type($ticket_type_name,post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
 
 		// Permissions
 		require_code('permissions2');
-		set_category_permissions_from_environment('tickets',$ticket_type);
+		set_category_permissions_from_environment('tickets',strval($ticket_type_id));
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
@@ -200,19 +200,19 @@ class Module_admin_tickets
 		require_code('form_templates');
 		require_code('permissions2');
 
-		$ticket_type=get_param_integer('ticket_type');
-		$details=get_ticket_type($ticket_type);
-		$type_text=get_translated_text($ticket_type);
+		$ticket_type_id=get_param_integer('ticket_type_id');
+		$details=get_ticket_type($ticket_type_id);
+		$ticket_type_name=get_translated_text($details['ticket_type_name']);
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit','ticket_type'=>$ticket_type),'_SELF');
+		$post_url=build_url(array('page'=>'_SELF','type'=>'_edit','ticket_type_id'=>$ticket_type_id),'_SELF');
 
 		$submit_name=do_lang_tempcode('SAVE');
 
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_line(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'new_type',$type_text,false));
+		$fields->attach(form_input_line(do_lang_tempcode('TYPE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type_name',$ticket_type_name,false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',$details['guest_emails_mandatory']));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',$details['search_faq']));
-		$fields->attach(get_category_permissions_for_environment('tickets',$type_text));
+		$fields->attach(get_category_permissions_for_environment('tickets',strval($ticket_type_id)));
 		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'09e6f1d2276ee679f280b33a79bff089','TITLE'=>do_lang_tempcode('ACTIONS'))));
 		$fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 
@@ -226,19 +226,18 @@ class Module_admin_tickets
 	 */
 	function _edit_ticket_type()
 	{
-		$type=get_param_integer('ticket_type');
+		$ticket_type_id=get_param_integer('ticket_type_id');
 
 		if (post_param_integer('delete',0)==1)
 		{
-			delete_ticket_type($type);
+			delete_ticket_type($ticket_type_id);
 		} else
 		{
-			$trans_old_ticket_type=get_translated_text($type);
-			edit_ticket_type($type,post_param('new_type'),post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
+			edit_ticket_type($ticket_type_id,post_param('ticket_type_name'),post_param_integer('guest_emails_mandatory',0),post_param_integer('search_faq',0));
 
-			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>$trans_old_ticket_type),'',1);
+			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($ticket_type_id)),'',1);
 			require_code('permissions2');
-			set_category_permissions_from_environment('tickets',post_param('new_type'));
+			set_category_permissions_from_environment('tickets',strval($ticket_type_id));
 		}
 
 		// Show it worked / Refresh

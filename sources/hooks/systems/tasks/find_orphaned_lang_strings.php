@@ -54,18 +54,12 @@ class Hook_task_find_orphaned_lang_strings
 		$langidfields=array();
 		foreach ($all_fields as $f)
 		{
-			if (substr($f['m_type'],-6)=='_TRANS') $langidfields[]=array('m_name'=>$f['m_name'],'m_table'=>$f['m_table']);
+			if (substr($f['m_type'],-6)=='_TRANS')
+				$langidfields[]=array('m_name'=>$f['m_name'],'m_table'=>$f['m_table']);
 		}
-		$langidfields[]=array('m_name'=>'c_value','m_table'=>'config');
 		foreach ($langidfields as $langidfield)
 		{
-			if ($langidfield['m_table']=='config')
-			{
-				$select=array($langidfield['m_name'],'c_needs_dereference');
-			} else
-			{
-				$select=array($langidfield['m_name']);
-			}
+			$select=array($langidfield['m_name']);
 			foreach ($all_fields as $f)
 			{
 				if ((substr($f['m_type'],0,1)=='*') && ($f['m_table']==$langidfield['m_table']))
@@ -76,12 +70,6 @@ class Hook_task_find_orphaned_lang_strings
 			{
 				$id=$of[$langidfield['m_name']];
 				if (is_null($id)) continue;
-				if (($langidfield['m_table']=='config') && ($langidfield['m_name']=='c_value'))
-				{
-					if ($of['c_needs_dereference']==0) continue;
-					if ($id=='') continue;
-					$id=intval($id);
-				}
 
 				if (!array_key_exists($id,$all_ids))
 				{

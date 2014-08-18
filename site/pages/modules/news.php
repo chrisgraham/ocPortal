@@ -233,8 +233,8 @@ class Module_news
 					$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
 					if (array_key_exists(0,$news_cat_title))
 					{
-						$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
-						$this->title=get_screen_title(make_fractionable_editable('news_category',$filter,$news_cat_title[0]['text_original']),false);
+						$news_cat_title[0]['_nc_title']=get_translated_text($news_cat_title[0]['nc_title']);
+						$this->title=get_screen_title(make_fractionable_editable('news_category',$filter,$news_cat_title[0]['_nc_title']),false);
 					} else
 					{
 						$this->title=get_screen_title('NEWS_ARCHIVE');
@@ -309,8 +309,8 @@ class Module_news
 					$news_cat_title=$GLOBALS['SITE_DB']->query_select('news_categories',array('nc_title'),array('id'=>intval($filter)),'',1);
 					if (array_key_exists(0,$news_cat_title))
 					{
-						$news_cat_title[0]['text_original']=get_translated_text($news_cat_title[0]['nc_title']);
-						$parent_title=make_string_tempcode(escape_html($news_cat_title[0]['text_original']));
+						$news_cat_title[0]['_nc_title']=get_translated_text($news_cat_title[0]['nc_title']);
+						$parent_title=make_string_tempcode(escape_html($news_cat_title[0]['_nc_title']));
 					} else
 					{
 						$parent_title=do_lang_tempcode('NEWS_ARCHIVE');

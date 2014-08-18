@@ -1004,7 +1004,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 												foreach ($rows as $h=>$row)
 												{
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
-													array_shift($cells); // First one is non-existant empty
+													array_shift($cells); // First one is non-existent empty
 													$spec=true;
 													// Find which to float
 													$to_float=NULL;
@@ -1101,7 +1101,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 												foreach ($rows as $table_row)
 												{
 													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$table_row,-1,PREG_SPLIT_DELIM_CAPTURE);
-													array_shift($cells); // First one is non-existant empty
+													array_shift($cells); // First one is non-existent empty
 													$spec=true;
 													$c_type='';
 													$cell_i=0;

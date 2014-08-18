@@ -47,7 +47,7 @@ class Hook_config_downloads_default_sort_order
 	 */
 	function get_default()
 	{
-		return 't.text_original ASC';
+		return 'name ASC';
 	}
 }
 

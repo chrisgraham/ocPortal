@@ -116,8 +116,6 @@ function init__lang()
 		$HTML_ESCAPE_1_STRREP=array('&'/*,'ì','î'*/,'"','\'','<','>'/*,'£'*/);
 		$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 	}
-
-	if (function_exists('cleanup_loaded_options')) cleanup_loaded_options();
 }
 
 // ====

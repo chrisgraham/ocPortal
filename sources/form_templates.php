@@ -451,7 +451,7 @@ function wysiwyg_on()
  * @param  string			The name of the field it's scoped for
  * @param  ?string		The page name scoped for (NULL: current page)
  * @param  ?string		The page type scoped for (NULL: current type)
- * @return ?string		The property (NULL: non-existant)
+ * @return ?string		The property (NULL: non-existent)
  */
 function get_field_restrict_property($property,$field,$page=NULL,$type=NULL)
 {

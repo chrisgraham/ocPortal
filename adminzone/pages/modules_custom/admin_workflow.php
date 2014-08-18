@@ -739,7 +739,7 @@ class Module_admin_workflow extends standard_crud_module
 	{	
 		require_lang('workflows');
 
-		// Grab our data. We pass true so that it will create non-existant content
+		// Grab our data. We pass true so that it will create non-existent content
 		// for us (workflow and approval points)
 		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(true);
 

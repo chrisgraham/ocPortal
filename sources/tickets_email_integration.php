@@ -47,7 +47,7 @@ function incoming_ticket_email_script()
  * @param  string		Display name of staff poster
  * @param  boolean	Whether this is a new ticket, just created by the ticket owner
  */
-function ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$subject,$message,$to_name,$to_email,$from_displayname,$new=false)
+function ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_name,$subject,$message,$to_name,$to_email,$from_displayname,$new=false)
 {
 	if (is_object($ticket_url)) $ticket_url=$ticket_url->evaluate();
 
@@ -62,11 +62,11 @@ function ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$subje
 	$headers.='Reply-To: '.do_lang('TICKET_SIMPLE_FROM',get_site_name(),$from_displayname).' <'.$from_email.'>';
 
 	$tightened_subject=str_replace(array("\n","\r"),array('',''),$subject);
-	$extended_subject=do_lang('TICKET_SIMPLE_SUBJECT_'.($new?'new':'reply'),$subject,$ticket_id,array($ticket_type_text,$from_displayname,get_site_name()));
+	$extended_subject=do_lang('TICKET_SIMPLE_SUBJECT_'.($new?'new':'reply'),$subject,$ticket_id,array($ticket_type_name,$from_displayname,get_site_name()));
 
 	require_code('mail');
 	$extended_message='';
-	$extended_message.=do_lang('TICKET_SIMPLE_MAIL_'.($new?'new':'reply'),get_site_name(),$ticket_type_text,array($ticket_url,$from_displayname));
+	$extended_message.=do_lang('TICKET_SIMPLE_MAIL_'.($new?'new':'reply'),get_site_name(),$ticket_type_name,array($ticket_url,$from_displayname));
 	$extended_message.=comcode_to_clean_text($message);
 
 	mail($to_name.' <'.$to_email.'>',$extended_subject,$extended_message,$headers);
@@ -581,24 +581,24 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 		$_home_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$new_ticket_id,'redirect'=>NULL),get_module_zone('tickets'),NULL,false,true,true);
 		$home_url=$_home_url->evaluate();
 
-		// Pick up ticket type
-		$ticket_type=mixed();
+		// Pick up ticket type, a other/general ticket type if it exists
+		$ticket_type_id=mixed();
 		$tags[]=do_lang('OTHER');
 		$tags[]=do_lang('GENERAL');
 		foreach ($tags as $tag)
 		{
-			$ticket_type=$GLOBALS['SITE_DB']->query_select_value_if_there('ticket_types t JOIN '.get_table_prefix().'translate tt ON tt.id=t.ticket_type','ticket_type',array('text_original'=>$tag));
+			$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('ticket_types','id',array($GLOBALS['SITE_DB']->translate_field_ref('ticket_type_name')=>$tag));
 			if (!is_null($ticket_type)) break;
 		}
 		if (is_null($ticket_type))
-			$ticket_type=$GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type');
+			$ticket_type=$GLOBALS['SITE_DB']->query_select_value('ticket_types','MIN(id)');
 
 		// Create the ticket...
 
-		ticket_add_post($member_id,$new_ticket_id,$ticket_type,$subject,$body,$home_url);
+		ticket_add_post($member_id,$new_ticket_id,$ticket_type_id,$subject,$body,$home_url);
 
 		// Send email (to staff)
-		send_ticket_email($new_ticket_id,$subject,$body,$home_url,$from_email,$ticket_type,$member_id,true);
+		send_ticket_email($new_ticket_id,$subject,$body,$home_url,$from_email,$ticket_type_id,$member_id,true);
 	} else
 	{
 		$_home_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$existing_ticket,'redirect'=>NULL),get_module_zone('tickets'),NULL,false,true,true);
@@ -606,15 +606,15 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 
 		// Reply to the ticket...
 
-		$ticket_type=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array(
+		$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array(
 			'ticket_id'=>$existing_ticket,
 		));
 
-		ticket_add_post($member_id,$existing_ticket,$ticket_type,$subject,$body,$home_url);
+		ticket_add_post($member_id,$existing_ticket,$ticket_type_id,$subject,$body,$home_url);
 
 		// Find true ticket title
-		$_forum=1; $_topic_id=1; $_ticket_type=1; // These will be returned by reference
-		$posts=get_ticket_posts($existing_ticket,$_forum,$_topic_id,$_ticket_type);
+		$_forum=1; $_topic_id=1; $_ticket_type_id=1; // These will be returned by reference
+		$posts=get_ticket_posts($existing_ticket,$_forum,$_topic_id,$_ticket_type_id);
 		if (!is_array($posts)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$__title=do_lang('UNKNOWN');
 		foreach ($posts as $ticket_post)

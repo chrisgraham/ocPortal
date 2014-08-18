@@ -40,12 +40,12 @@ class Hook_rss_calendar
 		$filters=ocfilter_to_sqlfragment($_filters,'c.id','calendar_types',NULL,'e_type','id');
 
 		$content=new ocp_tempcode();
-		$_categories=$GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types c WHERE '.$filters,NULL,NULL,false,true,array('t_title'));
+		$_categories=$GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'calendar_types c WHERE '.$filters,NULL,NULL,false,true,array('t_title'=>'SHORT_TRANS__COMCODE'));
 		foreach ($_categories as $i=>$_category)
 		{
-			$_categories[$i]['text_original']=get_translated_text($_category['t_title']);
+			$_categories[$i]['_t_title']=get_translated_text($_category['t_title']);
 		}
-		$categories=collapse_2d_complexity('id','text_original',$_categories);
+		$categories=collapse_2d_complexity('id','_t_title',$_categories);
 		$period_start=utctime_to_usertime($cutoff);
 		$period_end=utctime_to_usertime(time()*2-$cutoff);
 		if (is_float($period_end))	$period_end=intval($period_end);

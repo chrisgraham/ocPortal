@@ -35,7 +35,7 @@ class Hook_resource_meta_aware_ticket_type
 
 			'connection'=>$GLOBALS['SITE_DB'],
 			'table'=>'ticket_types',
-			'id_field'=>'ticket_type',
+			'id_field'=>'id',
 			'id_field_numeric'=>true,
 			'parent_category_field'=>NULL,
 			'parent_category_meta_aware_type'=>NULL,
@@ -48,7 +48,7 @@ class Hook_resource_meta_aware_ticket_type
 			'parent_spec__field_name'=>NULL,
 			'category_is_string'=>true,
 
-			'title_field'=>'ticket_type',
+			'title_field'=>'ticket_type_name',
 			'title_field_dereference'=>true,
 
 			'view_page_link_pattern'=>NULL,

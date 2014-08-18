@@ -1567,7 +1567,7 @@ function delete_gallery($name)
  */
 function make_member_gallery_if_needed($cat)
 {
-	// If it is a non-member gallery, it must surely exist, as we have no interface to choose non-existant ones (it's safe enough to assume it hasn't been deleted suddenly)
+	// If it is a non-member gallery, it must surely exist, as we have no interface to choose non-existent ones (it's safe enough to assume it hasn't been deleted suddenly)
 
 	if (substr($cat,0,7)!='member_') return;
 

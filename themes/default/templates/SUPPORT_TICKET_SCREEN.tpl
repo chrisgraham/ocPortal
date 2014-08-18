@@ -22,10 +22,10 @@
 					<select id="ticket_type_id" name="ticket_type_id" class="input_list_required wide_field">
 						<option value="">---</option>
 						{+START,LOOP,TYPES}
-							<option value="{TICKET_TYPE*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
+							<option value="{TICKET_TYPE_ID*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
 						{+END}
 					</select>
-					<div id="error_ticket_type" style="display: none" class="input_error_here"></div>
+					<div id="error_ticket_type_id" style="display: none" class="input_error_here"></div>
 				</td>
 			</tr>
 		{+END}
@@ -33,7 +33,7 @@
 		{+START,IF_NON_EMPTY,{POST_TEMPLATES}}
 			<tr>
 				<th class="de_th">
-					<span class="field_name"><label for="ticket_type">{!POST_TEMPLATE}:</label></span>
+					<span class="field_name"><label for="ticket_type_id">{!POST_TEMPLATE}:</label></span>
 				</th>
 				<td>
 					{POST_TEMPLATES}
@@ -65,9 +65,9 @@
 			1_URL={STAFF_DETAILS*}
 			1_TITLE={!VIEW_COMMENT_TOPIC}
 			1_ICON=feedback/comments_topic
-			{+START,IF_PASSED,TICKET_TYPE}
+			{+START,IF_PASSED,TICKET_TYPE_ID}
 				{+START,IF,{$NEQ,{USERNAME},{$USERNAME}}}
-					2_URL={$PAGE_LINK,_SEARCH:tickets:ticket:default={TICKET_TYPE}:post={!TICKET_SPLIT_POST&,{USERNAME}}:post_as={USERNAME}}
+					2_URL={$PAGE_LINK,_SEARCH:tickets:ticket:default={TICKET_TYPE_ID}:post={!TICKET_SPLIT_POST&,{USERNAME}}:post_as={USERNAME}}
 					2_TITLE={!STAFF_NEW_TICKET_AS,{USERNAME}}
 					2_ICON=buttons/add_ticket
 				{+END}
@@ -108,7 +108,7 @@
 {$SET,COMMENT_POSTING_ROWS,20}
 
 {+START,IF_NON_EMPTY,{COMMENT_FORM}}
-	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type']) || (check_field_for_blankness(this.elements['ticket_type'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
+	<form title="{!PRIMARY_PAGE_FORM}" id="comments_form" onsubmit="return (check_field_for_blankness(this.elements['post'],event)) &amp;&amp; ((!this.elements['ticket_type_id']) || (check_field_for_blankness(this.elements['ticket_type_id'],event)));" action="{URL*}" method="post" enctype="multipart/form-data" itemscope="itemscope" itemtype="http://schema.org/ContactPage">
 		{COMMENT_FORM}
 	</form>
 

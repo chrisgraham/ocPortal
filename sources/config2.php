@@ -129,14 +129,23 @@ function set_option($name,$value,$will_be_formally_set=1)
 
 		$needs_dereference=($option['type']=='transtext' || $option['type']=='transline' || $option['type']=='comcodetext' || $option['type']=='comcodeline')?1:0;
 
-		$CONFIG_OPTIONS_CACHE[$name]=array(
+		$map=array(
 			'c_name'=>$name,
 			'c_set'=>$will_be_formally_set,
-			'c_value'=>($needs_dereference==1)?strval(insert_lang($value,1)):$value,
+			'c_value'=>$value,
 			'c_needs_dereference'=>$needs_dereference,
 		);
+		if ($needs_dereference==1)
+		{
+			$map=insert_lang('c_value_trans',$value,1)+$map;
+		} else
+		{
+			$map['c_value_trans']=multi_lang_content()?NULL:'',
+		}
 		if ($will_be_formally_set==0 && $GLOBALS['IN_MINIKERNEL_VERSION']) return; // Don't save in the installer
-		$GLOBALS['SITE_DB']->query_insert('config',$CONFIG_OPTIONS_CACHE[$name]);
+		$GLOBALS['SITE_DB']->query_insert('config',$map);
+
+		$CONFIG_OPTIONS_CACHE[$name]=$map;
 	} else
 	{
 		$needs_dereference=$CONFIG_OPTIONS_CACHE[$name]['c_needs_dereference'];
@@ -144,16 +153,18 @@ function set_option($name,$value,$will_be_formally_set=1)
 
 	if ($needs_dereference==1) // Translated
 	{
-		$current_value=$CONFIG_OPTIONS_CACHE[$name]['c_value'];
+		$current_value=$CONFIG_OPTIONS_CACHE[$name]['c_value_trans'];
+		$map=array('c_set'=>$will_be_formally_set);
 		if ($current_value===NULL)
 		{
-			$CONFIG_OPTIONS_CACHE[$name]['c_value']=strval(insert_lang($value,1));
-			$GLOBALS['SITE_DB']->query_update('config',array('c_value'=>$CONFIG_OPTIONS_CACHE[$name]['c_value'],'c_set'=>$will_be_formally_set),array('c_name'=>$name),'',1);
+			$map+=insert_lang('c_value_trans',$value,1);
 		} else
 		{
-			lang_remap(intval($current_value),$value);
-			$GLOBALS['SITE_DB']->query_update('config',array('c_set'=>$will_be_formally_set),array('c_name'=>$name),'',1);
+			$map+=lang_remap($map,'c_value_trans',$value);
 		}
+		$GLOBALS['SITE_DB']->query_update('config',$map,array('c_name'=>$name),'',1);
+
+		$CONFIG_OPTIONS_CACHE[$name]=$map+$CONFIG_OPTIONS_CACHE[$name];
 	} else // Not translated
 	{
 		$GLOBALS['SITE_DB']->query_update('config',array('c_value'=>$value,'c_set'=>$will_be_formally_set),array('c_name'=>$name),'',1);
@@ -235,7 +246,7 @@ function delete_config_option($name)
 		$myrow=$rows[0];
 		if (($myrow['c_needs_dereference']==1) && (is_numeric($myrow['c_value'])))
 		{
-			delete_lang($myrow['c_value']);
+			delete_lang($myrow['c_value_trans']);
 		}
 		$GLOBALS['SITE_DB']->query_delete('config',array('c_name'=>$name),'',1);
 		/*global $CONFIG_OPTIONS_CACHE;  Don't do this, it will cause problems in some parts of the code

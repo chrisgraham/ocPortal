@@ -1037,7 +1037,7 @@ function _parse_expression_inner()
 				$expression=array('EMBEDDED_ASSIGNMENT','EQUAL',$target,$_expression,$GLOBALS['I']);
 				pparse__parser_expect('BRACKET_CLOSE');
 			}
-			elseif (in_array($next_2,array('INTEGER','INT','BOOL','FLOAT','ARRAY','OBJECT','STRING')))
+			elseif ((in_array($next_2,array('INTEGER','INT','BOOL','FLOAT','ARRAY','OBJECT','STRING'))) && ($next_3=='BRACKET_CLOSE'))
 			{
 				pparse__parser_next();
 				pparse__parser_next();

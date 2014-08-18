@@ -335,7 +335,7 @@ function cleanup()
 			'delete_ticket_type',
 			'tickets2',
 			'ticket_types',
-			'ticket_type',
+			'id',
 			array(db_get_first_id()),
 		),
 

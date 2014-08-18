@@ -24,7 +24,7 @@ If you are not logged in as admin, connect to your web server using FTP, then re
 
 [title="2"]Changing an account password[/title]
 
-If you've misset an ocPortal account password and for whatever reason can't use the 'lost password' feature to reset it (perhaps because of an invalid/non-existant e-mail address for that account, or a faulty/non-existant mail server, or a protected admin account), then you'll want to manually reset it.
+If you've misset an ocPortal account password and for whatever reason can't use the 'lost password' feature to reset it (perhaps because of an invalid/non-existent e-mail address for that account, or a faulty/non-existent mail server, or a protected admin account), then you'll want to manually reset it.
 Obviously this needs a greater level of access than ordinary members would have. We could either use:
  - Database access
  - Disk access

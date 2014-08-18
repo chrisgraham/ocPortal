@@ -761,9 +761,28 @@ class Module_wiki
 
 		$message=post_param('post');
 		check_comcode($message,NULL,false,NULL,true);
-		$post_id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('edit_date'=>NULL,'the_message'=>0,'member_id'=>get_member(),'date_and_time'=>time(),'page_id'=>get_param_integer('id'),'validated'=>1,'wiki_views'=>0),true);
+		$map=array(
+			'edit_date'=>NULL,
+			'member_id'=>get_member(),
+			'date_and_time'=>time(),
+			'page_id'=>get_param_integer('id'),
+			'validated'=>1,
+			'wiki_views'=>0,
+		);
+		if (multi_lang_content())
+		{
+			$map['the_message']=0;
+		} else
+		{
+			$map['the_message']='';
+			$map['the_message__text_parsed']='';
+			$map['the_message__source_user']=get_member();
+		}
+		$post_id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',$map,true);
 		require_code('attachments2');
-		$GLOBALS['SITE_DB']->query_update('wiki_posts',insert_lang_comcode_attachments('the_message',2,$message,'wiki_post',strval($post_id)),array('id'=>$post_id),'',1);
+		$map=array();
+		$map+=insert_lang_comcode_attachments('the_message',2,$message,'wiki_post',strval($post_id));
+		$GLOBALS['SITE_DB']->query_update('wiki_posts',$map,array('id'=>$post_id),'',1);
 
 		@ignore_user_abort(false);
 

@@ -45,10 +45,10 @@ class Hook_task_import_catalogue
 
 		// Find out what categories we have in the catalogue
 		$categories=array();
-		$cat_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories t1 JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t2 ON t1.cc_title=t2.id',array('t1.id','t2.text_original','t1.cc_parent_id'),array('t1.c_name'=>$catalogue_name));
+		$cat_rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_title','cc_parent_id'),array('c_name'=>$catalogue_name));
 		foreach ($cat_rows as $cat_row)
 		{
-			$categories[$cat_row['text_original']]=$cat_row['id'];
+			$categories[get_translated_text($cat_row['cc_title'])]=$cat_row['id'];
 
 			// Root category is 'default' category for catalogue importing (category with same name as catalogue)
 			if ((!array_key_exists($catalogue_name,$categories)) && (is_null($cat_row['cc_parent_id'])))
@@ -295,7 +295,7 @@ class Hook_task_import_catalogue
 								break;
 							case 'short_trans':
 							case 'long_trans':
-								$has_match=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_'.$db_type.' f JOIN '.get_table_prefix().'translate t ON t.id=f.cv_value','f.id',array('text_original'=>$key));
+								$has_match=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_'.$db_type,'id',array($GLOBALS['SITE_DB']->translate_field_ref('cv_value')=>$key));
 								break;
 							default:
 								$has_match=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_'.$db_type,'id',array('cv_value'=>$key));

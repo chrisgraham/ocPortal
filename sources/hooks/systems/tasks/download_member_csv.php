@@ -67,8 +67,8 @@ class Hook_task_download_member_csv
 		$headings=member_get_csv_headings();
 		foreach ($cpfs as $i=>$c) // CPFs take precedence over normal fields of the same name
 		{
-			$cpfs[$i]['text_original']=get_translated_text($c['cf_name'],$GLOBALS['FORUM_DB']);
-			$headings[$cpfs[$i]['text_original']]=NULL;
+			$cpfs[$i]['_cf_name']=get_translated_text($c['cf_name'],$GLOBALS['FORUM_DB']);
+			$headings[$cpfs[$i]['_cf_name']]=NULL;
 		}
 
 		// Subscription types
@@ -235,7 +235,7 @@ class Hook_task_download_member_csv
 					}
 				}
 			}
-			$out[$c['text_original']]=$at;
+			$out[$c['_cf_name']]=$at;
 		}
 
 		// Usergroup subscription details

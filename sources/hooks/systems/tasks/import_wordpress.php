@@ -401,10 +401,16 @@ class Hook_task_import_wordpress
 		{
 			$news=$item['import__news'];
 			$news_article=$item['import__news_article'];
+
+			$news_rows=$GLOBALS['SITE_DB']->query_select('news',array('news','news_article'),array('id'=>$item['import_id']),'',1);
+
 			_news_import_grab_images_and_fix_links($download_images==1,$news,$imported_news);
 			_news_import_grab_images_and_fix_links($download_images==1,$news_article,$imported_news);
-			lang_remap_comcode($GLOBALS['SITE_DB']->query_select_value('news','news',array('id'=>$item['import_id'])),$news);
-			lang_remap_comcode($GLOBALS['SITE_DB']->query_select_value('news','news_article',array('id'=>$item['import_id'])),$news_article);
+
+			$map=array();
+			$map+=lang_remap_comcode('news',$news_rows[0]['news'],$news);
+			$map+=lang_remap_comcode('news_article',$news_rows[0]['news_article'],$news_article);
+			$GLOBALS['SITE_DB']->query_update('news',$map,array('id'=>$item['import_id']),'',1);
 		}
 		foreach ($imported_pages as $item)
 		{

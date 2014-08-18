@@ -85,14 +85,17 @@ function edit_news_category($id,$title,$img,$notes,$owner)
 	// Sync meta keywords, if we have auto-sync for these
 	if (get_option('enable_seo_fields')==='0')
 	{
-		$sql='SELECT meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
-		$affected_news=$GLOBALS['SITE_DB']->query($sql);
+		$sql='SELECT * FROM '.get_table_prefix().'seo_meta m WHERE ';
+		$sql.=db_string_equal_to('meta_for_type','news');
+		$meta_keywords_field=$GLOBALS['SITE_DB']->translate_field_ref('meta_keywords');
+		$sql.=' AND ('.$meta_keywords_field.' LIKE \''.db_encode_like($old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title).'\')';
+		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
 		foreach ($affected_news as $af_row)
 		{
-			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',','.$title.',',$af_row['text_original']));
+			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',','.$title.',',get_translated_text($af_row['meta_keywords'])));
 			if (substr($new_meta,0,1)==',') $new_meta=substr($new_meta,1);
 			if (substr($new_meta,-1)==',') $new_meta=substr($new_meta,0,strlen($new_meta)-1);
-			lang_remap($af_row['meta_keywords'],$new_meta);
+			$GLOBALS['SITE_DB']->query_update('seo_meta',lang_remap('meta_keywords',$af_row['meta_keywords'],$new_meta),$af_row);
 		}
 	}
 
@@ -138,7 +141,7 @@ function delete_news_category($id)
 	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$myrow=$rows[0];
 
-	$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT c.id FROM '.get_table_prefix().'news_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.nc_title WHERE c.id<>'.strval($id).' AND '.db_string_equal_to('text_original',do_lang('news:NC_general')));
+	$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT c.id FROM '.get_table_prefix().'news_categories WHERE c.id<>'.strval($id).' AND '.db_string_equal_to($GLOBALS['SITE_DB']->translate_field_ref('nc_title'),do_lang('news:NC_general')),false,false,array('nc_title'=>'SHORT_TRANS'));
 	if (is_null($min))
 		$min=$GLOBALS['SITE_DB']->query_value_if_there('SELECT MIN(id) FROM '.get_table_prefix().'news_categories WHERE id<>'.strval($id));
 	if (is_null($min))
@@ -172,17 +175,19 @@ function delete_news_category($id)
 	// Sync meta keywords, if we have auto-sync for these
 	if (get_option('enable_seo_fields')==='0')
 	{
-		$sql='SELECT meta_keywords,text_original FROM '.get_table_prefix().'seo_meta m JOIN '.get_table_prefix().'translate t ON m.meta_keywords=t.id AND '.db_string_equal_to('language',user_lang()).' WHERE '.db_string_equal_to('meta_for_type','news').' AND (text_original LIKE \''.db_encode_like($old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR text_original LIKE \''.db_encode_like('%,'.$old_title).'\')';
-		$affected_news=$GLOBALS['SITE_DB']->query($sql);
+		$sql='SELECT * FROM '.get_table_prefix().'seo_meta m WHERE ';
+		$sql.=db_string_equal_to('meta_for_type','news');
+		$meta_keywords_field=$GLOBALS['SITE_DB']->translate_field_ref('meta_keywords');
+		$sql.=' AND ('.$meta_keywords_field.' LIKE \''.db_encode_like($old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title).'\')';
+		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
 		foreach ($affected_news as $af_row)
 		{
-			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#','',$af_row['text_original']));
+			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',','.$title.',',get_translated_text($af_row['meta_keywords'])));
 			if (substr($new_meta,0,1)==',') $new_meta=substr($new_meta,1);
 			if (substr($new_meta,-1)==',') $new_meta=substr($new_meta,0,strlen($new_meta)-1);
-			lang_remap($af_row['meta_keywords'],$new_meta);
+			$GLOBALS['SITE_DB']->query_update('seo_meta',lang_remap('meta_keywords',$af_row['meta_keywords'],$new_meta),$af_row);
 		}
 	}
-
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{

@@ -57,13 +57,15 @@ class Hook_members_quiz
 		require_code('quiz');
 
 		// Sorting
-		$order=get_param('sort_quiz_results','e.q_time DESC',true);
+		$order=get_param('sort_quiz_results','q_time DESC',true);
 		$_selectors=array(
-			't.text_original ASC'=>'ALPHABETICAL_FORWARD',
-			't.text_original DESC'=>'ALPHABETICAL_BACKWARD',
-			'e.q_time ASC'=>'OLDEST_RESULTS_FIRST',
-			'e.q_time DESC'=>'NEWEST_RESULTS_FIRST'
+			'q_name ASC'=>'ALPHABETICAL_FORWARD',
+			'q_name DESC'=>'ALPHABETICAL_BACKWARD',
+			'q_time ASC'=>'OLDEST_RESULTS_FIRST',
+			'q_time DESC'=>'NEWEST_RESULTS_FIRST'
 		);
+		if (!array_key_exists($order,$_selectors))
+			log_hack_attack_and_exit('ORDERBY_HACK');
 		$selectors=new ocp_tempcode();
 		foreach ($_selectors as $selector_value=>$selector_name)
 		{
@@ -73,11 +75,19 @@ class Hook_members_quiz
 		$sort_url=get_self_url(false,false,array('sort_quiz_results'=>NULL));
 		$sorting=do_template('PAGINATION_SORT',array('SORT'=>'sort_quiz_results','URL'=>$sort_url,'SELECTORS'=>$selectors));
 
+		if ($order=='q_name ASC' || $order=='q_name DESC')
+			$order=str_replace('q_name',$GLOBALS['SITE_DB']->translate_field_ref('q_name'),$order);
+
 		$entries=$GLOBALS['SITE_DB']->query_select(
-			'quiz_entries e JOIN '.get_table_prefix().'quizzes q ON q.id=e.q_quiz JOIN '.get_table_prefix().'translate t ON t.id=q.q_name AND '.db_string_equal_to('t.language',user_lang()),
+			'quiz_entries e JOIN '.get_table_prefix().'quizzes q ON q.id=e.q_quiz',
 			array('e.id AS e_id','e.q_time','q.*'),
 			array('q_member'=>$member_id,'q_type'=>'TEST','q_validated'=>1),
-			'ORDER BY '.$order
+			'ORDER BY '.$order,
+			NULL,
+			NULL,
+			false,
+			false,
+			array('q_name'=>'SHORT_TRANS')
 		);
 		//$has_points=($GLOBALS['SITE_DB']->query_select_value('quizzes','SUM(q_points_for_passing)',array('q_type'=>'TEST','q_validated'=>1))>0.0);
 		$categories=array();

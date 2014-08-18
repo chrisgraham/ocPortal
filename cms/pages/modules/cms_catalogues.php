@@ -474,10 +474,7 @@ class Module_cms_catalogues extends standard_crud_module
 		foreach ($special_fields as $field_num=>$field)
 		{
 			$ob=get_fields_hook($field['cf_type']);
-			$default=get_param('field_'.strval($field['id']),$field['cf_default']);
-			// Grab default from what already exists, if this is an edit and we know this
-			if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
-			elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
+			$default=get_param('field_'.strval($field['id']),array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['cf_default']);
 
 			$_cf_name=get_translated_text($field['cf_name']);
 			$field_cat='';

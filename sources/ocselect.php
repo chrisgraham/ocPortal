@@ -710,11 +710,16 @@ function _default_conv_func($db,$info,$catalogue_name,&$extra_join,&$extra_selec
 				break;
 			case 'LONG_TRANS':
 			case 'SHORT_TRANS':
+			case 'LONG_TRANS__COMCODE':
+			case 'SHORT_TRANS__COMCODE':
 				$field_type='line';
-				static $filter_i=1;
-				$extra_join[$inner_filter_key]=' LEFT JOIN '.$db->get_table_prefix().'translate ft'.strval($filter_i).' ON ft'.strval($filter_i).'.id='.strval($inner_filter_key);
-				$filter_key='ft'.strval($filter_i).'.text_original';
-				$filter_i++;
+				if (multi_lang_content())
+				{
+					static $filter_i=1;
+					$extra_join[$inner_filter_key]=' LEFT JOIN '.$db->get_table_prefix().'translate ft'.strval($filter_i).' ON ft'.strval($filter_i).'.id='.strval($inner_filter_key);
+					$filter_key='ft'.strval($filter_i).'.text_original';
+					$filter_i++;
+				}
 				break;
 		}
 	} else

@@ -49,10 +49,10 @@ class Hook_rss_galleries
 			$_galleries=$GLOBALS['SITE_DB']->query('SELECT fullname,name FROM '.get_table_prefix().'galleries WHERE '.$filters_1,NULL,NULL,false,true);
 			foreach ($_galleries as $i=>$_gallery)
 			{
-				$_galleries[$i]['text_original']=get_translated_text($_gallery['fullname']);
+				$_galleries[$i]['_title']=get_translated_text($_gallery['fullname']);
 			}
 		}
-		$galleries=collapse_2d_complexity('name','text_original',$_galleries);
+		$galleries=collapse_2d_complexity('name','_title',$_galleries);
 
 		$privacy_join='';
 		$privacy_where='';

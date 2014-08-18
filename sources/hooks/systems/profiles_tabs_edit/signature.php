@@ -64,7 +64,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
 		// UI
 
-		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
+		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of),'m_signature',$GLOBALS['FORUM_DB']);
 		$signature_original=get_translated_text($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
 
 		$size=ocf_get_member_best_group_property($member_id_of,'max_sig_length_comcode');

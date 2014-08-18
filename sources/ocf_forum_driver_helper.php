@@ -283,11 +283,11 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		}
 	}
 
-	$post_query_select='p.p_title,t.text_parsed,t.id,p.p_poster,p.p_poster_name_if_guest';
-	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts('t.text_original');
+	$post_query_select='p.p_title,top.id,p.p_poster,p.p_poster_name_if_guest,p.id AS p_id,p_post';
+	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
 	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
 	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
-	$post_query_sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$post_query_where.' ORDER BY p_time,p.id';
+	$post_query_sql.='WHERE '.$post_query_where.' ORDER BY p_time,p.id';
 
 	if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result)
 		$query.=' AND EXISTS('.$post_query_sql.')';
@@ -295,7 +295,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
 	if ($limit==0) return array();
 	$order_by=(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC';
-	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true);
+	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 
 	$out=array();
 	foreach ($rows as $i=>$r)
@@ -438,12 +438,12 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 	}
 	if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
 	{
-		$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start,false,true);
+		$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 	} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
 	{
-		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where.' ORDER BY '.$order,$max,$start,false,true);
+		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where.' ORDER BY '.$order,$max,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 	}
-	$count=$this_ref->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON t.id=p.p_post WHERE '.$where,false,true);
+	$count=$this_ref->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 
 	$out=array();
 	foreach ($rows as $myrow)

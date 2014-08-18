@@ -147,7 +147,7 @@ function generate_catalogue_entry_title($url_parts,$resourcefs_style=false)
 	$field_values=get_catalogue_entry_field_values($catalogue_name,intval($url_parts['id']),array($unique_key_num),$fields);
 	$field=$field_values[$unique_key_num];
 	if (is_null($field)) return uniqid('',true);
-	$value=array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['effective_value'];
+	$value=$field['effective_value_pure'];
 	return strip_comcode($value);
 }
 
@@ -178,6 +178,6 @@ function generate_catalogue_thumb_field($url_parts)
 	$field_values=get_catalogue_entry_field_values($catalogue_name,intval($url_parts['id']),array($unique_key_num),$fields);
 	$field=$field_values[$unique_key_num];
 	if (is_null($field)) return '';
-	$value=array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['effective_value'];
+	$value=$field['effective_value_pure'];
 	return $value;
 }

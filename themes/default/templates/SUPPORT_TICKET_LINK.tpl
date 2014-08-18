@@ -12,7 +12,7 @@
 	</td>
 
 	<td class="ticket_type">
-		{TICKET_TYPE*}
+		{TICKET_TYPE_NAME*}
 	</td>
 
 	{+START,IF,{$NOT,{$MOBILE}}}

@@ -748,7 +748,7 @@ class Hook_ocp_merge
 			$value=$row['c_value'];
 			if ((!is_null($value)) && ($row['c_set']==1))
 			{
-				if ($row['c_needs_dereference']==1) $value=$this->get_lang_string($db,intval($value));
+				if ($row['c_needs_dereference']==1) $value=$this->get_lang_string($db,$row['c_value_trans']);
 				$test=get_option($name,true);
 				if (!is_null($test))
 					set_option($name,$value);

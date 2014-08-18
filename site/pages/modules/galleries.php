@@ -138,7 +138,7 @@ class Module_galleries
 				'cat'=>'ID_TEXT',
 				'url'=>'URLPATH',
 				'thumb_url'=>'URLPATH',
-				'description'=>'LONG_TRANS',
+				'description'=>'LONG_TRANS__COMCODE',
 				'allow_rating'=>'BINARY',
 				'allow_comments'=>'SHORT_INTEGER',
 				'allow_trackbacks'=>'BINARY',

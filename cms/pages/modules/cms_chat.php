@@ -553,8 +553,6 @@ class Module_cms_chat
 		$myrow=$this->myrow;
 		$message_id=$this->message_id;
 
-		$message=$myrow['the_message'];
-
 		$room_id=$myrow['room_id'];
 		check_chatroom_access($room_id);
 

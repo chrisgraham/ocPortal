@@ -38,7 +38,7 @@ class Hook_rss_authors
 		if (!has_actual_page_access(get_member(),'authors')) return NULL;
 
 		$content=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('author','description'),NULL,'',1000);
+		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('*'),NULL,'',1000);
 		if (count($rows)==1000) return NULL; // Too much
 		foreach ($rows as $i=>$row)
 		{

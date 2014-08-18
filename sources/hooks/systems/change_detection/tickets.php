@@ -42,8 +42,8 @@ class Hook_change_detection_tickets
 		require_code('tickets2');
 		$forum=0;
 		$topic_id=0;
-		$ticket_type=0;
-		$_comments=get_ticket_posts($id,$forum,$topic_id,$ticket_type);
+		$ticket_type_id=0;
+		$_comments=get_ticket_posts($id,$forum,$topic_id,$ticket_type_id);
 
 		return md5(serialize($_comments))!=$data;
 	}

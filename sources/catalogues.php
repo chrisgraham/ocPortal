@@ -1544,13 +1544,13 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title'),array('c_name'=>$catalogue_name,'cc_parent_id'=>$category_id),'ORDER BY id DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);
 	foreach ($rows as $i=>$child)
 	{
-		$rows[$i]['text_original']=get_translated_text($child['cc_title']);
+		$rows[$i]['_cc_title']=get_translated_text($child['cc_title']);
 	}
 	if (get_page_name()=='cms_catalogues')
 	{
 		if (count($rows)==intval(get_option('general_safety_listing_limit'))) attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY',escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))),'warn');
 	}
-	sort_maps_by($rows,'text_original');
+	sort_maps_by($rows,'_cc_title');
 	$no_root=!array_key_exists(0,$children);
 	if (!$no_root) $children[0]['child_count']=count($rows);
 	if ($levels!==0)

@@ -93,16 +93,7 @@ function load_options()
 	$CONFIG_OPTIONS_CACHE=$CONFIG_OPTIONS_BEING_CACHED?persistent_cache_get('OPTIONS'):NULL;
 	if (is_array($CONFIG_OPTIONS_CACHE)) return;
 
-	if (strpos(get_db_type(),'mysql')!==false)
-	{
-		global $SITE_INFO;
-		$join='config c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON c.c_value=t.id AND '.db_string_equal_to('t.language',array_key_exists('default_lang',$SITE_INFO)?$SITE_INFO['default_lang']:'EN').' AND c.c_needs_dereference=1';
-		$select=array('c.*','t.text_original AS c_value_translated');
-		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select($join,$select,array(),'',NULL,NULL,true);
-	} else
-	{
-		$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('*'),NULL,'',NULL,NULL,true);
-	}
+	$CONFIG_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('config',array('*'),NULL,'',NULL,NULL,true);
 
 	if ($CONFIG_OPTIONS_CACHE===NULL)
 	{
@@ -120,24 +111,6 @@ function load_options()
 	$CONFIG_OPTIONS_CACHE=list_to_map('c_name',$CONFIG_OPTIONS_CACHE);
 
 	if ($CONFIG_OPTIONS_BEING_CACHED) persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
-}
-
-/**
- * Clean all loaded config options, removing loaded translations if they do not match what the user actually has.
- */
-function cleanup_loaded_options()
-{
-	if ((user_lang()!=get_site_default_lang()) && (strpos(get_db_type(),'mysql')!==false))
-	{
-		global $CONFIG_OPTIONS_CACHE;
-		foreach ($CONFIG_OPTIONS_CACHE as $name=>$option)
-		{
-			if ($option['c_needs_dereference']==1)
-			{
-				unset($CONFIG_OPTIONS_CACHE[$name]['c_value_translated']);
-			}
-		}
-	}
 }
 
 /**
@@ -190,7 +163,7 @@ function get_option($name,$missing_ok=false)
 	}
 
 	// Translated...
-	$value=get_translated_text(intval($option['c_value']));
+	$value=get_translated_text(intval($option['c_value_trans']));
 	$option['c_value_translated']=$value;
 
 	global $CONFIG_OPTIONS_BEING_CACHED;

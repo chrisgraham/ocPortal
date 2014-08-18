@@ -115,7 +115,7 @@ if ($version_branch===NULL)
 	exit('Please pass the branch version in the URL (?version_branch=num.x).');
 }
 
-$parent_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>1,'t.text_original'=>'Addons'));
+$parent_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id'=>1,$GLOBALS['SITE_DB']->translate_field_ref('category')=>'Addons'));
 $c_main_id=find_addon_category_download_category($target_cat,$parent_id);
 
 // Addons...

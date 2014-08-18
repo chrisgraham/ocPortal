@@ -25,20 +25,20 @@
  * @param  ?array			List of ticket types to show regardless of access permissions (NULL: none)
  * @return array			A map between ticket types, and template-ready details about them
  */
-function build_types_list($selected_ticket_type,$ticket_types_to_let_through=NULL)
+function build_types_list($selected_ticket_type_id,$ticket_types_to_let_through=NULL)
 {
 	if (is_null($ticket_types_to_let_through)) $ticket_types_to_let_through=array();
 
-	$_types=$GLOBALS['SITE_DB']->query_select('ticket_types LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate ON id=ticket_type',array('ticket_type','text_original','cache_lead_time'),NULL,'ORDER BY text_original');
+	$_types=$GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name','cache_lead_time'),NULL,'ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('ticket_type_name'));
 	$types=array();
 	foreach ($_types as $type)
 	{
-		if ((!has_category_access(get_member(),'tickets',$type['text_original'])) && (!in_array($type['ticket_type'],$ticket_types_to_let_through)))
+		if ((!has_category_access(get_member(),'tickets',strval($type['id']))) && (!in_array($type['id'],$ticket_types_to_let_through)))
 			continue;
 
 		if (is_null($type['cache_lead_time'])) $lead_time=do_lang('UNKNOWN');
 		else $lead_time=display_time_period($type['cache_lead_time']);
-		$types[$type['ticket_type']]=array('TICKET_TYPE'=>strval($type['ticket_type']),'SELECTED'=>($type['ticket_type']===$selected_ticket_type),'NAME'=>$type['text_original'],'LEAD_TIME'=>$lead_time);
+		$types[$type['ticket_type']]=array('TICKET_TYPE'=>strval($type['ticket_type']),'SELECTED'=>($type['ticket_type']===$selected_ticket_type_id),'NAME'=>get_translated_text($type['ticket_type_name']),'LEAD_TIME'=>$lead_time);
 	}
 	return $types;
 }

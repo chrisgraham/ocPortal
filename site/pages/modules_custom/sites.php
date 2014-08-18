@@ -255,7 +255,7 @@ class Module_sites
 		$keep=symbol_tempcode('KEEP');
 		$url=find_script('dload',false,1).'?id='.strval($id).$keep->evaluate();
 		require_code('version2');
-		$version=get_version_dotted__from_anything($myrow['text_original']);
+		$version=get_version_dotted__from_anything(get_translated_text($myrow['name']));
 		require_code('files');
 		$filesize=clean_file_size($myrow['file_size']);
 

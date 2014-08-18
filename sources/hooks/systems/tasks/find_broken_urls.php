@@ -65,12 +65,11 @@ class Hook_task_find_broken_urls
 			if ($field['m_table']=='seo_meta') continue;
 			if ($field['m_table']=='cached_comcode_pages') continue;
 
-			$ofs=$GLOBALS['SITE_DB']->query_select($field['m_table'].' x LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=x.'.$field['m_name'],array('x.'.$field['m_name'],'t.text_original','t.source_user'));
+			$ofs=$GLOBALS['SITE_DB']->query_select($field['m_table'].' x',array('x.'.$field['m_name'],'t.source_user'));
 			foreach ($ofs as $of)
 			{
-				if (is_null($of['text_original'])) $of['text_original']=get_translated_text($of[$field['m_name']]);
+				$comcode=get_translated_text($of[$field['m_name']]);
 
-				$comcode=$of['text_original'];
 				comcode_to_tempcode($comcode,$of['source_user']);
 
 				if ((array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS)))
@@ -78,7 +77,16 @@ class Hook_task_find_broken_urls
 					foreach ($COMCODE_BROKEN_URLS as $i=>$_url)
 					{
 						list($url,$spot)=$_url;
-						if (is_null($spot)) $_url[$i][1]='translate#'.strval($i).' (text_original)';
+						if (is_null($spot))
+						{
+							if (multi_lang_content())
+							{
+								$_url[$i][1]='translate#'.strval($i).' (text_original)';
+							} else
+							{
+								$_url[$i][1]=$field['m_table'].'#'.strval($i).' ('.$field['m_name'].')';
+							}
+						}
 					}
 				}
 			}

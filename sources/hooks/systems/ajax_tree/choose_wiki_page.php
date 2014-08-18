@@ -96,7 +96,7 @@ class Hook_choose_wiki_page
 				$title=$orphan['_title'];
 
 				$_id=strval($orphan['id']);
-				$title=$orphan['text_original'];
+				$title=$orphan['_title'];
 				$has_children=($GLOBALS['SITE_DB']->query_select_value('wiki_children','COUNT(*)',array('parent_id'=>$orphan['id']))!=0);
 				$selectable=true;
 

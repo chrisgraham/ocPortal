@@ -1273,7 +1273,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		$where=$only_permissive?' WHERE g_is_private_club=0':'';
 
-		$select='g.id,text_original,g_name,g.g_hidden';
+		$select='g.id,g_name,g.g_hidden';
 		$sup=' ORDER BY g_order,g.id';
 		if (running_script('upgrader')) $sup='';
 		static $cnt_cache=array();
@@ -1307,7 +1307,7 @@ class forum_driver_ocf extends forum_driver_base
 			}
 		}
 		if (!function_exists('require_lang')) require_code('lang');
-		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.g_name=t.id'.$where.$sup;
+		$query='SELECT '.$select.' FROM '.$this->connection->get_table_prefix().'f_groups g'.$where.$sup;
 		static $rows_cache=array();
 		$rows=mixed();
 		if (!$too_many)
@@ -1319,7 +1319,7 @@ class forum_driver_ocf extends forum_driver_base
 				$rows=$rows_cache[$where];
 			} else
 			{
-				$rows=$this->connection->query($query,NULL,NULL,false,true);
+				$rows=$this->connection->query($query,NULL,NULL,false,true,array('g_name'=>'SHORT_TRANS'));
 				$rows_cache[$where]=$rows;
 				if (!$too_many)
 					persistent_cache_set('GROUPS'.($only_permissive?'_PO':''),$rows);
@@ -1332,7 +1332,7 @@ class forum_driver_ocf extends forum_driver_base
 		$out=array();
 		foreach ($rows as $row)
 		{
-			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || ($row['text_original']===NULL)) $row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+			$name=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
 			if (($hide_hidden) && ($row['g_hidden']==1))
 			{

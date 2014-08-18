@@ -21,22 +21,22 @@
 /**
  * Add a ticket type.
  *
- * @param  SHORT_TEXT		The ticket type
+ * @param  SHORT_TEXT		The ticket type name
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
  * @return AUTO_LINK			The ticket type ID
  */
-function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
+function add_ticket_type($ticket_type_name,$guest_emails_mandatory=0,$search_faq=0)
 {
 	require_code('global4');
-	prevent_double_submit('ADD_TICKET_TYPE',NULL,$ticket_type);
+	prevent_double_submit('ADD_TICKET_TYPE',NULL,$ticket_type_name);
 
 	$map=array(
 		'guest_emails_mandatory'=>$guest_emails_mandatory,
 		'search_faq'=>$search_faq,
 		'cache_lead_time'=>NULL,
 	);
-	$map+=insert_lang('ticket_type',$ticket_type,1);
+	$map+=insert_lang('ticket_type_name',$ticket_type_name,1);
 	$ticket_type_id=$GLOBALS['SITE_DB']->query_insert('ticket_types',$map,true);
 
 	log_it('ADD_TICKET_TYPE',strval($ticket_type_id),$ticket_type);
@@ -47,70 +47,73 @@ function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 		generate_resourcefs_moniker('ticket_type',strval($ticket_type_id),NULL,NULL,true);
 	}
 
-	return $ticket_type_lang;
+	return $ticket_type_id;
 }
 
 /**
  * Edit a ticket type, keeping the integer ID the same.
  *
- * @param  AUTO_LINK			The ticket type
+ * @param  AUTO_LINK			The ticket type ID
  * @param  ?SHORT_TEXT		The new ticket type text (NULL: do not change)
  * @param  BINARY				Whether guest e-mail addresses are mandatory for new tickets
  * @param  BINARY				Whether the FAQ should be searched before submitting a new ticket
  */
-function edit_ticket_type($old_ticket_type,$new_ticket_type,$guest_emails_mandatory,$search_faq)
+function edit_ticket_type($ticket_type_id,$ticket_type_name,$guest_emails_mandatory,$search_faq)
 {
-	$GLOBALS['SITE_DB']->query_update('ticket_types',array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq),array('ticket_type'=>$old_ticket_type),'',1);
+	$map=array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq);
+	$map+=lang_remap('ticket_type_name',$ticket_type_id,$ticket_type_name);
+	$GLOBALS['SITE_DB']->query_update('ticket_types',$map,array('id'=>$ticket_type_id),'',1);
 
-	if (!is_null($new_ticket_type))
-		lang_remap($old_ticket_type,$new_ticket_type);
-
-	log_it('EDIT_TICKET_TYPE',strval($old_ticket_type),$new_ticket_type);
+	log_it('EDIT_TICKET_TYPE',strval($ticket_type_id),$ticket_type_name);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('ticket_type',strval($old_ticket_type));
+		generate_resourcefs_moniker('ticket_type',strval($ticket_type_id),$ticket_type_name);
 	}
 }
 
 /**
  * Delete a ticket type.
  *
- * @param  AUTO_LINK			The ticket type
+ * @param  AUTO_LINK			The ticket type ID
  */
-function delete_ticket_type($ticket_type)
+function delete_ticket_type($ticket_type_id)
 {
-	$_ticket_type=get_translated_text($ticket_type);
-	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
-	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'tickets','category_name'=>strval($_ticket_type)));
+	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($ticket_type_id)));
+	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'tickets','category_name'=>strval($ticket_type_id)));
 
-	//delete_lang($ticket_type);	Needed for if existing ticket looked up
+	$GLOBALS['SITE_DB']->query_delete('ticket_types',array('id'=>$ticket_type_id),'',1);
 
-	$GLOBALS['SITE_DB']->query_delete('ticket_types',array('ticket_type'=>$ticket_type),'',1);
+	$ticket_type_name=$GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
+	$_ticket_type_name=get_translated_text($ticket_type_name);
+	delete_lang($ticket_type_name);
 
-	log_it('DELETE_TICKET_TYPE',strval($ticket_type),$_ticket_type);
+	log_it('DELETE_TICKET_TYPE',strval($ticket_type_id),$_ticket_type_name);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		expunge_resourcefs_moniker('ticket_type',strval($ticket_type));
+		expunge_resourcefs_moniker('ticket_type',strval($ticket_type_id));
 	}
 }
 
 /**
  * Get a map of properties for the given ticket type.
  *
- * @param  ?integer		The ticket type (NULL: fallback for old tickets)
+ * @param  ?AUTO_LINK	The ticket type (NULL: fallback for old tickets)
  * @return ?array			Array of properties (NULL: ticket type not found)
  */
-function get_ticket_type($ticket_type)
+function get_ticket_type($ticket_type_id)
 {
-	if (is_null($ticket_type)) return array('ticket_type'=>NULL,'guest_emails_mandatory'=>false,'search_faq'=>false,'cache_lead_time'=>NULL);
+	if (is_null($ticket_type_id))
+	{
+		return array('ticket_type'=>NULL,'guest_emails_mandatory'=>false,'search_faq'=>false,'cache_lead_time'=>NULL);
+	}
 
-	$row=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL,array('ticket_type'=>$ticket_type),'',1);
-	if (count($row)==0) return NULL;
-	return $row[0];
+	$rows=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL,array('id'=>$ticket_type_id),'',1);
+	if (count($rows)==0) return NULL;
+	return $rows[0];
 }
 
 /**
@@ -200,14 +203,14 @@ function get_tickets($member,$ticket_type_id=NULL,$override_view_others_tickets=
 			$fid=($view_others_tickets)?get_ticket_forum_id(NULL,NULL,false,$silent_error_handling):get_ticket_forum_id(get_member(),NULL,false,$silent_error_handling);
 			if (is_null($fid)) return array();
 
-			if (is_null($ticket_type))
+			if (is_null($ticket_type_id))
 			{
 				require_code('ocf_forums');
 				$forums=ocf_get_all_subordinate_forums($fid,NULL,NULL,true);
 			}
 			else
 			{
-				$query='SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE '.db_string_equal_to('f_name',get_translated_text($ticket_type)).' AND ';
+				$query='SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE '.db_string_equal_to('f_name',get_translated_text($ticket_type_name)).' AND ';
 				if ($view_others_tickets) $query.='f_parent_forum IN (SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_parent_forum='.strval($fid).')';
 				else $query.='f_parent_forum='.strval($fid);
 
@@ -243,7 +246,7 @@ function get_tickets($member,$ticket_type_id=NULL,$override_view_others_tickets=
  * @param  string			The ticket ID
  * @param  AUTO_LINK		Return location for the forum ID
  * @param  AUTO_LINK		Return location for the topic ID
- * @param  integer		Return location for the ticket type
+ * @param  AUTO_LINK		Return location for the ticket type
  * @param  integer		Start offset in pagination
  * @param  ?integer		Max per page in pagination (NULL: no limit)
  * @return mixed			The array of maps (Each map is: title, message, member, date) (NULL: no such ticket)
@@ -253,11 +256,11 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$
 	$ticket=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_id'=>$ticket_id),'',1,NULL,true);
 	if (count($ticket)==1) // We know about it, so grab details from tickets table
 	{
-		$ticket_type=$ticket[0]['ticket_type'];
+		$ticket_type_id=$ticket[0]['ticket_type'];
 
 		if (has_privilege(get_member(),'view_others_tickets'))
 		{
-			if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type)))
+			if (!has_category_access(get_member(),'tickets',strval($ticket_type_id)))
 				access_denied('CATEGORY_ACCESS_LEVEL');
 		}
 
@@ -341,7 +344,7 @@ function ticket_add_post($member,$ticket_id,$ticket_type_id,$title,$post,$ticket
  * @param  ?MEMBER		Posting member (NULL: current member)
  * @param  boolean		Whether the ticket was auto-created
  */
-function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticket_type_if_new,$new_poster=NULL,$auto_created=false)
+function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticket_type_id_if_new,$new_poster=NULL,$auto_created=false)
 {
 	if (is_null($new_poster)) $new_poster=get_member();
 
@@ -358,17 +361,28 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 
 	// Clarify some details about this ticket
 	if ($title=='') $title=do_lang('UNKNOWN');
-	$new_ticket=($ticket_type_if_new!=-1);
+	$new_ticket=($ticket_type_id_if_new!=-1);
 
 	// Lookup ticket type details
-	$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
-	$ticket_type_text=mixed();
+	if ($new_ticket)
+	{
+		$ticket_type_id=$ticket_type_id_if_new;
+	} else
+	{
+		$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+	}
+	$_ticket_type_name=$GLOBALS['SITE_DB']->query_select_value_if_there('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
+	if (is_null($_ticket_type_name))
+	{
+		$ticket_type_name=do_lang('UNKNOWN');
+	} else
+	{
+		$ticket_type_name=get_translated_text($_ticket_type_name);
+	}
 
 	if ($uid!=$new_poster)
 	{
 		// Reply from staff, notification to member
-		$ticket_type_text=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets t LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate tr ON t.ticket_type=tr.id','text_original',array('ticket_id'=>$ticket_id));
-		if (is_null($ticket_type_text)) $ticket_type_text=do_lang('UNKNOWN');
 		$post_tempcode=comcode_to_tempcode($post);
 		if (trim($post_tempcode->evaluate())!='')
 		{
@@ -379,15 +393,15 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 			{
 				require_code('tickets_email_integration');
 				if ($uid_email=='') $uid_email=$GLOBALS['FORUM_DRIVER']->get_member_email_address($uid);
-				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$title,$post,$uid_displayname,$uid_email,$staff_displayname);
+				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_name,$title,$post,$uid_displayname,$uid_email,$staff_displayname);
 			} elseif (!is_guest($uid))
 			{
 				$uid_lang=get_lang($uid);
 
 				$subject=do_lang(
 					'TICKET_REPLY',
-					$ticket_type_text,
-					$ticket_type_text,
+					$ticket_type_name,
+					$ticket_type_name,
 					$title,
 					$uid_lang
 				);
@@ -399,7 +413,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 					array(
 						comcode_escape($staff_displayname),
 						$post,
-						comcode_escape($ticket_type_text),
+						comcode_escape($ticket_type_name),
 						strval($new_poster),
 						comcode_escape($staff_username)
 					),
@@ -414,14 +428,9 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 		// Reply from member, notification to staff
 		if (is_object($ticket_url)) $ticket_url=$ticket_url->evaluate();
 
-		if (is_null($ticket_type_text))
-		{
-			$ticket_type_text=($ticket_type_if_new==-1)?'':get_translated_text($ticket_type_if_new);
-		}
-
 		$subject=do_lang(
 			$new_ticket?'TICKET_NEW_STAFF':'TICKET_REPLY_STAFF',
-			$ticket_type_text,
+			$ticket_type_name,
 			$title,
 			NULL,
 			get_site_default_lang()
@@ -434,7 +443,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 			array(
 				comcode_escape($uid_displayname),
 				$post,
-				comcode_escape($ticket_type_text),
+				comcode_escape($ticket_type_name),
 				strval($new_poster),
 				comcode_escape($uid_username)
 			),
@@ -449,7 +458,7 @@ function send_ticket_email($ticket_id,$title,$post,$ticket_url,$uid_email,$ticke
 			if ((get_option('ticket_mail_on')=='1') && (cron_installed()) && (function_exists('imap_open')) && ($new_ticket) && ($auto_created))
 			{
 				require_code('tickets_email_integration');
-				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_text,$title,$post,$uid_displayname,$uid_email,'',true);
+				ticket_outgoing_message($ticket_id,$ticket_url,$ticket_type_name,$title,$post,$uid_displayname,$uid_email,'',true);
 			} else
 			{
 				require_code('mail');
