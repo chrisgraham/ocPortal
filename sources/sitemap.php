@@ -635,9 +635,9 @@ abstract class Hook_sitemap_base
 				$test=$GLOBALS['SITE_DB']->query_select('menu_items',array('i_caption','i_theme_img_code','i_caption_long'),array('i_url'=>$zone.':'.$page),'',1);
 				if (array_key_exists(0,$test))
 				{
-					$title=get_translated_tempcode($test[0]['i_caption']);
+					$title=get_translated_tempcode('menu_items',$test[0],'i_caption');
 					$icon=$test[0]['i_theme_img_code'];
-					$description=get_translated_tempcode($test[0]['i_caption_long']);
+					$description=get_translated_tempcode('menu_items',$test[0],'i_caption_long');
 					$row+=array($title,$icon,$description);
 				}
 			}

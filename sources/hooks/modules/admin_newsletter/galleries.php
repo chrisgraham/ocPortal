@@ -59,9 +59,9 @@ class Hook_whats_news_galleries
 			$_galleries=$GLOBALS['SITE_DB']->query('SELECT name,fullname FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'galleries WHERE name NOT LIKE \''.db_encode_like('download\_%').'\'');
 			foreach ($_galleries as $i=>$_gallery)
 			{
-				$_galleries[$i]['text_original']=get_translated_text($_gallery['fullname']);
+				$_galleries[$i]['_fullname']=get_translated_text($_gallery['fullname']);
 			}
-			$galleries=collapse_2d_complexity('name','text_original',$_galleries);
+			$galleries=collapse_2d_complexity('name','_fullname',$_galleries);
 		} else $galleries=array();
 
 		require_code('ocfiltering');

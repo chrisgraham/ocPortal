@@ -120,7 +120,7 @@ class Hook_ipb_base
 				$promotion_threshold=NULL;
 			}
 
-			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['g_title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['g_title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group(@html_entity_decode($row['g_title'],ENT_QUOTES,get_charset()),0,$row['g_access_cp'],$row['g_is_supmod'],'','',$promotion_target,$promotion_threshold,NULL,$row['g_avoid_flood']?0:$row['g_search_flood'],0,5,5,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode);
@@ -530,7 +530,7 @@ class Hook_ipb_base
 			if ($row['ftype']=='text') $type='short_text';
 			elseif ($row['ftype']=='area') $type='long_text';
 
-			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['ftitle']));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['ftitle']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['ftitle'],0,$row['fdesc'],'',1-$row['fhide'],1-$row['fhide'],$row['fedit'],0,$type,$row['freq'],0,0,$row['forder'],'',true);
@@ -745,13 +745,13 @@ class Hook_ipb_base
 				$post_id=import_id_remap_get('post',strval($row['pid']),true);
 				if (is_null($post_id)) continue;
 
-				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON p.p_post=t.id',array('p_time','text_original','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
 				if (!array_key_exists(0,$post_row))
 				{
 					import_id_remap_put('post_files',strval($row['pid']),1);
 					continue; // Orphaned post
 				}
-				$post=$post_row[0]['text_original'];
+				$post=get_translated_text($post_row[0]['p_post']);
 				$lang_id=$post_row[0]['p_post'];
 				$member_id=import_id_remap_get('member',$post_row[0]['p_poster']);
 				$post_date=$post_row[0]['p_time'];
@@ -810,7 +810,7 @@ class Hook_ipb_base
 						$GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type'=>'ocf_post','r_referer_id'=>strval($post_id),'a_id'=>$_a_id));
 						$post.="\n\n".'[attachment]'.strval($_a_id).'[/attachment]';
 						ocf_over_msn();
-						update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
+						$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 						ocf_over_local();
 					}
 				} elseif (count($a_id)!=0)
@@ -826,7 +826,7 @@ class Hook_ipb_base
 						$i++;
 					}
 					ocf_over_msn();
-					update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
+					$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$lang_id,$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 					ocf_over_local();
 				}
 

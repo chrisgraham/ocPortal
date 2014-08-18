@@ -51,7 +51,7 @@ echo "
 				fp_animation_fader.src=fp_animation.src;
 				setOpacity(fp_animation_fader,1.0);
 				nereidFade(fp_animation_fader,0,50,-3);
-				fp_animation.src=url{$i};
+				fp_animation.src=url;
 			};
 			if (i!=0) func();
 			window.setInterval(func,{$mill}*{$count});

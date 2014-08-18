@@ -784,7 +784,7 @@ class Module_cms_calendar extends standard_crud_module
 		}
 		$myrow=$rows[0];
 
-		$parsed=get_translated_tempcode($myrow['e_content']);
+		$parsed=get_translated_tempcode('calendar_events',$myrow,'e_content');
 
 		check_edit_permission(($myrow['e_member_calendar']===NULL)?'mid':'low',$myrow['e_submitter']);
 		$content=get_translated_text($myrow['e_content']);

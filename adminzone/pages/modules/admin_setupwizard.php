@@ -895,10 +895,15 @@ class Module_admin_setupwizard
 			set_option('keywords',post_param('keywords'));
 			set_option('google_analytics',post_param('google_analytics'));
 			set_option('fixed_width',post_param('fixed_width','0'));
+
 			$a=$GLOBALS['SITE_DB']->query_select_value('zones','zone_header_text',array('zone_name'=>''));
-			lang_remap($a,$header_text);
+			$GLOBALS['SITE_DB']->query_update('zones',lang_remap('zone_header_text',$a,$header_text),array('zone_name'=>''),'',1);
+
 			$b=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>'site'));
-			if (!is_null($b)) lang_remap($b,$header_text);
+			if (!is_null($b))
+			{
+				$GLOBALS['SITE_DB']->query_update('zones',lang_remap('zone_header_text',$b,$header_text),array('zone_name'=>'site'),'',1);
+			}
 		}
 
 		if (post_param_integer('skip_9',0)==0)

@@ -164,6 +164,8 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 					case 'SHORT_TEXT':
 					case 'LONG_TRANS':
 					case 'SHORT_TRANS':
+					case 'LONG_TRANS__COMCODE':
+					case 'SHORT_TRANS__COMCODE':
 					case 'MINIID_TEXT':
 					case 'ID_TEXT':
 						if ($filter!='') $filter.=',';
@@ -289,6 +291,8 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 						case 'SHORT_TEXT':
 						case 'LONG_TRANS':
 						case 'SHORT_TRANS':
+						case 'LONG_TRANS__COMCODE':
+						case 'SHORT_TRANS__COMCODE':
 							$field_type='line';
 							break;
 						case 'MINIID_TEXT':
@@ -568,7 +572,7 @@ function _fields_api_ocselect($db,$info,$catalogue_name,&$extra_join,&$extra_sel
 		$table_join_code_here=$table_join_code;
 	}
 
-	if (strpos($table,'_trans')!==false)
+	if ((strpos($table,'_trans')!==false) && (multi_lang_content()))
 	{
 		$join_sql=' LEFT JOIN '.$db->get_table_prefix().'catalogue_efv_'.$table.' f'.strval($field_in_seq).'_'.$catalogue_key.' ON f'.strval($field_in_seq).'_'.$catalogue_key.'.ce_id='.$table_join_code_here.'.id AND f'.strval($field_in_seq).'_'.$catalogue_key.'.cf_id='.strval($fields[$field_in_seq]['id']).' LEFT JOIN '.$db->get_table_prefix().'translate t'.strval($field_in_seq).'_'.$catalogue_key.' ON f'.strval($field_in_seq).'_'.$catalogue_key.'.cv_value=t'.strval($field_in_seq).'_'.$catalogue_key.'.id';
 		if (!in_array($join_sql,$extra_join))

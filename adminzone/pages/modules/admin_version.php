@@ -310,7 +310,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_table('cached_comcode_pages',array(
 				'the_zone'=>'*ID_TEXT',
 				'the_page'=>'*ID_TEXT',
-				'string_index'=>'LONG_TRANS',	// Comcode
+				'string_index'=>'LONG_TRANS__COMCODE',
 				'the_theme'=>'*ID_TEXT',
 				'cc_page_title'=>'?SHORT_TRANS'
 			));

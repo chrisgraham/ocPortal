@@ -114,7 +114,7 @@ class Hook_search_polls
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'poll r',array('r.question','r.option1','r.option2','r.option3','r.option4','r.option5'),$where_clause,$content_where,$remapped_orderer,'r.*');
+		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'poll r',array('r.question'=>'SHORT_TRANS__COMCODE','r.option1'=>'SHORT_TRANS__COMCODE','r.option2'=>'SHORT_TRANS__COMCODE','r.option3'=>'SHORT_TRANS__COMCODE','r.option4'=>'SHORT_TRANS__COMCODE','r.option5'=>'SHORT_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

@@ -38,8 +38,27 @@ class Hook_rss_ocf_unread_topics
 		if (is_guest()) return NULL;
 
 		$condition='l_time<t_cache_last_time OR (l_time IS NULL AND t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).')';
-		$query=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND top.t_cache_first_post=t.id WHERE ('.$condition.') AND t_forum_id IS NOT NULL '.(((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND t_validated=1 ':'').' ORDER BY t_cache_last_time DESC';
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT *,top.id AS t_id '.$query,$max);
+		$query='SELECT *,top.id AS t_id';
+		if (multi_lang_content())
+		{
+			$query.=',t_cache_first_post AS p_post';
+		} else
+		{
+			$query.=',p_post,p_post__text_parsed,p_post__source_user';
+		}
+		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON top.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member());
+		if (!multi_lang_content())
+		{
+			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=top.t_cache_first_post_id';
+		}
+		$query.=' WHERE ('.$condition.') AND t_forum_id IS NOT NULL '.((!has_privilege(get_member(),'see_unvalidated'))?' AND t_validated=1 ':'').' ORDER BY t_cache_last_time DESC';
+		if (multi_lang_content())
+		{
+			$rows=$GLOBALS['FORUM_DB']->query($query,$max,false,array('t_cache_first_post'));
+		} else
+		{
+			$rows=$GLOBALS['FORUM_DB']->query($query,$max,false);
+		}
 		$categories=collapse_2d_complexity('id','f_name',$GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE f_cache_num_posts>0'));
 
 		$content=new ocp_tempcode();
@@ -55,7 +74,16 @@ class Hook_rss_ocf_unread_topics
 				if ($edit_date==$news_date) $edit_date='';
 
 				$news_title=xmlentities($row['t_cache_first_title']);
-				$_summary=get_translated_tempcode($row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
+				$post_row=array(
+					'id'=>$row['p_cache_first_post_id'],
+					'p_post'=>$row['p_post'],
+				);
+				if (!multi_lang_content())
+				{
+					$post_row['p_post__text_parsed']=$row['p_post__text_parsed'];
+					$post_row['p_post__source_user']=$row['p_post__source_user'];
+				}
+				$_summary=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 				$summary=xmlentities($_summary->evaluate());
 				$news='';
 

@@ -68,7 +68,7 @@ class Module_admin_community_billboard extends standard_crud_module
 			$GLOBALS['SITE_DB']->create_table('community_billboard',array(
 				'id'=>'*AUTO',
 				'member_id'=>'MEMBER',
-				'the_message'=>'SHORT_TRANS',	// Comcode
+				'the_message'=>'SHORT_TRANS__COMCODE',
 				'days'=>'INTEGER',
 				'order_time'=>'TIME',
 				'activation_time'=>'?TIME',
@@ -205,7 +205,7 @@ class Module_admin_community_billboard extends standard_crud_module
 			$activation_time=$row['activation_time'];
 			$days=is_null($activation_time)?'':float_format(round((time()-$activation_time)/60/60/24,3));
 
-			$fields->attach(results_entry(array(protect_from_escaping(get_translated_tempcode($row['the_message'])),integer_format($row['days']),get_timezoned_date($row['order_time']),($row['active_now']==1)?$days:do_lang_tempcode('NA_EM'),$username,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
+			$fields->attach(results_entry(array(protect_from_escaping(get_translated_tempcode('community_billboard',$row,'the_message')),integer_format($row['days']),get_timezoned_date($row['order_time']),($row['active_now']==1)?$days:do_lang_tempcode('NA_EM'),$username,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
 		}
 
 		return array(results_table(do_lang($this->menu_label),either_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);

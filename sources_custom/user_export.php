@@ -70,7 +70,7 @@ function do_user_export($to_file=true)
 		{
 			if (is_guest($row['id'])) continue;
 
-			$row+=ocf_get_all_custom_fields_match_member($row['id']);
+			$row=ocf_get_all_custom_fields_match_member($row['id'])+$row;
 
 			foreach (array_keys($USER_EXPORT_WANTED) as $i=>$local_key)
 			{

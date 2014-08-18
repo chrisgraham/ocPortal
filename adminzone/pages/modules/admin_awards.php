@@ -84,7 +84,7 @@ class Module_admin_awards extends standard_crud_module
 			$GLOBALS['SITE_DB']->create_table('award_types',array(
 				'id'=>'*AUTO',
 				'a_title'=>'SHORT_TRANS',
-				'a_description'=>'LONG_TRANS',
+				'a_description'=>'LONG_TRANS__COMCODE',
 				'a_points'=>'INTEGER',
 				'a_content_type'=>'ID_TEXT', // uses same naming convention as ocp_merge importer
 				'a_hide_awardee'=>'BINARY',
@@ -92,14 +92,15 @@ class Module_admin_awards extends standard_crud_module
 			));
 
 			require_lang('awards');
-			$GLOBALS['SITE_DB']->query_insert('award_types',array(
-				'a_title'=>lang_code_to_default_content('DOTW'),
-				'a_description'=>lang_code_to_default_content('DESCRIPTION_DOTW'),
+			$map=array(
 				'a_points'=>0,
 				'a_content_type'=>'download',
 				'a_hide_awardee'=>1,
 				'a_update_time_hours'=>168
-			));
+			);
+			$map+=lang_code_to_default_content('a_title','DOTW');
+			$map+=lang_code_to_default_content('a_description','DESCRIPTION_DOTW',true);
+			$GLOBALS['SITE_DB']->query_insert('award_types',$map);
 		}
 	}
 

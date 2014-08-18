@@ -1493,7 +1493,7 @@ function ecv_HEADER_TEXT($lang,$escaped,$param)
 		} else
 		{
 			if ($ZONE!==NULL)
-				$value=$ZONE['zone_header_text_trans'];
+				$value=get_translated_text($ZONE['zone_header_text']);
 		}
 	} else // Take from short title
 	{

@@ -338,15 +338,6 @@ class Block_main_multi_content
 			$where.=$extra_where;
 		}
 
-		// Need to pull in title?
-		if (($sort=='title') || (strpos($sort,'t.text_original')!==false))
-		{
-			if ((array_key_exists('title_field',$info)) && (strpos($info['title_field'],':')===false))
-			{
-				$query.=' LEFT JOIN '.get_table_prefix().'translate t ON t.id=r.'.$info['title_field'].' AND '.db_string_equal_to('t.language',user_lang());
-			}
-		}
-
 		if (addon_installed('content_privacy'))
 		{
 			require_code('content_privacy');
@@ -474,7 +465,7 @@ class Block_main_multi_content
 					{
 						if ($info['title_field_dereference'])
 						{
-							$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY t.text_original ASC',$max,$start,false,true,$lang_fields);
+							$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref($info['title_field']).' ASC',$max,$start,false,true,$lang_fields);
 						} else
 						{
 							$rows=$info['connection']->query('SELECT r.*'.$extra_select_sql.' '.$query.' ORDER BY r.'.$info['title_field'].' ASC',$max,$start,false,true,$lang_fields);

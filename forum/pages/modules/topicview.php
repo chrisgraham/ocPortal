@@ -454,7 +454,7 @@ class Module_topicview
 				}
 
 				if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description']=='') && (($_postdetails['id']===$jump_post_id) || (($array_id==0) && ($jump_post_id===NULL))))
-					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post']),'200','0','1','0.2'),'left'),ENT_QUOTES,get_charset());
+					$GLOBALS['META_DATA']['description']=html_entity_decode(strip_tags(symbol_truncator(array($_postdetails['post'],'200','0','1','0.2'),'left')),ENT_QUOTES,get_charset());
 
 				$rendered_post=do_template('OCF_TOPIC_POST',array(
 					'_GUID'=>'sacd09wekfofpw2f',
@@ -702,7 +702,24 @@ class Module_topicview
 			$map=array('page'=>'topics','type'=>'new_post','id'=>$id);
 			if (($test!=-1) && ($test!=0)) $map['kfs'.(is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']))]=$test;
 			$more_url=build_url($map,get_module_zone('topics'));
-			$_postdetails=array_key_exists('first_post',$topic_info)?get_translated_tempcode($topic_info['first_post'],$GLOBALS['FORUM_DB']):new ocp_tempcode();
+			if (isset($topic_info['first_post']))
+			{
+				$post_row=array(
+					'id'=>$topic_info['row']['id'],
+					'p_post'=>$topic_info['row']['p_post'],
+				);
+				if (!multi_lang_content())
+				{
+					$post_row+=array(
+						'p_post__text_parsed'=>$topic_info['row']['p_post__text_parsed'],
+						'p_post__source_user'=>$topic_info['row']['p_post__source_user'],
+					);
+				}
+				$_postdetails=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+			} else
+			{
+				$_postdetails=new ocp_tempcode();
+			}
 			$first_post=$_postdetails;
 			$first_post_url=$GLOBALS['FORUM_DRIVER']->post_url($topic_info['first_post_id'],is_null($topic_info['forum_id'])?'':strval($topic_info['forum_id']),true);
 			$display='block';
@@ -873,7 +890,7 @@ class Module_topicview
 			'TITLE'=>$this->title,
 			'SERIALIZED_OPTIONS'=>$serialized_options,
 			'HASH'=>$hash,
-			'ID'=>strval($id),
+			'ID'=>is_null($id)?'':strval($id),
 			'_TITLE'=>$topic_info['title'],
 			'MAY_DOUBLE_POST'=>has_privilege(get_member(),'double_post'),
 			'LAST_POSTER'=>array_key_exists('last_poster',$topic_info)?(is_null($topic_info['last_poster'])?'':strval($topic_info['last_poster'])):'',
@@ -881,8 +898,8 @@ class Module_topicview
 			'MAX'=>strval($max),
 			'MAY_CHANGE_MAX'=>array_key_exists('may_change_max',$topic_info),
 			'ACTION_URL'=>$action_url,
-			'NUM_GUESTS'=>integer_format($num_guests),
-			'NUM_MEMBERS'=>integer_format($num_members),
+			'NUM_GUESTS'=>is_null($num_guests)?'':integer_format($num_guests),
+			'NUM_MEMBERS'=>is_null($num_members)?'':integer_format($num_members),
 			'MEMBERS_VIEWING'=>$members_viewing,
 			'PAGINATION'=>$pagination,
 			'MODERATOR_ACTIONS'=>$moderator_actions,

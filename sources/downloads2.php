@@ -257,7 +257,14 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
 
 	if (is_null($add_time)) $add_time=time();
 
-	$map=array('rep_image'=>$rep_image,'add_date'=>$add_time,'notes'=>$notes,'category'=>insert_lang($category,2),'parent_id'=>$parent_id,'description'=>insert_lang_comcode($description,2));
+	$map=array(
+		'rep_image'=>$rep_image,
+		'add_date'=>$add_time,
+		'notes'=>$notes,
+		'parent_id'=>$parent_id,
+	);
+	$map+=insert_lang('category',$category,2);
+	$map+=insert_lang_comcode('description',$description,2);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
 
@@ -320,7 +327,12 @@ function edit_download_category($category_id,$category,$parent_id,$description,$
 	$_category=$rows[0]['category'];
 	$_description=$rows[0]['description'];
 
-	$update_map=array('notes'=>$notes,'category'=>lang_remap($_category,$category),'parent_id'=>$parent_id,'description'=>lang_remap_comcode($_description,$description));
+	$update_map=array(
+		'notes'=>$notes,
+		'parent_id'=>$parent_id,
+	);
+	$update_map+=lang_remap('category',$_category,$category);
+	$update_map+=lang_remap_comcode('description',$_description,$description);
 	if (!is_null($rep_image))
 	{
 		$update_map['rep_image']=$rep_image;
@@ -746,15 +758,15 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
 		'num_downloads'=>$num_downloads,
 		'out_mode_id'=>$out_mode_id,
 		'category_id'=>$category_id,
-		'name'=>insert_lang($name,2),
 		'url'=>$url,
-		'description'=>insert_lang_comcode($description,3),
 		'author'=>$author,
-		'additional_details'=>insert_lang_comcode($additional_details,3),
 		'validated'=>$validated,
 		'add_date'=>$add_date,
 		'file_size'=>$file_size,
 	);
+	$map+=insert_lang('name',$name,2);
+	$map+=insert_lang_comcode('description',$description,3);
+	$map+=insert_lang_comcode('additional_details',$additional_details,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
 
@@ -938,9 +950,6 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes,
-		'name'=>lang_remap($myrow['name'],$name),
-		'description'=>lang_remap_comcode($myrow['description'],$description),
-		'additional_details'=>lang_remap_comcode($myrow['additional_details'],$additional_details),
 		'validated'=>$validated,
 		'category_id'=>$category_id,
 		'url'=>$url,
@@ -948,6 +957,9 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
 		'default_pic'=>$default_pic,
 		'out_mode_id'=>$out_mode_id,
 	);
+	$update_map+=lang_remap('name',$myrow['name'],$name);
+	$update_map+=lang_remap_comcode('description',$myrow['description'],$description);
+	$update_map+=lang_remap_comcode('additional_details',$myrow['additional_details'],$additional_details);
 
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))

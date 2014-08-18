@@ -46,7 +46,7 @@ class Hook_sw_ocf_forum
 			$fields_l=array('im_jabber','im_skype','interests','location','occupation','sn_google','sn_facebook','sn_twitter');
 			foreach ($fields_l as $field)
 			{
-				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
 				if (!is_null($test))
 				{
 					$have_default_cpf_set=true;
@@ -126,7 +126,7 @@ class Hook_sw_ocf_forum
 					}
 					$_name=ocf_get_group_property(db_get_first_id()+8,'name');
 					if (is_integer($_name))
-						lang_remap($_name,do_lang('MEMBER'));
+						$GLOBALS['SITE_DB']->query_update('f_groups',lang_remap($_name,do_lang('MEMBER')),array('id'=>db_get_first_id()+8),'',1);
 				}
 			}
 			if (post_param_integer('have_default_full_emoticon_set',0)==0)
@@ -138,7 +138,7 @@ class Hook_sw_ocf_forum
 				$fields=array('im_skype','interests','location','occupation');
 				foreach ($fields as $field)
 				{
-					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
+					$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>do_lang('DEFAULT_CPF_'.$field.'_NAME')));
 					if (!is_null($test))
 					{
 						require_code('ocf_members_action');

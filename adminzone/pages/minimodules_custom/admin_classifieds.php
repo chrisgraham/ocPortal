@@ -46,9 +46,8 @@ if (count($_POST)!=0)
 						array(
 							'c_catalogue_name'=>$catalogue,
 							'c_days'=>intval($days),
-							'c_label'=>lang_remap($_label,$label),
 							'c_price'=>floatval($price),
-						),
+						)+lang_remap('c_label',$_label,$label),
 						array('id'=>intval($matches[2])),
 						'',
 						1
@@ -61,9 +60,8 @@ if (count($_POST)!=0)
 						array(
 							'c_catalogue_name'=>$catalogue,
 							'c_days'=>intval($days),
-							'c_label'=>insert_lang($label,2),
 							'c_price'=>floatval($price),
-						)
+						)+insert_lang('c_label',$label,2)
 					);
 				}
 			} else

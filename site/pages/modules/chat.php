@@ -106,7 +106,18 @@ class Module_chat
 			$GLOBALS['SITE_DB']->create_index('chat_rooms','allow_list',array('allow_list(30)'));
 
 			// Create our default chat room. By default, this will be as the shoutbox
-			$GLOBALS['SITE_DB']->query_insert('chat_rooms',array('is_im'=>0,'allow_list_groups'=>'','disallow_list_groups'=>'','allow_list'=>'','disallow_list'=>'','room_name'=>do_lang('DEFAULT_CHATROOM_GENERAL_CHAT'),'room_language'=>get_site_default_lang(),'room_owner'=>NULL,'c_welcome'=>insert_lang('',2)));
+			$map=array(
+				'is_im'=>0,
+				'allow_list_groups'=>'',
+				'disallow_list_groups'=>'',
+				'allow_list'=>'',
+				'disallow_list'=>'',
+				'room_name'=>do_lang('DEFAULT_CHATROOM_GENERAL_CHAT'),
+				'room_language'=>get_site_default_lang(),
+				'room_owner'=>NULL,
+			);
+			$map+=insert_lang('c_welcome','',2);
+			$GLOBALS['SITE_DB']->query_insert('chat_rooms',$map);
 
 			$GLOBALS['SITE_DB']->create_table('chat_messages',array(
 				'id'=>'*AUTO',
@@ -115,7 +126,7 @@ class Module_chat
 				'room_id'=>'AUTO_LINK',
 				'member_id'=>'MEMBER',
 				'date_and_time'=>'TIME',
-				'the_message'=>'LONG_TRANS',	// Comcode
+				'the_message'=>'LONG_TRANS__COMCODE',
 				'text_colour'=>'SHORT_TEXT',
 				'font_name'=>'SHORT_TEXT'
 			));

@@ -69,7 +69,13 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 						$value=mixed();
 						foreach ($d as $name=>$value)
 						{
-							if (($table=='translate') && ($name=='text_parsed')) $value='';
+							if (multi_lang_content())
+							{
+								if (($table=='translate') && ($name=='text_parsed')) $value='';
+							} else
+							{
+								if (strpos($name,'__text_parsed')!==false) $value='';
+							}
 
 							if (is_null($value)) continue;
 							if ($list!='') $list.=',';

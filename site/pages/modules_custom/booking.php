@@ -64,10 +64,10 @@ class Module_booking
 			$GLOBALS['SITE_DB']->create_table('bookable',array(
 				'id'=>'*AUTO',
 				//'num_available'=>'INTEGER',		Implied by number of bookable_codes attached to bookable_id
-				'title'=>'SHORT_TRANS',
-				'description'=>'LONG_TRANS',
+				'title'=>'SHORT_TRANS__COMCODE',
+				'description'=>'LONG_TRANS__COMCODE',
 				'price'=>'REAL',
-				'categorisation'=>'SHORT_TRANS', // (will work as a heading, for the booking form)
+				'categorisation'=>'SHORT_TRANS__COMCODE', // (will work as a heading, for the booking form)
 				'cycle_type'=>'ID_TEXT', // (same as event recurrences in the calendar addon; can be none [which would remove date chooser]) - a room cycles daily for example
 				'cycle_pattern'=>'SHORT_TEXT',
 				'user_may_choose_code'=>'BINARY',
@@ -98,7 +98,7 @@ class Module_booking
 				'blacked_to_day'=>'SHORT_INTEGER',
 				'blacked_to_month'=>'SHORT_INTEGER',
 				'blacked_to_year'=>'INTEGER',
-				'blacked_explanation'=>'LONG_TRANS',
+				'blacked_explanation'=>'LONG_TRANS__COMCODE',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('bookable_blacked_for',array(
@@ -300,7 +300,7 @@ class Module_booking
 			// Message about any black-outs within next 6 months
 			$blacked=$GLOBALS['SITE_DB']->query_select(
 				'bookable_blacked b JOIN '.get_table_prefix().'bookable_blacked_for f ON f.blacked_id=b.id',
-				array('blacked_from_day','blacked_from_month','blacked_from_year','blacked_to_day','blacked_to_month','blacked_to_year','blacked_explanation'),
+				array('*'),
 				array(
 					'bookable_id'=>$bookable['id'],
 				),
@@ -317,7 +317,7 @@ class Module_booking
 						($black_from==$black_to)?'NOTE_BOOKING_IMPOSSIBLE_BLACKED_ONEOFF':'NOTE_BOOKING_IMPOSSIBLE_BLACKED_PERIOD',
 						get_timezoned_date($black_from,false,true,false,true),
 						get_timezoned_date($black_to,false,true,false,true),
-						get_translated_tempcode($black['blacked_explanation'])
+						get_translated_tempcode('bookable_blacked',$black,'blacked_explanation')
 					);
 				}
 			}
@@ -333,7 +333,7 @@ class Module_booking
 
 			if (is_null($max_max_date)) $max_max_date=MAX_AHEAD_BOOKING_DATE;
 
-			$description=get_translated_tempcode($bookable['description']);
+			$description=get_translated_tempcode('bookable',$bookable,'description');
 
 			if ((!$description->is_empty()) || (count($messages)>0)) $has_details=true;
 
@@ -341,7 +341,7 @@ class Module_booking
 				'BOOKABLE_ID'=>strval($bookable['id']),
 				'BOOKABLE_QUANTITY_AVAILABLE'=>strval($quantity_available),
 				'BOOKABLE_MESSAGES'=>$messages,
-				'BOOKABLE_TITLE'=>get_translated_tempcode($bookable['title']),
+				'BOOKABLE_TITLE'=>get_translated_tempcode('bookable',$bookable,'title'),
 				'BOOKABLE_DESCRIPTION'=>$description,
 				'BOOKABLE_PRICE'=>float_format($bookable['price']),
 				'BOOKABLE_PRICE_RAW'=>float_to_raw_string($bookable['price']),
@@ -484,7 +484,7 @@ class Module_booking
 				{
 					$supplements[]=array(
 						'SUPPLEMENT_ID'=>strval($supplement_row['id']),
-						'SUPPLEMENT_TITLE'=>get_translated_tempcode($supplement_row['title']),
+						'SUPPLEMENT_TITLE'=>get_translated_tempcode('bookable_supplement',$supplement_row,'title'),
 						'SUPPLEMENT_SUPPORTS_QUANTITY'=>$supplement_row['supports_quantities']==1,
 						'SUPPLEMENT_QUANTITY'=>strval(post_param_integer('bookable_'.strval($bookable_row['id']).'_supplement_'.strval($supplement_row['id']).'_quantity',0)),
 						'SUPPLEMENT_SUPPORTS_NOTES'=>$supplement_row['supports_notes']==1,
@@ -494,7 +494,7 @@ class Module_booking
 
 				$bookables[]=array(
 					'BOOKABLE_ID'=>strval($bookable_row['id']),
-					'BOOKABLE_TITLE'=>get_translated_tempcode($bookable_row['title']),
+					'BOOKABLE_TITLE'=>get_translated_tempcode('bookable',$bookable_row,'title'),
 					'BOOKABLE_SUPPORTS_NOTES'=>$bookable_row['supports_notes']==1,
 					'BOOKABLE_NOTES'=>post_param('bookable_'.strval($bookable_row['id']).'_notes',''),
 					'BOOKABLE_SUPPLEMENTS'=>$supplements,

@@ -2834,7 +2834,7 @@ function ecv2_XOR($lang,$escaped,$param)
  */
 function ecv2_ZONE_HEADER_TEXT($lang,$escaped,$param)
 {
-	$value=$GLOBALS['ZONE']['zone_header_text_trans'];
+	$value=get_translated_text($GLOBALS['ZONE']['zone_header_text']);
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;

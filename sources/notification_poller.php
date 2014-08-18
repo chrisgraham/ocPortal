@@ -227,7 +227,7 @@ function get_web_notifications($max=NULL,$start=0)
 			$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 		}
 
-		$_message=get_translated_tempcode($row['d_message']);
+		$_message=get_translated_tempcode('digestives_tin',$row,'d_message');
 
 		$url=mixed();
 		switch ($row['d_notification_code'])
@@ -277,7 +277,7 @@ function web_notification_to_xml($row)
 	$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-	$_message=get_translated_tempcode($row['d_message']);
+	$_message=get_translated_tempcode('digestives_tin',$row,'d_message');
 
 	$rendered=do_template('NOTIFICATION_WEB_DESKTOP',array('_GUID'=>'1641fa5c5b62421ae535680859e89636','ID'=>strval($row['id']),
 		'SUBJECT'=>$row['d_subject'],
@@ -386,7 +386,7 @@ function pt_to_xml($row)
 	$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
 	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-	$_message=get_translated_tempcode($row['p_post']);
+	$_message=get_translated_tempcode('f_forums',$row,'p_post');
 
 	$rendered=do_template('NOTIFICATION_PT_DESKTOP',array('_GUID'=>'624df70cf0cbb796c5d5ce1d18ae39f7','ID'=>strval($row['p_id']),
 		'SUBJECT'=>$row['t_cache_first_title'],

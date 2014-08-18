@@ -1660,7 +1660,7 @@ class Module_topics
 		if (get_option('enable_pt_restrict')=='1')
 		{
 			$agreed=get_param_integer('agreed',0);
-			$rules=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_pt_rules_text'),$GLOBALS['FORUM_DB']);
+			$rules=get_translated_tempcode('f_members',$GLOBALS['FORUM_DRIVER']->get_member_row($member_id),'m_pt_rules_text',$GLOBALS['FORUM_DB']);
 			if (($agreed==0) && (!$rules->is_empty()))
 			{
 				$url=get_self_url(false,false,array('agreed'=>'1'));
@@ -1895,7 +1895,7 @@ class Module_topics
 		}
 
 		$topic_posts=new ocp_tempcode();
-		$posts=$GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.p_post WHERE p_topic_id='.strval($topic_id).' AND (p_intended_solely_for IS NULL OR p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).') AND p_validated=1 ORDER BY p_time DESC,p.id DESC',20);
+		$posts=$GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p WHERE p_topic_id='.strval($topic_id).' AND (p_intended_solely_for IS NULL OR p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).') AND p_validated=1 ORDER BY p_time DESC,p.id DESC',20);
 		foreach ($posts as $row)
 		{
 			$topic_posts->attach(render_post_box($row,true,false,false));
@@ -2891,7 +2891,7 @@ END;
 
 		if (is_null(get_param('post',NULL)))
 		{
-			$parsed=get_translated_tempcode($post_details[0]['p_post'],$GLOBALS['FORUM_DB']);
+			$parsed=get_translated_tempcode('f_posts',$post_details[0],'p_post',$GLOBALS['FORUM_DB']);
 		} else $parsed=NULL;
 		$posting_form=get_posting_form(do_lang('SAVE'),'buttons__edit',$post,$post_url,$hidden_fields,$specialisation,NULL,'',$specialisation2,$parsed,$this->_post_javascript());
 

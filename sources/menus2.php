@@ -49,10 +49,10 @@ function menu_management_script()
 		{
 			if (is_null($row))
 			{
-				$changes['i_'.$key]=insert_lang($val,2);
+				$changes+=insert_lang('i_'.$key,$val,2);
 			} else
 			{
-				lang_remap($row['i_'.$key],$val);
+				$changes+=lang_remap('i_'.$key,$row['i_'.$key],$val);
 			}
 		} elseif (($key=='url') || ($key=='theme_img_code'))
 		{
@@ -124,7 +124,7 @@ function delete_menu_item_simple($url)
 {
 	$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url'=>$url));
 
-	$_id=$GLOBALS['SITE_DB']->query_select('translate',array('id'),array('text_original'=>$url));
+	$_id=$GLOBALS['SITE_DB']->query_select('menu_items',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('i_caption')=>$url));
 	foreach ($_id as $id)
 		$GLOBALS['SITE_DB']->query_delete('menu_items',array('i_caption'=>$id['id']));
 }
@@ -148,12 +148,10 @@ function delete_menu_item_simple($url)
  */
 function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code='',$include_sitemap=0)
 {
-	$id=$GLOBALS['SITE_DB']->query_insert('menu_items',array(
+	$map=array(
 		'i_menu'=>$menu,
 		'i_order'=>$order,
 		'i_parent'=>$parent,
-		'i_caption'=>insert_lang($caption,1),
-		'i_caption_long'=>insert_lang($caption_long,1),
 		'i_url'=>$url,
 		'i_check_permissions'=>$check_permissions,
 		'i_page_only'=>$page_only,
@@ -161,7 +159,10 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
 		'i_expanded'=>$expanded,
 		'i_new_window'=>$new_window,
 		'i_theme_img_code'=>$theme_image_code,
-	),true);
+	);
+	$map+=insert_lang('i_caption',$caption,1);
+	$map+=insert_lang('i_caption_long',$caption_long,1);
+	$id=$GLOBALS['SITE_DB']->query_insert('menu_items',$map,true);
 
 	log_it('ADD_MENU_ITEM',strval($id),$caption);
 
@@ -196,19 +197,20 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
 	$_caption=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption',array('id'=>$id));
 	$_caption_long=$GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption_long',array('id'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('menu_items',array(
+	$map=array(
 		'i_menu'=>$menu,
 		'i_order'=>$order,
 		'i_parent'=>$parent,
-		'i_caption'=>lang_remap($_caption,$caption),
-		'i_caption_long'=>lang_remap($_caption_long,$caption_long),
 		'i_url'=>$url,
 		'i_check_permissions'=>$check_permissions,
 		'i_page_only'=>$page_only,
 		'i_expanded'=>$expanded,
 		'i_new_window'=>$new_window,
 		'i_include_sitemap'=>$include_sitemap,
-	),array('id'=>$id),'',1);
+	);
+	$map+=lang_remap('i_caption',$_caption,$caption);
+	$map+=lang_remap('i_caption_long',$_caption_long,$caption_long);
+	$GLOBALS['SITE_DB']->query_update('menu_items',$map,array('id'=>$id),'',1);
 
 	log_it('EDIT_MENU_ITEM',strval($id),$caption);
 

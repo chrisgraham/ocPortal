@@ -154,14 +154,14 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 	require_code('attachments2');
 	require_code('attachments3');
 	if (!addon_installed('unvalidated')) $validated=1;
-	$update_map=array_merge($update_map,array(
+	$update_map+=array(
 		'p_title'=>$title,
-		'p_post'=>update_lang_comcode_attachments($_postdetails,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB'],false,$post_owner),
 		'p_is_emphasised'=>$is_emphasised,
 		'p_intended_solely_for'=>$intended_solely_for,
 		'p_validated'=>$validated,
-		'p_skip_sig'=>$skip_sig
-	));
+		'p_skip_sig'=>$skip_sig,
+	);
+	$update_map+=update_lang_comcode_attachments('p_post',$_postdetails,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB'],false,$post_owner);
 
 	if ($show_as_edited)
 	{

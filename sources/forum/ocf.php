@@ -408,11 +408,11 @@ class forum_driver_ocf extends forum_driver_base
 		require_code('ocf_members_action');
 		require_code('ocf_members_action2');
 
-		$field_bits=$this->connection->query_select('f_custom_fields f LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON t.id=f.cf_name',array('f.id','f.cf_type'),array('text_original'=>'ocp_'.$field));
+		$field_bits=$this->connection->query_select('f_custom_fields',array('id','cf_type'),array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>'ocp_'.$field));
 		if (!array_key_exists(0,$field_bits)) // Should never happen, but sometimes on upgrades/corruption...
 		{
 			$this->install_create_custom_field($field,10);
-			$field_bits=$this->connection->query_select('f_custom_fields f LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON t.id=f.cf_name',array('f.id','f.cf_type'),array('text_original'=>'ocp_'.$field));
+			$field_bits=$this->connection->query_select('f_custom_fields',array('id','cf_type'),array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>'ocp_'.$field));
 			if (!array_key_exists(0,$field_bits)) return; // Possible on an MSN, and there's an inconsistency (e.g. no points addon)
 		}
 		$field_type=$field_bits[0]['cf_type'];
@@ -1340,7 +1340,7 @@ class forum_driver_ocf extends forum_driver_base
 				$out[$row['id']]=do_lang('SECRET_GROUP',strval($row['id']));
 			} else
 			{
-				$out[$row['id']]=$row['text_original'];
+				$out[$row['id']]=$name;
 			}
 		}
 		return $out;

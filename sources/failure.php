@@ -1250,7 +1250,7 @@ function get_html_trace()
 function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_text_match=false)
 {
 	if (!isset($GLOBALS['SITE_DB'])) return NULL;
-	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'));
+	$match_keys=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('*'));
 	sort_maps_by__strlen($match_keys,'k_match_key');
 	$match_keys=array_reverse($match_keys);
 	foreach ($match_keys as $match_key)
@@ -1287,7 +1287,7 @@ function _look_for_match_key_message($natural_text,$only_if_zone=false,$only_tex
 		if ($pass)
 		{
 			$message_raw=get_translated_text($match_key['k_message']);
-			$message=get_translated_tempcode($match_key['k_message']);
+			$message=get_translated_tempcode('match_key_messages',$match_key,'k_message');
 
 			// Maybe it is actually a redirect
 			if ((strpos($message_raw,"\n")===false) && (strpos($message_raw,' ')===false))

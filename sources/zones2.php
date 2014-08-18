@@ -59,7 +59,7 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
 
 		if ($summary=='')
 		{
-			$summary=get_translated_tempcode($row2[0]['string_index']);
+			$summary=get_translated_tempcode('zones',$row2[0],'string_index');
 		}
 	} else
 	{
@@ -176,7 +176,15 @@ function actual_add_zone($zone,$title,$default_page='start',$header_text='',$the
 		'p_show_as_edit'=>0
 	));
 
-	$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$zone,'zone_title'=>insert_lang($title,1),'zone_default_page'=>$default_page,'zone_header_text'=>insert_lang($header_text,1),'zone_theme'=>$theme,'zone_require_session'=>$require_session));
+	$map=array(
+		'zone_name'=>$zone,
+		'zone_default_page'=>$default_page,
+		'zone_theme'=>$theme,
+		'zone_require_session'=>$require_session,
+	);
+	$map+=insert_lang('zone_title',$title,1);
+	$map+=insert_lang('zone_header_text',$header_text,1);
+	$GLOBALS['SITE_DB']->query_insert('zones',$map);
 
 	persistent_cache_delete('ALL_ZONES');
 

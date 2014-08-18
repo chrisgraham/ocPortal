@@ -59,7 +59,7 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
 		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'BREADCRUMBS'=>$breadcrumbs,
-		'SUMMARY'=>get_translated_tempcode($row['the_message']),
+		'SUMMARY'=>get_translated_tempcode('wiki_posts',$row,'the_message'),
 		'URL'=>$url,
 	));
 }
@@ -79,7 +79,7 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
 {
 	require_lang('wiki');
 
-	$content=get_translated_tempcode($row['description']);
+	$content=get_translated_tempcode('wiki_pages',$row,'description');
 
 	$map=array('page'=>'wiki','type'=>'misc','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
@@ -148,8 +148,7 @@ function wiki_add_post($page_id,$message,$validated=1,$member=NULL,$send_notific
 	);
 
 	require_code('attachments2');
-	$the_message=insert_lang_comcode_attachments(2,$message,'wiki_post',strval($id));
-	$GLOBALS['SITE_DB']->query_update('wiki_posts',array('the_message'=>$the_message),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('wiki_posts',insert_lang_comcode_attachments('the_message',2,$message,'wiki_post',strval($id)),array('id'=>$id),'',1);
 
 	// Log
 	$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_action'=>'WIKI_MAKE_POST','the_page'=>$page_id,'ip'=>get_ip_address(),'member_id'=>$member,'date_and_time'=>time()));
@@ -226,8 +225,8 @@ function wiki_edit_post($id,$message,$validated,$member=NULL,$page_id=NULL,$edit
 
 	$update_map=array(
 		'validated'=>$validated,
-		'the_message'=>update_lang_comcode_attachments($_message,$message,'wiki_post',strval($id),NULL,true,$original_poster),
 	);
+	$update_map+=update_lang_comcode_attachments('the_message',$_message,$message,'wiki_post',strval($id),NULL,true,$original_poster);
 
 	if (!is_null($page_id))
 		$update_map['page_id']=$page_id;
@@ -325,8 +324,6 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
 	check_comcode($description,NULL,false,NULL,true);
 
 	$map=array(
-		'title'=>insert_lang($title,2),
-		'description'=>0,
 		'hide_posts'=>$hide_posts,
 		'notes'=>$notes,
 		'submitter'=>$member,
@@ -334,15 +331,26 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
 		'add_date'=>time(),
 		'edit_date'=>$edit_date,
 	);
+	if (multi_lang_content())
+	{
+		$map['description']=0;
+	} else
+	{
+		$map['description']='';
+		$map['description__text_parsed']='';
+		$map['description__source_user']=get_member();
+	}
+	$map+=insert_lang('title',$title,2);
 	if ($description!='')
 	{
 		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',$map,true);
 
 		require_code('attachments2');
-		$GLOBALS['SITE_DB']->query_update('wiki_pages',array('description'=>insert_lang_comcode_attachments(2,$description,'wiki_page',strval($id),NULL,false,$member)),array('id'=>$id),'',1);
+		$GLOBALS['SITE_DB']->query_update('wiki_pages',insert_lang_comcode_attachments('description',2,$description,'wiki_page',strval($id),NULL,false,$member),array('id'=>$id),'',1);
 	} else
 	{
-		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',$map+array('description'=>insert_lang($description,2)),true);
+		$map+=insert_lang('description',$description,2);
+		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',$map,true);
 	}
 
 	update_stat('num_wiki_pages',1);
@@ -419,10 +427,10 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 
 	$update_map=array(
 		'hide_posts'=>$hide_posts,
-		'description'=>update_lang_comcode_attachments($_description,$description,'wiki_page',strval($id),NULL,true,$member),
 		'notes'=>$notes,
-		'title'=>lang_remap($_title,$title),
 	);
+	$update_map+=update_lang_comcode_attachments('description',$_description,$description,'wiki_page',strval($id),NULL,true,$member);
+	$update_map+=lang_remap('title',$_title,$title);
 
 	$GLOBALS['SITE_DB']->query_update('wiki_pages',$update_map,array('id'=>$id),'',1);
 
@@ -683,23 +691,26 @@ function wiki_show_tree($select=NULL,$id=NULL,$breadcrumbs='',$include_orphans=t
 				$where.='p.id<>'.strval($seen);
 			}
 
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/,NULL,false,true);
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'wiki_pages p WHERE '.$where.' ORDER BY add_date DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/,NULL,false,true);
 		} else
 		{
-			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
-			if (count($orphans)<intval(get_option('general_safety_listing_limit')))
-			{
-				sort_maps_by($orphans,'text_original');
-			}
+			$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'wiki_pages p WHERE p.id<>'.strval(db_get_first_id()).' AND NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
+		}
+
+		foreach ($orphans as $i=>$orphan)
+		{
+			$orphans[$i]['_title']=get_translated_text($orphan['title']);
+		}
+		if (count($orphans)<intval(get_option('general_safety_listing_limit')))
+		{
+			sort_maps_by($orphans,'_title');
 		}
 
 		foreach ($orphans as $orphan)
 		{
 			if (!has_category_access(get_member(),'wiki_page',strval($orphan['id']))) continue;
 
-			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($orphan['text_original'])) $orphan['text_original']=get_translated_text($orphan['title']);
-
-			$title=$orphan['text_original'];
+			$title=$orphan['_title'];
 			$out->attach(form_input_list_entry($ins_format?(strval($orphan['id']).'!'.$title):strval($orphan['id']),false,do_lang('WIKI_ORPHANED').' > '.$title));
 		}
 	}

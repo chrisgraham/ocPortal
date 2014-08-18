@@ -154,7 +154,7 @@ class Module_admin_tickets
 		// Do a form so people can add
 		$post_url=build_url(array('page'=>'_SELF','type'=>'add'),'_SELF');
 		$submit_name=do_lang_tempcode('ADD_TICKET_TYPE');
-		$fields=form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type_2','',false);
+		$fields=form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TICKET_TYPE'),'ticket_type_name_2','',false);
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'),do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'),'guest_emails_mandatory',false));
 		$fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'),do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'),'search_faq',false));
 		// Permissions
@@ -246,5 +246,3 @@ class Module_admin_tickets
 		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 	}
 }
-
-

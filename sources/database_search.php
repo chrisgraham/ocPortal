@@ -416,11 +416,13 @@ function nl_delim_match_sql($row,$i,$type='short',$param=NULL)
  */
 function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,$fields,$where_clause,$content_where,$order,$select='*',$raw_fields=NULL,$permissions_module=NULL,$permissions_field=NULL,$permissions_field_is_string=false)
 {
-	@ignore_user_abort(false); // If the user multi-submits a search, we don't want to run parallel searches (very slow!). That said, this currently doesn't work in PHP, because PHP does not realise the connection has died until way too late :(. So we also use a different tact (dedupe_mode) but hope PHP will improve with time.
+	if (multi_lang_content())
+	{
+		@ignore_user_abort(false); // If the user multi-submits a search, we don't want to run parallel searches (very slow!). That said, this currently doesn't work in PHP, because PHP does not realise the connection has died until way too late :(. So we also use a different tact (dedupe_mode) but hope PHP will improve with time.
+	}
 
 	if (substr($where_clause,0,5)==' AND ') $where_clause=substr($where_clause,5);
 	if (substr($where_clause,-5)==' AND ') $where_clause=substr($where_clause,0,strlen($where_clause)-5);
-	$where_alternative_matches=array();
 
 	if ((!is_null($permissions_module)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 	{
@@ -434,7 +436,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		$cat_access=list_to_map('category_name',$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'group_category_access WHERE ('.$g_or.') AND '.db_string_equal_to('module_the_name',$permissions_module).' UNION ALL SELECT DISTINCT category_name FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'member_category_access WHERE (member_id='.strval((integer)get_member()).' AND active_until>'.strval(time()).') AND '.db_string_equal_to('module_the_name',$permissions_module),NULL,NULL,false,true));
 	}
 
-	if (($only_titles) && (array_key_exists(0,$fields)) && ($fields[0]=='')) return array();
+	if (key($fields)=='')
+	{
+		if (($only_titles) && (count($fields)!=0)) return array();
+	}
 
 	if (is_null($raw_fields)) $raw_fields=array();
 
@@ -464,8 +469,14 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 	// Defined-keywords/tags search
 	if ((get_param_integer('keep_just_show_query',0)==0) && (!is_null($meta_type)) && ($content!=''))
 	{
-		$keywords_where=preg_replace('#\?#','tm.text_original',build_content_where($content,$boolean_search,$boolean_operator,true));
-		$keywords_where=str_replace(' AND (tm.text_original IS NOT NULL)','',$keywords_where); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
+		list($meta_content_where)=build_content_where($content,$boolean_search,$boolean_operator,true);
+		if (multi_lang_content())
+		{
+			$keywords_where=preg_replace('#\?#','tm.text_original',$meta_content_where);
+		} else
+		{
+			$keywords_where=preg_replace('#\?#','meta_keywords',$meta_content_where);
+		}
 
 		if ($keywords_where!='')
 		{
@@ -928,8 +939,8 @@ function is_under_radar($test)
  * @param  boolean		Whether it's a boolean search
  * @param  string			Boolean operation to use
  * @set    AND OR
- * @param  boolean		Whether we can assume we require full coverage
- * @return string			WHERE clause
+ * @param  boolean		Whether we can assume we require full coverage (i.e. not substring matches)
+ * @return array			A tuple (any SQL component may be blank): The combined where clause SQL, the boolean operator, body where clause SQL, positive where clause SQL, negative where clause SQL
  */
 function build_content_where($content,$boolean_search,&$boolean_operator,$full_coverage=false)
 {
@@ -946,14 +957,20 @@ function build_content_where($content,$boolean_search,&$boolean_operator,$full_c
 		if ($content=='')
 		{
 			$content_where='';
+			$body_where=array();
+			$include_where=array();
+			$disclude_where='';
 		} else
 		{
 			if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!$under_radar))
 			{
 				$content_where=db_full_text_assemble($content,true);
+				$body_where=array($content_where);
+				$include_where=array();
+				$disclude_where='';
 			} else
 			{
-				$content_where=db_like_assemble($content,$boolean_operator,$full_coverage);
+				list($content_where,$boolean_operator,$body_where,$include_where,$disclude_where)=db_like_assemble($content,$boolean_operator,$full_coverage);
 				if ($content_where=='') $content_where='1=1';
 			}
 		}
@@ -962,14 +979,20 @@ function build_content_where($content,$boolean_search,&$boolean_operator,$full_c
 		if ($content=='')
 		{
 			$content_where='';
+			$body_where=array();
+			$include_where=array();
+			$disclude_where='';
 		} else
 		{
 			$content_where=db_full_text_assemble($content,false);
+			$body_where=array($content_where);
+			$include_where=array();
+			$disclude_where='';
 		}
 		$boolean_operator='OR';
 	}
 
-	return $content_where;
+	return array($content_where,$boolean_operator,$body_where,$include_where,$disclude_where);
 }
 
 /**
@@ -979,7 +1002,7 @@ function build_content_where($content,$boolean_search,&$boolean_operator,$full_c
  * @param  string			Boolean operator to use
  * @set    AND OR
  * @param  boolean		Whether we can assume we require full coverage
- * @return string			The SQL (may be blank)
+ * @return array			A tuple (any SQL component may be blank): The combined where clause SQL, the boolean operator, body where clause SQL, positive where clause SQL, negative where clause SQL
  */
 function db_like_assemble($content,$boolean_operator='AND',$full_coverage=false)
 {
@@ -988,28 +1011,26 @@ function db_like_assemble($content,$boolean_operator='AND',$full_coverage=false)
 	$fc_before=$full_coverage?'':'%';
 	$fc_after=$full_coverage?'':'%';
 
-	$body_where='';
+	$body_where=array();
 	foreach ($body_words as $word)
 	{
-		if ($body_where!='') $body_where.=' '.$boolean_operator.' ';
 		if ((strtoupper($word)==$word) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_collate_settings')) && ($GLOBALS['SITE_DB']->static_ob->db_has_collate_settings($GLOBALS['SITE_DB']->connection_read)) && (!is_numeric($word)))
 		{
-			$body_where.='CONVERT(? USING latin1) LIKE _latin1\''.db_encode_like($fc_before.$word.$fc_after).'\' COLLATE latin1_general_cs';
+			$body_where[]='CONVERT(? USING latin1) LIKE _latin1\''.db_encode_like($fc_before.$word.$fc_after).'\' COLLATE latin1_general_cs';
 		} else
 		{
-			$body_where.='? LIKE \''.db_encode_like($fc_before.$word.$fc_after).'\'';
+			$body_where[]='? LIKE \''.db_encode_like($fc_before.$word.$fc_after).'\'';
 		}
 	}
-	$include_where='';
+	$include_where=array();
 	foreach ($include_words as $word)
 	{
-		if ($include_where!='') $include_where.=' AND ';
 		if ((strtoupper($word)==$word) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_collate_settings')) && ($GLOBALS['SITE_DB']->static_ob->db_has_collate_settings($GLOBALS['SITE_DB']->connection_read)) && (!is_numeric($word)))
 		{
-			$include_where.='CONVERT(? USING latin1) LIKE _latin1\''.db_encode_like($fc_before.$word.$fc_after).'\' COLLATE latin1_general_cs';
+			$include_where[]='CONVERT(? USING latin1) LIKE _latin1\''.db_encode_like($fc_before.$word.$fc_after).'\' COLLATE latin1_general_cs';
 		} else
 		{
-			$include_where.='? LIKE \''.db_encode_like($fc_before.$word.$fc_after).'\'';
+			$include_where[]='? LIKE \''.db_encode_like($fc_before.$word.$fc_after).'\'';
 		}
 	}
 	$disclude_where='';
@@ -1024,19 +1045,26 @@ function db_like_assemble($content,$boolean_operator='AND',$full_coverage=false)
 			$disclude_where.='? NOT LIKE \''.db_encode_like($fc_before.$word.$fc_after).'\'';
 		}
 	}
+
+	// $content_where combines all
 	$content_where='';
-	if ($body_where!='') $content_where.='('.$body_where.')';
-	if ($include_where!='')
+	if ($body_words!=array())
 	{
 		if ($content_where!='') $content_where.=' AND ';
-		$content_where.='('.$include_where.')';
+		$content_where.='('.implode($boolean_operator,$include_where).')';
+	}
+	if ($include_where!=array())
+	{
+		if ($content_where!='') $content_where.=' AND ';
+		$content_where.='('.implode(' AND ',$include_where).')';
 	}
 	if ($disclude_where!='')
 	{
 		if ($content_where!='') $content_where.=' AND ';
 		$content_where.='('.$disclude_where.')';
 	}
-	return $content_where;
+
+	return array($content_where,$boolean_operator,$body_where,$include_where,$disclude_where);
 }
 
 /**

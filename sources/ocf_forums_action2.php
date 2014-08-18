@@ -128,20 +128,21 @@ function ocf_edit_forum($forum_id,$name,$description,$forum_grouping_id,$new_par
 		$GLOBALS['FORUM_DB']->query_delete('f_forum_intro_member',array('i_forum_id'=>$forum_id));
 	}
 
-	$GLOBALS['FORUM_DB']->query_update('f_forums',array(
+	$map=array(
 		'f_name'=>$name,
-		'f_description'=>lang_remap($forum_info[0]['f_description'],$description,$GLOBALS['FORUM_DB']),
 		'f_forum_grouping_id'=>$forum_grouping_id,
 		'f_parent_forum'=>$new_parent,
 		'f_position'=>$position,
 		'f_order_sub_alpha'=>$order_sub_alpha,
-		'f_intro_question'=>lang_remap($forum_info[0]['f_intro_question'],$intro_question,$GLOBALS['FORUM_DB']),
 		'f_intro_answer'=>$intro_answer,
 		'f_post_count_increment'=>$post_count_increment,
 		'f_redirection'=>$redirection,
 		'f_order'=>$order,
 		'f_is_threaded'=>$is_threaded,
-	),array('id'=>$forum_id),'',1);
+	);
+	$map+=lang_remap('f_description',$forum_info[0]['f_description'],$description,$GLOBALS['FORUM_DB']);
+	$map+=lang_remap('f_intro_question',$forum_info[0]['f_intro_question'],$intro_question,$GLOBALS['FORUM_DB']);
+	$GLOBALS['FORUM_DB']->query_update('f_forums',$map,array('id'=>$forum_id),'',1);
 
 	if ($old_name!=$name)
 	{

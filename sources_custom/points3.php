@@ -90,7 +90,7 @@ function points_profile($member_id_of,$member_id_viewing)
 			log_hack_attack_and_exit('ORDERBY_HACK');
 
 		$max_rows=$GLOBALS['SITE_DB']->query_select_value('chargelog','COUNT(*)',array('member_id'=>$member_id_of));
-		$rows=$GLOBALS['SITE_DB']->query_select('chargelog c LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=c.reason',array('*'),array('member_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
+		$rows=$GLOBALS['SITE_DB']->query_select('chargelog',array('*'),array('member_id'=>$member_id_of),'ORDER BY '.$sortable.' '.$sort_order,$max,$start);
 		$charges=new ocp_tempcode();
 		$from_name=get_site_name();
 		$to_name=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
@@ -101,16 +101,7 @@ function points_profile($member_id_of,$member_id_viewing)
 		{
 			$date=get_timezoned_date($myrow['date_and_time']);
 			$amount=$myrow['amount'];
-
-			if ((get_page_name()!='search') && (array_key_exists('text_parsed',$myrow)) && (!is_null($myrow['text_parsed'])) && ($myrow['text_parsed']!='') && ($myrow['reason']!=0))
-			{
-				$reason=new ocp_tempcode();
-				if (!$reason->from_assembly($myrow['text_parsed'],true))
-					$reason=get_translated_tempcode($myrow['reason']);
-			} else
-			{
-				$reason=get_translated_tempcode($myrow['reason']);
-			}
+			$reason=get_translated_tempcode('chargelog',$myrow,'reason');
 
 			$charges->attach(results_entry(array(escape_html($date),escape_html(integer_format($amount)),escape_html($from_name),escape_html($to_name),$reason)));
 		}

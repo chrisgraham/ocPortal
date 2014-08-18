@@ -154,7 +154,7 @@ class Hook_fields_upload
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
 	 * @param  array			The field details
 	 * @param  ?string		Where the files will be uploaded to (NULL: do not store an upload, return NULL if we would need to do so)
-	 * @param  ?string		Former value of field (NULL: none)
+	 * @param  ?array			Former value of field (NULL: none)
 	 * @return ?string		The value (NULL: could not process)
 	 */
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
@@ -173,12 +173,12 @@ class Hook_fields_upload
 				$value.='::'.$temp[2];
 			}
 			if (($editing) && ($value=='') && (post_param_integer($tmp_name.'_unlink',0)!=1))
-				return is_null($old_value)?'':$old_value;
+				return is_null($old_value)?'':$old_value['cv_value'];
 
-			if ((!is_null($old_value)) && ($old_value!='') && (($value!='') || (post_param_integer('custom_'.strval($field['id']).'_value_unlink',0)==1)))
+			if ((!is_null($old_value)) && ($old_value['cv_value']!='') && (($value!='') || (post_param_integer('custom_'.strval($field['id']).'_value_unlink',0)==1)))
 			{
-				@unlink(get_custom_file_base().'/'.rawurldecode($old_value));
-				sync_file(rawurldecode($old_value));
+				@unlink(get_custom_file_base().'/'.rawurldecode($old_value['cv_value']));
+				sync_file(rawurldecode($old_value['cv_value']));
 			}
 		} else
 		{
@@ -194,10 +194,10 @@ class Hook_fields_upload
 	 */
 	function cleanup($value)
 	{
-		if ($value!='')
+		if ($value['cv_value']!='')
 		{
-			@unlink(get_custom_file_base().'/'.rawurldecode($value));
-			sync_file(rawurldecode($value));
+			@unlink(get_custom_file_base().'/'.rawurldecode($value['cv_value']));
+			sync_file(rawurldecode($value['cv_value']));
 		}
 	}
 }

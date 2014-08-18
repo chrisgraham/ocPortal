@@ -221,10 +221,17 @@ class Block_main_news
 		{
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
+				$just_news_row=array(
+					'id'=>$row['id'],
+					'title'=>$row['title'],
+					'news'=>$row['news'],
+					'news_article'=>$row['news_article'],
+				);
+
 				// Basic details
 				$id=$myrow['p_id'];
 				$date=get_timezoned_date($myrow['date_and_time']);
-				$news_title=get_translated_tempcode($myrow['title']);
+				$news_title=get_translated_tempcode('news',$just_news_row,'title');
 				$news_title_plain=get_translated_text($myrow['title']);
 
 				// Author
@@ -241,18 +248,18 @@ class Block_main_news
 				// Text
 				if ($show_in_full)
 				{
-					$news=get_translated_tempcode($myrow['news_article']);
+					$news=get_translated_tempcode('news',$just_news_row,'news_article');
 					$truncate=false;
 					if ($news->is_empty())
 					{
-						$news=get_translated_tempcode($myrow['news']);
+						$news=get_translated_tempcode('news',$just_news_row,'news');
 					}
 				} else
 				{
-					$news=get_translated_tempcode($myrow['news']);
+					$news=get_translated_tempcode('news',$just_news_row,'news');
 					if ($news->is_empty())
 					{
-						$news=get_translated_tempcode($myrow['news_article']);
+						$news=get_translated_tempcode('news',$just_news_row,'news_article');
 						$truncate=true;
 					} else $truncate=false;
 				}
@@ -318,6 +325,13 @@ class Block_main_news
 		{
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
+				$just_news_row=array(
+					'id'=>$row['id'],
+					'title'=>$row['title'],
+					'news'=>$row['news'],
+					'news_article'=>$row['news_article'],
+				);
+
 				// Basic details
 				$date=get_timezoned_date($myrow['date_and_time']);
 
@@ -326,7 +340,7 @@ class Block_main_news
 				$url=build_url($tmp,$zone);
 
 				// Title
-				$title=get_translated_tempcode($myrow['title']);
+				$title=get_translated_tempcode('news',$just_news_row,'title');
 				$title_plain=get_translated_text($myrow['title']);
 
 				// Render

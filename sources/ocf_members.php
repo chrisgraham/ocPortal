@@ -138,11 +138,11 @@ function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_v
 		if ($required!==NULL) $where.=' AND cf_required='.strval($required);
 		if ($show_in_posts!==NULL) $where.=' AND cf_show_in_posts='.strval($show_in_posts);
 		if ($show_in_post_previews!==NULL) $where.=' AND cf_show_in_post_previews='.strval($show_in_post_previews);
-		if ($special_start==1) $where.=' AND tx.text_original LIKE \''.db_encode_like('ocp_%').'\'';
+		if ($special_start==1) $where.=' AND '.$GLOBALS['SITE_DB']->translate_field_ref('cf_name').' LIKE \''.db_encode_like('ocp_%').'\'';
 		if ($show_on_join_form!==NULL) $where.=' AND cf_show_on_join_form='.strval($show_on_join_form);
 
 		global $TABLE_LANG_FIELDS_CACHE;
-		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate tx ON (tx.id=f.cf_name AND '.db_string_equal_to('tx.language',get_site_default_lang()).') '.$where.' ORDER BY cf_order',NULL,NULL,false,true,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
+		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f '.$where.' ORDER BY cf_order',NULL,NULL,false,true,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
 		$result=array();
 		foreach ($_result as $row)
 		{
@@ -362,29 +362,35 @@ function ocf_get_custom_field_mappings($member_id)
 			$value=mixed();
 
 			$all_fields_regardless=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'));
-			$row=array('mf_member_id'=>$member_id);
+			$map=array('mf_member_id'=>$member_id);
 			foreach ($all_fields_regardless as $field)
 			{
 				$ob=get_fields_hook($field['cf_type']);
 				list(,$value,$storage_type)=$ob->get_field_value_row_bits($field,false,'',$GLOBALS['FORUM_DB']);
 
+				$row['field_'.strval($field['id'])]=$value;
 				if (is_string($value)) // Should not normally be needed, but the grabbing from cf_default further up is not converted yet
 				{
 					switch ($storage_type)
 					{
 						case 'short_trans':
 						case 'long_trans':
-							// ^^ treat as integer, as defaults to an insert_lang
+							if (!is_null($default))
+							{
+								$row+=insert_lang_comcode('field_'.strval($field['id']),$value,3,$GLOBALS['FORUM_DB']);
+							} else
+							{
+								$row['field_'.strval($field['id'])]=NULL;
+							}
+							break;
 						case 'integer':
-							$value=intval($value);
+							$row['field_'.strval($field['id'])]=intval($value);
 							break;
 						case 'float':
-							$value=floatval($value);
+							$row['field_'.strval($field['id'])]=floatval($value);
 							break;
 					}
 				}
-
-				$row['field_'.strval($field['id'])]=$value;
 			}
 			$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
 			$query=array($row);

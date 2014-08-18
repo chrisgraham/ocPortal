@@ -117,7 +117,7 @@ class Hook_search_galleries
 		$where_clause.='name NOT LIKE \''.db_encode_like('download\_%').'\'';
 
 		// Calculate and perform query
-		$rows=get_search_rows('gallery','name',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'galleries r',array('r.fullname','r.description'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'galleries','name',true);
+		$rows=get_search_rows('gallery','name',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'galleries r',array('r.fullname'=>'SHORT_TRANS__COMCODE','r.description'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'galleries','name',true);
 
 		$out=array();
 		foreach ($rows as $i=>$row)

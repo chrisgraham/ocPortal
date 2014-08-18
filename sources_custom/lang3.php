@@ -12,14 +12,16 @@ if (!function_exists('parse_translated_text'))
 	/**
 	 * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
 	 *
-	 * @param  integer			The ID
+	 * @param  ID_TEXT			The table name
+	 * @param  array				The database row
+	 * @param  ID_TEXT			The field name
 	 * @param  ?object			The database connection to use (NULL: standard site connection)
 	 * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
 	 * @param  boolean			Whether to force it to the specified language
 	 * @param  boolean			Whether to force as_admin, even if the lang string isn't stored against an admin (designed for Comcode page cacheing)
 	 * @return ?tempcode			The parsed Comcode (NULL: the text couldn't be looked up)
 	 */
-	function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
+	function parse_translated_text($table,&$row,$field_name,$connection,$lang,$force,$as_admin)
 	{
 		global $SEARCH__CONTENT_BITS;
 		global $LAX_COMCODE;
@@ -27,10 +29,16 @@ if (!function_exists('parse_translated_text'))
 		$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
-		$result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
-		$result=array_key_exists(0,$result)?$result[0]:NULL;
+		$entry=$row[$field_name];
 
-		if (is_null($result))
+		$result=mixed();
+		if (multi_lang_content())
+		{
+			$_result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
+			if (array_key_exists(0,$_result)) $result=$_result[0];
+		}
+
+		if ((is_null($result)) && (multi_lang_content())) // A missing translation
 		{
 			if ($force)
 			{
@@ -61,7 +69,7 @@ if (!function_exists('parse_translated_text'))
 
 				$temp=$LAX_COMCODE;
 				$LAX_COMCODE=true;
-				_lang_remap($entry,is_null($result)?'':$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+				_lang_remap($field_name,$entry,is_null($result)?'':$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
 				if (!is_null($SEARCH__CONTENT_BITS))
 				{
 					$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
@@ -70,7 +78,7 @@ if (!function_exists('parse_translated_text'))
 					return $ret;
 				}
 				$LAX_COMCODE=$temp;
-				$ret=get_translated_tempcode($entry,$connection,$lang);
+				$ret=get_translated_tempcode($table,$row,$field_name,$connection,$lang);
 				$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 				return $ret;
 			}
@@ -86,19 +94,38 @@ if (!function_exists('parse_translated_text'))
 			require_code('comcode'); // might not have been loaded for a quick-boot
 			require_code('permissions');
 
-			global $LAX_COMCODE;
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			_lang_remap($entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
-			if (!is_null($SEARCH__CONTENT_BITS))
+
+			if (multi_lang_content())
 			{
-				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
-				$LAX_COMCODE=$temp;
-				$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
-				return $ret;
+				_lang_remap($field_name,$entry,$result['text_original'],$connection,true,NULL,$result['source_user'],$as_admin,false,true);
+
+				if (!is_null($SEARCH__CONTENT_BITS))
+				{
+					$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+					$LAX_COMCODE=$temp;
+					$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
+					return $ret;
+				}
+			} else
+			{
+				$map=_lang_remap($field_name,$entry,$row[$field_name],$connection,true,NULL,$row[$field_name.'__source_user'],$as_admin,false,true);
+
+				$connection->query_update($table,$map,$row,'',1);
+				$row=$map+$row;
+
+				if (!is_null($SEARCH__CONTENT_BITS))
+				{
+					$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+					$LAX_COMCODE=$temp;
+					$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
+					return $ret;
+				}
 			}
+
 			$LAX_COMCODE=$temp;
-			$ret=get_translated_tempcode($entry,$connection,$lang);
+			$ret=get_translated_tempcode($table,$row,$field_name,$connection,$lang);
 			$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 			return $ret;
 		}

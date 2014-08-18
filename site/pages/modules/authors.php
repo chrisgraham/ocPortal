@@ -62,8 +62,8 @@ class Module_authors
 				'author'=>'*ID_TEXT',
 				'url'=>'URLPATH',
 				'member_id'=>'?MEMBER',
-				'description'=>'LONG_TRANS',	// Comcode
-				'skills'=>'LONG_TRANS'	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
+				'skills'=>'LONG_TRANS__COMCODE',
 			));
 
 			$GLOBALS['SITE_DB']->create_index('authors','findmemberlink',array('member_id'));
@@ -168,7 +168,7 @@ class Module_authors
 	{
 		$author=$this->author;
 
-		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('url','description','skills'),array('author'=>$author),'',1);
+		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('*'),array('author'=>$author),'',1);
 		if (!array_key_exists(0,$rows))
 		{
 			if ((has_actual_page_access(get_member(),'cms_authors')) && (has_edit_author_permission(get_member(),$author)))
@@ -214,10 +214,10 @@ class Module_authors
 		else $url_details=new ocp_tempcode();
 
 		// (Self?) description
-		$description=is_null($details['description'])?new ocp_tempcode():get_translated_tempcode($details['description']);
+		$description=empty($details['description'])?new ocp_tempcode():get_translated_tempcode('authors',$details,'description');
 
 		// Skills
-		$skills=is_null($details['skills'])?new ocp_tempcode():get_translated_tempcode($details['skills']);
+		$skills=empty($details['skills'])?new ocp_tempcode():get_translated_tempcode('authors',$details,'skills');
 
 		// Edit link, for staff
 		if (has_edit_author_permission(get_member(),$author))

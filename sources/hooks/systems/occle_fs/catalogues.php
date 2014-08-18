@@ -358,10 +358,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					$_description=$field_data['description'];
 					$field_title=mixed();
 					foreach ($_field_title as $lang=>$val)
-						$field_title=insert_lang($val,2,NULL,false,$field_title,$lang);
+						$field_title=insert_lang('cf_name',$val,2,NULL,false,$field_title,$lang);
 					$description=mixed();
 					foreach ($_description as $lang=>$val)
-						$description=insert_lang($val,2,NULL,false,$description,$lang);
+						$description=insert_lang('cf_description',$val,2,NULL,false,$description,$lang);
 
 					actual_add_catalogue_field($name,$field_title,$description,$type,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category,$put_in_search);
 				}
@@ -516,10 +516,10 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					{
 						$field_title=mixed();
 						foreach ($_field_title as $lang=>$val)
-							$field_title=insert_lang($val,2,NULL,false,$field_title,$lang);
+							$field_title=insert_lang('cf_name',$val,2,NULL,false,$field_title,$lang);
 						$description=mixed();
 						foreach ($_description as $lang=>$val)
-							$description=insert_lang($val,2,NULL,false,$description,$lang);
+							$description=insert_lang('cf_decription',$val,2,NULL,false,$description,$lang);
 
 						actual_add_catalogue_field($name,$field_title,$description,$type,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category,$put_in_search);
 					}

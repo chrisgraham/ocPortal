@@ -203,7 +203,7 @@ class Module_admin_points
 		{
 			$date=get_timezoned_date($myrow['date_and_time']);
 
-			$reason=get_translated_tempcode($myrow['reason']);
+			$reason=get_translated_tempcode('gifts',$myrow,'reason');
 
 			if (is_guest($myrow['gift_to']))
 			{

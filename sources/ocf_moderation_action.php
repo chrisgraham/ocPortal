@@ -36,8 +36,7 @@ function ocf_make_multi_moderation($name,$post_text,$move_to,$pin_state,$sink_st
 	require_code('global4');
 	prevent_double_submit('ADD_MULTI_MODERATION',NULL,$name);
 
-	$id=$GLOBALS['FORUM_DB']->query_insert('f_multi_moderations',array(
-		'mm_name'=>insert_lang($name,3,$GLOBALS['FORUM_DB']),
+	$map=array(
 		'mm_post_text'=>$post_text,
 		'mm_move_to'=>$move_to,
 		'mm_pin_state'=>$pin_state,
@@ -45,7 +44,9 @@ function ocf_make_multi_moderation($name,$post_text,$move_to,$pin_state,$sink_st
 		'mm_open_state'=>$open_state,
 		'mm_forum_multi_code'=>$forum_multi_code,
 		'mm_title_suffix'=>$title_suffix,
-	),true);
+	);
+	$map+=insert_lang('mm_name',$name,3,$GLOBALS['FORUM_DB']);
+	$id=$GLOBALS['FORUM_DB']->query_insert('f_multi_moderations',$map,true);
 
 	log_it('ADD_MULTI_MODERATION',strval($id),$name);
 

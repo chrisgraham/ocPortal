@@ -165,8 +165,17 @@ function do_work()
 	// messages in chat room
 	for ($j=$GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)');$j<$num_wanted;$j++)
 	{
-		$_message_parsed=insert_lang_comcode(random_text(),4);
-		$GLOBALS['SITE_DB']->query_insert('chat_messages',array('system_message'=>0,'ip_address'=>'','room_id'=>$room_id,'member_id'=>db_get_first_id(),'date_and_time'=>time(),'the_message'=>$_message_parsed,'text_colour'=>get_option('chat_default_post_colour'),'font_name'=>get_option('chat_default_post_font')));
+		$map=array(
+			'system_message'=>0,
+			'ip_address'=>'',
+			'room_id'=>$room_id,
+			'member_id'=>db_get_first_id(),
+			'date_and_time'=>time(),
+			'text_colour'=>get_option('chat_default_post_colour'),
+			'font_name'=>get_option('chat_default_post_font'),
+		);
+		$map+=insert_lang_comcode('the_message',random_text(),4);
+		$GLOBALS['SITE_DB']->query_insert('chat_messages',$map);
 	}
 	echo 'done chat stuff'."\n";
 

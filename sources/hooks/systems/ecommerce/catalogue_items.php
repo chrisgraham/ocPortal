@@ -67,7 +67,7 @@ class Hook_catalogue_items
 			{
 				$map=get_catalogue_entry_field_values($ecomm_item['c_name'],$ecomm_item['id'],NULL,NULL,true);
 
-				$product_title=array_key_exists('effective_value_pure',$map[0])?$map[0]['effective_value_pure']:$map[0]['effective_value'];
+				$product_title=$map[0]['effective_value_pure'];
 
 				if ((!is_null($search)) && ($search_item_names))
 				{
@@ -243,7 +243,7 @@ class Hook_catalogue_items
 
 		foreach ($product_det as $key=>$value)
 		{
-			$product_det[$key]=array_key_exists('effective_value_pure',$value)?$value['effective_value_pure']:$value['effective_value'];
+			$product_det[$key]=$value['effective_value_pure'];
 		}
 
 		$product=array(

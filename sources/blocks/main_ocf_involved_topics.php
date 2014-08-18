@@ -85,7 +85,22 @@ class Block_main_ocf_involved_topics
 				if ($where!='') $where.=' OR ';
 				$where.='t.id='.strval($row['p_topic_id']);
 			}
-			$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT t.*,lan.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate lan ON t.t_cache_first_post=lan.id WHERE '.$where,NULL,NULL,false,true);
+			$query='SELECT t.*,l_time';
+			if (multi_lang_content())
+			{
+				$query.=',t_cache_first_post AS p_post';
+			} else
+			{
+				$query.=',p_post,p_post__text_parsed,p_post__source_user';
+			}
+			$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).' WHERE '.$where;
+			if (multi_lang_content())
+			{
+				$topic_rows=$GLOBALS['FORUM_DB']->query($query,NULL,NULL,false,true,array('p_cache_first_post'=>'LONG_TRANS__COMCODE'));
+			} else
+			{
+				$topic_rows=$GLOBALS['FORUM_DB']->query($query,NULL,NULL,false,true);
+			}
 			$topic_rows_map=array();
 			foreach ($topic_rows as $topic_row)
 			{

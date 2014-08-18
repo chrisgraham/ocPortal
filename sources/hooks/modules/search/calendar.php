@@ -131,7 +131,7 @@ class Hook_search_calendar
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('event','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,array('r.e_title','r.e_content'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'calendar','e_type');
+		$rows=get_search_rows('event','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,array('r.e_title'=>'SHORT_TRANS','r.e_content'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'calendar','e_type');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

@@ -261,7 +261,7 @@ class Block_side_calendar
 				$view_url=$e_id;
 			}
 			$days[$day_start]['EVENTS'][]=array(
-				'DESCRIPTION'=>get_translated_tempcode($event['e_content']),
+				'DESCRIPTION'=>get_translated_tempcode('calendar_events',$event,'e_content'),
 				'TIMESTAMP'=>strval($real_from),
 				'TIME'=>($real_from!=$from)?do_lang('EVENT_CONTINUES'):(is_null($event['e_start_hour'])?do_lang_tempcode('ALL_DAY_EVENT'):make_string_tempcode(get_timezoned_time($real_from,false,NULL,true))),
 				'TIME_RAW'=>strval($real_from),

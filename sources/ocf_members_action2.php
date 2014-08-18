@@ -902,12 +902,12 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 	if (!is_null($allow_emails)) $update['m_allow_emails']=$allow_emails;
 	if (!is_null($allow_emails_from_staff)) $update['m_allow_emails_from_staff']=$allow_emails_from_staff;
 	if (!is_null($pt_allow)) $update['m_pt_allow']=$pt_allow;
-	if (!is_null($pt_rules_text)) $update['m_pt_rules_text']=lang_remap_comcode($_pt_rules_text,$pt_rules_text,$GLOBALS['FORUM_DB']);
+	if (!is_null($pt_rules_text)) $update+=lang_remap_comcode('m_pt_rules_text',$_pt_rules_text,$pt_rules_text,$GLOBALS['FORUM_DB']);
 	if (($skip_checks) || (has_privilege(get_member(),'probate_members')))
 		$update['m_on_probation_until']=$on_probation_until;
 	if (!is_null($join_time)) $update['m_join_time']=$join_time;
 	if (!is_null($avatar_url)) $update['m_avatar_url']=$avatar_url;
-	if (!is_null($signature)) $update['m_signature']=lang_remap_comcode($_signature,$signature,$GLOBALS['FORUM_DB']);
+	if (!is_null($signature)) $update+=lang_remap_comcode('m_signature',$_signature,$signature,$GLOBALS['FORUM_DB']);
 	if (!is_null($is_perm_banned)) $update['m_is_perm_banned']=$is_perm_banned;
 	if (!is_null($photo_url)) $update['m_photo_url']=$photo_url;
 	if (!is_null($photo_thumb_url)) $update['m_photo_thumb_url']=$photo_thumb_url;
@@ -921,13 +921,14 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 		if (addon_installed('galleries'))
 		{
 			require_lang('galleries');
-			$personal_galleries=$GLOBALS['SITE_DB']->query('SELECT fullname,parent_id FROM '.get_table_prefix().'galleries WHERE name LIKE \'member_'.strval($member_id).'_%\'');
+			$personal_galleries=$GLOBALS['SITE_DB']->query('SELECT name,fullname,parent_id FROM '.get_table_prefix().'galleries WHERE name LIKE \'member_'.strval($member_id).'_%\'');
 			foreach ($personal_galleries as $gallery)
 			{
 				$parent_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$gallery['parent_id'])));
 				if (get_translated_text($gallery['fullname'])==do_lang('PERSONAL_GALLERY_OF',$old_username,$parent_title))
 				{
-					lang_remap($gallery['fullname'],do_lang('PERSONAL_GALLERY_OF',$username,$parent_title),$GLOBALS['FORUM_DB']);
+					$new_fullname=do_lang('PERSONAL_GALLERY_OF',$username,$parent_title);
+					$GLOBALS['SITE_DB']->query_update('galleries',lang_remap_comcode('fullname',$gallery['fullname'],$new_fullname,$GLOBALS['FORUM_DB']),array('name'=>$gallery['name']),'',1);
 				}
 			}
 		}
@@ -1196,8 +1197,6 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 	$_description=$info[0]['cf_description'];
 
 	$map=array(
-		'cf_name'=>lang_remap($_name,$name,$GLOBALS['FORUM_DB']),
-		'cf_description'=>lang_remap($_description,$description,$GLOBALS['FORUM_DB']),
 		'cf_default'=>$default,
 		'cf_public_view'=>$public_view,
 		'cf_owner_view'=>$owner_view,
@@ -1210,6 +1209,8 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 		'cf_type'=>$type,
 		'cf_show_on_join_form'=>$show_on_join_form
 	);
+	$map+=lang_remap('cf_name',$_name,$name,$GLOBALS['FORUM_DB']);
+	$map+=lang_remap('cf_description',$_description,$description,$GLOBALS['FORUM_DB']);
 
 	$GLOBALS['FORUM_DB']->query_update('f_custom_fields',$map,array('id'=>$id),'',1);
 
@@ -1219,7 +1220,7 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
 	if ($index)
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
+		$indices_count=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields WHERE '.db_string_not_equal_to('cf_type','integer').' AND '.db_string_not_equal_to('cf_type','tick').' AND '.db_string_not_equal_to('cf_type','long_trans').' AND '.db_string_not_equal_to('cf_type','short_trans'));
 		if ($indices_count<60) // Could be 64 but trying to be careful here...
 		{
 			$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
@@ -1292,6 +1293,8 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 
 	ocf_get_custom_field_mappings($member_id); // This will do an auto-repair if CPF storage row is missing
 
+	$db_fieldname='field_'.strval($field);
+
 	global $ANY_FIELD_ENCRYPTED;
 	if ($ANY_FIELD_ENCRYPTED===NULL)
 		$ANY_FIELD_ENCRYPTED=!is_null($GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','cf_encrypted',array('cf_encrypted'=>1)));
@@ -1302,7 +1305,7 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 		if ($encrypted)
 		{
 			require_code('encryption');
-			$current=$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
+			$current=$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields',$db_fieldname,array('mf_member_id'=>$member_id));
 			if ((remove_magic_encryption_marker($value)==remove_magic_encryption_marker($current)) && (is_data_encrypted($current))) return NULL;
 			$value=encrypt_data($value);
 		}
@@ -1316,19 +1319,21 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 	{
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
 
-		$current=$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields','field_'.strval(intval($field)),array('mf_member_id'=>$member_id));
+		$current=$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields',$db_fieldname,array('mf_member_id'=>$member_id));
 		if (is_null($current))
 		{
+			$map=array();
+
 			if ($type=='posting_field')
 			{
 				require_code('attachments2');
-				$current=insert_lang_comcode_attachments(3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+				$map+=insert_lang_comcode_attachments($db_fieldname,3,$value,'null',strval($member_id),$GLOBALS['FORUM_DB']);
 			} else
 			{
-				$current=insert_lang_comcode($value,3,$GLOBALS['FORUM_DB']);
+				$map+=insert_lang_comcode($db_fieldname,$value,3,$GLOBALS['FORUM_DB']);
 			}
 
-			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',array('field_'.strval(intval($field))=>$current),array('mf_member_id'=>$member_id),'',1);
+			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$map,array('mf_member_id'=>$member_id),'',1);
 		} else
 		{
 			if ($type=='posting_field')
@@ -1349,18 +1354,17 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			{
 				case 'short_trans':
 				case 'long_trans':
-					$value=insert_lang($value,3,$GLOBALS['FORUM_DB']);
+					$change+=insert_lang($db_fieldname,$value,3,$GLOBALS['FORUM_DB']);
 					break;
 				case 'integer':
-					$value=($value=='')?NULL:intval($value);
+					$change[$db_fieldname]=($value=='')?NULL:intval($value);
 					break;
 				case 'float':
-					$value=($value=='')?NULL:floatval($value);
+					$change[$db_fieldname]=($value=='')?NULL:floatval($value);
 					break;
 			}
 		}
 
-		$change=array('field_'.strval(intval($field))=>$value);
 		if (!$defer)
 			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$change,array('mf_member_id'=>$member_id),'',1);
 		return $change;
@@ -1551,7 +1555,9 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 
 	require_code('attachments2');
 	require_code('attachments3');
-	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_signature'=>update_lang_comcode_attachments($_signature,$new_signature,'ocf_signature',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id)),array('id'=>$member_id),'',1);
+	$map=array();
+	$map+=update_lang_comcode_attachments('m_signature',$_signature,$new_signature,'ocf_signature',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);
+	$GLOBALS['FORUM_DB']->query_update('f_members',$map,array('id'=>$member_id),'',1);
 
 	require_code('notifications');
 	$subject=do_lang('CHOOSE_SIGNATURE_SUBJECT',$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),$GLOBALS['FORUM_DRIVER']->get_username($member_id),NULL,get_lang($member_id));

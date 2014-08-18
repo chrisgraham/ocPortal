@@ -357,17 +357,22 @@ function mass_delete_lang($table,$attrs,$connection)
 
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
-	$rows=$connection->query_select($table,$attrs,NULL,'',NULL,NULL,true);
-	if (!is_null($rows))
+	$start=0;
+	do
 	{
-		foreach ($rows as $row)
+		$rows=$connection->query_select($table,$attrs,NULL,'',1000,$start,true);
+		if (!is_null($rows))
 		{
-			foreach ($attrs as $attr)
+			foreach ($rows as $row)
 			{
-				delete_lang($row[$attr],$connection);
+				foreach ($attrs as $attr)
+				{
+					if (!is_null($row[$attr]))
+						delete_lang($row[$attr],$connection);
+				}
 			}
 		}
+		$start+=1000;
 	}
+	while ((!is_null($rows)) && (count($rows)>0));
 }
-
-

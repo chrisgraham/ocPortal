@@ -51,7 +51,7 @@ function render_event_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	return do_template('CALENDAR_EVENT_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'0eaa10d9fab32599ff095e1121d41c43',
 		'TITLE'=>get_translated_text($row['e_title']),
-		'SUMMARY'=>get_translated_tempcode($row['e_content']),
+		'SUMMARY'=>get_translated_tempcode('calendar_events',$row,'e_content'),
 		'URL'=>$url,
 		'GIVE_CONTEXT'=>$give_context,
 	));
@@ -683,9 +683,9 @@ function calendar_matches($auth_member_id,$member_id,$restrict,$period_start,$pe
 			if (($_event_type['t_external_feed']!='') && ((is_null($filter)) || (!array_key_exists($_event_type['id'],$filter)) || ($filter[$_event_type['id']]==1)) && (has_category_access(get_member(),'calendar',strval($_event_type['id']))))
 				$feed_urls_todo[$_event_type['t_external_feed']]=$_event_type['id'];
 
-			$_event_types[$j]['text_original']=get_translated_text($_event_type['t_title']);
+			$_event_types[$j]['_title']=get_translated_text($_event_type['t_title']);
 		}
-		$event_types=collapse_2d_complexity('text_original','t_logo',$_event_types);
+		$event_types=collapse_2d_complexity('_title','t_logo',$_event_types);
 
 		// Overlay it
 		foreach ($feed_urls_todo as $feed_url=>$event_type)

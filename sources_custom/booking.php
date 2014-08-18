@@ -534,10 +534,10 @@ function make_booking_request_printable($request)
 		$bookable_row=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),array('id'=>$_part['bookable_id']),'',1);
 
 		$part=array(
-			'BOOKABLE_TITLE'=>get_translated_tempcode($bookable_row[0]['title']),
+			'BOOKABLE_TITLE'=>get_translated_tempcode('bookable',$bookable_row[0],'title'),
 			'PRICE'=>float_format($bookable_row[0]['price']),
 			'CATEGORISATION'=>get_translated_text($bookable_row[0]['categorisation']),
-			'DESCRIPTION'=>get_translated_tempcode($bookable_row[0]['description']),
+			'DESCRIPTION'=>get_translated_tempcode('bookable',$bookable_row[0],'description'),
 			'QUANTITY'=>integer_format($_part['quantity']),
 			'_QUANTITY'=>strval($_part['quantity']),
 			'START'=>get_timezoned_date($start,false,true,false,true),
@@ -552,7 +552,7 @@ function make_booking_request_printable($request)
 			$supplement_row=$GLOBALS['SITE_DB']->query_select('bookable_supplement',array('*'),array('id'=>$supplement_id),'',1);
 
 			$part['SUPPLEMENTS'][]=array(
-				'SUPPLEMENT_TITLE'=>get_translated_tempcode($supplement_row[0]['title']),
+				'SUPPLEMENT_TITLE'=>get_translated_tempcode('bookable_supplement',$supplement_row[0],'title'),
 				'SUPPLEMENT_PRICE'=>float_format($supplement_row[0]['price']),
 				'SUPPLEMENT_PRICE_IS_PER_PERIOD'=>$supplement_row[0]['price_is_per_period']==1,
 				'SUPPLEMENT_QUANTITY'=>integer_format($supplement['quantity']),

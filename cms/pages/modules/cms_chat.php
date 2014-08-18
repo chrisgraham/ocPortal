@@ -331,7 +331,7 @@ class Module_cms_chat
 			$username=$GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
 			if (is_null($username)) $username='';//do_lang('UNKNOWN');
 
-			$message=get_translated_tempcode($myrow['the_message']);
+			$message=get_translated_tempcode('chat_messages',$myrow,'the_message');
 
 			$link_time=hyperlink($url,escape_html(get_timezoned_date($myrow['date_and_time'])));
 
@@ -468,7 +468,7 @@ class Module_cms_chat
 
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_ed','id'=>$myrow['id'],'room_id'=>$room_id),'_SELF');
 
-		$message=get_translated_tempcode($myrow['the_message']);
+		$message=get_translated_tempcode('chat_messages',$myrow,'the_message');
 
 		require_code('form_templates');
 
@@ -509,8 +509,9 @@ class Module_cms_chat
 			$has_mod_access=((has_privilege(get_member(),'edit_lowrange_content','cms_chat',array('chat',$room_id))) || ($row['room_owner']==get_member()) && (has_privilege(get_member(),'moderate_my_private_rooms')));
 			if (!$has_mod_access) access_denied('PRIVILEGE','edit_lowrange_content');
 
-			$_message_parsed=insert_lang_comcode(wordfilter_text(post_param('message')),4);
-			$GLOBALS['SITE_DB']->query_update('chat_messages',array('the_message'=>$_message_parsed,'text_colour'=>post_param('textcolour'),'font_name'=>post_param('fontname')),array('id'=>$message_id),'',1);
+			$map=array('text_colour'=>post_param('textcolour'),'font_name'=>post_param('fontname'));
+			$map+=insert_lang_comcode('the_message',wordfilter_text(post_param('message')),4);
+			$GLOBALS['SITE_DB']->query_update('chat_messages',$map,array('id'=>$message_id),'',1);
 
 			log_it('EDIT_MESSAGE',strval($message_id),post_param('message'));
 
@@ -567,8 +568,8 @@ class Module_cms_chat
 
 		decache('side_shoutbox');
 
-		$message2=get_translated_tempcode($message);
-		delete_lang($message);
+		$message2=get_translated_tempcode('chat_messages',$myrow,'the_message');
+		delete_lang($myrow['the_message']);
 
 		log_it('DELETE_MESSAGE',strval($message_id),$message2->evaluate());
 

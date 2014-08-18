@@ -148,7 +148,7 @@ function get_award_fields($content_type,$id=NULL)
 				$has_award=($test===$id);
 			} else $has_award=(get_param_integer('award',NULL)===$row['id']);
 
-			$description=(get_translated_text($row['a_description'])=='')?new ocp_tempcode():do_lang_tempcode('PRESENT_AWARD',get_translated_tempcode($row['a_description']));
+			$description=(get_translated_text($row['a_description'])=='')?new ocp_tempcode():do_lang_tempcode('PRESENT_AWARD',get_translated_tempcode('award_types',$row,'a_description'));
 
 			if (!$has_award)
 			{

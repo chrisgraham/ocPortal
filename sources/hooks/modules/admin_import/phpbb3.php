@@ -270,7 +270,7 @@ class Hook_phpbb3
 			if ($row['group_name']=='REGISTERED') $id_new=9;
 			elseif ($row['group_name']=='REGISTERED_COPPA') $id_new=9;
 			elseif ($row['group_name']=='GLOBAL_MODERATORS') $id_new=3;
-			else $id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['group_name']),'g.id');
+			else $id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['group_name']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['group_name'],0,$is_super_admin,$is_super_moderator,'','',NULL,NULL,$row_group_leader,NULL,NULL,NULL,NULL,$row['group_avatar_width'],$row['group_avatar_height'],NULL,$row['group_sig_chars']);
@@ -1248,11 +1248,8 @@ class Hook_phpbb3
 				$parameters.=$matches[1][$i];
 			}
 
-			$GLOBALS['FORUM_DB']->query_insert('custom_comcode',array(
+			$map=array(
 				'tag_tag'=>$row['bbcode_tag'],
-				'tag_title'=>insert_lang($row['bbcode_tag'],3),
-				'tag_description'=>insert_lang($row['bbcode_helpline'],3),
-
 				'tag_replace'=>str_replace('{TEXT}','{content}',$row['bbcode_match']),
 				'tag_example'=>'',
 				'tag_parameters'=>$parameters,
@@ -1260,7 +1257,10 @@ class Hook_phpbb3
 				'tag_dangerous_tag'=>0,
 				'tag_block_tag'=>0,
 				'tag_textual_tag'=>0
-			));
+			);
+			$map+=insert_lang('tag_title',$row['bbcode_tag'],3);
+			$map+=insert_lang('tag_description',$row['bbcode_helpline'],3);
+			$GLOBALS['FORUM_DB']->query_insert('custom_comcode',$map);
 		}
 	}
 
@@ -1316,7 +1316,7 @@ class Hook_phpbb3
 			if (import_check_if_imported('cpf',$row['field_ident'])) continue;
 
 			$name=$row['field_name'];
-			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$name));
 			if (is_null($id_new))
 			{
 				$default=$row['field_default_value'];

@@ -488,7 +488,7 @@ class Module_search
 
 		$boolean_operator=get_param('conjunctive_operator','OR');
 		$boolean_search=$this->_is_boolean_search();
-		$content_where=build_content_where($content,$boolean_search,$boolean_operator);
+		list($content_where)=build_content_where($content,$boolean_search,$boolean_operator);
 
 		disable_php_memory_limit();
 

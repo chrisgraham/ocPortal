@@ -36,11 +36,11 @@ function password_censor($auto=false,$display=true,$days_ago=30)
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($_forum);
 	}
 
-	$sql='SELECT t.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON p.p_post=t.id';
-	$sql.=' WHERE text_original LIKE \'%password%\'';
+	$sql='SELECT p_post FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p';
+	$sql.=' WHERE '.$GLOBALS['SITE_DB']->translate_field_ref('p_post').' LIKE \'%password%\'';
 	$sql.=' AND (p_cache_forum_id='.strval($forum_id).' OR p_cache_forum_id IS NULL OR p_intended_solely_for IS NOT NULL)';
 	$sql.=' AND p_time<'.strval(time()-60*60*24*$days_ago);
-	$rows=$GLOBALS['FORUM_DB']->query($sql);
+	$rows=$GLOBALS['FORUM_DB']->query($sql,NULL,NULL,false,false,array('p_post'=>'LONG_TRANS__COMCODE'));
 
 	header('Content-type: text/plain');
 
@@ -50,10 +50,16 @@ function password_censor($auto=false,$display=true,$days_ago=30)
 		$text_after=_password_censor($text_start,PASSWORD_CENSOR__TIMEOUT_SCAN);
 		if ($text_after!=$text_start)
 		{
-			$update_query='UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate SET text_original=\''.addslashes($text_after).'\',text_parsed=\'\' WHERE id='.strval($row['id']);
+			if (multi_lang_content())
+			{
+				$update_query='UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate SET text_original=\''.db_escape_string($text_after).'\',text_parsed=\'\' WHERE id='.strval($row['id']);
+			} else
+			{
+				$update_query='UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'p_posts SET p_post=\''.db_escape_string($text_after).'\',p_post__tempcode=\'\' WHERE id='.strval($row['id']);
+			}
 
 			if ($auto)
-				$GLOBALS['FORUM_DB']->query($update_query);
+				$GLOBALS['FORUM_DB']->query($update_query,NULL,NULL,false,true);
 
 			if ($display)
 				echo $text_start."\n\n-------->\n\n".$text_after."\n\n-------------\n\n".$update_query."\n\n<-----------\n\n\n\n\n";

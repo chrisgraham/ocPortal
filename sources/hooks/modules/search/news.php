@@ -146,7 +146,7 @@ class Hook_search_news
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows('news','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'news r'.$privacy_join,array('r.title','r.news','r.news_article'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'news','news_category');
+		$rows=get_search_rows('news','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'news r'.$privacy_join,array('r.title'=>'SHORT_TRANS__COMCODE','r.news'=>'LONG_TRANS__COMCODE','r.news_article'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'news','news_category');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

@@ -73,7 +73,7 @@ function render_image_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	}
 
 	// Description
-	$description=get_translated_tempcode($row['description']);
+	$description=get_translated_tempcode('images',$row,'description');
 
 	// Images
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
@@ -141,7 +141,7 @@ function render_video_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 	}
 
 	// Description
-	$description=get_translated_tempcode($row['description']);
+	$description=get_translated_tempcode('videos',$row,'description');
 
 	// Images
 	$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','videos',$row['id']);
@@ -204,7 +204,7 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 	// Basic details
 	$_title=get_translated_text($myrow['fullname']);
 	$add_date=get_timezoned_date($myrow['add_date'],false);
-	$description=get_translated_tempcode($myrow['description']);
+	$description=get_translated_tempcode('galleries',$myrow,'description');
 
 	// Member details
 	if ($show_member_stats_if_appropriate)
@@ -569,7 +569,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 		if (!array_key_exists(0,$_gallery_info)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html('gallery:'.$category_id)));
 		$gallery_info=$_gallery_info[0];
 	}
-	$title=array_key_exists('text_original',$gallery_info)?$gallery_info['text_original']:get_translated_text($gallery_info['fullname']);
+	$title=get_translated_text($gallery_info['fullname']);
 	$is_member_synched=$gallery_info['is_member_synched']==1;
 	$accept_images=$gallery_info['accept_images']==1;
 	$accept_videos=$gallery_info['accept_videos']==1;
@@ -577,13 +577,13 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 
 	$children=array();
 	$sub=false;
-	$query='FROM '.get_table_prefix().'galleries g LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND g.fullname=t.id WHERE '.db_string_equal_to('parent_id',$category_id);
+	$query='FROM '.get_table_prefix().'galleries g WHERE '.db_string_equal_to('parent_id',$category_id);
 	if (current(current($GLOBALS['SITE_DB']->query('SELECT COUNT(*) '.$query)))>=300)
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT text_original,name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY add_date',300);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY add_date',300,NULL,false,false,array('fullname'=>'SHORT_TRANS__COMCODE'));
 	} else
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT text_original,name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY text_original ASC');
+		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('fullname').' ASC',NULL,NULL,false,false,array('fullname'=>'SHORT_TRANS__COMCODE'));
 	}
 	if (((is_null($filter)) || (call_user_func_array($filter,array($category_id,$member_id,count($rows))))) && ((!$must_accept_images) || (($accept_images) && (!$is_member_synched))) && ((!$must_accept_videos) || (($accept_videos) && (!$is_member_synched))))
 	{

@@ -80,8 +80,8 @@ class Module_galleries
 		{
 			$GLOBALS['SITE_DB']->create_table('galleries',array(
 				'name'=>'*ID_TEXT',
-				'description'=>'LONG_TRANS',	// Comcode
-				'fullname'=>'SHORT_TRANS',
+				'description'=>'LONG_TRANS__COMCODE',
+				'fullname'=>'SHORT_TRANS__COMCODE',
 				'add_date'=>'TIME',
 				'rep_image'=>'URLPATH',
 				'parent_id'=>'ID_TEXT',
@@ -113,7 +113,7 @@ class Module_galleries
 				'cat'=>'ID_TEXT',
 				'url'=>'URLPATH',
 				'thumb_url'=>'URLPATH',
-				'description'=>'LONG_TRANS',	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
 				'allow_rating'=>'BINARY',
 				'allow_comments'=>'SHORT_INTEGER',
 				'allow_trackbacks'=>'BINARY',
@@ -503,7 +503,7 @@ class Module_galleries
 
 		require_code('images');
 
-		$description=get_translated_tempcode($myrow['description']);
+		$description=get_translated_tempcode('galleries',$myrow,'description');
 		$may_download_gallery=has_privilege(get_member(),'may_download_gallery','galleries',array('galleries',$cat));
 
 		// Management links
@@ -752,7 +752,7 @@ class Module_galleries
 					'EDIT_URL'=>$entry_edit_url,
 					'MAIN'=>true,
 					'RATING_DETAILS'=>$entry_rating_details,
-					'DESCRIPTION'=>get_translated_tempcode($row['description']),
+					'DESCRIPTION'=>get_translated_tempcode('galleries',$row,'description'),
 					'CAT'=>$cat,
 					'THUMB_URL'=>$url,
 					'FULL_URL'=>$full_url,
@@ -817,7 +817,7 @@ class Module_galleries
 					'EDIT_URL'=>$entry_edit_url,
 					'MAIN'=>true,
 					'RATING_DETAILS'=>$entry_rating_details,
-					'DESCRIPTION'=>get_translated_tempcode($row['description']),
+					'DESCRIPTION'=>get_translated_tempcode('galleries',$row,'description'),
 					'FILE_SIZE'=>$file_size,
 					'CAT'=>$cat,
 					'THUMB_URL'=>$thumb_url,
@@ -872,7 +872,7 @@ class Module_galleries
 			if (($type==$probe_type) && ($row['id']==$probe_id)) continue;
 
 			$entry_title=get_translated_text($row['title']);
-			$entry_description=get_translated_tempcode($row['description']);
+			$entry_description=get_translated_tempcode('galleries',$row,'description');
 
 			$probe_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$cat,'flow_mode_interface'=>get_param_integer('flow_mode_interface',NULL),'probe_type'=>$type,'probe_id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
 			$view_url_2=build_url(array('page'=>'_SELF','type'=>$type,'id'=>$row['id'],'days'=>(get_param('days','')=='')?NULL:get_param('days'),'sort'=>($sort=='add_date DESC')?NULL:$sort,'select'=>($image_select=='*')?NULL:$image_select,'video_select'=>($video_select=='*')?NULL:$video_select),'_SELF');
@@ -1089,7 +1089,7 @@ class Module_galleries
 		);
 
 		// Comments
-		$description=get_translated_tempcode($myrow['description']);
+		$description=get_translated_tempcode('galleries',$myrow,'description');
 
 		// Validation
 		if (($myrow['validated']==0) && (addon_installed('unvalidated')))
@@ -1211,7 +1211,7 @@ class Module_galleries
 		} else $warning_details=new ocp_tempcode();
 
 		// Comments
-		$description=get_translated_tempcode($myrow['description']);
+		$description=get_translated_tempcode('galleries',$myrow,'description');
 
 		if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat))))
 		{

@@ -297,12 +297,23 @@ function read_in_chat_perm_fields()
  * @param  BINARY				Whether it is an IM room
  * @return AUTO_LINK			The chat room ID
  */
-function add_chatroom($welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang,$is_im=0)
+function add_chatroom($welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$room_language,$is_im=0)
 {
 	require_code('global4');
 	prevent_double_submit('ADD_CHATROOM',NULL,$room_name);
 
-	$id=$GLOBALS['SITE_DB']->query_insert('chat_rooms',array('is_im'=>$is_im,'c_welcome'=>insert_lang($welcome,2),'room_name'=>$room_name,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),true);
+	$map=array(
+		'is_im'=>$is_im,
+		'room_name'=>$room_name,
+		'room_owner'=>$room_owner,
+		'allow_list'=>$allow2,
+		'allow_list_groups'=>$allow2_groups,
+		'disallow_list'=>$disallow2,
+		'disallow_list_groups'=>$disallow2_groups,
+		'room_language'=>$room_language,
+	);
+	$map+=insert_lang('c_welcome',$welcome,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('chat_rooms',$map,true);
 
 	log_it('ADD_CHATROOM',strval($id),$room_name);
 
@@ -330,11 +341,21 @@ function add_chatroom($welcome,$room_name,$room_owner,$allow2,$allow2_groups,$di
  * @param  LONG_TEXT			The comma-separated list of usergroups that may NOT access it (blank: no restriction)
  * @param  LANGUAGE_NAME	The room language
  */
-function edit_chatroom($id,$welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$roomlang)
+function edit_chatroom($id,$welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$room_language)
 {
 	$c_welcome=$GLOBALS['SITE_DB']->query_select_value('chat_rooms','c_welcome',array('id'=>$id));
 
-	$GLOBALS['SITE_DB']->query_update('chat_rooms',array('c_welcome'=>lang_remap($c_welcome,$welcome),'room_name'=>$room_name,'room_owner'=>$room_owner,'allow_list'=>$allow2,'allow_list_groups'=>$allow2_groups,'disallow_list'=>$disallow2,'disallow_list_groups'=>$disallow2_groups,'room_language'=>$roomlang),array('id'=>$id),'',1);
+	$map=array(
+		'room_name'=>$room_name,
+		'room_owner'=>$room_owner,
+		'allow_list'=>$allow2,
+		'allow_list_groups'=>$allow2_groups,
+		'disallow_list'=>$disallow2,
+		'disallow_list_groups'=>$disallow2_groups,
+		'room_language'=>$room_language,
+	);
+	$map+=lang_remap('c_welcome',$c_welcome,$welcome);
+	$GLOBALS['SITE_DB']->query_update('chat_rooms',$map,array('id'=>$id),'',1);
 
 	decache('side_shoutbox');
 

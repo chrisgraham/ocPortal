@@ -39,7 +39,7 @@ class Hook_fields_reference
 		$ret=array();
 		foreach ($cats as $cat)
 		{
-			$ret['ck_'.$cat['c_name']]=do_lang_tempcode('FIELD_TYPE_reference_x',get_translated_tempcode($cat['c_title']));
+			$ret['ck_'.$cat['c_name']]=do_lang_tempcode('FIELD_TYPE_reference_x',get_translated_tempcode('catalogues',$cat,'c_title'));
 		}
 		return $ret;
 	}
@@ -140,7 +140,7 @@ class Hook_fields_reference
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
 	 * @param  array			The field details
 	 * @param  ?string		Where the files will be uploaded to (NULL: do not store an upload, return NULL if we would need to do so)
-	 * @param  ?string		Former value of field (NULL: none)
+	 * @param  ?array			Former value of field (NULL: none)
 	 * @return ?string		The value (NULL: could not process)
 	 */
 	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)

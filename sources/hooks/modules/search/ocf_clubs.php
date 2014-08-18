@@ -103,7 +103,7 @@ class Hook_search_ocf_clubs
 		$where_clause.='g_hidden=0 AND g_is_private_club=1';
 
 		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_groups r',array('!','r.g_name','r.g_title'),$where_clause,$content_where,$remapped_orderer,'r.*');
+		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_groups r',array('!'=>'!','r.g_name'=>'SHORT_TRANS','r.g_title'=>'SHORT_TRANS'),$where_clause,$content_where,$remapped_orderer,'r.*');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

@@ -199,15 +199,16 @@ function _save_available_quiz_answers($id,$text,$type)
 
 		if (is_null($existing[$i])) // We're adding a new question on the end
 		{
-			$q_id=$GLOBALS['SITE_DB']->query_insert('quiz_questions',array(
+			$map=array(
 				'q_quiz'=>$id,
 				'q_type'=>$type,
-				'q_question_text'=>insert_lang($question,2),
-				'q_question_extra_text'=>insert_lang($question_extra_text,2),
 				'q_order'=>$i,
 				'q_required'=>$required,
 				'q_marked'=>$marked,
-			),true);
+			);
+			$map+=insert_lang('q_question_text',$question,2);
+			$map+=insert_lang('q_question_extra_text',$question_extra_text,2);
+			$q_id=$GLOBALS['SITE_DB']->query_insert('quiz_questions',$map,true);
 
 			// Now we add the answers
 			foreach ($as as $x=>$_a)
@@ -217,27 +218,32 @@ function _save_available_quiz_answers($id,$text,$type)
 				$is_correct=((($x==0) && (strpos($qs2[$i],' [*]')===false) && ($type!='SURVEY')) || (strpos($a,' [*]')!==false))?1:0;
 				$a=str_replace(' [*]','',$a);
 
-				$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',array(
+				$map=array(
 					'q_question'=>$q_id,
-					'q_answer_text'=>insert_lang($a,2),
 					'q_is_correct'=>$is_correct,
 					'q_order'=>$x,
-					'q_explanation'=>insert_lang($explanation,2),
-				));
+				);
+				$map+=insert_lang('q_answer_text',$a,2);
+				$map+=insert_lang('q_explanation',$explanation,2);
+				$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',$map);
 			}
 		} else // We're replacing an existing question
 		{
-			if ($existing[$i]['q_question_extra_text']==1) $existing[$i]['q_question_extra_text']=insert_lang('',2); // Fix possible corruption
+			if (multi_lang_content())
+			{
+				if ($existing[$i]['q_question_extra_text']==1) $existing[$i]+=insert_lang('q_question_extra_text','',2); // Fix possible corruption
+			}
 
-			$GLOBALS['SITE_DB']->query_update('quiz_questions',array(
+			$map=array(
 				'q_quiz'=>$id,
 				'q_type'=>$type,
-				'q_question_text'=>lang_remap($existing[$i]['q_question_text'],$question),
-				'q_question_extra_text'=>lang_remap($existing[$i]['q_question_extra_text'],$question_extra_text),
 				'q_order'=>$i,
 				'q_required'=>$required,
 				'q_marked'=>$marked,
-			),array('id'=>$existing[$i]['id']));
+			);
+			$map+=lang_remap('q_question_text',$existing[$i]['q_question_text'],$question);
+			$map+=lang_remap('q_question_extra_text',$existing[$i]['q_question_extra_text'],$question_extra_text);
+			$GLOBALS['SITE_DB']->query_update('quiz_questions',$map,array('id'=>$existing[$i]['id']));
 
 			// Now we add the answers
 			$_existing_a=$GLOBALS['SITE_DB']->query_select('quiz_question_answers',array('*'),array('q_question'=>$existing[$i]['id']),'ORDER BY q_order');
@@ -273,21 +279,23 @@ function _save_available_quiz_answers($id,$text,$type)
 
 				if (!is_null($existing_a[$x]))
 				{
-					$GLOBALS['SITE_DB']->query_update('quiz_question_answers',array(
-						'q_answer_text'=>lang_remap($existing_a[$x]['q_answer_text'],$a),
+					$map=array(
 						'q_is_correct'=>$is_correct,
 						'q_order'=>$x,
-						'q_explanation'=>lang_remap($existing_a[$x]['q_explanation'],$explanation),
-					),array('id'=>$existing_a[$x]['id']),'',1);
+					);
+					$map+=lang_remap('q_answer_text',$existing_a[$x]['q_answer_text'],$a);
+					$map+=lang_remap('q_explanation',$existing_a[$x]['q_explanation'],$explanation);
+					$GLOBALS['SITE_DB']->query_update('quiz_question_answers',$map,array('id'=>$existing_a[$x]['id']),'',1);
 				} else
 				{
-					$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',array(
+					$map=array(
 						'q_question'=>$existing[$i]['id'],
-						'q_answer_text'=>insert_lang($a,2),
 						'q_is_correct'=>$is_correct,
 						'q_order'=>$x,
-						'q_explanation'=>insert_lang($explanation,2),
-					));
+					);
+					$map+=insert_lang('q_answer_text',$a,2);
+					$map+=insert_lang('q_explanation',$explanation,2);
+					$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',$map);
 				}
 			}
 			// If there were more answers before, deleting extra ones
@@ -351,12 +359,8 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 	if (is_null($add_time)) $add_time=time();
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$id=$GLOBALS['SITE_DB']->query_insert('quizzes',array(
-		'q_name'=>insert_lang($name,2),
+	$map=array(
 		'q_timeout'=>$timeout,
-		'q_start_text'=>insert_lang($start_text,2),
-		'q_end_text'=>insert_lang($end_text,2),
-		'q_end_text_fail'=>insert_lang($end_text_fail,2),
 		'q_notes'=>$notes,
 		'q_percentage'=>$percentage,
 		'q_open_time'=>$open_time,
@@ -372,7 +376,12 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 		'q_reveal_answers'=>$reveal_answers,
 		'q_shuffle_questions'=>$shuffle_questions,
 		'q_shuffle_answers'=>$shuffle_answers,
-	),true);
+	);
+	$map+=insert_lang('q_name',$name,2);
+	$map+=insert_lang('q_start_text',$start_text,2);
+	$map+=insert_lang('q_end_text',$end_text,2);
+	$map+=insert_lang('q_end_text_fail',$end_text_fail,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('quizzes',$map,true);
 
 	_save_available_quiz_answers($id,$text,$type);
 
@@ -448,11 +457,7 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 	}
 
 	$update_map=array(
-		'q_name'=>lang_remap($_name,$name),
 		'q_timeout'=>$timeout,
-		'q_start_text'=>lang_remap($_start_text,$start_text),
-		'q_end_text'=>lang_remap($_end_text,$end_text),
-		'q_end_text_fail'=>lang_remap($_end_text_fail,$end_text_fail),
 		'q_notes'=>$notes,
 		'q_percentage'=>$percentage,
 		'q_open_time'=>$open_time,
@@ -467,6 +472,10 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		'q_shuffle_questions'=>$shuffle_questions,
 		'q_shuffle_answers'=>$shuffle_answers,
 	);
+	$update_map+=lang_remap('q_name',$_name,$name);
+	$update_map+=lang_remap('q_start_text',$_start_text,$start_text);
+	$update_map+=lang_remap('q_end_text',$_end_text,$end_text);
+	$update_map+=lang_remap('q_end_text_fail',$_end_text_fail,$end_text_fail);
 
 	if (!is_null($add_time))
 		$update_map['q_add_date']=$add_time;

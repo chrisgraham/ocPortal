@@ -438,26 +438,24 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 {
 	$topic=array();
 
-	if ((is_null($topic_row['t_cache_first_post'])) || ($topic_row['t_cache_first_post']===0))
+	if (multi_lang_content())
 	{
-		$topic['first_post']=new ocp_tempcode();
-	} else
-	{
-		if ((!is_null($topic_row['_trans_post'])) && ($topic_row['_trans_post']!=''))
+		if (!is_null($topic_row['t_cache_first_post']))
 		{
-			$topic['first_post']=new ocp_tempcode();
-			if (!$topic['first_post']->from_assembly($topic_row['_trans_post']))
-				$topic_row['_trans_post']=NULL;
-		}
-
-		if ((is_null($topic_row['_trans_post'])) || ($topic_row['_trans_post']==''))
-		{
-			if (!is_null($topic_row['t_cache_first_post'])) $topic['first_post']=get_translated_tempcode($topic_row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
-			else $topic['first_post']=new ocp_tempcode();
+			$topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
 		} else
 		{
-			$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));
+			$topic['first_post']=new ocp_tempcode();
 		}
+	} else
+	{
+		$post_row=array(
+			'id'=>$topic_row['id'],
+			'p_post'=>$topic_row['p_post'],
+			'p_post__text_parsed'=>$topic_row['p_post__text_parsed'],
+			'p_post__source_user'=>$topic_row['p_post__source_user'],
+		);
+		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 	}
 
 	$topic['id']=$topic_row['id'];
@@ -703,11 +701,11 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 	{
 		$max_forum_inspect=intval(get_option('max_forum_inspect'));
 
-		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$sort,$max_forum_inspect,NULL,false,false,array('f_description','f_intro_question'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f WHERE f.id='.strval($forum_id).' OR f_parent_forum='.strval($forum_id).' ORDER BY f_parent_forum,'.$sort,$max_forum_inspect,NULL,false,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 		if (count($subforum_rows)==$max_forum_inspect) $subforum_rows=array(); // Will cause performance breakage
 	} else
 	{
-		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description','f_intro_question'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 	}
 	$unread_forums=array();
 	if ((!is_null($forum_id)) && (get_member()!=$GLOBALS['OCF_DRIVER']->get_guest_id()))
@@ -772,9 +770,9 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 			$subforum=array();
 			$subforum['id']=$subforum_row['id'];
 			$subforum['name']=$subforum_row['f_name'];
-			$subforum['description']=get_translated_tempcode($subforum_row['f_description'],$GLOBALS['FORUM_DB']);
+			$subforum['description']=get_translated_tempcode('f_forums',$subforum_row,'f_description',$GLOBALS['FORUM_DB']);
 			$subforum['redirection']=$subforum_row['f_redirection'];
-			$subforum['intro_question']=get_translated_tempcode($subforum_row['f_intro_question'],$GLOBALS['FORUM_DB']);
+			$subforum['intro_question']=get_translated_tempcode('f_forums',$subforum_row,'f_intro_question',$GLOBALS['FORUM_DB']);
 			$subforum['intro_answer']=$subforum_row['f_intro_answer'];
 
 			if (is_numeric($subforum_row['f_redirection']))
@@ -846,26 +844,46 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 	elseif ($sort=='title') $sort2='t_cache_first_title ASC';
 	if (get_option('enable_sunk')=='1')
 		$sort2='t_sunk ASC,'.$sort2;
-	if ($start<200)
+	if (is_guest())
 	{
-		if (is_guest())
+		$query='SELECT ttop.*,NULL AS l_time';
+		if (multi_lang_content())
 		{
-			$query='SELECT ttop.*,t.text_parsed AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
+			$query.=',t_cache_first_post AS p_post';
 		} else
 		{
-			$query='SELECT ttop.*,t.text_parsed AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
+			$query.=',p_post,p_post__text_parsed,p_post__source_user';
 		}
+		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop';
+		if (!multi_lang_content())
+		{
+			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=ttop.t_cache_first_post_id';
+		}
+		$query.=' WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
+	} else
+	{
+		$query='SELECT ttop.*,l_time';
+		if (multi_lang_content())
+		{
+			$query.=',t_cache_first_post AS p_post';
+		} else
+		{
+			$query.=',p_post,p_post__text_parsed,p_post__source_user';
+		}
+		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member());
+		if (!multi_lang_content())
+		{
+			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=ttop.t_cache_first_post_id';
+		}
+		$query.=' WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
+	}
+	if (($start<200) && (multi_lang_content()))
+	{
+		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('t_cache_first_post'=>'LONG_TRANS__COMCODE'));
 	} else // deep search, so we need to make offset more efficient, trade-off is more queries
 	{
-		if (is_guest())
-		{
-			$query='SELECT ttop.*,NULL AS _trans_post,NULL AS l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
-		} else
-		{
-			$query='SELECT ttop.*,NULL AS _trans_post,l_time FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval((integer)get_member()).') WHERE '.$where.' ORDER BY t_cascading DESC,t_pinned DESC,'.$sort2;
-		}
+		$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start);
 	}
-	$topic_rows=$GLOBALS['FORUM_DB']->query($query,$max,$start,false,true);
 	if (($start==0) && (count($topic_rows)<$max)) $max_rows=$max; // We know that they're all on this screen
 	else $max_rows=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where,false,true);
 	$topics=array();
@@ -886,7 +904,7 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 		$topics[]=ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,in_array($topic_row['id'],$involved));
 	}
 
-	$description=get_translated_tempcode($forum_info['f_description'],$GLOBALS['FORUM_DB']);
+	$description=get_translated_tempcode('f_forums',$forum_info['f_description'],$GLOBALS['FORUM_DB']);
 	$out=array(
 		'name'=>$forum_info['f_name'],
 		'description'=>$description,
@@ -898,7 +916,7 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 	);
 
 	// Is there a question/answer situation?
-	$question=get_translated_tempcode($forum_info['f_intro_question'],$GLOBALS['FORUM_DB']);
+	$question=get_translated_tempcode('f_forums',$forum_info['f_intro_question'],$GLOBALS['FORUM_DB']);
 	if (!$question->is_empty())
 	{
 		$is_guest=($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id());

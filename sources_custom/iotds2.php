@@ -41,7 +41,24 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 	if (is_null($time)) $time=time();
 	if (is_null($submitter)) $submitter=get_member();
 
-	$id=$GLOBALS['SITE_DB']->query_insert('iotd',array('i_title'=>insert_lang_comcode($title,2),'add_date'=>time(),'edit_date'=>$edit_date,'iotd_views'=>$views,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'date_and_time'=>$use_time,'used'=>$used,'url'=>$url,'caption'=>insert_lang_comcode($caption,2),'thumb_url'=>$thumb_url,'submitter'=>$submitter,'is_current'=>$current),true);
+	$map=array(
+		'add_date'=>time(),
+		'edit_date'=>$edit_date,
+		'iotd_views'=>$views,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'date_and_time'=>$use_time,
+		'used'=>$used,
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+		'submitter'=>$submitter,
+		'is_current'=>$current,
+	);
+	$map+=insert_lang_comcode('i_title',$title,2),
+	$map+=insert_lang_comcode('caption',$caption,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('iotd',$map,true);
 
 	log_it('ADD_IOTD',strval($id),$caption);
 
@@ -89,15 +106,15 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 	delete_upload('uploads/iotds_thumbs','iotd','thumb_url','id',$id,$thumb_url);
 
 	$update_map=array(
-		'i_title'=>lang_remap_comcode($_title,$title),
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes,
-		'caption'=>lang_remap_comcode($_caption,$caption),
 		'thumb_url'=>$thumb_url,
 		'url'=>$url,
 	);
+	$update_map+=lang_remap_comcode('i_title',$_title,$title);
+	$update_map+=lang_remap_comcode('caption',$_caption,$caption);
 
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))

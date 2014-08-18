@@ -154,7 +154,14 @@ function add_author($author,$url,$member_id,$description,$skills,$meta_keywords=
 		seo_meta_set_for_explicit('authors',$author,$meta_keywords,$meta_description);
 	}
 
-	$GLOBALS['SITE_DB']->query_insert('authors',array('author'=>$author,'url'=>$url,'member_id'=>$member_id,'description'=>insert_lang_comcode($description,3),'skills'=>insert_lang_comcode($skills,3)));
+	$map=array(
+		'author'=>$author,
+		'url'=>$url,
+		'member_id'=>$member_id,
+	);
+	$map+=insert_lang_comcode('description',$description,3);
+	$map+=insert_lang_comcode('skills',$skills,3);
+	$GLOBALS['SITE_DB']->query_insert('authors',$map);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{

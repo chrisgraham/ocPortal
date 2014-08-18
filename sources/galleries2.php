@@ -400,7 +400,22 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if (is_null($add_date)) $add_date=time();
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'image_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'description'=>insert_lang_comcode($description,3),'cat'=>$cat,'validated'=>$validated);
+	$map=array(
+		'edit_date'=>$edit_date,
+		'image_views'=>$views,
+		'add_date'=>$add_date,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+		'cat'=>$cat,
+		'validated'=>$validated,
+	);
+	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang_comcode('description',$description,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('images',$map,true);
 
@@ -500,17 +515,17 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	}
 
 	$update_map=array(
-		'title'=>lang_remap_comcode($_title,$title),
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes,
 		'validated'=>$validated,
 		'cat'=>$cat,
-		'description'=>lang_remap_comcode($_description,$description),
 		'url'=>$url,
 		'thumb_url'=>$thumb_url,
 	);
+	$update_map+=lang_remap_comcode('title',$_title,$title);
+	$update_map+=lang_remap_comcode('description',$_description,$description);
 
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))
@@ -820,7 +835,25 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 	if (is_null($add_date)) $add_date=time();
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('title'=>insert_lang_comcode($title,2),'edit_date'=>$edit_date,'video_views'=>$views,'add_date'=>$add_date,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'url'=>$url,'thumb_url'=>$thumb_url,'description'=>insert_lang_comcode($description,3),'cat'=>$cat,'validated'=>$validated,'video_length'=>$video_length,'video_width'=>$video_width,'video_height'=>$video_height);
+	$map=array(
+		'edit_date'=>$edit_date,
+		'video_views'=>$views,
+		'add_date'=>$add_date,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'url'=>$url,
+		'thumb_url'=>$thumb_url,
+		'cat'=>$cat,
+		'validated'=>$validated,
+		'video_length'=>$video_length,
+		'video_width'=>$video_width,
+		'video_height'=>$video_height,
+	);
+	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang_comcode('description',$description,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
 
@@ -934,20 +967,20 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 	}
 
 	$update_map=array(
-		'title'=>lang_remap_comcode($_title,$title),
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes,
 		'validated'=>$validated,
 		'cat'=>$cat,
-		'description'=>lang_remap_comcode($_description,$description),
 		'url'=>$url,
 		'thumb_url'=>$thumb_url,
 		'video_length'=>$video_length,
 		'video_width'=>$video_width,
 		'video_height'=>$video_height,
 	);
+	$update_map+=lang_remap_comcode('title',$_title,$title);
+	$update_map+=lang_remap_comcode('description',$_description,$description);
 
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))
@@ -1232,16 +1265,28 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 		}
 	}
 
-	$GLOBALS['SITE_DB']->query_insert('galleries',
-		array('name'=>$name,'add_date'=>$add_date,'description'=>insert_lang_comcode($description,2),'notes'=>$notes,
-				'fullname'=>insert_lang($fullname,1),
-				'watermark_top_left'=>$watermark_top_left,'watermark_top_right'=>$watermark_top_right,
-				'watermark_bottom_left'=>$watermark_bottom_left,'watermark_bottom_right'=>$watermark_bottom_right,
-				'parent_id'=>$parent_id,'accept_images'=>$accept_images,'rep_image'=>$rep_image,
-				'accept_videos'=>$accept_videos,'is_member_synched'=>$is_member_synched,'flow_mode_interface'=>$flow_mode_interface,
-				'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'g_owner'=>$g_owner,
-				'gallery_views'=>0,
-				));
+	$map=array(
+		'name'=>$name,
+		'add_date'=>$add_date,
+		'notes'=>$notes,
+		'watermark_top_left'=>$watermark_top_left,
+		'watermark_top_right'=>$watermark_top_right,
+		'watermark_bottom_left'=>$watermark_bottom_left,
+		'watermark_bottom_right'=>$watermark_bottom_right,
+		'parent_id'=>$parent_id,
+		'accept_images'=>$accept_images,
+		'rep_image'=>$rep_image,
+		'accept_videos'=>$accept_videos,
+		'is_member_synched'=>$is_member_synched,
+		'flow_mode_interface'=>$flow_mode_interface,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'g_owner'=>$g_owner,
+		'gallery_views'=>0,
+	);
+	$map+=insert_lang_comcode('description',$description,2);
+	$map+=insert_lang('fullname',$fullname,1);
+	$GLOBALS['SITE_DB']->query_insert('galleries',$map);
 
 	log_it('ADD_GALLERY',$name,$fullname);
 
@@ -1370,8 +1415,6 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 	$update_map=array(
 		'name'=>$name,
 		'notes'=>$notes,
-		'fullname'=>lang_remap($myrow['fullname'],$fullname),
-		'description'=>lang_remap_comcode($myrow['description'],$description),
 		'parent_id'=>$parent_id,
 		'accept_images'=>$accept_images,
 		'accept_videos'=>$accept_videos,
@@ -1380,6 +1423,8 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 	);
+	$update_map+=lang_remap('fullname',$myrow['fullname'],$fullname);
+	$update_map+=lang_remap_comcode('description',$myrow['description'],$description);
 
 	require_code('files2');
 

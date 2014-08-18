@@ -491,7 +491,7 @@ class Module_cms_news extends standard_crud_module
 		$ret[3]='';
 		$ret[4]=false;
 		$ret[5]=get_translated_text($myrow['news_article']);
-		$ret[7]=get_translated_tempcode($myrow['news_article']);
+		$ret[7]=get_translated_tempcode('news',$myrow,'news_article');
 		return $ret;
 	}
 

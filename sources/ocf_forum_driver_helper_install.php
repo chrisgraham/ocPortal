@@ -42,7 +42,7 @@ function _helper_install_create_custom_field($this_ref,$name,$length,$locked=1,$
 	require_code('ocf_members_action');
 
 	$name='ocp_'.$name;
-	$id=$this_ref->connection->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$name));
+	$id=$this_ref->connection->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>$name));
 	if (is_null($id))
 	{
 		if (is_null($default))

@@ -199,13 +199,13 @@ abstract class capi_catalogue_object extends capi_object
 			$_val=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_'.$sup_table_name,'cv_value',array('cf_id'=>$field_id,'ce_id'=>$id));
 			if (is_null($_val))
 			{
-				$_val=insert_lang_comcode($val,3);
+				$_val=insert_lang_comcode('cv_value',$val,3);
 			} else
 			{
-				$_val=lang_remap_comcode($_val,$val);
+				$_val=lang_remap_comcode('cv_value',$_val,$val);
 			}
 
-			$GLOBALS['SITE_DB']->query_update('catalogue_efv_'.$sup_table_name,array('cv_value'=>$_val),array('cf_id'=>$field_id,'ce_id'=>$id),'',1);
+			$GLOBALS['SITE_DB']->query_update('catalogue_efv_'.$sup_table_name,$_val,array('cf_id'=>$field_id,'ce_id'=>$id),'',1);
 		} else
 		{
 			if ($sup_table_name=='float')

@@ -129,12 +129,26 @@ END;
 	$prefix=$settings['db_prefix'];
 	if (file_exists($FILE_BASE.'/sources/hooks/systems/addon_registry/calendar_events.php'))
 	{
-		$r=mysql_query('SELECT * FROM '.$prefix.'calendar_events e LEFT JOIN '.$prefix.'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id',$db);
-		if ($r!==false)
+		$multi_lang_content=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):true;
+		if ($multi_lang_content)
 		{
-			while (($row=mysql_fetch_assoc($r))!==false)
+			$r=mysql_query('SELECT * FROM '.$prefix.'calendar_events e LEFT JOIN '.$prefix.'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id',$db);
+			if ($r!==false)
 			{
-				$results.="Cronjob: {$row['id']}=".md5($row['text_original'])."\n";
+				while (($row=mysql_fetch_assoc($r))!==false)
+				{
+					$results.="Cronjob: {$row['id']}=".md5($row['text_original'])."\n";
+				}
+			}
+		} else
+		{
+			$r=mysql_query('SELECT * FROM '.$prefix.'calendar_events e WHERE e_type=1 ORDER BY e.id',$db);
+			if ($r!==false)
+			{
+				while (($row=mysql_fetch_assoc($r))!==false)
+				{
+					$results.="Cronjob: {$row['id']}=".md5($row['e_content'])."\n";
+				}
 			}
 		}
 	}

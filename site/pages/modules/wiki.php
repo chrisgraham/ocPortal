@@ -99,7 +99,7 @@ class Module_wiki
 				'id'=>'*AUTO',
 				'title'=>'SHORT_TRANS',
 				'notes'=>'LONG_TEXT',
-				'description'=>'LONG_TRANS',	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
 				'add_date'=>'TIME',
 				'edit_date'=>'?TIME',
 				'wiki_views'=>'INTEGER',
@@ -111,8 +111,17 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','sps',array('submitter'));
 			$GLOBALS['SITE_DB']->create_index('wiki_pages','sadd_date',array('add_date'));
 
-			$lang_key=lang_code_to_default_content('WIKI_HOME',false,1);
-			$GLOBALS['SITE_DB']->query_insert('wiki_pages',array('submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,'edit_date'=>NULL,'hide_posts'=>0,'wiki_views'=>0,'add_date'=>time(),'description'=>insert_lang_comcode('',2),'notes'=>'','title'=>$lang_key));
+			$map=array(
+				'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,
+				'edit_date'=>NULL,
+				'hide_posts'=>0,
+				'wiki_views'=>0,
+				'add_date'=>time(),
+				'notes'=>'',
+			);
+			$map+=insert_lang_comcode('description','',2);
+			$map+=lang_code_to_default_content('title','WIKI_HOME',false,1);
+			$GLOBALS['SITE_DB']->query_insert('wiki_pages',$map);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			foreach (array_keys($groups) as $group_id)
 			{
@@ -124,7 +133,7 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->create_table('wiki_posts',array(
 				'id'=>'*AUTO',
 				'page_id'=>'AUTO_LINK',
-				'the_message'=>'LONG_TRANS',	// Comcode
+				'the_message'=>'LONG_TRANS__COMCODE',
 				'date_and_time'=>'TIME',
 				'validated'=>'BINARY',
 				'wiki_views'=>'INTEGER',
@@ -248,7 +257,7 @@ class Module_wiki
 			$find=get_param('find','');
 			if ($find!='')	// Allow quick 'find' remapping to a real ID
 			{
-				$id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON p.title=t.id','p.id',array('text_original'=>$find));
+				$id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','id',array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$find));
 				if (is_null($id))
 				{
 					$this->title=get_screen_title('ERROR_OCCURRED');
@@ -465,7 +474,7 @@ class Module_wiki
 		}
 
 		// Description
-		$description=get_translated_tempcode($page['description']);
+		$description=get_translated_tempcode('seedy_pages'/*TODO: Change in v10*/,$page,'description');
 		$description_comcode=get_translated_text($page['description']);
 
 		// Children Links
@@ -535,7 +544,7 @@ class Module_wiki
 			$post_comcode=get_translated_text($myrow['the_message']);
 			$include_expansion_here=(strpos($post_comcode,'[attachment')!==false);
 			if ($include_expansion_here) $include_expansion=true;
-			$post=get_translated_tempcode($myrow['the_message']);
+			$post=get_translated_tempcode('wiki_posts',$myrow,'the_message');
 			if ((has_edit_permission('low',get_member(),$poster,'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
 			{
 				$edit_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain,'post_id'=>$post_id),'_SELF');
@@ -754,8 +763,7 @@ class Module_wiki
 		check_comcode($message,NULL,false,NULL,true);
 		$post_id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',array('edit_date'=>NULL,'the_message'=>0,'member_id'=>get_member(),'date_and_time'=>time(),'page_id'=>get_param_integer('id'),'validated'=>1,'wiki_views'=>0),true);
 		require_code('attachments2');
-		$the_message=insert_lang_comcode_attachments(2,$message,'wiki_post',strval($post_id));
-		$GLOBALS['SITE_DB']->query_update('wiki_posts',array('the_message'=>$the_message),array('id'=>$post_id),'',1);
+		$GLOBALS['SITE_DB']->query_update('wiki_posts',insert_lang_comcode_attachments('the_message',2,$message,'wiki_post',strval($post_id)),array('id'=>$post_id),'',1);
 
 		@ignore_user_abort(false);
 
@@ -888,7 +896,7 @@ class Module_wiki
 
 			// If we are editing, we need to retrieve the message
 			$message=get_translated_text($myrow['the_message']);
-			$parsed=get_translated_tempcode($myrow['the_message']);
+			$parsed=get_translated_tempcode('seedy_posts'/*TODO: Change in v10*/,$myrow,'the_message');
 
 			require_code('content2');
 			$specialisation->attach(meta_data_get_fields('wiki_post',strval($post_id)));

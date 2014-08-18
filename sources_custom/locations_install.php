@@ -542,7 +542,7 @@ function _create_catalogue_position($catalogue_name,$tree_pos,$cat,$location,&$t
 
 		if (!isset($tree['cc_id']))
 		{
-			$tree['cc_id']=isset($cache[$cat][$name])?$cache[$cat][$name]:$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$cat,'text_original'=>$name));
+			$tree['cc_id']=isset($cache[$cat][$name])?$cache[$cat][$name]:$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('cc_parent_id'=>$cat,$GLOBALS['SITE_DB']->translate_field_ref('cc_title')=>$name));
 
 			if (is_null($tree['cc_id']))
 			{
@@ -570,7 +570,7 @@ function recalculate_continent_bounds($catalogue_name='places')
 	$first_cat=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>$catalogue_name));
 	foreach ($continents as $continent)
 	{
-		$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories c LEFT JOIN '.get_table_prefix().'translate t ON t.id=c.cc_title','c.id',array('cc_parent_id'=>$first_cat,'text_original'=>$continent));
+		$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('cc_parent_id'=>$first_cat,$GLOBALS['SITE_DB']->translate_field_ref('cc_title')=>$continent));
 		recalculate_bounding_long_lat($category_id);
 	}
 }

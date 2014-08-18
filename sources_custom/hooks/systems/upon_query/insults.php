@@ -69,32 +69,32 @@ class Hook_upon_query_insults
 
 				if ($get_reply!='')
 				{
-					//get PT
+					// Get PT
 					$pt=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1,NULL,true);
 
 					$to_member=(isset($pt[0]['t_pt_to']) && $pt[0]['t_pt_to']>0)?$pt[0]['t_pt_to']:0;
 
 					if($to_member == $poster_id)
 					{
-						//start comparing insult reply and the post
+						// Start comparing insult reply and the post
 						if (levenshtein(trim(strtolower($post)),trim(strtolower($get_reply)))<intval(0.1*strlen($get_reply)))
 						{
 							$_insult_points=get_option('insult_points', true);
 							$insult_points=(isset($_insult_points) && intval($_insult_points)>0)?intval($_insult_points):10;
 
-							// give points
+							// Give points
 							require_code('points2');
 							require_lang('insults');
 
-							$rows=$GLOBALS['FORUM_DB']->query('SELECT g.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gifts g LEFT JOIN '.get_table_prefix().'translate t ON t.id=g.reason WHERE t.text_original LIKE \''.db_encode_like('%'.$insult.'%').'\' AND g.gift_to='.strval($poster_id),1, NULL,true);
+							$rows=$GLOBALS['FORUM_DB']->query('SELECT g.id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'gifts g WHERE '.$GLOBALS['SITE_DB']->translate_field_ref('reason').' LIKE \''.db_encode_like('%'.$insult.'%').'\' AND g.gift_to='.strval($poster_id),1,NULL,true);
 
-							//if the member doesn't get reward yet, give him/her his award
+							// If the member doesn't get reward yet, give him/her his award
 							if(!isset($rows[0]['id']))
 							{
 								system_gift_transfer(do_lang('SUCCESSFULLY_SUGGESTED_COMEBACK').' ('.$insult.')',intval($insult_points),$poster_id);
 
 								require_code('ocf_posts_action');
-								$congratulations_post=do_lang('CONGRATULATIONS_WON');//Congratulations that is the correct response
+								$congratulations_post=do_lang('CONGRATULATIONS_WON'); // Congratulations that is the correct response
 
 								ocf_make_post($topic_id,'',$congratulations_post,0,true,1,0,do_lang('SYSTEM'),NULL,NULL,$GLOBALS['FORUM_DRIVER']->get_guest_id(),$poster_id,NULL,NULL,false,true,NULL,true,'',0,NULL,false,true,true);
 							}

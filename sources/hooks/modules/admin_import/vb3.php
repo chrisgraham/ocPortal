@@ -237,7 +237,7 @@ class Hook_vb3
 			$is_super_admin=(($row['adminpermissions']&2)!=0)?1:0;
 			$is_super_moderator=(($row['adminpermissions']&1)!=0)?1:0;
 
-			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$row['title']),'g.id');
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$row['title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,$row['usertitle'],'',$row_promotion_target,$row['reputation'],$row_group_leader,5,0,5,$row['attachlimit'],$row['avatarmaxwidth'],$row['avatarmaxheight'],$PROBED_FORUM_CONFIG['postmaxchars'],array_key_exists('sigmax',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['sigmax']:700);
@@ -479,7 +479,7 @@ class Hook_vb3
 				$row['title']=$db->query_value_if_there('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_title'));
 				$row['description']=$db->query_value_if_there('SELECT text FROM '.$table_prefix.'phrase WHERE '.db_string_equal_to('product','vbulletin').' AND '.db_string_equal_to('varname','field'.strval($row['profilefieldid']).'_desc'));
 			}
-			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>$row['title']));
+			$id_new=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$row['title']));
 			if (is_null($id_new))
 			{
 				$id_new=ocf_make_custom_field($row['title'],0,$row['description'],'',1-$row['hidden'],1-$row['hidden'],$row['editable'],0,$type,$row['required'],$row['memberlist'],$row['memberlist'],$row['displayorder'],'',true);
@@ -816,14 +816,13 @@ class Hook_vb3
 				$post_id=import_id_remap_get('post',strval($row['postid']),true);
 				if (is_null($post_id)) continue;
 
-				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON p.p_post=t.id',array('p_time','text_original','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+				$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
 				if (!array_key_exists(0,$post_row))
 				{
 					import_id_remap_put('post_files',strval($row['attachmentid']),1);
 					continue; // Orphaned post
 				}
-				$post=$post_row[0]['text_original'];
-				$lang_id=$post_row[0]['p_post'];
+				$post=get_translated_text($post_row[0]['p_post']);
 				$member_id=$post_row[0]['p_poster'];
 
 				list($url,$thumb_url)=$this->data_to_disk($row['filedata'],$row['filename'],'attachments',false,$row['thumbnail'],true);
@@ -833,7 +832,7 @@ class Hook_vb3
 				$post.="\n\n".'[attachment]'.strval($a_id).'[/attachment]';
 
 				ocf_over_msn();
-				update_lang_comcode_attachments($lang_id,$post,'ocf_post',strval($post_id));
+				$GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$post_row[0]['p_post'],$post,'ocf_post',strval($post_id)),array('id'=>$post_id),'',1);
 				ocf_over_local();
 
 				import_id_remap_put('post_files',strval($row['attachmentid']),1);
@@ -1291,7 +1290,15 @@ adminlog
 			$member=import_id_remap_get('member',strval($row['userid']),true);
 			$reason=$row['reason'];
 			$anonymous=0;
-			$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>$time,'amount'=>$amount,'gift_from'=>$viewer_member,'gift_to'=>$member,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>$anonymous));
+			$map=array(
+				'date_and_time'=>$time,
+				'amount'=>$amount,
+				'gift_from'=>$viewer_member,
+				'gift_to'=>$member,
+				'anonymous'=>$anonymous,
+			);
+			$map+=insert_lang_comcode('reason',$reason,4);
+			$GLOBALS['SITE_DB']->query_insert('gifts',$map);
 
 			import_id_remap_put('points',strval($row['reputationid']),-1);
 		}

@@ -43,7 +43,12 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	$where='(t_pt_from='.strval($member_id).' OR t_pt_to='.strval($member_id).') AND t_forum_id IS NULL';
 	$filter=get_param('category','');
 	$where.=' AND ('.db_string_equal_to('t_pt_from_category',$filter).' AND t_pt_from='.strval($member_id).' OR '.db_string_equal_to('t_pt_to_category',$filter).' AND t_pt_to='.strval($member_id).')';
-	$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$where;
+	$query='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top';
+	if (!multi_lang_content())
+	{
+		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=top.t_cache_first_post_id';
+	}
+	$query.=' WHERE '.$where;
 	$max_rows=0;
 	$union='';
 	if ($filter==do_lang('INVITED_TO_PTS'))
@@ -68,7 +73,16 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	elseif ($sort=='title') $sort2='t_cache_first_title ASC';
 	if (get_option('enable_sunk')=='1')
 		$sort2='t_sunk ASC,'.$sort2;
-	$topic_rows=$GLOBALS['FORUM_DB']->query('SELECT * '.$query.$union.' ORDER BY t_pinned DESC,'.$sort2,$max,$start,false,true);
+	$query_full='SELECT *';
+	if (multi_lang_content())
+	{
+		$query_full.=',t_cache_first_post AS p_post';
+	} else
+	{
+		$query_full.=',p_post,p_post__text_parsed,p_post__source_user';
+	}
+	$query_full.=' '.$query.$union.' ORDER BY t_pinned DESC,'.$sort2;
+	$topic_rows=$GLOBALS['FORUM_DB']->query($query_full,$max,$start,false,true);
 	$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query);
 	$topics=array();
 	$hot_topic_definition=intval(get_option('hot_topic_definition'));
@@ -80,7 +94,22 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 		$topic['num_posts']=$topic_row['t_cache_num_posts'];
 		$topic['first_time']=$topic_row['t_cache_first_time'];
 		$topic['first_title']=$topic_row['t_cache_first_title'];
-		$topic['first_post']=(is_null($topic_row['t_cache_first_post']))?new ocp_tempcode():get_translated_tempcode($topic_row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
+		if (is_null($topic_row['p_post']))
+		{
+			$topic['first_post']=new ocp_tempcode();
+		} else
+		{
+			$post_row=array(
+				'id'=>$row['p_cache_first_post_id'],
+				'p_post'=>$row['p_post'],
+			);
+			if (!multi_lang_content())
+			{
+				$post_row['p_post__text_parsed']=$row['p_post__text_parsed'];
+				$post_row['p_post__source_user']=$row['p_post__source_user'];
+			}
+			$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+		}
 		$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));
 		$topic['first_username']=$topic_row['t_cache_first_username'];
 		$topic['first_member_id']=$topic_row['t_cache_first_member_id'];

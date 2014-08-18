@@ -196,11 +196,13 @@ Database indexes are created using the [tt]create_index[/tt] function of a datab
 3) A list of fields to include in the index
 (Indexes provide important speed improvements if you routinely look-up data from tables using fields other than the primary key)
 
-One important thing to understand at this point is that ocPortal supports multi-language content at it's core. This means that any resources that are defined need to define their human-readable strings via the 'translate' table rather than directly. This is the purpose behind the 'transtext' and 'transline' configuration option, as well as the 'SHORT_TRANS' and 'LONG_TRANS' field-type-identifiers.
+One important thing to understand at this point is that ocPortal supports multi-language content at it's core. This means that any resources that are defined need to be able to define their human-readable strings via the 'translate' table rather than directly. As of ocPortal 10, by default multi-language content is not enabled, but the code needs to support it anyway. This is the purpose behind the 'transtext' and 'transline' configuration option, as well as the 'SHORT_TRANS'/'LONG_TRANS'/'SHORT_TRANS__COMCODE'/'LONG_TRANS__COMCODE' field-type-identifiers.
 
-If you store data in tables using 'SHORT/LONG_TRANS' you retrieve that data via calling the [tt]get_translated_text[/tt] function upon the database field value.
+If you store data in tables using 'SHORT/LONG_TRANS[__COMCODE]' you retrieve that data via calling the [tt]get_translated_text[/tt] function upon the database field value.
 
 There is one other reason the 'translate' table is used, and that is so that content may be stored efficiently in 'Comcode'. Comcode is our dynamic markup language, a superset of XHTML which defines additional dynamic features. The 'translate' table allows Comcode to be stored along with the parsed version of it, which is in Tempcode format. To get back back the Tempcode, which can then be mixed in with templates, use the [tt]get_translated_tempcode[/tt] function.
+
+If multi-language content is not enabled all the same APIs are used, but the 'translate' table is bypassed. String data (and where applicable, parsed Comcode) is saved directly into the normal database tables.
 
 When developing a module you might find it easiest to set up the database tables by hand, and then code in the installer afterwards. Otherwise it can be time-consuming going backwards and forwards reinstalling modules every time a small change is required.
 
@@ -1017,7 +1019,7 @@ To place a new item into the Admin Zone or CMS "Where to go" menus, create a new
 
 [title="3"]The translation table[/title]
 
-All text strings in ocPortal databases (including forum posts, page comments, and generally any user-submitable text) are stored in the 'translate' table. There are two reasons for this:
+If multi-language content is enabled, all text strings in ocPortal databases (including forum posts, page comments, and generally any user-submitable text) are stored in the 'translate' table. There are two reasons for this:
  - It can be used to store parsed Comcode as Tempcode format, effectively a cache
  - ocPortal's API supports multi-language websites in the truest sense. Meaning that potentially, translated versions of virtually any content can be supplied for visitors. As of version 4.2 this is fully supported.
 

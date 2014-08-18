@@ -129,13 +129,30 @@ function erase_comcode_cache()
 
 	ocp_profile_start_for('erase_comcode_cache');
 
-	if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
+	if (multi_lang_content())
 	{
-		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+		if ((substr(get_db_type(),0,5)=='mysql') && (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_fields',array('i_table'=>'translate','i_name'=>'decache')))))
+		{
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+		} else
+		{
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+		}
 	} else
 	{
-		$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'translate SET text_parsed=\'\' WHERE '.db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+		global $TABLE_LANG_FIELDS;
+		foreach ($TABLE_LANG_FIELDS as $table=>$fields)
+		{
+			foreach (array_keys($fields) as $field)
+			{
+				if (strpos($field,'__COMCODE')!==false)
+				{
+					$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().$table.' SET '.$field.'__text_parsed=\'\' WHERE '.db_string_not_equal_to($field.'__text_parsed','')/*this WHERE is so indexing helps*/);
+				}
+			}
+		}
 	}
+
 	$done_once=true;
 
 	ocp_profile_end_for('erase_comcode_cache');

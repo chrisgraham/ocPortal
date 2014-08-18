@@ -84,12 +84,19 @@ class Module_downloads
 				'parent_id'=>'?AUTO_LINK',
 				'add_date'=>'TIME',
 				'notes'=>'LONG_TEXT',
-				'description'=>'LONG_TRANS',	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
 				'rep_image'=>'URLPATH'
 			));
 
-			$lang_key=lang_code_to_default_content('DOWNLOADS_HOME');
-			$id=$GLOBALS['SITE_DB']->query_insert('download_categories',array('rep_image'=>'','parent_id'=>NULL,'add_date'=>time(),'notes'=>'','description'=>insert_lang_comcode('',3),'category'=>$lang_key),true);
+			$map=array(
+				'rep_image'=>'',
+				'parent_id'=>NULL,
+				'add_date'=>time(),
+				'notes'=>'',
+			);
+			$map+=insert_lang_comcode('description','',3);
+			$map+=lang_code_to_default_content('category','DOWNLOADS_HOME');
+			$id=$GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads'));
 			foreach (array_keys($groups) as $group_id)
@@ -102,9 +109,9 @@ class Module_downloads
 				'category_id'=>'AUTO_LINK',
 				'name'=>'SHORT_TRANS',
 				'url'=>'URLPATH',
-				'description'=>'LONG_TRANS',	// Comcode
+				'description'=>'LONG_TRANS__COMCODE',
 				'author'=>'ID_TEXT',
-				'additional_details'=>'LONG_TRANS',	// Comcode
+				'additional_details'=>'LONG_TRANS__COMCODE',
 				'num_downloads'=>'INTEGER',
 				'out_mode_id'=>'?AUTO_LINK',
 				'add_date'=>'TIME',
@@ -352,7 +359,7 @@ class Module_downloads
 					if ($image_url=='') $image_url=$row['url'];
 					if (url_is_local($view_url)) $view_url=get_custom_base_url().'/'.$view_url;
 					$thumb_url=ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-					$image_description=get_translated_tempcode($row['description']);
+					$image_description=get_translated_tempcode('images',$row,'description');
 					$thumb=do_image_thumb($thumb_url,'');
 					if ((has_actual_page_access(NULL,'cms_galleries',NULL,NULL)) && (has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries','download_'.strval($id)))))
 					{
@@ -440,7 +447,7 @@ class Module_downloads
 		$cat_sort=get_param('cat_sort','t1.text_original ASC');
 		$sort=get_param('sort',get_option('downloads_default_sort_order'));
 
-		$description=get_translated_tempcode($category['description']);
+		$description=get_translated_tempcode('download_downloads',$category,'description');
 
 		// Sorting
 		if (is_null($sort))
@@ -545,11 +552,11 @@ class Module_downloads
 
 		// Load up all data
 		$cats=array();
-		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p'.$privacy_join.' LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',user_lang()).' WHERE '.(addon_installed('unvalidated')?'validated=1 AND ':'').'('.$sql_filter.')'.$privacy_where.' ORDER BY text_original ASC',NULL,NULL,false,true);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p'.$privacy_join.' WHERE '.(addon_installed('unvalidated')?'validated=1 AND ':'').'('.$sql_filter.')'.$privacy_where.' ORDER BY text_original ASC',NULL,NULL,false,true,array('name'=>'SHORT_TRANS'));
 		foreach ($rows as $row)
 		{
-			if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['text_original'])) $row['text_original']=get_translated_text($row['name']);
-			$letter=strtoupper(substr($row['text_original'],0,1));
+			$download_name=get_translated_text($row['name']);
+			$letter=strtoupper(substr($download_name,0,1));
 
 			if (!has_category_access(get_member(),'downloads',strval($row['category_id']))) continue;
 
@@ -690,7 +697,7 @@ class Module_downloads
 		$add_date=get_timezoned_date($myrow['add_date'],false);
 
 		// Additional information
-		$additional_details=get_translated_tempcode($myrow['additional_details']);
+		$additional_details=get_translated_tempcode('download_downloads',$myrow,'additional_details');
 
 		// Edit date
 		if (!is_null($myrow['edit_date']))
@@ -746,7 +753,7 @@ class Module_downloads
 			'WARNING_DETAILS'=>$warning_details,
 			'EDIT_URL'=>$edit_url,
 			'ADD_IMG_URL'=>$add_img_url,
-			'DESCRIPTION'=>get_translated_tempcode($myrow['description']),
+			'DESCRIPTION'=>get_translated_tempcode('download_downloads',$myrow,'description'),
 			'ADDITIONAL_DETAILS'=>$additional_details,
 			'IMAGES_DETAILS'=>$images_details,
 			'ID'=>strval($id),

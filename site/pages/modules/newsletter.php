@@ -88,8 +88,8 @@ class Module_newsletter
 			$GLOBALS['SITE_DB']->create_table('newsletter_archive',array(
 				'id'=>'*AUTO',
 				'date_and_time'=>'INTEGER',
-				'subject'=>'SHORT_TEXT',	// Comcode
-				'newsletter'=>'LONG_TEXT',	// Comcode
+				'subject'=>'SHORT_TEXT',
+				'newsletter'=>'LONG_TEXT',
 				'language'=>'ID_TEXT',
 				'importance_level'=>'INTEGER'
 			));
@@ -102,10 +102,10 @@ class Module_newsletter
 				'description'=>'LONG_TRANS',
 			));
 
-			$GLOBALS['SITE_DB']->query_insert('newsletters',array(
-				'title'=>lang_code_to_default_content('GENERAL'),
-				'description'=>lang_code_to_default_content('NEWSLETTER_GENERAL'),
-			));
+			$map=array();
+			$map+=lang_code_to_default_content('title','GENERAL');
+			$map+=lang_code_to_default_content('description','NEWSLETTER_GENERAL');
+			$GLOBALS['SITE_DB']->query_insert('newsletters',$map);
 
 			$GLOBALS['SITE_DB']->create_table('newsletter_subscribe',array(
 				'newsletter_id'=>'*AUTO_LINK',

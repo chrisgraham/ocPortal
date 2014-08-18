@@ -114,6 +114,8 @@ function get_innodb_data_types()
 		'TIME'=>'integer unsigned',
 		'LONG_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
 		'SHORT_TRANS'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
+		'LONG_TRANS__COMCODE'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
+		'SHORT_TRANS__COMCODE'=>'integer', // USUALLY IS UNSIGNED, BUT WE NEED KEY CONSISTENCY HERE
 		'SHORT_TEXT'=>'varchar(255)',
 		'LONG_TEXT'=>'longtext',
 		'ID_TEXT'=>'varchar(80)',
@@ -366,6 +368,7 @@ function get_relation_map()
 		'tests.t_inherit_section'=>'test_sections.id',
 		'tickets.topic_id'=>'f_topics.id',
 		'tickets.forum_id'=>'f_forums.id',
+		'tickets.ticket_type'=>'ticket_types.id',
 		'poll_votes.v_poll_id'=>'poll.poll_id',
 		'reported_content.r_session_id'=>'sessions.id',
 		'bookable.calendar_type'=>'calendar_types.id',
@@ -388,6 +391,10 @@ function get_relation_map()
 		'members_gifts.gift_id'=>'gifts.id',
 		'temp_block_permissions.p_session_id'=>'sessions.id',
 		'credit_purchases.member_id'=>'f_members.id',
+		'workflow_approval_points.workflow_id'=>'workflows.id',
+		'workflow_content.workflow_id'=>'workflows.id',
+		'workflow_content_status.workflow_approval_point_id'=>'workflow_approval_points.id',
+		'workflow_permissions.workflow_approval_point_id'=>'workflow_approval_points.id',
 		'video_transcoding.t_local_id'=>'videos.id',
 		'f_welcome_emails.w_newsletter'=>'newsletters.id',
 		'f_welcome_emails.w_usergroup'=>'f_groups.id',
@@ -413,9 +420,23 @@ function get_code_to_fix_foreign_keys() // Temporary code to help fixup AUTO/AUT
 	{
 		$table=get_table_prefix().$t['m_table'];
 		$id=$t['m_name'];
-		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL AUTO_INCREMENT;\n";
+		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
 	}
 	$temp=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'LONG_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+	foreach ($temp as $t)
+	{
+		$table=get_table_prefix().$t['m_table'];
+		$id=$t['m_name'];
+		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
+	}
+	$temp=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'SHORT_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+	foreach ($temp as $t)
+	{
+		$table=get_table_prefix().$t['m_table'];
+		$id=$t['m_name'];
+		$out.="ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
+	}
+	$temp=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type'=>'LONG_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
 	foreach ($temp as $t)
 	{
 		$table=get_table_prefix().$t['m_table'];

@@ -267,7 +267,7 @@ function _build_stored_menu_branch($item,$items)
 {
 	$is_page_link=!looks_like_url($item['i_url']);
 
-	$title=get_translated_tempcode($item['i_caption']);
+	$title=get_translated_tempcode('menu_items',$item,'i_caption');
 
 	$modifiers=array();
 	if ($item['i_new_window']==1) $modifiers['new_window']=true;
@@ -283,7 +283,7 @@ function _build_stored_menu_branch($item,$items)
 		'page_link'=>$is_page_link?$item['i_url']:NULL,
 		'url'=>$is_page_link?NULL:$item['i_url'],
 		'extra_meta'=>array(
-			'description'=>get_translated_tempcode($item['i_caption_long']),
+			'description'=>get_translated_tempcode('menu_items',$item,'i_caption_long'),
 			'image'=>($item['i_theme_img_code']=='')?NULL:find_theme_image($item['i_theme_img_code']),
 			'image_2x'=>($item['i_theme_img_code']=='')?NULL:str_replace('/1x/','/2x/',find_theme_image($item['i_theme_img_code'])),
 		),

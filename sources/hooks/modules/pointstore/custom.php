@@ -116,15 +116,16 @@ class Hook_pointstore_custom
 				$GLOBALS['SITE_DB']->query_delete('pstore_customs',array('id'=>$id),'',1);
 			} else
 			{
-				$GLOBALS['SITE_DB']->query_update('pstore_customs',array(
-					'c_title'=>lang_remap($_title,$title),
-					'c_description'=>lang_remap($_description,$description),
+				$map=array(
 					'c_enabled'=>$enabled,
 					'c_cost'=>$cost,
 					'c_one_per_member'=>$one_per_member,
-					'c_mail_subject'=>lang_remap($_mail_subject,$mail_subject),
-					'c_mail_body'=>lang_remap($_mail_body,$mail_body),
-				),array('id'=>$id),'',1);
+				);
+				$map+=lang_remap('c_title',$_title,$title);
+				$map+=lang_remap('c_description',$_description,$description);
+				$map+=lang_remap('c_mail_subject',$_mail_subject,$mail_subject);
+				$map+=lang_remap('c_mail_body',$_mail_body,$mail_body);
+				$GLOBALS['SITE_DB']->query_update('pstore_customs',$map,array('id'=>$id),'',1);
 			}
 			$i++;
 		}
@@ -138,15 +139,16 @@ class Hook_pointstore_custom
 			$mail_subject=post_param('custom_mail_subject');
 			$mail_body=post_param('custom_mail_body');
 
-			$GLOBALS['SITE_DB']->query_insert('pstore_customs',array(
-				'c_title'=>insert_lang($title,2),
-				'c_description'=>insert_lang($description,2),
+			$map=array(
 				'c_enabled'=>$enabled,
 				'c_cost'=>$cost,
 				'c_one_per_member'=>$one_per_member,
-				'c_mail_subject'=>insert_lang($mail_subject,2),
-				'c_mail_body'=>insert_lang($mail_body,2),
-			));
+			);
+			$map+=insert_lang('c_title',$title,2);
+			$map+=insert_lang_comcode('c_description',$description,2);
+			$map+=insert_lang('c_mail_subject',$mail_subject,2);
+			$map+=insert_lang('c_mail_body',$mail_body,2);
+			$GLOBALS['SITE_DB']->query_insert('pstore_customs',$map);
 		}
 	}
 
@@ -171,7 +173,7 @@ class Hook_pointstore_custom
 			}
 
 			$next_url=build_url(array('page'=>'_SELF','type'=>'action','id'=>$class,'sub_id'=>$row['id']),'_SELF');
-			$items[]=do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url,'TITLE'=>get_translated_text($row['c_title']),'DESCRIPTION'=>get_translated_tempcode($row['c_description'])));
+			$items[]=do_template('POINTSTORE_'.strtoupper($class),array('NEXT_URL'=>$next_url,'TITLE'=>get_translated_text($row['c_title']),'DESCRIPTION'=>get_translated_tempcode('pstore_customs',$row,'c_description')));
 		}
 		return $items;
 	}

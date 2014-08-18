@@ -64,8 +64,8 @@ class Module_iotds
 			$GLOBALS['SITE_DB']->create_table('iotd',array(
 				'id'=>'*AUTO',
 				'url'=>'URLPATH',
-				'i_title'=>'SHORT_TRANS',
-				'caption'=>'LONG_TRANS',	// Comcode
+				'i_title'=>'SHORT_TRANS__COMCODE',
+				'caption'=>'LONG_TRANS__COMCODE',
 				'thumb_url'=>'URLPATH',
 				'is_current'=>'BINARY',
 				'allow_rating'=>'BINARY',
@@ -254,8 +254,8 @@ class Module_iotds
 			'_GUID'=>'f508d483459b88fab44cd8b9f4db780b',
 			'TITLE'=>$this->title,
 			'SUBMITTER'=>strval($myrow['submitter']),
-			'I_TITLE'=>get_translated_tempcode($myrow['i_title']),
-			'CAPTION'=>get_translated_tempcode($myrow['caption']),
+			'I_TITLE'=>get_translated_tempcode('iotd',$myrow,'i_title'),
+			'CAPTION'=>get_translated_tempcode('iotd',$myrow,'caption'),
 			'DATE'=>$date,
 			'DATE_RAW'=>$date_raw,
 			'ADD_DATE'=>$add_date,

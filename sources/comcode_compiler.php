@@ -141,7 +141,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 
 	$allowed_html_seqs=array( // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
 		'<table>',
-		'<table( class="[^"<>]*")?( summary="[^"<>]*")?>',
+		'<table( class="[^"<>]*")?( summary="[^"<>]*")?'.'>',
 		'</table>',
 		'<tr>',
 		'</tr>',
@@ -181,10 +181,10 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 		'</del>',
 		'<s>',
 		'</s>',
-		'<font( color="[^"<>]*")?( face="[^"<>]*")?( size="[^"<>]*")?>',
+		'<font( color="[^"<>]*")?( face="[^"<>]*")?( size="[^"<>]*")?'.'>',
 		'</font>',
 		'<!--',
-		'<h1( class="screen_title")?( id="screen_title")?>',
+		'<h1( class="screen_title")?( id="screen_title")?'.'>',
 		'</h1>',
 		'<h2>',
 		'</h2>',
@@ -1202,7 +1202,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 													$tag_output->attach($continuation);
 													$continuation='';
 													$differented=true;
-													$ad_text=show_banner($ad_bits['name'],$ad_bits['b_title_text'],get_translated_tempcode($ad_bits['caption']),$ad_bits['b_direct_code'],$ad_bits['img_url'],'',$ad_bits['site_url'],$ad_bits['b_type'],$ad_bits['submitter']);
+													$ad_text=show_banner($ad_bits['name'],$ad_bits['b_title_text'],get_translated_tempcode('banners',$ad_bits,'caption'),$ad_bits['b_direct_code'],$ad_bits['img_url'],'',$ad_bits['site_url'],$ad_bits['b_type'],$ad_bits['submitter']);
 													$embed_output=_do_tags_comcode('tooltip',array('param'=>$ad_text,'url'=>(url_is_local($ad_bits['site_url']) && ($ad_bits['site_url']!=''))?(get_custom_base_url().'/'.$ad_bits['site_url']):$ad_bits['site_url']),substr($comcode,$pos-1,strlen($ad_trigger)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
 													$pos+=strlen($ad_trigger)-1;
 													$tag_output->attach($embed_output);

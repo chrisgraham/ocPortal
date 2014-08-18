@@ -35,8 +35,7 @@ function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sin
 {
 	$_name=$GLOBALS['FORUM_DB']->query_select_value('f_multi_moderations','mm_name',array('id'=>$id));
 
-	$GLOBALS['FORUM_DB']->query_update('f_multi_moderations',array(
-		'mm_name'=>lang_remap($_name,$name,$GLOBALS['FORUM_DB']),
+	$map=array(
 		'mm_post_text'=>$post_text,
 		'mm_move_to'=>$move_to,
 		'mm_pin_state'=>$pin_state,
@@ -44,7 +43,9 @@ function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sin
 		'mm_open_state'=>$open_state,
 		'mm_forum_multi_code'=>$forum_multi_code,
 		'mm_title_suffix'=>$title_suffix,
-	),array('id'=>$id),'',1);
+	);
+	$map+=lang_remap('mm_name',$_name,$name,$GLOBALS['FORUM_DB']);
+	$GLOBALS['FORUM_DB']->query_update('f_multi_moderations',$map,array('id'=>$id),'',1);
 
 	log_it('EDIT_MULTI_MODERATION',strval($id),$name);
 

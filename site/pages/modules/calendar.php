@@ -93,8 +93,8 @@ class Module_calendar
 				'e_submitter'=>'MEMBER',
 				'e_member_calendar'=>'?MEMBER', // Which member's calendar it shows on; if NULL, it shows globally
 				'e_views'=>'INTEGER',
-				'e_title'=>'SHORT_TRANS',
-				'e_content'=>'LONG_TRANS',
+				'e_title'=>'SHORT_TRANS__COMCODE',
+				'e_content'=>'LONG_TRANS__COMCODE',
 				'e_add_date'=>'TIME',
 				'e_edit_date'=>'?TIME',
 				'e_recurrence'=>'ID_TEXT', // [none, daily, weekly, monthly, yearly, xth_dotw_of_monthly] X [fractional-occurrence]. e.g. "daily yyyyynn" for weekdays
@@ -133,14 +133,19 @@ class Module_calendar
 
 			$GLOBALS['SITE_DB']->create_table('calendar_types',array(
 				'id'=>'*AUTO',
-				't_title'=>'SHORT_TRANS',
+				't_title'=>'SHORT_TRANS__COMCODE',
 				't_logo'=>'SHORT_TEXT',
 				't_external_feed'=>'URLPATH',
 			));
 			$default_types=array('system_command','general','birthday','public_holiday','vacation','appointment','commitment','anniversary');
 			foreach ($default_types as $type)
 			{
-				$GLOBALS['SITE_DB']->query_insert('calendar_types',array('t_external_feed'=>'','t_title'=>lang_code_to_default_content('DEFAULT_CALENDAR_TYPE__'.$type),'t_logo'=>'calendar/'.$type));
+				$map=array(
+					't_external_feed'=>'',
+					't_logo'=>'calendar/'.$type,
+				);
+				$map+=lang_code_to_default_content('t_title','DEFAULT_CALENDAR_TYPE__'.$type,true);
+				$GLOBALS['SITE_DB']->query_insert('calendar_types',$map);
 			}
 
 			$GLOBALS['SITE_DB']->create_table('calendar_reminders',array(
@@ -781,7 +786,7 @@ class Module_calendar
 			// Fill in stream gaps as appropriate
 			$_title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 			$down=strval($to_h-$from_h);
-			$description=(intval($down)<3)?new ocp_tempcode():(is_numeric($event['e_content'])?get_translated_tempcode($event['e_content']):$event['e_content']);
+			$description=(intval($down)<3)?new ocp_tempcode():(is_numeric($event['e_content'])?get_translated_tempcode('calendar_events',$event,'e_content'):$event['e_content']);
 			$priority_lang=do_lang_tempcode('PRIORITY_'.strval($event['e_priority']));
 			$priority_icon='calendar/priority_'.strval($event['e_priority']);
 			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$_title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none','VALIDATED'=>$event['validated']==1);
@@ -1441,7 +1446,7 @@ class Module_calendar
 		}
 
 		// Misc data
-		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode($event['e_content']);
+		$content=($event['e_type']==db_get_first_id())?make_string_tempcode(get_translated_text($event['e_content'])):get_translated_tempcode('calendar_events',$event,'e_content');
 		$type=get_translated_text($event['t_title']);
 		$priority=$event['e_priority'];
 		$priority_lang=do_lang_tempcode('PRIORITY_'.strval($priority));

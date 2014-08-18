@@ -94,19 +94,16 @@ function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=NULL
 	require_code('global4');
 	prevent_double_submit('ADD_WELCOME_EMAIL',NULL,$subject);
 
-	$id=$GLOBALS['SITE_DB']->query_insert(
-		'f_welcome_emails',
-		array(
-			'w_name'=>$name,
-			'w_newsletter'=>$newsletter,
-			'w_subject'=>insert_lang($subject,2),
-			'w_text'=>insert_lang($text,2),
-			'w_send_time'=>$send_time,
-			'w_usergroup'=>$usergroup,
-			'w_usergroup_type'=>$usergroup_type,
-		),
-		true
+	$map=array(
+		'w_name'=>$name,
+		'w_newsletter'=>$newsletter,
+		'w_send_time'=>$send_time,
+		'w_usergroup'=>$usergroup,
+		'w_usergroup_type'=>$usergroup_type,
 	);
+	$map+=insert_lang('w_subject',$subject,2);
+	$map+=insert_lang('w_text',$text,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('f_welcome_emails',$map,true);
 	log_it('ADD_WELCOME_EMAIL',strval($id),$subject);
 	return $id;
 }

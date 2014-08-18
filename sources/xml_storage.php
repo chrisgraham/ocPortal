@@ -187,7 +187,7 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 
 		$name=$field['m_name'];
 		$value='';
-		if ((strpos($field['m_type'],'TRANS')!==false) || (($table=='config') && ($name=='c_value') && ($row[$name]!='') && ($row['c_needs_dereference']==1))) // Translation layer integration.
+		if ((strpos($field['m_type'],'TRANS')!==false) && (multi_lang_content())) // Translation layer integration.
 		{
 			$inner.=get_translated_text_xml($row[$name],$name,$GLOBALS['SITE_DB']);
 
@@ -547,7 +547,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 		foreach ($all_fields[$table[0]] as $field) if ($field['m_name']==$row_tag) break;
 		if ($field['m_name']!=$row_tag) continue; // No such field
 
-		if ((strpos($field['m_type'],'TRANS')!==false) || (($table[0]=='config') && ($field['m_name']=='c_value') && ($row_value!='') && ($data['c_needs_dereference'])==1)) // Translation layer integration.
+		if ((strpos($field['m_type'],'TRANS')!==false) && (multi_lang_content())) // Translation layer integration.
 		{
 			if ($update) // Update in lang layer
 			{
@@ -620,10 +620,10 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 					$_type='LONG_TEXT';
 					break;
 				case 'short_trans':
-					$_type='?SHORT_TRANS';
+					$_type='?SHORT_TRANS__COMCODE';
 					break;
 				case 'long_trans':
-					$_type='?LONG_TRANS';
+					$_type='?LONG_TRANS__COMCODE';
 					break;
 				case 'integer':
 					$_type='?INTEGER';

@@ -315,7 +315,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['forum_id']=$r['t_forum_id'];
 
 		$_post_query_sql=str_replace('top.id',strval($out[$i]['id']),$post_query_sql);
-		$fp_rows=$this_ref->connection->query($_post_query_sql,1);
+		$fp_rows=$this_ref->connection->query($_post_query_sql,1,NULL,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 		if (!array_key_exists(0,$fp_rows))
 		{
 			unset($out[$i]);
@@ -326,13 +326,16 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		$out[$i]['firsttitle']=$fp_rows[0]['p_title'];
 		if ($show_first_posts)
 		{
-			$message=new ocp_tempcode();
-			if ((get_page_name()!='search') && (!is_null($fp_rows[0]['text_parsed'])) && ($fp_rows[0]['text_parsed']!='') && ($fp_rows[0]['id']!=0))
+			$post_row=array(
+				'id'=>$fp_rows[0]['p_id'],
+				'p_post'=>$fp_rows[0]['p_post'],
+			);
+			if (!multi_lang_content())
 			{
-				if (!$message->from_assembly($fp_rows[0]['text_parsed'],true))
-					$message=get_translated_tempcode($fp_rows[0]['id'],$GLOBALS['FORUM_DB']);
-			} else $message=get_translated_tempcode($fp_rows[0]['id'],$GLOBALS['FORUM_DB']);
-			$out[$i]['firstpost']=$message;
+				$post_row['p_post__text_parsed']=$fp_rows[0]['p_post__text_parsed'];
+				$post_row['p_post__source_user']=$fp_rows[0]['p_post__source_user'];
+			}
+			$out[$i]['firstpost']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 		}
 	}
 	if (count($out)!=0) return $out;
@@ -405,7 +408,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 
 	$where='('.ocf_get_topic_where($topic_id).')';
 	if (!$load_spacer_posts_too)
-		$where.=not_like_spacer_posts('t.text_original');
+		$where.=not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
 	$where.=$extra_where;
 	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval(get_member()).'))';
 	static $index=NULL;
@@ -430,7 +433,7 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 		$select='p.id,p.p_parent_id,p.p_intended_solely_for,p.p_poster';
 	} else
 	{
-		$select='p.*,text_parsed,text_original';
+		$select='p.*';
 		if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
 		{
 			$select.=',h.h_post_id';

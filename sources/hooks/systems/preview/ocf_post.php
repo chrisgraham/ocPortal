@@ -59,7 +59,7 @@ class Hook_Preview_ocf_post
 			if (array_key_exists(0,$_p))
 			{
 				$p=$_p[0];
-				$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
+				$p['message']=get_translated_tempcode('f_posts',$p,'p_post',$GLOBALS['FORUM_DB']);
 
 				$temp=$post_html;
 				$post_html=new ocp_tempcode();
@@ -102,7 +102,7 @@ class Hook_Preview_ocf_post
 		$class=$is_emphasised?'ocf_post_emphasis':(!is_null($intended_solely_for)?'ocf_post_personal':'');
 
 		// Member details
-		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($post_owner,'m_signature'),$GLOBALS['FORUM_DB']);
+		$signature=get_translated_tempcode('f_members',$GLOBALS['FORUM_DRIVER']->get_member_row($post_owner),'m_signature',$GLOBALS['FORUM_DB']);
 		$_postdetails_avatar=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($post_owner);
 		if ($_postdetails_avatar!='')
 		{

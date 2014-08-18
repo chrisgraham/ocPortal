@@ -174,20 +174,26 @@ function load_zone_data()
 			$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$real_zone),'',1);
 			if ((!array_key_exists(0,$zones)) && (is_dir(get_file_base().'/'.$real_zone.'/'.'pages')))
 			{
-				$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>$real_zone,'zone_title'=>insert_lang($real_zone,1),'zone_default_page'=>'start','zone_header_text'=>insert_lang($real_zone,1),'zone_theme'=>'default','zone_require_session'=>0));
-				$zones=$GLOBALS['SITE_DB']->query_select('zones z LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND z.zone_header_text=t.id',array('z.*','text_original AS zone_header_text_trans'),array('zone_name'=>$real_zone),'',1);
+				$map=array(
+					'zone_name'=>$real_zone,
+					'zone_default_page'=>'start',
+					'zone_theme'=>'default',
+					'zone_require_session'=>0,
+				);
+				$map+=insert_lang('zone_title',$real_zone,1);
+				$map+=insert_lang('zone_header_text',$real_zone,1);
+				$GLOBALS['SITE_DB']->query_insert('zones',$map);
+				$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>$real_zone),'',1);
 			}
 			if (array_key_exists(0,$zones))
 			{
 				$ZONE=$zones[0];
-				$ZONE['zone_header_text_trans']=get_translated_text($ZONE['zone_header_text']);
 				persistent_cache_set(array('ZONE',$real_zone),$ZONE);
 			}
 			if ($ZONE===NULL)
 			{
 				$zones=$GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name'=>''),'',1);
 				$ZONE=$zones[0];
-				$ZONE['zone_header_text_trans']=get_translated_text($ZONE['zone_header_text']);
 				warn_exit(do_lang_tempcode('BAD_ZONE',escape_html($real_zone)));
 			}
 			unset($zones);
@@ -1539,7 +1545,7 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 		} else $pcache=NULL;
 		if ($pcache===NULL)
 		{
-			$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('*'),array('a.the_page'=>$codename,'a.the_zone'=>$zone,'the_theme'=>$theme),'',1,NULL,false,array('string_index','cc_page_title'));
+			$comcode_page=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('*'),array('a.the_page'=>$codename,'a.the_zone'=>$zone,'the_theme'=>$theme),'',1,NULL,false,array('string_index'=>'LONG_TRANS__COMCODE','cc_page_title'=>'?SHORT_TRANS'));
 			if (array_key_exists(0,$comcode_page))
 			{
 				if ($support_smart_decaching)
@@ -1550,7 +1556,15 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 				if ((!$support_smart_decaching) || ((($comcode_page[0]['p_edit_date']!==NULL) && ($comcode_page[0]['p_edit_date']>=$mtime)) || (($comcode_page[0]['p_edit_date']===NULL) && ($comcode_page[0]['p_add_date']!==NULL) && ($comcode_page[0]['p_add_date']>=$mtime)))) // Make sure it has not been edited since last edited or created
 				{
 					$comcode_page_row=$comcode_page[0];
-					$db_set=get_translated_tempcode($comcode_page[0]['string_index'],NULL,user_lang(),true,true);
+					$comcode_page_row_cached_only=array(
+						'the_zone'=>$comcode_page_row['the_zone'],
+						'the_page'=>$comcode_page_row['the_page'],
+						'the_theme'=>$comcode_page_row['the_theme'],
+						'string_index'=>$comcode_page_row['string_index'],
+						'string_index__text_parsed'=>$comcode_page_row['string_index__text_parsed'],
+						'string_index__source_user'=>$comcode_page_row['string_index__source_user'],
+					);
+					$db_set=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index',NULL,user_lang(),true,true/*,true*/);
 				} else
 				{
 					$mtime=filemtime($file_base.'/'.$string);
@@ -1730,11 +1744,11 @@ function comcode_breadcrumbs($the_page,$the_zone,$root='',$no_link_for_me_sir=tr
 	global $PT_PAIR_CACHE_CP;
 	if (!array_key_exists($the_page,$PT_PAIR_CACHE_CP))
 	{
-		$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index','cc_page_title'));
+		$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index'=>'LONG_TRANS__COMCODE','cc_page_title'=>'?SHORT_TRANS'));
 		if (!array_key_exists(0,$page_rows))
 		{
 			request_page($the_page,false,$the_zone,NULL,true); // It's not cached, force the issue and then try again...
-			$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index','cc_page_title'));
+			$page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)',array('cc_page_title','p_parent_page','string_index'),array('a.the_page'=>$the_page,'a.the_zone'=>$the_zone),'',1,NULL,false,array('string_index'=>'LONG_TRANS__COMCODE','cc_page_title'=>'?SHORT_TRANS'));
 			if (!array_key_exists(0,$page_rows)) // Oh well, fallback (maybe page doesn't exist yet, ?)...
 			{
 				$_title=$the_page;

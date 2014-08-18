@@ -137,7 +137,7 @@ class Block_main_image_slider
 			$view_url=build_url(array('page'=>'galleries','type'=>$row['content_type'],'id'=>$row['id']),$zone);
 
 			$title=get_translated_text($row['title']);
-			$description=get_translated_tempcode($row['description']);
+			$description=get_translated_tempcode($row['content_type'].'s',$row,'description');
 
 			$images[]=array(
 				'URL'=>$url,

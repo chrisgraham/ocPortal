@@ -107,7 +107,14 @@ class Block_main_image_fader_news
 		require_code('images');
 		foreach ($all_rows as $row)
 		{
-			$title=get_translated_tempcode($row['title']);
+			$just_news_row=array(
+				'id'=>$row['id'],
+				'title'=>$row['title'],
+				'news'=>$row['news'],
+				'news_article'=>$row['news_article'],
+			);
+
+			$title=get_translated_tempcode('news',$just_news_row,'title');
 
 			$image_url=$row['news_image'];
 			if ($image_url=='')
@@ -128,8 +135,8 @@ class Block_main_image_fader_news
 			if ($blogs===1) $url_map['blog']=1;
 			$url=build_url($url_map,$zone);
 
-			$body=get_translated_tempcode($row['news']);
-			if ($body->is_empty()) $body=get_translated_tempcode($row['news_article']);
+			$body=get_translated_tempcode('news',$just_news_row,'news');
+			if ($body->is_empty()) $body=get_translated_tempcode('news',$just_news_row,'news_article');
 			if ($body->is_empty()) continue; // Invalid: empty text
 
 			$date=get_timezoned_date($row['date_and_time']);

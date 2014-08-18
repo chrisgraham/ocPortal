@@ -377,7 +377,7 @@ class Module_cms_wiki
 
 		$page_title=get_translated_text($page['title']);
 		$description=get_translated_text($page['description']);
-		$_description=get_translated_tempcode($page['description']);
+		$_description=get_translated_tempcode('cedi_pages'/*TODO: Change in v10*/,$page,'description');
 
 		$redir_url=get_param('redirect',NULL);
 		if (is_null($redir_url))
@@ -628,7 +628,7 @@ class Module_cms_wiki
 						{
 							require_code('urls2');
 							suggest_new_idmoniker_for('wiki','misc',strval($child_id),'',$title);
-							$GLOBALS['SITE_DB']->query_update('wiki_pages',array('title'=>lang_remap($title_id,$title)),array('id'=>$child_id),'',1);
+							$GLOBALS['SITE_DB']->query_update('wiki_pages',lang_remap('title',$title_id,$title),array('id'=>$child_id),'',1);
 						}
 					}
 				}

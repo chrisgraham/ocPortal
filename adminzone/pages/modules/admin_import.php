@@ -752,8 +752,15 @@ class Module_admin_import
 		$out->attach(paragraph(do_lang_tempcode('OCF_CONVERTED_INFO')));
 
 		// Add zone formally
-		$trans5=insert_lang(do_lang('FORUM'),1,NULL,false,NULL,get_site_default_lang());
-		$GLOBALS['SITE_DB']->query_insert('zones',array('zone_name'=>'forum','zone_title'=>insert_lang(do_lang('SECTION_FORUMS'),1),'zone_default_page'=>'forumview','zone_header_text'=>$trans5,'zone_theme'=>'-1','zone_require_session'=>0));
+		$map=array(
+			'zone_name'=>'forum',
+			'zone_default_page'=>'forumview',
+			'zone_theme'=>'-1',
+			'zone_require_session'=>0,
+		);
+		$map+=insert_lang('zone_title',do_lang('SECTION_FORUMS'),1);
+		$map+=insert_lang('zone_header_text',do_lang('FORUM'),1,NULL,false,NULL,$LANG);
+		$GLOBALS['SITE_DB']->query_insert('zones',$map);
 
 		return $out;
 	}

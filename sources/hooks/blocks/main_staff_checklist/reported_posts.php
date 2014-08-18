@@ -35,7 +35,7 @@ class Hook_checklist_reported_posts
 		$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('reported_posts_forum'));
 		if (is_null($forum_id)) return array();
 		$where='t_forum_id='.strval($forum_id);
-		$query='SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).') LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND ttop.t_cache_first_post=t.id WHERE '.$where;
+		$query='SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).' WHERE '.$where;
 		$outstanding=$GLOBALS['FORUM_DB']->query_value_if_there($query);
 
 		if ($outstanding>0)

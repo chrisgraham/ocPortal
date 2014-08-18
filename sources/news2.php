@@ -37,7 +37,12 @@ function add_news_category($title,$img,$notes,$owner=NULL,$id=NULL)
 	require_code('global4');
 	prevent_double_submit('ADD_NEWS_CATEGORY',NULL,$title);
 
-	$map=array('nc_title'=>insert_lang($title,1),'nc_img'=>$img,'notes'=>$notes,'nc_owner'=>$owner);
+	$map=array(
+		'nc_img'=>$img,
+		'notes'=>$notes,
+		'nc_owner'=>$owner,
+	);
+	$map+=insert_lang('nc_title',$title,1);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
 
@@ -103,7 +108,11 @@ function edit_news_category($id,$title,$img,$notes,$owner)
 	if (is_null($img)) $img=$myrow['nc_img'];
 	if (is_null($notes)) $notes=$myrow['notes'];
 
-	$update_map=array('nc_title'=>lang_remap($myrow['nc_title'],$title),'nc_img'=>$img,'notes'=>$notes);
+	$update_map=array(
+		'nc_img'=>$img,
+		'notes'=>$notes,
+	);
+	$update_map+=lang_remap('nc_title',$myrow['nc_title'],$title);
 	$update_map['nc_owner']=$owner;
 
 	$GLOBALS['SITE_DB']->query_update('news_categories',$update_map,array('id'=>$id),'',1);
@@ -227,9 +236,14 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		{
 			if (!has_privilege(get_member(),'have_personal_category','cms_news')) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
-			$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter,true)),2);
+			$map=array(
+				'nc_img'=>'newscats/community',
+				'notes'=>'',
+				'nc_owner'=>$submitter,
+			);
+			$map+=insert_lang('nc_title',do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter,true)),2);
 
-			$main_news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>$p_nc_title,'nc_img'=>'newscats/community','notes'=>'','nc_owner'=>$submitter),true);
+			$main_news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
 			$already_created_personal_category=true;
 
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -243,7 +257,31 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	}
 
 	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array('news_image'=>$image,'edit_date'=>$edit_date,'news_category'=>$main_news_category_id,'news_views'=>$views,'news_article'=>0,'allow_rating'=>$allow_rating,'allow_comments'=>$allow_comments,'allow_trackbacks'=>$allow_trackbacks,'notes'=>$notes,'submitter'=>$submitter,'validated'=>$validated,'date_and_time'=>$time,'title'=>insert_lang_comcode($title,1),'news'=>insert_lang_comcode($news,1),'author'=>$author);
+	$map=array(
+		'news_image'=>$image,
+		'edit_date'=>$edit_date,
+		'news_category'=>$main_news_category_id,
+		'news_views'=>$views,
+		'allow_rating'=>$allow_rating,
+		'allow_comments'=>$allow_comments,
+		'allow_trackbacks'=>$allow_trackbacks,
+		'notes'=>$notes,
+		'submitter'=>$submitter,
+		'validated'=>$validated,
+		'date_and_time'=>$time,
+		'author'=>$author,
+	);
+	if (multi_lang_content())
+	{
+		$map['news_article']=0;
+	} else
+	{
+		$map['news_article']='';
+		$map['news_article__text_parsed']='';
+		$map['news_article__source_user']=get_member();
+	}
+	$map+=insert_lang_comcode('title',$title,1);
+	$map+=insert_lang_comcode('news',$news,1);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('news',$map,true);
 
@@ -253,8 +291,13 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 		{
 			if ((is_null($value)) && (!$already_created_personal_category))
 			{
-				$p_nc_title=insert_lang(do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter,true)),2);
-				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',array('nc_title'=>$p_nc_title,'nc_img'=>'newscats/community','notes'=>'','nc_owner'=>$submitter),true);
+				$map=array(
+					'nc_img'=>'newscats/community',
+					'notes'=>'',
+					'nc_owner'=>$submitter,
+				);
+				$map+=insert_lang('nc_title',do_lang('MEMBER_CATEGORY',$GLOBALS['FORUM_DRIVER']->get_username($submitter,true)),2);
+				$news_category_id=$GLOBALS['SITE_DB']->query_insert('news_categories',$map,true);
 
 				$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
@@ -447,16 +490,16 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 
 	$update_map=array(
 		'news_category'=>$main_news_category,
-		'news_article'=>update_lang_comcode_attachments($_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']),
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes,
 		'validated'=>$validated,
-		'title'=>lang_remap_comcode($_title,$title),
-		'news'=>lang_remap_comcode($_news,$news),
 		'author'=>$author,
 	);
+	$update_map+=update_lang_comcode_attachments('news_article',$_news_article,$news_article,'news',strval($id),NULL,false,$rows[0]['submitter']);
+	$update_map+=lang_remap_comcode('title',$_title,$title);
+	$update_map+=lang_remap_comcode('news',$_news,$news);
 
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))

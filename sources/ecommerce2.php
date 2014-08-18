@@ -45,9 +45,7 @@ function add_usergroup_subscription($title,$description,$cost,$length,$length_un
 	$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
-	$id=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_insert('f_usergroup_subs',array(
-		's_title'=>insert_lang($title,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_description'=>insert_lang_comcode($description,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+	$map=array(
 		's_cost'=>$cost,
 		's_length'=>$length,
 		's_length_units'=>$length_units,
@@ -55,20 +53,24 @@ function add_usergroup_subscription($title,$description,$cost,$length,$length_un
 		's_group_id'=>$group_id,
 		's_uses_primary'=>$uses_primary,
 		's_enabled'=>$enabled,
-		's_mail_start'=>insert_lang_comcode($mail_start,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_mail_end'=>insert_lang_comcode($mail_end,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_mail_uhoh'=>insert_lang_comcode($mail_uhoh,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-	),true);
+	);
+	$map+=insert_lang('s_title',$title,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang_comcode('s_description',$description,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang_comcode('s_mail_start',$mail_start,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang_comcode('s_mail_end',$mail_end,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=insert_lang_comcode('s_mail_uhoh',$mail_uhoh,2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$id=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_insert('f_usergroup_subs',$map,true);
 
 	foreach ($mails as $mail)
 	{
-		$GLOBALS['SITE_DB']->query_insert('f_usergroup_sub_mails',array(
+		$map=array(
 			'm_usergroup_sub_id'=>$id,
 			'm_ref_point'=>$mail['ref_point'],
 			'm_ref_point_offset'=>$mail['ref_point_offset'],
-			'm_subject'=>insert_lang_comcode($mail['subject'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-			'm_body'=>insert_lang_comcode($mail['body'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		));
+		);
+		$map+=insert_lang_comcode('m_subject',$mail['subject'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+		$map+=insert_lang_comcode('m_body',$mail['body'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+		$GLOBALS['SITE_DB']->query_insert('f_usergroup_sub_mails',$map);
 	}
 
 	log_it('ADD_USERGROUP_SUBSCRIPTION',strval($id),$title);
@@ -140,9 +142,7 @@ function edit_usergroup_subscription($id,$title,$description,$cost,$length,$leng
 	$_mail_end=$myrow['s_mail_end'];
 	$_mail_uhoh=$myrow['s_mail_uhoh'];
 
-	$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_update('f_usergroup_subs',array(
-		's_title'=>lang_remap($_title,$title,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_description'=>lang_remap_comcode($_description,$description,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
+	$map=array(
 		's_cost'=>$cost,
 		's_length'=>$length,
 		's_length_units'=>$length_units,
@@ -150,10 +150,13 @@ function edit_usergroup_subscription($id,$title,$description,$cost,$length,$leng
 		's_group_id'=>$group_id,
 		's_uses_primary'=>$uses_primary,
 		's_enabled'=>$enabled,
-		's_mail_start'=>lang_remap_comcode($_mail_start,$mail_start,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_mail_end'=>lang_remap_comcode($_mail_end,$mail_end,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-		's_mail_uhoh'=>lang_remap_comcode($_mail_uhoh,$mail_uhoh,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-	),array('id'=>$id),'',1);
+	);
+	$map+=lang_remap('s_title',$_title,$title,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=lang_remap_comcode('s_description',$_description,$description,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=lang_remap_comcode('s_mail_start',$_mail_start,$mail_start,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=lang_remap_comcode('s_mail_end',$_mail_end,$mail_end,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$map+=lang_remap_comcode('s_mail_uhoh',$_mail_uhoh,$mail_uhoh,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+	$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_update('f_usergroup_subs',$map,array('id'=>$id),'',1);
 
 	// Handle extra mails. Add/edit/delete as required
 	if (!is_null($mails))
@@ -168,22 +171,24 @@ function edit_usergroup_subscription($id,$title,$description,$cost,$length,$leng
 		{
 			if (isset($existing_mails[$i]))
 			{
-				$GLOBALS['SITE_DB']->query_update('f_usergroup_sub_mails',array(
+				$map=array(
 					'm_usergroup_sub_id'=>$id,
 					'm_ref_point'=>$mail['ref_point'],
 					'm_ref_point_offset'=>$mail['ref_point_offset'],
-					'm_subject'=>lang_remap_comcode($existing_mails[$i][1],$mail['subject'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-					'm_body'=>lang_remap_comcode($existing_mails[$i][2],$mail['body'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-				),array('id'=>$existing_mails[$i][0]),'',1);
+				);
+				$map+=lang_remap_comcode('m_subject',$existing_mails[$i][1],$mail['subject'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+				$map+=lang_remap_comcode('m_body',$existing_mails[$i][2],$mail['body'],$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+				$GLOBALS['SITE_DB']->query_update('f_usergroup_sub_mails',$map,array('id'=>$existing_mails[$i][0]),'',1);
 			} else
 			{
-				$GLOBALS['SITE_DB']->query_insert('f_usergroup_sub_mails',array(
+				$map=array(
 					'm_usergroup_sub_id'=>$id,
 					'm_ref_point'=>$mail['ref_point'],
 					'm_ref_point_offset'=>$mail['ref_point_offset'],
-					'm_subject'=>insert_lang_comcode($mail['subject'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-					'm_body'=>insert_lang_comcode($mail['body'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']),
-				));
+				);
+				$map+=insert_lang_comcode('m_subject',$mail['subject'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+				$map+=insert_lang_comcode('m_body',$mail['body'],2,$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']);
+				$GLOBALS['SITE_DB']->query_insert('f_usergroup_sub_mails',$map);
 			}
 		}
 		for ($i=count($mails);$i<count($existing_mails);$i++)

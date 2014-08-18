@@ -1418,13 +1418,13 @@ function collapse_2d_complexity($key,$value,$list)
  */
 function collapse_1d_complexity($key,$list)
 {
-	$new_map=array();
+	$new_array=array();
 	foreach ($list as $map)
 	{
-		$new_map[]=$map[$key];
+		$new_array[]=$map[$key];
 	}
 
-	return $new_map;
+	return $new_array;
 }
 
 /**

@@ -28,7 +28,7 @@ function ocf_list_multi_moderations($forum_id)
 {
 	if (!addon_installed('ocf_multi_moderations')) return array();
 
-	$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.mm_name=t.id',array('mm_forum_multi_code','m.id','m.mm_name','text_original AS _mm_name'),NULL,'ORDER BY text_original');
+	$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),NULL,'ORDER BY '.$GLOBALS['FORUM_DB']->translate_field_ref('mm_name'));
 	$out=array();
 	if (count($rows)==0) return $out;
 
@@ -39,7 +39,7 @@ function ocf_list_multi_moderations($forum_id)
 	}
 	foreach ($rows as $row)
 	{
-		if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($row['_mm_name'])) $row['_mm_name']=get_translated_text($row['mm_name'],$GLOBALS['FORUM_DB']);
+		$row['_mm_name']=get_translated_text($row['mm_name'],$GLOBALS['FORUM_DB']);
 
 		require_code('ocfiltering');
 		if ($lots_of_forums)

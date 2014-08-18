@@ -74,7 +74,7 @@ class Hook_rss_chat
 				$news_date=date($date_string,$row['date_and_time']);
 				$edit_date='';
 
-				$_title=get_translated_tempcode($row['the_message']);
+				$_title=get_translated_tempcode('chat_messages',$row,'the_message');
 				$news_title=xmlentities($_title->evaluate());
 				$summary='';
 

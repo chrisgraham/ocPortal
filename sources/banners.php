@@ -46,7 +46,7 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$_title=$row['name'];
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('BANNER'),$_title):$_title;
 
-	$summary=show_banner($row['name'],$row['b_title_text'],get_translated_tempcode($row['caption']),$row['b_direct_code'],$row['img_url'],'',$row['site_url'],$row['the_type'],$row['submitter']);
+	$summary=show_banner($row['name'],$row['b_title_text'],get_translated_tempcode('banners',$row,'caption'),$row['b_direct_code'],$row['img_url'],'',$row['site_url'],$row['the_type'],$row['submitter']);
 
 	return do_template('SIMPLE_PREVIEW_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'aaea5f7f64297ab46aa3b3182fb57c37',
@@ -207,7 +207,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 		}
 
 		// Run Query
-		$rows=$GLOBALS['SITE_DB']->query($myquery,500/*reasonable limit - old ones should be turned off*/,NULL,true,true,array('caption'));
+		$rows=$GLOBALS['SITE_DB']->query($myquery,500/*reasonable limit - old ones should be turned off*/,NULL,true,true,array('caption'=>'SHORT_TRANS__COMCODE'));
 		if ($rows===NULL) $rows=array(); // Error, but tolerate it as it could be on each page load
 
 		// Filter out what we don't have permission for
@@ -307,7 +307,7 @@ function banners_script($ret=false,$type=NULL,$dest=NULL,$b_type=NULL,$source=NU
 
 		// Display!
 		$img=$rows[$i]['img_url'];
-		$caption=get_translated_tempcode($rows[$i]['caption']);
+		$caption=get_translated_tempcode('banners',$rows[$i],'caption');
 		$content=show_banner($name,$rows[$i]['b_title_text'],$caption,array_key_exists('b_direct_code',$rows[$i])?$rows[$i]['b_direct_code']:'',$img,$source,$rows[$i]['site_url'],$rows[$i]['b_type'],$rows[$i]['submitter']);
 		if ($ret) return $content;
 		$echo=do_template('BASIC_HTML_WRAP',array('_GUID'=>'d23424ded86c850f4ae0006241407ff9','TITLE'=>do_lang_tempcode('BANNER'),'CONTENT'=>$content));

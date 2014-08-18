@@ -247,7 +247,6 @@ class Module_cms_catalogues extends standard_crud_module
 			$cat_rows=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_title','c_description'),array('c_name'=>$catalogue_name),'',1);
 			if (!array_key_exists(0,$cat_rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$cat_title=$cat_rows[0]['c_title'];
-			$cat_description=$cat_rows[0]['c_description'];
 		}
 
 		if ((!is_null($catalogue_name)) && ($catalogue_name!=''))
@@ -258,7 +257,7 @@ class Module_cms_catalogues extends standard_crud_module
 
 		require_code('fields');
 
-		return do_next_manager(($catalogue_name!='')?get_screen_title(escape_html(get_translated_text($cat_title)),false):get_screen_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode($cat_description):comcode_lang_string('DOC_CATALOGUES'),
+		return do_next_manager(($catalogue_name!='')?get_screen_title(escape_html(get_translated_text($cat_title)),false):get_screen_title('MANAGE_CATALOGUES'),($catalogue_name!='')?get_translated_tempcode('catalogues',$cat_rows[0],'c_description'):comcode_lang_string('DOC_CATALOGUES'),
 			array_merge(array(
 				(has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues') && ($catalogue_name==''))?array('menu/cms/catalogues/add_one_catalogue',array('_SELF',array_merge($extra_map,array('type'=>'add_catalogue')),'_SELF'),do_lang('ADD_CATALOGUE')):NULL,
 				has_privilege(get_member(),'edit_cat_highrange_content','cms_catalogues')?array('menu/cms/catalogues/edit_one_catalogue',array('_SELF',array_merge($extra_map_2,array('type'=>($catalogue_name=='')?'edit_catalogue':'_edit_catalogue')),'_SELF'),do_lang('EDIT_CATALOGUE')):NULL,

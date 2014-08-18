@@ -506,7 +506,6 @@ function lex($text=NULL)
 
 				break;
 
-
 			case PLEXER_HEREDOC:
 				list($reached_end,$i,$char)=plex__get_next_chars($i,strlen($heredoc_symbol)+2);
 
@@ -715,6 +714,7 @@ function lex($text=NULL)
 					$tokens[]=array('string_literal',$special_token_value,$i);
 					if ((isset($GLOBALS['CHECKS'])) && (isset($GLOBALS['PEDANTIC'])) && (strpos($special_token_value,'<')!==false) && (strpos($special_token_value,'<')!=strlen($special_token_value)-1)) log_warning('Should\'t this be templated?',$i,true);
 					$special_token_value='';
+
 					break;
 				}
 

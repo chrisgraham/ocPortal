@@ -79,7 +79,6 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'e_submitter'=>$submitter,
 		'e_member_calendar'=>$member_calendar,
 		'e_views'=>$views,
-		'e_title'=>insert_lang($title,2),
 		'e_content'=>0,
 		'e_add_date'=>$add_time,
 		'e_edit_date'=>$edit_time,
@@ -108,11 +107,22 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes
 	);
+	$map+=insert_lang('e_title',$title,2);
+	if (multi_lang_content())
+	{
+		$map['e_content']=0;
+	} else
+	{
+		$map['e_content']='';
+		$map['e_content__text_parsed']='';
+		$map['e_content__source_user']=get_member();
+	}
+	$map+=insert_lang_comcode('e_title',$title,2);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('calendar_events',$map,true);
 
 	require_code('attachments2');
-	$GLOBALS['SITE_DB']->query_update('calendar_events',array('e_content'=>insert_lang_comcode_attachments(3,$content,'calendar',strval($id))),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('calendar_events',insert_lang_comcode_attachments('e_content',3,$content,'calendar',strval($id)),array('id'=>$id),'',1);
 
 	require_code('seo2');
 	if (($meta_keywords=='') && ($meta_description==''))
@@ -265,8 +275,6 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		if ($myrow[$key]!=$val) $rescheduled=true;
 	}
 	$update_map=array(
-		'e_title'=>lang_remap($myrow['e_title'],$title),
-		'e_content'=>update_lang_comcode_attachments($myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']),
 		'e_recurrence'=>$recurrence,
 		'e_recurrences'=>$recurrences,
 		'e_seg_recurrences'=>$seg_recurrences,
@@ -278,7 +286,10 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'allow_trackbacks'=>$allow_trackbacks,
 		'e_member_calendar'=>$member_calendar,
 		'notes'=>$notes
-	)+$scheduling_map;
+	);
+	$update_map+=$scheduling_map;
+	$update_map+=lang_remap('e_title',$myrow['e_title'],$title);
+	$update_map+=update_lang_comcode_attachments('e_content',$myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']);
 
 	if (!is_null($validated))
 		$update_map['validated']=$validated;
@@ -448,11 +459,12 @@ function add_event_type($title,$logo,$external_feed='')
 	require_code('global4');
 	prevent_double_submit('ADD_EVENT_TYPE',NULL,$title);
 
-	$id=$GLOBALS['SITE_DB']->query_insert('calendar_types',array(
-		't_title'=>insert_lang($title,2),
+	$map=array(
 		't_logo'=>$logo,
 		't_external_feed'=>$external_feed,
-	),true);
+	);
+	$map+=insert_lang('t_title',$title,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('calendar_types',$map,true);
 
 	log_it('ADD_EVENT_TYPE',strval($id),$title);
 
@@ -485,11 +497,12 @@ function edit_event_type($id,$title,$logo,$external_feed)
 	require_code('urls2');
 	suggest_new_idmoniker_for('calendar','misc',strval($id),'',$title);
 
-	$GLOBALS['SITE_DB']->query_update('calendar_types',array(
-		't_title'=>lang_remap($myrow['t_title'],$title),
+	$map=array(
 		't_logo'=>$logo,
 		't_external_feed'=>$external_feed,
-	),array('id'=>$id),'',1);
+	);
+	$map+=lang_remap_comcode('t_title',$myrow['t_title'],$title);
+	$GLOBALS['SITE_DB']->query_update('calendar_types',$map,array('id'=>$id),'',1);
 
 	require_code('themes2');
 	tidy_theme_img_code($logo,$myrow['t_logo'],'calendar_types','t_logo');

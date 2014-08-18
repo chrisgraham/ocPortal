@@ -46,15 +46,17 @@ class Hook_rss_tickets
 		if (count($ticket_types)!=0)
 		{
 			$rows=array();
-			foreach ($ticket_types as $ticket_type)
+			foreach ($ticket_types as $ticket_type_id)
 			{
-				if (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type))) continue;
-				$rows=array_merge($rows,get_tickets(get_member(),$ticket_type));
+				if (!has_category_access(get_member(),'tickets',strval($ticket_type_id))) continue;
+				$rows=array_merge($rows,get_tickets(get_member(),$ticket_type_id));
 			}
 		}
 		else $rows=get_tickets(get_member());
 
 		require_code('feedback');
+
+		$ticket_type_rows=collapse_2d_complexity('id','ticket_type_name',$GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name')));
 
 		$content=new ocp_tempcode();
 		foreach ($rows as $i=>$row)
@@ -64,7 +66,7 @@ class Hook_rss_tickets
 			if ($row['lasttime']<$cutoff) continue;
 
 			$ticket_id=extract_topic_identifier($row['description']);
-			$ticket_type=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+			$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
 
 			$author=$row['firstusername'];
 			$date=date($date_string,$row['firsttime']);
@@ -75,10 +77,10 @@ class Hook_rss_tickets
 
 			$category='';
 			$category_raw='';
-			if (!is_null($ticket_type))
+			if ((!is_null($ticket_type_id)) && (isset($ticket_type_rows[$ticket_type_id])))
 			{
-				$category=get_translated_text($ticket_type);
-				$category_raw=strval($ticket_type);
+				$category=get_translated_text($ticket_type_rows[$ticket_type_id]);
+				$category_raw=strval($ticket_type_id);
 			}
 
 			$view_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$ticket_id),get_module_zone('tickets'),NULL,false,false,true);

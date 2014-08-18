@@ -41,7 +41,15 @@ function system_gift_transfer($reason,$amount,$member_id)
 	if (is_guest($member_id)) return;
 	if ($amount==0) return;
 
-	$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>time(),'amount'=>$amount,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),'gift_to'=>$member_id,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>1));
+	$map=array(
+		'date_and_time'=>time(),
+		'amount'=>$amount,
+		'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),
+		'gift_to'=>$member_id,
+		'anonymous'=>1,
+	);
+	$map+=insert_lang_comcode('reason',$reason,4);
+	$GLOBALS['SITE_DB']->query_insert('gifts',$map);
 	$_before=point_info($member_id);
 	$before=array_key_exists('points_gained_given',$_before)?$_before['points_gained_given']:0;
 	$new=strval($before+$amount);
@@ -77,7 +85,15 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
 
 	$your_username=$GLOBALS['FORUM_DRIVER']->get_username($sender_id);
 	$your_displayname=$GLOBALS['FORUM_DRIVER']->get_username($sender_id,true);
-	$GLOBALS['SITE_DB']->query_insert('gifts',array('date_and_time'=>time(),'amount'=>$amount,'gift_from'=>$sender_id,'gift_to'=>$recipient_id,'reason'=>insert_lang_comcode($reason,4),'anonymous'=>$anonymous?1:0));
+	$map=array(
+		'date_and_time'=>time(),
+		'amount'=>$amount,
+		'gift_from'=>$sender_id,
+		'gift_to'=>$recipient_id,
+		'anonymous'=>$anonymous?1:0,
+	);
+	$map+=insert_lang_comcode('reason',$reason,4);
+	$GLOBALS['SITE_DB']->query_insert('gifts',$map);
 	$sender_gift_points_used=point_info($sender_id);
 	$sender_gift_points_used=array_key_exists('gift_points_used',$sender_gift_points_used)?$sender_gift_points_used['gift_points_used']:0;
 	$GLOBALS['FORUM_DRIVER']->set_custom_field($sender_id,'gift_points_used',strval($sender_gift_points_used+$amount));
@@ -165,6 +181,12 @@ function charge_member($member_id,$amount,$reason)
 function add_to_charge_log($member_id,$amount,$reason,$time=NULL)
 {
 	if (is_null($time)) $time=time();
-	$GLOBALS['SITE_DB']->query_insert('chargelog',array('member_id'=>$member_id,'amount'=>$amount,'reason'=>insert_lang_comcode($reason,4),'date_and_time'=>$time));
+	$map=array(
+		'member_id'=>$member_id,
+		'amount'=>$amount,
+		'date_and_time'=>$time,
+	);
+	$map+=insert_lang_comcode('reason',$reason,4);
+	$GLOBALS['SITE_DB']->query_insert('chargelog',$map);
 }
 

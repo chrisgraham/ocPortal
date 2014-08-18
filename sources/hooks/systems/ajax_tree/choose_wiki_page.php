@@ -69,13 +69,21 @@ class Hook_choose_wiki_page
 					$where.='p.id<>'.strval($seen);
 				}
 
-				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,true);
+				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'wiki_pages p WHERE '.$where.' ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,true,array('title'=>'SHORT_TRANS'));
+				foreach ($orphans as $i=>$orphan)
+				{
+					$orphans[$i]['_title']=get_translated_text($orphan['title']);
+				}
 			} else
 			{
-				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,text_original,p.title FROM '.get_table_prefix().'wiki_pages p LEFT JOIN '.get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND t.id=p.title WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/);
+				$orphans=$GLOBALS['SITE_DB']->query('SELECT p.id,p.title FROM '.get_table_prefix().'wiki_pages p WHERE NOT EXISTS(SELECT * FROM '.get_table_prefix().'wiki_children WHERE child_id=p.id) ORDER BY add_date DESC',50/*reasonable limit*/,NULL,false,false,array('title'=>'SHORT_TRANS'));
+				foreach ($orphans as $i=>$orphan)
+				{
+					$orphans[$i]['_title']=get_translated_text($orphan['title']);
+				}
 				if (count($orphans)<50)
 				{
-					sort_maps_by($orphans,'text_original');
+					sort_maps_by($orphans,'_title');
 				}
 			}
 
@@ -85,7 +93,7 @@ class Hook_choose_wiki_page
 
 				if ($orphan['id']==db_get_first_id()) continue;
 
-				if ($GLOBALS['RECORD_LANG_STRINGS_CONTENT'] || is_null($orphan['text_original'])) $orphan['text_original']=get_translated_text($orphan['title']);
+				$title=$orphan['_title'];
 
 				$_id=strval($orphan['id']);
 				$title=$orphan['text_original'];

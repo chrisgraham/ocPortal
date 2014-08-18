@@ -341,7 +341,7 @@ class Module_cms_comcode_pages
 			switch ($sortable)
 			{
 				case 'page_title':
-					$orderer='t.text_original '.$sort_order;
+					$orderer=$GLOBALS['SITE_DB']->translate_field_ref('cc_page_title').' '.$sort_order;
 					break;
 				case 'page':
 					$orderer='c.the_page '.$sort_order;
@@ -390,8 +390,8 @@ class Module_cms_comcode_pages
 			{
 				// No additional filter; NB: this does assume no negative overrides are in place; if they are, an error will be shown when clicking through
 			}
-			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone LEFT JOIN '.get_table_prefix().'translate t ON t.id=a.cc_page_title';
-			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start);
+			$ttable=get_table_prefix().'comcode_pages c LEFT JOIN '.get_table_prefix().'cached_comcode_pages a ON c.the_page=a.the_page AND c.the_zone=a.the_zone';
+			$page_rows=$GLOBALS['SITE_DB']->query('SELECT c.*,cc_page_title FROM '.$ttable.' WHERE '.$where_map.$group_by.' ORDER BY '.$orderer,$max,$start,NULL,NULL,false,false,array('cc_page_title'=>'?SHORT_TRANS'));
 			$max_rows=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT c.the_zone,c.the_page) FROM '.$ttable.' WHERE '.$where_map);
 
 			$filesarray=array();
@@ -663,8 +663,19 @@ class Module_cms_comcode_pages
 				fclose($tmp);
 				if (is_null(get_param('restore_from',NULL)))
 				{
-					$string_index=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','string_index',array('the_zone'=>$zone,'the_page'=>$file));
-					if (!is_null($string_index)) $parsed=get_translated_tempcode($string_index,NULL,$lang);
+					$comcode_page_rows=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$file),'',1);
+					if (array_key_exists(0,$comcode_page_rows))
+					{
+						$comcode_page_row_cached_only=array(
+							'the_zone'=>$comcode_page_rows[0]['the_zone'],
+							'the_page'=>$comcode_page_rows[0]['the_page'],
+							'the_theme'=>$comcode_page_rows[0]['the_theme'],
+							'string_index'=>$comcode_page_rows[0]['string_index'],
+							'string_index__text_parsed'=>$comcode_page_rows[0]['string_index__text_parsed'],
+							'string_index__source_user'=>$comcode_page_rows[0]['string_index__source_user'],
+						);
+						$parsed=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index',NULL,$lang);
+					}
 				}
 
 				$new=false;

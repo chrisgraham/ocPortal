@@ -282,7 +282,7 @@ class Hook_Profiles_Tabs_about
 		$primary_group_id=ocf_get_member_primary_group($member_id_of);
 		$primary_group=ocf_get_group_link($primary_group_id,$member_id_of!=$member_id_viewing);
 
-		$signature=get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
+		$signature=get_translated_tempcode('f_members',$GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of),'m_signature',$GLOBALS['FORUM_DB']);
 
 		$last_visit_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_last_visit_time');
 		require_code('users2');
@@ -381,7 +381,7 @@ class Hook_Profiles_Tabs_about
 				}
 
 				$club_name=get_translated_text($club_row['g_name']);
-				$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$club_name)));
+				$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>do_lang('FORUM_FOR_CLUB',$club_name)));
 
 				$clubs[]=array(
 					'CLUB_NAME'=>$club_name,

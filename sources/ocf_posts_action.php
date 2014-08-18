@@ -230,22 +230,9 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		if ((!is_null($forum_id)) && (!has_privilege($poster,'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;
 	}
 
-	if (!$support_attachments)
-	{
-		ocp_profile_start_for('ocf_make_post:insert_lang_comcode');
-		$lang_id=insert_lang_comcode($post,4,$GLOBALS['FORUM_DB'],$insert_comcode_as_admin);
-		ocp_profile_end_for('ocf_make_post:insert_lang_comcode');
-	} else
-	{
-		@ignore_user_abort(true);
-
-		$lang_id=0;
-	}
-
 	if (!addon_installed('unvalidated')) $validated=1;
 	$map=array(
 		'p_title'=>$title,
-		'p_post'=>$lang_id,
 		'p_ip_address'=>$ip_address,
 		'p_time'=>$time,
 		'p_poster'=>$anonymous?db_get_first_id():$poster,
@@ -261,15 +248,36 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		'p_parent_id'=>$parent_id
 	);
 	if (!is_null($id)) $map['id']=$id;
+
+	if (!$support_attachments)
+	{
+		ocp_profile_start_for('ocf_make_post:insert_lang_comcode');
+		$map+=insert_lang_comcode('p_post',$post,4,$GLOBALS['FORUM_DB'],$insert_comcode_as_admin);
+		ocp_profile_end_for('ocf_make_post:insert_lang_comcode');
+	} else
+	{
+		@ignore_user_abort(true);
+
+		if (multi_lang_content())
+		{
+			$map['p_post']=0;
+		} else
+		{
+			$map['p_post']='';
+			$map['p_post__text_parsed']='';
+			$map['p_post__source_user']=db_get_first_id();
+		}
+	}
+
 	$post_id=$GLOBALS['FORUM_DB']->query_insert('f_posts',$map,true);
 
 	if ($support_attachments)
 	{
 		require_code('attachments2');
 		ocp_profile_start_for('ocf_make_post:insert_lang_comcode_attachments');
-		$lang_id=insert_lang_comcode_attachments(4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB']);
+		$map=insert_lang_comcode_attachments('p_post',4,$post,'ocf_post',strval($post_id),$GLOBALS['FORUM_DB'])+$map;
+		$GLOBALS['FORUM_DB']->query_update('f_posts',$map,array('id'=>$post_id),'',1);
 		ocp_profile_end_for('ocf_make_post:insert_lang_comcode_attachments');
-		$GLOBALS['FORUM_DB']->query_update('f_posts',array('p_post'=>$lang_id),array('id'=>$post_id),'',1);
 	}
 
 	@ignore_user_abort(false);
@@ -282,7 +290,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 		{
 			// send_validation_mail is used for other content - but forum is special
 			$subject=do_lang('POST_REQUIRING_VALIDATION_MAIL_SUBJECT',$topic_title,NULL,NULL,get_site_default_lang());
-			$post_text=get_translated_text($lang_id,$GLOBALS['FORUM_DB'],get_site_default_lang());
+			$post_text=get_translated_text($map['p_post'],$GLOBALS['FORUM_DB'],get_site_default_lang());
 			$mail=do_lang('POST_REQUIRING_VALIDATION_MAIL',comcode_escape($url),comcode_escape($poster_name_if_guest),array($post_text,strval($anonymous?db_get_first_id():$poster)));
 			require_code('notifications');
 			dispatch_notification('needs_validation',NULL,$subject,$mail,NULL,$poster,3,false,false,NULL,NULL,'','','','',NULL,true);
@@ -291,7 +299,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 	{
 		if ($send_notification)
 		{
-			$post_comcode=get_translated_text($lang_id,$GLOBALS['FORUM_DB']);
+			$post_comcode=get_translated_text($map['p_post'],$GLOBALS['FORUM_DB']);
 
 			require_code('ocf_posts_action2');
 			ocp_profile_start_for('ocf_make_post:ocf_send_topic_notification');
@@ -351,7 +359,7 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig=0,$is_starter=false,$val
 			{
 				require_code('ocf_posts_action2');
 				ocp_profile_start_for('ocf_make_post:ocf_force_update_topic_cacheing');
-				ocf_force_update_topic_cacheing($topic_id,1,true,$is_starter,$post_id,$time,$title,$lang_id,$poster_name_if_guest,$poster);
+				ocf_force_update_topic_cacheing($topic_id,1,true,$is_starter,$post_id,$time,$title,$map['p_post'],$poster_name_if_guest,$poster);
 				ocp_profile_end_for('ocf_make_post:ocf_force_update_topic_cacheing');
 			}
 			if ($validated==1)

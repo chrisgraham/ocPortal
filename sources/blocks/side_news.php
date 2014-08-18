@@ -170,13 +170,13 @@ class Block_side_news
 				if ($blogs===1) $url_map['blog']=1;
 				$full_url=build_url($url_map,$zone);
 
-				$news_title=get_translated_tempcode($myrow['title']);
+				$news_title=get_translated_tempcode('news',$myrow,'title');
 				$date=locale_filter(date('d M',utctime_to_usertime($myrow['date_and_time'])));
 
-				$summary=get_translated_tempcode($myrow['news']);
+				$summary=get_translated_tempcode('news',$myrow,'news');
 				if ($summary->is_empty())
 				{
-					$summary=get_translated_tempcode($myrow['news_article']);
+					$summary=get_translated_tempcode('news',$myrow,'news_article');
 				}
 
 				if (!array_key_exists($myrow['news_category'],$NEWS_CATS_CACHE))

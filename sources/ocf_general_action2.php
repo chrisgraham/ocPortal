@@ -132,21 +132,16 @@ function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter,
 {
 	$_subject=$GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_subject',array('id'=>$id));
 	$_text=$GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_text',array('id'=>$id));
-	$GLOBALS['SITE_DB']->query_update(
-		'f_welcome_emails',
-		array(
-			'w_name'=>$name,
-			'w_newsletter'=>$newsletter,
-			'w_subject'=>lang_remap($_subject,$subject),
-			'w_text'=>lang_remap($_text,$text),
-			'w_send_time'=>$send_time,
-			'w_usergroup'=>$usergroup,
-			'w_usergroup_type'=>$usergroup_type,
-		),
-		array('id'=>$id),
-		'',
-		1
+	$map=array(
+		'w_name'=>$name,
+		'w_newsletter'=>$newsletter,
+		'w_send_time'=>$send_time,
+		'w_usergroup'=>$usergroup,
+		'w_usergroup_type'=>$usergroup_type,
 	);
+	$map+=lang_remap('w_subject',$_subject,$subject);
+	$map+=lang_remap('w_text',$_text,$text);
+	$GLOBALS['SITE_DB']->query_update('f_welcome_emails',$map,array('id'=>$id),'',1);
 	log_it('EDIT_WELCOME_EMAIL',strval($id),get_translated_text($_subject));
 }
 

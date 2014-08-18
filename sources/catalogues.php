@@ -138,7 +138,7 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	}
 
 	// Description
-	$content=get_translated_tempcode($row['cc_description']);
+	$content=get_translated_tempcode('catalogue_categories',$row,'cc_description');
 
 	// Breadcrumbs
 	$breadcrumbs=mixed();
@@ -204,7 +204,7 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$_title=get_translated_text($row['c_title']);
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('CATALOGUE'),$_title):$_title;
 
-	$summary=get_translated_tempcode($row['c_description']);
+	$summary=get_translated_tempcode('catalogues',$row,'c_description');
 
 	$num_children=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']));
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));
@@ -718,7 +718,7 @@ function get_catalogue_entries($catalogue_name,$category_id,$max,$start,$filter,
 			if ($bits!==NULL)
 			{
 				list($new_key,)=$bits;
-				if (strpos($new_key,'.text_original')!==false)
+				if ((strpos($new_key,'.text_original')!==false) && (multi_lang_content()))
 				{
 					$num_entries=$GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM '.get_table_prefix().'catalogue_entries r'.implode('',$extra_join).' WHERE '.$where_clause,false,true);
 					if ($num_entries>300) // For large data sets too slow as after two MySQL joins it can't then use index for ordering
@@ -1129,7 +1129,7 @@ function create_selection_list_catalogues($it=NULL,$prefer_ones_with_entries=fal
  * @param  boolean		Whether to order the fields in their natural database order
  * @param  ID_TEXT		The view type we're doing
  * @set    PAGE SEARCH CATEGORY
- * @return array			A list of maps (each field for the entry gets a map), where each map contains 'effective_value' (the value for the field). Some maps get additional fields (effective_value_nontrans, effective_value_pure), depending on the field type
+ * @return array			A list of maps (each field for the entry gets a map), where each map contains 'effective_value' (the value for the field). Some maps get additional fields (effective_value_pure), depending on the field type
  */
 function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields=NULL,$fields=NULL,$natural_order=false,$view_type='PAGE')
 {
@@ -1237,7 +1237,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
  * @param  ID_TEXT		The type of field
  * @set    short long
  * @param  ?array			A list of field IDs that we are limiting ourselves to (NULL: get ALL fields)
- * @return string			The value
+ * @return ?array			The row (NULL: not found)
  */
 function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_field_ids=NULL)
 {
@@ -1554,7 +1554,7 @@ function get_catalogue_category_tree($catalogue_name,$category_id,$breadcrumbs=N
 		foreach ($rows as $child)
 		{
 			$child_id=$child['id'];
-			$child_title=$child['text_original'];
+			$child_title=$child['_cc_title'];
 			$child_breadcrumbs=new ocp_tempcode();
 			$child_breadcrumbs->attach($breadcrumbs2);
 

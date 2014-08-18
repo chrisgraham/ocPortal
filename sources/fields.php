@@ -221,9 +221,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_fi
 			continue;
 
 		$ob=get_fields_hook($field['cf_type']);
-		$default=get_param('field_'.strval($field['id']),$field['cf_default']);
-		if (array_key_exists('effective_value_pure',$field)) $default=$field['effective_value_pure'];
-		elseif (array_key_exists('effective_value',$field)) $default=$field['effective_value'];
+		$default=get_param('field_'.strval($field['id']),array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['cf_default']);
 
 		$_cf_name=get_translated_text($field['cf_name']);
 		$field_cat='';

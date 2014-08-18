@@ -13,7 +13,7 @@ file_put_contents($debugfile,"d: ".$content);
 $options=array(
 	'http'=>array(	
 		'method' => 'POST',
-		'header' => "Accept-Encoding: gzip, deflate\nContent-Type: text/xml; charset=utf-8\nContent-length: ".strlen($content)."\n",
+		'header' => "Accept-Encoding: gzip, deflate\nContent-Type: text/xml; charset=utf-8\nContent-length: ".strval(strlen($content))."\n",
 		'content' => $content
 	)
 );

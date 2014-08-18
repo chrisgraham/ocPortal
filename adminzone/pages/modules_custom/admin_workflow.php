@@ -70,24 +70,29 @@ class Module_admin_workflow extends standard_crud_module
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
 		// Create required database structures
+
 		require_lang('workflows');
+
+		$GLOBALS['SITE_DB']->create_table('workflows',array(
+			'id'=>'*AUTO',		// ID
+			'workflow_name'=>'SHORT_TRANS',		// The name (and ID) of this approval point
+			'is_default'=>'BINARY',
+		));
+
+		// The workflow_approval_points table records which workflows require which points to approve
+		$GLOBALS['SITE_DB']->create_table('workflow_approval_points',array(
+			'id'=>'*AUTO',		// ID for reference
+			'workflow_id'=>'AUTO_LINK',		// The name (and ID) of this workflow
+			'workflow_approval_name'=>'SHORT_TRANS',		// The name (and ID) of the approval point to require in this workflow
+			'the_position'=>'INTEGER',		// The position of this approval point in the workflow (ie. any approval can be given at any time, but encourage users into a prespecified order)
+		));
 
 		// The workflow_permissions table stores which usergroups are
 		// allowed to approve which points
 		$GLOBALS['SITE_DB']->create_table('workflow_permissions',array(
 			'id'=>'*AUTO',		// ID for reference
-			'workflow_approval_name'=>'SHORT_TRANS',		// The name (and ID) of this approval point
+			'workflow_approval_point_id'=>'AUTO_LINK',		// The ID of the approval point
 			'usergroup'=>'GROUP',		// The usergroup to give permission to
-			'validated'=>'BINARY'		// Whether this permission has been approved
-		));
-
-		// The workflow_requirements table records which workflows require which points to approve
-		$GLOBALS['SITE_DB']->create_table('workflow_requirements',array(
-			'id'=>'*AUTO',		// ID for reference
-			'workflow_name'=>'SHORT_TRANS',		// The name (and ID) of this workflow
-			'workflow_approval_name'=>'SHORT_TRANS',		// The name (and ID) of the approval point to require in this workflow
-			'the_position'=>'INTEGER',		// The position of this requirement in the workflow (ie. any approval can be given at any time, but encourage users into a prespecified order)
-			'is_default'=>'BINARY'		// Keep default workflow information here, since the system config makes it difficult to display a list of strings whilst returning associated ID ints. NOTE: For the default workflow, set this to 1 for ALL of its requirements
 		));
 
 		// The workflow_content table records which site resources are in
@@ -95,9 +100,9 @@ class Module_admin_workflow extends standard_crud_module
 		// process
 		$GLOBALS['SITE_DB']->create_table('workflow_content',array(
 			'id'=>'*AUTO',		// ID for reference
-			'source_type'=>'SHORT_TEXT',		// The content-meta-aware type we'd find this content in
-			'source_id'=>'SHORT_TEXT',		// The ID of the source, wherever it happens to be
-			'workflow_name'=>'SHORT_TRANS',		// The name (and ID) of the workflow this content is in
+			'content_type'=>'ID_TEXT',		// The content-meta-aware type we'd find this content in
+			'content_id'=>'ID_TEXT',		// The ID of the content, wherever it happens to be
+			'workflow_id'=>'AUTO_LINK',		// The ID of the workflow this content is in
 			'notes'=>'LONG_TEXT',		// No point translating the notes, since they're transient
 			'original_submitter'=>'MEMBER'		// Save this here since there's no standard way to discover it later (eg. through content-meta-aware hooks)
 		));
@@ -225,6 +230,7 @@ class Module_admin_workflow extends standard_crud_module
 	function run_start($type)
 	{
 		require_code('workflows');
+		require_code('workflows2');
 
 		if ($type=='misc') return $this->misc();
 		return new ocp_tempcode();
@@ -238,7 +244,6 @@ class Module_admin_workflow extends standard_crud_module
 	function misc()
 	{
 		require_code('templates_donext');
-		require_lang('workflows');
 		return do_next_manager(get_screen_title('MANAGE_WORKFLOWS'),comcode_to_tempcode(do_lang('DOC_WORKFLOWS'),NULL,true),
 			array(
 				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
@@ -249,6 +254,35 @@ class Module_admin_workflow extends standard_crud_module
 	}
 
 	/**
+	 * Standard crud_module edit form filler.
+	 *
+	 * @param  ID_TEXT		The entry being edited
+	 * @return array			A triple: fields, hidden-fields, delete-fields
+	 */
+	function fill_in_edit_form($id)
+	{
+		return $this->get_form_fields(intval($id));
+	}
+
+	/**
+	 * Get a list of point names specified.
+	 *
+	 * @return array			List of point names
+	 */
+	function get_points_in_edited_workflow()
+	{
+		// Grab all of the requested points
+		$point_names=array_map('trim',explode("\n",post_param('points')));
+		$temp_point_names=array();
+		foreach ($point_names as $p)
+		{
+			if ($p!='')
+				$temp_point_names[]=$p;
+		}
+		return $temp_point_names;
+	}
+
+	/**
 	 * Get tempcode for a adding/editing form.
 	 *
 	 * @param  ?integer		The workflow being edited (NULL: adding, not editing)
@@ -256,13 +290,7 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function get_form_fields($id=NULL)
 	{
-		/////////////////////////////////
-		// Get all of our requirements //
-		/////////////////////////////////
-
 		require_code('form_templates');
-		require_lang('workflows');
-		require_code('workflows');
 
 		// These will hold our form elements, visible & hidden
 		$fields=new ocp_tempcode();
@@ -272,13 +300,18 @@ class Module_admin_workflow extends standard_crud_module
 		// Make some assumptions first
 		$default=false;
 		$approval_points=array();
-		$name_string='';
+		$workflow_name='';
 
 		// Now overwrite those assumptions if they're wrong
 		if (!is_null($id))
 		{
+			$workflows=$GLOBALS['SITE_DB']->query_select('workflows',array('*'),array('id'=>$id),'',1);
+			if (!array_key_exists(0,$workflows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+			$workflow=$workflows[0];
+
 			// We can grab the name straight away
-			$name_string=get_translated_text($id);
+			$workflow_name=get_translated_text($workflow['workflow_name']);
+
 			// Now see if we're the default
 			$default_workflow=get_default_workflow();
 			if (!is_null($default_workflow) && $id==$default_workflow)
@@ -286,12 +319,10 @@ class Module_admin_workflow extends standard_crud_module
 				$default=true;
 			}	
 			// Get the approval points in workflow order
-			$approval_points=array_map('get_translated_text',get_requirements_for_workflow($id));
-		}
-		else
+			$approval_points=get_all_approval_points($id);
+		} else
 		{
-			// -1 indicates an invalid ID
-			$id=-1;
+			$id=NULL;
 		}
 
 		////////////////////
@@ -300,44 +331,25 @@ class Module_admin_workflow extends standard_crud_module
 
 		// First we must be given a name (defaulting to the given name if
 		// it has been passed). We want to show the user which names are
-		// unavailable, so scrape the database for this information.
-		$workflow_names=get_all_workflows();
-		$workflow_name_ids=array_keys($workflow_names);
-
-		if (count($workflow_names) > 0)
+		// unavailable, so search the database for this information.
+		$workflows=get_all_workflows();
+		if (count($workflows)>0)
 		{
-			$defined_names=do_lang('DEFINED_WORKFLOWS', implode(', ', $workflow_names));
-		}
-		else
+			$defined_names=do_lang('DEFINED_WORKFLOWS',implode(', ',$workflows));
+		} else
 		{
 			$defined_names=do_lang('NO_DEFINED_WORKFLOWS');
 		}
 
-		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('WORKFLOW_NAME_DESCRIPTION', $defined_names),'name',$name_string,true));
+		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('WORKFLOW_NAME_DESCRIPTION',$defined_names),'name',$workflow_name,true));
 
-		// Now we must handle the ID for this workflow. The ID is an index
-		// to the translation table, thus if it is NULL we can generate
-		// one simply by adding the given name to the translation table
-		// later. Otherwise we must update the language string for this
-		// ID. Either way this must be handled during the form processing,
-		// since we don't have access to the string until then. Since we
-		// want ID to be a number we will set it to an invalid value (-1)
-		// to indicate a NULL status.
-		$hidden->attach(form_input_hidden('workflow_id',strval($id)));
-
-		// Give the user a multiline text entry to specify the approval
-		// points for this workflow. Not as elegant as it could be, but it
-		// doesn't require Javascript.
-		$all_points=get_all_approval_points();		// We need to display which points are available
-		$points_text=array_values($all_points);		// An array of approval point names (strings)
-
-		if ($points_text==array())
+		$all_points=is_null($id)?array():get_all_approval_points($id);		// We need to display which points are available
+		if ($all_points==array())
 		{
 			$points_list=do_lang('APPROVAL_POINTS_DESCRIPTION_EMPTY_LIST');
-		}
-		else
+		} else
 		{
-			$points_list=do_lang('APPROVAL_POINTS_DESCRIPTION_LIST', implode(', ', $points_text));
+			$points_list=do_lang('APPROVAL_POINTS_DESCRIPTION_LIST',implode(', ',$all_points));
 		}
 
 		// Now add the approval point lines
@@ -421,150 +433,71 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function read_in_data($insert_if_needed=false)
 	{
-		require_lang('workflows');
+		$name=post_param('name');
+		$is_default=(post_param_integer('is_default',0)==1);
 
-		// Grab the given name. We allow spaces, letters and numbers.
-		$name=implode(' ',array_map('strip_tags',explode(' ',trim(post_param('name')))));
-
-		// Look for an existing workflow with this name
-		$workflows=get_all_workflows();
-		if (in_array($name,$workflows))
+		$workflow_id=either_param_integer('id',NULL);
+		$map=array('is_default'=>$is_default?1:0);
+		if ($workflow_id===NULL)
 		{
-			// Found one, use it
-			$workflow_id=current(array_keys($workflows,$name));
-		}
-		elseif ($insert_if_needed)
+			if ($insert_if_needed) // Adding
+			{
+				$map+=insert_lang('workflow_name',$name,3);
+				$workflow_id=$GLOBALS['SITE_DB']->query_insert('workflows',$map,true);
+			} else
+			{
+				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+			}
+		} else
 		{
-			// Couldn't find any. Let's make one, with a dummy approval point.
-			// HACKHACK We should use a normalised table with an ID column
-			$workflow_id=insert_lang($name,3);
-			$GLOBALS['SITE_DB']->query_insert('workflow_requirements',array('workflow_name'=>$workflow_id,'is_default'=>0,'the_position'=>0,'workflow_approval_name'=>0));
-		}
-		else
-		{
-			warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html($name)));
+			$old_name=$GLOBALS['SITE_DB']->query_select_value('workflows','workflow_name',array('id'=>$workflow_id));
+			$map+=lang_remap('workflow_name',$old_name,$name);
+			$GLOBALS['SITE_DB']->query_update('workflows',$map,array('id'=>$workflow_id));
 		}
 
-		// Grab all of the requested points
-		$points=array_map('trim',explode("\n",trim(post_param('points'))));
+		$point_names=$this->get_points_in_edited_workflow();
 
-		// Discard whitespace
-		$temp_points=array();
-		foreach ($points as $p)
-		{
-			if (strlen(trim($p)) > 0)
-				$temp_points[]=trim($p);
-		}
-		$points=$temp_points;
-		unset($temp_points);
-
-		// Clean them up a bit. We'll allow spaces, but no other punctuation.
-		$clean_points=array();
-		foreach ($points as $p)
-		{
-			$clean_points[]=implode(' ',array_map('strip_tags',explode(' ',$p)));
-		}
-		$points=$clean_points;
-		unset($clean_points);
-
-		// Find any points which are already defined
-		$all_points=get_all_approval_points();
+		// Find any points and new settings for them
+		$all_points=get_all_approval_points($workflow_id);
 		$point_ids=array();
-		foreach ($points as $p)
+		foreach ($point_names as $seq_id=>$point_name)
 		{
-			if (in_array($p, array_values($all_points)))
+			$point_id=array_search($point_name,$all_points);
+			if ($point_id!==false)
 			{
 				// This already exists. Use the existing version.
-				$point_id=current(array_keys($all_points,$p));
-				$point_ids[$point_id]=$p;
-			}
-			else
+				$point_ids[$point_id]=$point_name;
+
+				// Clear previous permissions for this approval point
+				$GLOBALS['SITE_DB']->query_delete('workflow_permissions',array('workflow_approval_point_id'=>$point_id));
+			} else
 			{
-				// This doesn't exist yet. Define it now.
+				// This doesn't exist yet. Create it.
 
-				// HACKHACK We should use a normalised table with an ID field
-				$point_id=insert_lang($p,3);
-				$point_ids[$point_id]=$p;
+				$point_id=add_approval_point_to_workflow(insert_lang('workflow_approval_name',$point_name,3),$workflow_id);
+				$point_ids[$point_id]=$point_name;
 			}
-
-			// Make sure that there are groups allowed to approve this point
-			$this_key=NULL;
-			foreach (array_keys($_POST) as $post_key)
-			{
-				if (strpos($post_key,'code_')===0)
-				{
-					$this_key=intval(str_replace('code_','',$post_key));
-				}
-				elseif (strpos($post_key,'redef_')===0)
-				{
-					$this_key=intval(str_replace('redef_','',$post_key));
-				}
-			}
-			if (is_null($this_key))
-			{
-				// If we can't find any then it may be that the browser didn't send
-				// us the ticks, since the user didn't change them (notably Chrome
-				// does this).
-				// If this is the case then we leave existing points alone...
-				$has_defaults=$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('*'),array('workflow_approval_name'=>$point_id));
-				if (count($has_defaults) > 0)
-				{
-					continue;
-				}
-				else
-				{
-					// ... but this is an error is there are no existing permissions
-
-					// Clean up any dummies we made
-					$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_approval_name'=>0));
-					warn_exit(do_lang('WORKFLOW_POINT_MUST_HAVE_GROUP',$p));
-				}
-			}
-
-			// Clear previous permissions for this approval point
-			$GLOBALS['SITE_DB']->query_delete('workflow_permissions',array('workflow_approval_name'=>$point_id));
 
 			// Insert the new permissions for this approval point
-			if (array_key_exists('groups_'.strval($this_key),$_POST))
+			if (array_key_exists('groups_'.strval($seq_id),$_POST))
 			{
-				foreach ($_POST['groups_'.strval($this_key)] as $k=>$v)
+				foreach (array_keys($_POST['groups_'.strval($seq_id)]) as $group_id)
 				{
 					$GLOBALS['SITE_DB']->query_insert('workflow_permissions',array(
-						'usergroup'=>intval($k),
-						'workflow_approval_name'=>$point_id,
-						'validated'=>1,		// Keep things simple for now
+						'usergroup'=>intval($group_id),
+						'workflow_approval_point_id'=>$point_id,
 					));
 				}
 			}
-			if (array_key_exists('redef_groups_'.strval($this_key),$_POST))
-			{
-				foreach ($_POST['redef_groups_'.strval($this_key)] as $k=>$v)
-				{
-					$GLOBALS['SITE_DB']->query_insert('workflow_permissions',array(
-						'usergroup'=>intval($k),
-						'workflow_approval_name'=>$point_id,
-						'validated'=>1,		// Keep things simple for now
-					));
-				}
-			}
-
 		}
 
-		// Now replace the workflow requirements. Add the new points (existing
-		// instances will be replaced, so we don't need to worry about duplicates)
-		$point_names=array_flip($point_ids);
-		$points_we_want=array();
-		foreach ($points as $p)
-		{
-			add_requirement_to_workflow($point_names[$p],$workflow_id);
-			$points_we_want[]=$point_names[$p];
-		}
 		// Now we remove those points which are not wanted. We have to do this
 		// after the insertions, since we need to keep at least one approval point
 		// for the workflow in order for it to exist.
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'workflow_requirements WHERE workflow_name='.strval($workflow_id).' AND workflow_approval_name NOT IN ('.implode(',',$points_we_want).')');
+		$sql='DELETE FROM '.get_table_prefix().'workflow_approval_points WHERE workflow_id='.strval($workflow_id).' AND id NOT IN ('.implode(',',array_map('strval',array_keys($point_ids))).')';
+		$GLOBALS['SITE_DB']->query($sql);
 
-		return array($workflow_id, $name, $point_ids, post_param_integer('is_default',0)==1);
+		return array($workflow_id,$name,$point_ids,$is_default);
 	}
 
 	/**

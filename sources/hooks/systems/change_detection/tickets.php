@@ -32,8 +32,8 @@ class Hook_change_detection_tickets
 		{
 			require_code('tickets');
 			require_code('tickets2');
-			$ticket_type=get_param_integer('ticket_type',NULL);
-			$tickets=get_tickets(get_member(),$ticket_type);
+			$ticket_type_id=get_param_integer('ticket_type_id',NULL);
+			$tickets=get_tickets(get_member(),$ticket_type_id);
 			return md5(serialize($tickets))!=$data;
 		}
 

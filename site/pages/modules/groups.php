@@ -138,7 +138,7 @@ class Module_groups
 					$id=intval($_id);
 				} else // Collaboration zone has a text link like this
 				{
-					$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+					$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$_id));
 					if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 				}
 				if ($id==db_get_first_id()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -228,7 +228,7 @@ class Module_groups
 
 		foreach ($groups as $g_id=>$row)
 		{
-			$groups[$g_id]['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+			$groups[$g_id]['_name']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 		}
 
 		// Categorise
@@ -301,7 +301,7 @@ class Module_groups
 				continue;
 			}
 			if ($i>$start+$max) break;
-			$group_name=$row['text_original'];
+			$group_name=$row['_name'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 			$staff->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$group_name)),escape_html($num_members))));
@@ -327,14 +327,14 @@ class Module_groups
 					continue;
 				}
 				if ($i>$start+$max) break;
-				$group_name=$row['text_original'];
+				$group_name=$row['_name'];
 				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 				$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 				$_p_t=$row['g_promotion_threshold'];
 				$p_t=new ocp_tempcode();
 				if ((!is_null($_p_t)) && (array_key_exists($row['g_promotion_target'],$_rank)))
 				{
-					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['text_original']));
+					$p_t=do_lang_tempcode('PROMOTION_TO',escape_html(integer_format($_p_t)),escape_html($_rank[$row['g_promotion_target']]['_name']));
 				}
 				$rank->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$group_name)),escape_html($num_members),$p_t)));
 			}
@@ -364,9 +364,8 @@ class Module_groups
 		$others=new ocp_tempcode();
 		foreach ($_others as $row)
 		{
-			$row['text_original']=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+			$group_name=get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
 
-			$group_name=$row['text_original'];
 			$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$row['id']),'_SELF');
 			$num_members=integer_format(ocf_get_group_members_raw_count($row['id'],true));
 			$others->attach(results_entry(array(hyperlink($url,make_fractionable_editable('group',$row['id'],$group_name)),escape_html($num_members))));
@@ -524,7 +523,7 @@ class Module_groups
 		$club_forum=NULL;
 		if ($group['g_is_private_club']==1)
 		{
-			$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$group_name)));
+			$club_forum=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>do_lang('FORUM_FOR_CLUB',$group_name)));
 		}
 
 		require_javascript('javascript_ajax');
@@ -573,7 +572,7 @@ class Module_groups
 			$id=intval($_id);
 		} else // Collaboration zone has a text link like this
 		{
-			$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_id));
+			$id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description')=>$_id));
 			if (is_null($id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		}
 

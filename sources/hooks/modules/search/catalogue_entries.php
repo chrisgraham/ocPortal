@@ -240,7 +240,7 @@ class Hook_search_catalogue_entries
 
 			$rows=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name'=>$catalogue_name,'cf_searchable'=>1),'ORDER BY cf_order');
 			$table='catalogue_entries r';
-			$trans_fields=array('!');
+			$trans_fields=array('!'=>'!');
 			$nontrans_fields=array();
 			$title_field=mixed();
 			require_code('fields');
@@ -298,7 +298,7 @@ class Hook_search_catalogue_entries
 								$temp=db_full_text_assemble($param,true);
 							} else
 							{
-								$temp=db_like_assemble($param);
+								list($temp,)=db_like_assemble($param);
 							}
 							$where_clause.=preg_replace('#\?#',$search_field,$temp);
 						}
@@ -317,7 +317,7 @@ class Hook_search_catalogue_entries
 						$where_clause.=$temp[4];
 					} else
 					{
-						$trans_fields=array_merge($trans_fields,$temp[0]);
+						$trans_fields[$temp[0]]='LONG_TRANS__COMCODE';
 						$non_trans_fields=array_merge($nontrans_fields,$temp[1]);
 					}
 				}
@@ -350,7 +350,7 @@ class Hook_search_catalogue_entries
 			{
 				$join=' LEFT JOIN '.get_table_prefix().'catalogue_efv_short_trans a ON (r.id=a.ce_id AND f.id=a.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_long_trans b ON (r.id=b.ce_id AND f.id=b.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_long d ON (r.id=d.ce_id AND f.id=d.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_short c ON (r.id=c.ce_id AND f.id=c.cf_id)';
 				//' LEFT JOIN '.get_table_prefix().'catalogue_efv_float g ON (r.id=g.ce_id AND f.id=g.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_integer h ON (r.id=h.ce_id AND f.id=h.cf_id)';
-				$trans_fields=array('a.cv_value','b.cv_value');
+				$trans_fields=array('a.cv_value'=>'LONG_TRANS__COMCODE','b.cv_value'=>'LONG_TRANS__COMCODE');
 				$_remapped_orderer=str_replace('b_cv_value','b.cv_value',$remapped_orderer);
 				$extra_select=',b.cv_value AS b_cv_value';
 				$non_trans_fields=array('c.cv_value','d.cv_value'/*,'g.cv_value','h.cv_value'*/);

@@ -31,15 +31,20 @@ function add_ticket_type($ticket_type,$guest_emails_mandatory=0,$search_faq=0)
 	require_code('global4');
 	prevent_double_submit('ADD_TICKET_TYPE',NULL,$ticket_type);
 
-	$ticket_type_lang=insert_lang($ticket_type,1);
-	$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>$ticket_type_lang,'guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq,'cache_lead_time'=>NULL));
+	$map=array(
+		'guest_emails_mandatory'=>$guest_emails_mandatory,
+		'search_faq'=>$search_faq,
+		'cache_lead_time'=>NULL,
+	);
+	$map+=insert_lang('ticket_type',$ticket_type,1);
+	$ticket_type_id=$GLOBALS['SITE_DB']->query_insert('ticket_types',$map,true);
 
-	log_it('ADD_TICKET_TYPE',strval($ticket_type_lang),$ticket_type);
+	log_it('ADD_TICKET_TYPE',strval($ticket_type_id),$ticket_type);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{
 		require_code('resource_fs');
-		generate_resourcefs_moniker('ticket_type',strval($ticket_type_lang),NULL,NULL,true);
+		generate_resourcefs_moniker('ticket_type',strval($ticket_type_id),NULL,NULL,true);
 	}
 
 	return $ticket_type_lang;
@@ -115,14 +120,14 @@ function get_ticket_type($ticket_type)
 function update_ticket_type_lead_times()
 {
 	require_code('feedback');
-	$ticket_types=$GLOBALS['SITE_DB']->query_select('ticket_types',NULL);
 
+	$ticket_types=$GLOBALS['SITE_DB']->query_select('ticket_types',array('*'));
 	foreach ($ticket_types as $ticket_type)
 	{
 		$total_lead_time=0;
 		$tickets_counted=0;
-		$tickets=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_type'=>$ticket_type['ticket_type']));
 
+		$tickets=$GLOBALS['SITE_DB']->query_select('tickets',NULL,array('ticket_type'=>$ticket_type['id']));
 		foreach ($tickets as $ticket)
 		{
 			$max_rows=0;
@@ -135,8 +140,8 @@ function update_ticket_type_lead_times()
 				continue;
 
 			$ticket_id=extract_topic_identifier($topic['description']);
-			$_forum=1; $_topic_id=1; $_ticket_type=1; // These will be returned by reference
-			$posts=get_ticket_posts($ticket_id,$_forum,$_topic_id,$_ticket_type);
+			$_forum=1; $_topic_id=1; $_ticket_type_id=1; // These will be returned by reference
+			$posts=get_ticket_posts($ticket_id,$_forum,$_topic_id,$_ticket_type_id);
 
 			// Differentiate between old- and new-style tickets
 			if ($topic['firstusername']==do_lang('SYSTEM')) $first_key=1;
@@ -155,7 +160,7 @@ function update_ticket_type_lead_times()
 
 		/* Calculate the new lead time and store it in the DB */
 		if ($tickets_counted>0)
-			$GLOBALS['SITE_DB']->query_update('ticket_types',array('cache_lead_time'=>$total_lead_time/$tickets_counted),array('ticket_type'=>$ticket_type['ticket_type']),'',1);
+			$GLOBALS['SITE_DB']->query_update('ticket_types',array('cache_lead_time'=>$total_lead_time/$tickets_counted),array('id'=>$ticket_type['id']),'',1);
 	}
 }
 
@@ -169,7 +174,7 @@ function update_ticket_type_lead_times()
  * @param  boolean		Whether to skip showing errors, returning NULL instead
  * @return array			Array of tickets, empty on failure
  */
-function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=false,$silent_error_handling=false)
+function get_tickets($member,$ticket_type_id=NULL,$override_view_others_tickets=false,$silent_error_handling=false)
 {
 	$restrict='';
 	$restrict_description='';
@@ -181,9 +186,12 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 		$restrict_description=do_lang('SUPPORT_TICKET').': #'.$restrict;
 	} else
 	{
-		if ((!is_null($ticket_type)) && (!has_category_access(get_member(),'tickets',get_translated_text($ticket_type))))
+		if ((!is_null($ticket_type_id)) && (!has_category_access(get_member(),'tickets',strval($ticket_type_id))))
 			return array();
 	}
+
+	if (!is_null($ticket_type_id))
+		$ticket_type_name=$GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
 
 	if ((get_option('ticket_member_forums')=='1') || (get_option('ticket_type_forums')=='1'))
 	{
@@ -207,7 +215,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 				$forums=collapse_2d_complexity('id','id',$rows);
 			}
 		}
-		else $forums=array(get_ticket_forum_id($member,$ticket_type,false,$silent_error_handling));
+		else $forums=array(get_ticket_forum_id($member,$ticket_type_id,false,$silent_error_handling));
 	}
 	else $forums=array(get_ticket_forum_id(NULL,NULL,false,$silent_error_handling));
 
@@ -220,7 +228,7 @@ function get_tickets($member,$ticket_type=NULL,$override_view_others_tickets=fal
 	{
 		$fp=$topic['firstpost'];
 		unset($topic['firstpost']); // To stop Tempcode randomly making serialization sometimes change such that the refresh_if_changed is triggered
-		if ((is_null($ticket_type)) || (strpos($fp->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type))!==false))
+		if ((is_null($ticket_type_id)) || (strpos($fp->evaluate(),do_lang('TICKET_TYPE').': '.get_translated_text($ticket_type_name))!==false))
 		{
 			$filtered_topics[]=$topic;
 		}
@@ -262,7 +270,7 @@ function get_ticket_posts($ticket_id,&$forum,&$topic_id,&$ticket_type,$start=0,$
 	// It must be an old-style ticket, residing in the root ticket forum
 	$forum=get_ticket_forum_id();
 	$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('ticket_forum_name'),$ticket_id);
-	$ticket_type=NULL;
+	$ticket_type_id=NULL;
 	$count=0;
 	return $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$ticket_id),$count);
 }
@@ -283,17 +291,17 @@ function delete_ticket_by_topic_id($topic_id)
  *
  * @param  AUTO_LINK		The member ID
  * @param  string			The ticket ID (doesn't have to exist)
- * @param  integer		The ticket type
+ * @param  AUTO_LINK		The ticket type
  * @param  LONG_TEXT		The post title
  * @param  LONG_TEXT		The post content in Comcode format
  * @param  string			The home URL
  * @param  boolean		Whether the reply is staff only (invisible to ticket owner, only on OCF)
  */
-function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_url,$staff_only=false)
+function ticket_add_post($member,$ticket_id,$ticket_type_id,$title,$post,$ticket_url,$staff_only=false)
 {
 	// Get the forum ID first
 	$fid=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','forum_id',array('ticket_id'=>$ticket_id));
-	if (is_null($fid)) $fid=get_ticket_forum_id($member,$ticket_type);
+	if (is_null($fid)) $fid=get_ticket_forum_id($member,$ticket_type_id);
 
 	$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
 		$fid,
@@ -315,9 +323,9 @@ function ticket_add_post($member,$ticket_id,$ticket_type,$title,$post,$ticket_ur
 	);
 	$topic_id=$GLOBALS['LAST_TOPIC_ID'];
 	$is_new=$GLOBALS['LAST_TOPIC_IS_NEW'];
-	if (($is_new) && ($ticket_type!=-1))
+	if (($is_new) && ($ticket_type_id!=-1))
 	{
-		$GLOBALS['SITE_DB']->query_insert('tickets',array('ticket_id'=>$ticket_id,'forum_id'=>$fid,'topic_id'=>$topic_id,'ticket_type'=>$ticket_type));
+		$GLOBALS['SITE_DB']->query_insert('tickets',array('ticket_id'=>$ticket_id,'forum_id'=>$fid,'topic_id'=>$topic_id,'ticket_type'=>$ticket_type_id));
 	}
 }
 

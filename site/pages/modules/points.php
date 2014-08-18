@@ -78,7 +78,7 @@ class Module_points
 				'id'=>'*AUTO',
 				'member_id'=>'MEMBER',
 				'amount'=>'INTEGER',
-				'reason'=>'SHORT_TRANS',	// Comcode
+				'reason'=>'SHORT_TRANS__COMCODE',
 				'date_and_time'=>'TIME'
 			));
 
@@ -88,7 +88,7 @@ class Module_points
 				'amount'=>'INTEGER',
 				'gift_from'=>'MEMBER',
 				'gift_to'=>'MEMBER',
-				'reason'=>'SHORT_TRANS',	// Comcode
+				'reason'=>'SHORT_TRANS__COMCODE',
 				'anonymous'=>'BINARY'
 			));
 			$GLOBALS['SITE_DB']->create_index('gifts','giftsgiven',array('gift_from'));

@@ -79,7 +79,8 @@ class Hook_occle_fs_extended_config__match_key_message
 		if ($rows===false) return false;
 		foreach ($rows as $row)
 		{
-			$row2=array('k_message'=>insert_lang_xml($row['k_message']),'k_match_key'=>$row['k_match_key']);
+			$row2=array('k_match_key'=>$row['k_match_key']);
+			$row2+=insert_lang_xml('k_message',$row['k_message']);
 			$GLOBALS['SITE_DB']->query_insert('match_key_messages',$row2);
 		}
 		return true;

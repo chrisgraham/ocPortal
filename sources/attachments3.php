@@ -120,14 +120,22 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 
 	_check_attachment_count();
 
-	$test=$connection->query_select_value_if_there('translate','text_original',array('id'=>$id,'language'=>user_lang()));
-
-	if ($backup_string)
+	if (($backup_string) && (multi_lang_content()))
 	{
-		$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id,'language'=>user_lang()));
-		if (!array_key_exists(0,$current))
+		if (multi_lang())
 		{
-			$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id));
+			$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id,'language'=>user_lang()));
+			if (!array_key_exists(0,$current))
+			{
+				$current=$connection->query_select('translate',array('*'),array('id'=>$lang_id));
+			}
+		} else
+		{
+			$current=array(array(
+				'language'=>user_lang(),
+				'text_original'=>$lang_id,
+				'broken'=>0,
+			));
 		}
 
 		$connection->query_insert('translate_history',array(
@@ -141,12 +149,9 @@ function update_lang_comcode_attachments($lang_id,$text,$type,$id,$connection=NU
 	}
 
 	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
 	if ((is_null($for_member)) || ($GLOBALS['FORUM_DRIVER']->get_username($for_member)===NULL))
 		$for_member=$member;
-
-	$_info=do_comcode_attachments($text,$type,$id,false,$connection,NULL,$for_member);
-	$text2='';//Actually we'll let it regenerate with the correct permissions ($member, not $for_member) $_info['tempcode']->to_assembly();
-	$remap=array('text_original'=>$_info['comcode'],'text_parsed'=>$text2);
 
 	/*
 	We set the Comcode user to the editing user (not the content owner) if the editing user does not have full HTML/Dangerous-Comcode privileges.

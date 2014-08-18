@@ -54,26 +54,24 @@ class galleries_test_set extends ocp_test_case
 		$this->cms_gal_category=new Module_cms_galleries_cat();
 	}
 
-	function testAddgalleryUI()
+	function testAddGalleryUI()
 	{
 		require_code('content2');
 		$_GET['type']='ad';
 		$this->cms_gal_category->pre_run();
-		return $this->cms_gal_category->ad();
+		$this->cms_gal_category->ad();
 	}
 
-	function testAddgalleryActualiser()
+	function testAddGalleryActualiser()
 	{
 		//Setting sample data to POST
 		$_POST=array(
-			'saleable'=>1,
 			'fullname'=>'A test gallery for UT',
 			'require__fullname'=>1,
 			'name'=>'a_test_gallery_for_ut',
 			'require__name'=>1,
 			'comcode__description'=>1,
 			'description'=>'A test gallery for UT',
-
 			'description_parsed'=>'',
 			'require__rep_image'=>0,
 			'hidFileID_rep_image'=>-1,
@@ -82,7 +80,6 @@ class galleries_test_set extends ocp_test_case
 			'secondary_parents'=>array(
 				'0'=>'a_test_image',
 			),
-
 			'require__secondary_parents'=>0,
 			'accept_images'=>1,
 			'tick_on_form__accept_images'=>0,
@@ -136,20 +133,18 @@ class galleries_test_set extends ocp_test_case
 			'require__meta_description'=>0,
 			'tick_on_form__award_3'=>0,
 			'require__award_3'=>0,
-			'http_referer'=>'http://localhost/~manu/nomosa/cms/cms_galleries/ac.htm',
 			'description__is_wysiwyg'=>1,
 		);
 
 		$_GET['type']='_ad';
 		$this->cms_gal_category->pre_run();
-		return $this->cms_gal_category->_ad();
+		$this->cms_gal_category->_ad();
 	}
 
-	function testEditgalleryActualiser()
+	function testEditGalleryActualiser()
 	{
 		//Setting sample data to POST
 		$_POST=array(
-			'saleable'=>1,
 			'fullname'=>'A test gallery for UT- Edited',
 			'require__fullname'=>1,
 			'name'=>'a_test_gallery_for_ut',
@@ -217,19 +212,18 @@ class galleries_test_set extends ocp_test_case
 			'require__meta_description'=>0,
 			'tick_on_form__award_3'=>0,
 			'require__award_3'=>0,
-			'http_referer'=>'http://localhost/~manu/nomosa/cms/cms_galleries/ac.htm',
 			'description__is_wysiwyg'=>1,
 		);
 
-		//return $this->cms_gal_category->_ed();
+		//$this->cms_gal_category->_ed();
 	}
 
-	function testAddimageUI()
+	function testAddImageUI()
 	{
 		//Checking gallery image adding UI
 		$_GET['type']='ad';
 		$this->cms_gal->pre_run();
-		return $this->cms_gal->ad();
+		$this->cms_gal->ad();
 	}
 
 	function testAddImageActualiser()
@@ -275,14 +269,14 @@ class galleries_test_set extends ocp_test_case
 
 		$_GET['type']='_ad';
 		$this->cms_gal->pre_run();
-		return $this->cms_gal->_ad();
+		$this->cms_gal->_ad();
 	}
 
 	function testAddVideoUI()
 	{
 		$_GET['type']='ad';
 		$this->cms_gal_alt->pre_run();
-		return $this->cms_gal_alt->ad();
+		$this->cms_gal_alt->ad();
 	}
 
 	function testAddVideoActuliser()
@@ -325,11 +319,11 @@ class galleries_test_set extends ocp_test_case
 			'description__is_wysiwyg'=>1,
 		);
 
-		//return $this->cms_gal_alt->_ad();
+		//$this->cms_gal_alt->_ad();
 	}
 
 	function testDeleteGallery()
 	{
-		return $this->cms_gal_category->delete_actualisation('a_test_gallery_for_ut');
+		$this->cms_gal_category->delete_actualisation('a_test_gallery_for_ut');
 	}
 }

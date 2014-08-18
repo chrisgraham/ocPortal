@@ -104,13 +104,19 @@ class Module_tickets
 			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
 
 			$default_types=array(/*'TT_FEATURE_REQUEST','TT_FEATURE_INQUIRY','TT_MODDING_HELP','TT_REPAIR_HELP',*/'TT_OTHER',/*'TT_FINANCIAL_INQUIRY',*/'TT_COMPLAINT');
-			foreach ($default_types as $type)
+			foreach ($default_types as $ticket_type_name)
 			{
-				$GLOBALS['SITE_DB']->query_insert('ticket_types',array('ticket_type'=>insert_lang(do_lang($type),1),'guest_emails_mandatory'=>0,'search_faq'=>0,'cache_lead_time'=>NULL));
+				$map=array(
+					'guest_emails_mandatory'=>0,
+					'search_faq'=>0,
+					'cache_lead_time'=>NULL,
+				);
+				$map+=insert_lang('ticket_type',do_lang($ticket_type_name),1);
+				$GLOBALS['SITE_DB']->query_insert('ticket_types',$map);
 
 				foreach (array_keys($groups) as $id)
 				{
-					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'tickets','category_name'=>do_lang($type),'group_id'=>$id));
+					$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'tickets','category_name'=>do_lang($ticket_type_name),'group_id'=>$id));
 				}
 			}
 

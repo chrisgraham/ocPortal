@@ -123,8 +123,8 @@ class Module_quiz
 				'id'=>'*AUTO',
 				'q_timeout'=>'?INTEGER', // The number of minutes to complete the test (not secure)
 				'q_name'=>'SHORT_TRANS',
-				'q_start_text'=>'LONG_TRANS',
-				'q_end_text'=>'LONG_TRANS',
+				'q_start_text'=>'LONG_TRANS__COMCODE',
+				'q_end_text'=>'LONG_TRANS__COMCODE',
 				'q_notes'=>'LONG_TEXT', // Staff notes
 				'q_percentage'=>'INTEGER', // Percentage required for successful completion, if a test
 				'q_open_time'=>'TIME',
@@ -137,7 +137,7 @@ class Module_quiz
 				'q_submitter'=>'MEMBER',
 				'q_points_for_passing'=>'INTEGER',
 				'q_tied_newsletter'=>'?AUTO_LINK',
-				'q_end_text_fail'=>'LONG_TRANS',
+				'q_end_text_fail'=>'LONG_TRANS__COMCODE',
 				'q_reveal_answers'=>'BINARY',
 				'q_shuffle_questions'=>'BINARY',
 				'q_shuffle_answers'=>'BINARY',
@@ -158,7 +158,7 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->create_table('quiz_question_answers',array(
 				'id'=>'*AUTO',
 				'q_question'=>'AUTO_LINK',
-				'q_answer_text'=>'SHORT_TRANS',
+				'q_answer_text'=>'SHORT_TRANS__COMCODE',
 				'q_is_correct'=>'BINARY', // If this is the correct answer; only applies for quizzes
 				'q_order'=>'INTEGER',
 				'q_explanation'=>'LONG_TRANS',
@@ -493,7 +493,7 @@ class Module_quiz
 		}
 
 		// Display UI: start text, questions. Including timeout
-		$start_text=get_translated_tempcode($quiz['q_start_text']);
+		$start_text=get_translated_tempcode('quizzes',$quiz,'q_start_text');
 		$post_url=build_url(array('page'=>'_SELF','type'=>'_do','id'=>$quiz_id),'_SELF');
 		return do_template('QUIZ_SCREEN',array(
 			'_GUID'=>'f390877672938ba62f79f9528bef742f',
@@ -708,8 +708,8 @@ class Module_quiz
 		$GLOBALS['SITE_DB']->query_update('quiz_entries',array('q_results'=>intval(round($marks))),array('id'=>$entry_id),'',1);
 
 		// Show completion summary / results
-		$fail_text=get_translated_tempcode($quiz['q_end_text_fail']);
-		$message=(($quiz['q_type']!='TEST') || ($passed) || ($fail_text->is_empty()))?get_translated_tempcode($quiz['q_end_text']):$fail_text;
+		$fail_text=get_translated_tempcode('quizzes',$quiz,'q_end_text_fail');
+		$message=(($quiz['q_type']!='TEST') || ($passed) || ($fail_text->is_empty()))?get_translated_tempcode('quizzes',$quiz,'q_end_text'):$fail_text;
 		$reveal_answers=($quiz['q_reveal_answers']==1) && ($quiz['q_type']=='TEST');
 		return do_template('QUIZ_DONE_SCREEN',array(
 			'_GUID'=>'fa783f087eca7f8f577b134ec0bdc4ce',

@@ -73,7 +73,7 @@ class Module_admin_permissions
 		{
 			$GLOBALS['SITE_DB']->create_table('match_key_messages',array(
 				'id'=>'*AUTO',
-				'k_message'=>'LONG_TRANS',
+				'k_message'=>'LONG_TRANS__COMCODE',
 				'k_match_key'=>'SHORT_TEXT'
 			));
 
@@ -591,15 +591,15 @@ class Module_admin_permissions
 				if ((substr($id,0,4)=='new_') || (!array_key_exists(intval($id),$mkeylang)))
 				{
 					$GLOBALS['SITE_DB']->query_insert('match_key_messages',array(
-						'k_message'=>insert_lang(post_param('msg_'.$id),2),
 						'k_match_key'=>$val
-					));
+					)+insert_lang_comcode('k_message',post_param('msg_'.$id),2));
 				} else
 				{
-					$GLOBALS['SITE_DB']->query_insert('match_key_messages',array(
-						'k_message'=>lang_remap($mkeylang[intval($id)],post_param('msg_'.$id)),
+					$map=array(
 						'k_match_key'=>$val
-					));
+					);
+					$map+=lang_remap_comcode('k_message',$mkeylang[intval($id)],post_param('msg_'.$id));
+					$GLOBALS['SITE_DB']->query_insert('match_key_messages',$map);
 					unset($mkeylang[intval($id)]);
 				}
 			}

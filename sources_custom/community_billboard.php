@@ -29,7 +29,16 @@ function add_community_billboard_message($message,$days,$notes,$validated)
 
 	$order_time=time();
 
-	$id=$GLOBALS['SITE_DB']->query_insert('community_billboard',array('notes'=>$notes,'activation_time'=>NULL,'active_now'=>0,'the_message'=>insert_lang_comcode($message,2),'days'=>$days,'order_time'=>$order_time,'member_id'=>get_member()),true);
+	$map=array(
+		'notes'=>$notes,
+		'activation_time'=>NULL,
+		'active_now'=>0,
+		'days'=>$days,
+		'order_time'=>$order_time,
+		'member_id'=>get_member(),
+	);
+	$map+=insert_lang_comcode('the_message',$message,2);
+	$id=$GLOBALS['SITE_DB']->query_insert('community_billboard',$map,true);
 
 	log_it('ADD_COMMUNITY_BILLBOARD',strval($id),$message);
 
@@ -50,7 +59,12 @@ function edit_community_billboard_message($id,$message,$notes,$validated)
 {
 	$_message=$GLOBALS['SITE_DB']->query_select_value('community_billboard','the_message',array('id'=>$id));
 	log_it('EDIT_COMMUNITY_BILLBOARD',strval($id),$message);
-	$GLOBALS['SITE_DB']->query_update('community_billboard',array('notes'=>$notes,'the_message'=>lang_remap_comcode($_message,$message),'active_now'=>$validated),array('id'=>$id),'',1);
+	$map=array(
+		'notes'=>$notes,
+		'active_now'=>$validated,
+	);
+	$map+=lang_remap_comcode('the_message',$_message,$message);
+	$GLOBALS['SITE_DB']->query_update('community_billboard',$map,array('id'=>$id),'',1);
 	if ($validated==1) choose_community_billboard_message($id); else persistent_cache_delete('COMMUNITY_BILLBOARD');
 }
 

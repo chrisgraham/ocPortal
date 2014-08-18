@@ -65,34 +65,35 @@ if (!function_exists('_load_comcode_page_not_cached'))
 		global $LAX_COMCODE;
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
-		$_text2=comcode_to_tempcode($result,$page_submitter,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,60,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
-		$text2=$_text2->to_assembly();
-		if (get_site_default_lang()!=$lang)
-		{
-			$non_trans__text2=comcode_to_tempcode($non_trans_result,$page_submitter,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,60,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
-			$non_trans_text2=$non_trans__text2->to_assembly();
-		}
+		require_code('attachments2');
+		$_new=do_comcode_attachments($result,'comcode_page',$zone.':'.$codename,false,NULL,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,$page_submitter);
+		$_text2=$_new['tempcode'];
 		$LAX_COMCODE=$temp;
+		$text2=$_text2->to_assembly();
 
 		// Check it still needs inserting (it might actually be there, but not translated)
 		$trans_key=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','string_index',array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 		if (is_null($COMCODE_PARSE_TITLE)) $COMCODE_PARSE_TITLE='';
 		$title_to_use=clean_html_title($COMCODE_PARSE_TITLE);
-		if (!is_null($trans_key))
-		{
-			$_comcode_page_row=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$codename),'',1);
-			if (!array_key_exists(0,$_comcode_page_row))
-			{
-				$trans_key=NULL;
-				$GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$codename,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
-			}
-		}
 		if (is_null($trans_key))
 		{
-			$index=$GLOBALS['SITE_DB']->query_insert('translate',array('source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang),true,false,true);
-			if (get_site_default_lang()!=$lang)
-				$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$index,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$non_trans_result,'text_parsed'=>$non_trans_text2,'language'=>get_site_default_lang()),true,false,true);
-			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',array('the_zone'=>$zone,'the_page'=>$codename,'string_index'=>$index,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'cc_page_title'=>insert_lang(clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true)),false,true); // Race conditions
+			$map=array(
+				'the_zone'=>$zone,
+				'the_page'=>$codename,
+				'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),
+			);
+			$map+=insert_lang('cc_page_title',clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
+			if (multi_lang_content())
+			{
+				$map['string_index']=$GLOBALS['SITE_DB']->query_insert('translate',array('source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang),true,false,true);
+			} else
+			{
+				$map['string_index']=$result;
+				$map['string_index__source_user']=$page_submitter;
+				$map['string_index__text_parsed']=$text2;
+			}
+			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map,false,true); // Race conditions
+
 			decache('main_comcode_page_children');
 
 			// Try and insert corresponding page; will silently fail if already exists. This is only going to add a row for a page that was not created in-system
@@ -109,14 +110,43 @@ if (!function_exists('_load_comcode_page_not_cached'))
 			}
 		} else
 		{
-			$comcode_page_row=$_comcode_page_row[0];
+			$_comcode_page_row=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('*'),array('the_zone'=>$zone,'the_page'=>$codename),'',1);
+			if (array_key_exists(0,$_comcode_page_row))
+			{
+				$comcode_page_row=$_comcode_page_row[0];
+			} else
+			{
+				$comcode_page_row=$new_comcode_page_row;
+				$GLOBALS['SITE_DB']->query_insert('comcode_pages',$comcode_page_row,false,true);
+			}
 
 			// Check to see if it needs translating
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('id'=>$trans_key,'language'=>$lang));
-			if (is_null($test))
+			if (multi_lang_content())
 			{
-				$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang));
-				$index=$trans_key;
+				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('id'=>$trans_key,'language'=>$lang));
+				if (is_null($test))
+				{
+					$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang),false,true);
+					$index=$trans_key;
+
+					$trans_cc_page_title_key=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
+					if (!is_null($trans_cc_page_title_key))
+					{
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('id'=>$trans_cc_page_title_key,'language'=>$lang));
+						if (is_null($test))
+						{
+							$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_cc_page_title_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$title_to_use,'text_parsed'=>'','language'=>$lang),true);
+						}
+					} // else race condition, decached while being recached
+				}
+			} else
+			{
+				$map=array();
+				$map+=insert_lang('cc_page_title',clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
+				$map['string_index']=$result;
+				$map['string_index__source_user']=$page_submitter;
+				$map['string_index__text_parsed']=$text2;
+				$GLOBALS['SITE_DB']->query_update('cached_comcode_pages',$map,array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()),'',1);
 			}
 		}
 

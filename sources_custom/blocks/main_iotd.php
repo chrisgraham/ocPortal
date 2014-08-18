@@ -89,8 +89,8 @@ class Block_main_iotd
 
 		$view_url=build_url(array('page'=>'iotds','type'=>'view','id'=>$myrow['id']),$zone);
 
-		$i_title=get_translated_tempcode($myrow['i_title']);
-		$caption=get_translated_tempcode($myrow['caption']);
+		$i_title=get_translated_tempcode('iotd',$myrow,'i_title');
+		$caption=get_translated_tempcode('iotd',$myrow,'caption');
 
 		require_code('images');
 		$thumb_url=ensure_thumbnail($myrow['url'],$myrow['thumb_url'],'iotds','iotd',$myrow['id']);

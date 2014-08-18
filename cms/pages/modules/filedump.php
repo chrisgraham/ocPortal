@@ -1137,7 +1137,13 @@ class Module_filedump
 							lang_remap($test,$description);
 						} else
 						{
-							$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$file,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
+							$map=array(
+								'name'=>$file,
+								'path'=>$place,
+								'the_member'=>get_member(),
+							);
+							$map+=insert_lang_comcode('description',$description,3),
+							$GLOBALS['SITE_DB']->query_insert('filedump',$map);
 						}
 						break;
 
@@ -1224,7 +1230,13 @@ class Module_filedump
 			$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$name,'path'=>$place),'',1);
 		}
 		$description=post_param('description','');
-		$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$name,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
+		$map=array(
+			'name'=>$name,
+			'path'=>$place,
+			'the_member'=>get_member(),
+		);
+		$map+=insert_lang_comcode('description',$description,3);
+		$GLOBALS['SITE_DB']->query_insert('filedump',$map);
 
 		log_it('FILEDUMP_CREATE_FOLDER',$name,$place);
 
@@ -1307,7 +1319,13 @@ class Module_filedump
 				$GLOBALS['SITE_DB']->query_delete('filedump',array('name'=>$filename,'path'=>$place),'',1);
 			}
 			$description=post_param('description','');
-			$GLOBALS['SITE_DB']->query_insert('filedump',array('name'=>$filename,'path'=>$place,'the_member'=>get_member(),'description'=>insert_lang_comcode($description,3)));
+			$map=array(
+				'name'=>$filename,
+				'path'=>$place,
+				'the_member'=>get_member(),
+			);
+			$map+=insert_lang_comcode('description',$description,3);
+			$GLOBALS['SITE_DB']->query_insert('filedump',$map);
 
 			// Logging etc
 			require_code('notifications');

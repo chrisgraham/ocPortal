@@ -40,8 +40,8 @@ function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$giv
 		$edit_url=mixed();
 	}
 
-	$i_title=get_translated_tempcode($myrow['i_title']);
-	$caption=get_translated_tempcode($myrow['caption']);
+	$i_title=get_translated_tempcode('iotd',$myrow,'i_title');
+	$caption=get_translated_tempcode('iotd',$myrow,'caption');
 	$date=get_timezoned_date($myrow['date_and_time']);
 
 	$submitter=$myrow['submitter'];

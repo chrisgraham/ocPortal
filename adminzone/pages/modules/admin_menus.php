@@ -505,26 +505,16 @@ class Module_admin_menus
 		// Save
 		if (array_key_exists($id,$old_menu_bits))
 		{
-			$lang_code=$old_menu_bits[$id]['i_caption'];
-			$lang_code_2=$old_menu_bits[$id]['i_caption_long'];
-			$menu_save_map+=array(
-				'i_caption'=>$lang_code,
-				'i_caption_long'=>$lang_code_2,
-			);
-			unset($old_menu_bits[$id]);
-			$insert_id=$id;
+			$menu_save_map+=lang_remap_comcode('i_caption',$old_menu_bits[$id]['i_caption'],$caption);
+			$menu_save_map+=lang_remap_comcode('i_caption_long',$old_menu_bits[$id]['i_caption_long'],$caption_long);
 			$GLOBALS['SITE_DB']->query_update('menu_items',$menu_save_map,array('id'=>$id));
 
-			lang_remap($lang_code,$caption);
-			lang_remap($lang_code_2,$caption_long);
+			unset($old_menu_bits[$id]);
+			$insert_id=$id;
 		} else
 		{
-			$lang_code=insert_lang($caption,1);
-			$lang_code_2=insert_lang($caption_long,1);
-			$menu_save_map+=array(
-				'i_caption'=>$lang_code,
-				'i_caption_long'=>$lang_code_2,
-			);
+			$menu_save_map+=insert_lang_comcode('i_caption',$caption,1);
+			$menu_save_map+=insert_lang_comcode('i_caption_long',$caption_long,1);
 			$insert_id=$GLOBALS['SITE_DB']->query_insert('menu_items',$menu_save_map,true);
 		}
 

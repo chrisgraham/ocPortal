@@ -65,6 +65,22 @@ function init__database()
 }
 
 /**
+ * Find whether to run in multi-lang mode for content translations.
+ *
+ * @return boolean		Whether to run in multi-lang mode for content translations.
+ */
+function multi_lang_content()
+{
+	global $HAS_MULTI_LANG_CONTENT;
+	if ($HAS_MULTI_LANG_CONTENT===NULL)
+	{
+		global $SITE_INFO;
+		$HAS_MULTI_LANG_CONTENT=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):true;
+	}
+	return $HAS_MULTI_LANG_CONTENT;
+}
+
+/**
  * Called once our DB connection becomes active.
  */
 function _general_db_init()
@@ -669,11 +685,13 @@ class database_driver
 	 * @param  string			The field to select
 	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no where conditions)
 	 * @param  string			Something to tack onto the end
+	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
+	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @return mixed			The first value of the first row returned
 	 */
-	function query_select_value($table,$selected_value,$where_map=NULL,$end='')
+	function query_select_value($table,$selected_value,$where_map=NULL,$end='',$fail_ok=false,$lang_fields=NULL)
 	{
-		$values=$this->query_select($table,array($selected_value),$where_map,$end,1,NULL);
+		$values=$this->query_select($table,array($selected_value),$where_map,$end,1,NULL,$fail_ok,$lang_fields);
 		if ($values===NULL) return NULL; // error
 		if (!array_key_exists(0,$values)) fatal_exit(do_lang_tempcode('QUERY_NULL',escape_html($this->_get_where_expand($this->table_prefix.$table,array($selected_value),$where_map,$end)))); // No result found
 		return $this->_query_select_value($values);
@@ -701,11 +719,12 @@ class database_driver
 	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no where conditions)
 	 * @param  string			Something to tack onto the end
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
+	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
 	 */
-	function query_select_value_if_there($table,$select,$where_map=NULL,$end='',$fail_ok=false)
+	function query_select_value_if_there($table,$select,$where_map=NULL,$end='',$fail_ok=false,$lang_fields=NULL)
 	{
-		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL,$fail_ok);
+		$values=$this->query_select($table,array($select),$where_map,$end,1,NULL,$fail_ok,$lang_fields);
 		if ($values===NULL) return NULL; // error
 		return $this->_query_select_value($values);
 	}
@@ -772,10 +791,27 @@ class database_driver
 
 		if ($select===NULL) $select=array('*');
 
+		$this->_automatic_lang_fields($table,$full_table,$select,$where_map,$end,$lang_fields);
+
+		return $this->_query($this->_get_where_expand($full_table,$select,$where_map,$end),$max,$start,$fail_ok,false,$lang_fields,$field_prefix);
+	}
+
+	/**
+	 * Work out $lang_fields from analysing the table, if needed.
+	 *
+	 * @param  string			The table name
+	 * @param  string			The table name, with prefix too
+	 * @param  array			The SELECT map
+	 * @param  ?array			The WHERE map [will all be AND'd together] (NULL: no conditions)
+	 * @param  string			Something to tack onto the end of the SQL query
+	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
+	 */
+	function _automatic_lang_fields(&$table,&$full_table,&$select,&$where_map,&$end,&$lang_fields)
+	{
 		// Optimisation for entirely automatic translate table linkage (only done on non-joins, as this removes a whole lot of potential complexities -- if people are doing joins they go a little further to do this manually anyway; also we make sure we're operating on our site's table prefix so we don't collect meta info for the wrong table set)
 		if ($lang_fields===NULL)
 		{
-			if (($table!='translate') && (strpos($table,' ')===false) && (isset($GLOBALS['SITE_DB'])) && ($this->table_prefix==$GLOBALS['SITE_DB']->table_prefix))
+			if (($table!='translate') && (strpos($table,' ')===false) && ((isset($GLOBALS['SITE_DB'])) && ($this->table_prefix==$GLOBALS['SITE_DB']->table_prefix) || (get_forum_type()=='ocf')))
 			{
 				global $TABLE_LANG_FIELDS_CACHE;
 				$lang_fields_provisional=isset($TABLE_LANG_FIELDS_CACHE[$table])?$TABLE_LANG_FIELDS_CACHE[$table]:array();
@@ -872,6 +908,22 @@ class database_driver
 	}
 
 	/**
+	 * Convert a field name of type SHORT/LONG_TRANS[__COMCODE] into something we may use directly in our SQL.
+	 * Assumes the query has separately been informed of the $lang_fields parameter (which is automatic for query_select).
+	 *
+	 * @param  ID_TEXT		Language field name
+	 * @return ID_TEXT		SQL field name reference
+	 */
+	function translate_field_ref($field_name)
+	{
+		if (multi_lang_content())
+		{
+			return 't_'.$field_name.'.text_original';
+		}
+		return $field_name;
+	}
+
+	/**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are specialised abstracted versions available.
 	 *
 	 * @param  string			The complete SQL query
@@ -881,7 +933,7 @@ class database_driver
 	 * @param  boolean		Whether to get an insert ID
 	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @param  string			All the core fields have a prefix of this on them, so when we fiddle with language lookup we need to use this (only consider this if you're setting $lang_fields)
-	 * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
+	 * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
 	 * @return ?mixed			The results (NULL: no results)
 	 */
 	function _query($query,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false,$lang_fields=NULL,$field_prefix='',$save_as_volatile=false)
@@ -936,49 +988,81 @@ class database_driver
 		}
 
 		$lang_strings_expecting=array();
-		if ((isset($lang_fields[0])) && (function_exists('user_lang')) && ((is_null($start)) || ($start<200)))
+		if ($lang_fields!==NULL)
 		{
-			$lang=user_lang(); // We can we assume this, as we will cache against it -- if subsequently code wants something else it'd be a cache miss which is fine
-
-			foreach ($lang_fields as $i=>$field)
+			if (multi_lang_content())
 			{
-				$_i=strval($i);
+				if ((strpos($query,'text_original')!==false) || (function_exists('user_lang')) && ((is_null($start)) || ($start<200)))
+				{
+					$lang=function_exists('user_lang')?user_lang():get_site_default_lang(); // We can we assume this, as we will cache against it -- if subsequently code wants something else it'd be a cache miss which is fine
 
-				$join=' LEFT JOIN '.$this->table_prefix.'translate t'.$_i.' ON t'.$_i.'.id='.$field_prefix.$field.' AND '.db_string_equal_to('t'.$_i.'.language',$lang);
-				$_query=strtoupper($query);
-				$from_pos=strpos($_query,' FROM ');
-				$where_pos=strpos($_query,' WHERE ');
-				if ($where_pos===false)
-				{
-					$_where_pos=0;
-					do
+					foreach ($lang_fields as $field=>$field_type)
 					{
-						$_where_pos=strpos($_query,' GROUP BY ',$_where_pos+1);
-						if ($_where_pos!==false) $where_pos=$_where_pos;
+						$join=' LEFT JOIN '.$this->table_prefix.'translate t_'.$field.' ON t_'.$field.'.id='.$field_prefix.$field;
+						if (strpos($query,'t_'.$field.'.text_original')===false)
+							$join.=' AND '.db_string_equal_to('t_'.$field.'.language',$lang);
+
+						$_query=strtoupper($query);
+						$from_pos=strrpos($_query,' FROM ');
+						$where_pos=strrpos($_query,' WHERE ');
+						if ($where_pos===false)
+						{
+							$_where_pos=0;
+							do
+							{
+								$_where_pos=strpos($_query,' GROUP BY ',$_where_pos+1);
+								if ($_where_pos!==false) $where_pos=$_where_pos;
+							}
+							while ($_where_pos!==false);
+						}
+						if ($where_pos===false)
+						{
+							$_where_pos=0;
+							do
+							{
+								$_where_pos=strpos($_query,' ORDER BY ',$_where_pos+1);
+								if ($_where_pos!==false) $where_pos=$_where_pos;
+							}
+							while ($_where_pos!==false);
+						}
+						if ($where_pos!==false)
+						{
+							$query=substr($query,0,$where_pos).$join.substr($query,$where_pos);
+						} else
+						{
+							$query.=$join;
+						}
+
+						$before_from=substr($query,0,$from_pos);
+						if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)
+						{
+							$original='t_'.$field.'.text_original AS t_'.$field.'__text_original';
+							$parsed='t_'.$field.'.text_parsed AS t_'.$field.'__text_parsed';
+
+							$query=$before_from.','.$original.','.$parsed.substr($query,$from_pos);
+
+							$lang_strings_expecting[]=array($field,'t_'.$field.'__text_original','t_'.$field.'__text_parsed');
+						}
 					}
-					while ($_where_pos!==false);
 				}
-				if ($where_pos===false)
+			} else
+			{
+				foreach ($lang_fields as $field=>$field_type)
 				{
-					$_where_pos=0;
-					do
+					if (strpos($field_type,'__COMCODE')!==false)
 					{
-						$_where_pos=strpos($_query,' ORDER BY ',$_where_pos+1);
-						if ($_where_pos!==false) $where_pos=$_where_pos;
+						$from_pos=strrpos(strtoupper($query),' FROM ');
+						$before_from=substr($query,0,$from_pos);
+
+						if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)
+						{
+							$source_user=$field.'__source_user';
+							$parsed=$field.'__text_parsed';
+
+							$query=$before_from.','.$source_user.','.$parsed.substr($query,$from_pos);
+						}
 					}
-					while ($_where_pos!==false);
 				}
-				if ($where_pos!==false)
-				{
-					$query=substr($query,0,$where_pos).$join.substr($query,$where_pos);
-				} else
-				{
-					$query.=$join;
-				}
-				$original='t'.$_i.'.text_original AS t'.$_i.'__text_original';
-				$parsed='t'.$_i.'.text_parsed AS t'.$_i.'__text_parsed';
-				$query=substr($query,0,$from_pos).','.$original.','.$parsed.substr($query,$from_pos);
-				$lang_strings_expecting[]=array($field,'t'.$_i.'__text_original','t'.$_i.'__text_parsed');
 			}
 		}
 

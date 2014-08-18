@@ -66,7 +66,7 @@ function ocf_may_control_group($group_id,$member_id)
  */
 function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club,$uniqify=false)
 {
-	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON g.g_name=t.id WHERE '.db_string_equal_to('text_original',$name),'g.id');
+	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$name));
 	if ((!is_null($test)) && ($test!=$group_id))
 	{
 		if ($uniqify)
@@ -84,13 +84,13 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 	$_title=$_group_info[0]['g_title'];
 
 	$map=array();
-	if (!is_null($name)) $map['g_name']=lang_remap($_name,$name,$GLOBALS['FORUM_DB']);
+	if (!is_null($name)) $map+=lang_remap('g_name',$_name,$name,$GLOBALS['FORUM_DB']);
 	if (!is_null($is_default)) $map['g_is_default']=$is_default;
 	if (!is_null($is_presented_at_install)) $map['g_is_presented_at_install']=$is_presented_at_install;
 	if (!is_null($is_super_admin)) $map['g_is_super_admin']=$is_super_admin;
 	if (!is_null($is_super_moderator)) $map['g_is_super_moderator']=$is_super_moderator;
 	$map['g_group_leader']=$group_leader;
-	if (!is_null($title)) $map['g_title']=lang_remap($_title,$title,$GLOBALS['FORUM_DB']);
+	if (!is_null($title)) $map+=lang_remap('g_title',$_title,$title,$GLOBALS['FORUM_DB']);
 	$map['g_promotion_target']=$promotion_target;
 	$map['g_promotion_threshold']=$promotion_threshold;
 	if (!is_null($flood_control_submit_secs)) $map['g_flood_control_submit_secs']=$flood_control_submit_secs;

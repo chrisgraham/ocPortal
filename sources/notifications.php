@@ -519,9 +519,8 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 				@file_put_contents($path.'/latest.dat',strval(time()));
 			}
 
-			$GLOBALS['SITE_DB']->query_insert('digestives_tin',array(
+			$map=array(
 				'd_subject'=>$subject,
-				'd_message'=>insert_lang($message,4),
 				'd_from_member_id'=>$from_member_id,
 				'd_to_member_id'=>$to_member_id,
 				'd_priority'=>$priority,
@@ -531,7 +530,9 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 				'd_code_category'=>is_null($code_category)?'':$code_category,
 				'd_frequency'=>$frequency,
 				'd_read'=>0,
-			));
+			);
+			$map+=insert_lang('d_message',$message,4);
+			$GLOBALS['SITE_DB']->query_insert('digestives_tin',$map);
 
 			$GLOBALS['SITE_DB']->query_insert('digestives_consumed',array(
 				'c_member_id'=>$to_member_id,

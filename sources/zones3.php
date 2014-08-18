@@ -64,7 +64,15 @@ function actual_edit_zone($zone,$title,$default_page,$header_text,$theme,$requir
 	$_header_text=$GLOBALS['SITE_DB']->query_select_value('zones','zone_header_text',array('zone_name'=>$zone));
 	$_title=$GLOBALS['SITE_DB']->query_select_value('zones','zone_title',array('zone_name'=>$zone));
 
-	$GLOBALS['SITE_DB']->query_update('zones',array('zone_name'=>$new_zone,'zone_title'=>lang_remap($_title,$title),'zone_default_page'=>$default_page,'zone_header_text'=>lang_remap($_header_text,$header_text),'zone_theme'=>$theme,'zone_require_session'=>$require_session),array('zone_name'=>$zone),'',1);
+	$map=array(
+		'zone_name'=>$new_zone,
+		'zone_default_page'=>$default_page,
+		'zone_theme'=>$theme,
+		'zone_require_session'=>$require_session,
+	);
+	$map+=lang_remap('zone_title',$_title,$title);
+	$map+=lang_remap('zone_header_text',$_header_text,$header_text);
+	$GLOBALS['SITE_DB']->query_update('zones',$map,array('zone_name'=>$zone),'',1);
 
 	if ($new_zone!=$zone)
 	{

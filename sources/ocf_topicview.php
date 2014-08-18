@@ -169,7 +169,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 				$sig=$SIGNATURES_CACHE[$_postdetails['p_poster']];
 			} else
 			{
-				$sig=get_translated_tempcode($GLOBALS['OCF_DRIVER']->get_member_row_field($_postdetails['p_poster'],'m_signature'),$GLOBALS['FORUM_DB']);
+				$sig=get_translated_tempcode('f_members',$GLOBALS['OCF_DRIVER']->get_member_row($_postdetails['p_poster']),'m_signature',$GLOBALS['FORUM_DB']);
 				$SIGNATURES_CACHE[$_postdetails['p_poster']]=$sig;
 			}
 			$post['signature']=$sig;
@@ -243,7 +243,17 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 {
 	if (!is_null($topic_id))
 	{
-		$_topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f ON f.id=t.t_forum_id',array('t.*','f.f_is_threaded'),array('t.id'=>$topic_id),'',1);
+		$table='f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums f ON f.id=t.t_forum_id';
+		$select=array('t.*','f.f_is_threaded');
+		if (multi_lang_content())
+		{
+			$select[]='t_cache_first_post AS p_post';
+		} else
+		{
+			$table.=' JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+			$select[]='p_post,p_post__text_parsed,p_post__source_user';
+		}
+		$_topic_info=$GLOBALS['FORUM_DB']->query_select($table,$select,array('t.id'=>$topic_id),'',1);
 		if (!array_key_exists(0,$_topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$topic_info=$_topic_info[0];
 
@@ -301,7 +311,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			'description_link'=>$topic_info['t_description_link'],
 			'emoticon'=>$topic_info['t_emoticon'],
 			'forum_id'=>$topic_info['t_forum_id'],
-			'first_post'=>$topic_info['t_cache_first_post'],
+			'first_post'=>$topic_info['p_post'],
 			'first_poster'=>$topic_info['t_cache_first_member_id'],
 			'first_post_id'=>$topic_info['t_cache_first_post_id'],
 			'pt_from'=>$topic_info['t_pt_from'],
@@ -322,6 +332,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 				'image'=>find_theme_image('icons/48x48/menu/social/forum/forums'),
 				//'category'=>???,
 			),
+			'row'=>$topic_info,
 		);
 
 		// Poll?
@@ -343,24 +354,12 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 
 		// Post query
 		$where=ocf_get_topic_where($topic_id);
-		if ($start<200)
+		if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
 		{
-			if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
-			{
-				$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
-			} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
-			{
-				$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode, (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
-			}
-		} else // deep search, so we need to make offset more efficient, trade-off is more queries
+			$query='SELECT p.*,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time WHERE '.$where.' ORDER BY p_time,p.id';
+		} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
 		{
-			if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
-			{
-				$query='SELECT p.*,NULL AS text_parsed,NULL AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY p_time,p.id';
-			} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
-			{
-				$query='SELECT p.*,NULL AS text_parsed,NULL AS message_comcode, (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p WHERE '.$where.' ORDER BY p_time,p.id';
-			}
+			$query='SELECT p.*, (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p WHERE '.$where.' ORDER BY p_time,p.id';
 		}
 	} else
 	{
@@ -386,19 +385,19 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 
 		// Post query
 		$where='p_intended_solely_for='.strval(get_member());
-		if ($start<200)
-		{
-			$query='SELECT p.*,t.text_parsed AS text_parsed,t.text_original AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND p.p_post=t.id WHERE '.$where.' ORDER BY p_time,p.id';
-		} else // deep search, so we need to make offset more efficient, trade-off is more queries
-		{
-			$query='SELECT p.*,NULL AS text_parsed,NULL AS message_comcode,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY p_time,p.id';
-		}
+		$query='SELECT p.*,h.h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time WHERE '.$where.' ORDER BY p_time,p.id';
 	}
 
 	// Posts
 	if ($out['is_threaded']==0)
 	{
-		$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start));
+		if ($start<200)
+		{
+			$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start,false,false,array('p_post'=>'LONG_TRANS__COMCODE')));
+		} else // deep search, so we need to make offset more efficient, trade-off is more queries
+		{
+			$_postdetailss=list_to_map('id',$GLOBALS['FORUM_DB']->query($query,$max,$start));
+		}
 		if (($start==0) && (count($_postdetailss)<$max)) $out['max_rows']=$max; // We know that they're all on this screen
 		else $out['max_rows']=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE '.$where);
 		$posts=array();
@@ -414,7 +413,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 		$i=0;
 		foreach ($_postdetailss as $_postdetails)
 		{
-			if (is_null($_postdetails['message_comcode'])) $_postdetails['message_comcode']=get_translated_text($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
+			$_postdetails['message_comcode']=get_translated_text($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
 
 			$linked_type='';
 			$linked_id='';
@@ -434,15 +433,18 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 
 			// Load post
-			if ((get_page_name()=='search') || (is_null($_postdetails['text_parsed'])) || ($_postdetails['text_parsed']=='') || ($_postdetails['p_post']==0))
+			$post_row=array(
+				'id'=>$_postdetails['id'],
+				'p_post'=>$_postdetails['p_post'],
+			);
+			if (!multi_lang_content())
 			{
-				$_postdetails['message']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
-			} else
-			{
-				$_postdetails['message']=new ocp_tempcode();
-				if (!$_postdetails['message']->from_assembly($_postdetails['text_parsed'],true))
-					$_postdetails['message']=get_translated_tempcode($_postdetails['p_post'],$GLOBALS['FORUM_DB']);
+				$post_row+=array(
+					'p_post__text_parsed'=>$_postdetails['p_post__text_parsed'],
+					'p_post__source_user'=>$_postdetails['p_post__source_user'],
+				);
 			}
+			$_postdetails['message']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 
 			// Fake a quoted post? (kind of a nice 'tidy up' feature if a forum's threading has been turned off, leaving things for flat display)
 			if ((!is_null($_postdetails['p_parent_id'])) && (strpos($_postdetails['message_comcode'],'[quote')===false))
@@ -453,22 +455,14 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 					$p=$_postdetailss[$_postdetails['p_parent_id']];
 
 					// Load post
-					if ((get_page_name()=='search') || (is_null($p['text_parsed'])) || ($p['text_parsed']=='') || ($p['p_post']==0))
-					{
-						$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
-					} else
-					{
-						$p['message']=new ocp_tempcode();
-						if (!$p['message']->from_assembly($p['text_parsed'],true))
-							$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
-					}
+					$p['message']=get_translated_tempcode('f_posts',$p,'p_post',$GLOBALS['FORUM_DB']);
 				} else // Drat, we need to load it
 				{
 					$_p=$GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id'=>$_postdetails['p_parent_id']),'',1);
 					if (array_key_exists(0,$_p))
 					{
 						$p=$_p[0];
-						$p['message']=get_translated_tempcode($p['p_post'],$GLOBALS['FORUM_DB']);
+						$p['message']=get_translated_tempcode('f_posts',$p,'p_post',$GLOBALS['FORUM_DB']);
 					}
 				}
 				$temp=$_postdetails['message'];
@@ -599,7 +593,7 @@ function ocf_cache_member_details($members)
 	}
 	if ($member_or_list!='')
 	{
-		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.*,text_parsed AS signature FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON '.db_string_equal_to('language',user_lang()).' AND m.m_signature=t.id WHERE '.$member_or_list,NULL,NULL,false,true);
+		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.$member_or_list,NULL,NULL,false,true,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_member_custom_fields']:array());
 		global $TABLE_LANG_FIELDS_CACHE;
 		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,true,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_member_custom_fields']:array());
 		$member_rows_3=$GLOBALS['FORUM_DB']->query('SELECT gm_group_id,gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members WHERE gm_validated=1 AND ('.str_replace('m.id','gm_member_id',$member_or_list).')',NULL,NULL,false,true);
@@ -618,11 +612,9 @@ function ocf_cache_member_details($members)
 			}
 
 			// Signature
-			if ((get_page_name()!='search') && (!is_null($row['signature'])) && ($row['signature']!='') && ($row['m_signature']!=0))
+			if ((get_page_name()!='search') && (!is_null($row['m_signature'])) && ($row['m_signature']!=='') && ($row['m_signature']!==0))
 			{
-				$SIGNATURES_CACHE[$row['id']]=new ocp_tempcode();
-				if (!$SIGNATURES_CACHE[$row['id']]->from_assembly($row['signature'],true))
-					unset($SIGNATURES_CACHE[$row['id']]);
+				$SIGNATURES_CACHE[$row['id']]=get_translated_tempcode('f_members',$row,'m_signature');
 			}
 		}
 		foreach ($member_rows_2 as $row)

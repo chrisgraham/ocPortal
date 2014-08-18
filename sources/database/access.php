@@ -113,6 +113,8 @@ class Database_Static_access
 			'TIME'=>'integer',
 			'LONG_TRANS'=>'integer',
 			'SHORT_TRANS'=>'integer',
+			'LONG_TRANS__COMCODE'=>'integer',
+			'SHORT_TRANS__COMCODE'=>'integer',
 			'SHORT_TEXT'=>'text',
 			'LONG_TEXT'=>'longtext',
 			'ID_TEXT'=>'varchar(80)',
@@ -163,7 +165,15 @@ class Database_Static_access
 
 			$type=isset($type_remap[$type])?$type_remap[$type]:$type;
 
-			$_fields.="	  $name $type $perhaps_null,\n";
+			$_fields.='	  '.$name.' '.$type;
+			if (substr($name,-13)=='__text_parsed')
+			{
+				$_fields.=' DEFAULT \'\'';
+			} elseif (substr($name,-13)=='__source_user')
+			{
+				$_fields.=' DEFAULT '.strval(db_get_first_id());
+			}
+			$_fields.=' '.$perhaps_null.','."\n";
 		}
 
 		$query='CREATE TABLE '.$table_name.' (

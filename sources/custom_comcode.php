@@ -121,10 +121,8 @@ function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$exa
 	$_title=$old[0]['tag_title'];
 	$_description=$old[0]['tag_description'];
 
-	$GLOBALS['SITE_DB']->query_update('custom_comcode',array(
+	$map=array(
 		'tag_tag'=>$tag,
-		'tag_title'=>lang_remap($_title,$title),
-		'tag_description'=>lang_remap($_description,$description),
 		'tag_replace'=>$replace,
 		'tag_example'=>$example,
 		'tag_parameters'=>$parameters,
@@ -132,7 +130,10 @@ function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$exa
 		'tag_dangerous_tag'=>$dangerous_tag,
 		'tag_block_tag'=>$block_tag,
 		'tag_textual_tag'=>$textual_tag,
-	),array('tag_tag'=>$old_tag),'',1);
+	);
+	$map+=lang_remap('tag_title',$_title,$title);
+	$map+=lang_remap('tag_description',$_description,$description);
+	$GLOBALS['SITE_DB']->query_update('custom_comcode',$map,array('tag_tag'=>$old_tag),'',1);
 
 	log_it('EDIT_CUSTOM_COMCODE_TAG',$tag,$old_tag);
 

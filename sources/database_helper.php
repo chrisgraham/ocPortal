@@ -64,6 +64,8 @@ function _check_sizes($primary_key,$fields,$id_name,$skip_size_check=false,$skip
 					'TIME'=>4,
 					'LONG_TRANS'=>4,
 					'SHORT_TRANS'=>4,
+					'LONG_TRANS__COMCODE'=>255+1,
+					'SHORT_TRANS__COMCODE'=>255+1,
 					'SHORT_TEXT'=>$primary_key?(150):(255+1), /* We underestimate for primary key, as it is very unlikely to be very high and the limit only exists on our own 'xml' database driver as a run-time limit */
 					'LONG_TEXT'=>255+1,
 					'ID_TEXT'=>$primary_key?(16):(80+1), /* We underestimate for primary key, as it is very unlikely to be very high and the limit only exists on our own 'xml' database driver as a run-time limit */
@@ -207,15 +209,23 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 
 	$keywords=get_db_keywords();
 	if (in_array(strtoupper($index_name),$keywords)) fatal_exit($index_name.' is a keyword');
-	if ((preg_match('#^[\#\w]+$#',$index_name)==0) || (strlen($index_name)+7>DB_MAX_IDENTIFIER_SIZE)) fatal_exit('Inappropriate identifier: '.$index_name);
+	if (preg_match('#^[\#\w]+$#',$index_name)==0) fatal_exit('Inappropriate identifier: '.$index_name);
+	if (strlen($index_name)+7>DB_MAX_IDENTIFIER_SIZE) fatal_exit('Inappropriate identifier, too long: '.$index_name);
 
 	$_fields='';
 	foreach ($fields as $field)
 	{
 		if ($_fields!='') $_fields.=',';
 		$_fields.=$field;
+
+		if (!multi_lang_content())
+		{
+			global $TABLE_LANG_FIELDS;
+			if (isset($TABLE_LANG_FIELDS[$table_name][$field]))
+				$_fields.='(255)';
+		}
 	}
-	$this_ref->query_insert('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name,'i_fields'=>$_fields),false,true); // Allow errors because sometimes bugs when developing can call for this happening twice
+	$this_ref->query_insert('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name,'i_fields'=>implode(',',$fields)),false,true); // Allow errors because sometimes bugs when developing can call for this happening twice
 
 	if (count($this_ref->connection_write)>4) // Okay, we can't be lazy anymore
 	{
@@ -235,6 +245,7 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
  */
 function _helper_delete_index_if_exists($this_ref,$table_name,$index_name)
 {
+	$full_index_name=$index_name;
 	if (substr($index_name,0,1)=='#') $index_name=substr($index_name,1);
 	$query='DROP INDEX '.$index_name.' ON '.$this_ref->get_table_prefix().$table_name;
 	$this_ref->query($query,NULL,NULL,true);
@@ -245,7 +256,7 @@ function _helper_delete_index_if_exists($this_ref,$table_name,$index_name)
 		$GLOBALS['XML_CHAIN_DB']->_query($query,NULL,NULL,true);
 	}
 
-	$this_ref->query_delete('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name));
+	$this_ref->query_delete('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$full_index_name));
 }
 
 /**
@@ -258,13 +269,14 @@ function _helper_drop_table_if_exists($this_ref,$table)
 {
 	if (($table!='db_meta') && ($table!='db_meta_indices'))
 	{
-		if (function_exists('mass_delete_lang'))
+		if ((function_exists('mass_delete_lang')) && (multi_lang_content()))
 		{
 			$attrs=$this_ref->query_select('db_meta',array('m_name','m_type'),array('m_table'=>$table));
 			$_attrs=array();
 			foreach ($attrs as $attr)
 			{
-				if (in_array($attr['m_type'],array('SHORT_TRANS','LONG_TRANS'))) $_attrs[]=$attr['m_name'];
+				if (in_array(preg_replace('#[^\w]#','',$attr['m_type']),array('SHORT_TRANS','LONG_TRANS','SHORT_TRANS__COMCODE','LONG_TRANS__COMCODE')))
+					$_attrs[]=$attr['m_name'];
 			}
 			mass_delete_lang($table,$_attrs,$this_ref);
 		}
@@ -347,6 +359,11 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 				$default=NULL;
 				break;
 
+			case 'LONG_TRANS__COMCODE':
+			case 'SHORT_TRANS__COMCODE':
+				$default=multi_lang_content()?NULL:'';
+				break;
+
 			case 'SHORT_TEXT':
 			case 'LONG_TEXT':
 			case 'ID_TEXT':
@@ -360,6 +377,9 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 		}
 	}
 
+	$type_remap=$this_ref->static_ob->db_get_type_remap();
+
+	$final_type=$_type;
 	if (strpos($_type,'_TRANS')!==false)
 	{
 		if ((is_null($default)) && (strpos($_type,'?')===false))
@@ -367,50 +387,91 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 			$default='';
 		}
 
-		if (is_string($default))
+		if (multi_lang_content())
 		{
-			$default_st=$default;
-			$default=0;
+			if (is_string($default))
+			{
+				$default_st=$default;
+				$default=0;
+			}
+		} else
+		{
+			$final_type='LONG_TEXT'; // In the DB layer, it must now save as such
 		}
 	}
 
-	if ($_type[0]=='?')
+	if ($final_type[0]=='?')
 	{
-		$type=substr($_type,1);
+		$type=substr($final_type,1);
 		$tag=' NULL';
 	} else
 	{
 		$tag=' NOT NULL';
-		$type=$_type;
+		$type=$final_type;
 	}
-	$type_remap=$this_ref->static_ob->db_get_type_remap();
 	$extra='';
-	if (($_type!='LONG_TEXT') || (get_db_type()=='postgresql')) $extra=is_null($default)?'DEFAULT NULL':(' DEFAULT '.(is_string($default)?('\''.db_escape_string($default).'\''):strval($default)));
+	if (($final_type!='LONG_TEXT') || (get_db_type()=='postgresql')) $extra=is_null($default)?'DEFAULT NULL':(' DEFAULT '.(is_string($default)?('\''.db_escape_string($default).'\''):strval($default)));
 	$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$name.' '.$type_remap[$type].' '.$extra.' '.$tag;
 	$this_ref->_query($query);
 
 	if (isset($GLOBALS['XML_CHAIN_DB']))
 	{
 		// DB chaining: It's a write query, so needs doing on chained DB too
-		$type_remap=$GLOBALS['XML_CHAIN_DB']->static_ob->db_get_type_remap();
-		$extra='';
-		if ($_type!='LONG_TEXT') $extra=is_null($default)?'DEFAULT NULL':(' DEFAULT '.(is_string($default)?('\''.db_escape_string($default).'\''):strval($default)));
-		$query='ALTER TABLE '.$GLOBALS['XML_CHAIN_DB']->table_prefix.$table_name.' ADD '.$name.' '.$type_remap[$type].' '.$extra.' '.$tag;
 		$GLOBALS['XML_CHAIN_DB']->_query($query);
 	}
 
-	if (!is_null($default_st))
+	if (multi_lang_content())
 	{
-		$rows=$this_ref->_query('SELECT * FROM '.$this_ref->get_table_prefix().$table_name);
-		foreach ($rows as $row)
+		if (!is_null($default_st))
 		{
-			$lang=insert_lang($default_st,$lang_level);
-
-			$this_ref->query_update($table_name,array($name=>$lang),$row);
+			$start=0;
+			do
+			{
+				$rows=$this_ref->_query('SELECT * FROM '.$this_ref->get_table_prefix().$table_name,1000,$start);
+				foreach ($rows as $row)
+				{
+					$this_ref->query_update($table_name,insert_lang($name,$default_st,$lang_level),$row);
+				}
+				$start+=1000;
+			}
+			while (count($rows)>0);
 		}
 	}
 
 	$this_ref->query_insert('db_meta',array('m_table'=>$table_name,'m_name'=>$name,'m_type'=>$_type));
+	reload_lang_fields();
+
+	if (!multi_lang_content())
+	{
+		if (strpos($_type,'_TRANS')!==false)
+		{
+			$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
+		}
+	}
+
+	if ((!multi_lang_content()) && (strpos($_type,'__COMCODE')!==false))
+	{
+		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
+		{
+			$sub_name=$name.'__'.$sub_name;
+			$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$sub_name.' '.$type_remap[$sub_type];
+			if ($sub_name=='text_parsed')
+			{
+				$query.=' DEFAULT \'\'';
+			} elseif ($sub_name=='source_user')
+			{
+				$query.=' DEFAULT '.strval(db_get_first_id());
+			}
+			$query.=' NOT NULL';
+			$this_ref->_query($query);
+
+			if (isset($GLOBALS['XML_CHAIN_DB']))
+			{
+				// DB chaining: It's a write query, so needs doing on chained DB too
+				$GLOBALS['XML_CHAIN_DB']->_query($query);
+			}
+		}
+	}
 
 	if (function_exists('persistent_cache_delete'))
 		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
@@ -427,6 +488,33 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
  */
 function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=NULL)
 {
+	$type_remap=$this_ref->static_ob->db_get_type_remap();
+
+	if ((strpos($_type,'__COMCODE')!==false) && (!is_null($new_name)) && ($new_name!=$name))
+	{
+		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
+		{
+			$sub_name=$name.'__'.$sub_name;
+			$sub_new_name=$new_name.'__'.$sub_name;
+			$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' CHANGE '.$sub_name.' '.$sub_new_name.' '.$type_remap[$sub_type];
+			if ($sub_name=='text_parsed')
+			{
+				$query.=' DEFAULT \'\'';
+			} elseif ($sub_name=='source_user')
+			{
+				$query.=' DEFAULT '.strval(db_get_first_id());
+			}
+			$query.=' NOT NULL';
+			$this_ref->_query($query);
+
+			if (isset($GLOBALS['XML_CHAIN_DB']))
+			{
+				// DB chaining: It's a write query, so needs doing on chained DB too
+				$GLOBALS['XML_CHAIN_DB']->_query($query);
+			}
+		}
+	}
+
 	if ($_type[0]=='?')
 	{
 		$type=substr($_type,1);
@@ -436,7 +524,6 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 		$tag=' NOT NULL';
 		$type=$_type;
 	}
-	$type_remap=$this_ref->static_ob->db_get_type_remap();
 	$extra=(!is_null($new_name))?$new_name:$name;
 	$extra2='';
 	if (substr(get_db_type(),0,5)=='mysql') $extra2='IGNORE ';
@@ -446,8 +533,6 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 	if (isset($GLOBALS['XML_CHAIN_DB']))
 	{
 		// DB chaining: It's a write query, so needs doing on chained DB too
-		$type_remap=$GLOBALS['XML_CHAIN_DB']->static_ob->db_get_type_remap();
-		$query='ALTER '.$extra2.'TABLE '.$this_ref->table_prefix.$table_name.' CHANGE '.$name.' '.$extra.' '.$type_remap[$type].' '.$tag;
 		$GLOBALS['XML_CHAIN_DB']->_query($query);
 	}
 
@@ -491,17 +576,17 @@ function _helper_promote_text_field_to_comcode($this_ref,$table_name,$name,$key=
 {
 	$rows=$this_ref->query_select($table_name,array($name,$key));
 	$this_ref->delete_table_field($table_name,$name);
-	$this_ref->add_table_field($table_name,$name,'SHORT_TRANS');
+	$this_ref->add_table_field($table_name,$name,'SHORT_TRANS__COMCODE');
 	foreach ($rows as $row)
 	{
 		if ($in_assembly)
 		{
-			$turned=insert_lang('',$level,$this_ref,true,NULL,NULL,false,NULL,$row[$name]);
-			$this_ref->query_update($table_name,array($name=>$turned),array($key=>$row[$key]));
+			$map=insert_lang($name,'',$level,$this_ref,true,NULL,NULL,false,NULL,$row[$name]);
 		} else
 		{
-			$this_ref->query_update($table_name,array($name=>insert_lang($row[$name],$level,$this_ref)),array($key=>$row[$key]));
+			$map=insert_lang($name,$row[$name],$level,$this_ref);
 		}
+		$this_ref->query_update($table_name,$map,array($key=>$row[$key]));
 	}
 
 	if (function_exists('persistent_cache_delete'))
@@ -517,17 +602,39 @@ function _helper_promote_text_field_to_comcode($this_ref,$table_name,$name,$key=
  */
 function _helper_delete_table_field($this_ref,$table_name,$name)
 {
-	$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' DROP COLUMN '.$name;
-	$this_ref->_query($query);
+	$type=$this_ref->query_select_value_if_there('db_meta','m_type',array('m_table'=>$table_name,'m_name'=>$name));
+	if (is_null($type)) $type='SHORT_TEXT';
+
+	if ((strpos($type,'_TRANS')!==false) && (multi_lang_content()))
+	{
+		require_code('database_action');
+		mass_delete_lang($table_name,array($name),$this_ref);
+	}
+
+	$cols_to_delete=array($name);
+	if (strpos($type,'_TRANS__COMCODE')!==false)
+	{
+		if (!multi_lang_content())
+		{
+			$cols_to_delete[]=$name.'__text_parsed';
+			$cols_to_delete[]=$name.'__source_user';
+		}
+	}
+
+	foreach ($cols_to_delete as $col)
+	{
+		$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' DROP COLUMN '.$col;
+		$this_ref->_query($query);
+
+		if (isset($GLOBALS['XML_CHAIN_DB']))
+		{
+			// DB chaining: It's a write query, so needs doing on chained DB too
+			$GLOBALS['XML_CHAIN_DB']->_query($query);
+		}
+	}
 
 	$this_ref->query_delete('db_meta',array('m_table'=>$table_name,'m_name'=>$name));
 	$this_ref->query_delete('db_meta_indices',array('i_table'=>$table_name,'i_fields'=>$name));
-
-	if (isset($GLOBALS['XML_CHAIN_DB']))
-	{
-		// DB chaining: It's a write query, so needs doing on chained DB too
-		$GLOBALS['XML_CHAIN_DB']->_query($query);
-	}
 
 	if (function_exists('persistent_cache_delete'))
 		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');

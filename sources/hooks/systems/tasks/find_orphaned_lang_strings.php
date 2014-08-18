@@ -87,10 +87,10 @@ class Hook_task_find_orphaned_lang_strings
 				{
 					if (($fix) && (($id==0) || (!array_key_exists($id,$missing_lang_strings))))
 					{
-						$new_id=insert_lang('',2,NULL,false,$id);
-						if ($id!=$new_id)
+						$new_id=insert_lang($langidfield['m_name'],'',2,NULL,false,$id);
+						if ($id[$langidfield['m_name']]!=$new_id)
 						{
-							$GLOBALS['SITE_DB']->query_update($langidfield['m_table'],array($langidfield['m_name']=>$new_id),$of,'',1);
+							$GLOBALS['SITE_DB']->query_update($langidfield['m_table'],$new_id,$of,'',1);
 						}
 					}
 
@@ -104,12 +104,13 @@ class Hook_task_find_orphaned_lang_strings
 						$_of=$GLOBALS['SITE_DB']->query_select($langidfield['m_table'],array('*'),$of,'',1,NULL,false,array());
 						$of=$_of[0];
 						$of_orig=$of;
-						$of[$langidfield['m_name']]=insert_lang($looked_up,2);
+						$of=insert_lang($langidfield['m_name'],$looked_up,2)+$of;
 						$GLOBALS['SITE_DB']->query_update($langidfield['m_table'],$of,$of_orig,'',1);
 					}
 					$fused_lang_strings[$id]=$looked_up;
 				}
-				if ($langidfield['m_name']!='t_cache_first_post') $ids_seen_so_far[$id]=1;
+				if ($langidfield['m_name']!='t_cache_first_post') // 'if..!=' is for special exception for one that may be re-used in a cache position
+					$ids_seen_so_far[$id]=1;
 			}
 		}
 		$orphaned_lang_strings=array_diff(array_keys($all_ids),array_keys($ids_seen_so_far));

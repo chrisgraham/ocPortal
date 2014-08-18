@@ -205,7 +205,7 @@ class Module_sites
 		$hostingcopy_form=do_template('FORM',array('_GUID'=>'e9f51de85f7cf800aa3097366a03ca5e','HIDDEN'=>'','URL'=>$post_url,'FIELDS'=>$fields,'TEXT'=>do_lang_tempcode('OC_COPYWAIT'),'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name));
 
 		// Put together details about releases
-		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.description','name',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','name',array($GLOBALS['SITE_DB']->translate_field_ref('description')=>'This is the latest version.'));
 		if (!is_null($t))
 		{
 			$releases=new ocp_tempcode();
@@ -240,7 +240,7 @@ class Module_sites
 	 */
 	function do_release($name,$prefix,$version_must_be_newer_than=NULL)
 	{
-		$rows=$GLOBALS['SITE_DB']->query('SELECT d.description as d_description,d.id AS d_id,num_downloads,file_size,text_original FROM '.get_table_prefix().'download_downloads d USE INDEX(downloadauthor) LEFT JOIN '.get_table_prefix().'translate t ON d.name=t.id WHERE '.db_string_equal_to('author','ocProducts').' AND validated=1 AND t.text_original LIKE \''.db_encode_like('%'.$name).'\' ORDER BY add_date DESC',1);
+		$rows=$GLOBALS['SITE_DB']->query('SELECT d.*,d.id AS d_id FROM '.get_table_prefix().'download_downloads d USE INDEX(downloadauthor) WHERE '.db_string_equal_to('author','ocProducts').' AND validated=1 AND '.$GLOBALS['SITE_DB']->translate_field_ref('name').' LIKE \''.db_encode_like('%'.$name).'\' ORDER BY add_date DESC',1,NULL,false,false,array('name'=>'SHORT_TRANS'));
 		if (!array_key_exists(0,$rows)) return NULL; // Shouldn't happen, but let's avoid transitional errors
 
 		if (!is_null($version_must_be_newer_than))
@@ -267,7 +267,13 @@ class Module_sites
 			}
 		}
 
-		return array($prefix.'VERSION'=>$version,$prefix.'NAME'=>$name,$prefix.'FILESIZE'=>$filesize,$prefix.'NUM_DOWNLOADS'=>number_format($num_downloads),$prefix.'URL'=>$url);
+		$ret=array();
+		$ret[$prefix.'VERSION']=$version;
+		$ret[$prefix.'NAME']=$name;
+		$ret[$prefix.'FILESIZE']=$filesize;
+		$ret[$prefix.'NUM_DOWNLOADS']=number_format($num_downloads);
+		$ret[$prefix.'URL']=$url;
+		return $ret;
 	}
 
 	/**
@@ -284,7 +290,7 @@ class Module_sites
 		if ($directory[strlen($directory)-1]!='/') $directory.='/';
 
 		$list=new ocp_tempcode();
-		if (!@ftp_chdir($conn_id,$directory.'/'.$entry)) return $list; // Can't rely on ftp_nlist if not a directory
+		if (!@ftp_chdir($conn_id,$directory)) return $list; // Can't rely on ftp_nlist if not a directory
 		$contents=ftp_nlist($conn_id,$directory);
 		if ($contents===false) return $list;
 		$list->attach(form_input_list_entry($directory,($directory=='/public_html/') || ($directory=='/www/') || ($directory=='/httpdocs/') || ($directory=='/htdocs/')));
@@ -392,7 +398,7 @@ class Module_sites
 		}
 
 		// Find latest version
-		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads d LEFT JOIN '.get_table_prefix().'translate t ON t.id=d.description','url',array('text_original'=>'This is the latest version.'));
+		$t=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array($GLOBALS['SITE_DB']->translate_field_ref('description')=>'This is the latest version.'));
 		if (is_null($t)) warn_exit(do_lang_tempcode('ARCHIVE_NOT_AVAILABLE'));
 		if (url_is_local($t)) $t=get_custom_file_base().'/'.rawurldecode($t);
 

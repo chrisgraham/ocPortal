@@ -131,7 +131,7 @@ class Hook_search_wiki_posts
 		}
 
 		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'wiki_posts r',array('','r.the_message'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'wiki_page','page_id');
+		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'wiki_posts r',array(''=>'','r.the_message'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'wiki_page','page_id');
 
 		$out=array();
 		foreach ($rows as $i=>$row)

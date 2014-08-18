@@ -35,7 +35,7 @@ This notification hook was created using the classifieds notification hook as a 
 		if ($debug_mode!='0' && $debug_mode!='1' && $debug_mode!='2') $debug_mode='0';
 		if ($debug_mode=='2') 
 		{
-			$cron_interval=.01; // Sets interval to 36 seconds
+			$cron_interval=0.01; // Sets interval to 36 seconds
 			$debug=TRUE;
 		}
 		else 
@@ -99,16 +99,16 @@ This notification hook was created using the classifieds notification hook as a 
 			foreach ($downloads as $download)
 			{
 				// Do a query to get download names and generate links
-				$query='SELECT p.*,text_original FROM '.get_table_prefix().'download_downloads p LEFT JOIN '.get_table_prefix().'translate t ON t.id=p.name AND '.db_string_equal_to('language',$lang).' WHERE p.id='.$download['id'];
-				$the_download=$GLOBALS['SITE_DB']->query($query);
+				$the_download=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$download['id']),'',1);
 				$root=get_param_integer('root',db_get_first_id(),true);
 				$map=array('page'=>'downloads','type'=>'entry','id'=>$download['id'],'root'=>($root==db_get_first_id())?NULL:$root);
 				$the_download_url=static_evaluate_tempcode(build_url($map,$zone));
+				$name=get_translated_text($the_download[0]['name']);
 
 				if ($debug) echo "downloads_followup_email: download query = $query \n";
-				if ($debug) echo "downloads_followup_email: download name / download filename / download url = ".$the_download[0]['text_original']." / ".$the_download[0]['original_filename']." / $the_download_url \n";
+				if ($debug) echo "downloads_followup_email: download name / download filename / download url = ".$name." / ".$the_download[0]['original_filename']." / $the_download_url \n";
 
-				$download_list->attach(do_template($download_list_template,array('DOWNLOAD_NAME'=>$the_download[0]['text_original'],'DOWNLOAD_FILENAME'=>$the_download[0]['original_filename'],'DOWNLOAD_URL'=>$the_download_url )));
+				$download_list->attach(do_template($download_list_template,array('DOWNLOAD_NAME'=>$name,'DOWNLOAD_FILENAME'=>$the_download[0]['original_filename'],'DOWNLOAD_URL'=>$the_download_url )));
 				$count++;
 			}
 			$s=''; // Can be used to pluralise the word download in the subject line in the language .ini file if we have more than one download (better than using download(s))

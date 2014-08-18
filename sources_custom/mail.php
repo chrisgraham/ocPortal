@@ -270,6 +270,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			{
 				$myfile=ocp_tempnam('email_attachment');
 				http_download_file($img,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$myfile);
+				if (filesize($myfile)==0) continue;
 				if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) $mime_type=$GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
 				if (!is_null($GLOBALS['HTTP_FILENAME'])) $filename=$GLOBALS['HTTP_FILENAME'];
 			}
