@@ -438,24 +438,13 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 {
 	$topic=array();
 
-	if (multi_lang_content())
+	if (!is_null($topic_row['t_cache_first_post']))
 	{
-		if (!is_null($topic_row['t_cache_first_post']))
-		{
-			$topic['first_post']=get_translated_tempcode('f_posts',$topic_row,'t_cache_first_post',$GLOBALS['FORUM_DB']);
-		} else
-		{
-			$topic['first_post']=new ocp_tempcode();
-		}
+		$post_row=db_map_restrict($topic_row,array('p_post'))+array('id'=>$topic_row['p_cache_first_post_id']);
+		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 	} else
 	{
-		$post_row=array(
-			'id'=>$topic_row['id'],
-			'p_post'=>$topic_row['p_post'],
-			'p_post__text_parsed'=>$topic_row['p_post__text_parsed'],
-			'p_post__source_user'=>$topic_row['p_post__source_user'],
-		);
-		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+		$topic['first_post']=new ocp_tempcode();
 	}
 
 	$topic['id']=$topic_row['id'];
@@ -705,7 +694,7 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 		if (count($subforum_rows)==$max_forum_inspect) $subforum_rows=array(); // Will cause performance breakage
 	} else
 	{
-		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 	}
 	$unread_forums=array();
 	if ((!is_null($forum_id)) && (get_member()!=$GLOBALS['OCF_DRIVER']->get_guest_id()))
@@ -904,7 +893,7 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 		$topics[]=ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,in_array($topic_row['id'],$involved));
 	}
 
-	$description=get_translated_tempcode('f_forums',$forum_info['f_description'],$GLOBALS['FORUM_DB']);
+	$description=get_translated_tempcode('f_forums',$forum_info,'f_description',$GLOBALS['FORUM_DB']);
 	$out=array(
 		'name'=>$forum_info['f_name'],
 		'description'=>$description,
@@ -916,7 +905,7 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 	);
 
 	// Is there a question/answer situation?
-	$question=get_translated_tempcode('f_forums',$forum_info['f_intro_question'],$GLOBALS['FORUM_DB']);
+	$question=get_translated_tempcode('f_forums',$forum_info,'f_intro_question',$GLOBALS['FORUM_DB']);
 	if (!$question->is_empty())
 	{
 		$is_guest=($member_id==$GLOBALS['OCF_DRIVER']->get_guest_id());

@@ -195,6 +195,8 @@ class Block_main_gallery_embed
 		{
 			if ($i>=$start)
 			{
+				$just_media_row=db_map_restrict($c[0],array('id','description'));
+
 				switch ($c[1])
 				{
 					case 'image':
@@ -223,7 +225,7 @@ class Block_main_gallery_embed
 							'_GUID'=>($guid!='')?$guid:'043ac7d15ce02715ac02309f6e8340ff',
 							'RATING_DETAILS'=>$entry_rating_details,
 							'TITLE'=>$entry_title,
-							'DESCRIPTION'=>get_translated_tempcode('images',$row_image,'description'),
+							'DESCRIPTION'=>get_translated_tempcode('images',$just_media_row,'description'),
 							'ID'=>strval($row_image['id']),
 							'MEDIA_TYPE'=>'image',
 							'FILE_SIZE'=>$file_size,
@@ -271,7 +273,7 @@ class Block_main_gallery_embed
 							'_GUID'=>($guid!='')?$guid:'66b7fb4d3b61ef79d6803c170d102cbf',
 							'RATING_DETAILS'=>$entry_rating_details,
 							'TITLE'=>$entry_title,
-							'DESCRIPTION'=>get_translated_tempcode('videos',$row_video,'description'),
+							'DESCRIPTION'=>get_translated_tempcode('videos',$just_media_row,'description'),
 							'ID'=>strval($row_video['id']),
 							'MEDIA_TYPE'=>'video',
 							'CAT'=>$cat,

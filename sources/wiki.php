@@ -37,6 +37,8 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
 {
 	require_lang('wiki');
 
+	$just_wiki_post_row=db_map_restrict($row,array('id','the_message'));
+
 	$map=array('page'=>'wiki','type'=>'misc','id'=>$row['page_id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;
 	$url=build_url($map,$zone);
@@ -59,7 +61,7 @@ function render_wiki_post_box($row,$zone='_SEARCH',$give_context=true,$include_b
 		'ID'=>strval($row['id']),
 		'TITLE'=>$title,
 		'BREADCRUMBS'=>$breadcrumbs,
-		'SUMMARY'=>get_translated_tempcode('wiki_posts',$row,'the_message'),
+		'SUMMARY'=>get_translated_tempcode('wiki_posts',$just_wiki_post_row,'the_message'),
 		'URL'=>$url,
 	));
 }
@@ -79,7 +81,9 @@ function render_wiki_page_box($row,$zone='_SEARCH',$give_context=true,$include_b
 {
 	require_lang('wiki');
 
-	$content=get_translated_tempcode('wiki_pages',$row,'description');
+	$just_wiki_page_row=db_map_restrict($row,array('id','description'));
+
+	$content=get_translated_tempcode('wiki_pages',$just_wiki_page_row,'description');
 
 	$map=array('page'=>'wiki','type'=>'misc','id'=>$row['id']);
 	if (!is_null($root)) $map['keep_forum_root']=$root;

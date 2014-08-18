@@ -616,7 +616,7 @@ class Hook_wowbb
 				if (!is_null($post_id))
 				{
 					$post_id=import_id_remap_get('post',$post_id);
-					$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts p',array('p_time','p_poster','p_post'),array('p.id'=>$post_id),'',1);
+					$post_row=$GLOBALS['FORUM_DB']->query_select('f_posts',array('p_time','p_poster','p_post'),array('id'=>$post_id),'',1);
 				}
 				if (!array_key_exists(0,$post_row))
 				{

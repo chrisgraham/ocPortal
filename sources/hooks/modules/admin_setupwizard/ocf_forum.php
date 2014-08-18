@@ -110,8 +110,8 @@ class Hook_sw_ocf_forum
 		{
 			if (post_param_integer('have_default_rank_set',0)==0)
 			{
-				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('f_groups','id',array('id'=>db_get_first_id()+8));
-				if (!is_null($test))
+				$group_rows=$GLOBALS['SITE_DB']->query_select('f_groups','id',array('id'=>db_get_first_id()+8));
+				if (array_key_exists(0,$group_rows))
 				{
 					$promotion_target=ocf_get_group_property(db_get_first_id()+8,'promotion_target');
 					if (!is_null($promotion_target))
@@ -124,9 +124,7 @@ class Hook_sw_ocf_forum
 							ocf_delete_group($i);
 						}
 					}
-					$_name=ocf_get_group_property(db_get_first_id()+8,'name');
-					if (is_integer($_name))
-						$GLOBALS['SITE_DB']->query_update('f_groups',lang_remap($_name,do_lang('MEMBER')),array('id'=>db_get_first_id()+8),'',1);
+					$GLOBALS['SITE_DB']->query_update('f_groups',lang_remap($group_rows[0],'g_name',do_lang('MEMBER')),array('id'=>db_get_first_id()+8),'',1);
 				}
 			}
 			if (post_param_integer('have_default_full_emoticon_set',0)==0)

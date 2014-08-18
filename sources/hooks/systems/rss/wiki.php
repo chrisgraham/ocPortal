@@ -57,7 +57,7 @@ class Hook_rss_wiki
 			$edit_date='';
 
 			$news_title=xmlentities(escape_html(get_translated_text($row['title'])));
-			$_summary=get_translated_tempcode('seedy_pages'/*TODO: Change in v10*/,$row,'description');
+			$_summary=get_translated_tempcode('wiki_pages',$row,'description');
 			$summary=xmlentities($_summary->evaluate());
 			$news='';
 

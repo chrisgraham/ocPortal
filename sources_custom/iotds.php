@@ -40,8 +40,10 @@ function render_iotd_box($myrow,$zone='_SEARCH',$include_manage_links=false,$giv
 		$edit_url=mixed();
 	}
 
-	$i_title=get_translated_tempcode('iotd',$myrow,'i_title');
-	$caption=get_translated_tempcode('iotd',$myrow,'caption');
+	$just_iotd_row=db_map_restrict($myrow,array('id','i_title','caption'));
+
+	$i_title=get_translated_tempcode('iotd',$just_iotd_row,'i_title');
+	$caption=get_translated_tempcode('iotd',$just_iotd_row,'caption');
 	$date=get_timezoned_date($myrow['date_and_time']);
 
 	$submitter=$myrow['submitter'];

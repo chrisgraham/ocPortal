@@ -71,7 +71,7 @@ class Hook_choose_download
 
 				foreach ($t['entries'] as $eid=>$etitle)
 				{
-					$row=$GLOBALS['SITE_DB']->query_select('download_downloads',array('description','original_filename'),array('id'=>$eid),'',1);
+					$row=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$eid),'',1);
 
 					if ($file_type!='')
 					{

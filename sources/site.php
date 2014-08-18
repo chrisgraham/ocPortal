@@ -1556,15 +1556,8 @@ function load_comcode_page($string,$zone,$codename,$file_base=NULL,$being_includ
 				if ((!$support_smart_decaching) || ((($comcode_page[0]['p_edit_date']!==NULL) && ($comcode_page[0]['p_edit_date']>=$mtime)) || (($comcode_page[0]['p_edit_date']===NULL) && ($comcode_page[0]['p_add_date']!==NULL) && ($comcode_page[0]['p_add_date']>=$mtime)))) // Make sure it has not been edited since last edited or created
 				{
 					$comcode_page_row=$comcode_page[0];
-					$comcode_page_row_cached_only=array(
-						'the_zone'=>$comcode_page_row['the_zone'],
-						'the_page'=>$comcode_page_row['the_page'],
-						'the_theme'=>$comcode_page_row['the_theme'],
-						'string_index'=>$comcode_page_row['string_index'],
-						'string_index__text_parsed'=>$comcode_page_row['string_index__text_parsed'],
-						'string_index__source_user'=>$comcode_page_row['string_index__source_user'],
-					);
-					$db_set=get_translated_tempcode('cached_comcode_pages',$comcode_page_row_cached_only,'string_index',NULL,user_lang(),true,true/*,true*/);
+					$just_comcode_page_row=db_map_restrict($myrow,array('the_page','the_zone','the_theme','string_index'));
+					$db_set=get_translated_tempcode('cached_comcode_pages',$just_comcode_page_row,'string_index',NULL,user_lang(),true,true/*,true*/);
 				} else
 				{
 					$mtime=filemtime($file_base.'/'.$string);

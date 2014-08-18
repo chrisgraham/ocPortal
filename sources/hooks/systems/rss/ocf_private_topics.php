@@ -56,15 +56,7 @@ class Hook_rss_ocf_private_topics
 			if ($edit_date==$news_date) $edit_date='';
 
 			$news_title=xmlentities($row['t_cache_first_title']);
-			$post_row=array(
-				'id'=>$row['p_cache_first_post_id'],
-				'p_post'=>$row['p_post'],
-			);
-			if (!multi_lang_content())
-			{
-				$post_row['p_post__text_parsed']=$row['p_post__text_parsed'];
-				$post_row['p_post__source_user']=$row['p_post__source_user'];
-			}
+			$post_row=db_map_restrict($row,array('p_post'))+array('id'=>$row['p_cache_first_post_id']);
 			$_summary=get_translated_tempcode('f_posts',$post_row,'p_post');
 			$summary=xmlentities($_summary->evaluate());
 			$news='';

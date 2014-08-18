@@ -704,17 +704,7 @@ class Module_topicview
 			$more_url=build_url($map,get_module_zone('topics'));
 			if (isset($topic_info['first_post']))
 			{
-				$post_row=array(
-					'id'=>$topic_info['row']['id'],
-					'p_post'=>$topic_info['row']['p_post'],
-				);
-				if (!multi_lang_content())
-				{
-					$post_row+=array(
-						'p_post__text_parsed'=>$topic_info['row']['p_post__text_parsed'],
-						'p_post__source_user'=>$topic_info['row']['p_post__source_user'],
-					);
-				}
+				$post_row=db_map_restrict($topic_info['row'],array('id','p_post'));
 				$_postdetails=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 			} else
 			{

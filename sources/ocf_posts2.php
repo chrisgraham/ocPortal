@@ -34,6 +34,8 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	require_lang('ocf');
 	require_css('ocf');
 
+	$just_post_row=db_map_restrict($row,array('id','p_post'));
+
 	require_code('ocf_groups');
 	require_code('ocf_forums');
 
@@ -156,7 +158,7 @@ function render_post_box($row,$use_post_title=false,$give_context=true,$include_
 	if (!is_null($root)) $map['keep_forum_root']=$root;
 	$post_url=build_url($map,get_module_zone('topicview'));
 	$post_url->attach('#post_'.strval($row['id']));
-	$post=get_translated_tempcode('f_posts',$row,'p_post',$GLOBALS['FORUM_DB']);
+	$post=get_translated_tempcode('f_posts',$just_post_row,'p_post',$GLOBALS['FORUM_DB']);
 	$post_date=get_timezoned_date($row['p_time']);
 	$post_date_raw=$row['p_time'];
 	if ($use_post_title)

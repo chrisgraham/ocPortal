@@ -33,6 +33,8 @@ function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=f
 {
 	require_lang('polls');
 
+	$just_poll_row=db_map_restrict($myrow,array('id','question','option1','option2','option3','option4','option5','option6','option7','option8','option9','option10'));
+
 	$ip=get_ip_address();
 	if (!may_vote_in_poll($myrow['id'],get_member(),get_ip_address())) $results=true;
 
@@ -61,7 +63,7 @@ function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=f
 	$tpl=new ocp_tempcode();
 	for ($i=1;$i<=$num_options;$i++)
 	{
-		$answer=get_translated_tempcode('poll',$myrow,'option'.strval($i));
+		$answer=get_translated_tempcode('poll',$just_poll_row,'option'.strval($i));
 		$answer_plain=get_translated_text($myrow['option'.strval($i)]);
 		if (!$results)
 		{
@@ -90,7 +92,7 @@ function render_poll_box($results,$myrow,$zone='_SEARCH',$include_manage_links=f
 	}
 
 	// Do our final template
-	$question=get_translated_tempcode('poll',$myrow,'question');
+	$question=get_translated_tempcode('poll',$just_poll_row,'question');
 	$question_plain=get_translated_text($myrow['question']);
 	$full_url=new ocp_tempcode();
 	if ((get_page_name()!='polls') || (get_param('type','')!='view'))

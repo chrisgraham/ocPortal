@@ -98,7 +98,7 @@ class Module_forumview
 		{
 			$id=get_param_integer('id',db_get_first_id());
 
-			$_forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('f.id'=>$id),'',1,NULL,false,array('f_description','f_intro_question'));
+			$_forum_info=$GLOBALS['FORUM_DB']->query_select('f_forums',array('f_redirection','f_intro_question','f_intro_answer','f_order_sub_alpha','f_parent_forum','f_name','f_description','f_order'),array('id'=>$id),'',1,NULL,false,array('f_description','f_intro_question'));
 			if (!array_key_exists(0,$_forum_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 			$forum_info=$_forum_info[0];
 

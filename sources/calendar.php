@@ -46,12 +46,14 @@ function render_event_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	require_css('calendar');
 	require_lang('calendar');
 
+	$just_event_row=db_map_restrict($myrow,array('id','e_content'));
+
 	$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),$zone);
 
 	return do_template('CALENDAR_EVENT_BOX',array(
 		'_GUID'=>($guid!='')?$guid:'0eaa10d9fab32599ff095e1121d41c43',
 		'TITLE'=>get_translated_text($row['e_title']),
-		'SUMMARY'=>get_translated_tempcode('calendar_events',$row,'e_content'),
+		'SUMMARY'=>get_translated_tempcode('calendar_events',$just_event_row,'e_content'),
 		'URL'=>$url,
 		'GIVE_CONTEXT'=>$give_context,
 	));

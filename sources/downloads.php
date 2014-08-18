@@ -66,10 +66,12 @@ function render_download_box($row,$pic=true,$include_breadcrumbs=true,$zone=NULL
 
 	if (is_null($zone)) $zone=get_module_zone('downloads');
 
+	$just_download_row=db_map_restrict($row,array('id','description'));
+
 	// Details
 	$filesize=$row['file_size'];
 	$filesize=($filesize>0)?clean_file_size($filesize):do_lang('UNKNOWN');
-	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode('download_downloads',$row,'description');
+	$description=is_string($row['description'])?comcode_to_tempcode($row['description']):get_translated_tempcode('download_downloads',$just_download_row,'description');
 	if (array_key_exists('id',$row))
 	{
 		$map=array('page'=>'downloads','type'=>'entry','id'=>$row['id']);
@@ -191,7 +193,9 @@ function render_download_category_box($row,$zone='_SEARCH',$give_context=true,$i
 		$breadcrumbs=download_breadcrumbs($row['parent_id'],is_null($root)?get_param_integer('keep_download_root',NULL):$root,false,$zone,$attach_to_url_filter);
 	}
 
-	$summary=get_translated_tempcode('download_downloads',$row,'description');
+	$just_download_category_row=db_map_restrict($row,array('id','description'));
+
+	$summary=get_translated_tempcode('download_downloads',$just_download_category_row,'description');
 
 	$child_counts=count_download_category_children($row['id']);
 	$num_children=$child_counts['num_children_children'];

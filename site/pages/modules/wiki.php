@@ -474,7 +474,7 @@ class Module_wiki
 		}
 
 		// Description
-		$description=get_translated_tempcode('seedy_pages'/*TODO: Change in v10*/,$page,'description');
+		$description=get_translated_tempcode('wiki_pages',$page,'description');
 		$description_comcode=get_translated_text($page['description']);
 
 		// Children Links
@@ -896,7 +896,7 @@ class Module_wiki
 
 			// If we are editing, we need to retrieve the message
 			$message=get_translated_text($myrow['the_message']);
-			$parsed=get_translated_tempcode('seedy_posts'/*TODO: Change in v10*/,$myrow,'the_message');
+			$parsed=get_translated_tempcode('wiki_posts',$myrow,'the_message');
 
 			require_code('content2');
 			$specialisation->attach(meta_data_get_fields('wiki_post',strval($post_id)));

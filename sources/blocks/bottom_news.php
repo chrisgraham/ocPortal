@@ -119,7 +119,8 @@ class Block_bottom_news
 				if ($blogs===1) $url_map['blog']=1;
 				$full_url=build_url($url_map,$zone);
 
-				$_title=get_translated_tempcode('news',$item,'title');
+				$just_news_row=db_map_restrict($item,array('id','title','news','news_article'));
+				$_title=get_translated_tempcode('news',$just_news_row,'title');
 				$date=get_timezoned_date($item['date_and_time'],false);
 
 				$_postdetailss[]=array('DATE'=>$date,'FULL_URL'=>$full_url,'NEWS_TITLE'=>$_title);

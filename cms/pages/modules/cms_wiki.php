@@ -377,7 +377,7 @@ class Module_cms_wiki
 
 		$page_title=get_translated_text($page['title']);
 		$description=get_translated_text($page['description']);
-		$_description=get_translated_tempcode('cedi_pages'/*TODO: Change in v10*/,$page,'description');
+		$_description=get_translated_tempcode('wiki_pages',$page,'description');
 
 		$redir_url=get_param('redirect',NULL);
 		if (is_null($redir_url))

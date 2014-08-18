@@ -33,9 +33,11 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false,$g
 	require_lang('news');
 	require_css('news');
 
+	$just_news_row=db_map_restrict($row,array('id','title','news','news_article'));
+
 	$url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),$zone);
 
-	$title=get_translated_tempcode('news',$row,'title');
+	$title=get_translated_tempcode('news',$just_news_row,'title');
 	$title_plain=get_translated_text($row['title']);
 
 	global $NEWS_CATS_CACHE;
@@ -64,10 +66,10 @@ function render_news_box($row,$zone='_SEARCH',$give_context=true,$brief=false,$g
 		$img=$img_raw;
 	}
 
-	$news=get_translated_tempcode('news',$row,'news');
+	$news=get_translated_tempcode('news',$just_news_row,'news');
 	if ($news->is_empty())
 	{
-		$news=get_translated_tempcode('news',$row,'news_article');
+		$news=get_translated_tempcode('news',$just_news_row,'news_article');
 		$truncate=true;
 	} else $truncate=false;
 

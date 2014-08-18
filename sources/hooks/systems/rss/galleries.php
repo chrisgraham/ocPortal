@@ -89,10 +89,7 @@ class Hook_rss_galleries
 			{
 				$news_title=xmlentities(do_lang('THIS_WITH_SIMPLE',(($row['type']=='video')?do_lang('VIDEO'):do_lang('IMAGE')),strval($row['id'])));
 			}
-			$just_row=array(
-				'id'=>$row['id'],
-				'description'=>$row['description'],
-			);
+			$just_row=db_map_restrict($row,array('id','description'));
 			$_summary=get_translated_tempcode($row['type'].'s',$just_row,'description');
 			$summary=xmlentities($_summary->evaluate());
 			$news='';

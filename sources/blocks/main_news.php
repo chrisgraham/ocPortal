@@ -221,12 +221,7 @@ class Block_main_news
 		{
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
-				$just_news_row=array(
-					'id'=>$row['id'],
-					'title'=>$row['title'],
-					'news'=>$row['news'],
-					'news_article'=>$row['news_article'],
-				);
+				$just_news_row=db_map_restrict($myrow,array('id','title','news','news_article'));
 
 				// Basic details
 				$id=$myrow['p_id'];
@@ -325,12 +320,7 @@ class Block_main_news
 		{
 			if (has_category_access(get_member(),'news',strval($myrow['news_category'])))
 			{
-				$just_news_row=array(
-					'id'=>$row['id'],
-					'title'=>$row['title'],
-					'news'=>$row['news'],
-					'news_article'=>$row['news_article'],
-				);
+				$just_news_row=db_map_restrict($myrow,array('id','title','news','news_article'));
 
 				// Basic details
 				$date=get_timezoned_date($myrow['date_and_time']);

@@ -122,6 +122,8 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 {
 	require_lang('catalogues');
 
+	$just_category_row=db_map_restrict($row,array('id','cc_description'));
+
 	// URL
 	$map=array('page'=>'catalogues','type'=>'category','id'=>$row['id']);
 	if ($root!==NULL) $map['keep_catalogue_'.$row['c_name'].'_root']=$root;
@@ -138,7 +140,7 @@ function render_catalogue_category_box($row,$zone='_SEARCH',$give_context=true,$
 	}
 
 	// Description
-	$content=get_translated_tempcode('catalogue_categories',$row,'cc_description');
+	$content=get_translated_tempcode('catalogue_categories',$just_category_row,'cc_description');
 
 	// Breadcrumbs
 	$breadcrumbs=mixed();
@@ -193,6 +195,8 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	require_lang('catalogues');
 
+	$just_catalogue_row=db_map_restrict($row,array('c_name','c_description'));
+
 	if ($row['c_is_tree'])
 	{
 		$url=build_url(array('page'=>'catalogues','type'=>'category','catalogue_name'=>$row['c_name']),$zone);
@@ -204,7 +208,7 @@ function render_catalogue_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	$_title=get_translated_text($row['c_title']);
 	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('CATALOGUE'),$_title):$_title;
 
-	$summary=get_translated_tempcode('catalogues',$row,'c_description');
+	$summary=get_translated_tempcode('catalogues',$just_catalogue_row,'c_description');
 
 	$num_children=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name'=>$row['c_name']));
 	$num_entries=$GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)',array('c_name'=>$row['c_name']));

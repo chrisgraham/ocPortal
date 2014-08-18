@@ -51,7 +51,7 @@ function render_comcode_page_box($row,$give_context=true,$include_breadcrumbs=tr
 		request_page($row['the_page'],false,$row['the_zone'],NULL,true);
 	}
 
-	$row2=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('cc_page_title','string_index'),array('the_zone'=>$row['the_zone'],'the_page'=>$row['the_page']),'',1);
+	$row2=$GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('*'),array('the_zone'=>$row['the_zone'],'the_page'=>$row['the_page']),'',1);
 	if (array_key_exists(0,$row2))
 	{
 		$cc_page_title=get_translated_text($row2[0]['cc_page_title'],NULL,NULL,true);

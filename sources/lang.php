@@ -656,7 +656,7 @@ function lang_code_to_default_content($field_name,$code,$comcode=false,$level=2)
 			if ($lang!=user_lang())
 			{
 				if (is_file(get_file_base().'/'.$lang_type.'/'.$lang.'/critical_error.ini')) // Make sure it's a reasonable looking pack, not just a stub (Google Translate addon can be made to go nuts otherwise)
-					insert_lang($field_name,do_lang($code,'','','',$lang),$level,NULL,true,$lang_key,$lang);
+					insert_lang($field_name,do_lang($code,'','','',$lang),$level,NULL,true,$insert_map[$field_name],$lang);
 			}
 		}
 	}

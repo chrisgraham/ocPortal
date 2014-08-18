@@ -70,8 +70,10 @@ class Hook_rss_calendar
 			// The edit date'll be the latest of add/edit
 			$edit_date=is_null($row['e_edit_date'])?date($date_string,$row['e_add_date']):date($date_string,$row['e_edit_date']);
 
+			$just_event_row=db_map_restrict($row,array('id','e_content'));
+
 			$news_title=xmlentities(escape_html(get_translated_text($row['e_title'])));
-			$_summary=get_translated_tempcode('calendar_events',$row,'e_content');
+			$_summary=get_translated_tempcode('calendar_events',$just_event_row,'e_content');
 			$summary=xmlentities($_summary->evaluate());
 			$news='';
 

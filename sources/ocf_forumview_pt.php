@@ -99,15 +99,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 			$topic['first_post']=new ocp_tempcode();
 		} else
 		{
-			$post_row=array(
-				'id'=>$row['p_cache_first_post_id'],
-				'p_post'=>$row['p_post'],
-			);
-			if (!multi_lang_content())
-			{
-				$post_row['p_post__text_parsed']=$row['p_post__text_parsed'];
-				$post_row['p_post__source_user']=$row['p_post__source_user'];
-			}
+			$post_row=db_map_restrict($topic_row,array('p_post'))+array('id'=>$topic_row['p_cache_first_post_id']);
 			$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 		}
 		$topic['first_post']->singular_bind('ATTACHMENT_DOWNLOADS',make_string_tempcode('?'));

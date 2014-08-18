@@ -167,6 +167,8 @@ function generate_notifications($member_id)
 		$num_unread_pps=0;
 		foreach ($unread_pps as $unread_pp)
 		{
+			$just_post_row=db_map_restrict($unread_pp,array('id','p_post'));
+
 			$by_id=(is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id'];
 			$by=is_guest($by_id)?do_lang('SYSTEM'):$GLOBALS['OCF_DRIVER']->get_username($by_id);
 			if (is_null($by)) $by=do_lang('UNKNOWN');
@@ -189,7 +191,7 @@ function generate_notifications($member_id)
 			$time_raw=$unread_pp['p_time'];
 			$time=get_timezoned_date($unread_pp['p_time']);
 			$topic_url=$GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'],NULL,true);
-			$post=get_translated_tempcode('f_posts',$unread_pp,'p_post',$GLOBALS['FORUM_DB']);
+			$post=get_translated_tempcode('f_posts',$just_post_row,'p_post',$GLOBALS['FORUM_DB']);
 			$description=$unread_pp['t_description'];
 			if ($description!='') $description=' ('.$description.')';
 			$profile_link=is_guest($by_id)?new ocp_tempcode():$GLOBALS['OCF_DRIVER']->member_profile_url($by_id,false,true);
