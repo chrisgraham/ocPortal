@@ -212,7 +212,7 @@ class Hook_pointstore_permission
 					'p_category'=>$category,
 				);
 				$map+=lang_remap('p_title',$_title,$title);
-				$map+=lang_remap('p_description',$_description,$description);
+				$map+=lang_remap_comcode('p_description',$_description,$description);
 				$map+=lang_remap('p_mail_subject',$_mail_subject,$mail_subject);
 				$map+=lang_remap('p_mail_body',$_mail_body,$mail_body);
 				$GLOBALS['SITE_DB']->query_update('pstore_permissions',$map,array('id'=>$id),'',1);

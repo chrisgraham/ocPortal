@@ -960,17 +960,14 @@ function get_catalogue_entry_map($entry,$catalogue,$view_type,$tpl_set,$root=NUL
 				$map['FIELD_'.$str_i.'_PLAIN']=$ev;
 			}
 			$map['_FIELD_'.$str_id.'_PLAIN']=&$map['FIELD_'.$str_i.'_PLAIN'];
-			if (isset($field['effective_value_pure']))
+			if ($ev===$field['effective_value_pure'])
 			{
-				if ($ev===$field['effective_value_pure'])
-				{
-					$map['FIELD_'.$str_i.'_PURE']=&$map['FIELD_'.$str_i.'_PLAIN'];
-				} else
-				{
-					$map['FIELD_'.$str_i.'_PURE']=$field['effective_value_pure'];
-				}
-				$map['_FIELD_'.$str_id.'_PURE']=&$map['FIELD_'.$str_i.'_PURE'];
+				$map['FIELD_'.$str_i.'_PURE']=&$map['FIELD_'.$str_i.'_PLAIN'];
+			} else
+			{
+				$map['FIELD_'.$str_i.'_PURE']=$field['effective_value_pure'];
 			}
+			$map['_FIELD_'.$str_id.'_PURE']=&$map['FIELD_'.$str_i.'_PURE'];
 
 			if (($field['cf_visible']==1) || ($i==0))
 			{
@@ -1183,54 +1180,86 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
 
 		if (($only_fields!==NULL) && (!isset($only_fields[$i]))) continue;
 
-		$ob=get_fields_hook($field['cf_type']);
-		list($raw_type,,$type)=$ob->get_field_value_row_bits($field);
-		if ($raw_type===NULL) $raw_type=$field['cf_type'];
-
-		switch ($raw_type)
-		{
-			case 'short_trans':
-			case 'long_trans':
-				$fields[$i]['effective_value_nontrans']=_get_catalogue_entry_field($field_id,$entry_id,$type,$only_field_ids);
-				if ($fields[$i]['effective_value_nontrans']===NULL) // Should not be possible
-				{
-					$fields[$i]['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
-					$fields[$i]['effective_value_pure']=do_lang('INTERNAL_ERROR');
-					break;
-				}
-				$l_id=intval($fields[$i]['effective_value_nontrans']);
-				$fields[$i]['effective_value']=get_translated_tempcode($l_id);
-				$fields[$i]['effective_value_pure']=get_translated_text($l_id);
-				break;
-			case 'long_text':
-			case 'short_text':
-			case 'long_unescaped':
-			case 'short_unescaped':
-				$fields[$i]['effective_value_pure']=_get_catalogue_entry_field($field_id,$entry_id,$type,$only_field_ids);
-				$fields[$i]['effective_value']=$fields[$i]['effective_value_pure'];
-				if ($fields[$i]['effective_value']===NULL) // Should not be possible
-				{
-					$fields[$i]['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
-					$fields[$i]['effective_value_pure']=do_lang('INTERNAL_ERROR');
-					break;
-				}
-				break;
-			case 'float_unescaped':
-			case 'integer_unescaped':
-				$fields[$i]['effective_value']=_get_catalogue_entry_field($field_id,$entry_id,$type,$only_field_ids);
-				if ($fields[$i]['effective_value']===NULL) // Really is NULL
-				{
-					$fields[$i]['effective_value']=do_lang_tempcode('NA_EM');
-					$fields[$i]['effective_value_pure']=do_lang('NA');
-					break;
-				}
-				break;
-			default:
-				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		}
+		_resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,$fields[$i]);
 	}
 
 	return $fields;
+}
+
+/**
+ * Get the standardised details for a catalogue entry field.
+ *
+ * @param  array			The field row
+ * @param  AUTO_LINK		The ID of the entry we are getting for
+ * @param  ?array			A list of field IDs that we are limiting ourselves to (NULL: get ALL fields)
+ * @param  array			Save the result into here
+ */
+function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$target)
+{
+	$ob=get_fields_hook($field['cf_type']);
+	list($raw_type,,$type)=$ob->get_field_value_row_bits($field);
+	if (is_null($raw_type)) $raw_type=$field['cf_type'];
+
+	switch ($raw_type)
+	{
+		case 'long_trans':
+		case 'short_trans':
+			$temp=_get_catalogue_entry_field($field['id'],$entry_id,'short_trans',$only_field_ids);
+			if ($temp['cv_value']===NULL)
+			{
+				$target['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
+				$target['effective_value_pure']=do_lang('INTERNAL_ERROR');
+			} else
+			{
+				$target['effective_value']=get_translated_tempcode('catalogue_efv_'.$raw_type,$temp,'cv_value');
+				$target['effective_value_pure']=get_translated_text($temp['cv_value']);
+			}
+			break;
+		case 'long_text':
+		case 'short_text':
+		case 'long_unescaped':
+		case 'short_unescaped':
+			$temp=_get_catalogue_entry_field($field['id'],$entry_id,$type,$only_field_ids);
+			if ($temp['cv_value']===NULL)
+			{
+				$target['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
+				$target['effective_value_pure']=do_lang('INTERNAL_ERROR');
+  				break;
+			} else
+			{
+				$target['effective_value']=$temp['cv_value'];
+				$target['effective_value_pure']=$temp['cv_value'];
+			}
+			break;
+		case 'float_unescaped':
+			$temp=_get_catalogue_entry_field($field['id'],$entry_id,$type,$only_field_ids);
+			if ($temp['cv_value']===NULL)
+			{
+				$target['effective_value']=do_lang_tempcode('NA_EM');
+				$target['effective_value_pure']=do_lang('NA');
+  				break;
+			} else
+			{
+				$target['effective_value']=float_to_raw_string($temp['cv_value']);
+				$target['effective_value_pure']=$target['effective_value'];
+			}
+			break;
+		case 'integer_unescaped':
+			$temp=_get_catalogue_entry_field($field['id'],$entry_id,$type,$only_field_ids);
+			if ($temp['cv_value']===NULL)
+			{
+				$target['effective_value']=do_lang_tempcode('NA_EM');
+				$target['effective_value_pure']=do_lang('NA');
+  				break;
+			} else
+			{
+				$target['effective_value']=strval($temp['cv_value']);
+				$target['effective_value_pure']=$target['effective_value'];
+			}
+			break;
+		default:
+			warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+	}
 }
 
 /**
@@ -1256,19 +1285,18 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		foreach (array('catalogue_efv_float','catalogue_efv_integer','catalogue_efv_long','catalogue_efv_long_trans','catalogue_efv_short','catalogue_efv_short_trans',) as $table)
 		{
 			if ($query!='') $query.=' UNION ';
-			$query.='SELECT f.id,v.cv_value,';
-			if (strpos($table,'_trans')!==false)
+			$query.='SELECT f.id AS f_id,v.cv_value';
+			if (!multi_lang_content())
 			{
-				$query.='t.text_original,t.text_parsed';
-			} else
-			{
-				$query.='NULL AS text_original,NULL AS text_parsed';
+				if (strpos($table,'_trans')!==false)
+				{
+					$query.=',v.cv_value__text_parsed,v.cv_value__source_user';
+				} else
+				{
+					$query.=',NULL AS cv_value__text_parsed,NULL AS cv_value__source_user';
+				}
 			}
 			$query.=' FROM '.get_table_prefix().'catalogue_fields f JOIN '.get_table_prefix().$table.' v ON v.cf_id=f.id';
-			if (strpos($table,'_trans')!==false)
-			{
-				$query.=' JOIN '.get_table_prefix().'translate t ON t.id=v.cv_value';
-			}
 			$query.=' WHERE v.ce_id='.strval($entry_id);
 			if ($only_field_ids!==NULL)
 			{
@@ -1287,14 +1315,10 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 				$query.=')';
 			}
 		}
-		foreach ($GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true) as $line)
+		$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true);
+		foreach ($rows as $row)
 		{
-			$catalogue_entry_cache[$entry_id][$line['id']]=$line['cv_value'];
-			if (isset($line['text_original']))
-			{
-				$GLOBALS['SITE_DB']->text_lookup_original_cache[$line['cv_value']]=$line['text_original'];
-				$GLOBALS['SITE_DB']->text_lookup_cache[$line['cv_value']]=$line['text_parsed'];
-			}
+			$catalogue_entry_cache[$entry_id][$row['id']]=$row;
 		}
 
 		$value=isset($catalogue_entry_cache[$entry_id][$field_id])?$catalogue_entry_cache[$entry_id][$field_id]:NULL;
@@ -1305,8 +1329,6 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		$value=$catalogue_entry_cache[$entry_id][$field_id];
 	}
 
-	if (is_integer($value)) $value=strval($value);
-	elseif (is_float($value)) $value=float_to_raw_string($value);
 	return $value;
 }
 

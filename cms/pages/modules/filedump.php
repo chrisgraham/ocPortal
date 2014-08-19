@@ -754,9 +754,7 @@ class Module_filedump
 				break;
 
 			case 'audios':
-				if ((substr(strtolower($filename),-4)!='.mp3') && (substr(strtolower($filename),-4)!='.wav') && (substr(strtolower($filename),-4)!='.ogg'))
-					return false;
-				//if (!is_audio($filename)) return false;		Use official call in v10
+				if (!is_audio($filename)) return false;
 				break;
 
 			case 'others':

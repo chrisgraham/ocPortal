@@ -160,8 +160,8 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
 		'i_new_window'=>$new_window,
 		'i_theme_img_code'=>$theme_image_code,
 	);
-	$map+=insert_lang('i_caption',$caption,1);
-	$map+=insert_lang('i_caption_long',$caption_long,1);
+	$map+=insert_lang_comcode('i_caption',$caption,1);
+	$map+=insert_lang_comcode('i_caption_long',$caption_long,1);
 	$id=$GLOBALS['SITE_DB']->query_insert('menu_items',$map,true);
 
 	log_it('ADD_MENU_ITEM',strval($id),$caption);
@@ -208,8 +208,8 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
 		'i_new_window'=>$new_window,
 		'i_include_sitemap'=>$include_sitemap,
 	);
-	$map+=lang_remap('i_caption',$_caption,$caption);
-	$map+=lang_remap('i_caption_long',$_caption_long,$caption_long);
+	$map+=lang_remap_comcode('i_caption',$_caption,$caption);
+	$map+=lang_remap_comcode('i_caption_long',$_caption_long,$caption_long);
 	$GLOBALS['SITE_DB']->query_update('menu_items',$map,array('id'=>$id),'',1);
 
 	log_it('EDIT_MENU_ITEM',strval($id),$caption);

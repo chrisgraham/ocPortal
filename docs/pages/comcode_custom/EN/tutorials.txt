@@ -71,7 +71,7 @@
 <div>
 	[title="2"]<a class="standardbox_tray hide_button" href="#" onclick="SetCookie('doctray_7',(get_elements_by_class_name(this.parentNode.parentNode,'hide_tag')[0].style.display=='none')?'open':'closed'); hideTag(this.parentNode.parentNode); return false;"><img alt="{!EXPAND}/{!CONTRACT}" src="{$IMG*,1x/trays/expand}" srcset="{$IMG*,2x/trays/expand} 2x" /></a>Advanced configuration[/title]
 	<div class="hide_tag" id="doctray_7"{+START,IF,{$JS_ON}} style="display: none"{+END}>
-	[block="adv_configuration,filter,ocselect,intl_users,intl,optimisation,msn,security,fields_filter,cookies" view="full"]ocportalcom_new_tutorials[/block]
+	[block="adv_configuration,filter,ocselect,intl_users,intl,intl_content,optimisation,msn,security,fields_filter,cookies" view="full"]ocportalcom_new_tutorials[/block]
 	</div>
 </div>
 

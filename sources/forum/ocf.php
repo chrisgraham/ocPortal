@@ -140,7 +140,7 @@ class forum_driver_ocf extends forum_driver_base
 	 */
 	function _install_delete_custom_field($name)
 	{
-		$id=$this->connection->query_select_value_if_there('f_custom_fields f LEFT JOIN '.$this->connection->get_table_prefix().'translate t ON f.cf_name=t.id','f.id',array('text_original'=>'ocp_'.$name));
+		$id=$this->connection->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>'ocp_'.$name));
 		if (!is_null($id))
 		{
 			require_code('ocf_members_action2');

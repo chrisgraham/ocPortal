@@ -28,6 +28,7 @@ class Hook_checklist_translations
 	function run()
 	{
 		if (!multi_lang()) return array();
+		if (!multi_lang_content()) return array();
 
 		if (substr(get_db_type(),0,5)!='mysql') return array(); // Only tested on MySQL
 

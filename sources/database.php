@@ -25,6 +25,9 @@
  */
 function init__database()
 {
+	global $HAS_MULTI_LANG_CONTENT;
+	$HAS_MULTI_LANG_CONTENT=NULL;
+
 	global $QUERY_LIST,$QUERY_COUNT,$NO_QUERY_LIMIT,$NO_DB_SCOPE_CHECK,$QUERY_FILE_LOG,$SITE_INFO;
 	$QUERY_LIST=array();
 	$QUERY_COUNT=0;
@@ -116,23 +119,32 @@ function _general_db_init()
 	$TABLE_LANG_FIELDS_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('TABLE_LANG_FIELDS_CACHE'):NULL;
 	if ($TABLE_LANG_FIELDS_CACHE===NULL)
 	{
-		$TABLE_LANG_FIELDS_CACHE=array();
-
-		$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.get_table_prefix().'db_meta WHERE '.db_string_equal_to('m_type','SHORT_TRANS').' OR '.db_string_equal_to('m_type','LONG_TRANS').' OR '.db_string_equal_to('m_type','*SHORT_TRANS').' OR '.db_string_equal_to('m_type','*LONG_TRANS').' OR '.db_string_equal_to('m_type','?SHORT_TRANS').' OR '.db_string_equal_to('m_type','?LONG_TRANS'),NULL,NULL,true);
-		if ($_table_lang_fields!==NULL)
-		{
-			foreach ($_table_lang_fields as $lang_field)
-			{
-				if (!isset($TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]))
-					$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]=array();
-
-				$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']][]=$lang_field['m_name'];
-			}
-		}
-
-		if (function_exists('persistent_cache_set'))
-			persistent_cache_set('TABLE_LANG_FIELDS_CACHE',$TABLE_LANG_FIELDS_CACHE);
+		reload_lang_fields();
 	}
+}
+
+/**
+ * Reload language fields from the database.
+ */
+function reload_lang_fields()
+{
+	global $TABLE_LANG_FIELDS_CACHE;
+	$TABLE_LANG_FIELDS_CACHE=array();
+
+	$_table_lang_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table,m_type FROM '.get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'',NULL,NULL,true);
+	if ($_table_lang_fields!==NULL)
+	{
+		foreach ($_table_lang_fields as $lang_field)
+		{
+			if (!isset($TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]))
+				$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]=array();
+
+			$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']][$lang_field['m_name']]=$lang_field['m_type'];
+	  	}
+	}
+
+	if (function_exists('persistent_cache_set'))
+		persistent_cache_set('TABLE_LANG_FIELDS_CACHE',$TABLE_LANG_FIELDS_CACHE);
 }
 
 /**
@@ -566,7 +578,7 @@ class database_driver
 	 * @param  array			The insertion map
 	 * @param  boolean		Whether to return the auto-insert-id
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
-	 * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
+	 * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to git)
 	 * @return integer		The ID of the new row
 	 */
 	function query_insert($table,$map,$ret=false,$fail_ok=false,$save_as_volatile=false)
@@ -691,8 +703,6 @@ class database_driver
 					{
 						if (($value==='') && ($this->static_ob->db_empty_is_null())) $value=' ';
 
-						if ($key=='text_original') $table=str_replace(' LEFT JOIN '.$this->get_table_prefix().'translate ',' JOIN '.$this->get_table_prefix().'translate ',$table);
-
 						$where.=db_string_equal_to($key,$value);
 					}
 				}
@@ -760,9 +770,10 @@ class database_driver
 	 * @param  string			The complete SQL query
 	 * @param  boolean		Whether to allow failure (outputting a message instead of exiting completely)
 	 * @param  boolean		Whether to skip the query safety check
+	 * @param  ?array			Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
 	 * @return ?mixed			The first value of the first row returned (NULL: nothing found, or null value found)
 	 */
-	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false)
+	function query_value_if_there($query,$fail_ok=false,$skip_safety_check=false,$lang_fields=NULL)
 	{
 		global $DEV_MODE;
 
@@ -782,7 +793,7 @@ class database_driver
 			}
 		}
 
-		$values=$this->query($query,1,NULL,$fail_ok,$skip_safety_check);
+		$values=$this->query($query,1,NULL,$fail_ok,$skip_safety_check,$lang_fields);
 		if ($values===NULL) return NULL; // error
 		return $this->_query_select_value($values);
 	}
@@ -882,18 +893,20 @@ class database_driver
 
 					$select_inv=array_flip($select);
 
-					foreach ($lang_fields_provisional as $lang_field)
+					foreach ($lang_fields_provisional as $lang_field=>$field_type)
 					{
-						if ((isset($select_inv[$field_prefix.$lang_field])) || (isset($select_inv[$field_prefix.'*'])))
+						if (
+							(isset($select_inv[$field_prefix.$lang_field])) || 
+							((!is_null($where_map)) && (isset($where_map['t_'.$lang_field.'.text_original']))) || 
+							(isset($select_inv[$field_prefix.'*']))
+						)
 						{
-							$lang_fields[]=$lang_field;
+							$lang_fields[$lang_field]=$field_type;
 						}
 					}
 				}
 			}
 		}
-
-		return $this->_query($this->_get_where_expand($full_table,$select,$where_map,$end),$max,$start,$fail_ok,false,$lang_fields,$field_prefix);
 	}
 
 	/**
@@ -972,9 +985,17 @@ class database_driver
 
 		if ($DEV_MODE)
 		{
-			if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (is_ocf_satellite_site()) && (!$GLOBALS['NO_DB_SCOPE_CHECK']))
+			if (!$GLOBALS['NO_DB_SCOPE_CHECK'])
 			{
-				fatal_exit('Using OCF queries on the wrong driver');
+				if ((!multi_lang_content()) && (strpos($query,$this->get_table_prefix().'translate')!==false) && (strpos($query,'DROP INDEX')===false) && (strpos($query,'ALTER TABLE')===false) && (strpos($query,'CREATE TABLE')===false))
+				{
+					fatal_exit('Assumption of multi-lang-content being on, and it\'s not');
+				}
+
+				if ((get_forum_type()!='none') && (strpos($query,get_table_prefix().'f_')!==false) && (strpos($query,get_table_prefix().'f_')<100) && (strpos($query,'f_welcome_emails')===false) && ($this->connection_write===$GLOBALS['SITE_DB']->connection_write) && (is_ocf_satellite_site()))
+				{
+					fatal_exit('Using OCF queries on the wrong driver');
+				}
 			}
 		}
 
@@ -1196,18 +1217,23 @@ class database_driver
 					ocp_profile_end_for('_query:MANY_RESULTS_ALERT',$query);
 				}
 
-				// Copy results to lang cache, but only if not null AND unset to avoid any confusion
-				foreach ($ret as $i=>$row)
+				if (multi_lang_content())
 				{
-					$entry=$row[preg_replace('#^.*\.#','',$field)];
+					// Copy results to lang cache, but only if not null AND unset to avoid any confusion
+					foreach ($ret as $i=>$row)
+					{
+						if (!isset($row[$field])) continue; // Probably dereferenced to text_original in WHERE, but not selected
 
-					if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
-						$this->text_lookup_original_cache[$entry]=$row[$original];
-					if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
-						$this->text_lookup_cache[$entry]=$row[$parsed];
+						$entry=$row[preg_replace('#^.*\.#','',$field)];
 
-					unset($ret[$i][$original]);
-					unset($ret[$i][$parsed]);
+						if (($row[$original]!==NULL) && (count($this->text_lookup_original_cache)<=1000))
+							$this->text_lookup_original_cache[$entry]=$row[$original];
+						if (($row[$parsed]!==NULL) && (count($this->text_lookup_cache)<=1000))
+							$this->text_lookup_cache[$entry]=$row[$parsed];
+
+						unset($ret[$i][$original]);
+						unset($ret[$i][$parsed]);
+					}
 				}
 			}
 		}

@@ -58,7 +58,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 		{
 			case 'image':
 			case 'video':
-				$_ret=$GLOBALS['SITE_DB']->query_select($resource_type.'s a JOIN '.get_table_prefix().'translate t ON t.id=a.title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select($resource_type.'s',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -67,7 +67,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 				return $ret;
 
 			case 'gallery':
-				$ret=$GLOBALS['SITE_DB']->query_select('galleries a JOIN '.get_table_prefix().'translate t ON t.id=a.fullname',array('name'),array('text_original'=>$label));
+				$ret=$GLOBALS['SITE_DB']->query_select('galleries',array('name'),array($GLOBALS['SITE_DB']->translate_field_ref('fullname')=>$label));
 				return collapse_1d_complexity('name',$ret);
 		}
 		return array();

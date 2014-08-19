@@ -488,13 +488,21 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$meta_join='m.meta_for_id=r.'.$meta_id_field;
 			}
 			$extra_join='';
-			foreach ($fields as $i=>$field) // Translatable fields present in 'select'
+			if (multi_lang_content())
 			{
-				if (($field=='') || ($field=='!') || (strpos($select,'t1.text_original')===false)) continue;
+				foreach (array_keys($fields) as $i=>$field) // Translatable fields present in 'select'
+				{
+					if (($field=='') || ($field=='!') || (strpos($select,'t1.text_original')===false)) continue;
 
-				$extra_join.=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+					$extra_join.=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+				}
 			}
-			$_keywords_query=$table_clause.' JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.') JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang()).$extra_join;
+			$_keywords_query=$table_clause.' JOIN '.$db->get_table_prefix().'seo_meta m ON ('.db_string_equal_to('m.meta_for_type',$meta_type).' AND '.$meta_join.')';
+			if (multi_lang_content())
+			{
+				$_keywords_query.=' JOIN '.$db->get_table_prefix().'translate tm ON tm.id=m.meta_keywords AND '.db_string_equal_to('tm.language',user_lang());
+			}
+			$_keywords_query.=$extra_join;
 			$_keywords_query.=' WHERE '.$keywords_where;
 			$_keywords_query.=(($where_clause!='')?(' AND '.$where_clause):'');
 
@@ -548,161 +556,283 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 	// Main content search
 	if (!$only_search_meta)
 	{
-		if (($content_where!='') || (preg_match('#t\d+\.text_original#',$where_clause)!=0) || (preg_match('#t\d+\.text_original#',$select)!=0))
+		if (multi_lang_content())
 		{
-			// Each of the fields represents an 'OR' match, so we put it together into a list ($where_alternative_matches) of specifiers for each. Hopefully we will 'UNION' them rather than 'OR' them as it is much more efficient in terms of table index usage
-
 			$where_alternative_matches=array();
-			foreach ($fields as $i=>$field) // Referenced fields in where condition must result in the shared table clause having a reference to the translate for that
+
+			if (($content_where!='') || (preg_match('#t\d+\.text_original#',$where_clause)!=0) || (preg_match('#t\d+\.text_original#',$select)!=0))
 			{
-				if ((strpos($select,'t'.strval($i).'.text_original')!==false) || (strpos($where_clause,'t'.strval($i).'.text_original')!==false))
+				// Each of the fields represents an 'OR' match, so we put it together into a list ($where_alternative_matches) of specifiers for each. Hopefully we will 'UNION' them rather than 'OR' them as it is much more efficient in terms of table index usage
+
+				$where_alternative_matches=array();
+				foreach (array_keys($fields) as $i=>$field) // Referenced fields in where condition must result in the shared table clause having a reference to the translate for that
 				{
+					if ((strpos($select,'t'.strval($i).'.text_original')!==false) || (strpos($where_clause,'t'.strval($i).'.text_original')!==false))
+					{
+						$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
+						$orig_table_clause.=$tc_add;
+					}
+				}
+				foreach (array_keys($fields) as $i=>$field) // Translatable fields
+				{
+					if (($field=='') || ($field=='!')) continue;
+
+					if ($field==$order) $order='t'.$i.'.text_original'; // Ah, remap to the textual equivalent then
+
 					$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
-					$orig_table_clause.=$tc_add;
-				}
-			}
-			foreach ($fields as $i=>$field) // Translatable fields
-			{
-				if (($field=='') || ($field=='!')) continue;
+					if (strpos($orig_table_clause,$tc_add)!==false) $tc_add='';
 
-				if ($field==$order) $order='t'.$i.'.text_original'; // Ah, remap to the textual equivalent then
-
-				$tc_add=' JOIN '.$db->get_table_prefix().'translate t'.strval($i).' ON t'.strval($i).'.id='.$field.' AND '.db_string_equal_to('t'.strval($i).'.language',user_lang());
-				if (strpos($orig_table_clause,$tc_add)!==false) $tc_add='';
-
-				if (($only_titles) && ($i!=0)) break;
-
-				$where_clause_2=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where);
-				$where_clause_2=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$where_clause_2); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
-				$where_clause_3=$where_clause;
-				if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
-					$where_clause_3.=(($where_clause=='')?'':' AND ').'NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
-
-				if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
-				{
-					$_select=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where).' AS contextual_relevance';
-					$_select=str_replace(' AND (t'.strval($i).'.text_original IS NOT NULL)','',$_select); // Not needed for translate joins, as these won't be NULL's. Fixes performance issue.
-				} else
-				{
-					$_select='';
-				}
-				$_table_clause=$orig_table_clause.$tc_add;
-
-				$where_alternative_matches[]=array($where_clause_2,$where_clause_3,$_select,$_table_clause,'t'.strval($i));
-			}
-			if ($content_where!='') // Non-translatable fields
-			{
-				foreach ($raw_fields as $i=>$field)
-				{
 					if (($only_titles) && ($i!=0)) break;
 
-					$where_clause_2=preg_replace('#\?#',$field,$content_where);
+					$where_clause_2=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where);
 					$where_clause_3=$where_clause;
 					if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
 						$where_clause_3.=(($where_clause=='')?'':' AND ').'NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
 
 					if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
 					{
-						$_select=preg_replace('#\?#',$field,$content_where).' AS contextual_relevance';
+						$_select=preg_replace('#\?#','t'.strval($i).'.text_original',$content_where).' AS contextual_relevance';
 					} else
 					{
 						$_select='';
 					}
+					$_table_clause=$orig_table_clause.$tc_add;
 
-					$_table_clause=$orig_table_clause;
-
-					$where_alternative_matches[]=array($where_clause_2,$where_clause_3,$_select,$_table_clause,NULL);
+					$where_alternative_matches[]=array($where_clause_2,$where_clause_3,$_select,$_table_clause,'t'.strval($i));
 				}
-			}
-		}
-
-		if (count($where_alternative_matches)==0)
-		{
-			$where_alternative_matches[]=array($where_clause,'','',$table_clause,NULL);
-		} else
-		{
-			if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
-			{
-				$order='contextual_relevance DESC';
-			}
-		}
-
-		$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
-		if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
-
-		// Work out main query
-		$query='(';
-		foreach ($where_alternative_matches as $parts) // We UNION them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
-		{
-			list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
-
-			if ($query!='(')
-			{
-				if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
+				if ($content_where!='') // Non-translatable fields
 				{
-					$query.=' ORDER BY '.$order;
-					if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
+					foreach ($raw_fields as $i=>$field)
+					{
+						if (($only_titles) && ($i!=0)) break;
+
+						$where_clause_2=preg_replace('#\?#',$field,$content_where);
+						$where_clause_3=$where_clause;
+						if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
+							$where_clause_3.=(($where_clause=='')?'':' AND ').'NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
+
+						if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
+						{
+							$_select=preg_replace('#\?#',$field,$content_where).' AS contextual_relevance';
+						} else
+						{
+							$_select='';
+						}
+
+						$_table_clause=$orig_table_clause;
+
+						$where_alternative_matches[]=array($where_clause_2,$where_clause_3,$_select,$_table_clause,NULL);
+					}
 				}
-				$query.=' LIMIT '.strval($max+$start);
-				$query.=') UNION (';
 			}
 
-			$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
-
-			$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
-		}
-		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
-		{
-			$query.=' ORDER BY '.$order;
-			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
-		}
-		$query.=($group_by_ok?' GROUP BY r.id':'');
-		$query.=' LIMIT '.strval($max+$start);
-		$query.=')';
-		// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
-		$_query='';
-		if (strpos(get_db_type(),'mysql')===false)
-		{
-			foreach ($where_alternative_matches as $parts)
+			if (count($where_alternative_matches)==0)
 			{
-				list($where_clause_2,$where_clause_3,,$_table_clause,$tid)=$parts;
-
-				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
-
-				$_query.=(($where_clause_3!='')?((($_query=='')?' WHERE ':' OR ').$where_clause_3):'');
+				$where_alternative_matches[]=array($where_clause,'','',$table_clause,NULL);
+			} else
+			{
+				if (($order=='') && (db_has_expression_ordering($db->connection_read)) && ($content_where!=''))
+				{
+					$order='contextual_relevance DESC';
+				}
 			}
-			$_count_query_main_search='SELECT COUNT(*) FROM '.$table_clause.$_query;
-		} else // This is inaccurate (does not filter dupes from each +'d query) but much more efficient on MySQL
-		{
-			foreach ($where_alternative_matches as $parts) // We "+" them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
+
+			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
+			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+
+			// Work out main query
+			$query='(';
+			foreach ($where_alternative_matches as $parts) // We UNION them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
 			{
 				list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
 
-				if ($_query!='') $_query.='+';
+				if ($query!='(')
+				{
+					if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
+					{
+						$query.=' ORDER BY '.$order;
+						if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
+					}
+					$query.=' LIMIT '.strval($max+$start);
+					$query.=') UNION (';
+				}
 
 				$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
 
-				if (!db_has_subqueries($db->connection_read))
+				$query.='SELECT '.$select.(($_select=='')?'':',').$_select.' FROM '.$_table_clause.(($where_clause_3=='')?'':' WHERE '.$where_clause_3);
+			}
+			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
+			{
+				$query.=' ORDER BY '.$order;
+				if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
+			}
+			$query.=($group_by_ok?' GROUP BY r.id':'');
+			$query.=' LIMIT '.strval($max+$start);
+			$query.=')';
+			// Work out COUNT(*) query using one of a few possible methods. It's not efficient and stops us doing proper merge-sorting between content types (and possible not accurate - if we use an efficient but non-deduping COUNT strategy) if we have to use this, so we only do it if there are too many rows to fetch in one go.
+			$_query='';
+			if (strpos(get_db_type(),'mysql')===false)
+			{
+				foreach ($where_alternative_matches as $parts)
 				{
-					$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3)).')';
-				} else // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
+					list($where_clause_2,$where_clause_3,,$_table_clause,$tid)=$parts;
+
+					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
+
+					$_query.=(($where_clause_3!='')?((($_query=='')?' WHERE ':' OR ').$where_clause_3):'');
+				}
+				$_count_query_main_search='SELECT COUNT(*) FROM '.$table_clause.$_query;
+			} else // This is inaccurate (does not filter dupes from each +'d query) but much more efficient on MySQL
+			{
+				foreach ($where_alternative_matches as $parts) // We "+" them, because doing OR's on MATCH's is insanely slow in MySQL (sometimes I hate SQL...)
 				{
-					$_query.='(SELECT COUNT(*) FROM (';
-					$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3));
-					$_query.=' LIMIT 1000) counter)';
+					list($where_clause_2,$where_clause_3,$_select,$_table_clause,$tid)=$parts;
+
+					if ($_query!='') $_query.='+';
+
+					$where_clause_3=$where_clause_2.(($where_clause_3=='')?'':((($where_clause_2=='')?'':' AND ').$where_clause_3));
+
+					if (!db_has_subqueries($db->connection_read))
+					{
+						$_query.='(SELECT COUNT(*) FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3)).')';
+					} else // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
+					{
+						$_query.='(SELECT COUNT(*) FROM (';
+						$_query.='SELECT 1 FROM '.$_table_clause.(($where_clause_3=='')?'':(' WHERE '.$where_clause_3));
+						$_query.=' LIMIT 1000) counter)';
+					}
+				}
+				$_count_query_main_search='SELECT ('.$_query.')';
+			}
+
+			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
+			{
+				$query.=' ORDER BY '.$order;
+				if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
+			}
+
+			if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN']))
+			{
+				if (get_param_integer('keep_show_query',0)==1)
+				{
+					attach_message($query,'inform');
+				}
+				if (get_param_integer('keep_just_show_query',0)==1)
+				{
+					@ini_set('ocproducts.xss_detect','0');
+					header('Content-type: text/plain; charset='.get_charset());
+					exit($query);
 				}
 			}
-			$_count_query_main_search='SELECT ('.$_query.')';
-		}
 
-		if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
-		{
-			$query.=' ORDER BY '.$order;
-			if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
-		}
+			/*if ($group_by_ok)	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
+			{
+				$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
+			}*/
 
-		if (($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) || ($GLOBALS['IS_ACTUALLY_ADMIN']))
+			$db->dedupe_mode=true;
+
+			ocp_profile_start_for('SEARCH:t_main_search_rows_count');
+			$t_main_search_rows_count=$db->query_value_if_there($_count_query_main_search);
+			if (is_null($t_main_search_rows_count)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
+			ocp_profile_end_for('SEARCH:t_main_search_rows_count',$_count_query_main_search);
+			$t_count+=$t_main_search_rows_count;
+
+			ocp_profile_start_for('SEARCH:t_main_search_rows');
+			$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
+			ocp_profile_end_for('SEARCH:t_main_search_rows',$query);
+			if (is_null($t_main_search_rows)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
+
+			$db->dedupe_mode=false;
+		} else // Much simpler code if we don't have multi-multi-content
 		{
+			list(,$boolean_operator,$body_where,$include_where,$disclude_where)=build_content_where($content,$boolean_search,$boolean_operator);
+
+			$where_clause_and='';
+			$all_fields=array_merge($raw_fields,array_keys($fields));
+			reset($raw_fields);
+			reset($fields);
+			$search_clause_sets=array(array($include_where,'AND'),array($body_where,$boolean_operator));
+			foreach ($search_clause_sets as $search_clause_set)
+			{
+				list($_where,$_operator)=$search_clause_set;
+
+				foreach ($_where as $__where)
+				{
+					$where_clause_or='';
+					$where_clause_or_fields='';
+					foreach ($all_fields as $field)
+					{
+						if (($field=='') || ($field=='!')) continue;
+
+						if (($only_titles) && ($field!==current($raw_fields)) && ($field!==key($fields))) break;
+
+						if (($table=='f_members') && (substr($field,0,6)=='field_') && (db_has_subqueries($db->connection_read)))
+						{
+							if ($where_clause_or!='') $where_clause_or.=' OR ';
+							$where_clause_or.=preg_replace('#\?#',$field,$__where);
+							$where_clause_or.=' AND NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
+						} else
+						{
+							/*if (strpos($__where,' AGAINST ')!==false)	Does not work, as needs a compound fulltext index
+							{
+								if ($where_clause_or_fields!='')
+								{
+									$where_clause_or_fields.=',';
+								}
+								$where_clause_or_fields.=$field;
+							} else
+							{*/
+								if ($where_clause_or!='') $where_clause_or.=' OR ';
+								$where_clause_or.=preg_replace('#\?#',$field,$__where);
+							/*}*/
+						}
+					}
+
+					if ($where_clause_or_fields!='')
+					{
+						if ($where_clause_or!='') $where_clause_or.=' OR ';
+						$where_clause_or.=preg_replace('#\?#',$where_clause_or_fields,$__where);
+					}
+
+					if ($where_clause_and!='') $where_clause_and.=' '.$boolean_operator.' ';
+					$where_clause_and.='('.$where_clause_or.')';
+				}
+			}
+			if ($disclude_where!='')
+			{
+				foreach ($all_fields as $field)
+				{
+					if (($field=='') || ($field=='!')) continue;
+
+					if (($only_titles) && ($field!==current($raw_fields)) && ($field!==key($fields))) break;
+
+					if ($where_clause!='')
+						$where_clause.=' AND ';
+					$where_clause.=preg_replace('#\?#',$field,$disclude_where);
+				}
+			}
+
+			$group_by_ok=(can_arbitrary_groupby() && $meta_id_field==='id');
+			if (strpos($table,' LEFT JOIN')===false) $group_by_ok=false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+
+			// Work out our queries
+			$query=' FROM '.$table_clause.' WHERE '.(($where_clause=='')?'':($where_clause.(($where_clause_and=='')?'':' AND ')));
+			if ($where_clause_and!='') $query.='('.$where_clause_and.')';
+			if ($group_by_ok && false/*Actually we cannot assume that r.id exists*/)
+			{
+				$_count_query_main_search='SELECT COUNT(DISTINCT r.id)'.$query;
+			} else
+			{
+				$_count_query_main_search='SELECT COUNT(*)'.$query;
+			}
+			$query='SELECT '.$select.$query.($group_by_ok?' GROUP BY r.id':'');
+			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
+			{
+				$query.=' ORDER BY '.$order;
+				if (($direction=='DESC') && (substr($order,-4)!=' ASC') && (substr($order,-5)!=' DESC')) $query.=' DESC';
+			}
+
 			if (get_param_integer('keep_show_query',0)==1)
 			{
 				attach_message($query,'inform');
@@ -713,27 +843,21 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				header('Content-type: text/plain; charset='.get_charset());
 				exit($query);
 			}
+
+			$db->dedupe_mode=true;
+
+			ocp_profile_start_for('SEARCH:t_main_search_rows_count');
+			$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
+			ocp_profile_end_for('SEARCH:t_main_search_rows_count',$_count_query_main_search);
+			$t_count+=$t_main_search_rows_count;
+
+			ocp_profile_start_for('SEARCH:t_main_search_rows');
+			$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true,$fields);
+			ocp_profile_end_for('SEARCH:t_main_search_rows',$query);
+			if ($t_main_search_rows===NULL) $t_main_search_rows=array(); // In case of a failed search query
+
+			$db->dedupe_mode=false;
 		}
-
-		/*if ($group_by_ok)	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
-		{
-			$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
-		}*/
-
-		$db->dedupe_mode=true;
-
-		ocp_profile_start_for('SEARCH:t_main_search_rows_count');
-		$t_main_search_rows_count=$db->query_value_if_there($_count_query_main_search);
-		if (is_null($t_main_search_rows_count)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
-		ocp_profile_end_for('SEARCH:t_main_search_rows_count',$_count_query_main_search);
-		$t_count+=$t_main_search_rows_count;
-
-		ocp_profile_start_for('SEARCH:t_main_search_rows');
-		$t_main_search_rows=$db->query($query,$max+$start,NULL,false,true);
-		ocp_profile_end_for('SEARCH:t_main_search_rows',$query);
-		if (is_null($t_main_search_rows)) warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
-
-		$db->dedupe_mode=false;
 	} else
 	{
 		$t_main_search_rows=array();

@@ -55,7 +55,7 @@ function catalogue_find_options($field,$catalogue_name,$where='')
 	global $CAPI_CATALOGUE_OPTIONS;
 	if (isset($CAPI_CATALOGUE_OPTIONS[$sx])) return $CAPI_CATALOGUE_OPTIONS[$sx];
 
-	$cf_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_fields f JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$field,'c_name'=>$catalogue_name));
+	$cf_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>$field,'c_name'=>$catalogue_name));
 	$rows=$GLOBALS['SITE_DB']->query_select('catalogue_efv_short s JOIN '.get_table_prefix().'catalogue_entries e ON e.id=s.ce_id',array('s.*'),array('c_name'=>$catalogue_name,'cf_id'=>$cf_id),$where.' ORDER BY cv_value');
 	$out=array();
 	foreach ($rows as $row)
@@ -176,7 +176,7 @@ abstract class capi_catalogue_object extends capi_object
 
 	function _keyfield_entity_id_convert($id,$field)
 	{
-		$cf_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_fields f JOIN '.get_table_prefix().'translate t ON t.id=f.cf_name','f.id',array('text_original'=>$field,'c_name'=>$this->catalogue));
+		$cf_id=$GLOBALS['SITE_DB']->query_select_value('catalogue_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name')=>$field,'c_name'=>$this->catalogue));
 		return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_short','ce_id',array('cf_id'=>$cf_id,'cv_value'=>$id));
 	}
 

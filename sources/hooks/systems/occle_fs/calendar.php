@@ -56,7 +56,7 @@ class Hook_occle_fs_calendar extends resource_fs_base
 		switch ($resource_type)
 		{
 			case 'event':
-				$_ret=$GLOBALS['SITE_DB']->query_select('calendar_events a JOIN '.get_table_prefix().'translate t ON t.id=a.e_title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('calendar_events',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('e_title')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -65,7 +65,7 @@ class Hook_occle_fs_calendar extends resource_fs_base
 				return $ret;
 
 			case 'calendar_type':
-				$_ret=$GLOBALS['SITE_DB']->query_select('calendar_types a JOIN '.get_table_prefix().'translate t ON t.id=a.t_title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('t_title')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{

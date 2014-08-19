@@ -60,7 +60,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 				return collapse_1d_complexity('m_username',$ret);
 
 			case 'group':
-				$_ret=$GLOBALS['FORUM_DB']->query_select('f_groups a JOIN '.get_table_prefix().'translate t ON t.id=a.g_name',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{

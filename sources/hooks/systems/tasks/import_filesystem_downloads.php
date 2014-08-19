@@ -93,7 +93,7 @@ class Hook_task_import_filesystem_downloads
 						if ($make_subfolders)
 						{
 							// Do we need to make new category, or is it already existent?
-							$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories c JOIN '.get_table_prefix().'translate t ON t.id=c.category','c.id AS id',array('parent_id'=>$dest_cat,$GLOBALS['SITE_DB']->translate_field_ref('category')=>$entry));
+							$category_id=$GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id'=>$dest_cat,$GLOBALS['SITE_DB']->translate_field_ref('category')=>$entry));
 							if (is_null($category_id))
 							{
 								// Add the directory

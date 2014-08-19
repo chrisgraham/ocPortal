@@ -56,7 +56,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 		switch ($resource_type)
 		{
 			case 'download':
-				$_ret=$GLOBALS['SITE_DB']->query_select('download_downloads a JOIN '.get_table_prefix().'translate t ON t.id=a.name',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('download_downloads',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('name')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -65,7 +65,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
 				return $ret;
 
 			case 'download_category':
-				$_ret=$GLOBALS['SITE_DB']->query_select('download_categories a JOIN '.get_table_prefix().'translate t ON t.id=a.category',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('download_categories',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('category')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{

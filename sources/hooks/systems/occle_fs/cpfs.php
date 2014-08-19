@@ -44,7 +44,7 @@ class Hook_occle_fs_cpfs extends resource_fs_base
 	 */
 	function find_resource_by_label($resource_type,$label)
 	{
-		$_ret=$GLOBALS['FORUM_DB']->query_select('f_custom_fields a JOIN '.get_table_prefix().'translate t ON t.id=a.cf_name',array('a.id'),array('text_original'=>$label));
+		$_ret=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id'),array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name')=>$label));
 		$ret=array();
 		foreach ($_ret as $r)
 		{

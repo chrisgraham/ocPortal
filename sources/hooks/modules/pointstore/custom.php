@@ -122,7 +122,7 @@ class Hook_pointstore_custom
 					'c_one_per_member'=>$one_per_member,
 				);
 				$map+=lang_remap('c_title',$_title,$title);
-				$map+=lang_remap('c_description',$_description,$description);
+				$map+=lang_remap_comcode('c_description',$_description,$description);
 				$map+=lang_remap('c_mail_subject',$_mail_subject,$mail_subject);
 				$map+=lang_remap('c_mail_body',$_mail_body,$mail_body);
 				$GLOBALS['SITE_DB']->query_update('pstore_customs',$map,array('id'=>$id),'',1);

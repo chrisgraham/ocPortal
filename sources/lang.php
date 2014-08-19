@@ -990,6 +990,7 @@ function create_selection_list_langs($select_lang=NULL,$show_unset=false)
 /**
  * Insert a Comcode language entry into the translation table, and returns the ID.
  *
+ * @param  ID_TEXT		The field name
  * @param  string			The text
  * @param  integer		The level of importance this language string holds
  * @set    1 2 3 4
@@ -999,18 +1000,19 @@ function create_selection_list_langs($select_lang=NULL,$show_unset=false)
  * @param  integer		Comcode parser wrap position
  * @param  boolean		Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean		Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return integer		The ID of the newly added language entry
+ * @return array			The language ID save fields
  */
-function insert_lang_comcode($text,$level,$connection=NULL,$insert_as_admin=false,$pass_id=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
+function insert_lang_comcode($field_name,$text,$level,$connection=NULL,$insert_as_admin=false,$pass_id=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
-	return insert_lang($text,$level,$connection,true,NULL,NULL,$insert_as_admin,$pass_id,NULL,$wrap_pos,$preparse_mode,$save_as_volatile);
+	return insert_lang($field_name,$text,$level,$connection,true,NULL,NULL,$insert_as_admin,$pass_id,NULL,$wrap_pos,$preparse_mode,$save_as_volatile);
 }
 
 /**
  * Insert a language entry into the translation table, and returns the ID.
  *
+ * @param  ID_TEXT			The field name
  * @param  string				The text
  * @param  integer			The level of importance this language string holds
  * @set    1 2 3 4
@@ -1024,47 +1026,49 @@ function insert_lang_comcode($text,$level,$connection=NULL,$insert_as_admin=fals
  * @param  integer			Comcode parser wrap position
  * @param  boolean			Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean			Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return integer			The ID of the newly added language entry
+ * @return array			The language ID save fields
  */
-function insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text2=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
+function insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text_parsed=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
 	require_code('lang3');
-	return _insert_lang($text,$level,$connection,$comcode,$id,$lang,$insert_as_admin,$pass_id,$text2,$wrap_pos,$preparse_mode,$save_as_volatile);
+	return _insert_lang($field_name,$text,$level,$connection,$comcode,$id,$lang,$insert_as_admin,$pass_id,$text_parsed,$wrap_pos,$preparse_mode,$save_as_volatile);
 }
 
 /**
  * Remap the specified Comcode language ID, and return the ID again - the ID isn't changed.
  *
- * @param  integer		The language entry's ID
+ * @param  ID_TEXT		The field name
+ * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  ?string		The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
- * @param  ?MEMBER		The member performing the change (NULL: current member)
+ * @param  ?MEMBER		The member that owns the content this is for (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
- * @return integer		The language entry's ID
+ * @return array			The language ID save fields
  */
-function lang_remap_comcode($id,$text,$connection=NULL,$pass_id=NULL,$source_member=NULL,$as_admin=false)
+function lang_remap_comcode($field_name,$id,$text,$connection=NULL,$pass_id=NULL,$source_user=NULL,$as_admin=false)
 {
-	return lang_remap($id,$text,$connection,true,$pass_id,$source_member,$as_admin);
+	return lang_remap($field_name,$id,$text,$connection,true,$pass_id,$source_user,$as_admin);
 }
 
 /**
  * Remap the specified language ID, and return the ID again - the ID isn't changed.
  *
- * @param  integer		The language entry's ID
+ * @param  ID_TEXT		The field name
+ * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether it is to be parsed as Comcode
  * @param  ?string		The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
- * @param  ?MEMBER		The member performing the change (NULL: current member)
+ * @param  ?MEMBER		The member that owns the content this is for (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
- * @return integer		The language entry's ID
+ * @return array			The language ID save fields
  */
-function lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_member=NULL,$as_admin=false,$backup_string=false)
+function lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$source_user=NULL,$as_admin=false,$backup_string=false)
 {
 	require_code('lang3');
-	return _lang_remap($id,$text,$connection,$comcode,$pass_id,$source_member,$as_admin,$backup_string);
+	return _lang_remap($field_name,$id,$text,$connection,$comcode,$pass_id,$source_user,$as_admin,$backup_string);
 }
 
 /**
@@ -1075,6 +1079,8 @@ function lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$sou
  */
 function delete_lang($id,$connection=NULL)
 {
+	if (!multi_lang_content()) return;
+
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 	$connection->query_delete('translate',array('id'=>$id));
 }
@@ -1082,7 +1088,9 @@ function delete_lang($id,$connection=NULL)
 /**
  * This function is an offshoot of get_translated_text, it instead returns parsed Comcode that is linked to the specified language ID.
  *
- * @param  integer			The ID
+ * @param  ID_TEXT			The table name
+ * @param  array				The table row. Must not have aspects of other tables in it (i.e. joins). Pre-filter using 'db_map_restrict' if required
+ * @param  ID_TEXT			The field name
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
@@ -1090,93 +1098,115 @@ function delete_lang($id,$connection=NULL)
  * @param  boolean			Whether to remove from the Tempcode cache when we're done, for performance reasons (normally don't bother with this, but some code knows it won't be needed again -- esp Comcode cache layer -- and saves RAM by removing it)
  * @return ?tempcode			The parsed Comcode (NULL: the text couldn't be looked up)
  */
-function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false,$as_admin=false,$clear_away_from_cache=false)
+function get_translated_tempcode($table,$row,$field_name,$connection=NULL,$lang=NULL,$force=false,$as_admin=false,$clear_away_from_cache=false)
 {
-	if ($entry==0) return paragraph(do_lang_tempcode('FAILED_ENTRY'),'rtgtedgrgd');
-
 	if ($connection===NULL) $connection=$GLOBALS['SITE_DB'];
-
-	global $RECORD_LANG_STRINGS_CONTENT;
-	if ($RECORD_LANG_STRINGS_CONTENT)
-	{
-		global $RECORDED_LANG_STRINGS_CONTENT;
-		$RECORDED_LANG_STRINGS_CONTENT[$entry]=($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write);
-	}
 
 	if ($lang===NULL) $lang=user_lang();
 
-	if ($lang=='xxx') return make_string_tempcode('!!!'); // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
-
-	if ((isset($connection->text_lookup_cache[$entry])) && ($lang==user_lang()))
+	if (multi_lang_content())
 	{
-		$ret=$connection->text_lookup_cache[$entry];
-		if ($ret!=='')
+		$entry=$row[$field_name];
+
+		if ($entry==0) return paragraph(do_lang_tempcode('FAILED_ENTRY'),'rtgtedgrgd');
+
+		global $RECORD_LANG_STRINGS_CONTENT;
+		if ($RECORD_LANG_STRINGS_CONTENT)
 		{
-			if (is_string($ret))
-			{
-				$connection->text_lookup_cache[$entry]=new ocp_tempcode();
-				$connection->text_lookup_cache[$entry]->from_assembly($ret);
-				$ret=$connection->text_lookup_cache[$entry];
-			}
-			if ($clear_away_from_cache)
-			{
-				unset($connection->text_lookup_cache[$entry]);
-				unset($connection->text_lookup_original_cache[$entry]);
-			}
-			return $ret;
+			global $RECORDED_LANG_STRINGS_CONTENT;
+			$RECORDED_LANG_STRINGS_CONTENT[$entry]=($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write);
 		}
-	}
 
-	global $SEARCH__CONTENT_BITS;
+		if ($lang=='xxx') return make_string_tempcode('!!!'); // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
 
-	if ($SEARCH__CONTENT_BITS!==NULL) // Doing a search so we need to reparse, with highlighting on
+		if ((isset($connection->text_lookup_cache[$entry])) && ($lang==user_lang()))
+		{
+			$ret=$connection->text_lookup_cache[$entry];
+			if ($ret!=='')
+			{
+				if (is_string($ret))
+				{
+					$connection->text_lookup_cache[$entry]=new ocp_tempcode();
+					$connection->text_lookup_cache[$entry]->from_assembly($ret);
+					$ret=$connection->text_lookup_cache[$entry];
+				}
+				if ($clear_away_from_cache)
+				{
+					unset($connection->text_lookup_cache[$entry]);
+					unset($connection->text_lookup_original_cache[$entry]);
+				}
+				return $ret;
+			}
+		}
+
+		global $SEARCH__CONTENT_BITS;
+
+		if ($SEARCH__CONTENT_BITS!==NULL) // Doing a search so we need to reparse, with highlighting on
+		{
+			$_result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
+			if (array_key_exists(0,$_result))
+			{
+				global $LAX_COMCODE;
+				$temp=$LAX_COMCODE;
+				$LAX_COMCODE=true;
+				$result=$_result[0];
+
+				if (get_value('really_want_highlighting')==='1')
+				{
+					require_code('comcode_from_html');
+					$result['text_original']=force_clean_comcode($result['text_original']); // Highlighting only works with pure Comcode
+				}
+
+				$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+				$LAX_COMCODE=$temp;
+				return $ret;
+			}
+		}
+
+		$_result=$connection->query_select('translate',array('text_parsed','text_original'),array('id'=>$entry,'language'=>$lang),'',1);
+		$result=isset($_result[0])?$_result[0]['text_parsed']:NULL;
+		if (isset($_result[0]))
+		{
+			if ($lang==user_lang())
+			{
+				$connection->text_lookup_original_cache[$entry]=$_result[0]['text_original'];
+			}
+		}
+	} else
 	{
-		$_result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
-		if (array_key_exists(0,$_result))
+		global $SEARCH__CONTENT_BITS;
+		if ($SEARCH__CONTENT_BITS!==NULL) // Doing a search so we need to reparse, with highlighting on
 		{
 			global $LAX_COMCODE;
 			$temp=$LAX_COMCODE;
 			$LAX_COMCODE=true;
-			$result=$_result[0];
 
 			if (get_value('really_want_highlighting')==='1')
 			{
 				require_code('comcode_from_html');
-				$result['text_original']=force_clean_comcode($result['text_original']); // Highlighting only works with pure Comcode
+				$row[$field_name]=force_clean_comcode($row[$field_name]); // Highlighting only works with pure Comcode
 			}
 
-			$ret=comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+			$ret=comcode_to_tempcode($row[$field_name],$row[$field_name.'__source_user'],$as_admin,60,NULL,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
 			$LAX_COMCODE=$temp;
 			return $ret;
 		}
-	}
 
-	$_result=$connection->query_select('translate',array('text_parsed','text_original'),array('id'=>$entry,'language'=>$lang),'',1);
-	$result=isset($_result[0])?$_result[0]['text_parsed']:NULL;
-	if (isset($_result[0]))
-	{
-		if ($lang==user_lang())
-		{
-			$connection->text_lookup_original_cache[$entry]=$_result[0]['text_original'];
-		}
+		$result=$row[$field_name.'__text_parsed'];
 	}
 
 	if (($result===NULL) || ($result=='') || (is_browser_decacheing())) // Not cached
 	{
 		require_code('lang3');
-		return parse_translated_text($entry,$connection,$lang,$force,$as_admin);
+		return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
 	}
 
-	$parsed=new ocp_tempcode();
-	if (!$parsed->from_assembly($result,true))
+	if (multi_lang_content())
 	{
-		require_code('lang3');
-		return parse_translated_text($entry,$connection,$lang,$force,$as_admin);
-	}
-
-	if ($lang==user_lang())
-	{
-		$connection->text_lookup_cache[$entry]=$parsed;
+		if ($lang==user_lang())
+		{
+			$connection->text_lookup_cache[$entry]=$parsed;
+		}
 	}
 
 	return $parsed;
@@ -1185,7 +1215,7 @@ function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false
 /**
  * Try to return the human-readable version of the language ID, passed in as $entry.
  *
- * @param  integer			The ID
+ * @param  mixed				The ID (if multi-lang-content on), or the string itself
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
@@ -1193,6 +1223,8 @@ function get_translated_tempcode($entry,$connection=NULL,$lang=NULL,$force=false
  */
 function get_translated_text($entry,$connection=NULL,$lang=NULL,$force=false)
 {
+	if (!multi_lang_content()) return $entry;
+
 	if ($entry==0) return do_lang('FAILED_ENTRY');
 
 	if ($entry===NULL) fatal_exit(do_lang_tempcode('NULL_LANG_STRING'));

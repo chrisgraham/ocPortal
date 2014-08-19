@@ -61,7 +61,7 @@ foreach (array_keys($_GET) as $x)
 		$filter_sql=ocfilter_to_sqlfragment(strval($_id).'*','id','download_categories','parent_id','category_id','id');
 
 		$addon_name=get_param($x);
-		$result=$GLOBALS['SITE_DB']->query('SELECT d.id,url,text_original FROM '.get_table_prefix().'download_downloads d JOIN '.get_table_prefix().'translate t ON t.id=d.name WHERE '.db_string_equal_to('text_original',$addon_name).' AND ('.$filter_sql.')',NULL,NULL,false,true);
+		$result=$GLOBALS['SITE_DB']->query('SELECT d.id,url,name FROM '.get_table_prefix().'download_downloads d WHERE '.db_string_equal_to($GLOBALS['SITE_DB']->translate_field_ref('name'),$addon_name).' AND ('.$filter_sql.')',NULL,NULL,false,true,array('name'=>'SHORT_TRANS'));
 
 		$addon_times[intval(substr($x,6))]=array(NULL,NULL,NULL,$addon_name);
 

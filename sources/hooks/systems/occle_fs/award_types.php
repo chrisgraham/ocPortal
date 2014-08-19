@@ -44,7 +44,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
 	 */
 	function find_resource_by_label($resource_type,$label)
 	{
-		$_ret=$GLOBALS['SITE_DB']->query_select('award_types a JOIN '.get_table_prefix().'translate t ON t.id=a.a_title',array('a.id'),array('text_original'=>$label));
+		$_ret=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('a_title')=>$label));
 		$ret=array();
 		foreach ($_ret as $r)
 		{

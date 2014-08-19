@@ -188,7 +188,7 @@ if ((!$is_bleeding_edge) && (!$is_old_tree) && (isset($all_downloads_to_add[0]['
 		if ($last_version_id!=$all_downloads_to_add[0]['download_id'])
 		{
 			$description="A new version, {$version_pretty} is available. Upgrading to {$version_pretty} is considered {$needed} by ocProducts{$justification}. There may have been other upgrades since {$version_pretty} - see [url=\"the ocProducts news archive\" target=\"_blank\"]http://ocportal.com/site/news.htm[/url].";
-			$GLOBALS['SITE_DB']->query_update('downloads',lang_remap($last_version_str,'description',$description),array('id'=>$last_version_id),'',1);
+			$GLOBALS['SITE_DB']->query_update('downloads',lang_remap_comcode($last_version_str,'description',$description),array('id'=>$last_version_id),'',1);
 		}
 	}
 }

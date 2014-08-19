@@ -192,7 +192,7 @@ class Block_main_members
 					$group_id=intval($_usergroup);
 				} else
 				{
-					$group_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups g JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=g.g_name','g.id',array('text_original'=>$_usergroup));
+					$group_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name')=>$_usergroup));
 					if (is_null($group_id))
 					{
 						return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'red_alert');

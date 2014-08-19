@@ -42,7 +42,11 @@ if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) access_denied();
 // Create default news categories
 $categories_path=get_custom_file_base().'/data_custom/free_article_import__categories.txt';
 $categories_default=is_file($categories_path)?explode("\n",file_get_contents($categories_path)):array();
-$categories_existing=collapse_2d_complexity('id','text_original',$GLOBALS['SITE_DB']->query_select('news_categories n JOIN '.get_table_prefix().'translate t ON t.id=n.nc_title',array('n.id','text_original')));
+$categories_existing=collapse_2d_complexity('id','nc_title',$GLOBALS['SITE_DB']->query_select('news_categories',array('id','nc_title')));
+foreach ($categories_existing as $id=>$nc_title)
+{
+	$categories_existing[$id]=get_translated_text($nc_title);
+}
 foreach ($categories_default as $category)
 {
 	$category=trim($category);
@@ -110,7 +114,7 @@ while (($r=fgetcsv($csvfile,1024000))!==false)
 	$news_article='[html]'.$r[5].'[/html]';
 	$news=empty($r[6])?'':$r[6]; // Summary
 
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('news n JOIN '.get_table_prefix().'translate t ON t.id=n.title','n.id',array('text_original'=>$title,'date_and_time'=>$time));
+	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('news','id',array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$title,'date_and_time'=>$time));
 	if (is_null($test)) // If does not exist yet
 	{
 		$id=add_news($title,$news,$author,1,1,1,1,'',$news_article,$main_news_category,NULL,$time);

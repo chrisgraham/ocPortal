@@ -476,6 +476,7 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 		{
 			$subject=substr($subject,strlen($prefix));
 			$forwarded=true;
+			$body=preg_replace('#^(\[semihtml\])?(<br />\n)*-------- Original Message --------(\n|<br />)+#','${1}',$body);
 			$body=preg_replace('#^(\[semihtml\])?(<br />\n)*Begin forwarded message:(\n|<br />)*#','${1}',$body);
 			$body=preg_replace('#^(\[semihtml\])?(<br />\n)*<div>Begin forwarded message:</div>(\n|<br />)*#','${1}',$body);
 			$body=preg_replace('#^(\[semihtml\])?(<br />\n)*<div>(<br />\n)*<div>Begin forwarded message:</div>(\n|<br />)*#','${1}<div>',$body);
@@ -483,7 +484,7 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 	}
 	if ($forwarded)
 	{
-		if (preg_match('#From:(.*)#',$body,$matches)!=0)
+		if (preg_match('#From:(.*)#s',$body,$matches)!=0)
 		{
 			$from_email=$matches[1];
 		}

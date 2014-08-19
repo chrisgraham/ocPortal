@@ -68,8 +68,8 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					list(,,$storage_type)=$ob->get_field_value_row_bits(array('id'=>NULL,'cf_type'=>$field_bits['cf_type'],'cf_default'=>''));
 					if (strpos($storage_type,'_trans')!==false)
 					{
-						$table='catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']).' JOIN '.get_table_prefix().'translate t ON t.id=b.cv_value';
-						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('a.id'),array('text_original'=>$label),'',1000/*reasonable search limit*/);
+						$table='catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']);
+						$_ret=$GLOBALS['SITE_DB']->query_select($table,array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('cv_value')=>$label),'',1000/*reasonable search limit*/,NULL,false,false,array('cv_value'=>'SHORT_TRANS'));
 					} else
 					{
 						$table='catalogue_entries a JOIN '.get_table_prefix().'catalogue_efv_'.$storage_type.' b ON a.id=b.ce_id AND b.cf_id='.strval($field_bits['id']);
@@ -83,7 +83,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 				return $ret;
 
 			case 'catalogue_category':
-				$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_categories a JOIN '.get_table_prefix().'translate t ON t.id=a.cc_title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('cc_title')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -92,7 +92,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 				return $ret;
 
 			case 'catalogue':
-				$ret=$GLOBALS['SITE_DB']->query('SELECT c_name FROM '.get_table_prefix().'catalogues a JOIN '.get_table_prefix().'translate t ON t.id=a.c_title WHERE '.db_string_equal_to('text_original',$label).' OR '.db_string_equal_to('c_name',$label));
+				$ret=$GLOBALS['SITE_DB']->query('SELECT c_name FROM '.get_table_prefix().'catalogues WHERE '.db_string_equal_to($GLOBALS['SITE_DB']->translate_field_ref('c_title'),$label).' OR '.db_string_equal_to('c_name',$label),NULL,NULL,false,false,array('c_title'=>'SHORT_TRANS'));
 				return collapse_1d_complexity('c_name',$ret);
 		}
 		return array();

@@ -56,7 +56,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 		switch ($resource_type)
 		{
 			case 'wiki_post':
-				$_ret=$GLOBALS['SITE_DB']->query_select('wiki_posts a JOIN '.get_table_prefix().'translate t ON t.id=a.the_message',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('the_message')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -65,7 +65,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
 				return $ret;
 
 			case 'wiki_page':
-				$_ret=$GLOBALS['SITE_DB']->query_select('wiki_pages a JOIN '.get_table_prefix().'translate t ON t.id=a.title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{

@@ -14,385 +14,77 @@
  */
 
 /**
- * Adds the specified content (image, video, gallery, etc.) to the
- * specified workflow.
+ * Returns whether the given user (default: current member) can choose the
+ * workflow to apply to some content they're submitting/editing.
  *
- * @param  SHORT_TEXT		The content-meta-aware name that applies to this content.
- * @param  SHORT_TEXT		The ID of this content. Must be a string. Integers will be extracted from the string if needed.
- * @param  ?AUTO_LINK		The translation table ID of the desired workflow. -1 is none, defaults to NULL (NULL: system default)
- * @param  boolean			Whether to remove any existing workflows from this content beforehand (current permissions must allow this)
- * @return ?AUTO_LINK		The content's ID in the workflow_content table. (NULL: if not added (eg. told to use default when there isn't one))
+ * @param  ?MEMBER		Member (NULL: current member)
+ * @return boolean		Whether the user has permission or not
  */
-function add_content_to_workflow($content_type='', $content_id='', $workflow_id=NULL, $remove_existing=false)
+function can_choose_workflow($member=NULL)
 {
-	//TODO: Remove existing entries, however that requires permissions
-	// Garbage in requires garbage out
-	if ($content_type=='' || $content_id=='')
-	{
-		// Bail out
-		fatal_exit(do_lang_tempcode('_MISSING_RESOURCE',get_translated_text($workflow_id)));
-	}
-
-	// Have we been given a valid workflow to use?
-	if (!is_null($workflow_id))
-	{
-		$valid_workflow=false;		// The caller is guilty of providing false details until proven innocent
-		// Look through the distict workflows...
-		foreach ($GLOBALS['SITE_DB']->query_select('workflow_requirements',array('DISTINCT workflow_name')) as $a_workflow)
-		{
-			// ...and see if this one is us
-			if ($a_workflow['workflow_name']==$workflow_id)
-			{
-				$valid_workflow=true;
-			}
-		}
-		// Bail out if we couldn't find the specified workflow
-		if (!$valid_workflow)
-		{
-			warn_exit(do_lang_tempcode('_MISSING_RESOURCE',get_translated_text($workflow_id)));
-		}
-		// Don't need this anymore
-		unset($valid_workflow);
-	}
-	// Otherwise use the system default
-	else
-	{
-		$default_workflow=get_default_workflow();
-		if (is_null($default_workflow))
-		{
-			// No default, so don't apply any
-			return NULL;
-		}
-		else
-		{
-			$workflow_id=$default_workflow;
-		}
-	}
-
-	// Now we know the workflow is OK, what about the content?
-	// Look through the content-meta-aware hooks to find it.
-	// We don't need to worry too much about multiple hooks with this
-	// name, since we're calling the filesystem and if there are multiple
-	// files with the same path then we've got bigger problems to worry
-	// about!
-	$hooks=find_all_hooks('systems','content_meta_aware');
-	$found=false;		// Guilty until proven innocent again
-	foreach (array_keys($hooks) as $hook)
-	{
-		// Skip if this is not the hook we're after
-		if ($hook != $content_type) continue;
-
-		// Otherwise load and instantiate the hook
-		require_code('content');
-		$ob=get_content_object($hook);
-		if (is_null($ob)) continue;		// Bail out if the hook fails
-
-		// Grab information about the hook
-		$info=$ob->info();
-		$content_table=$info['table'];
-		$content_field=$info['id_field'];
-		if ($info['id_field_numeric'])		// See if we need to extract a number from the provided ID string
-		{
-			// If so then flag it with a shorter name, and use a different
-			// name for the converted ID (ocPortal avoids dynamic typing)
-			$numeric=true;
-			$numeric_id=intval($content_id);		// Errors arise from passing an object, but should be noticed by type checker
-		}
-		else
-		{
-			// Otherwise set the flag as false. We've already got a string.
-			$numeric=false;
-		}
-	}
-
-	// Now we have the information required to access the content.
-	// However, we still don't know if the provided ID is valid, so we
-	// have to check that too!
-	// Need different paths based on ID type, to prevent breaking strict
-	// databases
-	if ($numeric)
-	{
-		// Query the database for content matching the found parameters
-		if ($GLOBALS['SITE_DB']->query_select($content_table,array($content_field),array($content_field=>$numeric_id),'',1)==array())
-		{
-			// This content doesn't exist, bail out
-			warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html($content_table.'/'.$content_field.'/'.$content_id)));
-		}
-	}
-	else
-	{
-		// Query the database for content matching the found parameters
-		if ($GLOBALS['SITE_DB']->query_select($content_table,array($content_field),array($content_field=>$content_id),'',1)==array())
-		{
-			// This content doesn't exist, bail out
-			warn_exit(do_lang_tempcode('_MISSING_RESOURCE',get_translated_text($workflow_id)));
-		}
-	}
-
-	// If we've made it this far then we have been asked to apply a
-	// valid workflow to a valid piece of content, so let's go ahead
-
-	// Remove existing associations if we've been asked to
-	if ($remove_existing)
-	{
-		$wf=get_workflow_of_content($content_type,$content_id);
-		if (!is_null($wf))
-		{
-			$workflow_content_id=array_map('current',$GLOBALS['SITE_DB']->query_select('workflow_content',array('id'),array('source_type'=>$content_type,'source_id'=>$content_id)));
-			foreach ($workflow_content_id as $this_id)
-			{
-				$GLOBALS['SITE_DB']->query_delete('workflow_content',array('id'=>$this_id));
-				$GLOBALS['SITE_DB']->query_delete('workflow_content_status',array('workflow_content_id'=>$this_id));
-			}
-		}
-	}
-	$id=$GLOBALS['SITE_DB']->query_insert('workflow_content',array('source_type'=>$content_type,'source_id'=>$content_id,'workflow_name'=>$workflow_id,'notes'=>'','original_submitter'=>get_member()),true,false,false);
-
-	// Set the workflow status to 0 for each point
-	foreach (get_requirements_for_workflow($workflow_id) as $point)
-	{
-		$GLOBALS['SITE_DB']->query_insert('workflow_content_status',array('workflow_content_id'=>$id,'workflow_approval_name'=>$point,'status_code'=>0,'approved_by'=>get_member()),true,false,false);
-	}
-
-	return $id;
-}
-
-/**
- * Give the specified workflow a new requirement. If you need to invent
- * a new requirement that's not been used before then just add its name
- * to the translation table via the 'insert_lang' function and use the
- * returned ID as that requirement's ID from then on.
- * Note: The workflow must already exist with at least one requirement.
- * See the 'build_new_workflow' function to define a new workflow.
- * Note: If passing a requirement already in the given workflow, its
- * position will be updated to the new value (or the end if not specified).
- * NOTE: Positions do not need to be contiguous, as long as they are in
- * an order. For example, requirements at positions 12, 34 and 852 will
- * behave the same way as requirements at positions 1, 2 and 3 (except
- * when adding requirements at defined positions of course, since
- * position 4 will appear at the start of the former list but at the end
- * of the latter)
- *
- * @param  AUTO_LINK		The ID of the requirement
- * @param  AUTO_LINK		The ID of the workflow to add this requirement to
- * @param  ?integer		The position in the workflow that this requirement will have. NULL adds it to the end (NULL: default)
- */
-function add_requirement_to_workflow($requirement_id,$workflow_id,$position=NULL)
-{
-	// Check we've not been given garbage. If so then bail out.
-	if (is_null($requirement_id))
-	{	
-		fatal_exit(do_lang_tempcode('_MISSING_RESOURCE','NULL requirement'));
-	}
-	if (is_null($workflow_id))
-	{
-		fatal_exit(do_lang_tempcode('_MISSING_RESOURCE','NULL workflow'));
-	}
-
-	// Make sure this workflow exists
-	if ($GLOBALS['SITE_DB']->query_select('workflow_requirements',array('workflow_name'),array('workflow_name'=>$workflow_id),'',1)==array())
-	{
-		// If not then give a warning and exit
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',get_translated_text($workflow_id)));
-	}
-
-	// If this requirement is already in this workflow then we need to
-	// update its position. However, it is easiest if we simply delete
-	// the entry here, so that the following code will apply to all cases
-	$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_name'=>$workflow_id,'workflow_approval_name'=>$requirement_id),'',1,NULL,true);
-
-	// Now see what position we're adding to. We either need to determine
-	// the next position (if we've been given NULL), or else just dump
-	// the position in the record (we don't assume that positions are
-	// unique in any case, points with the same position will appear
-	// together but their specific order is undefined)
-	if (is_null($position))
-	{
-		// The easy case, we simply grab the existing requirements in
-		// order of position and +1 to the highest.
-		$current_positions=$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('the_position'),array('workflow_name'=>$workflow_id),'ORDER BY the_position DESC',1);
-		$position=$current_positions[0]['the_position'] + 1;
-	}
-
-	// Do the insertion.
-	// TODO: We should set the default appropriately here, since the case
-	// of adding new requirements then removing the original requirements
-	// would cause a workflow to lose its default status.
-	$GLOBALS['SITE_DB']->query_insert('workflow_requirements',array('workflow_name'=>$workflow_id,'workflow_approval_name'=>$requirement_id,'the_position'=>$position,'is_default'=>0),true,false,false);
-}
-
-/**
- * Approves the given point for the given piece of content. The optional
- * member argument will be set as the approver (ie. the one to blame if
- * this approval is in error) , otherwise the current user will be set.
- *
- * @param  AUTO_LINK		The *workflow content* ID (NOT the gallery, category, etc. ID!)
- * @param  AUTO_LINK		The approval point name (translation table ID)
- * @param  ?MEMBER		The member ID to use as the approver, (NULL: for current user)
- */
-function approve_content_for_point($content_id,$approval_name,$member=NULL)
-{
-	// TODO: Add some sanity checks here
-	// Grab the current user if we've not been given one
+	// Sort out the user
 	if (is_null($member)) $member=get_member();
 
-	// Grab the current status of this point, firstly to see if we need
-	// to set it at all, but more importantly to make sure that the given
-	// parameters make sense and are valid
-	$status=$GLOBALS['SITE_DB']->query_select('workflow_content_status',array('status_code'),array('workflow_content_id'=>$content_id,'workflow_approval_name'=>$approval_name),'',1);
-
-	// Now approve the point if needed
-	if ($status['status_code']==0)
-	{
-		$GLOBALS['SITE_DB']->query_update('workflow_content_status',array('status_code'=>1),array('workflow_content_id'=>$content_id,'workflow_approval_name'=>$approval_name),'',1);
-	}
-
-	// Done
+	// We currently use access to the workflow management page as the defining
+	// criterion
+	return has_actual_page_access($member,'admin_workflow',get_module_zone('admin_workflow'));
 }
 
 /**
- * Add a new workflow to the system. The workflow needs at least one
- * requirement, which you should put in the $requirements array passed
- * as the second argument. The indices of this array must be natural
- * numbers, since they will indicate the position of this requirement in
- * the workflow. The requirements themselves are simply integers which
- * map to language strings containing the requirement name. They can be
- * made up arbitrarily before passing to this function by calling
- * insert_lang('requirement_name').
+ * Returns a form field to choose the desired workflow (if there is more than
+ * one in the system).
  *
- * @param  ?AUTO_LINK	The ID of this workflow, if you've already inserted the language string. (NULL: If not already inserted).
- * @param  string			The string to use as this requirement's name in the current language
- * @param  array			A mapping from workflow position to workflow requirement (language string lookup integer)
- * @param  boolean		Whether to make this workflow the default workflow (default value is false)
- * @return AUTO_LINK		The workflow's ID (language string lookup integer)
+ * @param  boolean		Whether to include an option for inheriting
+ * @param  boolean		Whether to include an option for leaving it alone
+ * @return tempcode		The UI for choosing a workflow (if needed)
  */
-function build_new_workflow($id,$name,$requirements,$default=false)
+function workflow_choose_ui($include_inherit=false,$include_current=false)
 {
-	// First let's get a unique ID for this workflow if it has none
-	if (is_null($id))
-	{
-		// HACKHACK We should use a normalised table with an ID field
-		$id=insert_lang($name,3);
-	}
-	// Remove any existing requirements just in case this workflow already exists
-	$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_name'=>$id));
+	// Grab the necessary code
+	require_code('workflows');
+	require_lang('workflows');
 
-	// Now add each requirement to this workflow; as a side-effect this will
-	// give the workflow a presence in the database
-	foreach ($requirements as $position=>$requirement)
-	{
-		// Set default to 0 to start with
-		$GLOBALS['SITE_DB']->query_insert('workflow_requirements',array('workflow_name'=>$id,'workflow_approval_name'=>$requirement,'the_position'=>$position,'is_default'=>0),true,false,false);
-	}
-	// Now see if we're to be the default
-	if ($default)
-	{
-		// If so then set all defaults to 0 (which is why we didn't bother
-		// setting it upon insertion)
-		$GLOBALS['SITE_DB']->query_update('workflow_requirements',array('is_default'=>0));
-		// Now set our defaults to 1
-		$GLOBALS['SITE_DB']->query_update('workflow_requirements',array('is_default'=>1),array('workflow_name'=>$id));
-	}
-	// And we're done!
-	return $id;
-}
+	// Find out which workflows are available
+	$all_workflows=get_all_workflows();
 
-/**
- * Deleting a workflow will remove the workflow, leaving the validated/
- * unvalidated system to handle content, ie. content which has passed
- * completely through the workflow will have its validated bit set and
- * will thus remain live. Those not completely through will not have
- * theirs set yet and will thus remain unvalidated and not live.
- * NOTE: Approval points can be reused, so they will stay behind.
- *
- * @param  AUTO_LINK		The ID of the workflow to delete
- */
-function delete_workflow($id)
-{
-	// Grab all of the content in this workflow
-	$content=$GLOBALS['SITE_DB']->query_select('workflow_content',array('id','source_type','source_id'),array('workflow_name'=>$id));
-
-	// Now remove those references
-	$GLOBALS['SITE_DB']->query_delete('workflow_content',array('workflow_name'=>$id));
-
-	// Then remove their workflow status
-	foreach ($content as $content_item)
+	// Only give an option to select a workflow if there is more
+	// than one available
+	if (count($all_workflows)>1)
 	{
-		$GLOBALS['SITE_DB']->query_delete('workflow_content_status',array('workflow_content_id'=>$content_item['id']));
-	}
+		// Grab the default workflow
+		$def=get_default_workflow();
+		$workflows=new ocp_tempcode();
 
-	// Grab the approval points in this workflow and remove those which aren't
-	// used by any other workflows
-	$points=array_map('current',$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('workflow_approval_name'),array('workflow_name'=>$id)));
-	foreach ($points as $p)
-	{
-		if (count(
-			array_unique(
-				array_map('current',$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('workflow_name'),array('workflow_approval_name'=>$p)))
-			)
-		)==1)
+		// If we've been asked to show a "current" option then add that
+		if ($include_current)
 		{
-			// This approval point is only in one workflow (ie. this one) so remove
-			// it from the permissions table
-			$GLOBALS['SITE_DB']->query_delete('workflow_permissions',array('workflow_approval_name'=>$p));
+			$workflows->attach(form_input_list_entry('wf_-2',true,do_lang('KEEP_WORKFLOW'),false,false));
 		}
+
+		// If we've been asked to show an "inherit" option then add that
+		if ($include_inherit)
+		{
+			$workflows->attach(form_input_list_entry('wf_-1',!$include_current,do_lang('INHERIT_WORKFLOW'),false,false));
+		}
+
+		// Get all of the workflows we have
+		foreach ($all_workflows as $id=>$workflow)
+		{
+			$workflows->attach(form_input_list_entry('wf_'.strval($id),(!$include_inherit && !$include_current && $id==$def),$workflow,false,false));
+		}
+
+		// Return a list entry to choose from
+		$help=$include_inherit? do_lang('INHERIT_WORKFLOW_HELP') : '';
+		$help.=$include_current? do_lang('CURRENT_WORKFLOW_HELP') : '';
+		return form_input_list(do_lang_tempcode('USE_WORKFLOW'),do_lang_tempcode('USE_WORKFLOW_DESCRIPTION',$help),'workflow',$workflows,NULL,false);
 	}
-
-	// Now remove the workflow from the database (ie. remove its association with
-	// approval points)
-	$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_name'=>$id));
-}
-
-/**
- * Deleting an approval point will remove it from any workflow it is a
- * part of. Any content which has been approved for this requirement
- * will be unaffected, whilst those not-yet-approved will first be
- * approved, then have the requirement removed. This is to prevent any
- * content asking to be approved on a point which doesn't exist.
- *
- * @param  AUTO_LINK		The workflow approval point name (translation table ID)
- */
-function delete_approval_point($name)
-{
-	// Grab all content awaiting this approval
-	$content=$GLOBALS['SITE_DB']->query_select('workflow_content_status',array('status_code','workflow_content_id'),array('workflow_approval_name'=>$name));
-
-	// Now go through each, approving them if needed
-	foreach ($content as $content_item)
+	elseif (count($all_workflows)==1)
 	{
-		// 0 means unapproved
-		if ($content['status_code']==0)
-		{
-			// Set the approval
-			approve_content_for_point($content['workflow_content_id'],$name);
-		}
-	}
-	// Now remove these requirements en-mass from the content
-	$GLOBALS['SITE_DB']->query_delete('workflow_content_status',array('workflow_content_id'=>$name));
-
-	// We have to be careful about removing requirements from workflows,
-	// since a workflow is defined by the approval points it requires.
-	// We must check to see if we're about to throw out any workflows as
-	// a result of removing this point. If so then we'd like to remove
-	// the workflow sanely and completely.
-	$affected_workflows=$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('workflow_name'),array('workflow_approval_name'=>$name));
-	foreach ($affected_workflows as $workflow)
+		return form_input_hidden('workflow','wf_'.current(array_keys($all_workflows)));
+	} else
 	{
-		// If there is only one requirement then it's the one we've been
-		// asked to remove. Let's just remove the whole workflow.
-		if (count(get_requirements_for_workflow($workflow['workflow_name']))==1)
-		{
-			delete_workflow($workflow['workflow_name']);
-		}
-		// Otherwise we can just remove this one point
-		else
-		{
-			$GLOBALS['SITE_DB']->query_delete('workflow_requirements',array('workflow_approval_name'=>$name,'workflow_name'=>$workflow['workflow_name']),'',1);
-		}
+		return new ocp_tempcode();
 	}
-
-	// Now we remove the permissions associated with this approval point
-	$GLOBALS['SITE_DB']->query_delete('workflow_permissions',array('workflow_approval_name'=>$name));
 }
 
 /**
@@ -402,29 +94,11 @@ function delete_approval_point($name)
  */
 function get_all_workflows()
 {
-	$workflows=array_map('current',$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('DISTINCT workflow_name')));
+	$workflows=$GLOBALS['SITE_DB']->query_select('workflows',array('id','workflow_name'));
 	$output=array();
 	foreach ($workflows as $w)
 	{
-		$output[$w]=get_translated_text($w);
-	}
-	return $output;
-}
-
-/**
- * Returns all of the approval point which are currently defined. Indices are
- * IDs, values are names.
- *
- * @return array		The approval points which are defined. Empty if none are defined.
- */
-function get_all_approval_points()
-{
-	$points=array_map('current',$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('DISTINCT workflow_approval_name')));
-	$points=array_unique(array_merge($points,array_map('current',$GLOBALS['SITE_DB']->query_select('workflow_permissions',array('DISTINCT workflow_approval_name')))));
-	$output=array();
-	foreach ($points as $p)
-	{
-		$output[$p]=get_translated_text($p);
+		$output[]=get_translated_text($w['workflow_name']);
 	}
 	return $output;
 }
@@ -445,7 +119,7 @@ function get_default_workflow()
 	if (count($workflows)>1)
 	{
 		// Look for those which are set as default
-		$defaults=$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('DISTINCT workflow_name'),array('is_default'=>1));
+		$defaults=$GLOBALS['SITE_DB']->query_select('workflows',array('id'),array('is_default'=>1));
 		// If there aren't any then we can't presume to know which should
 		// be returned, so return an empty array
 		if ($defaults==array())
@@ -459,104 +133,17 @@ function get_default_workflow()
 			return NULL;
 		}
 		// If we're here then we have one default, so return it
-		return current(current($defaults));
+		return $defaults[0]['id'];
 	}
 	// Otherwise just give back what we've found (singleton or empty)
 	elseif (count($workflows)==1)
 	{
-		return current(array_keys($workflows));
-	}
-	else
+		$keys=array_keys($workflows);
+		return $keys[0];
+	} else
 	{
 		return NULL;
 	}
-}
-
-/**
- * Get the workflow content ID for the given piece of content.
- *
- * @param  string		The type of the source (eg. download, gallery, etc.)
- * @param  string		The ID of the specific piece of content (if numeric, pass as a string anyway)
- * @return AUTO_LINK	The workflow_content_id
- */
-function get_workflow_content_id($source_type,$source_id)
-{
-	// Grab the specified content's ID
-	$content=$GLOBALS['SITE_DB']->query_select('workflow_content',array('id'),array('source_type'=>$source_type,'source_id'=>$source_id),'',1);
-	if ($content==array())
-	{
-		return NULL;
-	}
-	return $content[0]['id'];
-}
-
-/**
- * Gets an array of the approval point IDs required by the given
- * workflow ID
- *
- * @param  AUTO_LINK		The ID of the workflow
- * @return array			The IDs of the approval points for the workflow, in workflow order
- */
-function get_requirements_for_workflow($workflow_id)
-{
-	// Make sure we have something to work with
-	if (is_null($workflow_id))
-	{
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE','NULL workflow'));
-	}
-	// Now grab each point along with its position
-	$approval_points=$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('workflow_approval_name'),array('workflow_name'=>$workflow_id),'ORDER BY the_position ASC');
-	$raw_names=array();		// This will store the points in order
-	// Fill the $raw_names array
-	foreach ($approval_points as $point)
-	{
-		$raw_names[]=$point['workflow_approval_name'];
-	}
-	return $raw_names;
-}
-
-/**
- * Gets the position of the given requirement in the given workflow.
- *
- * @param  AUTO_LINK		The ID of the approval point
- * @param  AUTO_LINK		The ID of the workflow
- * @return ?integer		The position of the approval point in this case (NULL: if not found)
- */
-function get_requirement_position($requirement_id,$workflow_id)
-{
-	$found=$GLOBALS['SITE_DB']->query_select('workflow_requirements',array('the_position'),array('workflow_name'=>$workflow_id,'workflow_approval_name'=>$requirement_id),'ORDER BY the_position ASC');
-	if ($found==array())
-	{
-		return NULL;
-	}
-	else
-	{
-		return $found[0]['the_position'];
-	}
-}
-
-/**
- * Gets an array of the group IDs allowed to approve the given point
- *
- * @param  AUTO_LINK		The ID of the approval point
- * @param  boolean		Should we only return groups which are validated? (default: true)
- * @return array			The IDs of the groups allowed to signoff on it
- */
-function get_groups_for_point($approval_id,$only_validated=true)
-{
-	// TODO: Implement $only_validated
-
-	if (is_null($approval_id))
-	{
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE','NULL approval'));
-	}
-	$groups=$GLOBALS['SITE_DB']->query_select('workflow_permissions',array('usergroup'),array('workflow_approval_name'=>$approval_id));
-	$raw_names=array();
-	foreach ($groups as $group)
-	{
-		$raw_names[]=$group['usergroup'];
-	}
-	return $raw_names;
 }
 
 /**
@@ -614,31 +201,31 @@ function get_workflow_form($workflow_content_id)
 	$workflow_hidden->attach(form_input_hidden('content_id',strval($workflow_content_id)));
 
 	// Check if this is a valid piece of content for a workflow
-	$row=$GLOBALS['SITE_DB']->query_select('workflow_content',array('*'),array('id'=>$workflow_content_id),'',1);
-	if (count($row)==0)
+	$rows=$GLOBALS['SITE_DB']->query_select('workflow_content',array('*'),array('id'=>$workflow_content_id),'',1);
+	if (count($rows)==0)
 	{
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',get_translated_text($workflow_content_id)));
+		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',strval($workflow_content_id)));
 	}
 
-	$row=array_pop($row);
+	$row=$rows[0];
 
-	// If so then find the workflow name for it
-	$relevant_workflow=$row['workflow_name'];
+	// If so then find the workflow for it
+	$relevant_workflow=$row['workflow_id'];
 
 	$workflow_hidden->attach(form_input_hidden('workflow_id',strval($relevant_workflow)));
 
 	// Make sure there are some points to approve
-	$approval_points=get_requirements_for_workflow($relevant_workflow);
+	$approval_points=get_all_approval_points($relevant_workflow);
 	if ($approval_points==array())
 	{
-		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',get_translated_text($workflow_content_id)));
+		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',strval($workflow_content_id)));
 	}
 
 	/////////////////////////
 	// Approval tick boxes //
 	/////////////////////////
 
-	$available_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member());		// What groups our member is in
+	$available_groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member());		// What groups our user is in
 	$existing_status=array();		// This shows the current approval status, but is not editable
 	$approval_status=array();		// This holds tick-boxes for editing the approval status
 	$send_next=array();		// This holds the details for who to send this to next
@@ -651,24 +238,25 @@ function get_workflow_form($workflow_content_id)
 
 	// Get the status of each point
 	$statuses=array();
-	foreach ($GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_name','status_code'),array('workflow_content_id'=>$workflow_content_id)) as $stat)
+	$_statuses=$GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_point_id','status_code'),array('workflow_content_id'=>$workflow_content_id));
+	foreach ($_statuses as $status)
 	{
-		$statuses[$stat['workflow_approval_name']]=$stat['status_code'];
+		$statuses[$status['workflow_approval_point_id']]=$status['status_code'];
 	}
 
 	// Assume we can't do anything
 	$have_permission_over_a_point=false;
 
 	// Now loop through all approval points in workflow order	
-	foreach ($approval_points as $point)
+	foreach ($approval_points as $point=>$approval_point_name)
 	{
 		// Only show one tick box for each approval point, if any
 		$approval_shown=false;
 
 		// Go through each group allowed to modify this value...
-		foreach (get_groups_for_point($point) as $allowed_group)
+		foreach (get_usergroups_for_approval_point($point) as $allowed_group)
 		{
-			// ... and check whether the member is in it
+			// ... and check whether the user is in it
 			if (!$approval_shown && in_array($allowed_group,$available_groups))
 			{
 				// If so then remember that we've handled this point
@@ -782,19 +370,18 @@ function get_workflow_form($workflow_content_id)
 			// Add on the point's position to this group's score
 			if (array_key_exists($group,$group_scores))
 			{
-				$group_scores[$group]=$group_scores[$group] + get_requirement_position($point,$relevant_workflow);
+				$group_scores[$group]=$group_scores[$group]+get_approval_point_position($point,$relevant_workflow);
 			}
 			// Otherwise give it a new score equal to this point's position
 			else
 			{
-				$group_scores[$group]=get_requirement_position($point,$relevant_workflow);
+				$group_scores[$group]=get_approval_point_position($point,$relevant_workflow);
 			}
 			// Now increment the group's approval point count
 			if (array_key_exists($group,$group_counts))
 			{
-				$group_counts[$group]=$group_counts[$group] + 1;
-			}
-			else
+				$group_counts[$group]++;
+			} else
 			{
 				$group_counts[$group]=1;
 			}
@@ -885,7 +472,7 @@ function get_workflow_form($workflow_content_id)
 	}
 
 	// Attach the title to the form first, along with usage info
-	$workflow_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'7bcd811123baa45bbe81ca9e5b44a7ae','TITLE'=>NULL,'HELP'=>do_lang_tempcode('WORKFLOW_USAGE'))));
+	$workflow_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>NULL,'HELP'=>do_lang_tempcode('WORKFLOW_USAGE'))));
 
 	// Show the current status next
 	$workflow_fields->attach(form_input_various_ticks($existing_status,'',NULL,do_lang_tempcode('CURRENT_APPROVAL_STATUS'),false));
@@ -912,7 +499,7 @@ function get_workflow_form($workflow_content_id)
 	$workflow_hidden->attach(form_input_hidden('return_url',get_self_url(true)));
 
 	// Add all of these to the form
-	$workflow_form->attach(do_template('FORM',array('_GUID'=>'9eb9a74add2b4fea737d0af7b65a2d85','FIELDS'=>$workflow_fields,'HIDDEN'=>$workflow_hidden,'TEXT'=>'','URL'=>$post_url,'SUBMIT_ICON'=>'buttons__save','SUBMIT_NAME'=>do_lang_tempcode('SUBMIT_WORKFLOW_CHANGES'),'SKIP_REQUIRED'=>true)));
+	$workflow_form=do_template('FORM',array('_GUID'=>'9eb9a74add2b4fea737d0af7b65a2d85','FIELDS'=>$workflow_fields,'HIDDEN'=>$workflow_hidden,'TEXT'=>'','URL'=>$post_url,'SUBMIT_NAME'=>do_lang_tempcode('SUBMIT_WORKFLOW_CHANGES'),'SKIP_REQUIRED'=>true));
 
 	// Then pass it to whoever wanted it
 	return do_template('WORKFLOW_BOX',array('_GUID'=>'cc80db735825a058c0d90e40e783ed30','FORM'=>$workflow_form));
@@ -952,23 +539,20 @@ function workflow_update_handler()
 	// Find out which groups/members to inform, starting with the
 	// original submitter
 	$send_to_members=array();
-	if (array_key_exists('send_author',$_POST))
+	if (post_param_integer('send_author')==1)
 	{
-		if (post_param_integer('send_author')==1)
+		$submitter=get_submitter_of_workflow_content($content_id);
+		if (!is_null($submitter))
 		{
-			$submitter=get_submitter_of_workflow_content($content_id);
-			if (!is_null($submitter))
-			{
-				$send_to_members[$submitter]=1;
-			}
+			$send_to_members[$submitter]=1;
 		}
 	}
 
 	// Now get the groups
 	$group_ids=array();		// Only remember 1 copy of each group
-	foreach (get_requirements_for_workflow($workflow_id) as $requirement)
+	foreach (array_keys(get_all_approval_points($workflow_id)) as $point_id)
 	{
-		foreach (get_groups_for_point($requirement) as $group)
+		foreach (get_usergroups_for_approval_point($point_id) as $group)
 		{
 			if (!in_array($group,$group_ids))
 			{
@@ -993,7 +577,7 @@ function workflow_update_handler()
 	$all_approval_statuses=array();
 
 	// Grab each point's status from the database
-	$old_values=$GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_name','status_code'),array('workflow_content_id'=>$content_id));
+	$old_values=$GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_point_id','status_code'),array('workflow_content_id'=>$content_id));
 
 	$accounted_for_statuses=array();
 
@@ -1001,26 +585,27 @@ function workflow_update_handler()
 	foreach ($old_values as $old_value)
 	{
 		$noted=false;		// Keep a note of each value for including in emails
-		// Only compare against values which we've been given
-		if (array_key_exists($old_value['workflow_approval_name'],$approvals))
-		{
-			$accounted_for_statuses[]=$old_value['workflow_approval_name'];
 
-			// See if the database entry is the same as the given status
-			if ($old_value['status_code'] != $approvals[$old_value['workflow_approval_name']])
+		// Only compare against values which we've been given
+		if (array_key_exists($old_value['workflow_approval_point_id'],$approvals))
+		{
+			$accounted_for_statuses[]=$old_value['workflow_approval_point_id'];
+
+			// See if the database status is the same status as the given status
+			if (($old_value['status_code']?1:0)!=$approvals[$old_value['workflow_approval_point_id']])
 			{
 				// If not then see if we have permission to change it
 				$members_with_permission=array();
-				foreach ($GLOBALS['FORUM_DRIVER']->member_group_query(get_groups_for_point($old_value['workflow_approval_name'])) as $permitted)
+				foreach ($GLOBALS['FORUM_DRIVER']->member_group_query(get_usergroups_for_approval_point($old_value['workflow_approval_point_id'])) as $permitted)
 				{
 					$members_with_permission[]=$permitted['id'];
 				}
 				if (in_array(get_member(),$members_with_permission))
 				{
 					// Remember that this needs to be changed
-					$updated_approvals[$old_value['workflow_approval_name']]=$approvals[$old_value['workflow_approval_name']];
+					$updated_approvals[$old_value['workflow_approval_point_id']]=$approvals[$old_value['workflow_approval_point_id']];
 					// Make a note of this value in the array of all statuses
-					$all_approval_statuses[$old_value['workflow_approval_name']]=$approvals[$old_value['workflow_approval_name']];
+					$all_approval_statuses[$old_value['workflow_approval_point_id']]=$approvals[$old_value['workflow_approval_point_id']];
 					$noted=true;
 				}
 			}
@@ -1030,7 +615,7 @@ function workflow_update_handler()
 			// If we're here then this status has either not been passed or
 			// it does not need modifying. Either way we can grab a valid
 			// status from the database.
-			$all_approval_statuses[$old_value['workflow_approval_name']]=$old_value['status_code'];
+			$all_approval_statuses[$old_value['workflow_approval_point_id']]=$old_value['status_code'];
 		}
 	}
 	// Now add any unaccounted-for points to those which need updating
@@ -1096,76 +681,47 @@ function workflow_update_handler()
 	// specify this via their content-meta-aware info.
 
 	// Grab lookup data from the workflows database
-	$content_details=$GLOBALS['SITE_DB']->query_select('workflow_content',array('source_type','source_id'),array('id'=>$content_id),'',1);
+	$content_details=$GLOBALS['SITE_DB']->query_select('workflow_content',array('content_type','content_id'),array('id'=>$content_id),'',1);
 	if ($content_details==array())
 	{
 		warn_exit(do_lang_tempcode('_MISSING_RESOURCE','workflow_content->'.strval($content_id)));
 	}
 
-	// Now use it to find this content's validation field
-	$hooks=find_all_hooks('systems','content_meta_aware');
-	$found=false;		// Guilty until proven innocent again
-	foreach (array_keys($hooks) as $hook)
+	// Now use it to find this content's validation field...
+
+	$ob=get_content_object($content_details[0]['content_type']);
+
+	// Grab information about the hook
+	$info=$ob->info();
+	$content_table=$info['table'];
+	$content_field=$info['id_field'];
+	if (array_key_exists('validated_field',$info))
 	{
-		// Skip if this is not the hook we're after
-		if ($hook != $content_details[0]['source_type']) continue;
-
-		// Otherwise load and instantiate the hook
-		require_code('content');
-		$ob=get_content_object($hook);
-		if (is_null($ob)) continue;		// Bail out if the hook fails
-
-		// Grab information about the hook
-		$info=$ob->info();
-		$content_table=$info['table'];
-		$content_field=$info['id_field'];
-		if (array_key_exists('validated_field',$info))
-		{
-			$content_validated_field=$info['validated_field'];
-		}
-		else
-		{
-			// Fall back to 'validated' if nothing is specified
-			$content_validated_field='validated';
-		}
-
-		if ($info['id_field_numeric'])		// See if we need to extract a number from the provided ID string
-		{
-			// If so then flag it with a shorter name, and use a different
-			// name for the converted ID (ocPortal avoids dynamic typing)
-			$numeric=true;
-			$numeric_id=intval($content_details[0]['source_id']);		// Errors arise from passing an object, but should be noticed by type checker
-		}
-		else
-		{
-			// Otherwise set the flag as false. We've already got a string.
-			$numeric=false;
-		}
+		$content_validated_field=$info['validated_field'];
+	} else
+	{
+		// Fall back to 'validated' if nothing is specified
+		$content_validated_field='validated';
 	}
 
 	// Now we have the details required to lookup this entry, wherever it
 	// is. Let's get its current validation status and compare to what
 	// the workflow would have it be
-	if ($numeric)
-	{
-		$content_is_validated=$GLOBALS['SITE_DB']->query_select($content_table,array($content_validated_field),array($content_field=>$numeric_id),'',1);
-	}
-	else
-	{
-		$content_is_validated=$GLOBALS['SITE_DB']->query_select($content_table,array($content_validated_field),array($content_field=>$content_details[0]['source_id']),'',1);
-	}
+	$content_is_validated=$GLOBALS['SITE_DB']->query_select($content_table,array($content_validated_field),array($content_field=>$info['id_field_numeric']?intval($content_details[0]['content_id']):$content_details[0]['content_id']),'',1);
+
 	// Make sure we've actually found something
 	if ($content_is_validated==array())
 	{
-		$source_id=$content_details[0]['source_id'];
-		$validated_field=$source_id->content_validated_field;
+		$content_id=$content_details[0]['content_id'];
+		$validated_field=$content_id->content_validated_field;
 		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',$content_table.'->'.$content_field.'->'.$validated_field));
 	}
+
 	// In order for content to go live all points must be approved
 	// See if all points have been approved. If so, none will have
 	// status 0
 	$all_points_approved=false;
-	if ($GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_name'),array('workflow_content_id'=>$content_id,'status_code'=>0))==array())
+	if ($GLOBALS['SITE_DB']->query_select('workflow_content_status',array('workflow_approval_point_id'),array('workflow_content_id'=>$content_id,'status_code'=>0))==array())
 	{
 		$all_points_approved=true;
 	}
@@ -1175,17 +731,18 @@ function workflow_update_handler()
 	if (($content_is_validated[0][$content_validated_field]==1)!=$all_points_approved)
 	{
 		$success_message=$all_points_approved? do_lang('APPROVAL_COMPLETE') : do_lang('APPROVAL_REVOKED');
-		$GLOBALS['SITE_DB']->query_update($content_table,array($content_validated_field=>$all_points_approved?1:0),array($content_field=>$content_details[0]['source_id']),'',1);
+		$GLOBALS['SITE_DB']->query_update($content_table,array($content_validated_field=>$all_points_approved?1:0),array($content_field=>$info['id_field_numeric']?intval($content_details[0]['content_id']):$content_details[0]['content_id']),'',1);
 	}
 
 	///////////////////////////////////////////
 	// Now inform members about this content //
 	///////////////////////////////////////////
+
 	// Make a nicely formatted list of the statuses
 	$status_list='';
 	foreach ($all_approval_statuses as $point=>$status)
 	{
-		$status_list.=get_translated_text($point).': ';
+		$status_list.=$approvals[$point].': ';
 		$status_list.=($status==1)?'approved':'not approved';
 		$status_list.=', ';
 	}
@@ -1196,11 +753,9 @@ function workflow_update_handler()
 	{
 		$success_message.=do_lang('APPROVAL_CHANGED_NOTIFICATIONS');
 	}
-	//require_code('developer_tools');
-	//inspect($emails);
 	$subject=do_lang('APPROVAL_EMAIL_SUBJECT',/*TODO: Should pass title in, for unique email subject line*/NULL,NULL,NULL,get_site_default_lang());
 	$body=do_lang('APPROVAL_EMAIL_BODY',post_param('http_referer',ocp_srv('HTTP_REFERER')),$status_list,$workflow_notes,get_site_default_lang());
-	dispatch_notification('workflow_step',NULL/*strval($workflow_id)*/,$subject,$body,$send_to_members);
+	dispatch_notification('workflow_step',strval($workflow_id),$subject,$body,$send_to_members);
 
 	// Finally return a success message
 	$return_url=strip_tags(post_param('return_url'));
@@ -1209,61 +764,157 @@ function workflow_update_handler()
 }
 
 /**
- * Returns a form field to choose the desired workflow (if there is more than
- * one in the system).
+ * Adds the specified content (image, video, gallery, etc.) to the
+ * specified workflow.
  *
- * @param  boolean		Whether to include an option for inheriting
- * @param  boolean		Whether to include an option for leaving it alone
- * @return tempcode		The UI for choosing a workflow (if needed)
+ * @param  ID_TEXT			The content-meta-aware name that applies to this content.
+ * @param  ID_TEXT			The ID of this content. Must be a string. Integers will be extracted from the string if needed.
+ * @param  ?AUTO_LINK		The ID of the desired workflow. (NULL: system default)
+ * @param  boolean			Whether to remove any existing workflows from this content beforehand (current permissions must allow this)
+ * @return ?AUTO_LINK		The content's ID in the workflow_content table. (NULL: if not added (eg. told to use default when there isn't one))
  */
-function workflow_choose_ui($include_inherit=false,$include_current=false)
+function add_content_to_workflow($content_type='',$content_id='',$workflow_id=NULL,$remove_existing=false)
 {
-	// Grab the necessary code
-	require_code('workflows');
-	require_lang('workflows');
-
-	// Find out which workflows are available
-	$all_workflows=get_all_workflows();
-
-	// Only give an option to select a workflow if there is more
-	// than one available
-	if (count($all_workflows)>1)
+	// Have we been given a valid workflow to use? If not, use system default
+	if (is_null($workflow_id))
 	{
-		// Grab the default workflow
-		$def=get_default_workflow();
-		$workflows=new ocp_tempcode();
-
-		// If we've been asked to show a "current" option then add that
-		if ($include_current)
+		$default_workflow=get_default_workflow();
+		if (is_null($default_workflow))
 		{
-			$workflows->attach(form_input_list_entry('wf_-2',true,do_lang('KEEP_WORKFLOW'),false,false));
-		}
-
-		// If we've been asked to show an "inherit" option then add that
-		if ($include_inherit)
+			// No default, so don't apply any
+			return NULL;
+		} else
 		{
-			$workflows->attach(form_input_list_entry('wf_-1',!$include_current,do_lang('INHERIT_WORKFLOW'),false,false));
+			$workflow_id=$default_workflow;
 		}
-
-		// Get all of the workflows we have
-		foreach ($all_workflows as $id=>$workflow)
-		{
-			$workflows->attach(form_input_list_entry('wf_'.strval($id),(!$include_inherit && !$include_current && $id==$def),$workflow,false,false));
-		}
-
-		// Return a list entry to choose from
-		$help=$include_inherit? do_lang('INHERIT_WORKFLOW_HELP') : '';
-		$help.=$include_current? do_lang('CURRENT_WORKFLOW_HELP') : '';
-		return form_input_list(do_lang_tempcode('USE_WORKFLOW'),do_lang_tempcode('USE_WORKFLOW_DESCRIPTION',$help),'workflow',$workflows,NULL,false);
 	}
-	elseif (count($all_workflows)==1)
+
+	$ob=get_content_object($content_type);
+
+	// Grab information about the hook
+	$info=$ob->info();
+	$content_table=$info['table'];
+	$content_field=$info['id_field'];
+
+	// Now we have the information required to access the content.
+	// However, we still don't know if the provided ID is valid, so we
+	// have to check that too!
+	// Need different paths based on ID type, to prevent breaking strict
+	// databases
+
+	// Query the database for content matching the found parameters
+	if ($GLOBALS['SITE_DB']->query_select($content_table,array($content_field),array($content_field=>$info['id_field_numeric']?$content_id:intval($content_id)),'',1)==array())
 	{
-		return form_input_hidden('workflow','wf_'.current(array_keys($all_workflows)));
+		// This content doesn't exist, bail out
+		warn_exit(do_lang_tempcode('_MISSING_RESOURCE',escape_html($content_table.'/'.$content_field.'/'.$content_id)));
 	}
-	else
+
+	// If we've made it this far then we have been asked to apply a
+	// valid workflow to a valid piece of content, so let's go ahead
+
+	// Remove existing associations if we've been asked to
+	if ($remove_existing)
 	{
-		return new ocp_tempcode();
+		$wf=get_workflow_of_content($content_type,$content_id);
+		if (!is_null($wf))
+		{
+			$workflow_content_ids=$GLOBALS['SITE_DB']->query_select('workflow_content',array('id'),array('content_type'=>$content_type,'content_id'=>$content_id));
+			foreach ($workflow_content_ids as $workflow_content_id)
+			{
+				$GLOBALS['SITE_DB']->query_delete('workflow_content',array('id'=>$workflow_content_id['id']));
+				$GLOBALS['SITE_DB']->query_delete('workflow_content_status',array('workflow_content_id'=>$workflow_content_id['id']));
+			}
+		}
 	}
+
+	// Add to workflow
+	$map=array(
+		'content_type'=>$content_type,
+		'content_id'=>$content_id,
+		'workflow_id'=>$workflow_id,
+		'notes'=>'',
+		'original_submitter'=>get_member(),
+	);
+	$id=$GLOBALS['SITE_DB']->query_insert('workflow_content',$map,true);
+
+	// Set the workflow status to 0 for each point
+	foreach (array_keys(get_approval_points_for_workflow($workflow_id)) as $approval_point_id)
+	{
+		$GLOBALS['SITE_DB']->query_insert('workflow_content_status',array('workflow_content_id'=>$id,'workflow_approval_point_id'=>$approval_point_id,'status_code'=>0,'approved_by'=>get_member()));
+	}
+
+	return $id;
+}
+
+/**
+ * Returns all of the approval point which are currently defined. Indices are
+ * IDs, values are names.
+ *
+ * @param  AUTO_LINK		The workflow ID.
+ * @return array			The approval points which are defined. Empty if none are defined.
+ */
+function get_all_approval_points($workflow_id)
+{
+	$workflow_approval_points=$GLOBALS['SITE_DB']->query_select('workflow_approval_points',array('id','workflow_approval_name'),array('workflow_id'=>$workflow_id),'ORDER BY the_position');
+	$approval_points=array();
+	foreach ($workflow_approval_points as $r)
+	{
+		$approval_points[$r['id']]=get_translated_text($r['workflow_approval_name']);
+	}
+	return $approval_points;
+}
+
+/**
+ * Gets an array of the group IDs allowed to approve the given point
+ *
+ * @param  AUTO_LINK		The ID of the approval point
+ * @return array			The IDs of the groups allowed to signoff on it
+ */
+function get_usergroups_for_approval_point($approval_id)
+{
+	if (is_null($approval_id))
+	{
+		warn_exit(do_lang_tempcode('_MISSING_RESOURCE','NULL approval'));
+	}
+	$groups=$GLOBALS['SITE_DB']->query_select('workflow_permissions',array('usergroup'),array('workflow_approval_point_id'=>$approval_id));
+	$raw_names=array();
+	foreach ($groups as $group)
+	{
+		$raw_names[]=$group['usergroup'];
+	}
+	return $raw_names;
+}
+
+/**
+ * Gets the position of the given approval point in the given workflow.
+ *
+ * @param  AUTO_LINK		The ID of the approval point
+ * @return ?integer		The position of the approval point in this case (NULL: if not found)
+ */
+function get_approval_point_position($approval_point_id)
+{
+	$found=$GLOBALS['SITE_DB']->query_select('workflow_approval_points',array('the_position'),array('id'=>$approval_point_id),'ORDER BY the_position ASC');
+	if ($found!=array())
+		return $found[0]['the_position'];
+	return NULL;
+}
+
+/**
+ * Get the workflow content ID for the given piece of content.
+ *
+ * @param  string		The type of the content (eg. download, gallery, etc.)
+ * @param  string		The ID of the specific piece of content (if numeric, pass as a string anyway)
+ * @return AUTO_LINK	The workflow_content_id
+ */
+function get_workflow_content_id($content_type,$content_id)
+{
+	// Grab the specified content's ID
+	$content=$GLOBALS['SITE_DB']->query_select('workflow_content',array('id'),array('content_type'=>$content_type,'content_id'=>$content_id),'',1);
+	if ($content==array())
+	{
+		return NULL;
+	}
+	return $content[0]['id'];
 }
 
 /**
@@ -1277,24 +928,18 @@ function workflow_choose_ui($include_inherit=false,$include_current=false)
  */
 function get_workflow_of_content($type,$id)
 {
-	return $GLOBALS['SITE_DB']->query_select_value_if_there('workflow_content','workflow_name',array('source_type'=>$type,'source_id'=>$id));
+	return $GLOBALS['SITE_DB']->query_value_null_ok('workflow_content','workflow_id',array('content_type'=>$type,'content_id'=>$id));
 }
 
 /**
- * Returns whether the given member (default: current member) can choose the
- * workflow to apply to some content they're submitting/editing.
+ * Approves the given point for the given piece of content.
  *
- * @param  ?MEMBER		Member (NULL: current member)
- * @return boolean		Whether the member has permission or not
+ * @param  AUTO_LINK		The *workflow content* ID (NOT the gallery, category, etc. ID!)
+ * @param  AUTO_LINK		The approval point ID
  */
-function can_choose_workflow($member=NULL)
+function approve_content_for_point($workflow_content_id,$approval_point_id)
 {
-	// Sort out the member
-	if (is_null($member)) $member=get_member();
-
-	// We currently use access to the workflow management page as the defining
-	// criterion
-	return has_actual_page_access(get_member(),'admin_workflow',get_module_zone('admin_workflow'));
+	$GLOBALS['SITE_DB']->query_update('workflow_content_status',array('status_code'=>1),array('workflow_content_id'=>$workflow_content_id,'workflow_approval_point_id'=>$approval_point_id),'',1);
 }
 
 /**

@@ -223,7 +223,7 @@ function _save_available_quiz_answers($id,$text,$type)
 					'q_is_correct'=>$is_correct,
 					'q_order'=>$x,
 				);
-				$map+=insert_lang('q_answer_text',$a,2);
+				$map+=insert_lang_comcode('q_answer_text',$a,2);
 				$map+=insert_lang('q_explanation',$explanation,2);
 				$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',$map);
 			}
@@ -283,7 +283,7 @@ function _save_available_quiz_answers($id,$text,$type)
 						'q_is_correct'=>$is_correct,
 						'q_order'=>$x,
 					);
-					$map+=lang_remap('q_answer_text',$existing_a[$x]['q_answer_text'],$a);
+					$map+=lang_remap_comcode('q_answer_text',$existing_a[$x]['q_answer_text'],$a);
 					$map+=lang_remap('q_explanation',$existing_a[$x]['q_explanation'],$explanation);
 					$GLOBALS['SITE_DB']->query_update('quiz_question_answers',$map,array('id'=>$existing_a[$x]['id']),'',1);
 				} else
@@ -293,7 +293,7 @@ function _save_available_quiz_answers($id,$text,$type)
 						'q_is_correct'=>$is_correct,
 						'q_order'=>$x,
 					);
-					$map+=insert_lang('q_answer_text',$a,2);
+					$map+=insert_lang_comcode('q_answer_text',$a,2);
 					$map+=insert_lang('q_explanation',$explanation,2);
 					$GLOBALS['SITE_DB']->query_insert('quiz_question_answers',$map);
 				}
@@ -378,9 +378,9 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 		'q_shuffle_answers'=>$shuffle_answers,
 	);
 	$map+=insert_lang('q_name',$name,2);
-	$map+=insert_lang('q_start_text',$start_text,2);
-	$map+=insert_lang('q_end_text',$end_text,2);
-	$map+=insert_lang('q_end_text_fail',$end_text_fail,2);
+	$map+=insert_lang_comcode('q_start_text',$start_text,2);
+	$map+=insert_lang_comcode('q_end_text',$end_text,2);
+	$map+=insert_lang_comcode('q_end_text_fail',$end_text_fail,2);
 	$id=$GLOBALS['SITE_DB']->query_insert('quizzes',$map,true);
 
 	_save_available_quiz_answers($id,$text,$type);
@@ -473,9 +473,9 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 		'q_shuffle_answers'=>$shuffle_answers,
 	);
 	$update_map+=lang_remap('q_name',$_name,$name);
-	$update_map+=lang_remap('q_start_text',$_start_text,$start_text);
-	$update_map+=lang_remap('q_end_text',$_end_text,$end_text);
-	$update_map+=lang_remap('q_end_text_fail',$_end_text_fail,$end_text_fail);
+	$update_map+=lang_remap_comcode('q_start_text',$_start_text,$start_text);
+	$update_map+=lang_remap_comcode('q_end_text',$_end_text,$end_text);
+	$update_map+=lang_remap_comcode('q_end_text_fail',$_end_text_fail,$end_text_fail);
 
 	if (!is_null($add_time))
 		$update_map['q_add_date']=$add_time;

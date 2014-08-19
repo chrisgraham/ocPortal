@@ -41,7 +41,7 @@ function add_award_type($title,$description,$points,$content_type,$hide_awardee,
 		'a_update_time_hours'=>$update_time_hours,
 	);
 	$map+=insert_lang_comcode('a_title',$title,2);
-	$map+=insert_lang('a_description',$description,2);
+	$map+=insert_lang_comcode('a_description',$description,2);
 	$id=$GLOBALS['SITE_DB']->query_insert('award_types',$map,true);
 
 	log_it('ADD_AWARD_TYPE',strval($id),$title);
@@ -78,7 +78,7 @@ function edit_award_type($id,$title,$description,$points,$content_type,$hide_awa
 		'a_update_time_hours'=>$update_time_hours,
 	);
 	$map+=lang_remap_comcode('a_title',$_title,$title);
-	$map+=lang_remap('a_description',$_description,$description);
+	$map+=lang_remap_comcode('a_description',$_description,$description);
 	$GLOBALS['SITE_DB']->query_update('award_types',$map,array('id'=>$id));
 
 	log_it('EDIT_AWARD_TYPE',strval($id),$title);

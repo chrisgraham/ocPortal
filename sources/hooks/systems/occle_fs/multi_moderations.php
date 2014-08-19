@@ -44,7 +44,7 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
 	 */
 	function find_resource_by_label($resource_type,$label)
 	{
-		$_ret=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations a JOIN '.get_table_prefix().'translate t ON t.id=a.mm_name',array('a.id'),array('text_original'=>$label));
+		$_ret=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('id'),array($GLOBALS['FORUM_DB']->translate_field_ref('mm_name')=>$label));
 		$ret=array();
 		foreach ($_ret as $r)
 		{

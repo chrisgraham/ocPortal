@@ -353,7 +353,7 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member=NULL,$add_
 		$GLOBALS['SITE_DB']->query_update('wiki_pages',insert_lang_comcode_attachments('description',2,$description,'wiki_page',strval($id),NULL,false,$member),array('id'=>$id),'',1);
 	} else
 	{
-		$map+=insert_lang('description',$description,2);
+		$map+=insert_lang_comcode('description',$description,2);
 		$id=$GLOBALS['SITE_DB']->query_insert('wiki_pages',$map,true);
 	}
 

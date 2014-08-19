@@ -557,10 +557,10 @@ class Module_admin_version
 				'catalogue_categories'=>array(
 					'cc_description',
 				),
-				'seedy_posts'=>array(
+				'wiki_posts'=>array(
 					'the_message',
 				),
-				'seedy_pages'=>array(
+				'wiki_pages'=>array(
 					'description',
 				),
 				'chat_messages'=>array(

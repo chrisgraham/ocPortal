@@ -44,7 +44,7 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
 	 */
 	function find_resource_by_label($resource_type,$label)
 	{
-		$_ret=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs a JOIN '.get_table_prefix().'translate t ON t.id=a.s_title',array('a.id'),array('text_original'=>$label));
+		$_ret=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id'),array($GLOBALS['FORUM_DB']->translate_field_ref('s_title')=>$label));
 		$ret=array();
 		foreach ($_ret as $r)
 		{

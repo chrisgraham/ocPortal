@@ -15,18 +15,10 @@
 
 require_code('crud_module');
 
-class Module_admin_workflow extends standard_crud_module
+class Module_admin_workflow extends standard_aed_module
 {
 	var $lang_type='WORKFLOW';
 	var $select_name='NAME';
-	var $javascript='';
-	var $content_type=NULL;
-	var $possibly_some_kind_of_upload=false;
-	var $output_of_action_is_confirmation=true;
-	var $do_preview=NULL;
-	var $archive_entry_point=NULL;
-	var $archive_label=NULL;
-	var $view_entry_point=NULL;
 	var $menu_label='WORKFLOW';
 	var $appended_actions_already=true;
 
@@ -53,10 +45,10 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function uninstall()
 	{
-		require_lang('workflows');
 		// Remove database tables
+		$GLOBALS['SITE_DB']->drop_table_if_exists('workflows');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_permissions');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_requirements');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_approval_points');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_content');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('workflow_content_status');
 	}
@@ -113,11 +105,10 @@ class Module_admin_workflow extends standard_crud_module
 		$GLOBALS['SITE_DB']->create_table('workflow_content_status',array(
 			'id'=>'*AUTO',		// ID for reference. Larger IDs will override smaller ones if they report a different status (nondeterministic for non-incremental IDs!)
 			'workflow_content_id'=>'INTEGER',		// The ID of this content in the workflow_content table
-			'workflow_approval_name'=>'SHORT_TRANS',		// The name of the ID field in the source table
+			'workflow_approval_point_id'=>'AUTO_LINK',		// The ID of the approval point
 			'status_code'=>'SHORT_INTEGER',		// A code indicating the status
 			'approved_by'=>'MEMBER'		// Remember who set this status, if the need arises to investigate this later
 		));
-
 	}
 
 	/**
@@ -158,18 +149,6 @@ class Module_admin_workflow extends standard_crud_module
 		if ($type=='_ad')
 		{
 			$doing='ADD_'.$this->lang_type;
-			if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-			{
-				$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-				if ($this->type_code=='d')
-				{
-					$doing=do_lang('CATALOGUE_GENERIC_ADD',escape_html($catalogue_title));
-				}
-				elseif ($this->type_code=='c')
-				{
-					$doing=do_lang('CATALOGUE_GENERIC_ADD_CATEGORY',escape_html($catalogue_title));
-				}
-			}
 
 			$this->title=get_screen_title($doing);
 
@@ -179,38 +158,14 @@ class Module_admin_workflow extends standard_crud_module
 		if ($type=='__ed')
 		{
 			$delete=post_param_integer('delete',0);
-			if (($delete==1) || ($delete==2)) //1=partial,2=full,...=unknown,thus handled as an edit
+			if ($delete==1)
 			{
 				$doing='DELETE_'.$this->lang_type;
-				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-				{
-					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-					if ($this->type_code=='d')
-					{
-						$doing=do_lang('CATALOGUE_GENERIC_DELETE',escape_html($catalogue_title));
-					}
-					elseif ($this->type_code=='c')
-					{
-						$doing=do_lang('CATALOGUE_GENERIC_DELETE_CATEGORY',escape_html($catalogue_title));
-					}
-				}
 
 				$this->title=get_screen_title($doing);
 			} else
 			{
 				$doing='EDIT_'.$this->lang_type;
-				if (($this->catalogue) && (get_param('catalogue_name','')!=''))
-				{
-					$catalogue_title=get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title',array('c_name'=>get_param('catalogue_name'))));
-					if ($this->type_code=='d')
-					{
-						$doing=do_lang('CATALOGUE_GENERIC_EDIT',escape_html($catalogue_title));
-					}
-					elseif ($this->type_code=='c')
-					{
-						$doing=do_lang('CATALOGUE_GENERIC_EDIT_CATEGORY',escape_html($catalogue_title));
-					}
-				}
 
 				$this->title=get_screen_title($doing);
 			}
@@ -229,6 +184,11 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function run_start($type)
 	{
+		// TODO: Add pic & tutorial
+		//$GLOBALS['HELPER_PANEL_PIC']='pagepics/usergroups';
+		//$GLOBALS['HELPER_PANEL_TUTORIAL']='tut_subcom';
+
+		require_lang('workflows');
 		require_code('workflows');
 		require_code('workflows2');
 
@@ -245,11 +205,12 @@ class Module_admin_workflow extends standard_crud_module
 	{
 		require_code('templates_donext');
 		return do_next_manager(get_screen_title('MANAGE_WORKFLOWS'),comcode_to_tempcode(do_lang('DOC_WORKFLOWS'),NULL,true),
-			array(
-				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
-				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WORKFLOW')),
-			),
-			do_lang('MANAGE_WORKFLOWS')
+					array(
+						/*	 type							  page	 params													 zone	  */
+						array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
+						array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_WORKFLOW')),
+					),
+					do_lang('MANAGE_WORKFLOWS')
 		);
 	}
 
@@ -360,12 +321,176 @@ class Module_admin_workflow extends standard_crud_module
 
 		// Actions
 		$fields2=new ocp_tempcode();
-		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'2ba5778e5fae64904d0c013db3d0a216','TITLE'=>do_lang_tempcode('ACTIONS'))));
+		$fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('TITLE'=>do_lang_tempcode('ACTIONS'))));
 
 		// Add an option to redefine the approval permissions
-		$fields2->attach(form_input_tick(do_lang('REDEFINE_WORKFLOW_POINTS'), do_lang('REDEFINE_WORKFLOW_POINTS_DESC'), 'redefine_points', false));
+		$fields2->attach(form_input_tick(do_lang('REDEFINE_WORKFLOW_POINTS'),do_lang('REDEFINE_WORKFLOW_POINTS_DESC'),'redefine_points',false));
 
 		return array($fields,$hidden,new ocp_tempcode(),'',false,'',$fields2);
+	}
+
+	/**
+	 * Tells us if more information is needed from the user. This is required
+	 * since the user may create a workflow out of predefined components, which
+	 * requires no further information, or they may want to define new approval
+	 * points, which requires more information.
+	 *
+	 * @return boolean		Whether more information is needed from the user.
+	 */
+	function need_second_screen()
+	{
+		if (post_param_integer('redefined',0)==1)
+			return false;
+
+		// We need to show the second screen if it has been specifically requested
+		// via the edit form
+		if (post_param_integer('redefine_points',0)==1)
+		{
+			return true;
+		}
+
+		// Otherwise the only reason we might need more information is if there
+		// are approval points specified that haven't been defined.
+
+		$point_names=$this->get_points_in_edited_workflow();
+
+		// Find any points which are already defined
+		$workflow_id=get_param_integer('id',NULL);
+		$all_points=($workflow_id===NULL)?array():get_all_approval_points($workflow_id);
+
+		// See if we need to define any
+		foreach ($point_names as $p)
+		{
+			if (!in_array($p,$all_points)) // This point has not been defined previously...
+				return true;
+		}
+
+		// If we've reached here then there's nothing to do
+		return false;
+	}
+
+	/**
+	 * Renders a screen for setting permissions on approval points.
+	 *
+	 * @return tempcode		The UI
+	 */
+	function second_screen()
+	{
+		require_code('form_templates');
+
+		$point_names=$this->get_points_in_edited_workflow();
+
+		// Find any points which are already defined
+		$workflow_id=get_param_integer('id',NULL);
+		$all_points=($workflow_id===NULL)?array():get_all_approval_points($workflow_id);
+
+		// This will hold new points
+		$clarify_points=array();
+
+		// This will hold existing points we're redefining
+		$redefine_points=array();
+
+		// See if we need to define any
+		foreach ($point_names as $seq_id=>$p)
+		{
+			if (!in_array($p,$all_points))
+			{
+				// Found an undefined point. We need more information.
+				$clarify_points[$seq_id]=$p;
+			} else
+			{
+				$redefine_points[$seq_id]=$p;
+			}
+		}
+
+		// These will hold our form fields
+		$fields=new ocp_tempcode();
+		$hidden=new ocp_tempcode();
+
+		// Pass through the previous screen's data
+		foreach (array('points','is_default','name') as $n)
+		{
+			$hidden->attach(form_input_hidden($n,post_param($n,'')));
+		}
+		$hidden->attach(form_input_hidden('redefined','1'));
+		if (!is_null($workflow_id))
+		{
+			$hidden->attach(form_input_hidden('id',strval($workflow_id)));
+		}
+
+		// We need a list of groups so that the user can choose those to give
+		// permission to
+		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,true,false,NULL,NULL);
+
+		// Add the form elements for each section
+		if (count($clarify_points)>0)
+		{
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+				'TITLE'=>do_lang('DEFINE_WORKFLOW_POINTS'),
+				'HELP'=>do_lang_tempcode('DEFINE_WORKFLOW_POINTS_HELP',implode(', ',$clarify_points)),
+			)));
+			foreach ($clarify_points as $seq_id=>$p)
+			{
+				// Now add a list of the groups to allow
+				$content=array();
+				foreach ($usergroups as $group_id=>$group_name)
+				{
+					$content[]=array($group_name,'groups_'.strval($seq_id).'['.strval($group_id).']',false,'');
+				}
+				$fields->attach(form_input_various_ticks(
+					$content,
+					do_lang('WORKFLOW_POINT_GROUPS_DESC',$p),
+					NULL,
+					do_lang('WORKFLOW_POINT_GROUPS',$p),
+					true
+				));
+			}
+		}
+
+		if (count($redefine_points)>0)
+		{
+			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+				'TITLE'=>do_lang('REDEFINE_WORKFLOW_POINTS'),
+				'HELP'=>do_lang('REDEFINE_WORKFLOW_POINTS_HELP'),
+			)));
+
+			// These points already exist, so look them up
+			$all_points=($workflow_id===NULL)?array():array_flip(get_all_approval_points($workflow_id));
+
+			foreach ($redefine_points as $seq_id=>$p)
+			{
+				// Now add a list of the groups to allow, defaulting to those which
+				// already have permission
+				$groups=get_usergroups_for_approval_point($all_points[$p],false);
+
+				$content=array();
+				foreach ($usergroups as $group_id=>$group_name)
+				{
+					$content[]=array($group_name,'groups_'.strval($seq_id).'['.strval($group_id).']',in_array($group_id,$groups),'');
+				}
+				$fields->attach(form_input_various_ticks(
+					$content,
+					do_lang('WORKFLOW_POINT_GROUPS_DESC',$p),
+					NULL,
+					do_lang('WORKFLOW_POINT_GROUPS',$p),
+					true
+				));
+			}
+		}
+
+		$self_url=get_self_url();
+
+		$title=get_screen_title('DEFINE_WORKFLOW_POINTS');
+
+		return do_template('FORM_SCREEN',array(
+			'TITLE'=>$title,
+			'FIELDS'=>$fields,
+			'TEXT'=>'',
+			'HIDDEN'=>$hidden,
+			'URL'=>$self_url,
+			'SUBMIT_ICON'=>'buttons__proceed',
+			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
+		));
 	}
 
 	/**
@@ -375,7 +500,6 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function create_selection_list_entries()
 	{
-		require_lang('workflows');
 		$fields=new ocp_tempcode();
 		$rows=get_all_workflows();
 		foreach ($rows as $id=>$name)
@@ -394,35 +518,8 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function may_delete_this($id)
 	{
-		require_lang('workflows');
 		// Workflows are optional, so we can always delete them
 		return true;
-	}
-
-	/**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A triple: fields, hidden-fields, delete-fields
-	 */
-	function fill_in_edit_form($id)
-	{
-		require_lang('workflows');
-		// Grab all of our workflow IDs
-		$all_workflows=array_keys(get_all_workflows());
-		// See if there are any
-		if (!array_key_exists(0,$all_workflows))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-
-		list($fields,$hidden,$delete,$edit_text,$all_delete_fields_given,$posting_form_text,$fields2)=$this->get_form_fields(intval($id));
-
-		$default_workflow=get_default_workflow();
-
-		$workflows=new ocp_tempcode();
-
-		return array($fields,$hidden,$delete,$edit_text,$all_delete_fields_given,$posting_form_text,$fields2);
 	}
 
 	/**
@@ -450,7 +547,7 @@ class Module_admin_workflow extends standard_crud_module
 			}
 		} else
 		{
-			$old_name=$GLOBALS['SITE_DB']->query_select_value('workflows','workflow_name',array('id'=>$workflow_id));
+			$old_name=$GLOBALS['SITE_DB']->query_value('workflows','workflow_name',array('id'=>$workflow_id));
 			$map+=lang_remap('workflow_name',$old_name,$name);
 			$GLOBALS['SITE_DB']->query_update('workflows',$map,array('id'=>$workflow_id));
 		}
@@ -509,82 +606,40 @@ class Module_admin_workflow extends standard_crud_module
 	{
 		// We override the add screen here so that we can provide multiple screens
 
-		/* Standard CRUD stuff */
-		if (!is_null($this->permissions_require)) check_submit_permission($this->permissions_require,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b)));
-
-		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
-		{
-			return $this->preview_intercept($this->title);
-		}
-
-		$test=$this->handle_confirmations($this->title);
+		$test=$this->handle_confirmations($title);
 		if (!is_null($test)) return $test;
 
-		if (($this->user_facing) && (!is_null($this->permissions_require)))
-		{
-			if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
-				$_POST['validated']='0';
-		}
-
-		if (!is_null($this->upload)) require_code('uploads');
-
-		/* Interrupt standard CRUD stuff, so we can choose our screen */
+		// Interrupt standard CRUD stuff, so we can choose our screen
 		if ($this->need_second_screen())
 		{
 			// We need more info from the user. Ask for it here.
 			return $this->second_screen();
 		}
 
-		/* If we reach here, the form is complete so we resume the CRUD process */
+		// If we reach here, the form is complete so we resume the CRUD process
 
-		$temp=$this->add_actualisation();
+		$id=$this->add_actualisation();
 
-		$description=is_null($this->do_next_description)?do_lang_tempcode('SUCCESS'):$this->do_next_description;
+		$description=do_lang_tempcode('SUCCESS');
 
-		if (is_array($temp))
-		{
-			list($id,$text)=$temp;
-			if (!is_null($text)) $description->attach($text);
-		} else
-		{
-			$id=$temp;
-		}
-
-		if ($this->user_facing)
-		{
-			require_code('submit');
-			if (($this->check_validation) && (post_param_integer('validated',0)==0))
-			{
-				if ($this->send_validation_request)
-				{
-					$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',NULL,false,false,true);
-					if (addon_installed('unvalidated'))
-						send_validation_request($this->doing,$this->table,$this->non_integer_id,$id,$edit_url);
-				}
-
-				$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
-			}
-			give_submit_points($this->doing);
-		}
-
-		if (addon_installed('awards'))
-		{
-			if (!is_null($this->content_type))
-			{
-				require_code('awards');
-				handle_award_setting($this->content_type,$id);
-			}
-		}
-
-		clear_ocp_autosave();
-
-		//if ($this->redirect_type=='!')
-		{
-			$url=get_param('redirect',NULL);
-			if (!is_null($url)) return redirect_screen($this->title,$url,$description);
-		}
+		$url=get_param('redirect',NULL);
+		if (!is_null($url)) return redirect_screen($this->title,$url,$description);
 
 		return $this->do_next_manager($this->title,$description,$id);
+	}
+
+	/**
+	 * Standard crud_module add actualiser.
+	 *
+	 * @return ID_TEXT		The entry added
+	 */
+	function add_actualisation()
+	{	
+		// Grab our data. We pass true so that it will create non-existant content
+		// for us (workflow and approval points)
+		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(true);
+
+		return strval($workflow_id);
 	}
 
 	/**
@@ -600,84 +655,25 @@ class Module_admin_workflow extends standard_crud_module
 
 		// CRUD stuff to begin with
 
-		$id=mixed(); // Define type as mixed
-		$id=$this->non_integer_id?get_param('id',false,true):strval(get_param_integer('id'));
-
-		if (($this->second_stage_preview) && (get_param_integer('preview',0)==1))
-		{
-			return $this->preview_intercept($this->title);
-		}
-
-
-		if (method_exists($this,'get_submitter'))
-		{
-			list($submitter,$date_and_time)=$this->get_submitter($id);
-			if ((!is_null($date_and_time)) && (addon_installed('points')))
-			{
-				$reverse=post_param_integer('reverse_point_transaction',0);
-				if ($reverse==1)
-				{
-					$points_test=$GLOBALS['SITE_DB']->query_select('gifts',array('*'),array('date_and_time'=>$date_and_time,'gift_to'=>$submitter,'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()));
-					if (array_key_exists(0,$points_test))
-					{
-						$amount=$points_test[0]['amount'];
-						$sender_id=$points_test[0]['gift_from'];
-						$recipient_id=$points_test[0]['gift_to'];
-						$GLOBALS['SITE_DB']->query_delete('gifts',array('id'=>$points_test[0]['id']),'',1);
-						if (!is_guest($sender_id))
-						{
-							$_sender_gift_points_used=point_info($sender_id);
-							$sender_gift_points_used=array_key_exists('gift_points_used',$_sender_gift_points_used)?$_sender_gift_points_used['gift_points_used']:0;
-							$GLOBALS['FORUM_DRIVER']->set_custom_field($sender_id,'gift_points_used',strval($sender_gift_points_used-$amount));
-						}
-						require_code('points');
-						$temp_points=point_info($recipient_id);
-						$GLOBALS['FORUM_DRIVER']->set_custom_field($recipient_id,'points_gained_given',strval((array_key_exists('points_gained_given',$temp_points)?$temp_points['points_gained_given']:0)-$amount));
-					}
-				}
-			}
-		} else $submitter=NULL;
+		$id=strval(get_param_integer('id'));
 
 		$delete=post_param_integer('delete',0);
-		if (($delete==1) || ($delete==2)) //1=partial,2=full,...=unknown,thus handled as an edit
+		if ($delete==1)
 		{
-			if (!is_null($this->permissions_require))
-			{
-				check_delete_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
-			}
-
-			$test=$this->handle_confirmations($this->title);
+			$test=$this->handle_confirmations($title);
 			if (!is_null($test)) return $test;
 
 			$this->delete_actualisation($id);
 
-			/*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
-			{
-				$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-				return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-			}*/
-
 			clear_ocp_autosave();
 
-			$description=is_null($this->do_next_description)?do_lang_tempcode('SUCCESS'):$this->do_next_description;
+			$description=do_lang_tempcode('SUCCESS');
 
 			return $this->do_next_manager($this->title,$description,NULL);
-		}
-		else
+		} else
 		{
-			if (!is_null($this->permissions_require))
-			{
-				check_edit_permission($this->permissions_require,$submitter,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?NULL:$this->get_cat($id),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?NULL:$this->get_cat_b($id)));
-			}
-
-			$test=$this->handle_confirmations($this->title);
+			$test=$this->handle_confirmations($title);
 			if (!is_null($test)) return $test;
-
-			if (($this->user_facing) && (!is_null($this->permissions_require)) && (array_key_exists('validated',$_POST)))
-			{
-				if (!has_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,array($this->permissions_cat_require,is_null($this->permissions_cat_name)?'':post_param($this->permissions_cat_name),$this->permissions_cat_require_b,is_null($this->permissions_cat_name_b)?'':post_param($this->permissions_cat_name_b))))
-					$_POST['validated']='0';
-			}
 
 			// Here we interrupt the regular CRUD code see if we should redirect to
 			// a second data entry screen
@@ -686,68 +682,14 @@ class Module_admin_workflow extends standard_crud_module
 				return $this->second_screen();
 			}
 
-			if (!is_null($this->upload)) require_code('uploads');
-			$description=$this->edit_actualisation($id);
-			if (!is_null($this->new_id)) $id=$this->new_id;
-			if (($this->output_of_action_is_confirmation) && (!is_null($description))) return $description;
+			$this->edit_actualisation($id);
 
-			if (is_null($description)) $description=do_lang_tempcode('SUCCESS');
-
-			if (addon_installed('awards'))
-			{
-				if (!is_null($this->content_type))
-				{
-					require_code('awards');
-					handle_award_setting($this->content_type,$id);
-				}
-			}
-
-			if ($this->user_facing)
-			{
-				if (($this->check_validation) && (post_param_integer('validated',0)==0))
-				{
-					require_code('submit');
-					if ($this->send_validation_request)
-					{
-						$edit_url=build_url(array('page'=>'_SELF','type'=>'_e'.$this->type_code,'id'=>$id),'_SELF',NULL,false,false,true);
-						if (addon_installed('unvalidated'))
-							send_validation_request($this->doing,$this->table,$this->non_integer_id,$id,$edit_url);
-					}
-
-					$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
-				}
-			}
-		}
-
-		if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))
-		{
-			$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?make_string_tempcode(get_param('redirect')):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+			$description=do_lang_tempcode('SUCCESS');
 		}
 
 		clear_ocp_autosave();
 
 		return $this->do_next_manager($this->title,$description,$id);
-	}
-
-	/**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
-	function add_actualisation()
-	{	
-		require_lang('workflows');
-
-		// Grab our data. We pass true so that it will create non-existent content
-		// for us (workflow and approval points)
-		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(true);
-
-		// Now create the workflow's presence in the database, by giving
-		// it the approval points as requirements.
-		$id=build_new_workflow($workflow_id, $workflow_name, array_keys($approval_points), $is_default);
-
-		return strval($id);
 	}
 
 	/**
@@ -758,11 +700,8 @@ class Module_admin_workflow extends standard_crud_module
 	 */
 	function edit_actualisation($id)
 	{
-		require_lang('workflows');
-		// Grab our data
 		list($workflow_id,$workflow_name,$approval_points,$is_default)=$this->read_in_data(false);
-
-		// TODO
+		return NULL;
 	}
 
 	/**
@@ -774,221 +713,4 @@ class Module_admin_workflow extends standard_crud_module
 	{
 		delete_workflow(intval($id));
 	}
-
-	/**
-	 * Tells us if more information is needed from the user. This is required
-	 * since the user may create a workflow out of predefined components, which
-	 * requires no further information, or they may want to define new approval
-	 * points, which requires more information.
-	 *
-	 * @return boolean		Whether more information is needed from the user.
-	 */
-	function need_second_screen()
-	{
-		// We need to show the second screen if it has been specifically requested
-		// via the edit form
-		if (array_key_exists('redefine_points',$_POST))
-		{
-			return true;
-		}
-
-		// Otherwise the only reason we might need more information is if there
-		// are approval points specified that haven't been defined.
-
-		// Grab all of the requested points
-		$points=array_map('trim',explode("\n",trim(post_param('points'))));
-
-		// Throw out whitespace
-		$temp_points=array();
-		foreach ($points as $p)
-		{
-			if (strlen(trim($p)) > 0)
-				$temp_points[]=trim($p);
-		}
-		$points=$temp_points;
-		unset($temp_points);
-
-		// Clean them up a bit. We'll allow spaces, but no other punctuation.
-		$clean_points=array();
-		foreach ($points as $p)
-		{
-			$clean_points[]=implode(' ',array_map('strip_tags',explode(' ',$p)));
-		}
-		$points=$clean_points;
-		unset($clean_points);
-
-		// Find any points which are already defined
-		$all_points=get_all_approval_points();
-
-		// See if we need to define any
-		foreach ($points as $p)
-		{
-			if (!in_array($p,$all_points) &&												// This point has not been defined previously...
-				(
-					!in_array($p,$_POST) ||													// ... and we are not defining it now...
-					($_POST['points']==$p && count(array_keys($_POST,$p))==1)	// ... or our definition is restricted to just the approval point list
-				)
-			)
-			{
-				// Found an undefined point. We need more information.
-				return true;
-			}
-		}
-
-		// If we've reached here then there's nothing to do
-		return false;
-	}
-
-	/**
-	 * Renders a screen for setting permissions on approval points.
-	 *
-	 * @return tempcode		The UI
-	 */
-	function second_screen()
-	{
-		require_code('form_templates');
-
-		// See if we're redefining everything
-		$redefining=array_key_exists('redefine_points',$_POST);
-
-		// Grab all of the requested points
-		$points=array_map('trim',explode("\n",trim(post_param('points'))));
-
-		// Throw out whitespace
-		$temp_points=array();
-		foreach ($points as $p)
-		{
-			if (strlen(trim($p)) > 0)
-				$temp_points[]=trim($p);
-		}
-		$points=$temp_points;
-		unset($temp_points);
-
-		// Clean them up a bit. We'll allow spaces, but no other punctuation.
-		$clean_points=array();
-		foreach ($points as $p)
-		{
-			$clean_points[]=implode(' ',array_map('strip_tags',explode(' ',$p)));
-		}
-		$points=$clean_points;
-		unset($clean_points);
-
-		// Find any points which are already defined
-		$all_points=get_all_approval_points();
-
-		// This will hold new points
-		$clarify_points=array();
-
-		// This will hold existing points we're redefining
-		$redefine_points=array();
-
-		// See if we need to define any
-		foreach ($points as $p)
-		{
-			if (!in_array($p,$all_points))
-			{
-				// Found an undefined point. We need more information.
-				$clarify_points[]=$p;
-			}
-			elseif ($redefining)
-			{
-				$redefine_points[]=$p;
-			}
-		}
-
-		// These will hold our form fields
-		$fields=new ocp_tempcode();
-		$hidden=new ocp_tempcode();
-
-		// Pass through the previous screen's data
-		foreach (array('points','is_default','name') as $n)
-		{
-			$hidden->attach(form_input_hidden($n, post_param($n,'')));
-		}
-
-		// We need a list of groups so that the user can choose those to give
-		// permission to
-		$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,true,false,NULL,NULL);
-
-		// Add the form elements for each section
-		if (count($clarify_points) > 0)
-		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-				'_GUID'=>'ceee046b64028beeccd973c7221d5a5b',
-				'TITLE'=>do_lang('DEFINE_WORKFLOW_POINTS'),
-				'HELP'=>do_lang_tempcode('DEFINE_WORKFLOW_POINTS_HELP',implode(', ',$clarify_points)),
-			)));
-			$counter=0;
-			foreach ($clarify_points as $p)
-			{
-				// Add a code to reference these elements by later
-				$hidden->attach(form_input_hidden('code_'.strval($counter), $p));
-
-				// Now add a list of the groups to allow
-				$content=array();
-				foreach ($usergroups as $group_id=>$group_name)
-				{
-					$content[]=array($group_name,'groups_'.strval($counter).'['.strval($group_id).']', false, '');
-				}
-				$fields->attach(form_input_various_ticks(
-					$content,
-					do_lang('WORKFLOW_POINT_GROUPS_DESC',$p),
-					NULL,
-					do_lang('WORKFLOW_POINT_GROUPS',$p),
-					true
-				));
-				$counter++;
-			}
-		}
-
-		if (count($redefine_points) > 0)
-		{
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-				'_GUID'=>'db8e021f2a59b1c30a3bf64ac97a5de2',
-				'TITLE'=>do_lang('REDEFINE_WORKFLOW_POINTS'),
-				'HELP'=>do_lang('REDEFINE_WORKFLOW_POINTS_HELP'),
-			)));
-
-			// These points already exist, so look them up
-			$all_points=array_flip(get_all_approval_points());
-
-			foreach ($redefine_points as $p)
-			{
-				// Add a code to reference these elements by later
-				$hidden->attach(form_input_hidden('redef_'.strval($all_points[$p]), $p));
-
-				// Now add a list of the groups to allow, defaulting to those which
-				// already have permission
-				$groups=get_groups_for_point($all_points[$p],false);
-
-				$content=array();
-				foreach ($usergroups as $group_id=>$group_name)
-				{
-					$content[]=array($group_name,'redef_groups_'.strval($all_points[$p]).'['.strval($group_id).']', in_array($group_id,$groups), '');
-				}
-				$fields->attach(form_input_various_ticks(
-					$content,
-					do_lang('WORKFLOW_POINT_GROUPS_DESC',$p),
-					NULL,
-					do_lang('WORKFLOW_POINT_GROUPS',$p),
-					true
-				));
-			}
-		}
-
-		$self_url=get_self_url();
-
-		return do_template('FORM_SCREEN',array(
-			'_GUID'=>'33e5a72664f26e420b1fdf9a681b57f7',
-			'TITLE'=>get_screen_title('DEFINE_WORKFLOW_POINTS'),
-			'FIELDS'=>$fields,
-			'TEXT'=>'',
-			'HIDDEN'=>$hidden,
-			'URL'=>is_object($self_url)?$self_url->evaluate():$self_url,
-			'SUBMIT_ICON'=>'buttons__proceed',
-			'SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),
-		));
-	}
 }
-
-

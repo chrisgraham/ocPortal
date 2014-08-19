@@ -56,7 +56,7 @@ class Hook_occle_fs_news extends resource_fs_base
 		switch ($resource_type)
 		{
 			case 'news':
-				$_ret=$GLOBALS['SITE_DB']->query_select('news a JOIN '.get_table_prefix().'translate t ON t.id=a.title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('news',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{
@@ -65,7 +65,7 @@ class Hook_occle_fs_news extends resource_fs_base
 				return $ret;
 
 			case 'news_category':
-				$_ret=$GLOBALS['SITE_DB']->query_select('news_categories a JOIN '.get_table_prefix().'translate t ON t.id=a.nc_title',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('news_categories',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('nc_title')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{

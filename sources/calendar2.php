@@ -107,7 +107,7 @@ function add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$tit
 		'allow_trackbacks'=>$allow_trackbacks,
 		'notes'=>$notes
 	);
-	$map+=insert_lang('e_title',$title,2);
+	$map+=insert_lang_comcode('e_title',$title,2);
 	if (multi_lang_content())
 	{
 		$map['e_content']=0;
@@ -288,7 +288,7 @@ function edit_calendar_event($id,$type,$recurrence,$recurrences,$seg_recurrences
 		'notes'=>$notes
 	);
 	$update_map+=$scheduling_map;
-	$update_map+=lang_remap('e_title',$myrow['e_title'],$title);
+	$update_map+=lang_remap_comcode('e_title',$myrow['e_title'],$title);
 	$update_map+=update_lang_comcode_attachments('e_content',$myrow['e_content'],$content,'calendar',strval($id),NULL,false,$myrow['e_submitter']);
 
 	if (!is_null($validated))
@@ -463,7 +463,7 @@ function add_event_type($title,$logo,$external_feed='')
 		't_logo'=>$logo,
 		't_external_feed'=>$external_feed,
 	);
-	$map+=insert_lang('t_title',$title,2);
+	$map+=insert_lang_comcode('t_title',$title,2);
 	$id=$GLOBALS['SITE_DB']->query_insert('calendar_types',$map,true);
 
 	log_it('ADD_EVENT_TYPE',strval($id),$title);

@@ -56,7 +56,7 @@ class Hook_occle_fs_menus extends resource_fs_base
 		switch ($resource_type)
 		{
 			case 'menu_item':
-				$_ret=$GLOBALS['SITE_DB']->query_select('menu_items a JOIN '.get_table_prefix().'translate t ON t.id=a.i_caption',array('a.id'),array('text_original'=>$label));
+				$_ret=$GLOBALS['SITE_DB']->query_select('menu_items',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('i_caption')=>$label));
 				$ret=array();
 				foreach ($_ret as $r)
 				{

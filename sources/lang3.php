@@ -238,16 +238,16 @@ function _create_selection_list_langs($select_lang=NULL,$show_unset=false)
  * @param  integer			Comcode parser wrap position
  * @param  boolean			Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean			Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return integer			The ID of the newly added language entry
+ * @return array				The language ID save fields
  */
-function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text2=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
+function _insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text_parsed=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 
 	if (get_mass_import_mode()) $comcode=false; // For speed, and to avoid instantly showing Comcode errors from sloppy bbcode
 
 	if (is_null($lang)) $lang=user_lang();
-	$_text2=NULL;
+	$_text_parsed=NULL;
 
 	if (running_script('stress_test_loader'))
 	{
@@ -267,12 +267,24 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 				$insert_as_admin=true;
 			}
 			require_code('comcode');
-			$_text2=comcode_to_tempcode($text,$member,$insert_as_admin,$wrap_pos,$pass_id,$connection,false,$preparse_mode);
-			$text2=$_text2->to_assembly();
+			$_text_parsed=comcode_to_tempcode($text,$member,$insert_as_admin,$wrap_pos,$pass_id,$connection,false,$preparse_mode);
+			$text_parsed=$_text_parsed->to_assembly();
 		}
-	} else $text2='';
+	} else $text_parsed='';
 
-	$source_member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
+	$source_user=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
+	if (!multi_lang_content())
+	{
+		$ret=array();
+		$ret[$field_name]=$text;
+		if ($comcode)
+		{
+			$ret[$field_name.'__text_parsed']=$text_parsed;
+			$ret[$field_name.'__source_user']=$source_user;
+		}
+		return $ret;
+	}
 
 	if ((is_null($id)) && (multi_lang())) // Needed as MySQL auto-increment works separately for each combo of other key values (i.e. language in this case). We can't let a language string ID get assigned to something entirely different in another language. This MySQL behaviour is not well documented, it may work differently on different versions.
 	{
@@ -289,18 +301,18 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 	{
 		if (is_null($id))
 		{
-			$id=$connection->query_insert('translate',array('source_user'=>$source_member,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'),true,false,$save_as_volatile);
+			$id=$connection->query_insert('translate',array('source_user'=>$source_user,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'),true,false,$save_as_volatile);
 		} else
 		{
-			$connection->query_insert('translate',array('id'=>$id,'source_user'=>$source_member,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'),false,false,$save_as_volatile);
+			$connection->query_insert('translate',array('id'=>$id,'source_user'=>$source_user,'broken'=>0,'importance_level'=>$level,'text_original'=>'EnglishEnglishWarningWrongLanguageWantGibberishLang','text_parsed'=>'','language'=>'EN'),false,false,$save_as_volatile);
 		}
 	}
 	if ((is_null($id)) || ($id===0)) //==0 because unless MySQL NO_AUTO_VALUE_ON_ZERO is on, 0 insertion is same as NULL is same as "use autoincrement"
 	{
-		$id=$connection->query_insert('translate',array('source_user'=>$source_member,'broken'=>0,'importance_level'=>$level,'text_original'=>$text,'text_parsed'=>$text2,'language'=>$lang),true,false,$save_as_volatile);
+		$id=$connection->query_insert('translate',array('source_user'=>$source_user,'broken'=>0,'importance_level'=>$level,'text_original'=>$text,'text_parsed'=>$text_parsed,'language'=>$lang),true,false,$save_as_volatile);
 	} else
 	{
-		$connection->query_insert('translate',array('id'=>$id,'source_user'=>$source_member,'broken'=>0,'importance_level'=>$level,'text_original'=>$text,'text_parsed'=>$text2,'language'=>$lang),false,false,$save_as_volatile);
+		$connection->query_insert('translate',array('id'=>$id,'source_user'=>$source_user,'broken'=>0,'importance_level'=>$level,'text_original'=>$text,'text_parsed'=>$text_parsed,'language'=>$lang),false,false,$save_as_volatile);
 	}
 
 	if ($lock)
@@ -310,35 +322,41 @@ function _insert_lang($text,$level,$connection=NULL,$comcode=false,$id=NULL,$lan
 
 	if (count($connection->text_lookup_cache)<5000)
 	{
-		if (!is_null($_text2))
+		if (!is_null($_text_parsed))
 		{
-			$connection->text_lookup_cache[$id]=$_text2;
+			$connection->text_lookup_cache[$id]=$_text_parsed;
 		} else
 		{
 			$connection->text_lookup_original_cache[$id]=$text;
 		}
 	}
 
-	return $id;
+	return array(
+		$field_name=>$id
+	);
 }
 
 /**
  * Remap the specified language ID, and return the ID again - the ID isn't changed.
  *
- * @param  integer		The language entry's ID
+ * @param  ID_TEXT		The field name
+ * @param  mixed			The ID (if multi-lang-content on), or the string itself
  * @param  string			The text to remap to
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether it is to be parsed as Comcode
  * @param  ?string		The special identifier for this lang code on the page it will be displayed on; this is used to provide an explicit binding between languaged elements and greater templated areas (NULL: none)
- * @param  ?MEMBER		The member performing the change (NULL: current member)
+ * @param  ?MEMBER		The member that owns the content this is for (NULL: current member)
  * @param  boolean		Whether to generate Comcode as arbitrary admin
  * @param  boolean		Whether to backup the language string before changing it
  * @param  boolean		Whether to leave the source member as-is (as opposed to resetting it to the current member)
- * @return integer		The language entry's ID
+ * @return array			The language ID save fields
  */
-function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false,$leave_source_member=false)
+function _lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$for_member=NULL,$as_admin=false,$backup_string=false,$leave_source_user=false)
 {
-	if ($id==0) return insert_lang($text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
+	if ($id===0)
+	{
+		return insert_lang($field_name,$text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
+	}
 
 	if ($text===STRING_MAGIC_NULL) return $id;
 
@@ -347,7 +365,6 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 	$lang=user_lang();
 
 	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
-
 	if ((is_null($for_member)) || ($GLOBALS['FORUM_DRIVER']->get_username($for_member)===NULL))
 		$for_member=$member;
 
@@ -393,22 +410,33 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 		));
 	}
 
-	$member=(function_exists('get_member'))?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id(); // This updates the Comcode reference to match the current user, which may not be the owner of the content this is for. This is for a reason - we need to parse with the security token of the current user, not the original content submitter.
-	if ((is_null($for_member)) || ($GLOBALS['FORUM_DRIVER']->get_username($for_member)===NULL))
-		$for_member=$member;
-
-	if ($comcode)
+	if (!multi_lang_content())
 	{
-		$_text2=comcode_to_tempcode($text,$for_member,$as_admin,60,$pass_id,$connection);
-		$connection->text_lookup_cache[$id]=$_text2;
-		$text2=$_text2->to_assembly();
-	} else $text2='';
+		$ret=array();
+		$ret[$field_name]=$text;
+		if ($comcode)
+		{
+			$ret[$field_name.'__text_parsed']=$text_parsed;
+			if (!is_null($source_user))
+				$ret[$field_name.'__source_user']=$source_user;
+		}
+		return $ret;
+	}
 
-	$remap=array('broken'=>0,'text_original'=>$text,'text_parsed'=>$text2);
-	if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg','1')=='0') && (get_value('edit_with_my_comcode_perms')==='1')) || (!has_privilege($member,'allow_html')) || (!has_privilege($member,'use_very_dangerous_comcode')))
-		$remap['source_user']=$member;
-	elseif (!is_null($for_member))
-		$remap['source_user']=$for_member; // Reset to latest submitter for main record
+	$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$id,'language'=>$lang));
+
+	// Mark old as out-of-date
+	if ($test!==$text)
+		$GLOBALS['SITE_DB']->query_update('translate',array('broken'=>1),array('id'=>$id));
+
+	$remap=array(
+		'broken'=>0,
+		'text_original'=>$text,
+		'text_parsed'=>$text_parsed,
+	);
+	if (!is_null($source_user))
+		$remap['source_user']=$source_user;
+
 	if (!is_null($test)) // Good, we save into our own language, as we have a translation for the lang entry setup properly
 	{
 		$connection->query_update('translate',$remap,array('id'=>$id,'language'=>$lang),'',1);
@@ -419,31 +447,40 @@ function _lang_remap($id,$text,$connection=NULL,$comcode=false,$pass_id=NULL,$fo
 
 	$connection->text_lookup_original_cache[$id]=$text;
 
-	// $id doesn't change, but lets allow some functional embedding
-	return $id;
+	return array(
+		$field_name=>$id
+	);
 }
 
 /**
  * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
  *
- * @param  integer			The ID
+ * @param  ID_TEXT			The table name
+ * @param  array				The database row
+ * @param  ID_TEXT			The field name
  * @param  ?object			The database connection to use (NULL: standard site connection)
  * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
  * @param  boolean			Whether to force it to the specified language
  * @param  boolean			Whether to force as_admin, even if the lang string isn't stored against an admin (designed for Comcode page cacheing)
  * @return ?tempcode			The parsed Comcode (NULL: the text couldn't be looked up)
  */
-function parse_translated_text($entry,$connection,$lang,$force,$as_admin)
+function parse_translated_text($table,&$row,$field_name,$connection,$lang,$force,$as_admin)
 {
 	global $SEARCH__CONTENT_BITS,$LAX_COMCODE;
 
 	$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 	$GLOBALS['NO_QUERY_LIMIT']=true;
 
-	$result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
-	$result=array_key_exists(0,$result)?$result[0]:NULL;
+	$entry=$row[$field_name];
 
-	if (is_null($result)) // A missing translation
+	$result=mixed();
+	if (multi_lang_content())
+	{
+		$_result=$connection->query_select('translate',array('text_original','source_user'),array('id'=>$entry,'language'=>$lang),'',1);
+		if (array_key_exists(0,$_result)) $result=$_result[0];
+	}
+
+	if ((is_null($result)) && (multi_lang_content())) // A missing translation
 	{
 		if ($force)
 		{

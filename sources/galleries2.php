@@ -1285,7 +1285,7 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 		'gallery_views'=>0,
 	);
 	$map+=insert_lang_comcode('description',$description,2);
-	$map+=insert_lang('fullname',$fullname,1);
+	$map+=insert_lang_comcode('fullname',$fullname,1);
 	$GLOBALS['SITE_DB']->query_insert('galleries',$map);
 
 	log_it('ADD_GALLERY',$name,$fullname);
@@ -1423,7 +1423,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
 		'allow_rating'=>$allow_rating,
 		'allow_comments'=>$allow_comments,
 	);
-	$update_map+=lang_remap('fullname',$myrow['fullname'],$fullname);
+	$update_map+=lang_remap_comcode('fullname',$myrow['fullname'],$fullname);
 	$update_map+=lang_remap_comcode('description',$myrow['description'],$description);
 
 	require_code('files2');

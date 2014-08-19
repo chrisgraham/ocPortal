@@ -109,7 +109,7 @@ function _check_sizes($primary_key,$fields,$id_name,$skip_size_check=false,$skip
 		{
 			fatal_exit('You may not have a NULL string field');
 		}
-		if (($key) && (substr($id_name,0,1)!='#') && (!$size_restricted) && (($field=='LONG_TEXT'))) fatal_exit('You may not use a '.$field.' field for part of a key');
+		//if (($key) && (substr($id_name,0,1)!='#') && (!$size_restricted) && (($field=='LONG_TEXT'))) fatal_exit('You may not use a '.$field.' field for part of a key');		We now size restrict using "(255)"
 		if (($key) && ($primary_key) && ($null)) fatal_exit('No field that may be NULL may be a part of a primary key');
 		if (in_array(strtoupper($name),$keywords)) fatal_exit($name.' is a keyword');
 		if ((preg_match('#^[\w]+$#',$name)==0) || (strlen($name)>DB_MAX_FIELD_IDENTIFIER_SIZE)) fatal_exit('Inappropriate identifier: '.$name);
@@ -148,11 +148,26 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 
 	// Note that interbase has a 31000byte limit on LONG_TEXT/LONG_TRANS, because we can't use blobs on it (those have too many restraints)
 
-	foreach ($fields as $name=>$type)
+	$fields_copy=$fields;
+	foreach ($fields_copy as $name=>$type)
 	{
 		if (($table_name!='db_meta') && ($table_name!='db_meta_indices'))
 		{
 			$this_ref->query_insert('db_meta',array('m_table'=>$table_name,'m_name'=>$name,'m_type'=>$type),false,true); // Allow errors because sometimes bugs when developing can call for this happening twice
+		}
+
+		if (!multi_lang_content())
+		{
+			if (strpos($type,'_TRANS')!==false)
+			{
+				if (strpos($type,'__COMCODE')!==false)
+				{
+					$fields[$name.'__text_parsed']='LONG_TEXT';
+					$fields[$name.'__source_user']='USER';
+				}
+
+				$fields[$name]='LONG_TEXT'; // In the DB layer, it must now save as such
+			}
 		}
 	}
 	if (count($this_ref->connection_write)>4) // Okay, we can't be lazy anymore
@@ -168,8 +183,18 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 	// Then safely update our own
 	$this_ref->table_exists_cache[$table_name]=true;
 
-	if (function_exists('persistent_cache_delete'))
-		persistent_cache_delete('TABLE_LANG_FIELDS_CACHE');
+	if (!multi_lang_content())
+	{
+		foreach ($fields_copy as $name=>$type)
+		{
+			if (strpos($type,'_TRANS')!==false)
+			{
+				$GLOBALS['SITE_DB']->create_index($table_name,'#'.$name,array($name));
+			}
+		}
+	}
+
+	reload_lang_fields();
 }
 
 /**
