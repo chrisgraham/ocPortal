@@ -13,6 +13,8 @@
  * @package		ocportalcom
  */
 
+/*EXTRA FUNCTIONS: shell_exec*/
+
 /* To be called by make_release.php - not directly linked from menus */
 
 restrictify();

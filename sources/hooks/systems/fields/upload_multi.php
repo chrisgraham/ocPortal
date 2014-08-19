@@ -220,10 +220,14 @@ class Hook_fields_upload_multi
 	 */
 	function cleanup($value)
 	{
-		if ($value!='')
+		if ($value['cv_value']!='')
 		{
-			@unlink(get_custom_file_base().'/'.rawurldecode($value));
-			sync_file(rawurldecode($value));
+			$files=explode("\n",$value['cv_value']);
+			foreach ($files as $file)
+			{
+				@unlink(get_custom_file_base().'/'.rawurldecode($file));
+				sync_file(rawurldecode($file));
+			}
 		}
 	}
 }

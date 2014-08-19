@@ -56,7 +56,7 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 		'submitter'=>$submitter,
 		'is_current'=>$current,
 	);
-	$map+=insert_lang_comcode('i_title',$title,2),
+	$map+=insert_lang_comcode('i_title',$title,2);
 	$map+=insert_lang_comcode('caption',$caption,2);
 	$id=$GLOBALS['SITE_DB']->query_insert('iotd',$map,true);
 

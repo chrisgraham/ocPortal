@@ -227,12 +227,12 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 		{
 			if ((is_null($member_value)) || ($member_value=='0'))
 			{
-				$member_value=''; // This is meant to be '' for blank, not new ocp_tempcode()
 				$member_value_raw='';
+				$member_value=''; // This is meant to be '' for blank, not new ocp_tempcode()
 			} else
 			{
 				$member_value_raw=get_translated_text(intval($member_value),$GLOBALS['FORUM_DB']);
-				$member_value=get_translated_tempcode(intval($member_value),$GLOBALS['FORUM_DB']);
+				$member_value=get_translated_tempcode('f_member_custom_fields',$fields_to_show,'field_'.strval($field_to_show['id']),$GLOBALS['FORUM_DB']);
 				if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
 			}
 		} else
@@ -361,8 +361,9 @@ function ocf_get_custom_field_mappings($member_id)
 		{
 			$value=mixed();
 
+			$row=array('mf_member_id'=>$member_id);
+
 			$all_fields_regardless=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'));
-			$map=array('mf_member_id'=>$member_id);
 			foreach ($all_fields_regardless as $field)
 			{
 				$ob=get_fields_hook($field['cf_type']);
@@ -375,7 +376,7 @@ function ocf_get_custom_field_mappings($member_id)
 					{
 						case 'short_trans':
 						case 'long_trans':
-							if (!is_null($default))
+							if (!is_null($value))
 							{
 								$row+=insert_lang_comcode('field_'.strval($field['id']),$value,3,$GLOBALS['FORUM_DB']);
 							} else

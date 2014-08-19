@@ -13,6 +13,8 @@
  * @package		ocportalcom
  */
 
+/*EXTRA FUNCTIONS: shell_exec*/
+
 function init__ocportalcom()
 {
 	define('MYOCP_DEMO_LAST_DAYS',30);
@@ -197,8 +199,8 @@ function myocp_add_site($codename,$name,$email_address,$password,$description,$c
 	),false,true);
 	reset_aliases();
 
-	// Info.php
-	reset_info_php($server);
+	// _config.php
+	reset_base_config_file($server);
 
 	// Welcome email
 	require_lang('sites');
@@ -341,7 +343,7 @@ function find_all_servers()
  *
  * @param  ID_TEXT	The server.
  */
-function reset_info_php($server)
+function reset_base_config_file($server)
 {
 	$path=special_myocp_dir().'/servers/'.filter_naughty($server).'/_config.php';
 	$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'at');
@@ -686,7 +688,7 @@ function myocp_delete_site($server,$codename,$bulk=false)
 	{
 		reset_aliases();
 	}
-	reset_info_php($server);
+	reset_base_config_file($server);
 
 	// Special
 	//$GLOBALS['SITE_DB']->query_delete('sites_email',array('s_codename'=>$codename));

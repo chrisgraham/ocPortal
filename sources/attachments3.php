@@ -115,7 +115,7 @@ function update_lang_comcode_attachments($field_name,$lang_id,$text,$type,$id,$c
 {
 	if ($lang_id===0)
 	{
-		return insert_lang_comcode_attachments(3,$text,$type,$id,$connection,false,$for_member);
+		return insert_lang_comcode_attachments($field_name,3,$text,$type,$id,$connection,false,$for_member);
 	}
 
 	if ($text===STRING_MAGIC_NULL) return $lang_id;

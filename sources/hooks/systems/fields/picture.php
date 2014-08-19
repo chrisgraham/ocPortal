@@ -188,7 +188,6 @@ class Hook_fields_picture
 	 */
 	function cleanup($value)
 	{
-		// TODO: In v10 cleanup and inputted_to_field_value needs $value type change for *_multi hooks
 		if ($value['cv_value']!='')
 		{
 			@unlink(get_custom_file_base().'/'.rawurldecode($value['cv_value']));

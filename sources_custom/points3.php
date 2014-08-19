@@ -61,10 +61,10 @@ function points_profile($member_id_of,$member_id_viewing)
 	$points_voting=intval(get_option('points_voting'));
 	$points_joining=intval(get_option('points_joining'));
 	$_points_wiki_posting=get_option('points_wiki',true);
-	if (is_null($_points_wiki_posting)) $_points_wiki_posting=0;
+	if (is_null($_points_wiki_posting)) $_points_wiki_posting='0';
 	$points_wiki_posting=intval($_points_wiki_posting);
 	$_points_chat=get_option('points_chat',true);
-	if (is_null($_points_chat)) $_points_chat=0;
+	if (is_null($_points_chat)) $_points_chat='0';
 	$points_chat_posting=intval($_points_chat);
 	$points_per_day=intval(get_option('points_per_day'));
 	$points_per_daily_visit=intval(get_option('points_per_daily_visit'));

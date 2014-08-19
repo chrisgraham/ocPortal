@@ -304,7 +304,7 @@ class Module_lost_password
 
 		$email=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_email_address');
 		$join_time=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_join_time');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
 		require_code('crypt');
 		$new_password=get_rand_password();

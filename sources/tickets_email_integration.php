@@ -589,10 +589,10 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 		foreach ($tags as $tag)
 		{
 			$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('ticket_types','id',array($GLOBALS['SITE_DB']->translate_field_ref('ticket_type_name')=>$tag));
-			if (!is_null($ticket_type)) break;
+			if (!is_null($ticket_type_id)) break;
 		}
-		if (is_null($ticket_type))
-			$ticket_type=$GLOBALS['SITE_DB']->query_select_value('ticket_types','MIN(id)');
+		if (is_null($ticket_type_id))
+			$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value('ticket_types','MIN(id)');
 
 		// Create the ticket...
 

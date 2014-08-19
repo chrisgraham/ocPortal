@@ -114,7 +114,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 				$tables_and_joins.=' ON (a.member_liked=b.member_likes AND a.member_likes=b.member_liked AND a.member_likes=';
 				$tables_and_joins.=strval($viewer_member);
 
-				$extra_not='';
+				$lm_ids='';
 				if (strlen($blocking)>0) // Also setting who gets discarded from outgoing like selection
 				{
 					if ($lm_ids!='') $lm_ids.=',';

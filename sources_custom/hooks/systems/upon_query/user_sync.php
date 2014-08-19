@@ -50,7 +50,7 @@ class Hook_upon_query_user_sync
 				require_code('user_sync');
 				user_sync__outbound(intval($matches[1]));
 				return;
- 			}
+			}
 		}
 	}
 }

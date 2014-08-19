@@ -143,8 +143,8 @@ function render_quiz($questions)
 	foreach ($questions as $i=>$q)
 	{
 		$name='q_'.strval($q['id']);
-		$question=protect_from_escaping(is_string($q['q_question_text'])?comcode_to_tempcode($q['q_question_text']):get_translated_tempcode('quiz_questions',$q,'q_question_text'));
-		$description=protect_from_escaping(is_string($q['q_question_extra_text'])?comcode_to_tempcode($q['q_question_extra_text']):get_translated_tempcode('quiz_questions',$q,'q_question_extra_text'));
+		$question=protect_from_escaping((!is_string($q['q_question_text']) && !isset($q['q_question_text__text_parsed']))?comcode_to_tempcode($q['q_question_text']):get_translated_tempcode('quiz_questions',$q,'q_question_text'));
+		$description=protect_from_escaping((!is_string($q['q_question_text']) && !isset($q['q_question_text__text_parsed']))?comcode_to_tempcode($q['q_question_extra_text']):get_translated_tempcode('quiz_questions',$q,'q_question_extra_text'));
 
 		switch ($q['q_type'])
 		{
@@ -152,7 +152,7 @@ function render_quiz($questions)
 				$radios=new ocp_tempcode();
 				foreach ($q['answers'] as $a)
 				{
-					$answer_text=is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode('quiz_question_answers',$a,'q_answer_text');
+					$answer_text=(!is_string($a['q_answer_text']) && !isset($a['q_answer_text__text_parsed']))?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode('quiz_question_answers',$a,'q_answer_text');
 					$radios->attach(form_input_radio_entry($name,strval($a['id']),false,protect_from_escaping($answer_text)));
 				}
 				$fields->attach(form_input_radio($question,$description,$name,$radios,$q['q_required']==1));
@@ -162,7 +162,7 @@ function render_quiz($questions)
 				$content=array();
 				foreach ($q['answers'] as $a)
 				{
-					$content[]=array(protect_from_escaping(is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode('quiz_question_answers',$a,'q_answer_text')),$name.'_'.strval($a['id']),false,'');
+					$content[]=array(protect_from_escaping((!is_string($a['q_answer_text']) && !isset($a['q_answer_text__text_parsed']))?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode('quiz_question_answers',$a,'q_answer_text')),$name.'_'.strval($a['id']),false,'');
 				}
 				$fields->attach(form_input_various_ticks($content,$description,NULL,$question,true));
 				break;

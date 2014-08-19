@@ -1,7 +1,8 @@
 <?php
-$url="http://".$_SERVER['HTTP_HOST'].":5280/http-bind/";
-set_time_limit(300);
 
+$url="http://".$_SERVER['HTTP_HOST'].":5280/http-bind/";
+
+if (function_exists('set_time_limit')) set_time_limit(300);
 
 $content=(isset($_POST['post'])?$_POST['post']:file_get_contents("php://input"))."\n";
 
@@ -28,8 +29,9 @@ if(!$debug){
 echo "derfehler";
 }
 */
-if(strlen($result)==0){
-print_r($http_response_header);
+if(strlen($result)==0)
+{
+	print_r($http_response_header);
 }
 //sleep(1);
-	echo $result;
+echo $result;

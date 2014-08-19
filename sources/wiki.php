@@ -413,6 +413,11 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	$_description=$page['description'];
 	$_title=$page['title'];
 
+	$update_map=array(
+		'hide_posts'=>$hide_posts,
+		'notes'=>$notes,
+	);
+
 	$update_map['edit_date']=$edit_time;
 	if (!is_null($add_time))
 		$update_map['add_date']=$add_time;
@@ -429,12 +434,8 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 	require_code('attachments2');
 	require_code('attachments3');
 
-	$update_map=array(
-		'hide_posts'=>$hide_posts,
-		'notes'=>$notes,
-	);
-	$update_map+=update_lang_comcode_attachments('description',$_description,$description,'wiki_page',strval($id),NULL,true,$member);
 	$update_map+=lang_remap('title',$_title,$title);
+	$update_map+=update_lang_comcode_attachments('description',$_description,$description,'wiki_page',strval($id),NULL,true,$member);
 
 	$GLOBALS['SITE_DB']->query_update('wiki_pages',$update_map,array('id'=>$id),'',1);
 

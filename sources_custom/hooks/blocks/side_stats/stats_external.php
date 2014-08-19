@@ -77,99 +77,99 @@ function getAlexaRank($url)
 }
 
 
-//convert a string to a 32-bit integer
-function StrToNum($Str, $Check, $Magic)
+// Convert a string to a 32-bit integer
+function StrToNum($str, $check, $magic)
 {
 	// This is external code which doesn't live up to ocPortal's strictness level
 	require_code('developer_tools');
 	destrictify();
 
-	$Int32Unit=4294967296;  // 2^32
+	$int_32_unit=4294967296;  // 2^32
 
-	$length=strlen($Str);
+	$length=strlen($str);
 	for ($i=0;$i<$length;$i++)
 	{
-		$Check*=$Magic;
+		$check*=$magic;
 		//If the float is beyond the boundaries of integer (usually +/- 2.15e+9=2^31),
 		//  the result of converting to integer is undefined
 		//  refer to http://www.php.net/manual/en/language.types.integer.php
-		if ($Check>=$Int32Unit)
+		if ($check>=$int_32_unit)
 		{
-			$Check=($Check - $Int32Unit*intval($Check/$Int32Unit));
+			$check=($check - $int_32_unit*intval($check/$int_32_unit));
 			//if the check less than -2^31
-			$Check=($Check<-2147483648)?($Check+$Int32Unit):$Check;
+			$check=($check<-2147483648)?($check+$int_32_unit):$check;
 		}
-		$Check += ord($Str[$i]);
+		$check += ord($str[$i]);
 	}
 
 	restrictify();
 
-	return $Check;
+	return $check;
 }
 
-//genearate a hash for a url
-function HashURL($String)
+// Generate a hash for a url
+function HashURL($string)
 {
-	$Check1=StrToNum($String,0x1505,0x21);
-	$Check2=StrToNum($String,0,0x1003F);
+	$check1=StrToNum($string,0x1505,0x21);
+	$check2=StrToNum($string,0,0x1003F);
 
-	$Check1=$Check1>>2;
-	$Check1=(($Check1>>4) & 0x3FFFFC0) | ($Check1&0x3F);
-	$Check1=(($Check1>>4) & 0x3FFC00) | ($Check1&0x3FF);
-	$Check1=(($Check1>>4) & 0x3C000) | ($Check1&0x3FFF);	
+	$check1=$check1>>2;
+	$check1=(($check1>>4) & 0x3FFFFC0) | ($check1&0x3F);
+	$check1=(($check1>>4) & 0x3FFC00) | ($check1&0x3FF);
+	$check1=(($check1>>4) & 0x3C000) | ($check1&0x3FFF);	
 
-	$T1=(((($Check1&0x3C0)<<4) | ($Check1&0x3C)) <<2) | ($Check2&0xF0F);
-	$T2=@(((($Check1&0xFFFFC000)<<4) | ($Check1 & 0x3C00))<<0xA) | ($Check2&0xF0F0000);
+	$t=(((($check1&0x3C0)<<4) | ($check1&0x3C)) <<2) | ($check2&0xF0F);
+	$t2=@(((($check1&0xFFFFC000)<<4) | ($check1 & 0x3C00))<<0xA) | ($check2&0xF0F0000);
 
-	return ($T1 | $T2);
+	return ($t1 | $t2);
 }
 
-//genearate a checksum for the hash string
-function CheckHash($Hashnum)
+// Generate a checksum for the hash string
+function CheckHash($hash_num)
 {
-	$CheckByte=0;
-	$Flag=0;
+	$check_byte=0;
+	$flag=0;
 
-	$HashStr=sprintf('%u',$Hashnum);
-	$length=strlen($HashStr);
+	$hash_str=sprintf('%u',$hash_num);
+	$length=strlen($hash_str);
 
 	for ($i=$length-1;$i>=0;$i--)
 	{
-		$Re=intval($HashStr[$i]);
-		if (1===($Flag%2))
+		$re=intval($hash_str[$i]);
+		if (1===($flag%2))
 		{
-			$Re+=$Re;
-			$Re=intval($Re/10)+($Re%10);
+			$re+=$re;
+			$re=intval($re/10)+($re%10);
 		}
-		$CheckByte+=$Re;
-		$Flag++;	
+		$check_byte+=$re;
+		$flag++;	
 	}
 
-	$CheckByte=$CheckByte%10;
-	if (0!==$CheckByte)
+	$check_byte=$check_byte%10;
+	if (0!==$check_byte)
 	{
-		$CheckByte=10-$CheckByte;
-		if (1===($Flag%2))
+		$check_byte=10-$check_byte;
+		if (1===($flag%2))
 		{
-			if (1===($CheckByte%2))
+			if (1===($check_byte%2))
 			{
-				$CheckByte+=9;
+				$check_byte+=9;
 			}
 
-			$CheckByte=$CheckByte>>1;
+			$check_byte=$check_byte>>1;
 		}
 	}
 
-	return '7'.strval($CheckByte).$HashStr;
+	return '7'.strval($check_byte).$hash_str;
 }
 
-//return the pagerank checksum hash
+// Return the pagerank checksum hash
 function getch($url)
 {
 	return CheckHash(HashURL($url));
 }
 
-//return the pagerank figure
+// Return the pagerank figure
 function getpr($url)
 {
 	$ch=getch($url);
@@ -190,7 +190,7 @@ function getpr($url)
 	return '';
 }
 
-//return the pagerank figure
+// Return the pagerank figure
 function getPageRank($url)
 {
 	$test=get_long_value_newer_than('pr__'.md5($url),time()-60*60*24*5);

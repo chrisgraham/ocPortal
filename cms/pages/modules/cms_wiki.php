@@ -18,6 +18,8 @@
  * @package		wiki
  */
 
+/*EXTRA FUNCTIONS: diff_simple_2*/
+
 /**
  * Module page class.
  */
@@ -426,12 +428,9 @@ class Module_cms_wiki
 				$restore_url=build_url(array('page'=>'_SELF','type'=>'edit_page','id'=>get_param('id',false,true),'restore_from'=>$revision['id']),'_SELF');
 				$size=strlen($revision['text_original']);
 				require_code('diff');
-				if (function_exists('diff_simple_2'))
-				{
-					$rendered_diff=diff_simple_2($revision['text_original'],$last_description);
-					$last_description=$revision['text_original'];
-					$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'a46de8a930ecfb814695a50b1c4931ac','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>'','SIZE'=>clean_file_size($size))));
-				}
+				$rendered_diff=diff_simple_2($revision['text_original'],$last_description);
+				$last_description=$revision['text_original'];
+				$revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID'=>'a46de8a930ecfb814695a50b1c4931ac','RENDERED_DIFF'=>$rendered_diff,'EDITOR'=>$editor,'DATE'=>$date,'DATE_RAW'=>strval($time),'RESTORE_URL'=>$restore_url,'URL'=>'','SIZE'=>clean_file_size($size))));
 			}
 			if ((!$revision_history->is_empty()) && ($restore_from==-1))
 				$revision_history=do_template('REVISION_HISTORY_WRAP',array('_GUID'=>'1fc38d9d7ec57af110759352446e533d','CONTENT'=>$revision_history));

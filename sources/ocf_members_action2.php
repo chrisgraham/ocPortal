@@ -1319,11 +1319,11 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 	{
 		if (is_integer($value)) $value=get_translated_text($value,$GLOBALS['FORUM_DB']);
 
+		$map=array();
+
 		$current=$GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields',$db_fieldname,array('mf_member_id'=>$member_id));
 		if (is_null($current))
 		{
-			$map=array();
-
 			if ($type=='posting_field')
 			{
 				require_code('attachments2');
@@ -1340,14 +1340,18 @@ function ocf_set_custom_field($member_id,$field,$value,$type=NULL,$defer=false)
 			{
 				require_code('attachments2');
 				require_code('attachments3');
-				update_lang_comcode_attachments($current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);
+				$map+=update_lang_comcode_attachments($db_fieldname,$current,$value,'null',strval($member_id),$GLOBALS['FORUM_DB'],false,$member_id);
 			} else
 			{
-				lang_remap_comcode($current,$value,$GLOBALS['FORUM_DB']);
+				$map+=lang_remap_comcode($db_fieldname,$current,$value,$GLOBALS['FORUM_DB']);
 			}
+
+			$GLOBALS['FORUM_DB']->query_update('f_member_custom_fields',$map,array('mf_member_id'=>$member_id),'',1);
 		}
 	} else
 	{
+		$change=array();
+
 		if (is_string($value)) // Should not normally be needed, but add some safety in our API
 		{
 			switch ($storage_type)

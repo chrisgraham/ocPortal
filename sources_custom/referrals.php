@@ -535,7 +535,7 @@ function referrer_report_script($ret=false)
 		$deleted=false;
 		if (is_null($ref['referee']))
 		{
-			$deleted=($ref['qualified']==1);//!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','id',array('the_type'=>'DELETE_MEMBER','param_b'=>TODO Unfortunately we can't tell)));
+			$deleted=!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','id',array('the_type'=>'DELETE_MEMBER','param_a'=>strval($ref['referee']))));
 		}
 		if ($csv)
 		{

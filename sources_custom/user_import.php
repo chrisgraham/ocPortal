@@ -95,7 +95,6 @@ function do_user_import()
 			$username=isset($USER_IMPORT_WANTED['m_username'])?$row[$USER_IMPORT_WANTED['m_username']]:NULL;
 			$password=isset($USER_IMPORT_WANTED['m_password'])?$row[$USER_IMPORT_WANTED['m_password']]:NULL;
 			$email_address=isset($USER_IMPORT_WANTED['m_email_address'])?$row[$USER_IMPORT_WANTED['m_email_address']]:NULL;
-			$groups=NULL;
 			$dob_day=isset($USER_IMPORT_WANTED['m_dob_day'])?$row[$USER_IMPORT_WANTED['m_dob_day']]:NULL;
 			$dob_month=isset($USER_IMPORT_WANTED['m_dob_month'])?$row[$USER_IMPORT_WANTED['m_dob_month']]:NULL;
 			$dob_year=isset($USER_IMPORT_WANTED['m_dob_year'])?$row[$USER_IMPORT_WANTED['m_dob_year']]:NULL;
@@ -109,6 +108,7 @@ function do_user_import()
 			}
 			$timezone=isset($USER_IMPORT_WANTED['m_timezone'])?$row[$USER_IMPORT_WANTED['m_timezone']]:NULL;
 			$primary_group=isset($USER_IMPORT_WANTED['m_primary_group'])?$row[$USER_IMPORT_WANTED['m_primary_group']]:NULL;
+			$groups=isset($USER_IMPORT_WANTED['groups'])?array_map('intval',explode(',',$row[$USER_IMPORT_WANTED['groups']])):NULL;
 			$photo_url=isset($USER_IMPORT_WANTED['m_photo_url'])?$row[$USER_IMPORT_WANTED['m_photo_url']]:NULL;
 
 			if (is_null($member_id))
@@ -117,12 +117,12 @@ function do_user_import()
 				{
 					// Add
 					if (is_null($password)) $password=produce_salt();
-					ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone,$primary_group,1,NULL,NULL,'',NULL,'',0,0,1,'',$photo_url,'',1,NULL,NULL,1,1,'',NULL,'',false,'plain');
+					ocf_make_member($username,$password,$email_address,$groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone,$primary_group,1,NULL,NULL,'',NULL,'',0,0,1,'',$photo_url,'',1,NULL,NULL,1,1,NULL,'',false,'plain');
 				}
 			} else
 			{
 				// Edit
-				ocf_edit_member($member_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,$username,$password,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,$photo_url,NULL,NULL,NULL,true);
+				ocf_edit_member($member_id,$email_address,NULL,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,$username,$password,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,$photo_url,NULL,NULL,NULL,true);
 				require_code('ocf_groups_action2');
 				if (!is_null($groups))
 				{

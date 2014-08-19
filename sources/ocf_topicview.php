@@ -584,6 +584,7 @@ function ocf_cache_member_details($members)
 	}
 	if ($member_or_list!='')
 	{
+		global $TABLE_LANG_FIELDS;
 		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.$member_or_list,NULL,NULL,false,true,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_member_custom_fields']:array());
 		global $TABLE_LANG_FIELDS_CACHE;
 		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,true,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_member_custom_fields']:array());

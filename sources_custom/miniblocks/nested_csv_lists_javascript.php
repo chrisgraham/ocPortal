@@ -1,5 +1,7 @@
 <?php
 
+/*EXTRA FUNCTIONS: json_encode*/
+
 require_code('nested_csv');
 $csv_structure=get_nested_csv_structure();
 

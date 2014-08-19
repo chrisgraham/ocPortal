@@ -65,7 +65,6 @@ class Hook_fields_short_text_multi
 		if ($required!==NULL)
 		{
 			if (($required) && ($default=='')) $default='default';
-			$default=strval(insert_lang_comcode($default,3,$db));
 		}
 		return array('long_text',$default,'long');
 	}

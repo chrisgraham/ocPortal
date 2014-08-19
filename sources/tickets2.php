@@ -39,7 +39,7 @@ function add_ticket_type($ticket_type_name,$guest_emails_mandatory=0,$search_faq
 	$map+=insert_lang('ticket_type_name',$ticket_type_name,1);
 	$ticket_type_id=$GLOBALS['SITE_DB']->query_insert('ticket_types',$map,true);
 
-	log_it('ADD_TICKET_TYPE',strval($ticket_type_id),$ticket_type);
+	log_it('ADD_TICKET_TYPE',strval($ticket_type_id),$ticket_type_name);
 
 	if ((addon_installed('occle')) && (!running_script('install')))
 	{

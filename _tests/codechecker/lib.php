@@ -15,7 +15,7 @@
 
 @ini_set('memory_limit','-1');
 error_reporting (E_ALL);
-set_time_limit(1000);
+if (function_exists('set_time_limit')) @set_time_limit(1000);
 global $OCPORTAL_PATH;
 $OCPORTAL_PATH=dirname(dirname(dirname(__FILE__)));
 
@@ -39,7 +39,7 @@ function parse_file($to_use,$verbose=false,$very_verbose=false,$i=NULL,$count=NU
 	if ($verbose) echo "\n\n".'<b>Starting lexing...</b>'."\n";
 	$TOKENS=lex();
 	if ($very_verbose) print_r($TOKENS);
-	if ($very_verbose) echo count($TOKENS).' tokens';
+	if ($very_verbose) echo strval(count($TOKENS)).' tokens';
 	if ($verbose) echo "\n\n".'<b>Starting parsing...</b>'."\n";
 	$structure=parse();
 	if ($very_verbose) print_r($structure);
@@ -210,7 +210,7 @@ function die_html_trace($message)
 		$trace.='<p>'.$traces.'</p>';
 	}
 
-	die('<span style="color: blue">'.$trace.'</span>');
+	exit('<span style="color: blue">'.$trace.'</span>');
 }
 
 function pos_to_line_details($i,$absolute=false)
@@ -230,15 +230,15 @@ function pos_to_line_details($i,$absolute=false)
 
 function log_warning($warning,$i=-1,$absolute=false)
 {
-	global $TEXT,$FILENAME,$START_TIME,$myfile_WARNINGS;
+	global $TEXT,$FILENAME,$START_TIME,$MYFILE_WARNINGS;
 
 	if (($i==-1) && (isset($GLOBALS['I']))) $i=$GLOBALS['I'];
 	list($pos,$line,$full_line)=pos_to_line_details($i,$absolute);
 
 	echo 'WARNING "'.$FILENAME.'" '.$line.' '.$pos.' '.'PHP: '.$warning.cnl();
-//	if (!isset($myfile_WARNINGS)) $myfile_WARNINGS=fopen('warnings_'.$START_TIME.'.log','at');
-//	fwrite($myfile_WARNINGS,$FILENAME.': '.$warning.' (at line '.$line.', position '.$pos.')  ['.$full_line.']'."\n");
-	//fclose($myfile_WARNINGS);
+//	if (!isset($MYFILE_WARNINGS)) $MYFILE_WARNINGS=fopen('warnings_'.$START_TIME.'.log','at');
+//	fwrite($MYFILE_WARNINGS,$FILENAME.': '.$warning.' (at line '.$line.', position '.$pos.')  ['.$full_line.']'."\n");
+	//fclose($MYFILE_WARNINGS);
 }
 
 function log_special($type,$value)

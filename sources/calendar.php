@@ -46,7 +46,7 @@ function render_event_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 	require_css('calendar');
 	require_lang('calendar');
 
-	$just_event_row=db_map_restrict($myrow,array('id','e_content'));
+	$just_event_row=db_map_restrict($row,array('id','e_content'));
 
 	$url=build_url(array('page'=>'calendar','type'=>'view','id'=>$row['id']),$zone);
 

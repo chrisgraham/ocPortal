@@ -7,10 +7,6 @@
 
 */
 
-/*
-CUSTOMISED FOR PROJECT: DO NOT OVERWRITE WITH A NEWER ADDON VERSION
-*/
-
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
@@ -182,8 +178,8 @@ class Block_main_google_map
 				$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name),'ORDER BY cf_order');
 			}
 			$CAT_FIELDS_CACHE[$catalogue_name]=$fields;
-			$_latitude_key=0;
-			$_longitude_key=0;
+			$_latitude_key='FIELD_1';
+			$_longitude_key='FIELD_2';
 			foreach ($fields as $field)
 			{
 				if (get_translated_text($field['cf_name'])==$latitude_key)

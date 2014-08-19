@@ -207,8 +207,8 @@ function enable_content_translation()
  */
 function _update_base_config_for_content_translation($new_setting)
 {
-	$config_path=get_file_base().'/info.php';
-	$config_file=file_get_contents($config_path); // TODO: _config.php in v10
+	$config_path=get_file_base().'/_config.php';
+	$config_file=file_get_contents($config_path);
 	$has='$SITE_INFO[\'multi_lang_content\']=\''.($new_setting?'0':'1').'\';';
 	$wants='$SITE_INFO[\'multi_lang_content\']=\''.($new_setting?'1':'0').'\';';
 	if (strpos($config_file,$has)!==false || strpos($config_file,$wants)!==false)

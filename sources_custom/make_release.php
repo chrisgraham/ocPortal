@@ -13,6 +13,8 @@
  * @package		ocportal_release_build
  */
 
+/*EXTRA FUNCTIONS: shell_exec|escapeshellarg*/
+
 function init__make_release()
 {
 	require_code('files2');
@@ -285,11 +287,9 @@ function make_installers($skip_file_grab=false)
 
 		// Filter out non-free stuff from "ocportal-<version>"
 		$prefix=$builds_path.'/builds/debian-build/ocportal-'.$version_dotted;
-		unlink($prefix.'/sources/hooks/systems/addon_registry/jwplayer.php');
-		unlink($prefix.'/data/flvplayer.swf');
+		unlink($prefix.'/data/jwplayer.flash.swf');
 		unlink($prefix.'/themes/default/templates/JAVASCRIPT_JWPLAYER.tpl');
 		unlink($prefix.'/sources/jsmin.php');
-		// TODO: Outdated code ^
 
 		// Create "ocportal-<version>.tar.gz" package from "ocportal-<version>"
 		chdir($builds_path.'/builds/debian-build');

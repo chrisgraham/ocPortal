@@ -27,7 +27,7 @@ class ocp_test_case extends WebTestCase
 		require_code('config2');
 		set_option('site_closed','0');
 
-		@set_time_limit(0);
+		if (function_exists('set_time_limit')) @set_time_limit(0);
 	}
 
 	function tearDown()

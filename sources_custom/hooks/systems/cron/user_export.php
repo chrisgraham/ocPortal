@@ -19,7 +19,7 @@ class Hook_cron_user_export
 		if (!USER_EXPORT_ENABLED) return;
 
 		$last=get_value('last_user_export');
-		if ((is_null($last)) || ($last<time()-60*USER_EXPORT_MINUTES))
+		if ((is_null($last)) || (intval($last)<time()-60*USER_EXPORT_MINUTES))
 		{
 			set_value('last_user_export',strval(time()));
 

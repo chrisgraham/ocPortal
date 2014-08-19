@@ -419,7 +419,7 @@ class Module_tickets
 				$id=strval($ticket_owner).'_'.$ticket_id;
 				if ($ticket_owner!=get_member())
 				{
-					$this->title=get_screen_title('ADD_TICKET_AS',true,escape_html($GLOBALS['FORUM_DRIVER']->get_username($ticket_owner)));
+					$this->title=get_screen_title('ADD_TICKET_AS',true,array(escape_html($GLOBALS['FORUM_DRIVER']->get_username($ticket_owner))));
 				} else
 				{
 					$this->title=get_screen_title('ADD_TICKET');
@@ -743,7 +743,7 @@ class Module_tickets
 		$_home_url=build_url(array('page'=>'_SELF','type'=>'ticket','id'=>$id,'redirect'=>NULL),'_SELF',NULL,false,true,true);
 		$home_url=$_home_url->evaluate();
 		$email='';
-		if ($ticket_type!=-1) // New ticket
+		if ($ticket_type_id!=-1) // New ticket
 		{
 			$ticket_type_details=get_ticket_type($ticket_type_id);
 

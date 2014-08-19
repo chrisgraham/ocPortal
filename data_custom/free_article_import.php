@@ -282,7 +282,8 @@ function parse_articletrader($r)
 function http_download_file_cached($url,$referer='',$cookies=NULL)
 {
 	require_code('files');
-	@mkdir(get_custom_file_base().'/data_custom/free_article_import_cache');
+	$dir=get_custom_file_base().'/data_custom/free_article_import_cache';
+	if (@mkdir($dir,0777)!==false) fix_permissions($dir);
 	$cache_file=get_custom_file_base().'/data_custom/free_article_import_cache/'.md5($url).'.htm';
 	if (is_file($cache_file))
 	{

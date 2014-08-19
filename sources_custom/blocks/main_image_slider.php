@@ -136,7 +136,7 @@ class Block_main_image_slider
 
 			$view_url=build_url(array('page'=>'galleries','type'=>$row['content_type'],'id'=>$row['id']),$zone);
 
-			$just_media_row=db_map_restrict($myrow,array('id','description'));
+			$just_media_row=db_map_restrict($row,array('id','description'));
 
 			$title=get_translated_text($row['title']);
 			$description=get_translated_tempcode($row['content_type'].'s',$just_media_row,'description');

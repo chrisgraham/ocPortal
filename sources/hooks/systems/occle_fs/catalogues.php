@@ -500,18 +500,20 @@ class Hook_occle_fs_catalogues extends resource_fs_base
 					{
 						$id=$_fields[$i]['id'];
 
+						$field_title=mixed();
 						foreach ($_field_title as $lang=>$val)
 						{
 							delete_lang($_fields[$i]['cf_name']);
-							insert_lang($val,2,NULL,false,$_fields[$i]['cf_name'],$lang);
+							$field_title=insert_lang('cf_name',$val,2,NULL,false,$_fields[$i]['cf_name'],$lang);
 						}
+						$description=mixed();
 						foreach ($_description as $lang=>$val)
 						{
 							delete_lang($_fields[$i]['cf_description']);
-							insert_lang($val,2,NULL,false,$_fields[$i]['cf_description'],$lang);
+							$description=insert_lang('cf_description',$val,2,NULL,false,$_fields[$i]['cf_description'],$lang);
 						}
 
-						actual_edit_catalogue_field($id,$name,NULL,NULL,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category,$put_in_search,$type);
+						actual_edit_catalogue_field($id,$name,$field_title,$description,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category,$put_in_search,$type);
 					} else
 					{
 						$field_title=mixed();

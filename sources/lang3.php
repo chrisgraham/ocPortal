@@ -591,12 +591,12 @@ function _comcode_lang_string($lang_code)
 		if ((array_key_exists(0,$comcode_page)) && (!is_browser_decacheing()))
 		{
 			$comcode_page_row_cached_only=array(
-				'the_zone'=>$comcode_page_rows[0]['the_zone'],
-				'the_page'=>$comcode_page_rows[0]['the_page'],
-				'the_theme'=>$comcode_page_rows[0]['the_theme'],
-				'string_index'=>$comcode_page_rows[0]['string_index'],
-				'string_index__text_parsed'=>$comcode_page_rows[0]['string_index__text_parsed'],
-				'string_index__source_user'=>$comcode_page_rows[0]['string_index__source_user'],
+				'the_zone'=>$comcode_page[0]['the_zone'],
+				'the_page'=>$comcode_page[0]['the_page'],
+				'the_theme'=>$comcode_page[0]['the_theme'],
+				'string_index'=>$comcode_page[0]['string_index'],
+				'string_index__text_parsed'=>$comcode_page[0]['string_index__text_parsed'],
+				'string_index__source_user'=>$comcode_page[0]['string_index__source_user'],
 			);
 			if ((!is_null($comcode_page[0]['text_parsed'])) && ($comcode_page[0]['text_parsed']!=''))
 			{

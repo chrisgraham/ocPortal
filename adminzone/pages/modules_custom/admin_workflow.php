@@ -606,7 +606,7 @@ class Module_admin_workflow extends standard_aed_module
 	{
 		// We override the add screen here so that we can provide multiple screens
 
-		$test=$this->handle_confirmations($title);
+		$test=$this->handle_confirmations($this->title);
 		if (!is_null($test)) return $test;
 
 		// Interrupt standard CRUD stuff, so we can choose our screen
@@ -660,7 +660,7 @@ class Module_admin_workflow extends standard_aed_module
 		$delete=post_param_integer('delete',0);
 		if ($delete==1)
 		{
-			$test=$this->handle_confirmations($title);
+			$test=$this->handle_confirmations($this->title);
 			if (!is_null($test)) return $test;
 
 			$this->delete_actualisation($id);
@@ -672,7 +672,7 @@ class Module_admin_workflow extends standard_aed_module
 			return $this->do_next_manager($this->title,$description,NULL);
 		} else
 		{
-			$test=$this->handle_confirmations($title);
+			$test=$this->handle_confirmations($this->title);
 			if (!is_null($test)) return $test;
 
 			// Here we interrupt the regular CRUD code see if we should redirect to

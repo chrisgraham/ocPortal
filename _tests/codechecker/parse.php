@@ -650,9 +650,11 @@ function _parse_cases()
 	return $cases;
 }
 
-function _parse_class_contents($class_modifiers=array(),$is_interface=false)
+function _parse_class_contents($class_modifiers=NULL,$is_interface=false)
 {
 // Choice{"VAR" "IDENTIFIER" "EQUAL" literal "COMMAND_TERMINATE" | "VAR" "IDENTIFIER" "COMMAND_TERMINATE" | function_dec}*
+
+	if ($class_modifiers===NULL) $class_modifiers=array();
 
 	$next=pparse__parser_peek();
 	$class=array('functions'=>array(),'vars'=>array(),'i'=>$GLOBALS['I']);
@@ -795,8 +797,10 @@ function _parse_class_contents($class_modifiers=array(),$is_interface=false)
 	return $class;
 }
 
-function _parse_class_dec($modifiers=array())
+function _parse_class_dec($modifiers=NULL)
 {
+	if ($modifiers===NULL) $modifiers=array();
+
 	$class=array('is_interface'=>false);		// Classes and interfaces aren't different enough to justify separate handlers
 	if (count($modifiers) > 0)
 	{
@@ -825,8 +829,10 @@ function _parse_class_dec($modifiers=array())
 	return $class;
 }
 
-function _parse_function_dec($function_modifiers=array())
+function _parse_function_dec($function_modifiers=NULL)
 {
+	if ($function_modifiers===NULL) $function_modifiers=array();
+
 	$function=array();
 	$function['offset']=$GLOBALS['I'];
 	pparse__parser_expect('FUNCTION');
@@ -1422,7 +1428,8 @@ function _parse_parameter()
 				pparse__parser_expect('REFERENCE');
 				$variable=pparse__parser_expect('variable');
 				// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-				$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I'],'HINT'=>$hint);
+				$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I']);
+				$parameter['HINT']=$hint;
 			}
 			elseif (pparse__parser_peek()=='variable')
 			{
@@ -1439,7 +1446,8 @@ function _parse_parameter()
 						// NULL
 						pparse__parser_next();		// Consume the NULL
 						// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-						$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['I'],'HINT'=>'?'.$hint);
+						$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['I']);
+						$parameter['HINT']='?'.$hint;
 					}
 					else
 					{
@@ -1449,7 +1457,8 @@ function _parse_parameter()
 				else
 				{
 					// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-					$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['I'],'HINT'=>$hint);
+					$parameter=array('RECEIVE_BY_VALUE',$var,NULL,$GLOBALS['I']);
+					$parameter['HINT']=$hint;
 				}
 			}
 			else
@@ -1471,7 +1480,8 @@ function _parse_parameter()
 					// NULL
 					pparse__parser_next();		// Consume the NULL
 					// 'RECEIVE_BY_REFERENCE' and 'RECEIVE_BY_VALUE' aren't actually used for anything specifically.
-					$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I'],'HINT'=>'?'.$hint);
+					$parameter=array('RECEIVE_BY_REFERENCE',$variable,NULL,$GLOBALS['I']);
+					$parameter['HINT']='?'.$hint;
 				}
 				else
 				{

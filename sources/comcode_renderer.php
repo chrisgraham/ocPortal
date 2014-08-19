@@ -388,7 +388,7 @@ function comcode_parse_error($preparse_mode,$_message,$pos,$comcode,$check_only=
 		}
 	}
 
-	set_helper_panel_text('');
+	set_helper_panel_text(new ocp_tempcode());
 
 	// Output our error / correction form
 	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer

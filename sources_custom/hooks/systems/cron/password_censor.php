@@ -21,7 +21,7 @@ class Hook_cron_password_censor
 	function run()
 	{
 		$last=get_value('last_password_censor_time');
-		if ((is_null($last)) || ($last<time()-60*60*12))
+		if ((is_null($last)) || (intval($last)<time()-60*60*12))
 		{
 			set_value('last_password_censor_time',strval(time()));
 

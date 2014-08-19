@@ -1,4 +1,4 @@
-info.php /etc/ocportal/info.php
+_config.php /etc/ocportal/_config.php
 adminzone /usr/share/ocportal
 b* /usr/share/ocportal
 c* /usr/share/ocportal

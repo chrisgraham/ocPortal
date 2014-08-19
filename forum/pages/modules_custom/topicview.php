@@ -117,26 +117,32 @@ function ocjester_piglatin_filter($in)
 // Otherwise, pass it on for rotation and add "ay"
 // Piglatin has variations in rules, this is a common form but not only form.
 
-function pigLatin($word) {
-	if (isVowel(substr($word,0,1))) {
-		return "$word" . "way ";
-	}
-	else {
-		return moveLetter($word) . "ay ";
+function pigLatin($word)
+{
+	if (isVowel(substr($word,0,1)))
+	{
+		return "$word"."way ";
+	} else
+	{
+		return moveLetter($word)."ay ";
 	}
 }
 
 // Recursive function to take off a non vowel letter and put it on the end
 // Recall the function until a vowel is encountered and then return the word.
-function moveLetter(&$word) {
+function moveLetter(&$word)
+{
 	if (!containsVowel($word)) return $word;
 
-	if (!isVowel(substr($word,0,1))) {
+	if (!isVowel(substr($word,0,1)))
+	{
 		$ch_letter=strtolower(substr($word,0,1));
-		$word=substr($word,1) . $ch_letter;
+		$word=substr($word,1).$ch_letter;
 		return moveLetter($word);
+	} else
+	{
+		return $word;
 	}
-	else { return $word; }
 }
 
 function containsVowel($word)
@@ -151,11 +157,16 @@ function containsVowel($word)
 
 // Simply checks if letter is a vowel.
 // For most pig latin variations, Y is considered a vowel.
-function isVowel($chLetter) {
-	$letters=array("a","e","i","o","u","y");
+function isVowel($ch_letter)
+{
+	$letters=array('a','e','i','o','u','y');
 
-	for ($i=0; $i < 6; $i++) {
-		if (strtolower($chLetter)==$letters[$i]) { return true; }
+	for ($i=0;$i<6;$i++)
+	{
+		if (strtolower($ch_letter)==$letters[$i])
+		{
+			return true;
+		}
 	}
 
 	return false;

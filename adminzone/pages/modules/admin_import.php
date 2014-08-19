@@ -759,7 +759,7 @@ class Module_admin_import
 			'zone_require_session'=>0,
 		);
 		$map+=insert_lang('zone_title',do_lang('SECTION_FORUMS'),1);
-		$map+=insert_lang('zone_header_text',do_lang('FORUM'),1,NULL,false,NULL,$LANG);
+		$map+=insert_lang('zone_header_text',do_lang('FORUM'),1);
 		$GLOBALS['SITE_DB']->query_insert('zones',$map);
 
 		return $out;

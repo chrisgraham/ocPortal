@@ -33,6 +33,7 @@ class Hook_login_provider_external_db
 
 			// Existing ocP user?
 			$username_field=get_long_value('external_db_login__username_field');
+			$email_address_field=get_long_value('external_db_login__email_address_field');
 			$member=mixed();
 			if (get_option('one_per_email_address')=='1')
 				$member=$GLOBALS['FORUM_DRIVER']->get_member_from_email_address($record[$email_address_field]);

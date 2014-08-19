@@ -13,6 +13,8 @@
  * @package		user_sync
  */
 
+/*EXTRA FUNCTIONS: PDO*/
+
 function init__user_sync()
 {
 	global $USER_SYNC_IMPORT_LIMIT;

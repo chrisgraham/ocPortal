@@ -12,6 +12,8 @@
  * @copyright	ocProducts Ltd
  */
 
+/*EXTRA FUNCTIONS: json_decode*/
+
 class Block_side_similar_sites
 {
 	/**
@@ -58,14 +60,14 @@ class Block_side_similar_sites
 		$criteria=array_key_exists('criteria',$map)?$map['criteria']:get_option('site_scope');
 		$max=(isset($map['max']) && intval($map['max'])>0)?intval($map['max']):3;
 
-		$setSearchTerms='';
-		$setSearchURL='related:'.$criteria;
+		$set_search_terms='';
+		$set_search_url='related:'.$criteria;
 
-		$searchResultsArray=$this->retrieveGoogleSearch($setSearchTerms,$setSearchURL);
+		$search_results_array=$this->retrieveGoogleSearch($set_search_terms,$set_search_url);
 
 		$out='<ul>';
 		$links_count=0;
-		foreach ($searchResultsArray as $result)
+		foreach ($search_results_array as $result)
 		{
 			//more details in output - page content and short url - if we need more details, i.e. for the main block we could use this
 			//$out .= '<li><strong><a href="'.$result["url"].'">'.$result["title"].'</a></strong> '.  $result["content"].' <em>'.$result["visibleUrl"].'</em></li>';
@@ -79,18 +81,18 @@ class Block_side_similar_sites
 		return do_template('BLOCK_SIDE_SIMILAR_SITES',array('_GUID'=>'0eeeec88a1496aa8b0db3580dcaa4ed8','TITLE'=>do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'),'CONTENT'=>$out,'CRITERIA'=>$criteria));
 	}
 
-	function retrieveGoogleSearch($searchTerms='example',$searchURL='related:example.com')
+	function retrieveGoogleSearch($search_terms='example',$search_url='related:example.com')
 	{
 		require_code('files');
-		$googleBaseUrl='http://ajax.googleapis.com/ajax/services/search/web';
-		$googleBaseQuery='?v=1.0&rsz=large&q=';
-		$googleFullUrl=$googleBaseUrl . $googleBaseQuery . $searchURL . '%20' . $searchTerms;
+		$google_base_url='http://ajax.googleapis.com/ajax/services/search/web';
+		$google_base_query='?v=1.0&rsz=large&q=';
+		$google_full_url=$google_base_url.$google_base_query.$search_url.'%20'.$search_terms;
 
-		$returnGoogleSearch=http_download_file($googleFullUrl);
+		$returned_google_search=http_download_file($google_full_url);
 
-		$returnGoogleSearch=json_decode($returnGoogleSearch,true);
+		$returned_google_search_arr=json_decode($returned_google_search,true);
 
-		return $returnGoogleSearch['responseData']['results'];
+		return $returned_google_search_arr['responseData']['results'];
 	}
 
 

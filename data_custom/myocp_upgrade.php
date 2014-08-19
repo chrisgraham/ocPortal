@@ -28,6 +28,8 @@ NOTES...
 Plenty of room for improvement into the future here, e.g. we could move upgraded users over to a separate myOCP server as we upgrade them, then erase the old one later.
 */
 
+/*EXTRA FUNCTIONS: escapeshellarg|shell_exec*/
+
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
@@ -75,7 +77,7 @@ set_option('site_closed','1');
 clear_caches_1();
 
 // Reset demo
-http_download_file(get_brand_base_url()'/data_custom/ocportalcom_web_service.php?call=demo_reset');
+http_download_file(get_brand_base_url().'/data_custom/ocportalcom_web_service.php?call=demo_reset');
 
 // Run upgrade
 global $SITE_INFO;

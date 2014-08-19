@@ -54,10 +54,8 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
 		}
 	}
 
-	$GLOBALS['SITE_DB']->query_insert('custom_comcode',array(
+	$map=array(
 		'tag_tag'=>$tag,
-		'tag_title'=>is_integer($title)?$title:insert_lang($title,2),
-		'tag_description'=>is_integer($description)?$description:insert_lang($description,2),
 		'tag_replace'=>$replace,
 		'tag_example'=>$example,
 		'tag_parameters'=>$parameters,
@@ -65,7 +63,22 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
 		'tag_dangerous_tag'=>$dangerous_tag,
 		'tag_block_tag'=>$block_tag,
 		'tag_textual_tag'=>$textual_tag,
-	));
+	);
+	if (is_array($title))
+	{
+		$map+=$title;
+	} else
+	{
+		$map+=insert_lang('tag_title',$title,2);
+	}
+	if (is_array($description))
+	{
+		$map+=$description;
+	} else
+	{
+		$map+=insert_lang('tag_description',$description,2);
+	}
+	$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 
 	log_it('ADD_CUSTOM_COMCODE_TAG',$tag);
 

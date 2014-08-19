@@ -7,6 +7,8 @@
 
 */
 
+/*EXTRA FUNCTIONS: shell_exec|escapeshellarg*/
+
 restrictify();
 @ini_set('ocproducts.xss_detect','0');
 

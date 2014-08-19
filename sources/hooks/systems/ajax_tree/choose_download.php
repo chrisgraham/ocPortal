@@ -71,15 +71,15 @@ class Hook_choose_download
 
 				foreach ($t['entries'] as $eid=>$etitle)
 				{
-					$row=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$eid),'',1);
+					$download_rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$eid),'',1);
 
 					if ($file_type!='')
 					{
-						if (substr($row[0]['original_filename'],-strlen($file_type)-1)!='.'.$file_type) continue;
+						if (substr($download_rows[0]['original_filename'],-strlen($file_type)-1)!='.'.$file_type) continue;
 					}
 
-					$description=get_translated_text($row[0]['description']);
-					$description_html=get_translated_tempcode('download_downloads',$rows[0],'description');
+					$description=get_translated_text($download_rows[0]['description']);
+					$description_html=get_translated_tempcode('download_downloads',$download_rows[0],'description');
 
 					if (addon_installed('galleries'))
 					{

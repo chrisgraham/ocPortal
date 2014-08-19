@@ -1,6 +1,6 @@
 <?php
 
-/*EXTRA FUNCTIONS: shell_exec*/
+/*EXTRA FUNCTIONS: shell_exec|get_hostname|escapeshellarg|escapeshellcmd*/
 
 if (function_exists('set_time_limit')) @set_time_limit(0);
 ini_set('allow_url_fopen','1');

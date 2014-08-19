@@ -41,7 +41,7 @@ function render_banner_box($row,$zone='_SEARCH',$give_context=true,$guid='')
 {
 	require_lang('banners');
 
-	$just_banner_row=db_map_restrict($myrow,array('name','caption'));
+	$just_banner_row=db_map_restrict($row,array('name','caption'));
 
 	$url=new ocp_tempcode();
 

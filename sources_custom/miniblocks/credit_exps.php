@@ -13,11 +13,11 @@
  * @package		ocportalcom_support_credits
  */
 
-$budget_minutes=integer_format(get_option('support_budget_priority'));
-$normal_minutes=integer_format(get_option('support_normal_priority'));
-$day_minutes=integer_format(get_option('support_day_priority'));
-$high_minutes=integer_format(get_option('support_high_priority'));
-$emergency_minutes=integer_format(get_option('support_emergency_priority'));
+$budget_minutes=integer_format(intval(get_option('support_budget_priority')));
+$normal_minutes=integer_format(intval(get_option('support_normal_priority')));
+$day_minutes=integer_format(intval(get_option('support_day_priority')));
+$high_minutes=integer_format(intval(get_option('support_high_priority')));
+$emergency_minutes=integer_format(intval(get_option('support_emergency_priority')));
 $s_currency=get_option('currency',true);
 if (is_null($s_currency)) $s_currency='USD';
 

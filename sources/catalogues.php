@@ -1224,7 +1224,7 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 			{
 				$target['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
 				$target['effective_value_pure']=do_lang('INTERNAL_ERROR');
-  				break;
+				break;
 			} else
 			{
 				$target['effective_value']=$temp['cv_value'];
@@ -1237,7 +1237,7 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 			{
 				$target['effective_value']=do_lang_tempcode('NA_EM');
 				$target['effective_value_pure']=do_lang('NA');
-  				break;
+				break;
 			} else
 			{
 				$target['effective_value']=float_to_raw_string($temp['cv_value']);
@@ -1250,7 +1250,7 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 			{
 				$target['effective_value']=do_lang_tempcode('NA_EM');
 				$target['effective_value_pure']=do_lang('NA');
-  				break;
+				break;
 			} else
 			{
 				$target['effective_value']=strval($temp['cv_value']);
@@ -1325,7 +1325,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		if (class_exists('resource_fs_base')) $catalogue_entry_cache=array();
 	} else
 	{
-		if (!isset($catalogue_entry_cache[$entry_id][$field_id])) return '';
+		if (!isset($catalogue_entry_cache[$entry_id][$field_id])) return array('cv_value'=>'');
 		$value=$catalogue_entry_cache[$entry_id][$field_id];
 	}
 

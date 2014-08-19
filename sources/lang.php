@@ -1205,11 +1205,11 @@ function get_translated_tempcode($table,$row,$field_name,$connection=NULL,$lang=
 	{
 		if ($lang==user_lang())
 		{
-			$connection->text_lookup_cache[$entry]=$parsed;
+			$connection->text_lookup_cache[$entry]=$result;
 		}
 	}
 
-	return $parsed;
+	return $result;
 }
 
 /**

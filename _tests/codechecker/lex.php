@@ -201,10 +201,11 @@ function lex($text=NULL)
 			log_warning('It is best to only have one PHP code block and not to terminate it. This stops problems with white-space at the end of files.');
 		} else $TEXT.='?'.'>';
 
-		$num_matches=preg_match_all('#<\\?php(.*)\\?'.'>#s',$TEXT,$matches,PREG_OFFSET_CAPTURE); // TODO: Put U back. I had to take it out because some kind of limit seemed to get hit with how much matching can be done with it on.
+		$num_matches=preg_match_all('#<\\?php(.*)\\?'.'>#sU',$TEXT,$matches,PREG_OFFSET_CAPTURE);
 	}
 	$new_text='';
-	$between_all='';
+	global $BETWEEN_ALL;
+	$BETWEEN_ALL='';
 	$extra_skipped=0;
 	$last_m=NULL;
 	for ($i=0;$i<$num_matches;$i++)
@@ -217,7 +218,7 @@ function lex($text=NULL)
 		{
 			$between=substr($TEXT,strlen($new_text)+$extra_skipped,$m[1]-5-strlen($new_text)-$extra_skipped);
 			$extra_skipped+=7;
-			$between_all.=$between;
+			$BETWEEN_ALL.=$between;
 			$new_text.=preg_replace('#[^\n]#s',' ',$between);
 			$new_text.=$m[0];
 			$last_m=$m;
@@ -226,15 +227,15 @@ function lex($text=NULL)
 	if (!is_null($last_m))
 	{
 		$between=substr($TEXT,$last_m[1]+strlen($last_m[0])+2);
-		$between_all.=$between;
+		$BETWEEN_ALL.=$between;
 		$new_text.=preg_replace('#[^\n]#',' ',$between);
 	}
 	if ($num_matches==0)
 	{
-		$between_all=$TEXT;
+		$BETWEEN_ALL=$TEXT;
 	}
 	$TEXT=$new_text;
-	if ((trim($between_all)!='') && (isset($GLOBALS['FILENAME'])))
+	if ((trim($BETWEEN_ALL)!='') && (isset($GLOBALS['FILENAME'])))
 	{
 		global $WITHIN_PHP;
 		$WITHIN_PHP=true;
@@ -429,7 +430,7 @@ function lex($text=NULL)
 						}
 					}
 
-					/*$terse_style=!isset($GLOBALS['NON_TERSE']); TODO Maybe put back, but should be optional
+					/*$terse_style=!isset($GLOBALS['NON_TERSE']); IDEA Maybe put back, but should be optional
 					if ($terse_style)
 					{
 						if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('COMMA','IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER','OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);

@@ -418,13 +418,13 @@ The following aren't 'keep' parameters, but are still useful and otherwise behav
  - [tt]page/type/id[/tt] -- standard URL routing parameters
  - [tt]kfsXX[/tt] -- this isn't useful for manual editing but people ask what it's for; it's to preserve the browse positions in forumviews, such that when returning, the browse positions are remembered
 
-[title="3"]Extra info.php settings[/title]
+[title="3"]Extra _config.php settings[/title]
 
 Setting,
 [code]
 $SITE_INFO['no_email_output']='1';
 [/code]
-in [tt]info.php[/tt] will disable emails. This is useful on a development server running with live user accounts.
+in [tt]_config.php[/tt] will disable emails. This is useful on a development server running with live user accounts.
 
 [title="3"]Hints for making websites for other people[/title]
 

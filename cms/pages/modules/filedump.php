@@ -754,7 +754,7 @@ class Module_filedump
 				break;
 
 			case 'audios':
-				if (!is_audio($filename)) return false;
+				if (!is_audio($filename,false)) return false;
 				break;
 
 			case 'others':
@@ -1132,7 +1132,8 @@ class Module_filedump
 						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name'=>$file,'path'=>$place));
 						if (!is_null($test))
 						{
-							lang_remap($test,$description);
+							$map=lang_remap('description',$test,$description);
+							$GLOBALS['SITE_DB']->query_update('filedump',$map);
 						} else
 						{
 							$map=array(
@@ -1140,7 +1141,7 @@ class Module_filedump
 								'path'=>$place,
 								'the_member'=>get_member(),
 							);
-							$map+=insert_lang_comcode('description',$description,3),
+							$map+=insert_lang_comcode('description',$description,3);
 							$GLOBALS['SITE_DB']->query_insert('filedump',$map);
 						}
 						break;

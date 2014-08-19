@@ -2088,9 +2088,10 @@ function implode($glue,$pieces)
  *
  * @param  mixed		Needle.
  * @param  array		Haystack.
+ * @param  boolean	Use strict type checking.
  * @return boolean	Whether the value exists in the array.
  */
-function in_array($needle,$haystack)
+function in_array($needle,$haystack,$strict=false)
 {
 	return false;
 }

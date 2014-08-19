@@ -196,7 +196,7 @@ function render_gallery_box($myrow,$root='root',$show_member_stats_if_appropriat
 	require_lang('galleries');
 	require_css('galleries');
 
-	$just_gallery_row=db_map_restrict($child,array('name','description'));
+	$just_gallery_row=db_map_restrict($myrow,array('name','description'));
 
 	$member_id=get_member_id_from_gallery_name($myrow['name'],$myrow,true);
 	$is_member=!is_null($member_id);

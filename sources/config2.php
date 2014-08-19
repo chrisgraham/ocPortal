@@ -140,7 +140,7 @@ function set_option($name,$value,$will_be_formally_set=1)
 			$map=insert_lang('c_value_trans',$value,1)+$map;
 		} else
 		{
-			$map['c_value_trans']=multi_lang_content()?NULL:'',
+			$map['c_value_trans']=multi_lang_content()?NULL:'';
 		}
 		if ($will_be_formally_set==0 && $GLOBALS['IN_MINIKERNEL_VERSION']) return; // Don't save in the installer
 		$GLOBALS['SITE_DB']->query_insert('config',$map);
@@ -160,7 +160,7 @@ function set_option($name,$value,$will_be_formally_set=1)
 			$map+=insert_lang('c_value_trans',$value,1);
 		} else
 		{
-			$map+=lang_remap($map,'c_value_trans',$value);
+			$map+=lang_remap('c_value_trans',$map['c_value_trans'],$value);
 		}
 		$GLOBALS['SITE_DB']->query_update('config',$map,array('c_name'=>$name),'',1);
 

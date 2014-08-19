@@ -18,6 +18,8 @@
  * @package		wiki_sync
  */
 
+/*EXTRA FUNCTIONS: shell_exec*/
+
 function find_wiki_disk_meta_set()
 {
 	$set=array();

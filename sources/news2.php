@@ -182,7 +182,7 @@ function delete_news_category($id)
 		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
 		foreach ($affected_news as $af_row)
 		{
-			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',','.$title.',',get_translated_text($af_row['meta_keywords'])));
+			$new_meta=str_replace(',,',',',preg_replace('#(^|,)'.preg_quote($old_title).'($|,)#',',',get_translated_text($af_row['meta_keywords'])));
 			if (substr($new_meta,0,1)==',') $new_meta=substr($new_meta,1);
 			if (substr($new_meta,-1)==',') $new_meta=substr($new_meta,0,strlen($new_meta)-1);
 			$GLOBALS['SITE_DB']->query_update('seo_meta',lang_remap('meta_keywords',$af_row['meta_keywords'],$new_meta),$af_row);
@@ -320,8 +320,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	}
 
 	require_code('attachments2');
-	$map=array('news_article'=>insert_lang_comcode_attachments(2,$news_article,'news',strval($id)));
-	$GLOBALS['SITE_DB']->query_update('news',$map,array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('news',array(insert_lang_comcode_attachments('news_article',2,$news_article,'news',strval($id))),array('id'=>$id),'',1);
 
 	log_it('ADD_NEWS',strval($id),$title);
 

@@ -1,4 +1,4 @@
-info.php /etc/ocportal/
+_config.php /etc/ocportal/
 debian/apache.conf /etc/ocportal/
 
 backend_cloud.php /usr/share/ocportal/www/

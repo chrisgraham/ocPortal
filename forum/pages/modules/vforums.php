@@ -284,7 +284,7 @@ class Module_vforums
 			$query.=' ORDER BY '.$order;
 			if (($start<200) && (is_null($initial_table)) && (multi_lang_content()))
 			{
-				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,'.(is_guest()?'NULL as l_time':'l_time').$query,$max,$start,NULL,NULL,false,false,array('t_cache_first_post'=>'?LONG_TRANS__COMCODE'))));
+				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,'.(is_guest()?'NULL as l_time':'l_time').$query,$max,$start,NULL,NULL,false,false,array('t_cache_first_post'=>'?LONG_TRANS__COMCODE')));
 			} else
 			{
 				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,'.(is_guest()?'NULL as l_time':'l_time').$query,$max,$start));

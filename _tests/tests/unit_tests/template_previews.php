@@ -13,6 +13,8 @@
  * @package		testing_platform
  */
 
+/*EXTRA FUNCTIONS: diff_simple_2*/
+
 /**
  * ocPortal test case class (unit testing).
  */
@@ -196,11 +198,8 @@ class template_previews_test_set extends ocp_test_case
 				fclose($myfile);
 				fix_permissions(get_file_base().'/_tests/screens_tested/v2__'.'.tmp');
 
-				if (function_exists('diff_simple_2'))
-				{
-					require_code('diff');
-					var_dump(diff_simple_2($_out1,$_out2));
-				}
+				require_code('diff');
+				var_dump(diff_simple_2($_out1,$_out2));
 
 				exit('Error!');
 			}

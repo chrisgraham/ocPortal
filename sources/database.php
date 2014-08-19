@@ -140,7 +140,7 @@ function reload_lang_fields()
 				$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']]=array();
 
 			$TABLE_LANG_FIELDS_CACHE[$lang_field['m_table']][$lang_field['m_name']]=$lang_field['m_type'];
-	  	}
+		}
 	}
 
 	if (function_exists('persistent_cache_set'))

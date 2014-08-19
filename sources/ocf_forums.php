@@ -64,7 +64,7 @@ function render_forum_box($row,$zone='_SEARCH',$give_context=true,$include_bread
 		$breadcrumbs=ocf_forum_breadcrumbs($row['id'],NULL,NULL,true,is_null($root)?get_param_integer('keep_forum_root',NULL):$root);
 	}
 
-	$just_forum_row=db_map_restrict($myrow,array('id','f_description'));
+	$just_forum_row=db_map_restrict($row,array('id','f_description'));
 
 	$summary=get_translated_tempcode('f_forums',$just_forum_row,'f_description',$GLOBALS['FORUM_DB']);
 

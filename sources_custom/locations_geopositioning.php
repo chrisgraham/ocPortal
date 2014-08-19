@@ -59,38 +59,38 @@ function find_nearest_location($latitude,$longitude,$latitude_field_id=NULL,$lon
 	// ====
 	// Much help from http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
 
-	$radLat=deg2rad($latitude);
-	$radLon=deg2rad($longitude);
+	$rad_lat=deg2rad($latitude);
+	$rad_lon=deg2rad($longitude);
 
-	$minLat=$radLat-$error_tolerance;
-	$maxLat=$radLat+$error_tolerance;
+	$min_lat=$rad_lat-$error_tolerance;
+	$max_lat=$rad_lat+$error_tolerance;
 
-	if ($minLat>MIN_LAT && $maxLat<MAX_LAT)
+	if ($min_lat>MIN_LAT && $max_lat<MAX_LAT)
 	{
-		$deltaLon=asin(sin($error_tolerance)/cos($radLat));
-		$minLon=$radLon-$deltaLon;
-		if ($minLon<MIN_LON) $minLon+=2.0*M_PI;
-		$maxLon=$radLon+$deltaLon;
-		if ($maxLon>MAX_LON) $maxLon-=2.0*M_PI;
+		$delta_lon=asin(sin($error_tolerance)/cos($rad_lat));
+		$min_lon=$rad_lon-$delta_lon;
+		if ($min_lon<MIN_LON) $min_lon+=2.0*M_PI;
+		$max_lon=$rad_lon+$delta_lon;
+		if ($max_lon>MAX_LON) $max_lon-=2.0*M_PI;
 	} else
 	{
 		// a pole is within the distance
-		$minLat=max($minLat,MIN_LAT);
-		$maxLat=min($maxLat,MAX_LAT);
-		$minLon=MIN_LON;
-		$maxLon=MAX_LON;
+		$min_lat=max($min_lat,MIN_LAT);
+		$max_lat=min($max_lat,MAX_LAT);
+		$min_lon=MIN_LON;
+		$max_lon=MAX_LON;
 	}
 
-	$meridian180WithinDistance=($minLon>$maxLon);
+	$meridian_180_within_distance=($min_lon>$max_lon);
 
-	$minLat=rad2deg($minLat);
-	$maxLat=rad2deg($maxLat);
-	$minLon=rad2deg($minLon);
-	$maxLon=rad2deg($maxLon);
+	$min_lat=rad2deg($min_lat);
+	$max_lat=rad2deg($max_lat);
+	$min_lon=rad2deg($min_lon);
+	$max_lon=rad2deg($max_lon);
 
-	$where='(l_latitude>='.float_to_raw_string($minLat,10).' AND l_latitude<='.float_to_raw_string($maxLat,10).') AND (l_longitude>='.float_to_raw_string($minLon,10).' '.
-				($meridian180WithinDistance?'OR':'AND').' l_longitude<='.float_to_raw_string($maxLon,10).') AND '.
-				'acos(sin('.float_to_raw_string($radLat,10).')*sin(radians(l_latitude))+cos('.float_to_raw_string($radLat,10).')*cos(radians(l_latitude))*cos(radians(l_longitude)-'.float_to_raw_string($radLon,10).'))<='.float_to_raw_string($error_tolerance,10);
+	$where='(l_latitude>='.float_to_raw_string($min_lat,10).' AND l_latitude<='.float_to_raw_string($max_lat,10).') AND (l_longitude>='.float_to_raw_string($min_lon,10).' '.
+				($meridian_180_within_distance?'OR':'AND').' l_longitude<='.float_to_raw_string($max_lon,10).') AND '.
+				'acos(sin('.float_to_raw_string($rad_lat,10).')*sin(radians(l_latitude))+cos('.float_to_raw_string($rad_lat,10).')*cos(radians(l_latitude))*cos(radians(l_longitude)-'.float_to_raw_string($rad_lon,10).'))<='.float_to_raw_string($error_tolerance,10);
 
 	// ==== ^^^
 
@@ -144,7 +144,7 @@ function latlong_distance_miles($lat1,$lng1,$lat2,$lng2,$miles=true)
 	$dlat = $lat2 - $lat1;
 	$dlng = $lng2 - $lng1;
 	$a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlng / 2) * sin($dlng / 2);
-	$c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+	$c = 2 * atan2(sqrt($a), sqrt(1.0 - $a));
 	$km = $r * $c;
  
 	return ($miles ? ($km * 0.621371192) : $km);

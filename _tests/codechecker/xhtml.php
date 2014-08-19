@@ -116,7 +116,8 @@ if (!$WITHIN_PHP)
 	}
 } else
 {
-	$contents=$between_all;
+	global $BETWEEN_ALL;
+	$contents=$BETWEEN_ALL;
 	$javascript=false;
 	$to_use=$GLOBALS['FILENAME'];
 }
@@ -448,7 +449,7 @@ if (!is_null($results))
 		$sp=strpos($error_exp,' ');
 		if (in_array($sp===false?$error_exp:substr($error_exp,0,$sp),$skip_over)) continue;
 		$error_exp_2=trim(is_array($result['error'])?do_lang($result['error'][0],@$result['error'][1],@$result['error'][2],@$result['error'][3]):$result['error']);
-		echo 'ISSUE "'.$to_use.'" '.$result['line'].' '.$result['pos'].' '.html_entity_decode($error_exp_2)."\n";
+		echo 'ISSUE "'.$to_use.'" '.$result['line'].' '.$result['pos'].' '.html_entity_decode($error_exp_2,ENT_QUOTES)."\n";
 	}
 }
 // Check URLs
@@ -463,7 +464,7 @@ if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS)))
 		if (strpos($url,'://')===false)
 		{
 			if ($GLOBALS['MAIL_MODE'])
-				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('MAIL_LOCAL_REF'))."\n";
+				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('MAIL_LOCAL_REF'),ENT_QUOTES)."\n";
 		} else
 		{
 			set_error_handler('error_capture');
@@ -472,15 +473,15 @@ if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS)))
 			restore_error_handler();
 			if (strpos($GLOBALS['ERROR'],'no such host is known')!==false)
 			{
-				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'bad host'))."\n";
+				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'bad host'),ENT_QUOTES)."\n";
 			}
 			if (strpos($GLOBALS['ERROR'],'404 not found')!==false)
 			{
-				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'404'))."\n";
+				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'404'),ENT_QUOTES)."\n";
 			}
 			if (strpos($GLOBALS['ERROR'],'500 internal server error')!==false)
 			{
-				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'500'))."\n";
+				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'500'),ENT_QUOTES)."\n";
 			}
 		}
 		if (preg_match('#^[A-Za-z0-9\-\_\.][A-Za-z0-9\-\_\./]*$#',$url)!=0)
@@ -490,7 +491,7 @@ if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS)))
 				$global_pos=strpos($contents,$url);
 				$line=substr_count(substr($contents,0,$global_pos),"\n")+1;
 				$pos=$global_pos-strrpos(substr($contents,0,$global_pos),"\n");
-				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('XHTML_LOCAL_BROKEN_URL',$url))."\n";
+				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('XHTML_LOCAL_BROKEN_URL',$url),ENT_QUOTES)."\n";
 			} else
 			{
 				$filesize+=filesize(dirname($to_use).'/'.$url);
@@ -500,7 +501,7 @@ if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS)))
 }
 if ($filesize>100*1024)
 {
-	echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('XHTML_BLOAT'))."\n";
+	echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('XHTML_BLOAT'),ENT_QUOTES)."\n";
 }
 
 global $WITHIN_PHP;

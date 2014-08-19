@@ -13,6 +13,8 @@
  * @package		ocportal_release_build
  */
 
+/*EXTRA FUNCTIONS: sha1_file*/
+
 /*
 This code is the frontend to make ocPortal builds.
 

@@ -589,7 +589,6 @@ class Module_cms_galleries extends standard_crud_module
 		}
 
 		$directory=array_reverse($directory);
-		return $directory;
 	}
 
 	/**

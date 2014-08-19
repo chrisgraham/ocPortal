@@ -1,5 +1,7 @@
 <?php
 
+/*EXTRA FUNCTIONS: diff_simple_2*/
+
 $title=get_screen_title('Generate an upgrade',false);
 
 $auto_probe=array();

@@ -30,7 +30,7 @@
 function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from_email='',$from_name='',$priority=3,$attachments=NULL,$no_cc=false,$as=NULL,$as_admin=false,$in_html=false,$coming_out_of_queue=false,$mail_template='MAIL',$bypass_queue=false,$extra_cc_addresses=NULL,$extra_bcc_addresses=NULL,$require_recipient_valid_since=NULL)
 {
 	if (get_option('smtp_sockets_use')=='0')
-		return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue,$mail_template='MAIL',$bypass_queue,$extra_cc_addresses,$extra_bcc_addresses,$require_recipient_valid_since);
+		return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue,$mail_template,$bypass_queue,$extra_cc_addresses,$extra_bcc_addresses,$require_recipient_valid_since);
 
 	if (running_script('stress_test_loader')) return NULL;
 
@@ -379,7 +379,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			$extra_cc_addresses[]=$cc_address;
 		} else
 		{
-			$extra_bc_addresses[]=$cc_address;
+			$extra_bcc_addresses[]=$cc_address;
 		}
 	}
 	$message->setCc(array_unique($extra_cc_addresses));

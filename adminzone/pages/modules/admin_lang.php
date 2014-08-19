@@ -374,11 +374,7 @@ class Module_admin_lang
 
 		if (!multi_lang_content())
 		{
-			// TODO: Make option to convert
 			warn_exit(do_lang_tempcode('MULTILANG_OFF_CONTENT'));
-		} else
-		{
-			// TODO: Make option to reverse convert
 		}
 
 		$max=get_param_integer('max',100);

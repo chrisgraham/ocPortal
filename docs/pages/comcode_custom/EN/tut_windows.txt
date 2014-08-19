@@ -16,7 +16,7 @@ This should work well, however we aren't able to regularly test it as it is very
 
 If you'd like to use Microsoft Web Platform, proceed to the [url="Web Platform website"]http://www.microsoft.com/web/downloads/platform.aspx[/url].
 
-One small note -- if you are developing locally, then choose to use WebMatrix to push a local site live, make sure you adjust the base URL setting in your info.php file to reflect your live URL.
+One small note -- if you are developing locally, then choose to use WebMatrix to push a local site live, make sure you adjust the base URL setting in your [tt]_config.php[/tt] file to reflect your live URL.
 
 [title="2"]Web server[/title]
 

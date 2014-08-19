@@ -12,6 +12,8 @@
  * @copyright	ocProducts Ltd
  */
 
+/*EXTRA FUNCTIONS: gc_enable*/
+
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
 $FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
@@ -31,7 +33,7 @@ if (!is_file($FILE_BASE.'/sources/global.php')) exit('<!DOCTYPE html>'."\n".'<ht
 
 require($FILE_BASE.'/sources/global.php');
 
-set_time_limit(0);
+if (function_exists('set_time_limit')) set_time_limit(0);
 @ini_set('ocproducts.xss_detect','0');
 @header('Content-type: text/plain');
 disable_php_memory_limit();
@@ -138,7 +140,7 @@ function do_work()
 	require_code('abstract_file_manager');
 	for ($i=$GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');$i<min($num_wanted,1000/* lets be somewhat reasonable! */);$i++)
 	{
-		actual_add_zone(uniqid('',true),random_line(),'start',random_line(),'default',0,0);
+		actual_add_zone(uniqid('',true),random_line(),'start',random_line(),'default',0);
 	}
 	echo 'done zone stuff'."\n";
 
