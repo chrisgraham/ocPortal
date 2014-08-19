@@ -15,7 +15,7 @@ import java.io.*;
 
 /**
  * <p>
- * Title: Java Frontend to Web Code Quality Checker</p>
+ * Title: Java Front-end to Web Code Quality Checker</p>
  */
 public class MainDialog extends JFrame {
 
@@ -613,7 +613,7 @@ public class MainDialog extends JFrame {
     }
 
     public void ForgetErrorBtn_actionPerformed(ActionEvent e) {
-        Main.skipped_errors.add(errors.getSelectedValue());
+        Main.skipped_errors.add((String)errors.getSelectedValue());
         DefaultListModel model = (DefaultListModel) errors.getModel();
         model.remove(errors.getSelectedIndex());
         String writePath = "non_errors.txt";

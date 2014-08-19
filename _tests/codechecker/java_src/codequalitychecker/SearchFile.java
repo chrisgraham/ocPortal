@@ -16,7 +16,7 @@ class SearchFile implements Comparable<SearchFile> {
     }
 
     @Override
-    public int compareTo(Object other) {
+    public int compareTo(SearchFile other) {
         if (((SearchFile) other).date == this.date) {
             return 0;
         }
