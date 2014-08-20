@@ -1101,7 +1101,7 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 	$GLOBALS['FORUM_DB']->delete_index_if_exists('f_member_custom_fields','#mcf'.strval($id));
 	if ($index)
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_select_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
+		$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
 		if ($indices_count<60) // Could be 64 but trying to be careful here...
 		{
 			if ($_type!='LONG_TEXT')
