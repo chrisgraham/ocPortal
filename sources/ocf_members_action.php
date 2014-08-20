@@ -490,7 +490,7 @@ function ocf_make_custom_field($name,$locked=0,$description='',$default='',$publ
 	$GLOBALS['FORUM_DB']->add_table_field('f_member_custom_fields','field_'.strval($id),$_type); // Default will be made explicit when we insert rows
 	if ($index)
 	{
-		$indices_count=$GLOBALS['FORUM_DB']->query_value_null_ok('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
+		$indices_count=$GLOBALS['FORUM_DB']->query_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
 		if ($indices_count<60) // Could be 64 but trying to be careful here...
 		{
 			if ($_type!='LONG_TEXT')
