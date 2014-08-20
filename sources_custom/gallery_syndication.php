@@ -145,7 +145,7 @@ function get_local_videos($local_id=NULL)
 
 	if (!is_null($local_id)) $where.=' AND v.id='.strval($local_id);
 
-	$rows=$GLOBALS['SITE_DB']->query('SELECT v.* FROM '.get_table_prefix().'videos v WHERE '.$where,NULL,NULL,false,true,array('title','description'));
+	$rows=$GLOBALS['SITE_DB']->query('SELECT v.* FROM '.get_table_prefix().'videos v WHERE '.$where,NULL,NULL,false,true,array('title'=>'SHORT_TRANS','description'=>'LONG_TRANS'));
 	$videos=array();
 	foreach ($rows as $row)
 	{

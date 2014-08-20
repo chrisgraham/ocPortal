@@ -162,7 +162,7 @@ function set_option($name,$value,$will_be_formally_set=1)
 			$map+=insert_lang('c_value_trans',$value,1);
 		} else
 		{
-			$map+=lang_remap('c_value_trans',$map['c_value_trans'],$value);
+			$map+=lang_remap('c_value_trans',$current_value,$value);
 		}
 		$GLOBALS['SITE_DB']->query_update('config',$map,array('c_name'=>$name),'',1);
 

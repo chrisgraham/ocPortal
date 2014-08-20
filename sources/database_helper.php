@@ -480,10 +480,10 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 		{
 			$sub_name=$name.'__'.$sub_name;
 			$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$sub_name.' '.$type_remap[$sub_type];
-			if (substr($sub_name,-13)=='__text_parsed')
+			if ($sub_name=='text_parsed')
 			{
 				$query.=' DEFAULT \'\'';
-			} elseif (substr($sub_name,-13)=='__source_user')
+			} elseif ($sub_name=='source_user')
 			{
 				$query.=' DEFAULT '.strval(db_get_first_id());
 			}
@@ -522,10 +522,10 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 			$sub_name=$name.'__'.$sub_name;
 			$sub_new_name=$new_name.'__'.$sub_name;
 			$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' CHANGE '.$sub_name.' '.$sub_new_name.' '.$type_remap[$sub_type];
-			if (substr($sub_name,-13)=='__text_parsed')
+			if ($sub_name=='text_parsed')
 			{
 				$query.=' DEFAULT \'\'';
-			} elseif (substr($sub_name,-13)=='__source_user')
+			} elseif ($sub_name=='source_user')
 			{
 				$query.=' DEFAULT '.strval(db_get_first_id());
 			}
