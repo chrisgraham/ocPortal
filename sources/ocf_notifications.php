@@ -52,7 +52,7 @@ function ocf_get_pp_rows($limit=5,$unread=true,$include_inline=true,$time_barrie
 	{
 		$unread_clause='
 			t_cache_last_time > '.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND 
-			(l_time IS NULL OR l_time < p_time) AND 
+			(l_time IS NULL OR l_time < p.p_time) AND 
 		';
 	}
 
@@ -77,15 +77,15 @@ function ocf_get_pp_rows($limit=5,$unread=true,$include_inline=true,$time_barrie
 	}
 	$query.=' FROM
 	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id='.strval($member_id).' )
+	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for='.strval($member_id).')';
 	if (!multi_lang_content())
 	{
 		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
 	}
 	$query.=' WHERE
 	'.$unread_clause.$time_clause.'
-	t_pt_from ='.strval($member_id).'
+	t_pt_from='.strval($member_id).'
 	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
 
 	$query.=' UNION ';
@@ -101,15 +101,15 @@ function ocf_get_pp_rows($limit=5,$unread=true,$include_inline=true,$time_barrie
 	}
 	$query.=' FROM
 	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id='.strval($member_id).' )
+	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for='.strval($member_id).')';
 	if (!multi_lang_content())
 	{
 		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
 	}
 	$query.=' WHERE
 	'.$unread_clause.$time_clause.'
-	t_pt_to ='.strval($member_id).'
+	t_pt_to='.strval($member_id).'
 	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
 
 	$query.=' UNION ';
@@ -126,15 +126,15 @@ function ocf_get_pp_rows($limit=5,$unread=true,$include_inline=true,$time_barrie
 	$query.=' FROM
 	'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
 	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_special_pt_access i ON (i.s_topic_id=t.id)
-	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+	LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id='.strval($member_id).' )
+	JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for='.strval($member_id).')';
 	if (!multi_lang_content())
 	{
 		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
 	}
 	$query.=' WHERE
 	'.$unread_clause.$time_clause.'
-	i.s_member_id ='.strval($member_id).'
+	i.s_member_id='.strval($member_id).'
 	'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
 
 	if ($include_inline)
@@ -152,15 +152,15 @@ function ocf_get_pp_rows($limit=5,$unread=true,$include_inline=true,$time_barrie
 		}
 		$query.=' FROM
 		'.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t
-		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id ='.strval($member_id).' )
-		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p_intended_solely_for ='.strval($member_id).')';
+		LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ( t.id=l_topic_id AND l_member_id='.strval($member_id).' )
+		JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for='.strval($member_id).')';
 		if (!multi_lang_content())
 		{
 			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
 		}
 		$query.=' WHERE
 		'.$unread_clause.$time_clause.'
-		p_intended_solely_for ='.strval($member_id).'
+		p.p_intended_solely_for='.strval($member_id).'
 		'.(can_arbitrary_groupby()?' GROUP BY t.id':'');
 	}
 

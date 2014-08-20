@@ -56,7 +56,7 @@ class Hook_rss_ocf_private_topics
 			if ($edit_date==$news_date) $edit_date='';
 
 			$news_title=xmlentities($row['t_cache_first_title']);
-			$post_row=db_map_restrict($row,array('p_post'))+array('id'=>$row['p_cache_first_post_id']);
+			$post_row=db_map_restrict($row,array('p_post'))+array('id'=>$row['t_cache_first_post_id']);
 			$_summary=get_translated_tempcode('f_posts',$post_row,'p_post');
 			$summary=xmlentities($_summary->evaluate());
 			$news='';

@@ -1550,7 +1550,7 @@ function version_specific()
 			$GLOBALS['SITE_DB']->rename_table('usersubmitban_ip','banned_ip');
 			$GLOBALS['SITE_DB']->query_update('db_meta',array('m_type'=>'MEMBER'),array('m_type'=>'USER'));
 			$GLOBALS['SITE_DB']->query_update('db_meta',array('m_type'=>'?MEMBER'),array('m_type'=>'?USER'));
-			$GLOBALS['SITE_DB']->query_update('db_meta',array('m_type'=>'*MEMBER'),array('m_type'=>'*MEMBER'));
+			$GLOBALS['SITE_DB']->query_update('db_meta',array('m_type'=>'*MEMBER'),array('m_type'=>'*USER'));
 			$GLOBALS['SITE_DB']->alter_table_field('adminlogs','the_user','MEMBER','member_id');
 			$GLOBALS['SITE_DB']->alter_table_field('sessions','the_user','MEMBER','member_id');
 			$GLOBALS['SITE_DB']->query_update('privilege_list',array('p_section'=>'FORUMS_AND_MEMBERS'),array('p_section'=>'SECTION_FORUMS'));

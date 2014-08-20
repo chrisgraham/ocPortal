@@ -440,7 +440,7 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 
 	if (!is_null($topic_row['t_cache_first_post']))
 	{
-		$post_row=db_map_restrict($topic_row,array('p_post'))+array('id'=>$topic_row['p_cache_first_post_id']);
+		$post_row=db_map_restrict($topic_row,array('p_post'))+array('id'=>$topic_row['t_cache_first_post_id']);
 		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
 	} else
 	{
@@ -710,7 +710,7 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 		if ($child_or_list!='') $child_or_list.=' AND ';
 		$query='SELECT DISTINCT t_forum_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (t.id=l_topic_id AND l_member_id='.strval(get_member()).') WHERE t_forum_id IS NOT NULL AND '.$child_or_list.'t_cache_last_time>'.strval(time()-60*60*24*intval(get_option('post_history_days'))).' AND (l_time<t_cache_last_time OR l_time IS NULL)';
 		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $query.=' AND t_validated=1';
-		$unread_forums=collapse_2d_complexity('t_forum_id','id',$GLOBALS['FORUM_DB']->query($query));
+		$unread_forums=array_flip(collapse_1d_complexity('t_forum_id',$GLOBALS['FORUM_DB']->query($query)));
 	}
 
 	// Find all the forum groupings that are used

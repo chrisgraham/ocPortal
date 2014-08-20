@@ -29,12 +29,12 @@ if (!function_exists('_load_comcode_page_not_cached'))
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 
 		// Not cached :(
-		$result=file_get_contents($file_base.'/'.$string);
-		apply_comcode_page_substitutions($result);
-		$non_trans_result=$result;
+		$comcode=file_get_contents($file_base.'/'.$string);
+		apply_comcode_page_substitutions($comcode);
+		$non_trans_comcode=$comcode;
 		if ((strpos($string,'/'.get_site_default_lang().'/')!==false) && (user_lang()!=get_site_default_lang()))
 		{
-			$result=google_translate($result,user_lang());
+			$comcode=google_translate($comcode,user_lang());
 		}
 
 		if (is_null($new_comcode_page_row['p_submitter']))
@@ -66,10 +66,10 @@ if (!function_exists('_load_comcode_page_not_cached'))
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
 		require_code('attachments2');
-		$_new=do_comcode_attachments($result,'comcode_page',$zone.':'.$codename,false,NULL,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,$page_submitter);
-		$_text2=$_new['tempcode'];
+		$_new=do_comcode_attachments($comcode,'comcode_page',$zone.':'.$codename,false,NULL,$as_admin/*Ideally we assign $page_submitter based on this as well so it is safe if the Comcode cache is emptied*/,$page_submitter);
+		$_text_parsed=$_new['tempcode'];
 		$LAX_COMCODE=$temp;
-		$text2=$_text2->to_assembly();
+		$text_parsed=$_text_parsed->to_assembly();
 
 		// Check it still needs inserting (it might actually be there, but not translated)
 		$trans_key=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','string_index',array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
@@ -85,12 +85,12 @@ if (!function_exists('_load_comcode_page_not_cached'))
 			$map+=insert_lang('cc_page_title',clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
 			if (multi_lang_content())
 			{
-				$map['string_index']=$GLOBALS['SITE_DB']->query_insert('translate',array('source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang),true,false,true);
+				$map['string_index']=$GLOBALS['SITE_DB']->query_insert('translate',array('source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$comcode,'text_parsed'=>$text_parsed,'language'=>$lang),true,false,true);
 			} else
 			{
-				$map['string_index']=$result;
+				$map['string_index']=$comcode;
 				$map['string_index__source_user']=$page_submitter;
-				$map['string_index__text_parsed']=$text2;
+				$map['string_index__text_parsed']=$text_parsed;
 			}
 			$GLOBALS['SITE_DB']->query_insert('cached_comcode_pages',$map,false,true); // Race conditions
 
@@ -126,7 +126,7 @@ if (!function_exists('_load_comcode_page_not_cached'))
 				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('translate','id',array('id'=>$trans_key,'language'=>$lang));
 				if (is_null($test))
 				{
-					$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$result,'text_parsed'=>$text2,'language'=>$lang),false,true);
+					$GLOBALS['SITE_DB']->query_insert('translate',array('id'=>$trans_key,'source_user'=>$page_submitter,'broken'=>0,'importance_level'=>1,'text_original'=>$comcode,'text_parsed'=>$text_parsed,'language'=>$lang),false,true);
 					$index=$trans_key;
 
 					$trans_cc_page_title_key=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
@@ -143,16 +143,16 @@ if (!function_exists('_load_comcode_page_not_cached'))
 			{
 				$map=array();
 				$map+=insert_lang('cc_page_title',clean_html_title($COMCODE_PARSE_TITLE),1,NULL,false,NULL,NULL,false,NULL,NULL,60,true,true);
-				$map['string_index']=$result;
+				$map['string_index']=$comcode;
 				$map['string_index__source_user']=$page_submitter;
-				$map['string_index__text_parsed']=$text2;
+				$map['string_index__text_parsed']=$text_parsed;
 				$GLOBALS['SITE_DB']->query_update('cached_comcode_pages',$map,array('the_page'=>$codename,'the_zone'=>$zone,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme()),'',1);
 			}
 		}
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 
-		return array($_text2,$title_to_use,$comcode_page_row,$result);
+		return array($_text_parsed,$title_to_use,$comcode_page_row,$comcode);
 	}
 }
 
@@ -191,14 +191,14 @@ if (!function_exists('_load_comcode_page_cache_off'))
 		global $LAX_COMCODE;
 		$temp=$LAX_COMCODE;
 		$LAX_COMCODE=true;
-		$result=file_get_contents($file_base.'/'.$string);
-		apply_comcode_page_substitutions($result);
+		$comcode=file_get_contents($file_base.'/'.$string);
+		apply_comcode_page_substitutions($comcode);
 		if ((strpos($string,'/'.get_site_default_lang().'/')!==false) && (user_lang()!=get_site_default_lang()))
 		{
-			$result=google_translate($result,user_lang());
+			$comcode=google_translate($comcode,user_lang());
 		}
 		$lang=user_lang();
-		$html=comcode_to_tempcode($result,array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member(),(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),60,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
+		$html=comcode_to_tempcode($comcode,array_key_exists(0,$_comcode_page_row)?$_comcode_page_row[0]['p_submitter']:get_member(),(!array_key_exists(0,$_comcode_page_row)) || (is_guest($_comcode_page_row[0]['p_submitter'])),60,($being_included || (strpos($codename,'panel_')!==false))?'panel':NULL);
 		$LAX_COMCODE=$temp;
 		$title_to_use=is_null($COMCODE_PARSE_TITLE)?NULL:clean_html_title($COMCODE_PARSE_TITLE);
 
@@ -218,6 +218,6 @@ if (!function_exists('_load_comcode_page_cache_off'))
 			}
 		}
 
-		return array($html,$comcode_page_row,$title_to_use,$result);
+		return array($html,$comcode_page_row,$title_to_use,$comcode);
 	}
 }

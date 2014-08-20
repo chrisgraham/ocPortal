@@ -231,8 +231,8 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
 				$member_value=''; // This is meant to be '' for blank, not new ocp_tempcode()
 			} else
 			{
-				$member_value_raw=get_translated_text(intval($member_value),$GLOBALS['FORUM_DB']);
-				$member_value=get_translated_tempcode('f_member_custom_fields',$fields_to_show,'field_'.strval($field_to_show['id']),$GLOBALS['FORUM_DB']);
+				$member_value_raw=get_translated_text($member_mappings['field_'.strval($field_to_show['id'])],$GLOBALS['FORUM_DB']);
+				$member_value=get_translated_tempcode('f_member_custom_fields',$member_mappings,'field_'.strval($field_to_show['id']),$GLOBALS['FORUM_DB']);
 				if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
 			}
 		} else

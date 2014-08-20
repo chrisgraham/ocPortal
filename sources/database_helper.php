@@ -163,7 +163,7 @@ function _helper_create_table($this_ref,$table_name,$fields,$skip_size_check=fal
 				if (strpos($type,'__COMCODE')!==false)
 				{
 					$fields[$name.'__text_parsed']='LONG_TEXT';
-					$fields[$name.'__source_user']='USER';
+					$fields[$name.'__source_user']='MEMBER';
 				}
 
 				$fields[$name]='LONG_TEXT'; // In the DB layer, it must now save as such
@@ -245,8 +245,8 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 
 		if (!multi_lang_content())
 		{
-			global $TABLE_LANG_FIELDS;
-			if (isset($TABLE_LANG_FIELDS[$table_name][$field]))
+			global $TABLE_LANG_FIELDS_CACHE;
+			if (isset($TABLE_LANG_FIELDS_CACHE[$table_name][$field]))
 				$_fields.='(255)';
 		}
 	}
@@ -476,7 +476,7 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 
 	if ((!multi_lang_content()) && (strpos($_type,'__COMCODE')!==false))
 	{
-		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
+		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'MEMBER') as $sub_name=>$sub_type)
 		{
 			$sub_name=$name.'__'.$sub_name;
 			$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$sub_name.' '.$type_remap[$sub_type];
@@ -517,7 +517,7 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 
 	if ((strpos($_type,'__COMCODE')!==false) && (!is_null($new_name)) && ($new_name!=$name))
 	{
-		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'USER') as $sub_name=>$sub_type)
+		foreach (array('text_parsed'=>'LONG_TEXT','source_user'=>'MEMBER') as $sub_name=>$sub_type)
 		{
 			$sub_name=$name.'__'.$sub_name;
 			$sub_new_name=$new_name.'__'.$sub_name;

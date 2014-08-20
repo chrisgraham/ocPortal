@@ -227,10 +227,8 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	// Create
 	$map=array(
 		'c_name'=>$name,
-		'c_title'=>$title,
 		'c_send_view_reports'=>$send_view_reports,
 		'c_ecommerce'=>$ecommerce,
-		'c_description'=>$description,
 		'c_display_type'=>$display_type,
 		'c_is_tree'=>$is_tree,
 		'c_notes'=>$notes,
@@ -257,7 +255,7 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 	if ($is_tree==1)
 	{
 		// Create root node
-		$root_title=($is_tree==1)?do_lang('_HOME',get_translated_text($title)):get_translated_text($title);
+		$root_title=($is_tree==1)?do_lang('_HOME',get_translated_text($map['c_title'])):get_translated_text($map['c_title']);
 		$map=array(
 			'cc_move_days_lower'=>30,
 			'cc_move_days_higher'=>60,
@@ -651,8 +649,6 @@ function actual_add_catalogue_category($catalogue_name,$title,$description,$note
 		'rep_image'=>$rep_image,
 		'cc_add_date'=>$add_date,
 		'c_name'=>$catalogue_name,
-		'cc_title'=>$title,
-		'cc_description'=>$description,
 		'cc_notes'=>$notes,
 		'cc_parent_id'=>$parent_id,
 	);

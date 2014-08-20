@@ -1201,15 +1201,22 @@ function get_translated_tempcode($table,$row,$field_name,$connection=NULL,$lang=
 		return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
 	}
 
+	$parsed=new ocp_tempcode();
+	if (!$parsed->from_assembly($result,true)) // Corrupted
+	{
+		require_code('lang3');
+		return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
+	}
+
 	if (multi_lang_content())
 	{
 		if ($lang==user_lang())
 		{
-			$connection->text_lookup_cache[$entry]=$result;
+			$connection->text_lookup_cache[$entry]=$parsed;
 		}
 	}
 
-	return $result;
+	return $parsed;
 }
 
 /**

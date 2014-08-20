@@ -142,10 +142,12 @@ function set_option($name,$value,$will_be_formally_set=1)
 		{
 			$map['c_value_trans']=multi_lang_content()?NULL:'';
 		}
-		if ($will_be_formally_set==0 && $GLOBALS['IN_MINIKERNEL_VERSION']) return; // Don't save in the installer
-		$GLOBALS['SITE_DB']->query_insert('config',$map);
 
 		$CONFIG_OPTIONS_CACHE[$name]=$map;
+
+		if ($will_be_formally_set==0 && $GLOBALS['IN_MINIKERNEL_VERSION']) return; // Don't save in the installer
+
+		$GLOBALS['SITE_DB']->query_insert('config',$map);
 	} else
 	{
 		$needs_dereference=$CONFIG_OPTIONS_CACHE[$name]['c_needs_dereference'];

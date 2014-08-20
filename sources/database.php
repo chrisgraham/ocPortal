@@ -103,7 +103,7 @@ function multi_lang_content()
 	if ($HAS_MULTI_LANG_CONTENT===NULL)
 	{
 		global $SITE_INFO;
-		$HAS_MULTI_LANG_CONTENT=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):true;
+		$HAS_MULTI_LANG_CONTENT=isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content']=='1'):false;
 	}
 	return $HAS_MULTI_LANG_CONTENT;
 }

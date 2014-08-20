@@ -286,7 +286,7 @@ function install_ocf($upgrade_from=NULL)
 		{
 			$GLOBALS['FORUM_DB']->query('ALTER TABLE '.get_table_prefix().'f_poll_votes ADD COLUMN id int NOT NULL AUTO_INCREMENT, DROP PRIMARY KEY, ADD PRIMARY KEY (id)');
 			$GLOBALS['FORUM_DB']->query_update('db_meta',array('m_type'=>'AUTO_LINK'),array('m_table'=>'f_poll_votes','m_type'=>'*AUTO_LINK'));
-			$GLOBALS['FORUM_DB']->query_update('db_meta',array('m_type'=>'USER'),array('m_table'=>'f_poll_votes','m_type'=>'*USER'));
+			$GLOBALS['FORUM_DB']->query_update('db_meta',array('m_type'=>'MEMBER'),array('m_table'=>'f_poll_votes','m_type'=>'*USER'));
 			$GLOBALS['FORUM_DB']->query_insert('db_meta',array('m_table'=>'f_poll_votes','m_name'=>'id','m_type'=>'*AUTO'));
 		}
 		$GLOBALS['FORUM_DB']->add_table_field('f_poll_votes','pv_ip','IP');

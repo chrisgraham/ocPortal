@@ -140,8 +140,8 @@ function erase_comcode_cache()
 		}
 	} else
 	{
-		global $TABLE_LANG_FIELDS;
-		foreach ($TABLE_LANG_FIELDS as $table=>$fields)
+		global $TABLE_LANG_FIELDS_CACHE;
+		foreach ($TABLE_LANG_FIELDS_CACHE as $table=>$fields)
 		{
 			foreach (array_keys($fields) as $field)
 			{

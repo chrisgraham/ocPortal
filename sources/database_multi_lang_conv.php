@@ -56,7 +56,7 @@ function disable_content_translation()
 		$to_add=array('new'=>'LONG_TEXT');
 		if (strpos($field['m_type'],'__COMCODE')!==false)
 		{
-			$to_add+=array('text_parsed'=>'LONG_TEXT','source_user'=>'USER');
+			$to_add+=array('text_parsed'=>'LONG_TEXT','source_user'=>'MEMBER');
 		}
 		foreach ($to_add as $sub_name=>$sub_type)
 		{

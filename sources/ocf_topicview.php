@@ -584,8 +584,8 @@ function ocf_cache_member_details($members)
 	}
 	if ($member_or_list!='')
 	{
-		global $TABLE_LANG_FIELDS;
-		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.$member_or_list,NULL,NULL,false,true,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS)?$TABLE_LANG_FIELDS['f_member_custom_fields']:array());
+		global $TABLE_LANG_FIELDS_CACHE;
+		$member_rows=$GLOBALS['FORUM_DB']->query('SELECT m.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members m WHERE '.$member_or_list,NULL,NULL,false,true);
 		global $TABLE_LANG_FIELDS_CACHE;
 		$member_rows_2=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_member_custom_fields f WHERE '.str_replace('m.id','mf_member_id',$member_or_list),NULL,NULL,false,true,array_key_exists('f_member_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_member_custom_fields']:array());
 		$member_rows_3=$GLOBALS['FORUM_DB']->query('SELECT gm_group_id,gm_member_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_group_members WHERE gm_validated=1 AND ('.str_replace('m.id','gm_member_id',$member_or_list).')',NULL,NULL,false,true);
