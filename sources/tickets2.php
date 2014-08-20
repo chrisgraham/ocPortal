@@ -60,8 +60,13 @@ function add_ticket_type($ticket_type_name,$guest_emails_mandatory=0,$search_faq
  */
 function edit_ticket_type($ticket_type_id,$ticket_type_name,$guest_emails_mandatory,$search_faq)
 {
-	$map=array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq);
-	$map+=lang_remap('ticket_type_name',$ticket_type_id,$ticket_type_name);
+	$old_ticket_type_name=$GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
+
+	$map=array(
+		'guest_emails_mandatory'=>$guest_emails_mandatory,
+		'search_faq'=>$search_faq,
+	);
+	$map+=lang_remap('ticket_type_name',$old_ticket_type_name,$ticket_type_name);
 	$GLOBALS['SITE_DB']->query_update('ticket_types',$map,array('id'=>$ticket_type_id),'',1);
 
 	log_it('EDIT_TICKET_TYPE',strval($ticket_type_id),$ticket_type_name);
@@ -83,10 +88,11 @@ function delete_ticket_type($ticket_type_id)
 	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'tickets','category_name'=>strval($ticket_type_id)));
 	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'tickets','category_name'=>strval($ticket_type_id)));
 
-	$GLOBALS['SITE_DB']->query_delete('ticket_types',array('id'=>$ticket_type_id),'',1);
-
 	$ticket_type_name=$GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
 	$_ticket_type_name=get_translated_text($ticket_type_name);
+
+	$GLOBALS['SITE_DB']->query_delete('ticket_types',array('id'=>$ticket_type_id),'',1);
+
 	delete_lang($ticket_type_name);
 
 	log_it('DELETE_TICKET_TYPE',strval($ticket_type_id),$_ticket_type_name);

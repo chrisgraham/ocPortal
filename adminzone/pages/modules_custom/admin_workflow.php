@@ -15,7 +15,7 @@
 
 require_code('crud_module');
 
-class Module_admin_workflow extends standard_aed_module
+class Module_admin_workflow extends standard_crud_module
 {
 	var $lang_type='WORKFLOW';
 	var $select_name='NAME';
@@ -547,7 +547,7 @@ class Module_admin_workflow extends standard_aed_module
 			}
 		} else
 		{
-			$old_name=$GLOBALS['SITE_DB']->query_value('workflows','workflow_name',array('id'=>$workflow_id));
+			$old_name=$GLOBALS['SITE_DB']->query_select_value('workflows','workflow_name',array('id'=>$workflow_id));
 			$map+=lang_remap('workflow_name',$old_name,$name);
 			$GLOBALS['SITE_DB']->query_update('workflows',$map,array('id'=>$workflow_id));
 		}

@@ -414,7 +414,7 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 		'cat'=>$cat,
 		'validated'=>$validated,
 	);
-	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang('title',$title,2);
 	$map+=insert_lang_comcode('description',$description,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('images',$map,true);
@@ -524,7 +524,7 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 		'url'=>$url,
 		'thumb_url'=>$thumb_url,
 	);
-	$update_map+=lang_remap_comcode('title',$_title,$title);
+	$update_map+=lang_remap('title',$_title,$title);
 	$update_map+=lang_remap_comcode('description',$_description,$description);
 
 	$update_map['edit_date']=$edit_time;
@@ -852,7 +852,7 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 		'video_width'=>$video_width,
 		'video_height'=>$video_height,
 	);
-	$map+=insert_lang_comcode('title',$title,2);
+	$map+=insert_lang('title',$title,2);
 	$map+=insert_lang_comcode('description',$description,3);
 	if (!is_null($id)) $map['id']=$id;
 	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
@@ -979,7 +979,7 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 		'video_width'=>$video_width,
 		'video_height'=>$video_height,
 	);
-	$update_map+=lang_remap_comcode('title',$_title,$title);
+	$update_map+=lang_remap('title',$_title,$title);
 	$update_map+=lang_remap_comcode('description',$_description,$description);
 
 	$update_map['edit_date']=$edit_time;

@@ -1318,7 +1318,7 @@ function _get_catalogue_entry_field($field_id,$entry_id,$type='short',$only_fiel
 		$rows=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,true);
 		foreach ($rows as $row)
 		{
-			$catalogue_entry_cache[$entry_id][$row['id']]=$row;
+			$catalogue_entry_cache[$entry_id][$row['f_id']]=$row;
 		}
 
 		$value=isset($catalogue_entry_cache[$entry_id][$field_id])?$catalogue_entry_cache[$entry_id][$field_id]:NULL;

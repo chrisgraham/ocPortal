@@ -16,7 +16,7 @@
 /**
  * ocPortal test case class (unit testing).
  */
-class calendareventtype_test_set extends ocp_test_case
+class calendar_event_type_test_set extends ocp_test_case
 {
 	var $eventtype_id;
 

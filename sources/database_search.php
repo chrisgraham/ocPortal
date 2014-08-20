@@ -847,7 +847,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 			$db->dedupe_mode=true;
 
 			ocp_profile_start_for('SEARCH:t_main_search_rows_count');
-			$t_main_search_rows_count=$db->query_value_null_ok_full($_count_query_main_search);
+			$t_main_search_rows_count=$db->query_value($_count_query_main_search);
 			ocp_profile_end_for('SEARCH:t_main_search_rows_count',$_count_query_main_search);
 			$t_count+=$t_main_search_rows_count;
 

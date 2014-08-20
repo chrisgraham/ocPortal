@@ -134,7 +134,7 @@ class Module_admin_menus
 		$list=new ocp_tempcode();//form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
 		foreach ($rows as $row)
 		{
-			$item_count=$GLOBALS['SITE_DB']->query_value('menu_items','COUNT(*)',array('i_menu'=>$row['i_menu']));
+			$item_count=$GLOBALS['SITE_DB']->query_select_value('menu_items','COUNT(*)',array('i_menu'=>$row['i_menu']));
 			$label=do_lang_tempcode('MENU_ITEM_COUNT',escape_html($row['i_menu']),escape_html(integer_format($item_count)));
 			$list->attach(form_input_list_entry($row['i_menu'],false,$label));
 		}

@@ -93,7 +93,12 @@ class Block_main_ocf_involved_topics
 			{
 				$query.=',p_post,p_post__text_parsed,p_post__source_user';
 			}
-			$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).' WHERE '.$where;
+			$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics t LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON t.id=l.l_topic_id AND l.l_member_id='.strval(get_member());
+			if (!multi_lang_content())
+			{
+				$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 ON p2.id=t.t_cache_first_post_id';
+			}
+			$query.=' WHERE '.$where;
 			if (multi_lang_content())
 			{
 				$topic_rows=$GLOBALS['FORUM_DB']->query($query,NULL,NULL,false,true,array('p_cache_first_post'=>'LONG_TRANS__COMCODE'));

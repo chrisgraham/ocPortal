@@ -928,7 +928,7 @@ function get_workflow_content_id($content_type,$content_id)
  */
 function get_workflow_of_content($type,$id)
 {
-	return $GLOBALS['SITE_DB']->query_value_null_ok('workflow_content','workflow_id',array('content_type'=>$type,'content_id'=>$id));
+	return $GLOBALS['SITE_DB']->query_select_value_if_there('workflow_content','workflow_id',array('content_type'=>$type,'content_id'=>$id));
 }
 
 /**

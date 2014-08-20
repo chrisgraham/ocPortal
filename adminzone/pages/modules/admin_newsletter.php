@@ -209,7 +209,7 @@ class Module_admin_newsletter extends standard_crud_module
 	 */
 	function misc()
 	{
-		$num_in_queue=$GLOBALS['SITE_DB']->query_value('newsletter_drip_send','COUNT(*)');
+		$num_in_queue=$GLOBALS['SITE_DB']->query_select_value('newsletter_drip_send','COUNT(*)');
 		if ($num_in_queue>0)
 		{
 			attach_message(do_lang_tempcode('NEWSLETTER_DRIP_SEND_QUEUE',integer_format($num_in_queue)),'inform');

@@ -293,7 +293,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 			{
 				case 'short_trans':
 				case 'long_trans':
-					$row=insert_lang('field_'.strval($field['id']),$value,3,$GLOBALS['FORUM_DB'])+$row;
+					$row=insert_lang_comcode('field_'.strval($field['id']),$value,3,$GLOBALS['FORUM_DB'])+$row;
 					break;
 				case 'integer':
 					$row['field_'.strval($field['id'])]=($value=='')?NULL:intval($value);

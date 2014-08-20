@@ -63,7 +63,7 @@ class specsettings_documented_test_set extends ocp_test_case
 				for ($i=0;$i<$num_matches;$i++)
 				{
 					$var=$matches[2][$i];
-					if ((/*string replace array*/$var!='reps') && (/*AFM*/strpos($var,'ftp_')===false) && (/*myocp*/strpos($var,'throttle_')===false) && (/*myocp*/strpos($var,'custom_')===false) && (/*Legacy password name*/$var!='admin_password') && (/*XML dev environment*/strpos($var,'_chain')===false))
+					if (($var!='multi_lang_content'/*Can't just flip so simply*/) && (/*string replace array*/$var!='reps') && (/*AFM*/strpos($var,'ftp_')===false) && (/*myocp*/strpos($var,'throttle_')===false) && (/*myocp*/strpos($var,'custom_')===false) && (/*Legacy password name*/$var!='admin_password') && (/*XML dev environment*/strpos($var,'_chain')===false))
 					{
 						$found[$var]=1;
 					}

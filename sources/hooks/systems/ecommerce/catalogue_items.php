@@ -251,7 +251,7 @@ class Hook_catalogue_items
 			'product_name'=>$product_det[0],
 			'product_code'=>$product_det[1],
 			'price'=>$product_det[2],
-			'tax'=>preg_replace('#[^\d\.]#','',$product_det[6]),
+			'tax'=>floatval(preg_replace('#[^\d\.]#','',$product_det[6])),
 			'description'=>$product_det[9],
 			'quantity'=>$qty,
 			'product_type'=>'catalogue_items',

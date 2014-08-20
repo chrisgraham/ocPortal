@@ -1061,29 +1061,32 @@ function ocf_delete_member($member_id)
 	// Delete custom profile fields
 	$cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields');
 	$fields_row=$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_id),'',1);
-	foreach ($cpfs as $field)
+	if (array_key_exists(0,$fields_row))
 	{
-		$l=$fields_row[0]['field_'.strval($field['id'])];
-
-		$object=get_fields_hook($field['cf_type']);
-
-		list(,,$storage_type)=$object->get_field_value_row_bits($field);
-
-		if (method_exists($object,'cleanup'))
+		foreach ($cpfs as $field)
 		{
-			$object->cleanup($l);
-		}
+			$l=$fields_row[0]['field_'.strval($field['id'])];
 
-		if ((strpos($storage_type,'_trans')!==false) && (!is_null($l)))
-		{
-			if (true) // Always do this just in case it is for attachments
+			$object=get_fields_hook($field['cf_type']);
+
+			list(,,$storage_type)=$object->get_field_value_row_bits($field);
+
+			if (method_exists($object,'cleanup'))
 			{
-				require_code('attachments2');
-				require_code('attachments3');
-				delete_lang_comcode_attachments($l,'null',strval($member_id),$GLOBALS['FORUM_DB']);
-			} else
+				$object->cleanup($l);
+			}
+
+			if ((strpos($storage_type,'_trans')!==false) && (!is_null($l)))
 			{
-				delete_lang($l,$GLOBALS['FORUM_DB']);
+				if (true) // Always do this just in case it is for attachments
+				{
+					require_code('attachments2');
+					require_code('attachments3');
+					delete_lang_comcode_attachments($l,'null',strval($member_id),$GLOBALS['FORUM_DB']);
+				} else
+				{
+					delete_lang($l,$GLOBALS['FORUM_DB']);
+				}
 			}
 		}
 	}

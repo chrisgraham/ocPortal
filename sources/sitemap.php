@@ -828,7 +828,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
 			{
 				if ($cma_info['title_field_dereference'])
 				{
-					$title=get_translated_tempcode($row,$cma_info['title_field'],$cma_info['connection']);
+					$title=get_translated_tempcode($cma_info['table'],$row,$cma_info['title_field'],$cma_info['connection']);
 				} else
 				{
 					$title=comcode_to_tempcode($title_value,$GLOBALS['FORUM_DRIVER']->get_guest_id());

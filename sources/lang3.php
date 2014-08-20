@@ -423,7 +423,7 @@ function _lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass
 		return $ret;
 	}
 
-	$test=$connection->query_value_null_ok('translate','text_original',array('id'=>$id,'language'=>$lang));
+	$test=$connection->query_select_value_if_there('translate','text_original',array('id'=>$id,'language'=>$lang));
 
 	// Mark old as out-of-date
 	if ($test!==$text)

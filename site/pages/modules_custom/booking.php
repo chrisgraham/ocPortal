@@ -116,7 +116,7 @@ class Module_booking
 				'price'=>'REAL',
 				'price_is_per_period'=>'BINARY', // If this is the case, the supplement will actually be repeated out in separate records, each tied to a booking for that date
 				'supports_quantities'=>'BINARY',
-				'title'=>'SHORT_TRANS',
+				'title'=>'SHORT_TRANS__COMCODE',
 				'promo_code'=>'ID_TEXT', // If non-blank, the user must enter this promo-code to purchase this
 				'supports_notes'=>'BINARY',
 				'sort_order'=>'INTEGER',
