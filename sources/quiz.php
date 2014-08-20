@@ -517,7 +517,7 @@ function render_quiz($questions)
 	foreach ($questions as $i=>$question)
 	{
 		$name='q_'.strval($question['id']);
-		$text=protect_from_escaping(is_string($question['q_question_text'])?comcode_to_tempcode($question['q_question_text']):get_translated_tempcode('quizzes',$question,'q_question_text'));
+		$text=protect_from_escaping((!is_string($q['q_question_text']) && !isset($q['q_question_text__text_parsed']))?get_translated_tempcode('quizzes',$question,'q_question_text'):comcode_to_tempcode($question['q_question_text']));
 		//$pretty_name=do_lang_tempcode('Q_NUM',integer_format($i+1));
 
 		if ($question['q_num_choosable_answers']==0) // Text box ("free question"). May be an actual answer, or may not be: but regardless, the user cannot see it
@@ -535,7 +535,7 @@ function render_quiz($questions)
 			$content=array();
 			foreach ($question['answers'] as $a)
 			{
-				$content[]=array(protect_from_escaping(is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode('quizzes',$a,'q_answer_text')),$name.'_'.strval($a['id']),false,'');
+				$content[]=array(protect_from_escaping((!is_string($a['q_answer_text']) && !isset($a['q_answer_text__text_parsed']))?get_translated_tempcode('quizzes',$a,'q_answer_text'):comcode_to_tempcode($a['q_answer_text'])),$name.'_'.strval($a['id']),false,'');
 			}
 			$fields->attach(form_input_various_ticks($content,'',NULL,$text,true));
 		} else // Radio buttons
@@ -543,7 +543,7 @@ function render_quiz($questions)
 			$radios=new ocp_tempcode();
 			foreach ($question['answers'] as $a)
 			{
-				$answer_text=is_string($a['q_answer_text'])?comcode_to_tempcode($a['q_answer_text']):get_translated_tempcode('quizzes',$a,'q_answer_text');
+				$answer_text=(!is_string($a['q_answer_text']) && !isset($a['q_answer_text__text_parsed']))?get_translated_tempcode('quizzes',$a,'q_answer_text'):comcode_to_tempcode($a['q_answer_text']);
 				$radios->attach(form_input_radio_entry($name,strval($a['id']),false,protect_from_escaping($answer_text)));
 			}
 			$fields->attach(form_input_radio($text,'',$name,$radios));

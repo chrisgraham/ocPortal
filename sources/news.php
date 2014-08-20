@@ -124,7 +124,7 @@ function edit_news_category($id,$title,$img,$notes,$owner=NULL)
 	{
 		$sql='SELECT * FROM '.get_table_prefix().'seo_meta m WHERE ';
 		$sql.=db_string_equal_to('meta_for_type','news');
-		$meta_keywords_field=$GLOBALS['SITE_DB']->translate_field_ref('name');
+		$meta_keywords_field=$GLOBALS['SITE_DB']->translate_field_ref('meta_keywords');
 		$sql.=' AND ('.$meta_keywords_field.' LIKE \''.db_encode_like($old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title.',%').'\' OR '.$meta_keywords_field.' LIKE \''.db_encode_like('%,'.$old_title).'\')';
 		$affected_news=$GLOBALS['SITE_DB']->query($sql,NULL,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
 		foreach ($affected_news as $af_row)

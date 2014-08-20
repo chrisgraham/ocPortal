@@ -740,11 +740,11 @@ class Module_tickets
 		$email='';
 		if ($ticket_type_id!=-1) // New ticket
 		{
-			$type_string=get_translated_text($ticket_type_id);
 			$ticket_type_details=get_ticket_type($ticket_type_id);
-			//$_title=$type_string.' ('.$_title.')';
+			$ticket_type_name=get_translated_text($ticket_type_details['ticket_type_name']);
+			//$_title=$ticket_type_name.' ('.$_title.')';
 
-			if (!has_category_access(get_member(),'tickets',$type_string)) access_denied('I_ERROR');
+			if (!has_category_access(get_member(),'tickets',strval($ticket_type_id))) access_denied('I_ERROR');
 
 			// Check FAQ search results first
 			if (($ticket_type_details['search_faq']) && (post_param_integer('faq_searched',0)==0))
@@ -754,7 +754,7 @@ class Module_tickets
 			}
 
 			$new_post=new ocp_tempcode();
-			$new_post->attach(do_lang('THIS_WITH_COMCODE',do_lang('TICKET_TYPE'),$type_string)."\n\n");
+			$new_post->attach(do_lang('THIS_WITH_COMCODE',do_lang('TICKET_TYPE'),$ticket_type_name)."\n\n");
 			$email=trim(post_param('email',''));
 			if ($email!='')
 			{

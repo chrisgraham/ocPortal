@@ -51,8 +51,10 @@ function add_ticket_type($ticket_type_name,$guest_emails_mandatory=0,$search_faq
  */
 function edit_ticket_type($ticket_type_id,$ticket_type_name,$guest_emails_mandatory,$search_faq)
 {
+	$old_ticket_type_name=$GLOBALS['SITE_DB']->query_value('ticket_types','ticket_type_name',array('id'=>$ticket_type_id));
+
 	$map=array('guest_emails_mandatory'=>$guest_emails_mandatory,'search_faq'=>$search_faq);
-	$map+=lang_remap('ticket_type_name',$ticket_type_id,$ticket_type_name);
+	$map+=lang_remap('ticket_type_name',$old_ticket_type_name,$ticket_type_name);
 	$GLOBALS['SITE_DB']->query_update('ticket_types',$map,array('id'=>$ticket_type_id),'',1);
 
 	log_it('EDIT_TICKET_TYPE',strval($ticket_type_id),$ticket_type_name);

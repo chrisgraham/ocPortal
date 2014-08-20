@@ -963,7 +963,7 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 	{
 		case 'long_trans':
 		case 'short_trans':
-			$temp=_get_catalogue_entry_field($field['id'],$entry_id,'short_trans',$only_field_ids);
+			$temp=_get_catalogue_entry_field($field['id'],$entry_id,$raw_type,$only_field_ids);
 			if (is_null($temp['cv_value']))
 			{
 				$target['effective_value']=do_lang_tempcode('INTERNAL_ERROR');
