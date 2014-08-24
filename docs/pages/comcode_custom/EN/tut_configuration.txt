@@ -241,6 +241,10 @@ In the event your hosting platform does not allow you access to CRON, there are 
  - At http://www.mywebcron.com/ you can schedule the CRON script to be called up to every 5 minutes for free. There are others on the market but this one seems to be the easiest to use and didn't fail at all during our testing. Simply Sign up and  add the URL i.e. [tt]http://yourwebsiteaddress.com/data/cron_bridge.php[/tt] to the scheduler and set how often you want it to run.
  - Other free options are http://www.setcronjob.com/ (up to every 5 minutes but the schedule needs to be re-set every week) and http://www.onlinecronjobs.com/ (up to 5 jobs twice a day).
 
+[title="3"]Caveats[/title]
+
+If you enable the mail queue (recommended for performance), then e-mail will be sent in the background via the scheduler. However, if the scheduler stops running for a period, e-mails could queue up. We have had a report of this happening to a user and then the webhost deciding to block the scheduler from running, compounding the problem. If such an event happens it is best to discuss it with the webhost, then perhaps deciding to ease CRON back in on a lower execution interval (e.g. once per hour, then back to normal after the queue is emptied).
+
 [title="2"]Closed site, and opening[/title]
 [surround]
 [exp_thumb="Your site is initially closed" float="right"]configuration_closed[/exp_thumb]

@@ -266,7 +266,7 @@ function comcode_text_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$p
 
 	// Our state
 	$status=CCP_NO_MANS_LAND;
-	$lax=$GLOBALS['LAX_COMCODE']; // if we don't want to produce errors for technically invalid Comcode
+	$lax=$GLOBALS['LAX_COMCODE'] || function_exists('get_member') && $source_member!=get_member() || count($_POST)==0; // if we don't want to produce errors for technically invalid Comcode
 	$tag_stack=array();
 	$pos=0;
 	$line_starting=true;

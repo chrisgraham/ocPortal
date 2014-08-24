@@ -2330,7 +2330,7 @@ END;
 					}
 				}
 
-				return do_template('CONFIRM_SCREEN',array('TITLE'=>get_screen_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden));
+				return do_template('CONFIRM_SCREEN',array('TITLE'=>get_screen_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden,'FIELDS'=>''));
 			}
 
 			foreach ($posts as $post)

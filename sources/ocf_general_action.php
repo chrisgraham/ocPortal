@@ -46,7 +46,7 @@ function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_foru
  *
  * @param  SHORT_TEXT	The textual code entered to make the emoticon appear.
  * @param  ID_TEXT		The image code used for the emoticon.
- * @param  integer		The relevance level.
+ * @param  integer		The relevance level. 0 is core, shown immediately.
  * @range  0 4
  * @param  BINARY			Whether this may be used as a topic emoticon.
  * @param  BINARY			Whether this may only be used by privileged members

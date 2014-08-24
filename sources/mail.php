@@ -112,6 +112,28 @@ function comcode_to_clean_text($message_plain)
 {
 	//$message_plain=str_replace("\n",'',$message_plain);
 
+	// If it is just HTML encapsulated in Comcode, force our best HTML to text conversion first
+	if ((substr($message_plain,0,10)=='[semihtml]') && (substr(trim($message_plain),-11)=='[/semihtml]'))
+	{
+		$_message_plain=trim($message_plain);
+		$_message_plain=substr($_message_plain,10,strlen($_message_plain)-11-10);
+		if (strpos($_message_plain,'[semihtml')===false)
+		{
+			require_code('comcode_from_html');
+			$message_plain=trim(semihtml_to_comcode($_message_plain,true));
+		}
+	}
+	if ((substr($message_plain,0,6)=='[html]') && (substr(trim($message_plain),-7)=='[/html]'))
+	{
+		$_message_plain=trim($message_plain);
+		$_message_plain=substr($_message_plain,6,strlen($_message_plain)-7-6);
+		if (strpos($_message_plain,'[html')===false)
+		{
+			require_code('comcode_from_html');
+			$message_plain=trim(str_replace('semihtml]','html]',semihtml_to_comcode($_message_plain,true)));
+		}
+	}
+
 	if ((strpos($message_plain,'[')===false) && (strpos($message_plain,'{')===false)) return $message_plain;
 
 	require_code('tempcode_compiler');
@@ -145,6 +167,7 @@ function comcode_to_clean_text($message_plain)
 	}
 	$message_plain=array_key_exists(1,$match) ? $match[1] : $message_plain;
 
+	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]\\1\[/url\]#",'${1}',$message_plain);
 	$message_plain=preg_replace("#\[url=\"([^\"]*)\"(.*)\]([^\[\]]*)\[/url\]#",'${1} (${3})',$message_plain);
 
 	$message_plain=preg_replace("#\[img(.*)\]([^\[\]]*)\[/img\]#",'',$message_plain);

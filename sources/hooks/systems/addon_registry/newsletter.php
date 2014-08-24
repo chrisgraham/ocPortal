@@ -214,7 +214,8 @@ class Hook_addon_registry_newsletter
 		return array(
 			lorem_globalise(do_lorem_template('NEWSLETTER_DEFAULT_FCOMCODE', array(
 				'CONTENT'=>lorem_phrase(),
-				'LANG'=>fallback_lang()
+				'LANG'=>fallback_lang(),
+				'SUBJECT'=>lorem_phrase(),
 			)), NULL, '', true)
 		);
 	}

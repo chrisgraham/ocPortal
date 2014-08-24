@@ -51,6 +51,49 @@ function ocf_delete_post_template($id)
 }
 
 /**
+ * Utility function to import custom emoticons.
+ * Not used by default, but useful when coding projects to do hot-changes to a separate live site.
+ *
+ * @param  boolean		Make some of the old core emoticons non-core (level 1).
+ */
+function import_custom_emoticons($remove_old_core=false)
+{
+	if ($remove_old_core)
+	{
+		$codes=array(	// All except    :P  ;)  :(  :)  :|
+			':\'(',
+			':dry:',
+			':$',
+			'O_o',
+			':wub:',
+			':cool:',
+			':lol:',
+			':thumbs:',
+			':ninja:',
+			':o',
+		);
+		foreach ($codes as $code)
+		{
+			$GLOBALS['FORUM_DB']->query_update('f_emoticons',array('e_relevance_level'=>1),array('e_relevance_level'=>0,'e_code'=>$code),'',1);
+		}
+	}
+
+	require_code('ocf_general_action');
+	require_code('images');
+	$core_emoticons=array();
+	$dh=opendir(get_custom_file_base().'/themes/default/images_custom/ocf_emoticons');
+	while (($f=readdir($dh))!==false)
+	{
+		if (is_image($f))
+		{
+			$ext=get_file_extension($f);
+			ocf_make_emoticon(':'.basename($f,'.'.$ext).':','ocf_emoticons/'.basename($f,'.'.$ext),0,0);
+		}
+	}
+	closedir($dh);
+}
+
+/**
  * Edit an emoticon.
  *
  * @param  SHORT_TEXT	The textual code entered to make the emoticon appear.

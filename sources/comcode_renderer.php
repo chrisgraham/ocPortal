@@ -1995,7 +1995,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$caption=$embed;
 
 			global $OVERRIDE_SELF_ZONE;
-			list($zone,$attributes,$hash)=page_link_decode($attributes['param']);
+			$page_link=$attributes['param'];
+			list($zone,$attributes,$hash)=page_link_decode($page_link);
 			if (!array_key_exists('page',$attributes)) $attributes['page']='';
 			if (($zone=='_SELF') && (!is_null($OVERRIDE_SELF_ZONE))) $zone=$OVERRIDE_SELF_ZONE;
 			unset($attributes['param']);
@@ -2037,7 +2038,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if ($ptest===false)
 				{
 					//$temp_tpl->attach(' ['.do_lang('MISSING_RESOURCE').']');  // Don't want this as we might be making the page immediately
-					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!in_array($page,$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						if ($ignore_if_hidden)
 						{
@@ -2045,7 +2046,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						} else
 						{
 							require_code('failure');
-							relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','page',$zone.':'.$page),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
+							relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','page_link',$page_link),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 						}
 					}
 				}
