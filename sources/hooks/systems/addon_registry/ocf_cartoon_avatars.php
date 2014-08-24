@@ -109,6 +109,14 @@ class Hook_addon_registry_ocf_cartoon_avatars
 			'themes/default/images/ocf_default_avatars/default_set/cartoons/rabbit.jpg',
 			'themes/default/images/ocf_default_avatars/default_set/cartoons/snorkler.jpg',
 			'themes/default/images/ocf_default_avatars/default_set/cartoons/western.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/anchor.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/boating.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/chillin.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/dude.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/dudette.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/guyinahat.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/kingfish.jpg',
+			'themes/default/images/ocf_default_avatars/default_set/cartoons/worm.jpg',
 		);
 	}
 }

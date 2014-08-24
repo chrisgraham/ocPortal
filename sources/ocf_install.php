@@ -511,6 +511,9 @@ function install_ocf($upgrade_from=NULL)
 			':fight:'=>'fight',
 			':goodbye:'=>'goodbye',
 			':idea:'=>'idea',
+			':boat:'=>'boat',
+			':fishing:'=>'fishing',
+			':reallybadday:'=>'reallybadday',
 		);
 		$unused_emoticons=array(
 			':christmas:'=>'christmas'
