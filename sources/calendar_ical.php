@@ -452,15 +452,16 @@ function get_event_data_ical($calendar_nodes)
 		$type=strtolower($calendar_nodes['CATEGORIES']);		
 	}
 
-	// Check existancy of category	
-	$typeid=NULL;
-
-	$rows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
-
-	foreach ($rows as $row)
+	// Check existency of category	
+	$type_id=NULL;
+	if (!is_null($type))
 	{
-		if (strtolower($type)==strtolower(get_translated_text($row['t_title'])))
-			$typeid=$row['id'];
+		$rows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
+		foreach ($rows as $row)
+		{
+			if (strtolower($type)==strtolower(get_translated_text($row['t_title'])))
+				$type_id=$row['id'];
+		}
 	}
 
 
@@ -504,17 +505,18 @@ function get_event_data_ical($calendar_nodes)
 			$timestamp=mktime($start_hour,$start_minute,0,$start_month,$start_day,$start_year);
 			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
 			$timestamp=$timestamp+$amount_forward;
-			list($start_hour,$start_minute,$start_year,$start_month,$start_day,$start_hour,$start_minute)=array_map('intval',explode('-',date('Y-m-d-H-i-s',$timestamp)));
+			list($start_year,$start_month,$start_day,$start_hour,$start_minute)=array_map('intval',explode('-',date('Y-m-d-H-i-s',$timestamp)));
 		}
 	}
 
 	if (array_key_exists('DTEND',$calendar_nodes))
 	{
-		$all_day=false;
 		if (strlen($calendar_nodes['DTEND'])==8)
 		{
 			$calendar_nodes['DTEND'].=' 00:00';
-			$all_day=true;
+		} else
+		{
+			$all_day=false;
 		}
 		$end=strtotime($calendar_nodes['DTEND']);
 		$end_year=intval(date('Y',$end));
@@ -536,7 +538,7 @@ function get_event_data_ical($calendar_nodes)
 			$timestamp=mktime($end_hour,$end_minute,0,$end_month,$end_day,$end_year);
 			$amount_forward=tz_time($timestamp,$timezone)-$timestamp;
 			$timestamp=$timestamp-$amount_forward;
-			list($end_hour,$end_minute,$end_year,$end_month,$end_day,$end_hour,$end_minute)=array_map('intval',explode('-',date('Y-m-d',$timestamp-1)));
+			list($end_year,$end_month,$end_day,$end_hour,$end_minute)=array_map('intval',explode('-',date('Y-m-d-H-i-s',$timestamp-1)));
 		}
 	}
 
@@ -545,12 +547,20 @@ function get_event_data_ical($calendar_nodes)
 		$start_day=find_abstract_day(intval(date('Y',$start)),intval(date('m',$start)),intval(date('d',$start)),$start_monthly_spec_type);
 	}
 
-	if ($end_monthly_spec_type!='day_of_month')
+	if (($end_monthly_spec_type!='day_of_month') && (!is_null($end_day)))
 	{
 		$end_day=find_abstract_day(intval(date('Y',$end)),intval(date('m',$end)),intval(date('d',$end)),$start_monthly_spec_type/*not encoded differently in iCalendar*/);
 	}
 
-	$ret=array($url,$typeid,$e_recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+	if ($all_day)
+	{
+		$start_hour=NULL;
+		$start_minute=NULL;
+		$end_hour=NULL;
+		$end_minute=NULL;
+	}
+
+	$ret=array($url,$type_id,$e_recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 	return $ret;
 }
 

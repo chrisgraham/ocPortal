@@ -207,6 +207,7 @@ abbr.dtstart, abbr.dtend {
 	color: {$GET,area_key_text};
 	padding: 0.3em;
 	margin-left: -1px;
+	min-height: 2.21em;
 }
 
 .calendar_date_span_link:first-child .calendar_date_span_link_inner {

@@ -611,7 +611,7 @@ function calendar_matches($member_id,$restrict,$period_start,$period_end,$filter
 						$child[0]=preg_replace('#;.*#','',$child[0]);
 
 						if (array_key_exists("1",$child) && $child[0]!=='PRODID' &&  $child[0]!=='VERSION' && $child[0]!=='END')
-							$calendar_nodes[$key][$child[0]]=str_replace(array('\n','\,'),array("\n",','),trim($child[1]," \t\""));
+							$calendar_nodes[$key][$child[0]]=str_replace(array('\n','\,'),array("\n",','),trim($child[1]));
 					}
 					if ($key!=0)
 					{
