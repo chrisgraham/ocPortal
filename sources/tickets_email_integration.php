@@ -449,9 +449,9 @@ function ticket_incoming_message($from_email,$subject,$body,$attachments)
 	$matches=array();
 	if (preg_match('#'.do_lang('TICKET_SIMPLE_SUBJECT_regexp').'#',$subject,$matches)!=0)
 	{
-		if (strpos($matches[1],'_')!==false)
+		if (strpos($matches[2],'_')!==false)
 		{
-			$existing_ticket=$matches[1];
+			$existing_ticket=$matches[2];
 
 			// Validate
 			$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('ticket_forum_name'),$existing_ticket);
