@@ -50,7 +50,7 @@
 
 				{+START,IF,{$CONFIG_OPTION,mobile_support}}
 					<p>
-						<label for="mobile_version">{!MOBILE_VERSION;} <input {+START,IF,{$MOBILE}}checked="checked" {+END}onclick="this.form.action=this.form.action.replace(/keep_mobile=\d/g,'keep_mobile='+(this.checked?'1':'0')); if (window.parent) { try { window.parent.scrollTo(0,find_pos_y(window.parent.document.getElementById('preview_iframe'))); } catch(e) {}; window.parent.mobile_version_for_preview=this.checked; window.parent.document.getElementById('preview_button').onclick(event); return; } this.form.submit();" type="checkbox" id="mobile_version" name="_mobile_version" /></label>
+						<label for="mobile_version">{!MOBILE_VERSION}: <input {+START,IF,{$MOBILE}}checked="checked" {+END}onclick="this.form.action=this.form.action.replace(/keep_mobile=\d/g,'keep_mobile='+(this.checked?'1':'0')); if (window.parent) { try { window.parent.scrollTo(0,find_pos_y(window.parent.document.getElementById('preview_iframe'))); } catch(e) {}; window.parent.mobile_version_for_preview=this.checked; window.parent.document.getElementById('preview_button').onclick(event); return; } this.form.submit();" type="checkbox" id="mobile_version" name="_mobile_version" /></label>
 						{+START,IF,{$MOBILE}}
 							&ndash; <em>{!USE_MOUSE_WHEEL_SCROLL}</em>
 						{+END}

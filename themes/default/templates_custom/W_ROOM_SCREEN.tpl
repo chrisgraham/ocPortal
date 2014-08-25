@@ -95,7 +95,7 @@
 		  </tr>
 		  <tr>
 				<th>{!W_ALLOW_PORTAL}</th>
-				<td><label class="accessibility_hidden" for="allow_portal">{!W_ALLOW_PORTAL}</label><input type="checkbox" value="1" id="allow_portal" name="allow_portal"{+START,IF,{ALLOW_PORTAL}} checked="checked"{+END} /></td>
+				<td><label class="accessibility_hidden" for="allow_portal">{!W_ALLOW_PORTAL}:</label> <input type="checkbox" value="1" id="allow_portal" name="allow_portal"{+START,IF,{ALLOW_PORTAL}} checked="checked"{+END} /></td>
 				<td>{!W_EG_ALLOW_PORTAL}</td>
 		  </tr>
 		  <tr>

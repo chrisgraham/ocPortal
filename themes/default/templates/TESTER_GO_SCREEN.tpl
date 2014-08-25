@@ -11,10 +11,10 @@
 
 	<div>
 		<p>
-			<label for="show_for_all">{!SHOW_FOR_ALL} <input type="checkbox" id="show_for_all" name="show_for_all" value="1" /></label>
+			<label for="show_for_all">{!SHOW_FOR_ALL}: <input type="checkbox" id="show_for_all" name="show_for_all" value="1" /></label>
 		</p>
 		<p>
-			<label for="show_successful">{!SHOW_SUCCESSFUL} <input type="checkbox" id="show_successful" name="show_successful" value="1" /></label>
+			<label for="show_successful">{!SHOW_SUCCESSFUL}: <input type="checkbox" id="show_successful" name="show_successful" value="1" /></label>
 		</p>
 	</div>
 

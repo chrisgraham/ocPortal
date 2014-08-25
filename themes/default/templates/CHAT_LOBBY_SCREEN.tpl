@@ -157,7 +157,7 @@
 
 					<form title="{!SOUND_EFFECTS}" action="index.php" method="post" class="inline">
 						<p>
-							<label for="play_sound">{!SOUND_EFFECTS}</label> <input type="checkbox" id="play_sound" name="play_sound" checked="checked" />
+							<label for="play_sound">{!SOUND_EFFECTS}:</label> <input type="checkbox" id="play_sound" name="play_sound" checked="checked" />
 						</p>
 					</form>
 

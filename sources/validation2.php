@@ -1073,6 +1073,15 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 						$errors[]=array('XHTML_MISSING_ATTRIBUTE','input','alt');
 					}
 
+					if (($attributes['type']=='checkbox') && (isset($attributes['id'])))
+					{
+						$pre_content=substr($OUT,0,$POS);
+						if (preg_match('#<label for="'.preg_quote($attributes['id'],'#').'">[^:]+<input[^<>]+id="'.preg_quote($attributes['id'],'#').'"#',$pre_content)!=0)
+						{
+							$errors[]=array('ACCESSIB_COLONS_IN_PRE_LABELS');
+						}
+					}
+
 					if ($attributes['type']=='file')
 					{
 						if (isset($attributes['value'])) $errors[]=array('XHTML_FILE_VALUE');
@@ -1147,7 +1156,7 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 				{
 					$errors[]=array('WCAG_LONGTEXT_DLINK');
 				}
-				if ((isset($attributes['alt'])) && (isset($attributes['src'])) && ($attributes['alt']==$attributes['src']))
+				if ((isset($attributes['alt'])) && (isset($attributes['src'])) && ($attributes['alt']!='') && ($attributes['alt']==$attributes['src']))
 				{
 					$errors[]=array('XHTML_MISSING_ATTRIBUTE','img','alt');
 				}

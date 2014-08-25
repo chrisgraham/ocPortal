@@ -33,7 +33,7 @@
 <div style="display: {$JS_ON,none,block}" class="chat_comcode_panel">
 	<form title="{!SOUND_EFFECTS}" action="{OPTIONS_URL*}" method="post" class="inline">
 		<div>
-			<label for="play_sound">{!SOUND_EFFECTS}</label> <input type="checkbox" id="play_sound" name="play_sound" checked="checked" />
+			<label for="play_sound">{!SOUND_EFFECTS}:</label> <input type="checkbox" id="play_sound" name="play_sound" checked="checked" />
 		</div>
 	</form>
 </div>

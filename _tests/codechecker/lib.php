@@ -76,6 +76,11 @@ function unixify_line_format($in)
 	return str_replace(chr(13),chr(10),$in);
 }
 
+function get_charset()
+{
+	return 'utf-8';
+}
+
 function do_dir($dir,$no_custom=false,$orig_priority=false,$avoid=NULL)
 {
 	global $OCPORTAL_PATH;
