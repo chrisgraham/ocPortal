@@ -41,6 +41,8 @@ class Hook_task_import_catalogue
 	{
 		require_code('catalogues2');
 
+		log_it('IMPORT_CATALOGUE_ENTRIES');
+
 		$fields=$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name'=>$catalogue_name));
 
 		// Find out what categories we have in the catalogue

@@ -93,6 +93,8 @@ class Hook_task_import_ftp_downloads
 			return array(NULL,do_lang_tempcode('POINTS_TO_ROOT_SCARY',$directory));
 		}
 
+		log_it('FTP_DOWNLOADS');
+
 		// Actually start the scanning
 		$num_added=$this->ftp_recursive_downloads_scan($conn_id,$server_url,$directory,$destination,$subfolders);
 

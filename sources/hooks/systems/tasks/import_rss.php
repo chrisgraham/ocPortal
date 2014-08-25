@@ -46,6 +46,8 @@ class Hook_task_import_rss
 			return array(NULL,$rss->error);
 		}
 
+		log_it('IMPORT_NEWS');
+
 		$imported_news=array();
 		$imported_pages=array();
 

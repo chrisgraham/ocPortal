@@ -33,6 +33,8 @@ class Hook_task_import_member_csv
 		require_lang('ocf');
 		require_code('ocf_members_action');
 
+		log_it('IMPORT_MEMBER_CSV');
+
 		$num_added=0;
 		$num_edited=0;
 		$done=0;

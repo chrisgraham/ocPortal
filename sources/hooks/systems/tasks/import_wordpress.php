@@ -37,6 +37,8 @@ class Hook_task_import_wordpress
 		require_code('news');
 		require_code('news2');
 
+		log_it('IMPORT_NEWS');
+
 		$GLOBALS['LAX_COMCODE']=true;
 
 		$data=_get_wordpress_db_data();

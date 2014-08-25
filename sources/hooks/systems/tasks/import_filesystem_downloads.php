@@ -42,6 +42,8 @@ class Hook_task_import_filesystem_downloads
 			return array(NULL,do_lang_tempcode('DIRECTORY_NOT_FOUND',$server_path));
 		}
 
+		log_it('FILESYSTEM_DOWNLOADS');
+
 		/*	Needless because it's relative to ocPortal directory anyway
 		// Failsafe check
 		if ((file_exists($base_path.'/dev')) && (file_exists($base_path.'/etc')) && (file_exists($base_path.'/sbin')))
