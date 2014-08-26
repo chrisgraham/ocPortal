@@ -180,7 +180,7 @@ class Module_admin
 			array('news','story','stories','article'),
 			array('language','unicode','utf','utf8','utf-8','character','charset','24','clock','timezone','time-zone','time','date','translate'),
 			array('ldap','active directory'),
-			array('contact','feedback','ticket','message','issue'),
+			array('contact','contactmember'/*TODO: remove in v10*/,'feedback','ticket','message','issue','email','e-mail'),
 			array('documentation','help','guide'),
 			array('sef','short','friendly'),
 			array('survey','quiz','competition','test'),
@@ -530,6 +530,15 @@ class Module_admin
 								$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'f656efd513099deac516d3273f9adfc4','NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>do_lang_tempcode('FIND_IN_SITE_TREE_EDITOR',escape_html($site_tree_editor_url->evaluate()),escape_html($permission_tree_editor_url->evaluate())),'SUP'=>$sup)));
 							}
 						}
+					}
+
+					$n=do_lang('MODULE_TRANS_NAME_'.$page,NULL,NULL,NULL,NULL,false);
+					if (($this->_keyword_match($n)) && (has_actual_page_access(get_member(),$page,$zone)))
+					{
+						$_url=build_url(array('page'=>$page),$zone);
+						$site_tree_editor_url=build_url(array('page'=>'admin_sitetree','type'=>'site_tree','id'=>$zone.':'.$page),'adminzone');
+						$permission_tree_editor_url=build_url(array('page'=>'admin_permissions','id'=>$zone.':'.$page),'adminzone');
+						$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$n,'URL'=>$_url,'TITLE'=>'','DESCRIPTION'=>do_lang_tempcode('FIND_IN_SITE_TREE_EDITOR',escape_html($site_tree_editor_url->evaluate()),escape_html($permission_tree_editor_url->evaluate())))));
 					}
 				}
 			}
