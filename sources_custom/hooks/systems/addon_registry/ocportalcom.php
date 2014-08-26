@@ -146,6 +146,7 @@ class Hook_addon_registry_ocportalcom
 			'uploads/website_specific/ocportal.com/myocp/template.sql',
 			'uploads/website_specific/ocportal.com/myocp/template.tar',
 			'data_custom/myocp_upgrade.php',
+			'sources_custom/ocf_forumview.php',
 			'sources_custom/errorservice.php',
 			'sources_custom/miniblocks/fp_animation.php',
 			'sources_custom/miniblocks/ocportalcom_featuretray.php',
