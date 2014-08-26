@@ -436,6 +436,9 @@ The box type a block uses is changeable by editing the template of that block; t
 If you want to make your own box in Comcode, just use the 'box' Comcode tag around some existing Comcode.
 If you want to place a block, use the 'Add block' button you see whilst editing Comcode pages.
 
+[b]How do I enable native right-click in the WYSIWYG editor?[/b]
+We use ckeditor, which disables this. However, if you edit the [tt]WYSIWYG_SETTINGS[/tt] template in ocPortal then you'll see we left a comment showing what plugins to disable to allow native right-click to be restored.
+
 ---
 
 [b]Do you have another question?[/b]

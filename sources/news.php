@@ -355,6 +355,7 @@ END;
 		decache('side_news');
 		decache('side_news_archive');
 		decache('bottom_news');
+		decache('side_news_categories');
 
 		dispatch_news_notification($id,$title,$main_news_category_id);
 	}
@@ -496,6 +497,7 @@ function edit_news($id,$title,$news,$author,$validated,$allow_rating,$allow_comm
 	decache('side_news');
 	decache('side_news_archive');
 	decache('bottom_news');
+	decache('side_news_categories');
 
 	if (($validated==1) && (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'news',strval($main_news_category))))
 	{
@@ -586,6 +588,7 @@ function delete_news($id)
 	decache('side_news');
 	decache('side_news_archive');
 	decache('bottom_news');
+	decache('side_news_categories');
 }
 
 /**

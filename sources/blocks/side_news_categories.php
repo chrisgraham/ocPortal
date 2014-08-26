@@ -65,7 +65,7 @@ class Block_side_news_categories
 		$cnt=$GLOBALS['SITE_DB']->query_value('news_categories','COUNT(*)',array('nc_owner'=>NULL));
 		if (($cnt>100) && (db_has_subqueries($GLOBALS['SITE_DB']->connection_read)))
 		{
-			$categories=$GLOBALS['SITE_DB']->query('SELECT c.* FROM '.get_table_prefix().'news_categories c WHERE nc_owner IS NULL AND EXISTS (SELECT * FROM '.get_table_prefix().'news n WHERE n.news_category=c.id)');
+			$categories=$GLOBALS['SITE_DB']->query('SELECT c.* FROM '.get_table_prefix().'news_categories c WHERE nc_owner IS NULL AND EXISTS (SELECT * FROM '.get_table_prefix().'news n WHERE n.news_category=c.id AND n.validated=1)');
 		} else
 		{
 			$categories=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));

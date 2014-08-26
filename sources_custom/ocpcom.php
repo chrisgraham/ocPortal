@@ -236,7 +236,7 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 		@mkdir(dirname($path),0775);
 		mkdir($path,0775);
 	}
-	chmod($path,0775);
+	@chmod($path,0775);
 	require_code('tar');
 	$tar=tar_open(special_myocp_dir().'/template.tar','rb');
 	$path_short=substr($path,strlen(get_custom_file_base().'/'));
@@ -246,12 +246,12 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 	$contents=get_directory_contents($path,$path,true,true,true);
 	foreach ($contents as $c)
 	{
-		chmod($c,0664);
+		@chmod($c,0664);
 	}
 	$contents=get_directory_contents($path,$path,true,true,false);
 	foreach ($contents as $c)
 	{
-		chmod($c,0775);
+		@chmod($c,0775);
 	}
 }
 
