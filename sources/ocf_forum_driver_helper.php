@@ -290,7 +290,7 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result)
 		$query.=' AND EXISTS('.$post_query_sql.')';
 
-	$max_rows=$this_ref->connection->query_value_null_ok_full(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
+	$max_rows=$this_ref->connection->query_value_null_ok_full(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 	if ($limit==0) return array();
 	$rows=$this_ref->connection->query($query.' ORDER BY '.(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC',$limit,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
 
@@ -445,7 +445,6 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
 
 				$post_row=db_map_restrict($myrow,array('id','p_post'));
 				$temp['message']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
-
 				$temp['message_comcode']=get_translated_text($myrow['p_post'],$GLOBALS['FORUM_DB']);
 				$temp['user']=$myrow['p_poster'];
 				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
