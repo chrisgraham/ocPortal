@@ -856,6 +856,7 @@ class database_driver
 				if ($lang_fields_provisional!=array())
 				{
 					$full_table.=' main';
+
 					foreach ($select as $i=>$s)
 					{
 						if (!is_string($s))

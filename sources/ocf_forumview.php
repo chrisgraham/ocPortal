@@ -694,7 +694,7 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 		if (count($subforum_rows)==$max_forum_inspect) $subforum_rows=array(); // Will cause performance breakage
 	} else
 	{
-		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
+		$subforum_rows=$GLOBALS['FORUM_DB']->query_select('f_forums f',array('f.*'),NULL,'ORDER BY f_parent_forum,'.$sort,NULL,NULL,false,array('f_description'=>'LONG_TRANS__COMCODE','f_intro_question'=>'LONG_TRANS__COMCODE'));
 	}
 	$unread_forums=array();
 	if ((!is_null($forum_id)) && (get_member()!=$GLOBALS['OCF_DRIVER']->get_guest_id()))

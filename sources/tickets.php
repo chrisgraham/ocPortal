@@ -38,7 +38,7 @@ function build_types_list($selected_ticket_type_id,$ticket_types_to_let_through=
 
 		if (is_null($type['cache_lead_time'])) $lead_time=do_lang('UNKNOWN');
 		else $lead_time=display_time_period($type['cache_lead_time']);
-		$types[$type['ticket_type']]=array('TICKET_TYPE'=>strval($type['ticket_type']),'SELECTED'=>($type['ticket_type']===$selected_ticket_type_id),'NAME'=>get_translated_text($type['ticket_type_name']),'LEAD_TIME'=>$lead_time);
+		$types[$type['id']]=array('TICKET_TYPE_ID'=>strval($type['id']),'SELECTED'=>($type['id']===$selected_ticket_type_id),'NAME'=>get_translated_text($type['ticket_type_name']),'LEAD_TIME'=>$lead_time);
 	}
 	return $types;
 }
