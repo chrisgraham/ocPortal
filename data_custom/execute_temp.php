@@ -53,4 +53,8 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	set_option('max_ip_addresses_per_subscriber','0');
+	require_code('hooks/systems/cron/ip_address_sharing');
+	$ob=new Hook_cron_ip_address_sharing();
+	$ob->run();
 }
