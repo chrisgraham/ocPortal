@@ -356,6 +356,11 @@ iframe {
 	background: {$GET,yellow_highlight_background};
 }
 
+/* Stop Chrome breaking our datalist display with an arrow */
+input.input_username::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
 /*
 =========================
 ======Global Layout======

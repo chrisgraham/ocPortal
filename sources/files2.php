@@ -819,7 +819,13 @@ function _http_download_file($url,$byte_limit=NULL,$trigger_error=true,$no_redir
 				}
 
 				$DOWNLOAD_LEVEL--;
-				return _detect_character_encoding(substr($line,$pos));
+				$ret=_detect_character_encoding(substr($line,$pos));
+				if (!is_null($write_to_file))
+				{
+					fwrite($write_to_file,$ret);
+					$ret='';
+				}
+				return $ret;
 			}
 		}
 

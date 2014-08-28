@@ -339,7 +339,10 @@ function ocf_render_forumview($id,$current_filter_cat,$max,$start,$root,$of_memb
 	{
 		if ($type=='pt')
 		{
-			$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_PRIVATE_TOPIC'),'url'=>$new_topic_url,'img'=>'send_message');
+			//if ($of_member_id!==get_member())		Actually we'll leave the "send message" button in your inbox, as a way for being able to type in who to send it to
+			{
+				$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_PRIVATE_TOPIC'),'url'=>$new_topic_url,'img'=>'send_message');
+			}
 		} else
 		{
 			$button_array[]=array('immediate'=>false,'rel'=>'add','title'=>do_lang_tempcode('ADD_TOPIC'),'url'=>$new_topic_url,'img'=>'new_topic');

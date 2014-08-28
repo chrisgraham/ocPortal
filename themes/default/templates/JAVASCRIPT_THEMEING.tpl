@@ -143,7 +143,7 @@ function template_edit_page(name,id)
 					st_value='{';
 				}
 
-				value=st_value+value+params+'}';
+				value=st_value+value+'*'+params+'}';
 
 				insert_textbox(box,value);
 			}

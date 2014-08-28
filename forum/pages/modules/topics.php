@@ -1660,7 +1660,7 @@ class Module_topics
 		}
 		if (ocf_may_make_private_topic())
 		{
-			if (($_intended_solely_for!='') || (get_value('no_inline_pp_advertise')!=='1'))
+			if ((($_intended_solely_for!='') || (get_value('no_inline_pp_advertise')!=='1')) && (!is_null($forum_id)))
 				$specialisation->attach(form_input_username(do_lang_tempcode('WHISPER'),do_lang_tempcode('DESCRIPTION_WHISPER'),'intended_solely_for',$_intended_solely_for,false));
 		}
 

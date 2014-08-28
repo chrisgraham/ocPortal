@@ -19,7 +19,7 @@ function init__user_import()
 	define('USER_IMPORT_MATCH_KEY','id'); // defined in terms of the local key
 
 	define('USER_IMPORT_URL',get_base_url().'/data_custom/modules/user_export/in.csv'); // Can be remote, we do an HTTP download to the path below (even if local)...
-	define('USER_IMPORT_TEMP_PATH','data_custom/modules/user_export/in.csv.tmp');
+	define('USER_IMPORT_TEMP_PATH','data_custom/modules/user_export/in.csv');
 
 	global $USER_IMPORT_WANTED;
 	$USER_IMPORT_WANTED=array(
@@ -38,9 +38,11 @@ function do_user_import()
 	{
 		require_code('files');
 		@ini_set('auto_detect_line_endings','1');
-		$infile=fopen(get_custom_file_base().'/'.USER_IMPORT_TEMP_PATH,'r+t');
-		$test=http_download_file(USER_IMPORT_URL,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$write_to_file);
+		$infile=fopen(get_custom_file_base().'/'.USER_IMPORT_TEMP_PATH,'wb');
+		$test=http_download_file(USER_IMPORT_URL,NULL,false,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$infile);
+		fclose($infile);
 		if (is_null($test)) return;
+		$infile=fopen(get_custom_file_base().'/'.USER_IMPORT_TEMP_PATH,'rb');
 	} else
 	{
 		@ini_set('auto_detect_line_endings','1');
@@ -50,8 +52,6 @@ function do_user_import()
 	require_code('ocf_members_action');
 	require_code('ocf_members_action2');
 	require_code('ocf_members');
-
-	rewind($infile);
 
 	global $USER_IMPORT_WANTED;
 	$header_row=fgetcsv($infile,0,USER_IMPORT_DELIM);
