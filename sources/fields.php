@@ -309,6 +309,7 @@ function save_form_custom_fields($content_type,$id,$old_id=NULL)
 
 		$map[$field['id']]=$value;
 	}
+	if (count($fields)==0) return;
 
 	$first_cat=$GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name'=>'_'.$content_type));
 	if (is_null($first_cat))

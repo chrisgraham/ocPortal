@@ -1458,7 +1458,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 						}
 
 						// Do the comcode for this tag
-						if ($in_semihtml) // We need to perform some magic to clean up the Comcode sections
+						if ($in_semihtml) // We need to perform some work to clean up the Comcode tag's attributes, as they generally do not support Comcode/HTML themselves (are plain text)
 						{
 							foreach ($_last[1] as $index=>$conv)
 							{

@@ -1189,6 +1189,8 @@ function email_bug_info_to_one_user( $p_visible_bug_data, $p_message_id, $p_proj
 		$t_mail_headers['In-Reply-To'] = $t_message_md5;
 	}
 
+	$t_message = "THIS IS AN AUTOMATED E-MAIL. PLEASE DO NOT REPLY DIRECTLY. Reply from within the tracker itself.\n\n\n" . $t_message;
+
 	# send mail
 	$t_ok = email_store( $t_user_email, $t_subject, $t_message, $t_mail_headers );
 
