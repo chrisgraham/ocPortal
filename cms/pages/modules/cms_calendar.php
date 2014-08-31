@@ -616,7 +616,7 @@ class Module_cms_calendar extends standard_aed_module
 			}
 		}
 
-		if ($recurrence!='monthly')
+		if (substr($recurrence,0,strlen('monthly'))!='monthly')
 		{
 			$start_monthly_spec_type='day_of_month';
 			$end_monthly_spec_type='day_of_month';
@@ -1242,7 +1242,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 		edit_event_type(intval($id),post_param('title'),get_theme_img_code('calendar'),post_param('external_feed'));
 		if (!fractional_edit())
 		{
-			$this->set_permissions(strval($id));
+			$this->set_permissions($id);
 		}
 	}
 

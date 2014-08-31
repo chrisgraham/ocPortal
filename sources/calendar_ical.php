@@ -42,7 +42,7 @@ function output_ical()
 	header('Content-Type: text/calendar');
 	header('Content-Disposition: inline; filename="export.ics"');
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return '';
+	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 
@@ -278,7 +278,7 @@ function output_ical()
 */
 function ical_import($file_name)
 {
-	$data=file_get_contents($file_name);
+	$data=unixify_line_format(file_get_contents($file_name));
 
 	$exploded=explode('BEGIN:VCALENDAR',$data);
 	$whole=end($exploded);
@@ -287,17 +287,31 @@ function ical_import($file_name)
 
 	$calendar_nodes=array();
 
-	$new_type=NULL;
-
 	foreach ($events as $key=>$items)
 	{		
-		$items=preg_replace('#(.*)\n +(.*)\n#','${1}${2}',$items); // Merge split lines
+		$items=preg_replace('#(.+)\n +(.*)\n#','${1}${2}'."\n",$items); // Merge split lines
 
 		$nodes=explode("\n",$items);
 
 		foreach ($nodes as $_child)
 		{
-			$child=explode(':',$_child,2);
+			if (strpos($_child,':')===false) continue;
+
+			$child=array('','');
+			$in_quotes=false;
+			$j=0;
+			for ($i=0;$i<strlen($_child);$i++)
+			{
+				$char=$_child[$i];
+				if ($char=='"') $in_quotes=!$in_quotes;
+				if (($j!=1) && (!$in_quotes) && ($char==':'))
+				{
+					$j++;
+				} else
+				{
+					$child[$j].=$char;
+				}
+			}
 
 			$matches=array();
 			if (preg_match('#;TZID=(.*)#',$child[0],$matches))
@@ -310,19 +324,15 @@ function ical_import($file_name)
 
 		if ($key!=0)
 		{
-			list(,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
+			list(,$type_id,$type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes)=get_event_data_ical($calendar_nodes[$key]);
 
-			if (is_null($type))
+			if (is_null($type_id))
 			{
-				if (is_null($new_type))
-				{
-					require_code('calendar2');
-					$new_type=add_event_type(strval(ucfirst($type)),'calendar/general');
-				}
-				$type=$new_type;
+				require_code('calendar2');
+				$type_id=add_event_type(ucfirst($type),'calendar/general');
 			}
 
-			$id=add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,1,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+			$id=add_calendar_event($type_id,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,1,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 		}
 	}
 }
@@ -454,14 +464,12 @@ function get_event_data_ical($calendar_nodes)
 
 	// Check existency of category	
 	$type_id=NULL;
-	if (!is_null($type))
+	if (is_null($type)) $type=do_lang('GENERAL');
+	$rows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
+	foreach ($rows as $row)
 	{
-		$rows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
-		foreach ($rows as $row)
-		{
-			if (strtolower($type)==strtolower(get_translated_text($row['t_title'])))
-				$type_id=$row['id'];
-		}
+		if (strtolower($type)==strtolower(get_translated_text($row['t_title'])))
+			$type_id=$row['id'];
 	}
 
 
@@ -469,6 +477,10 @@ function get_event_data_ical($calendar_nodes)
 	{
 		$title=$calendar_nodes['SUMMARY'];
 		$content=$calendar_nodes['SUMMARY'];
+	}
+	if (array_key_exists('DESCRIPTION',$calendar_nodes))
+	{
+		$content=str_replace('\n',"\n",$calendar_nodes['DESCRIPTION']);
 	}
 
 	if (array_key_exists('PRIORITY',$calendar_nodes))
@@ -560,7 +572,7 @@ function get_event_data_ical($calendar_nodes)
 		$end_minute=NULL;
 	}
 
-	$ret=array($url,$type_id,$e_recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
+	$ret=array($url,$type_id,$type,$e_recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$is_public,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes);
 	return $ret;
 }
 
