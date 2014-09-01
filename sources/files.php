@@ -69,7 +69,7 @@ function php_return_bytes($val)
 	if ($val=='') return 0;
 	$last=strtolower($val[strlen($val)-1]);
 	$_val=intval($val);
-	switch($last)
+	switch ($last)
 	{
 		// The 'G' modifier is available since PHP 5.1.0
 		case 'g':
@@ -84,7 +84,7 @@ function php_return_bytes($val)
 }
 
 /**
- * Get a formatted-string filesize for the specified file. It is formatted as such: x Mb/Kb/Bytes (or unknown). It is assumed that the file exists.
+ * Get a formatted-string filesize for the specified file. It is formatted as such: x MB/KB/Bytes (or unknown). It is assumed that the file exists.
  *
  * @param  URLPATH		The URL that the file size of is being worked out for. Should be local.
  * @return string			The formatted-string file size
@@ -114,12 +114,12 @@ function clean_file_size($bytes)
 	if ($bytes<0) return '-'.clean_file_size(-$bytes);
 
 	if (is_null($bytes)) return do_lang('UNKNOWN').' bytes';
-	if (floatval($bytes)>2.0*1024.0*1024.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0/1024.0/1024.0))).' Gb';
-	if (floatval($bytes)>1024.0*1024.0*1024.0) return float_format(round(floatval($bytes)/1024.0/1024.0/1024.0,2)).' Gb';
-	if (floatval($bytes)>2.0*1024.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0/1024.0))).' Mb';
-	if (floatval($bytes)>1024.0*1024.0) return float_format(round(floatval($bytes)/1024.0/1024.0,2)).' Mb';
-	if (floatval($bytes)>2.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0))).' Kb';
-	if (floatval($bytes)>1024.0) return float_format(round(floatval($bytes)/1024.0,2)).' Kb';
+	if (floatval($bytes)>2.0*1024.0*1024.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0/1024.0/1024.0))).' GB';
+	if (floatval($bytes)>1024.0*1024.0*1024.0) return float_format(round(floatval($bytes)/1024.0/1024.0/1024.0,2)).' GB';
+	if (floatval($bytes)>2.0*1024.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0/1024.0))).' MB';
+	if (floatval($bytes)>1024.0*1024.0) return float_format(round(floatval($bytes)/1024.0/1024.0,2)).' MB';
+	if (floatval($bytes)>2.0*1024.0) return strval(intval(round(floatval($bytes)/1024.0))).' KB';
+	if (floatval($bytes)>1024.0) return float_format(round(floatval($bytes)/1024.0,2)).' KB';
 	return strval($bytes).' Bytes';
 }
 

@@ -79,3 +79,12 @@
 	padding-left: 0;
 	margin-left: 0;
 }
+
+.menu_editor_branch input[type="text"] {
+	background: url('{$IMG;,action_small}') right center no-repeat white;
+	cursor: pointer;
+}
+
+.menu_editor_branch input[type="text"]:focus {
+	cursor: text !important;
+}

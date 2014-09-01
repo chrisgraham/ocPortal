@@ -1127,7 +1127,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 						{
 							$_theme_img_dims_cache=get_long_value('THEME_IMG_DIMS');
 							if (!is_null($_theme_img_dims_cache))
-								$THEME_IMG_DIMS_CACHE=unserialize($_theme_img_dims_cache);
+								$THEME_IMG_DIMS_CACHE=@unserialize($_theme_img_dims_cache);
 						}
 						if (!is_array($THEME_IMG_DIMS_CACHE)) $THEME_IMG_DIMS_CACHE=array();
 					}

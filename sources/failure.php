@@ -668,12 +668,15 @@ function remove_ip_ban($ip)
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
-		$contents=str_replace(chr(10).'deny from '.$ip_cleaned.chr(10),chr(10),$contents);
-		$contents=str_replace(chr(13).'deny from '.$ip_cleaned.chr(13),chr(13),$contents); // Just in case
-		$myfile=fopen(get_file_base().DIRECTORY_SEPARATOR.'.htaccess','wt');
-		if (fwrite($myfile,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-		fclose($myfile);
-		sync_file('.htaccess');
+		if (trim($ip_cleaned)!='')
+		{
+			$contents=str_replace(chr(10).'deny from '.$ip_cleaned.chr(10),chr(10),$contents);
+			$contents=str_replace(chr(13).'deny from '.$ip_cleaned.chr(13),chr(13),$contents); // Just in case
+			$myfile=fopen(get_file_base().DIRECTORY_SEPARATOR.'.htaccess','wt');
+			if (fwrite($myfile,$contents)<strlen($contents)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+			fclose($myfile);
+			sync_file('.htaccess');
+		}
 	}
 	$GLOBALS['SITE_DB']->query_delete('hackattack',array('ip'=>$ip));
 }
