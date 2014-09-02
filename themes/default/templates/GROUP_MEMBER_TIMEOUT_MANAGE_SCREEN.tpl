@@ -37,6 +37,7 @@
 
 					<td>
 						<label class="accessibility_hidden" for="gmt_group_id_{_loop_key*}">{!GROUP}</label>
+						<input name="gmt_old_group_id_{_loop_key*}" value="{GROUP_ID*}" type="hidden" />
 						<select id="gmt_group_id_{_loop_key*}" name="gmt_group_id_{_loop_key*}">
 							{+START,LOOP,GROUPS}
 								<option value="{_loop_key*}"{+START,IF,{$EQ,{GROUP_ID},{_loop_key}}} selected="selected"{+END}>{_loop_var*}</option>

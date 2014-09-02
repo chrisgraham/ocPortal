@@ -212,7 +212,7 @@ function inform_screen($title,$text,$support_match_key_messages=false)
 {
 	require_code('failure');
 
-	$tmp=_look_for_match_key_message(is_object($text)?$text->evaluate():$text,!$support_match_key_messages);
+	$tmp=_look_for_match_key_message(is_object($text)?$text->evaluate():$text,false,!$support_match_key_messages);
 	if (!is_null($tmp)) $text=$tmp;
 
 	return do_template('INFORM_SCREEN',array('_GUID'=>'6e0aec9eb8a1daca60f322f213ddd2ee','TITLE'=>$title,'TEXT'=>$text));

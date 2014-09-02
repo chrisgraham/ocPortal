@@ -167,6 +167,7 @@ function ocf_delete_group($group_id,$target_group=NULL)
 	$GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id'=>$group_id));
 	if (addon_installed('ecommerce'))
 		$GLOBALS['FORUM_DB']->query_delete('f_usergroup_subs',array('s_group_id'=>$group_id));
+	$GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts',array('group_id'=>$group_id));
 
 	require_code('themes2');
 	tidy_theme_img_code(NULL,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
