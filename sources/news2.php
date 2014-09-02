@@ -320,7 +320,7 @@ function add_news($title,$news,$author=NULL,$validated=1,$allow_rating=1,$allow_
 	}
 
 	require_code('attachments2');
-	$GLOBALS['SITE_DB']->query_update('news',array(insert_lang_comcode_attachments('news_article',2,$news_article,'news',strval($id))),array('id'=>$id),'',1);
+	$GLOBALS['SITE_DB']->query_update('news',insert_lang_comcode_attachments('news_article',2,$news_article,'news',strval($id)),array('id'=>$id),'',1);
 
 	log_it('ADD_NEWS',strval($id),$title);
 

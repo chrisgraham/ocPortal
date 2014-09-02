@@ -79,9 +79,9 @@ function update_filedump_links($from,$to)
 	{
 		foreach ($details['references'] as $ref)
 		{
-			if (is_numeric($ref))
+			if (is_array($ref))
 			{
-				$old_comcode=get_translated_text(intval($ref));
+				$old_comcode=get_translated_text($ref[0][$ref[1]]);
 			} else
 			{
 				list($zone,$page,$lang)=explode(':',$ref,3);
@@ -95,9 +95,9 @@ function update_filedump_links($from,$to)
 				$new_comcode=preg_replace($pattern_from,$pattern_to,$new_comcode);
 			}
 
-			if (is_numeric($ref))
+			if (is_array($ref))
 			{
-				lang_remap_comcode(intval($ref),$new_comcode);
+				lang_remap_comcode($ref[1],$ref[0][$ref[1]],$new_comcode);
 			} else
 			{
 				file_put_contents($path,$new_comcode);
@@ -119,22 +119,33 @@ function find_filedump_links($focus='')
 	$_focus=str_replace('%2F','/',rawurlencode($focus));
 
 	// Comcode
-	$query='SELECT id,text_original FROM '.get_table_prefix().'translate WHERE 1=1';
-	if (db_has_full_text($GLOBALS['SITE_DB']->connection_read)) // For efficiency, pre-filter via full-text search
+	global $TABLE_LANG_FIELDS_CACHE;
+	foreach ($TABLE_LANG_FIELDS_CACHE as $table=>$fields)
 	{
-		$query.=' AND '.preg_replace('#\?#','text_original',db_full_text_assemble('filedump',false));
-	}
-	if ($focus=='')
-	{
-		$query.=' AND text_original LIKE \''.db_encode_like('%uploads/filedump/%').'\'';
-	} else
-	{
-		$query.=' AND text_original LIKE \''.db_encode_like('%uploads/filedump'.$_focus.'%').'\'';
-	}
-	$results=$GLOBALS['SITE_DB']->query($query);
-	foreach ($results as $r)
-	{
-		extract_filedump_links($r['text_original'],strval($r['id']),$focus,$paths_used);
+		foreach ($fields as $field_name=>$field_type)
+		{
+			if (strpos($field_type,'LONG_TRANS__COMCODE')!==false)
+			{
+				$query='SELECT r.* FROM '.get_table_prefix().$table.' r WHERE 1=1';
+				$_field_name=$GLOBALS['SITE_DB']->translate_field_ref($field_name);
+				if (db_has_full_text($GLOBALS['SITE_DB']->connection_read)) // For efficiency, pre-filter via full-text search
+				{
+					$query.=' AND '.preg_replace('#\?#',$_field_name,db_full_text_assemble('filedump',false));
+				}
+				if ($focus=='')
+				{
+					$query.=' AND '.$_field_name.' LIKE \''.db_encode_like('%uploads/filedump/%').'\'';
+				} else
+				{
+					$query.=' AND '.$_field_name.' LIKE \''.db_encode_like('%uploads/filedump'.$_focus.'%').'\'';
+				}
+				$results=$GLOBALS['SITE_DB']->query($query,NULL,NULL,false,false,array($field_name=>$field_type));
+				foreach ($results as $r)
+				{
+					extract_filedump_links(get_translated_text($r[$field_name]),array($r,$field_name),$focus,$paths_used);
+				}
+			}
+		}
 	}
 
 	// Comcode pages
@@ -165,7 +176,7 @@ function find_filedump_links($focus='')
  * Find filedump links within some Comcode (an approximation).
  *
  * @param  string		Comcode to scan
- * @param  ID_TEXT	An identifier for where this Comcode was from
+ * @param  mixed		An identifier for where this Comcode was from
  * @param  string		Focus on a particular filedump file (give a path relative to uploads/filedump), with leading slash (blank: no filter)
  * @param  array		Paths found (passed by reference)
  */

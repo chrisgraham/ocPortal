@@ -231,7 +231,13 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 				$fields.=' '.$name.'="'.xmlentities($value).'"';
 			} else // Other data type
 			{
-				$inner.=_tab('<'.$name.'>'.xmlentities($value).'</'.$name.'>')."\n";
+				$att_tag='<'.$name;
+				if ((strpos($field['m_type'],'__COMCODE')!==false) && (!multi_lang_content()))
+				{
+					$att_tag.=' source_user="'.strval($row[$name.'__source_user']).'"';
+				}
+				$att_tag.='>'.xmlentities($value).'</'.$name.'>';
+				$inner.=_tab($att_tag)."\n";
 			}
 		}
 	}
@@ -485,12 +491,22 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 					case 'REAL': // float
 						$value=floatval($row_value);
 						break;
+					case 'LONG_TRANS__COMCODE':
+					case 'SHORT_TRANS__COMCODE':
+						$data[$row_tag.'__text_parsed']='';
+						$data[$row_tag.'__source_user']=isset($row_attributes['source_user'])?$row_attributes['source_user']:$GLOBALS['FORUM_DRIVER']->get_guest_id();
 					default:
 						$value=$row_value;
 						break;
 				}
-				if ($value==='PARENT_INSERT_ID') $value=$last_parent_id;
-				elseif ((is_string($value)) && (substr($value,0,strlen('LAST_INSERT_ID_'))==='LAST_INSERT_ID_')) $value=isset($insert_ids[substr($value,strlen('LAST_INSERT_ID_'))])?$insert_ids[substr($value,strlen('LAST_INSERT_ID_'))]:NULL;
+				if ($value==='PARENT_INSERT_ID')
+				{
+					$value=$last_parent_id;
+				}
+				elseif ((is_string($value)) && (substr($value,0,strlen('LAST_INSERT_ID_'))==='LAST_INSERT_ID_'))
+				{
+					$value=isset($insert_ids[substr($value,strlen('LAST_INSERT_ID_'))])?$insert_ids[substr($value,strlen('LAST_INSERT_ID_'))]:NULL;
+				}
 				$data[$row_tag]=$value;
 			}
 		}
@@ -598,7 +614,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 		$ops[]=array(do_lang('INSERTED_TO_TABLE',$table[0]),make_map_nice($data));
 	}
 
-	// Special case for CPF's
+	// Special case for CPFs, create indexes
 	if ($table[0]=='f_custom_fields')
 	{
 		$test=$GLOBALS['SITE_DB']->query_select('f_member_custom_fields',array('*'),NULL,'',1);
@@ -690,11 +706,19 @@ function get_translated_text_xml($id,$name,$db)
 /**
  * Parse some text for language string values, and insert.
  *
- * @param  string			XML (with root tag)
- * @return AUTO_LINK		Language ID
+ * @param  ID_TEXT		The field name
+ * @param  string			XML (with root tag), or just flat text if multi-lang-content is not on
+ * @return array			The language ID save fields
  */
-function insert_lang_xml($xml_data)
+function insert_lang_xml($field_name,$xml_data)
 {
+	if (!multi_lang_content())
+	{
+		return array(
+			$field_name=>$xml_data,
+		);
+	}
+
 	require_code('xml');
 	$parsed=new ocp_simple_xml_reader($xml_data);
 	if (!is_null($parsed->error)) warn_exit($parsed->error);
@@ -733,5 +757,7 @@ function insert_lang_xml($xml_data)
 		}
 	}
 
-	return $id;
+	return array(
+		$field_name=>$id,
+	);
 }
