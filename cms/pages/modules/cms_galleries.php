@@ -323,6 +323,7 @@ class Module_cms_galleries extends standard_crud_module
 		$supported='tar';
 		if ((function_exists('zip_open')) || (get_option('unzip_cmd')!='')) $supported.=', zip';
 		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_GIMP_TITLE'),'set_title','',false));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 		if (function_exists('imagecreatefromstring'))
@@ -433,6 +434,8 @@ class Module_cms_galleries extends standard_crud_module
 		if ((!is_swf_upload(true)) && ((!array_key_exists('file_1',$_FILES)) || (!is_uploaded_file($_FILES['file_1']['tmp_name']))))
 			warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','file'));
 
+		$media_imported=array();
+
 		foreach ($_FILES as $attach_name=>$__file)
 		{
 			$tmp_name=$__file['tmp_name'];
@@ -464,7 +467,7 @@ class Module_cms_galleries extends standard_crud_module
 						}
 						$this->_sort_media($directory);
 
-						foreach ($directory as $i=>$d)
+						foreach ($directory as $d)
 						{
 							$entry=$d['resource'];
 							$_file=$d['path'];
@@ -487,8 +490,8 @@ class Module_cms_galleries extends standard_crud_module
 
 							if ((is_image($_file)) || (is_video($_file,has_privilege(get_member(),'comcode_dangerous'))))
 							{
-								$this->store_from_archive($_file,$tmp_name_2,$cat);
-								$i++;
+								$ret=$this->store_from_archive($_file,$tmp_name_2,$cat);
+								if (!is_null($ret)) $media_imported[]=$ret;
 							}
 
 							zip_entry_close($entry);
@@ -524,8 +527,8 @@ class Module_cms_galleries extends standard_crud_module
 
 							if ((is_image($_file)) || (is_video($_file,has_privilege(get_member(),'comcode_dangerous'))))
 							{
-								$this->store_from_archive($_file,$tmp_name_2,$cat);
-								$i++;
+								$ret=$this->store_from_archive($_file,$tmp_name_2,$cat);
+								if (!is_null($ret)) $media_imported[]=$ret;
 							}
 							unset($_in);
 						}
@@ -546,12 +549,30 @@ class Module_cms_galleries extends standard_crud_module
 							$test=@copy($tmp_name,$tmp_name_2); // We could rename, but it would hurt integrity of refreshes
 						}
 
-						$this->store_from_archive($file,$tmp_name_2,$cat);
-						$i++;
+						$ret=$this->store_from_archive($file,$tmp_name_2,$cat);
+						if (!is_null($ret)) $media_imported[]=$ret;
 					} else
 					{
 						attach_message(do_lang_tempcode('BAD_ARCHIVE_FORMAT'),'warn');
 					}
+			}
+		}
+
+		$set_title=post_param('set_title','');
+		if ($set_title!='')
+		{
+			foreach ($media_imported as $i=>$media_file)
+			{
+				list($media_type,$media_id)=$media_file;
+				if (count($media_imported)==1)
+				{
+					$media_title=$set_title;
+				} else
+				{
+					$media_title=do_lang('MEDIA_FILE_IN_SET',$set_title,integer_format($i+1),integer_format(count($media_imported)));
+				}
+				$lang_value=$GLOBALS['SITE_DB']->query_select_value($media_type.'s','title',array('id'=>$media_id));
+				$GLOBALS['SITE_DB']->query_update($media_type.'s',lang_remap('title',$lang_value,$media_title),array('id'=>$media_id),'',1);
 			}
 		}
 
@@ -690,10 +711,11 @@ class Module_cms_galleries extends standard_crud_module
 	/**
 	 * Take some data and write it to be a file in the gallery uploads directory, and add it to a gallery.
 	 *
-	 * @param  string		The filename
-	 * @param  PATH		Path to data file (will be copied from)
-	 * @param  ID_TEXT	The gallery to add to
-	 * @param  ?TIME		Timestamp to use (NULL: now)
+	 * @param  string			The filename
+	 * @param  PATH			Path to data file (will be copied from)
+	 * @param  ID_TEXT		The gallery to add to
+	 * @param  ?TIME			Timestamp to use (NULL: now)
+	 * @return ?array			A pair: The media type, The media ID (NULL: error)
 	 */
 	function store_from_archive($file,&$in,$cat,$time=NULL)
 	{
@@ -727,7 +749,7 @@ class Module_cms_galleries extends standard_crud_module
 		$thumb_url='uploads/galleries_thumbs/'.rawurlencode($_file_thumb);
 
 		// Add to database
-		$this->simple_add($aurl,$thumb_url,$_file,$cat,$time);
+		return $this->simple_add($aurl,$thumb_url,$_file,$cat,$time);
 	}
 
 	/**
@@ -799,11 +821,12 @@ class Module_cms_galleries extends standard_crud_module
 	/**
 	 * Take a file in the gallery uploads directory, and add it to a gallery.
 	 *
-	 * @param  URLPATH	The URL to the file
-	 * @param  URLPATH	The thumb URL to the file
-	 * @param  string		The filename
-	 * @param  ID_TEXT	The gallery to add to
-	 * @param  ?TIME		Timestamp to use (NULL: now)
+	 * @param  URLPATH		The URL to the file
+	 * @param  URLPATH		The thumb URL to the file
+	 * @param  string			The filename
+	 * @param  ID_TEXT		The gallery to add to
+	 * @param  ?TIME			Timestamp to use (NULL: now)
+	 * @return ?array			A pair: The media type, The media ID (NULL: error)
 	 */
 	function simple_add($url,$thumb_url,$file,$cat,$time=NULL)
 	{
@@ -846,6 +869,8 @@ class Module_cms_galleries extends standard_crud_module
 						syndicate_described_activity('galleries:ACTIVITY_ADD_VIDEO',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:video:'.strval($id),'','','galleries');
 					}
 				}
+
+				return array('video',$id);
 			}
 		} else
 		{
@@ -896,8 +921,12 @@ class Module_cms_galleries extends standard_crud_module
 						syndicate_described_activity('galleries:ACTIVITY_ADD_IMAGE',($exif['UserComment']=='')?basename($url):$exif['UserComment'],'','','_SEARCH:galleries:image:'.strval($id),'','','galleries');
 					}
 				}
+
+				return array('image',$id);
 			}
 		}
+
+		return NULL;
 	}
 
 	/**
