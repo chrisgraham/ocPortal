@@ -53,6 +53,7 @@ ocPortal is not designed to "cache everything as it will be displayed" because t
  - If you are optimising your server infrastructure to be able to handle large numbers of users don't forget to change the value of the "Maximum users" config option to something much higher!
  - Even though ocPortal supports various database vendors it is optimised for MySQL
  - Even though ocPortal supports various third party forums it is optimised for OCF
+ - Servers may have incorrectly firewalled DNS resolution, in which case the ocPortal "Spammer checking level" setting must be set to "Never" to avoid a 28 second timeout happening on each anti-spammer check.
 
 [title="2"]Persistent cache[/title]
 

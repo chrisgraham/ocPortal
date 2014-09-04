@@ -484,9 +484,9 @@ Always test a new importer and keep backups before actually running it on your d
 
 [title="3"]eCommerce[/title]
 
-For technical information about how eCommerce is achieved in ocPortal, including how products work, [page="docs:tut_ecommerce"]see the eCommerce tutorial[/page].
+For technical information about how eCommerce is achieved in ocPortal, including how products work, [page="docs:tut_ecommerce"]see the eCommerce tutorial[/page]. This tutorial goes into a lot of programming detail.
 
-The described eCommerce hooks have the following methods:
+For reference, the described eCommerce hooks have the following methods:
 [list]
 [*][tt]product_info[/tt]
 This is a custom function for hooks to report their products' information. It is an array, where each entry has a key that is the product codename and a value that is an array that gives the attributes of one product (the product type, the price, the name of the custom function, an array of product-type-specific details which is often empty, and the product title). See other hooks for examples. You need to implement this for the hook to be usable in any way. Once implemented you will be able to use the ocPortal 'purchase' module to see your hook's products, and select them for purchase.
