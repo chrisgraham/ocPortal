@@ -18,12 +18,12 @@
 			{+END}
 		</span>
 
-		{+START,IF_NON_EMPTY,{COMCODE}}
+		{+START,IF_NON_EMPTY,{COMCODE}}{+START,IF,{$NOT,{$_GET,overlay}}}
 			<div class="comcode_supported">
 				<input type="hidden" name="comcode__{$GET,randomised_id}" value="1" />
 				{COMCODE}
 			</div>
-		{+END}
+		{+END}{+END}
 
 		{+START,IF_PASSED,DESCRIPTION_SIDE}{+START,IF_NON_EMPTY,{DESCRIPTION_SIDE}}
 			<p class="associated_details">{DESCRIPTION_SIDE}</p>

@@ -422,7 +422,7 @@ function tz_time($time,$zone)
  */
 function get_timezone_list()
 {
-   return array(
+   $ret=array(
       'Pacific/Niue'=>'(UTC-11:00) Niue, Pago Pago',
       'Pacific/Midway'=>'(UTC-11:00) Midway Island, Samoa',
       'Pacific/Apia'=>'(UTC-11:00) Apia',
@@ -497,16 +497,16 @@ function get_timezone_list()
       'Atlantic/Azores'=>'(UTC-01:00) Azores',
       'Atlantic/Cape_Verde'=>'(UTC-01:00) Cape Verde Islands',
       'America/Scoresbysund'=>'(UTC-01:00) Scoresbysund',
-      'Africa/El_Aaiun'=>'(UTC) El Aaiun, St. Helena',
-      'Atlantic/Madeira'=>'(UTC) Madeira',
-      'Europe/London'=>'(UTC) Belfast, Dublin, Edinburgh, Lisbon, London',
+      'Africa/El_Aaiun'=>'(UTC+00:00) El Aaiun, St. Helena',
+      'Atlantic/Madeira'=>'(UTC+00:00) Madeira',
+      'Europe/London'=>'(UTC+00:00) Belfast, Dublin, Edinburgh, Lisbon, London',
       'UTC'=>'(UTC) No daylight saving',
-      'Africa/Abidjan'=>'(UTC) Abidjan, Accra, Bamako, Banjul, Bissau, Conakry',
-      'Africa/Dakar'=>'(UTC) Dakar, Danmarkshavn, Freetown, Lome, Nouakchott, Ouagadougou',
-      'Africa/Sao_Tome'=>'(UTC) Sao Tome',
-      'Africa/Monrovia'=>'(UTC) Monrovia, Reykjavik',
-      'Africa/Casablanca'=>'(UTC) Casablanca',
-      'Atlantic/Canary'=>'(UTC) Canary, Faroe',
+      'Africa/Abidjan'=>'(UTC+00:00) Abidjan, Accra, Bamako, Banjul, Bissau, Conakry',
+      'Africa/Dakar'=>'(UTC+00:00) Dakar, Danmarkshavn, Freetown, Lome, Nouakchott, Ouagadougou',
+      'Africa/Sao_Tome'=>'(UTC+00:00) Sao Tome',
+      'Africa/Monrovia'=>'(UTC+00:00) Monrovia, Reykjavik',
+      'Africa/Casablanca'=>'(UTC+00:00) Casablanca',
+      'Atlantic/Canary'=>'(UTC+00:00) Canary, Faroe',
       'Europe/Belgrade'=>'(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague',
       'Europe/Warsaw'=>'(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb',
       'Europe/Andorra'=>'(UTC+01:00) Andorra, Ceuta, Gibraltar, Luxembourg, Malta, Monaco',
@@ -600,7 +600,8 @@ function get_timezone_list()
       'Australia/Broken_Hill'=>'(UTC+09:30) Broken Hill',
       'Australia/Adelaide'=>'(UTC+09:30) Adelaide',
       'Antarctica/DumontDUrville'=>'(UTC+10:00) DumontDUrville, Saipan',
-      'Australia/Melbourne'=>'(UTC+10:00) Canberra, Melbourne, Sydney',
+      'Australia/Melbourne'=>'(UTC+10:00) Melbourne',
+      'Australia/Sydney'=>'(UTC+10:00) Canberra, Sydney',
       'Australia/Currie'=>'(UTC+10:00) Currie, Lindeman',
       'Australia/Brisbane'=>'(UTC+10:00) Brisbane',
       'Asia/Sakhalin'=>'(UTC+10:00) Sakhalin',
@@ -632,6 +633,24 @@ function get_timezone_list()
       'Pacific/Tongatapu'=>'(UTC+13:00) Nuku Alofa, Tongatapu',
       'Pacific/Kiritimati'=>'(UTC+14:00) Kiritimati'
    );
+
+	// Make shown times dynamic to consider DST etc
+	foreach ($ret as $zone=>$title)
+	{
+		$offset=(tz_time(time(),$zone)-time())/3600.0;
+		$new='(UTC';
+		$new.=($offset<0.0)?'-':'+';
+		$offset=abs($offset);
+		$hours=intval(floor($offset));
+		$new.=str_pad(strval($hours),2,'0',STR_PAD_LEFT);
+		$new.=':';
+		$new.=str_pad(strval(intval(floor(($hours-$offset)*60))),2,'0',STR_PAD_LEFT);
+		$new.=') ';
+		$title=preg_replace('#^\(UTC[+-]\d\d:\d\d\) #',$new,$title);
+		$ret[$zone]=$title;
+	}
+
+	return $ret;
 }
 
 /**

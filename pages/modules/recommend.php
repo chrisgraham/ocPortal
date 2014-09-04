@@ -479,41 +479,77 @@ class Module_recommend
 							}
 						} else
 						{
-							while (($csv_line=fgetcsv($myfile,10240,$del))!==false) // Reading a CSV record
-							{
-								$found_email_address='';
-								$found_name='';
+							require_code('type_validation');
 
-								foreach ($possible_email_fields as $field)
+							// Find e-mail
+							$email_field_index=mixed();
+							foreach ($possible_email_fields as $field)
+							{
+								foreach ($csv_header_line_fields as $i=>$header_field)
 								{
-									foreach ($csv_header_line_fields as $i=>$header_field)
+									if (strtolower($header_field)==strtolower($field))
 									{
-										if ((strtolower($header_field)==strtolower($field)) && (array_key_exists($i,$csv_line)) && ($csv_line[$i]!=''))
-										{
-											$found_email_address=$csv_line[$i];
-											$success_read=true;
-										}
+										$email_field_index=$i;
+										$success_read=true;
+										break 2;
+									}
+
+									// No header
+									if (is_valid_email_address($header_field))
+									{
+										$email_field_index=$i;
+										$success_read=true;
+										rewind($myfile);
+										break 2;
 									}
 								}
+							}
 
+							if ($success_read)
+							{
+								// Find name
+								$name_field_index=mixed();
 								foreach ($possible_name_fields as $field)
 								{
 									foreach ($csv_header_line_fields as $i=>$header_field)
 									{
-										if ((strtolower($header_field)==strtolower($field)) && (array_key_exists($i,$csv_line)) && ($csv_line[$i]!=''))
+										if ((strtolower($header_field)==strtolower($field)) && ($i!=$email_field_index))
 										{
-											$found_name=$csv_line[$i];
+											$name_field_index=$i;
+											break 2;
+										}
+									}
+								}
+								// Hmm, first one that is not the email then
+								if (is_null($name_field_index))
+								{
+									foreach ($csv_header_line_fields as $i=>$header_field)
+									{
+										if ($i!=$email_field_index)
+										{
+											$name_field_index=$i;
+											break;
 										}
 									}
 								}
 
-								if (strlen($found_email_address)>0)
+								// Go through all records
+								while (($csv_line=fgetcsv($myfile,10240,$del))!==false) // Reading a CSV record
 								{
-									//Add to the list what we've found
-									$fields->attach(form_input_tick($found_name,do_lang_tempcode('RECOMMENDING_TO_LINE',escape_html($found_name),escape_html($found_email_address)),'use_details_'.strval($email_counter),true));
-									$hidden->attach(form_input_hidden('details_email_'.strval($email_counter),$found_email_address));
-									$hidden->attach(form_input_hidden('details_name_'.strval($email_counter),$found_name));
-									$email_counter++;
+									if (empty($csv_line[$email_field_index])) continue;
+									if (empty($csv_line[$name_field_index])) continue;
+
+									$found_email_address=$csv_line[$email_field_index];
+									$found_name=ucwords($csv_line[$name_field_index]);
+
+									if (is_valid_email_address($found_email_address))
+									{
+										//Add to the list what we've found
+										$fields->attach(form_input_tick($found_name,do_lang_tempcode('RECOMMENDING_TO_LINE',escape_html($found_name),escape_html($found_email_address)),'use_details_'.strval($email_counter),true));
+										$hidden->attach(form_input_hidden('details_email_'.strval($email_counter),$found_email_address));
+										$hidden->attach(form_input_hidden('details_name_'.strval($email_counter),$found_name));
+										$email_counter++;
+									}
 								}
 							}
 						}
