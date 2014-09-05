@@ -38,7 +38,7 @@ class installsql_test_set extends ocp_test_case
 		$this->assertTrue(strpos($contents,' ENGINE=MEMORY')===false,' ENGINE=HEAP');
 
 		// Not with bundled addons
-		$this->assertTrue(strpos($contents,'CREATE TABLE `ocp_workflow_requirements`')===false,'Contains non-bundled addons');
+		$this->assertTrue(strpos($contents,'CREATE TABLE `ocp_workflow_')===false,'Contains non-bundled addons');
 
 		// Not with wrong table prefixes / multiple installs
 		$this->assertTrue(preg_match('#\`ocp\d+\_#',$contents)==0,'Contains a prefixed install');

@@ -25,7 +25,7 @@ class Hook_page_groupings_workflows
 	function run($member_id=NULL,$extensive_docs=false)
 	{
 		return array(
-			array('setup','menu/workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('workflows:WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflow_requirements','COUNT(DISTINCT workflow_name)'))))),'workflows:DOC_WORKFLOWS'),
+			array('setup','menu/workflows',array('admin_workflow',array('type'=>'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('workflows:WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflows','COUNT(*)'))))),'workflows:DOC_WORKFLOWS'),
 		);
 	}
 }

@@ -106,7 +106,7 @@ class ocp_merge_test_set extends ocp_test_case
 			'workflow_content',
 			'workflow_content_status',
 			'workflow_permissions',
-			'workflow_requirements',
+			'workflow_approval_points',
 
 			// You should process orders before importing
 			'shopping_cart',
