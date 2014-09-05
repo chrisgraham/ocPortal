@@ -948,7 +948,12 @@ class standard_crud_module
 
 				$description->attach(paragraph(do_lang_tempcode('SUBMIT_UNVALIDATED')));
 			}
-			give_submit_points($this->doing);
+			$submitter=get_member();
+			if (method_exists($this,'get_submitter'))
+			{
+				list($submitter,)=$this->get_submitter($id);
+			}
+			give_submit_points($this->doing,$submitter);
 		}
 
 		if (addon_installed('awards'))
