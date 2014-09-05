@@ -541,7 +541,7 @@ function do_lang_tempcode($lang_string,$token1=NULL,$token2=NULL,$token3=NULL)
 }
 
 /**
- * Get a Tempcoded version of a normal XHTML template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the Tempcode attach method.
+ * Get a Tempcoded version of an ocPortal template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the Tempcode attach method.
  *
  * @param  ID_TEXT			The codename of the template being loaded
  * @param  ?array				A map of parameters for the template (key to value) (NULL: no parameters)

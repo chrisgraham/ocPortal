@@ -54,7 +54,14 @@ class Hook_page_stats
 			$delete_older_than=intval(get_option('stats_store_time'));
 
 			require_code('form_templates');
-			$fields=form_input_integer(do_lang_tempcode('DPLU_DAYS'),do_lang_tempcode('DESCRIPTION_DELETE_DAYS'),'delete_older_than',$delete_older_than,true);
+
+			$fields=new ocp_tempcode();
+			$fields->attach(form_input_integer(do_lang_tempcode('DPLU_DAYS'),do_lang_tempcode('DESCRIPTION_DELETE_DAYS'),'delete_older_than',$delete_older_than,true));
+			if ((addon_installed('search')) && ($GLOBALS['SITE_DB']->query_select_value('searches_logged','COUNT(*)')>10000))
+			{
+				$fields->attach(form_input_tick(do_lang_tempcode('DELETE_SEARCH_STATS'),do_lang_tempcode('DESCRIPTION_DELETE_SEARCH_STATS'),'search_stats',false));
+			}
+
 			$post_url=get_self_url(false,false,NULL,false,true);
 			$submit_name=do_lang_tempcode('DELETE');
 			$hidden=build_keep_post_fields();
@@ -117,6 +124,11 @@ class Hook_page_stats
 		@unlink($install_php_file);
 
 		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'stats WHERE date_and_time<'.strval(time()-60*60*24*$delete_older_than));
+
+		if ((addon_installed('search')) && (post_param_integer('search_stats',0)==1))
+		{
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'searches_logged WHERE s_time<'.strval(time()-60*60*24*$delete_older_than));
+		}
 
 		return do_template('CLEANUP_PAGE_STATS',array('_GUID'=>'1df213eee7c5c6b97168e5a34e92d3b0','STATS_BACKUP_URL'=>$stats_backup_url));
 	}
