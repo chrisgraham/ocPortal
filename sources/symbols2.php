@@ -3169,3 +3169,35 @@ function ecv2_LOOP(&$value,$lang,$escaped,$param)
 		}
 	}
 }
+
+/**
+ * Evaluate a particular Tempcode directive.
+ *
+ * @param  string				Value to write into.
+ * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array				Array of escaping operations.
+ * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ */
+function ecv2_MATURITY_FILTER_REQUESTED(&$value,$lang,$escaped,$param)
+{
+	$safe='';
+	if (function_exists('apache_request_headers'))
+	{
+		$headers=apache_request_headers();
+		if (array_key_exists('prefer',$headers))
+		{
+			$safe=$headers['prefer'];
+		}
+	} elseif (isset($_SERVER['HTTP_PREFER']))
+	{
+		$safe=$_SERVER['HTTP_PREFER'];
+	} elseif (isset($_ENV['HTTP_PREFER']))
+	{
+		$safe=$_ENV['HTTP_PREFER'];
+	}
+	if (strtolower($safe)=='safe')
+	{
+		return '1';
+	}
+	return '0';
+}
