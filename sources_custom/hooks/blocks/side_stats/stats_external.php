@@ -118,7 +118,7 @@ function HashURL($string)
 	$check1=(($check1>>4) & 0x3FFC00) | ($check1&0x3FF);
 	$check1=(($check1>>4) & 0x3C000) | ($check1&0x3FFF);	
 
-	$t=(((($check1&0x3C0)<<4) | ($check1&0x3C)) <<2) | ($check2&0xF0F);
+	$t1=(((($check1&0x3C0)<<4) | ($check1&0x3C)) <<2) | ($check2&0xF0F);
 	$t2=@(((($check1&0xFFFFC000)<<4) | ($check1 & 0x3C00))<<0xA) | ($check2&0xF0F0000);
 
 	return ($t1 | $t2);

@@ -78,6 +78,7 @@ class Module_admin
 		$type=get_param('type','misc');
 
 		require_code('menus');
+		require_lang('zones');
 
 		switch ($type)
 		{
@@ -479,7 +480,7 @@ class Module_admin
 				require_code('hooks/systems/page_groupings/'.filter_naughty_harsh($hook));
 				$object=object_factory('Hook_page_groupings_'.filter_naughty_harsh($hook),true);
 				if (is_null($object)) continue;
-				$info=$object->run(true);
+				$info=$object->run(NULL,true);
 				foreach ($info as $i)
 				{
 					if (is_null($i)) continue;

@@ -59,7 +59,7 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_
  * @param  MEMBER			The owner of the post.
  * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a Private Topic).
  * @param  ?MEMBER		The member (NULL: current member).
- * @param  ?boolean		Whether the topic the post is in closed (NULL: don't consider this, maybe we're not considering any one specific case).
+ * @param  ?boolean		Whether the topic the post is in is closed (NULL: don't consider this, maybe we're not considering any one specific case).
  * @return boolean		The answer.
  */
 function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL,$topic_is_closed=NULL)
