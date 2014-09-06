@@ -1996,7 +1996,7 @@ function step_7()
 	$addons=find_all_hooks('systems','addon_registry');
 	foreach ($addons as $addon=>$place)
 	{
-		if ($place=='sources_custom') continue;
+		//if ($place=='sources_custom') continue;	Now we are actually installing custom addons too
 
 		reinstall_addon_soft($addon);
 		$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'9fafb3dd014d589fcc057bba54fc4ag3','SOMETHING'=>do_lang_tempcode('INSTALL_ADDON',escape_html($addon)))));

@@ -222,6 +222,8 @@ class Hook_addon_registry_oc_purrrr
 	 */
 	function install($upgrade_from=NULL)
 	{
+		if (!module_installed('iotds')) return;
+
 		if (is_null($upgrade_from))
 		{
 			require_lang('iotds');
