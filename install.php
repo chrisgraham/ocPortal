@@ -975,6 +975,10 @@ function step_5()
 		$_POST['ocf_table_prefix']=array_key_exists('table_prefix',$_POST)?$_POST['table_prefix']:'ocp_';
 	}
 
+	// Checkbox fields that need to be explicitly saved, as the default is not 0
+	$multi_lang_content=post_param_integer('multi_lang_content',0);
+	if ($multi_lang_content==0) $_POST['multi_lang_content']='0';
+
 	// Check cookie settings. IF THIS CODE IS CHANGED ALSO CHANGE COPY&PASTED CODE IN CONFIG_EDITOR.PHP
 	$cookie_path=post_param('cookie_path');
 	$cookie_domain=trim(post_param('cookie_domain'));

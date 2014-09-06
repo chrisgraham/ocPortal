@@ -1009,7 +1009,8 @@ class standard_crud_module
 		{
 			$orderer=$select_field;
 		}
-		$table=(is_null($this->table)?$this->module_type:$this->table).' r';
+		$table_raw=(is_null($this->table)?$this->module_type:$this->table);
+		$table=$table_raw.' r';
 		$db=((substr($table,0,2)=='f_') && (!$force_site_db) && (get_forum_type()!='none'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
 		if (($orderer_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
 		{
@@ -1020,11 +1021,11 @@ class standard_crud_module
 			$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		}
-		$max_rows=$db->query_select_value($table.$join,'COUNT(*)',$where,'ORDER BY '.$orderer);
+		$max_rows=$db->query_select_value($table.$join,'COUNT(*)',$where,'ORDER BY '.$orderer,false,$GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw]);
 		if ($max_rows==0) return array(array(),0);
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
-		$rows=$db->query_select($table.$join,array('r.*'),$where,'ORDER BY '.$orderer,$max,$start);
+		$rows=$db->query_select($table.$join,array('r.*'),$where,'ORDER BY '.$orderer,$max,$start,false,$GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw]);
 		if ($force_site_db)
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;

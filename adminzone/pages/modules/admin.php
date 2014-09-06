@@ -197,6 +197,7 @@ class Module_admin
 			array('import','convert','migrate','upload'),
 			array('occle','console','command prompt','command line','cle'),
 			array('export','download'),
+			array('cpfs','cpf','fields'),
 			array('counting_blocks','hit counter'),
 			array('email','e-mail','ocf_contact_member'),
 			array('center','centre'),

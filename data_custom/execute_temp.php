@@ -53,6 +53,6 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('addons2');
-	reinstall_addon_soft('referrals');
+	$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'adminzone'),'',1);
+	$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'cms'),'',1);
 }
