@@ -126,6 +126,9 @@ class Module_awards
 
 		foreach ($award_types as $award_type_row)
 		{
+			if ((!file_exists(get_file_base().'/sources/hooks/systems/awards/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')) && (!file_exists(get_file_base().'/sources_custom/hooks/systems/awards/'.filter_naughty_harsh($award_type_row['a_content_type']).'.php')))
+				continue;
+
 			require_code('hooks/systems/awards/'.filter_naughty_harsh($award_type_row['a_content_type']),true);
 			$object=object_factory('Hook_awards_'.$award_type_row['a_content_type']);
 			$info=$object->info();

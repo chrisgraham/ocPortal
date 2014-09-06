@@ -224,7 +224,8 @@ class Hook_addon_registry_pointstore
 			lorem_globalise(
 				do_lorem_template('POINTSTORE_LOG_SCREEN',array(
 					'TITLE'=>lorem_title(),
-					'CONTENT'=>$content
+					'CONTENT'=>$content,
+					'PAGINATION'=>placeholder_pagination(),
 				)
 			),NULL,'',true),
 		);

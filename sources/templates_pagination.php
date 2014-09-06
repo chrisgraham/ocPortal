@@ -213,7 +213,7 @@ function pagination($title,$category_id,$start,$start_name,$max,$max_name,$max_r
 				$hidden=new ocp_tempcode();
 				$hidden->attach(form_input_hidden($max_name,strval($max)));
 				$hidden->attach(form_input_hidden('page',get_page_name()));
-				$hidden->attach(form_input_hidden('type',$type));
+				if (!is_null($type)) $hidden->attach(form_input_hidden('type',$type));
 			}
 			$pages_list=do_template('PAGINATION_LIST_PAGES',array('_GUID'=>'9e1b394763619433f23b8ed95f5ac134','URL'=>$get_url,'HIDDEN'=>$hidden,'START_NAME'=>$start_name,'LIST'=>$list));
 		} else

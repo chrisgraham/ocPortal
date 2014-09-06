@@ -83,12 +83,16 @@ class Module_admin_pointstore
 	 */
 	function pointstore_log_interface()
 	{
+		$title=get_screen_title('POINTSTORE_MANAGE_SALES');
+
 		$also_url=build_url(array('page'=>'_SELF','type'=>'p'),'_SELF');
 		attach_message(do_lang_tempcode('ALSO_SEE_SETUP',escape_html($also_url->evaluate())),'inform');
 
-		$title=get_screen_title('POINTSTORE_MANAGE_SALES');
+		$max=get_param_integer('max',50);
+		$start=get_param_integer('start',0);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('sales',array('*'),NULL,'ORDER BY date_and_time DESC');
+		$rows=$GLOBALS['SITE_DB']->query_select('sales',array('*'),NULL,'ORDER BY date_and_time DESC',$max,$start);
+		$max_rows=$GLOBALS['SITE_DB']->query_value('sales','COUNT(*)');
 		$out=new ocp_tempcode();
 		require_code('templates_results_table');
 		require_code('templates_columned_table');
@@ -148,7 +152,10 @@ class Module_admin_pointstore
 
 		$content=do_template('COLUMNED_TABLE',array('_GUID'=>'d87800ff26e9e5b8f7593fae971faa73','HEADER_ROW'=>$header_row,'ROWS'=>$out));
 
-		return do_template('POINTSTORE_LOG_SCREEN',array('_GUID'=>'014cf9436ece951edb55f2f7b0efb597','TITLE'=>$title,'CONTENT'=>$content));
+		require_code('templates_pagination');
+		$pagination=pagination(do_lang('POINTSTORE_MANAGE_SALES'),NULL,$start,'start',$max,'max',$max_rows,NULL,'misc');
+
+		return do_template('POINTSTORE_LOG_SCREEN',array('_GUID'=>'014cf9436ece951edb55f2f7b0efb597','TITLE'=>$title,'CONTENT'=>$content,'PAGINATION'=>$pagination));
 	}
 
 	/**
