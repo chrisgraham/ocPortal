@@ -59,9 +59,10 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_
  * @param  MEMBER			The owner of the post.
  * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a Private Topic).
  * @param  ?MEMBER		The member (NULL: current member).
+ * @param  ?boolean		Whether the topic the post is in closed (NULL: don't consider this, maybe we're not considering any one specific case).
  * @return boolean		The answer.
  */
-function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL)
+function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL,$topic_is_closed=NULL)
 {
 	if (is_null($member_id)) $member_id=get_member();
 
@@ -77,6 +78,11 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL)
 		{
 			if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
 		}
+	}
+
+	if ($topic_is_closed===true)
+	{
+		if (!ocf_may_moderate_forum($forum_id,$member_id)) return false;
 	}
 
 	return has_edit_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));

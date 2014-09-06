@@ -123,7 +123,10 @@ function ocf_edit_post($post_id,$validated,$title,$post,$skip_sig,$is_emphasised
 		ocf_check_post($post);
 
 	if ($check_perms)
-		if (!ocf_may_edit_post_by($post_owner,$forum_id)) access_denied('I_ERROR');
+	{
+		$closed=($GLOBALS['FORUM_DB']->query_select_value('f_topics','t_is_open',array('id'=>$topic_id))==0);
+		if (!ocf_may_edit_post_by($post_owner,$forum_id,NULL,$closed)) access_denied('I_ERROR');
+	}
 	if ((is_null($validated)) || ($validated==1))
 	{
 		if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_lowrange_content','topics',array('forums',$forum_id)))) $validated=0; else $validated=1;

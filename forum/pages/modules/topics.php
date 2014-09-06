@@ -2798,11 +2798,13 @@ END;
 		if (!array_key_exists(0,$post_details)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
 		$forum_id=$post_details[0]['p_cache_forum_id'];
-		if (!ocf_may_edit_post_by($post_details[0]['p_poster'],$forum_id))
-			access_denied('I_ERROR');
 
 		$topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$post_details[0]['p_topic_id']),'',1);
 		if (!array_key_exists(0,$topic_info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+
+		if (!ocf_may_edit_post_by($post_details[0]['p_poster'],$forum_id,NULL,$topic_info[0]['t_is_open']==0))
+			access_denied('I_ERROR');
+
 		$this->handle_topic_breadcrumbs($forum_id,$post_details[0]['p_topic_id'],$topic_info[0]['t_cache_first_title'],do_lang_tempcode('EDIT_POST'));
 
 		if (($topic_info[0]['t_cache_first_post_id']==$post_id) && ((ocf_may_moderate_forum($topic_info[0]['t_forum_id'])) || ($topic_info[0]['t_cache_first_member_id']==get_member())))

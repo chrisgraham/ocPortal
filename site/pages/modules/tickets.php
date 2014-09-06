@@ -471,9 +471,17 @@ class Module_tickets
 				$renderer->_inject_posts_for_scoring_algorithm($_comments);
 				$renderer->topic_id=$topic_id;
 
+				$topic_info=mixed();
+				if (get_forum_type()=='ocf')
+				{
+					$_topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1)
+					if (!array_key_exists(0,$_topic_info)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+					$topic_info=$_topic_info[0];
+				}
+
 				// Posts
 				$max_thread_depth=get_param_integer('max_thread_depth',intval(get_option('max_thread_depth')));
-				list($comments,$serialized_options,$hash)=$renderer->render_posts($num_to_show_limit,$max_thread_depth,true,$ticket_owner,array(),$forum);
+				list($comments,$serialized_options,$hash)=$renderer->render_posts($num_to_show_limit,$max_thread_depth,true,$ticket_owner,array(),$forum,$topic_info);
 
 				// Pagination
 				if (!$renderer->is_threaded)

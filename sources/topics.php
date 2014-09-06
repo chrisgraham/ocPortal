@@ -149,8 +149,16 @@ class OCP_Topic
 
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 
+			$topic_info=mixed();
+			if (get_forum_type()=='ocf')
+			{
+				$_topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
+				if (!array_key_exists(0,$_topic_info)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+				$topic_info=$_topic_info[0];
+			}
+
 			// Posts
-			list($posts,$serialized_options,$hash)=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id);
+			list($posts,$serialized_options,$hash)=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$topic_info);
 
 			// Pagination
 			$pagination=NULL;
@@ -276,8 +284,16 @@ class OCP_Topic
 
 			$forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
 
+			$topic_info=mixed();
+			if (get_forum_type()=='ocf')
+			{
+				$_topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
+				if (!array_key_exists(0,$_topic_info)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+				$topic_info=$_topic_info[0];
+			}
+
 			// Render
-			$rendered=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$parent_id,true);
+			$rendered=$this->render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$topic_info,$parent_id,true);
 			$ret=$rendered[0];
 			return $ret;
 		}
@@ -430,11 +446,12 @@ class OCP_Topic
 	 * @param  ?MEMBER		Member to highlight the posts of (NULL: none)
 	 * @param  array			Review ratings rows
 	 * @param  AUTO_LINK		ID of forum this topic in in
+	 * @param  ?array			The topic row (NULL: not running OCF).
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  boolean		Whether to just render everything as flat (used when doing AJAX post loading). NOT actually used since we wrote better post-orphaning-fixing code.
 	 * @return array			Tuple: Rendered topic, serialized options to render more posts, secure hash of serialized options to prevent tampering
 	 */
-	function render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$parent_post_id=NULL,$maybe_missing_links=false)
+	function render_posts($num_to_show_limit,$max_thread_depth,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$topic_info,$parent_post_id=NULL,$maybe_missing_links=false)
 	{
 		require_code('feedback');
 
@@ -514,7 +531,7 @@ class OCP_Topic
 			$tree=array($posts);
 		}
 
-		$ret=$this->_render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id);
+		$ret=$this->_render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$topic_info);
 
 		$other_ids=mixed();
 		if ($this->is_threaded)
@@ -750,10 +767,11 @@ class OCP_Topic
 	 * @param  ?AUTO_LINK	Only show posts under here (NULL: show posts from root)
 	 * @param  array			Review ratings rows
 	 * @param  AUTO_LINK		ID of forum this topic in in
+	 * @param  ?array			The topic row (NULL: not running OCF).
 	 * @param  integer		The recursion depth
 	 * @return tempcode		Rendered tree structure
 	 */
-	function _render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$depth=0)
+	function _render_post_tree($num_to_show_limit,$tree,$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$topic_info,$depth=0)
 	{
 		list($rendered,)=$tree;
 		$sequence=new ocp_tempcode();
@@ -763,7 +781,7 @@ class OCP_Topic
 			{
 				require_code('ocf_topicview');
 				require_code('ocf_posts');
-				$post+=ocf_get_details_to_show_post($post);
+				$post+=ocf_get_details_to_show_post($post,$topic_info);
 			}
 
 			// Misc details
@@ -930,7 +948,7 @@ class OCP_Topic
 				}
 				if ($this->is_threaded)
 				{
-					$children=$this->_render_post_tree($num_to_show_limit,$post['children'],$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$depth+1);
+					$children=$this->_render_post_tree($num_to_show_limit,$post['children'],$may_reply,$highlight_by_member,$all_individual_review_ratings,$forum_id,$topic_info,$depth+1);
 				}
 			}
 

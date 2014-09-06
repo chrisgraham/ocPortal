@@ -101,10 +101,11 @@ function find_first_unread_url($id)
  * Turn a post row, into a detailed map of information that is suitable for use as display parameters for that post.
  *
  * @param  array		The post row.
+ * @param  array		The topic row.
  * @param  boolean	Whether the post is the only post in the topic.
  * @return array		The detailed map.
  */
-function ocf_get_details_to_show_post($_postdetails,$only_post=false)
+function ocf_get_details_to_show_post($_postdetails,$topic_info,$only_post=false)
 {
 	$forum_id=$_postdetails['p_cache_forum_id'];
 
@@ -219,7 +220,7 @@ function ocf_get_details_to_show_post($_postdetails,$only_post=false)
 
 	// Do we have any special controls over this post?
 	require_code('ocf_posts');
-	if (ocf_may_edit_post_by($_postdetails['p_poster'],$forum_id)) $post['may_edit']=true;
+	if (ocf_may_edit_post_by($_postdetails['p_poster'],$forum_id,NULL,$topic_info['t_is_open']==0)) $post['may_edit']=true;
 	if ((ocf_may_delete_post_by($_postdetails['p_poster'],$forum_id)) && (!$only_post)) $post['may_delete']=true;
 
 	// More
@@ -500,7 +501,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			}
 
 			// Put together
-			$collated_post_details=ocf_get_details_to_show_post($_postdetails,($start==0) && (count($_postdetailss)==1));
+			$collated_post_details=ocf_get_details_to_show_post($_postdetails,$topic_info,($start==0) && (count($_postdetailss)==1));
 			$collated_post_details['is_spacer_post']=$is_spacer_post;
 			$posts[]=$collated_post_details;
 
