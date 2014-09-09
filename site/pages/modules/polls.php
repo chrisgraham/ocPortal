@@ -35,7 +35,7 @@ class Module_polls
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=5;
+		$info['version']=6;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -152,6 +152,11 @@ class Module_polls
 				}
 			}
 			$GLOBALS['SITE_DB']->delete_table_field('poll','ip');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			$GLOBALS['SITE_DB']->create_index('poll','#poll_search__combined',array('question','option1','option2','option3','option4','option5'));
 		}
 	}
 

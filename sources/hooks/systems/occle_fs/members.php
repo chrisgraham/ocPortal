@@ -114,7 +114,7 @@ class Hook_occle_fs_members
 			{
 				$i=intval(substr($_i,strlen('field_')));
 				$cpf_value=$member_custom_fields['field_'.strval($i)];
-				$cpf_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('f_custom_fields','cf_name',array('id'=>$i)));
+				$cpf_name=get_translated_text($GLOBALS['SITE_DB']->query_select_value('f_custom_fields','cf_name',array('id'=>$i)),$GLOBALS['FORUM_DB']);
 				$listing[]=array(
 					$cpf_name,
 					OCCLEFS_FILE,

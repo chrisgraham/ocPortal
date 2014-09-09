@@ -1565,7 +1565,7 @@ function ocf_member_choose_signature($new_signature,$member_id=NULL)
 
 	$_signature=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_signature');
 
-	if (get_translated_text($_signature)==$new_signature) return;
+	if (get_translated_text($_signature,$GLOBALS['FORUM_DB'])==$new_signature) return;
 
 	require_code('attachments2');
 	require_code('attachments3');

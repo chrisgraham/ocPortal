@@ -403,7 +403,8 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	$keep_actual=array();
 	if (($HAS_KEEP_IN_URL_CACHE===NULL) || ($HAS_KEEP_IN_URL_CACHE) || ($keep_all))
 	{
-		$mc=get_magic_quotes_gpc();
+		static $mc=NULL;
+		if ($mc===NULL) $mc=get_magic_quotes_gpc();
 
 		$keep_cant_use=array();
 		$HAS_KEEP_IN_URL_CACHE=false;

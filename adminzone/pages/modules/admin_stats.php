@@ -1410,17 +1410,20 @@ class Module_admin_stats
 			$data=fgets($file,1024);
 			if ($i>=$position)
 			{
-				$_data=explode(',',$data);
-				if (count($_data)==3)
+				if ($data!==false)
 				{
-					$to_insert['begin_num'][]=$_data[0]; // FUDGEFUDGE. Intentionally passes in as strings, to workaround problem in PHP integer sizes (can't store unsigned data type)
-					$to_insert['end_num'][]=$_data[1];
-					$to_insert['country'][]=substr($_data[2],0,2);
-
-					if (count($to_insert['begin_num'])==100)
+					$_data=explode(',',$data);
+					if (count($_data)==3)
 					{
-						$GLOBALS['SITE_DB']->query_insert('ip_country',$to_insert);
-						$to_insert=array('begin_num'=>array(),'end_num'=>array(),'country'=>array());
+						$to_insert['begin_num'][]=$_data[0]; // FUDGEFUDGE. Intentionally passes in as strings, to workaround problem in PHP integer sizes (can't store unsigned data type)
+						$to_insert['end_num'][]=$_data[1];
+						$to_insert['country'][]=substr($_data[2],0,2);
+
+						if (count($to_insert['begin_num'])==100)
+						{
+							$GLOBALS['SITE_DB']->query_insert('ip_country',$to_insert);
+							$to_insert=array('begin_num'=>array(),'end_num'=>array(),'country'=>array());
+						}
 					}
 				}
 			}

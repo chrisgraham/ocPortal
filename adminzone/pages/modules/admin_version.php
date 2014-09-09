@@ -651,7 +651,7 @@ class Module_admin_version
 			{
 				foreach ($fields as $field)
 				{
-					$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta SET m_type=m_type+\'__COMCODE\' WHERE '.db_string_equal_to('m_table',$table).' AND '.db_string_equal_to('m_name',$field));
+					$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta SET m_type=CONCAT(m_type,\'__COMCODE\') WHERE '.db_string_equal_to('m_table',$table).' AND '.db_string_equal_to('m_name',$field));
 				}
 			}
 
@@ -749,6 +749,8 @@ class Module_admin_version
 				'p_submitter'=>$admin_user,
 				'p_show_as_edit'=>0
 			));
+
+			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','#page_search__combined',array('cc_page_title','string_index'));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))

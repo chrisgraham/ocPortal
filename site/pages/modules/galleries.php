@@ -217,6 +217,10 @@ class Module_galleries
 		if ((is_null($upgrade_from)) || ($upgrade_from<10))
 		{
 			$GLOBALS['SITE_DB']->create_index('video_transcoding','t_local_id',array('t_local_id'));
+
+			$GLOBALS['SITE_DB']->create_index('galleries','#gallery_search__combined',array('fullname','description'));
+			$GLOBALS['SITE_DB']->create_index('images','#image_search__combined',array('description','title'));
+			$GLOBALS['SITE_DB']->create_index('videos','#video_search__combined',array('description','title'));
 		}
 	}
 

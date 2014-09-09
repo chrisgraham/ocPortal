@@ -612,7 +612,7 @@ function ocf_cache_member_details($members)
 			// Signature
 			if ((get_page_name()!='search') && (!is_null($row['m_signature'])) && ($row['m_signature']!=='') && ($row['m_signature']!==0))
 			{
-				$SIGNATURES_CACHE[$row['id']]=get_translated_tempcode('f_members',$row,'m_signature');
+				$SIGNATURES_CACHE[$row['id']]=get_translated_tempcode('f_members',$row,'m_signature',$GLOBALS['FORUM_DB']);
 			}
 		}
 		foreach ($member_rows_2 as $row)

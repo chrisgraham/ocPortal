@@ -35,7 +35,7 @@ class Module_news
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=7;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -144,6 +144,11 @@ class Module_news
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_ititle',array('title'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnews',array('news'));
 			$GLOBALS['SITE_DB']->create_index('news','ftjoin_nnewsa',array('news_article'));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<7))
+		{
+			$GLOBALS['SITE_DB']->create_index('news','#news_search__combined',array('title','news','news_article'));
 		}
 	}
 

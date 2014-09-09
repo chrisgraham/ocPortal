@@ -53,7 +53,7 @@ function find_member_subscriptions($member_id,$usergroup_subscriptions_only=fals
 				$usergroup_rows=$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id'=>$usergroup_id),'',1);
 				if (!array_key_exists(0,$usergroup_rows)) continue;
 				$usergroup_row=$usergroup_rows[0];
-				$usergroup_name=get_translated_text($usergroup_row['g_name']);
+				$usergroup_name=get_translated_text($usergroup_row['g_name'],$GLOBALS['FORUM_DB']);
 
 				$item_name=$usergroup_subscription_title;
 			} else

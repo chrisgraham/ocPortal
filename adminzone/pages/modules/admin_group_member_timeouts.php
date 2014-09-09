@@ -116,7 +116,7 @@ class Module_admin_group_member_timeouts
 				$usergroups=array();
 				foreach ($_usergroups as $g)
 				{
-					$usergroups[$g['id']]=get_translated_text($g['g_name']);
+					$usergroups[$g['id']]=get_translated_text($g['g_name'],$GLOBALS['FORUM_DB']);
 				}
 			} else
 			{

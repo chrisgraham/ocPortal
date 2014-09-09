@@ -37,6 +37,8 @@ Then the OcCLE command required is:
 :require_code('database_multi_lang_conv'); enable_content_translation();
 [/code]
 
+Depending on the size of your database, the command could take hours to run. You can monitor it progress through tables via MySQL ([tt]SHOW FULL PROCESSLIST[/tt]).
+
 To understand what the content translation can do, and how it works, we need to consider the following cases:
 1) Sending newsletters
 2) Editing theme images

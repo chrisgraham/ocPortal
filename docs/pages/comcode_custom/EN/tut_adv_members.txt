@@ -139,7 +139,8 @@ As long as you have the newsletters addon installed, welcome emails will piggy-b
 
 [title="2"]CSV files[/title]
 
-You can use [abbr="Comma-Separated-Values"]CSV[/abbr] files to put member data into your website, or to export it. This functionality is available from the 'Tools' section of the Admin Zone. There is full support for auto-creation of usergroups and custom profile fields as required to get the data imported.
+You can use [abbr="Comma-Separated-Values"]CSV[/abbr] files to put member data into your website, or to export it. There is full support for auto-creation of usergroups and custom profile fields as required to get the data imported.
+To know the format to import with, it's best to do an export first.
 
 [title="2"]Implicit usergroups and external usergroup listings[/title]
 

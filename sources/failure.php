@@ -258,8 +258,15 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
 
 	if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) // Don't display - die as normal
 	{
+		$error_str='PHP '.strtoupper($type).' ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline);
+
+		if ($type=='error')
+		{
+			critical_error('EMERGENCY',escape_html($error_str));
+		}
+
 		@ini_set('display_errors','0');
-		fatal_exit('PHP '.strtoupper($type).' ['.strval($errno).'] '.$errstr.' in '.$errfile.' on line '.strval($errline));
+		fatal_exit($error_str);
 	} else
 	{
 		require_code('site');

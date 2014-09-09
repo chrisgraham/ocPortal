@@ -115,7 +115,7 @@ class Hook_cart_orders
 
 			foreach ($orders as $order)
 			{			
-				$products[do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang())]=array(PRODUCT_ORDERS,$order['tot_price'],'handle_product_orders',array(),do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang()));
+				$products[do_lang('shopping:CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang())]=array(PRODUCT_ORDERS,$order['tot_price'],'handle_product_orders',array(),do_lang('CART_ORDER',strval($order['id']),NULL,NULL,$site_lang?get_site_default_lang():user_lang()));
 			}
 
 			$start+=500;

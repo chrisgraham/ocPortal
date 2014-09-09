@@ -278,16 +278,29 @@ class Module_vforums
 			}
 			if (!is_guest())
 				$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON (top.id=l.l_topic_id AND l.l_member_id='.strval(get_member()).')';
+			if (!multi_lang_content())
+			{
+				$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=top.t_cache_first_post_id';
+			}
 			$query.=' WHERE (('.$_condition.')'.$extra.') AND t_forum_id IS NOT NULL';
 			$_query=$query;
 			if ((can_arbitrary_groupby()) && (!is_null($initial_table))) $query.=' GROUP BY top.id';
 			$query.=' ORDER BY '.$order;
-			if (($start<200) && (is_null($initial_table)) && (multi_lang_content()))
+			$full_query='SELECT top.*,'.(is_guest()?'NULL as l_time':'l_time');
+			if (multi_lang_content())
 			{
-				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,'.(is_guest()?'NULL as l_time':'l_time').$query,$max,$start,NULL,NULL,false,false,array('t_cache_first_post'=>'?LONG_TRANS__COMCODE')));
+				$full_query.=',t_cache_first_post AS p_post';
 			} else
 			{
-				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query('SELECT top.*,'.(is_guest()?'NULL as l_time':'l_time').$query,$max,$start));
+				$full_query.=',p_post,p_post__text_parsed,p_post__source_user';
+			}
+			$full_query.=$query;
+			if (($start<200) && (is_null($initial_table)) && (multi_lang_content()))
+			{
+				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query($full_query,$max,$start,NULL,NULL,false,false,array('t_cache_first_post'=>'?LONG_TRANS__COMCODE')));
+			} else
+			{
+				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query($full_query,$max,$start));
 			}
 			if ((can_arbitrary_groupby()) && (!is_null($initial_table)))
 			{

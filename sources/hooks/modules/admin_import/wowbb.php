@@ -623,7 +623,7 @@ class Hook_wowbb
 					import_id_remap_put('post_files',strval($row['attachment_id']),1);
 					continue; // Orphaned post
 				}
-				$post=get_translated_text($post_row[0]['p_post']);
+				$post=get_translated_text($post_row[0]['p_post'],$GLOBALS['SITE_DB']);
 				$member_id=import_id_remap_get('member',strval($row['user_id']),true);
 				if (is_null($member_id)) $member_id=$post_row[0]['p_poster'];
 

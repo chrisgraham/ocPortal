@@ -43,7 +43,7 @@ class Hook_other
 	function get_products($site_lang=false)
 	{
 		$products=array(
-			'OTHER'=>array(PRODUCT_OTHER,'?','',array(),do_lang('CUSTOM_PRODUCT_OTHER',NULL,NULL,NULL,$site_lang?get_site_default_lang():user_lang())),
+			'OTHER'=>array(PRODUCT_OTHER,'?','',array(),do_lang('ecommerce:CUSTOM_PRODUCT_OTHER',NULL,NULL,NULL,$site_lang?get_site_default_lang():user_lang())),
 		);
 		return $products;
 	}

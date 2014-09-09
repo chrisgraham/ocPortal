@@ -432,6 +432,11 @@ class Module_catalogues
 		{
 			$GLOBALS['SITE_DB']->add_table_field('catalogues','c_default_review_freq','?INTEGER',NULL);
 		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<9))
+		{
+			$GLOBALS['SITE_DB']->create_index('catalogue_categories','#cat_cat_search__combined',array('cc_title','cc_description'));
+		}
 	}
 
 	/**

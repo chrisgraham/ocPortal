@@ -114,7 +114,7 @@ function _check_sizes($primary_key,$fields,$id_name,$skip_size_check=false,$skip
 		if (in_array(strtoupper($name),$keywords)) fatal_exit($name.' is a keyword');
 		if ((preg_match('#^[\w]+$#',$name)==0) || (strlen($name)>DB_MAX_FIELD_IDENTIFIER_SIZE)) fatal_exit('Inappropriate identifier: '.$name);
 	}
-	if (!$skip_size_check)
+	if ((!$skip_size_check) && (substr($id_name,0,1)!='#'))
 	{
 		if ($key_size>=($primary_key?DB_MAX_PRIMARY_KEY_SIZE:DB_MAX_KEY_SIZE))
 			fatal_exit('Key too long at '.integer_format($key_size).' bytes ['.$id_name.']'); // 252 for firebird
@@ -233,9 +233,11 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 	}
 
 	$keywords=get_db_keywords();
-	if (in_array(strtoupper($index_name),$keywords)) fatal_exit($index_name.' is a keyword');
+	if (in_array(strtoupper(str_replace('#','',$index_name)),$keywords)) fatal_exit($index_name.' is a keyword');
 	if (preg_match('#^[\#\w]+$#',$index_name)==0) fatal_exit('Inappropriate identifier: '.$index_name);
 	if (strlen($index_name)+7>DB_MAX_IDENTIFIER_SIZE) fatal_exit('Inappropriate identifier, too long: '.$index_name);
+
+	$ok_to_create=true;
 
 	$_fields='';
 	foreach ($fields as $field)
@@ -243,22 +245,30 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 		if ($_fields!='') $_fields.=',';
 		$_fields.=$field;
 
-		if (!multi_lang_content())
+		if ((!multi_lang_content()) && (substr($index_name,0,1)!='#'))
 		{
 			global $TABLE_LANG_FIELDS_CACHE;
 			if (isset($TABLE_LANG_FIELDS_CACHE[$table_name][$field]))
 				$_fields.='(255)';
 		}
+
+		if ((multi_lang_content()) && (isset($TABLE_LANG_FIELDS[$table_name][$field])) && (substr($index_name,0,1)=='#') && ($table_name!='translate'))
+		{
+			$ok_to_create=false;
+		}
 	}
 	$this_ref->query_insert('db_meta_indices',array('i_table'=>$table_name,'i_name'=>$index_name,'i_fields'=>implode(',',$fields)),false,true); // Allow errors because sometimes bugs when developing can call for this happening twice
 
-	if (count($this_ref->connection_write)>4) // Okay, we can't be lazy anymore
+	if ($ok_to_create)
 	{
-		$this_ref->connection_write=call_user_func_array(array($this_ref->static_ob,'db_get_connection'),$this_ref->connection_write);
-		_general_db_init();
-	}
+		if (count($this_ref->connection_write)>4) // Okay, we can't be lazy anymore
+		{
+			$this_ref->connection_write=call_user_func_array(array($this_ref->static_ob,'db_get_connection'),$this_ref->connection_write);
+			_general_db_init();
+		}
 
-	$this_ref->static_ob->db_create_index($this_ref->table_prefix.$table_name,$index_name,$_fields,$this_ref->connection_write,$unique_key_field);
+		$this_ref->static_ob->db_create_index($this_ref->table_prefix.$table_name,$index_name,$_fields,$this_ref->connection_write,$unique_key_field);
+	}
 }
 
 /**
@@ -361,7 +371,7 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 
 	if (is_null($default))
 	{
-		switch ($_type)
+		switch (str_replace(array('*','?'),array('',''),$_type))
 		{
 			case 'AUTO':
 				$default=NULL;
@@ -427,16 +437,17 @@ function _helper_add_table_field($this_ref,$table_name,$name,$_type,$default=NUL
 
 	if ($final_type[0]=='?')
 	{
-		$type=substr($final_type,1);
 		$tag=' NULL';
 	} else
 	{
 		$tag=' NOT NULL';
-		$type=$final_type;
 	}
+	$type=str_replace(array('*','?'),array('',''),$final_type);
 	$extra='';
 	if (($final_type!='LONG_TEXT') || (get_db_type()=='postgresql')) $extra=is_null($default)?'DEFAULT NULL':(' DEFAULT '.(is_string($default)?('\''.db_escape_string($default).'\''):strval($default)));
-	$query='ALTER TABLE '.$this_ref->table_prefix.$table_name.' ADD '.$name.' '.$type_remap[$type].' '.$extra.' '.$tag;
+	$query='ALTER TABLE '.$this_ref->table_prefix.$table_name;
+	$query.=' ADD '.$name.' '.$type_remap[$type].' '.$extra.' '.$tag;
+	if (substr($_type,0,1)=='*') $query.=', ADD PRIMARY KEY ('.$name.')';
 	$this_ref->_query($query);
 
 	if (isset($GLOBALS['XML_CHAIN_DB']))
@@ -542,17 +553,18 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 
 	if ($_type[0]=='?')
 	{
-		$type=substr($_type,1);
 		$tag=' NULL';
 	} else
 	{
 		$tag=' NOT NULL';
-		$type=$_type;
 	}
+	$type=str_replace(array('*','?'),array('',''),$_type);
 	$extra=(!is_null($new_name))?$new_name:$name;
 	$extra2='';
 	if (substr(get_db_type(),0,5)=='mysql') $extra2='IGNORE ';
-	$query='ALTER '.$extra2.'TABLE '.$this_ref->table_prefix.$table_name.' CHANGE '.$name.' '.$extra.' '.$type_remap[$type].' '.$tag;
+	$query='ALTER '.$extra2.'TABLE '.$this_ref->table_prefix.$table_name;
+	$query.=' CHANGE '.$name.' '.$extra.' '.$type_remap[$type].' '.$tag;
+	if (substr($_type,0,1)=='*') $query.=', ADD PRIMARY KEY ('.((!is_null($new_name))?$new_name:$name).')';
 	$this_ref->_query($query);
 
 	if (isset($GLOBALS['XML_CHAIN_DB']))

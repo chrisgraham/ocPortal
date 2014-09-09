@@ -144,7 +144,8 @@ class Block_main_image_fader
 			$images_full[]=$full_url;
 
 			$titles[]=get_translated_text($row['title']);
-			$html[]=get_translated_tempcode($row['type'].'s',$row,'description');
+			$just_media_row=db_map_restrict($row,array('id','description'));
+			$html[]=get_translated_tempcode($row['content_type'],$just_media_row,'description');
 		}
 
 		if (count($images)==0)

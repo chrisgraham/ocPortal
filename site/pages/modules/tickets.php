@@ -82,6 +82,7 @@ class Module_tickets
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
 		{
+			$GLOBALS['SITE_DB']->delete_index_if_exists('ticket_types','#ticket_type');
 			$GLOBALS['SITE_DB']->alter_table_field('ticket_types','ticket_type','*AUTO','id');
 			$GLOBALS['SITE_DB']->add_table_field('ticket_types','ticket_type_name','SHORT_TRANS',0);
 			$GLOBALS['SITE_DB']->query('UPDATE '.$GLOBALS['SITE_DB']->get_table_prefix().'ticket_types SET ticket_type_name=id');

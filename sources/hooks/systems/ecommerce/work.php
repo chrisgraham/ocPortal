@@ -62,7 +62,7 @@ class Hook_work
 	function get_products($site_lang=false)
 	{
 		$products=array(
-			'WORK'=>array(PRODUCT_INVOICE,'?','',array(),do_lang('CUSTOM_PRODUCT_WORK',NULL,NULL,NULL,$site_lang?get_site_default_lang():user_lang())),
+			'WORK'=>array(PRODUCT_INVOICE,'?','',array(),do_lang('ecommerce:CUSTOM_PRODUCT_WORK',NULL,NULL,NULL,$site_lang?get_site_default_lang():user_lang())),
 		);
 		return $products;
 	}

@@ -276,6 +276,9 @@ function install_ocf($upgrade_from=NULL)
 			'p_time'=>'TIME',
 		));
 		$GLOBALS['FORUM_DB']->create_index('f_password_history','p_member_id',array('p_member_id'));
+
+		$GLOBALS['FORUM_DB']->create_index('f_groups','#groups_search__combined',array('g_name','g_title'));
+		$GLOBALS['FORUM_DB']->create_index('f_posts','#posts_search__combined',array('p_post','p_title'));
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{

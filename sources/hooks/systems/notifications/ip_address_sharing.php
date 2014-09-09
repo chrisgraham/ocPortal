@@ -29,7 +29,7 @@ class Hook_Notification_ip_address_sharing extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$limit=get_option('max_ip_addresses_per_subscriber');
-		if ($limit=='') return;
+		if ($limit=='') return array();
 
 		if (get_forum_type()!='ocf') return array();
 		if (!addon_installed('stats')) return array();

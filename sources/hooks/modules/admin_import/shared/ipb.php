@@ -751,7 +751,7 @@ class Hook_ipb_base
 					import_id_remap_put('post_files',strval($row['pid']),1);
 					continue; // Orphaned post
 				}
-				$post=get_translated_text($post_row[0]['p_post']);
+				$post=get_translated_text($post_row[0]['p_post'],$GLOBALS['SITE_DB']);
 				$lang_id=$post_row[0]['p_post'];
 				$member_id=import_id_remap_get('member',$post_row[0]['p_poster']);
 				$post_date=$post_row[0]['p_time'];

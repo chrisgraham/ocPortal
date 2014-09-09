@@ -351,7 +351,7 @@ class Hook_search_catalogue_entries
 			}
 		} else
 		{
-			if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) // Big sites can't do indescriminate catalogue translatable searches for performance reasons
+			if (multi_lang_content() && $GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) // Big sites can't do indescriminate catalogue translatable searches for performance reasons
 			{
 				$trans_fields=array();
 				$join=' JOIN '.get_table_prefix().'catalogue_efv_short c ON (r.id=c.ce_id AND f.id=c.cf_id)';

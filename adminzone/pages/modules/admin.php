@@ -748,7 +748,7 @@ class Module_admin
 			$all_groups=$GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map);
 			foreach ($all_groups as $p)
 			{
-				$n=get_translated_text($p['g_name']);
+				$n=get_translated_text($p['g_name'],$GLOBALS['FORUM_DB']);
 				if ($this->_keyword_match($n))
 				{
 					$_url=build_url(array('page'=>'admin_ocf_groups','type'=>'_ed','id'=>$p['id']),'adminzone');

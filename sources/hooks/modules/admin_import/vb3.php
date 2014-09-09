@@ -822,7 +822,7 @@ class Hook_vb3
 					import_id_remap_put('post_files',strval($row['attachmentid']),1);
 					continue; // Orphaned post
 				}
-				$post=get_translated_text($post_row[0]['p_post']);
+				$post=get_translated_text($post_row[0]['p_post'],$GLOBALS['SITE_DB']);
 				$member_id=$post_row[0]['p_poster'];
 
 				list($url,$thumb_url)=$this->data_to_disk($row['filedata'],$row['filename'],'attachments',false,$row['thumbnail'],true);

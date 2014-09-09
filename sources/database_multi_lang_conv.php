@@ -20,16 +20,33 @@
 
 /**
  * Rebuild database indices, using correct rules for new field types.
+ *
+ * @param  boolean		Whether to only rebuild translatable field indexes
  */
-function rebuild_indices()
+function rebuild_indices($only_trans=false)
 {
+	global $TABLE_LANG_FIELDS;
+
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
 	$indices=$GLOBALS['SITE_DB']->query_select('db_meta_indices',array('*'));
 	foreach ($indices as $index)
 	{
-		$GLOBALS['SITE_DB']->delete_index_if_exists($index['i_table'],$index['i_name']);
-		$GLOBALS['SITE_DB']->create_index($index['i_table'],$index['i_name'],explode(',',$index['i_fields']));
+		$fields=explode(',',$index['i_fields']);
+		$ok=false;
+		foreach ($fields as $field)
+		{
+			if ((isset($TABLE_LANG_FIELDS[$index['i_table']][$field])) || (!$only_trans))
+			{
+				$ok=true;
+				break;
+			}
+		}
+		if ($ok)
+		{
+			$GLOBALS['SITE_DB']->delete_index_if_exists($index['i_table'],$index['i_name']);
+			$GLOBALS['SITE_DB']->create_index($index['i_table'],$index['i_name'],$fields);
+		}
 	}
 }
 
@@ -108,7 +125,7 @@ function disable_content_translation()
 
 	_update_base_config_for_content_translation(false);
 
-	rebuild_indices();
+	rebuild_indices(true);
 }
 
 /**
@@ -197,7 +214,7 @@ function enable_content_translation()
 
 	_update_base_config_for_content_translation(true);
 
-	rebuild_indices();
+	rebuild_indices(true);
 }
 
 /**

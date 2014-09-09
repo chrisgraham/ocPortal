@@ -215,6 +215,8 @@ class Module_calendar
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))
 		{
 			add_privilege('CALENDAR','calendar_add_to_others',true);
+
+			$GLOBALS['SITE_DB']->create_index('calendar_events','#event_search__combined',array('e_title','e_content'));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))

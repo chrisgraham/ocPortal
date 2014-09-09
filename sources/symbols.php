@@ -906,11 +906,19 @@ function ecv_META_DATA($lang,$escaped,$param)
 					if (isset($META_DATA[$param[0]]))
 					{
 						$value=$META_DATA[$param[0]];
-						if (preg_match('#^[\:\s\w\-\_]*$#',$value)==0)
+						if ($param[0]!='image')
 						{
-							$value=strip_comcode($value);
+							$value=$META_DATA[$param[0]];
+							if (preg_match('#^[\:\s\w\-\_]*$#',$value)==0)
+							{
+								$value=strip_comcode($value);
+							}
 						}
+					} else
+					{
+						$value='';
 					}
+					if ($value===NULL) $value='';
 				}
 		}
 	}

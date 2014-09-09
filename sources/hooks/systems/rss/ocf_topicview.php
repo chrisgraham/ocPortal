@@ -62,7 +62,7 @@ class Hook_rss_ocf_topicview
 				if ($edit_date==$news_date) $edit_date='';
 
 				$news_title=xmlentities($row['p_title']);
-				$_summary=get_translated_tempcode('p_posts',$row,'p_post');
+				$_summary=get_translated_tempcode('p_posts',$row,'p_post',$GLOBALS['FORUM_DB']);
 				$summary=xmlentities($_summary->evaluate());
 				$news='';
 

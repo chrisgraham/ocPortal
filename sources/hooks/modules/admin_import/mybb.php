@@ -910,7 +910,7 @@ class Hook_mybb
 					import_id_remap_put('post_files',strval($row['aid']),1);
 					continue; // Orphaned post
 				}
-				$post=get_translated_text($post_row[0]['p_post']);
+				$post=get_translated_text($post_row[0]['p_post'],$GLOBALS['SITE_DB']);
 				$member_id=$post_row[0]['p_poster'];
 
 				$url=$this->data_to_disk('',$row['attachname'],'attachments',$db,$table_prefix, $row['filename']);

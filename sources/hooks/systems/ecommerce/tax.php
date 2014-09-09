@@ -43,7 +43,7 @@ class Hook_tax
 	function get_products($site_lang=false)
 	{
 		$products=array(
-			'TAX'=>array(PRODUCT_OTHER,'?','',array(),do_lang('CUSTOM_PRODUCT_TAX',NULL,NULL,NULL,$site_lang?get_site_default_lang():user_lang())),
+			'TAX'=>array(PRODUCT_OTHER,'?','',array(),do_lang('ecommerce:CUSTOM_PRODUCT_TAX',NULL,NULL,NULL,$site_lang?get_site_default_lang():user_lang())),
 		);
 		return $products;
 	}

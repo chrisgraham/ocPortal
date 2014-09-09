@@ -207,6 +207,11 @@ class Module_wiki
 			$GLOBALS['SITE_DB']->alter_table_field('wiki_changes','the_user','MEMBER','member_id');
 			$GLOBALS['SITE_DB']->alter_table_field('wiki_posts','the_user','MEMBER','member_id');
 		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<10))
+		{
+			$GLOBALS['SITE_DB']->create_index('wiki_pages','#wiki_search__combined',array('title','description'));
+		}
 	}
 
 	/**

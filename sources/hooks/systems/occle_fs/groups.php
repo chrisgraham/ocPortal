@@ -325,7 +325,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$custom_fields=ocf_get_all_custom_fields_match(NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL);
 		foreach ($custom_fields as $i=>$custom_field)
 		{
-			$cf_name=get_translated_text($custom_field['cf_name']);
+			$cf_name=get_translated_text($custom_field['cf_name'],$GLOBALS['FORUM_DB']);
 			$fixed_id=fix_id($cf_name);
 			if (!array_key_exists($fixed_id,$props))
 			{
@@ -441,7 +441,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 		$props_already=array();
 		foreach ($custom_fields as $i=>$custom_field)
 		{
-			$cf_name=get_translated_text($custom_field['cf_name']);
+			$cf_name=get_translated_text($custom_field['cf_name'],$GLOBALS['FORUM_DB']);
 			$fixed_id=fix_id($cf_name);
 			if (!array_key_exists($fixed_id,$props_already))
 			{

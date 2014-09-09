@@ -35,7 +35,7 @@ class Module_downloads
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=7;
+		$info['version']=8;
 		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
@@ -168,6 +168,12 @@ class Module_downloads
 		if ((is_null($upgrade_from)) || ($upgrade_from<7))
 		{
 			add_privilege('_SECTION_DOWNLOADS','download',true);
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<8))
+		{
+			$GLOBALS['SITE_DB']->create_index('download_categories','#dl_cat_search__combined',array('category','description'));
+			$GLOBALS['SITE_DB']->create_index('download_downloads','#dl_search__combined',array('original_filename','download_data_mash'));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<7))

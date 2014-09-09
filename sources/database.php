@@ -800,6 +800,7 @@ class database_driver
 
 	/**
 	 * Get the database rows found matching the specified parameters. Unlike 'query', it doesn't take raw SQL -- it assembles SQL based the parameters requested.
+	 * Only use this if you're where condition is a series of AND clauses doing simple property comparisons.
 	 *
 	 * @param  string			The table name
 	 * @param  ?array			The SELECT map (NULL: all fields)

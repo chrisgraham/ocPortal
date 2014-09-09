@@ -254,7 +254,7 @@ class Hook_smf2
 		{
 			foreach ($rows as $row)
 			{
-				if (!in_array(get_translated_text($row['g_name']),$delete_groups)) continue;
+				if (!in_array(get_translated_text($row['g_name'],$GLOBALS['SITE_DB']),$delete_groups)) continue;
 				ocf_delete_group($row['id']);
 			}
 		}
@@ -964,7 +964,7 @@ class Hook_smf2
 			foreach ($rows as $row)
 			{
 				// K Skip Admins and guests
-				if (in_array(get_translated_text($row['g_name']),$ignore_groups)) continue;
+				if (in_array(get_translated_text($row['g_name'],$GLOBALS['SITE_DB']),$ignore_groups)) continue;
 				$gid=(integer)$row['id'];
 				// Set them to view
 				$this->set_forum_view_accesss($gid,$fid);
@@ -1219,7 +1219,7 @@ class Hook_smf2
 					import_id_remap_put('post_files',strval($row['id_attach']),1);
 					continue; // Orphaned post
 				}
-				$post=get_translated_text($post_row[0]['p_post']);
+				$post=get_translated_text($post_row[0]['p_post'],$GLOBALS['SITE_DB']);
 				$member_id=$post_row[0]['p_poster'];
 				$ext='.'.$row['fileext'];
 				$filename=$row['id_attach'].'_'.$row['file_hash'];

@@ -438,7 +438,7 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 {
 	$topic=array();
 
-	if (!is_null($topic_row['t_cache_first_post']))
+	if (!is_null($topic_row['p_post']))
 	{
 		$post_row=db_map_restrict($topic_row,array('p_post'))+array('id'=>$topic_row['t_cache_first_post_id']);
 		$topic['first_post']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);

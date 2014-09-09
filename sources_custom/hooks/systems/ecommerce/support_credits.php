@@ -64,7 +64,7 @@ class Hook_support_credits
 				float_to_raw_string($bundle*floatval(get_option('support_credit_value'))),
 				'handle_support_credits',
 				NULL,
-				do_lang('CUSTOMER_SUPPORT_CREDITS',integer_format($bundle))
+				do_lang('customers:CUSTOMER_SUPPORT_CREDITS',integer_format($bundle))
 			);
 		}
 

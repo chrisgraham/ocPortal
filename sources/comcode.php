@@ -159,7 +159,7 @@ function comcode_to_tempcode($comcode,$source_member=NULL,$as_admin=false,$wrap_
  */
 function strip_comcode($text,$for_extract=false)
 {
-	if (preg_match('#^[\w\d\-\_\(\) \.,:;/"\!\?]*$$#',$text)!=0) return $text; // Optimisation
+	if ($text=='' || preg_match('#^[\w\d\-\_\(\) \.,:;/"\'\!\?]*$$#',$text)!=0) return $text; // Optimisation
 
 	require_code('mail');
 	if (function_exists('comcode_to_clean_text')) // For benefit of installer, which disables mail.php

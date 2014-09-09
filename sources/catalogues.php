@@ -1190,7 +1190,7 @@ function get_catalogue_entry_field_values($catalogue_name,$entry_id,$only_fields
  * Get the standardised details for a catalogue entry field.
  *
  * @param  array			The field row
- * @param  AUTO_LINK		The ID of the entry we are getting for
+ * @param  mixed			The ID of the entry we are getting OR the row
  * @param  ?array			A list of field IDs that we are limiting ourselves to (NULL: get ALL fields)
  * @param  array			Save the result into here
  */
@@ -1211,7 +1211,8 @@ function _resolve_catalogue_entry_field($field,$entry_id,$only_field_ids,&$targe
 				$target['effective_value_pure']=do_lang('INTERNAL_ERROR');
 			} else
 			{
-				$target['effective_value']=get_translated_tempcode('catalogue_efv_'.$raw_type,$temp,'cv_value');
+				$just_row=db_map_restrict($temp,array('cv_value'))+array('ce_id'=>is_array($entry_id)?$entry_id['id']:$entry_id,'cf_id'=>$field['id']);
+				$target['effective_value']=get_translated_tempcode('catalogue_efv_'.$raw_type,$just_row,'cv_value');
 				$target['effective_value_pure']=get_translated_text($temp['cv_value']);
 			}
 			break;

@@ -127,7 +127,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 			if (!array_key_exists(0,$cpf_data)) continue;
 			if ($cpf_data[0]['cf_public_view']==0) continue;
 
-			$cpf_title=get_translated_text($cpf_data[0]['cf_name']);
+			$cpf_title=get_translated_text($cpf_data[0]['cf_name'],$GLOBALS['FORUM_DB']);
 			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf_title)==='') && (count($member_cpfs)>15))
 				continue; // If there are lots of CPFs, and this one seems to have a blank name, skip it (likely corrupt data)
 			if ((preg_replace('#^((\s)|(<br\s*/?'.'>)|(&nbsp;))*#','',$cpf)==='') && (count($member_cpfs)>15))

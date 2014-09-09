@@ -153,7 +153,7 @@ function get_nested_csv_structure()
 
 				$cpf_fields[$csv_heading]=array(
 					'id'=>$custom_field['id'],
-					'label'=>get_translated_text($custom_field['cf_name']),
+					'label'=>get_translated_text($custom_field['cf_name'],$GLOBALS['FORUM_DB']),
 					'possible_fields'=>array('field_'.strval($custom_field['id']),$csv_heading), // Form field names that this CPF may appear as (may not all be real CPFs)
 					'csv_filename'=>$csv_filename,
 					'csv_heading'=>$csv_heading,

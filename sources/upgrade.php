@@ -1595,6 +1595,19 @@ function version_specific()
 					$GLOBALS['SITE_DB']->alter_table_field('f_member_custom_fields',$bad_field['m_name'],'?'.$bad_type);
 				}
 			}
+
+			// This seems to be a legacy problem on some sites, but would crash on v10 if no-multi-lang was enabled. Generally things would corrupt.
+			require_code('ocf_members');
+			$fields=$GLOBALS['FORUM_DB']->query('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields WHERE cf_type IN (\'long_trans\',\'short_trans\')');
+			$member_mappings=ocf_get_custom_field_mappings(get_member());
+			foreach ($fields as $field)
+			{
+				$db_field='field_'.strval($field['id']);
+				if (is_string($member_mappings[$db_field]))
+				{
+					$GLOBALS['FORUM_DB']->promote_text_field_to_comcode('f_member_custom_fields',$db_field,'mf_member_id');
+				}
+			}
 		}
 
 		return true;
