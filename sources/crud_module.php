@@ -65,6 +65,7 @@ class standard_crud_module
 	var $posting_form_text_parsed=NULL;
 	var $posting_form_tabindex=NULL;
 	var $javascript=NULL;
+	var $javascript_for_choose=NULL;
 	var $type_code='d';
 	var $catalogue=false;
 	var $non_integer_id=false;
@@ -1136,6 +1137,7 @@ class standard_crud_module
 				'SUBMIT_ICON'=>'buttons__sort',
 				'SUBMIT_NAME'=>$has_ordering?do_lang_tempcode('ORDER'):NULL,
 				'POST_URL'=>get_self_url(),
+				'JAVASCRIPT'=>$this->javascript_for_choose,
 			));
 
 			require_code('templates_internalise_screen');
@@ -1198,6 +1200,7 @@ class standard_crud_module
 			'SUBMIT_NAME'=>$submit_name,
 			'SKIP_VALIDATION'=>true,
 			'EXTRA_BUTTONS'=>$extra_buttons,
+			'JAVASCRIPT'=>$this->javascript_for_choose,
 		));
 	}
 
