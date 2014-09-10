@@ -591,7 +591,7 @@ class Module_news
 		} else $warning_details=new ocp_tempcode();
 
 		// Views
-		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1') && (is_null(get_bot_type())))
 		{
 			$myrow['news_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('news'))

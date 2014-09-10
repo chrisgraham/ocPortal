@@ -113,7 +113,6 @@ ocPortal contains many "cross-cutting" features that are often present in differ
  - Blocking guests trying to edit something owned by Guest (a bug if it isn't, but it would be good to try and abstract this)
  - Ditto blocking editing interface for something you don't have category access to
  - Attachments, Comcode, Multi-language support (instructions for implementation provided in this book)
- - Splurgh views (see the [tt]Module_downloads::tree_view_screen[/tt] function for an example)
  - Validation, validation-required e-mails, Unvalidated warnings, and permissions to determine who may view unvalidated content, and a hook to identify all unvalidated resources (see how it's done in existing modules, it's quite straight-forward- just identify the lines of code that involve validation and basically copy&paste them to the right spots in your own code)
  - Control actions links (see the [tt]{+START,INCLUDE,STAFF_ACTIONS}[/tt] code in [tt]DOWNLOAD_SCREEN.tpl[/tt])
  - Logging (use the [tt]log_it[/tt] function in your model code, for adding, editing, and deleting)
@@ -128,6 +127,33 @@ ocPortal contains many "cross-cutting" features that are often present in differ
  - RSS (just implement a hook, and call [tt]set_feed_url[/tt] in the code when viewing what the RSS feed subscribes to)
  - awards (just implement a content-meta-aware hook)
  - Possible others I've forgotten to list
+
+[title="2"]General approach to coding standards[/title]
+
+If you bought a watch, and the watch wasn't quite a perfect circle, this would impact your perception of its quality, even if the watch worked perfectly. Or, if you opened it up to do some maintenance, and it looked messy inside, you'd lose your respect for the skills of the watchmaker.
+
+This is why we insist that core ocPortal programmers make everything "attainably perfect", even at the code level. That is, applying sufficient care and attention to detail when coding such that your code looks almost poetic, guided by an inbuilt sense for quality, tidiness, and consistency. It doesn't really have to take any longer to code like this -- it's more that if you wrote something that didn't have and continue beauty, you'd be instinctively repulsed by that code you wrote.
+
+This applies to maintaining consistent code formatting, correct English spelling and grammar, and general consistency over-all, so that everything flows cleanly.
+
+On a practical level:
+ - This makes the code nicer for all programmers to work in, it all flows really smoothly -- they can very quickly scan over the code and pick up immediate sub-conscious cues from how things are formatted, without having to work out what the rules of styling are (or worse, the rules of English grammar are) for particular spots of the code-base.
+ - Other programmers who have built up this automatic repulsion for ugliness (in order to refine what they expect from themselves) will require you to also maintain similar standards, lest they feel repulsed.
+ - It also helps the programmer put even more care into things the user does end up seeing. It's unrealistic for a human programmer to make things good in some places and bad in hidden places -- the badness will just start leaking everywhere -- it's better just to make it good, period.
+
+You can hear it from Steve Jobs too (taken from his official auto-biography by Walter Isaacson)...
+
+[quote="Walter Isaacson"]
+One of the most extreme—and telling—implementations of that philosophy came when he scrutinized the printed circuit board that would hold the chips and other components deep inside the Macintosh. No consumer would ever see it, but Jobs began critiquing it on aesthetic grounds. “That part’s really pretty,” he said. “But look at the memory chips. That’s ugly. The lines are too close together.”
+
+One of the new engineers interrupted and asked why it mattered. “The only thing that’s important is how well it works. Nobody is going to see the PC board.”
+
+Jobs reacted typically. “I want it to be as beautiful as possible, even if it’s inside the box. A great carpenter isn’t going to use lousy wood for the back of a cabinet, even though nobody’s going to see it.”
+[/quote]
+
+You may as a programmer be used to working with a lower level of quality. Don't be pulled down by the standards of programmers around you. Be better than them and set an example. Be really proud of the beauty of your own code, and make sure you can be really proud of the code of others on the same project -- know that by writing beautiful code you are a true artisan programmer, not just a code hacker. It shouldn't really be possible to quickly say "this code was written by Bob, you can see his style in the way it is laid out", the project should feel as one cohesive beautiful thing.
+
+You may or many not agree with the particular current coding standards within ocPortal. Programmers never agree on these things. However, the mature thing to do is to adapt to whatever the agreed standard is, and if you think it should change, make a case, rather than just ignoring pre-existing standards. ocPortal coding standards are certainly subject to review, but at any point in time should be met absolutely.
 
 [title="2"]Back-end[/title]
 

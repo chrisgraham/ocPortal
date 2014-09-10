@@ -1750,7 +1750,7 @@ function render_catalogue_entry_screen($id,$no_title=false,$attach_to_url_filter
 	$root=get_param_integer('keep_catalogue_'.$catalogue_name.'_root',NULL);
 	$map=get_catalogue_entry_map($entry,$catalogue,'PAGE',$tpl_set,$root,NULL,NULL,true,true);
 
-	if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
+	if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1') && (is_null(get_bot_type())))
 	{
 		$entry['ce_views']++;
 		if (!$GLOBALS['SITE_DB']->table_is_locked('catalogue_entries'))

@@ -471,7 +471,7 @@ class Module_wiki
 		if (get_option('wiki_enable_content_posts')=='0') $page['hide_posts']=1;
 
 		// Views
-		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1') && (is_null(get_bot_type())))
 		{
 			$page['wiki_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('wiki_pages'))

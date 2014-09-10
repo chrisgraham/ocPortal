@@ -1565,7 +1565,7 @@ class Module_calendar
 		} elseif ($day=='') $day=$first_date;
 
 		// Views
-		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1') && (is_null(get_bot_type())))
 		{
 			$event['e_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('calendar_events'))

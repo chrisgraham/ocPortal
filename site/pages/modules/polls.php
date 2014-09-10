@@ -290,7 +290,7 @@ class Module_polls
 		$edit_date=get_timezoned_date($myrow['edit_date']);
 
 		// Views
-		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1'))
+		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1') && (is_null(get_bot_type())))
 		{
 			$myrow['poll_views']++;
 			if (!$GLOBALS['SITE_DB']->table_is_locked('poll'))
