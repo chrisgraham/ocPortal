@@ -80,13 +80,13 @@ class Hook_realtime_rain_ocf
 					$timestamp=$row['timestamp'];
 					$member_id=$row['member_id'];
 
-					$ticker_text=strip_comcode(get_translated_text($row['p_post']));
+					$ticker_text=strip_comcode(get_translated_text($row['p_post'],$GLOBALS['FORUM_DB']));
 
 					$drops[]=rain_get_special_icons($row['p_ip_address'],$timestamp,NULL,$ticker_text)+array(
 						'TYPE'=>'post',
 						'FROM_MEMBER_ID'=>strval($member_id),
 						'TO_MEMBER_ID'=>NULL,
-						'TITLE'=>($row['p_title']=='')?rain_truncate_for_title(strip_comcode(get_translated_text($row['p_post']))):$row['p_title'],
+						'TITLE'=>($row['p_title']=='')?rain_truncate_for_title(strip_comcode(get_translated_text($row['p_post'],$GLOBALS['FORUM_DB']))):$row['p_title'],
 						'IMAGE'=>is_guest($member_id)?rain_get_country_image($row['p_ip_address']):$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id),
 						'TIMESTAMP'=>strval($timestamp),
 						'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),

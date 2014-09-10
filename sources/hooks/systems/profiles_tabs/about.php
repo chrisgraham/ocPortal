@@ -364,7 +364,7 @@ class Hook_Profiles_Tabs_about
 					$club_row=$club_rows[$club_id];
 				}
 
-				$club_name=get_translated_text($club_row['g_name']);
+				$club_name=get_translated_text($club_row['g_name'],$GLOBALS['FORUM_DB']);
 				$club_forum=$GLOBALS['FORUM_DB']->query_value_null_ok('f_forums f LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'translate t ON t.id=f.f_description','f.id',array('text_original'=>do_lang('FORUM_FOR_CLUB',$club_name)));
 
 				$clubs[]=array(

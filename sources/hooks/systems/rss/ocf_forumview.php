@@ -57,7 +57,7 @@ class Hook_rss_ocf_forumview
 				if ($edit_date==$news_date) $edit_date='';
 
 				$news_title=xmlentities($row['t_cache_first_title']);
-				$_summary=get_translated_tempcode($row['t_cache_first_post']);
+				$_summary=get_translated_tempcode($row['t_cache_first_post'],$GLOBALS['FORUM_DB']);
 				$summary=xmlentities($_summary->evaluate());
 				$news='';
 

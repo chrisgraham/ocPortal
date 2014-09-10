@@ -118,7 +118,7 @@ class Module_join
 				{
 					$selected=$group['id']==get_param_integer('usergroup');
 				}
-				$group_select->attach(form_input_list_entry(strval($group['id']),$selected,get_translated_text($group['g_name'])));
+				$group_select->attach(form_input_list_entry(strval($group['id']),$selected,get_translated_text($group['g_name'],$GLOBALS['FORUM_DB'])));
 			}
 		}
 

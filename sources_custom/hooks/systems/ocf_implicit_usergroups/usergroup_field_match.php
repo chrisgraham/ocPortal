@@ -27,7 +27,7 @@ class Hook_implicit_usergroups_usergroup_field_match
 		$groups=array();
 		foreach ($_groups as $g)
 		{
-			$groups[get_translated_text($g['g_name'])]=$g['id'];
+			$groups[get_translated_text($g['g_name'],$GLOBALS['FORUM_DB'])]=$g['id'];
 		}
 
 		$list_cpfs=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_default'),array('cf_type'=>'list'));

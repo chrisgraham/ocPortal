@@ -144,7 +144,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 			}
 
 			// Work out the CPF name
-			$cpf_title=get_translated_text($cpf_data[0]['cf_name']);
+			$cpf_title=get_translated_text($cpf_data[0]['cf_name'],$GLOBALS['FORUM_DB']);
 			if (substr($cpf_title,0,4)=='ocp_')
 			{
 				$_cpf_title=do_lang('SPECIAL_CPF__'.$cpf_title,NULL,NULL,NULL,NULL,false);
