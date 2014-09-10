@@ -90,6 +90,7 @@
 
 .search_result {
 	margin-top: 1em;
+	overflow: hidden;
 }
 
 .search_field_table th {

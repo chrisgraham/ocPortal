@@ -457,7 +457,9 @@ function get_workflow_form($workflow_content_id)
 		$submitter_details[]=$GLOBALS['FORUM_DRIVER']->get_username($submitter).' ('.do_lang('SUBMITTER').')';
 		$submitter_details[]='send_author';		// Name
 		$submitter_details[]=false;		// Value
-		$submitter_details[]=do_lang_tempcode('NEXT_APPROVAL_AUTHOR',$GLOBALS['FORUM_DRIVER']->get_username($submitter));		// Description
+		$username=$GLOBALS['FORUM_DRIVER']->get_username($submitter);
+		if (is_null($username)) $username=do_lang('DELETED');
+		$submitter_details[]=do_lang_tempcode('NEXT_APPROVAL_AUTHOR',$username);		// Description
 		$send_to_boxes[]=$submitter_details;		// Then tack it on the end
 	}
 

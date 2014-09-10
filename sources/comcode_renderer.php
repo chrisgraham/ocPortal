@@ -2084,7 +2084,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				} else // No permission
 				{
 					require_lang('permissions');
-					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'af61f96b5cc6819979ce681d6f49b384','WARNING'=>do_lang_tempcode('permissions:ACCESS_DENIED__REUSE_ATTACHMENT',$GLOBALS['FORUM_DRIVER']->get_username($source_member))));
+					$username=$GLOBALS['FORUM_DRIVER']->get_username($source_member);
+					if (is_null($username)) $username=do_lang('DELETED');
+					$temp_tpl=do_template('WARNING_BOX',array('_GUID'=>'af61f96b5cc6819979ce681d6f49b384','WARNING'=>do_lang_tempcode('permissions:ACCESS_DENIED__REUSE_ATTACHMENT',$username)));
 					break;
 				}
 			}

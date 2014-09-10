@@ -748,6 +748,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		{
 			list(,$boolean_operator,$body_where,$include_where,$disclude_where)=build_content_where($content,$boolean_search,$boolean_operator);
 
+			$simple_table=preg_replace('# .*#','',$table);
+			$indices_for_table=$GLOBALS['SITE_DB']->query_select('db_meta_indices',array('i_name','i_fields'),array('i_table'=>$simple_table));
+
 			$where_clause_and='';
 			$all_fields=array_merge($raw_fields,array_keys($fields));
 			reset($raw_fields);
@@ -759,6 +762,31 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 
 				foreach ($_where as $__where)
 				{
+					// See if we have a combined fulltext index coveraging multiple columns
+					$has_combined_index_coverage=false;
+					foreach ($indices_for_table as $index)
+					{
+						if (substr($index['i_name'],0,1)=='#')
+						{
+							$index_coverage=explode(',',$index['i_fields']);
+
+							$has_combined_index_coverage=true;
+							foreach ($all_fields as $field)
+							{
+								if (($field=='') || ($field=='!')) continue;
+
+								$field_stripped=preg_replace('#.*\.#','',$field);
+								if (!in_array($field_stripped,$index_coverage))
+								{
+									$has_combined_index_coverage=false;
+									break;
+								}
+							}
+
+							if ($has_combined_index_coverage) break;
+						}
+					}
+
 					$where_clause_or='';
 					$where_clause_or_fields='';
 					foreach ($all_fields as $field)
@@ -774,7 +802,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 							$where_clause_or.=' AND NOT EXISTS (SELECT * FROM '.$db->get_table_prefix().'f_cpf_perms cpfp WHERE cpfp.member_id=r.id AND cpfp.field_id='.substr($field,6).' AND cpfp.guest_view=0)';
 						} else
 						{
-							/*if (strpos($__where,' AGAINST ')!==false)	Does not work, as needs a compound fulltext index
+							if ((strpos($__where,' AGAINST ')!==false) && ($has_combined_index_coverage))
 							{
 								if ($where_clause_or_fields!='')
 								{
@@ -782,10 +810,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 								}
 								$where_clause_or_fields.=$field;
 							} else
-							{*/
+							{
 								if ($where_clause_or!='') $where_clause_or.=' OR ';
 								$where_clause_or.=preg_replace('#\?#',$field,$__where);
-							/*}*/
+							}
 						}
 					}
 
@@ -919,7 +947,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		$before=count($t_rows);
 		foreach ($t_rows as $i=>$row)
 		{
-			if (!array_key_exists(strval($row[$permissions_field]),$cat_access)) unset($t_rows[$i]);
+			if (!array_key_exists(@strval($row[$permissions_field]),$cat_access)) unset($t_rows[$i]);
 		}
 	}
 	$final_result_rows=$t_rows;
