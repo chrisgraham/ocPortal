@@ -818,7 +818,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 		$before=count($t_rows);
 		foreach ($t_rows as $i=>$row)
 		{
-			if (!array_key_exists(strval($row[$permissions_field]),$cat_access)) unset($t_rows[$i]);
+			if (!array_key_exists(@strval($row[$permissions_field]),$cat_access)) unset($t_rows[$i]);
 		}
 	}
 	$final_result_rows=$t_rows;
