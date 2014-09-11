@@ -102,14 +102,6 @@ class Module_quiz
 			$GLOBALS['SITE_DB']->add_table_field('quiz_questions','q_question_extra_text','LONG_TRANS');
 		}
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<6))
-		{
-			add_privilege('QUIZZES','view_others_quiz_results',false);
-			add_privilege('QUIZZES','bypass_quiz_timer',false);
-
-			$GLOBALS['SITE_DB']->create_index('quizzes','#quiz_search__combined',array('q_start_text','q_name'));
-		}
-
 		if (is_null($upgrade_from))
 		{
 			$GLOBALS['SITE_DB']->create_table('quiz_member_last_visit',array(
@@ -188,6 +180,14 @@ class Module_quiz
 			));
 
 			$GLOBALS['SITE_DB']->create_index('quizzes','ftjoin_qstarttext',array('q_start_text'));
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<6))
+		{
+			add_privilege('QUIZZES','view_others_quiz_results',false);
+			add_privilege('QUIZZES','bypass_quiz_timer',false);
+
+			$GLOBALS['SITE_DB']->create_index('quizzes','#quiz_search__combined',array('q_start_text','q_name'));
 		}
 	}
 

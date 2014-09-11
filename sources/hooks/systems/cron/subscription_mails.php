@@ -32,7 +32,9 @@ class Hook_cron_subscription_mails
 		if ($last_time>$time-30*60) return; // Every 30 minutes
 
 		require_code('ecommerce_subscriptions');
-		$_subscribers=collapse_1d_complexity('s_member_id',$GLOBALS['SITE_DB']->query_select('subscriptions',array('DISTINCT s_member_id')));
+		$_subscribers_1=collapse_1d_complexity('s_member_id',$GLOBALS['SITE_DB']->query_select('subscriptions',array('DISTINCT s_member_id')));
+		$_subscribers_2=collapse_1d_complexity('member_id',$GLOBALS['FORUM_DB']->query_select('f_group_member_timeouts',array('DISTINCT member_id')));
+		$_subscribers=array_merge($_subscribers_1,$_subscribers_2);
 		$subscribers=array();
 		foreach ($_subscribers as $subscriber)
 		{

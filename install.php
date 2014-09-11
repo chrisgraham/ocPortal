@@ -1717,7 +1717,7 @@ function step_5_core()
 		'broken'=>'BINARY',
 		'source_user'=>'MEMBER'
 	));
-	$GLOBALS['SITE_DB']->create_index('translate','#search',array('text_original'));
+	$GLOBALS['SITE_DB']->create_index('translate','#tsearch',array('text_original'));
 	$GLOBALS['SITE_DB']->create_index('translate','importance_level',array('importance_level'));
 	if (substr(get_db_type(),0,5)=='mysql')
 	{
