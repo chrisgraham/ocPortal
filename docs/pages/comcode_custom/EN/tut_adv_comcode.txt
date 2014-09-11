@@ -13,6 +13,15 @@ Users can use HTML in Comcode, but it is subject to a security filter. There are
 1) The whitelist filter. This is the most secure filter, and is used by default. It only allows certain HTML fragments to be used (fragments likely to be produced via usage of the WYSIWYG editor).
 2) The blacklist filter. This is designed for high security, filtering out anything it sees as dangerous. Members are subjected to this filter if they have the "Subject to a more liberal HTML filter" permission.
 
+Dangerous code includes:
+ - JavaScript code (reason: code can be malicious, for example steal cookies)
+ - CSS code rules block ([tt]style[/tt] element) (reason: style changes can be used to deceive a visitor)
+ - Code to embed external files, such as JavaScript, CSS, applets, or browser plugins (reason: external code can either be malicious or adjust existing code to be malicious)
+ - Meta tags (reason: could inkect the authorisation needed for taking over the Google Webmaster Tools, for example)
+ - Code to change the overall page document structure (reason: can significantly change how the browser processes the page)
+
+Some time in the future browsers may gain the ability to sandbox parts of web pages, which would allow us to relax these rules, but it seems a long way off still. We would need to wait for all web browsers in use to have adopted the new sandboxing behaviour before we could rely on it.
+
 [title="2"]Comcode Menus[/title]
 
 ocPortal has had a dedicated menu editor since version 2.5. Before this, menus were written directly into Comcode rather than being tied to a menu-editor menu via a block. The old method of writing a 'Comcode menu' is still available though, and some users, especially those with disabilities, may prefer this method of menu generation.
