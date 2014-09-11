@@ -365,7 +365,7 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 /**
  * Get code to do an AJAX check of the CAPTCHA.
  *
- * @return string			Javascript code.
+ * @return string			JavaScript code.
  */
 function captcha_ajax_check()
 {

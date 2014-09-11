@@ -740,11 +740,11 @@ function require_css($css)
 }
 
 /**
- * Make sure that the given Javascript file is loaded up.
+ * Make sure that the given JavaScript file is loaded up.
  *
  * @sets_output_state
  *
- * @param  ID_TEXT		The Javascript file required
+ * @param  ID_TEXT		The JavaScript file required
  */
 function require_javascript($css)
 {

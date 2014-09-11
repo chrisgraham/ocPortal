@@ -191,7 +191,7 @@ class Block_main_google_map
 			$has_guid=(isset($map['guid']) && $map['guid']!='');
 			$star_entry_int=intval($star_entry);
 
-			// Make marker data Javascript-friendly
+			// Make marker data JavaScript-friendly
 			foreach ($entries_to_show as $i=>$entry_row)
 			{
 				$details=get_catalogue_entry_map($entry_row,$catalogue_row,'CATEGORY',$catalogue_name,NULL/*,$only_fields*/);

@@ -110,7 +110,7 @@ and
 	{
 		return array(
 			'requires'=>array(
-				'Javascript enabled',
+				'JavaScript enabled',
 			),
 			'recommends'=>array(
 			),

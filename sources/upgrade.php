@@ -528,7 +528,7 @@ function post_fields_relay()
  * @param  string		The URL (something like 'upgrader.php?type=ocf')
  * @param  string		The URL caption text
  * @param  boolean	Whether it is disabled
- * @param  string		Extra Javascript
+ * @param  string		Extra JavaScript
  * @return string		The form-based link
  */
 function fu_link($url,$text,$disabled=false,$js='')

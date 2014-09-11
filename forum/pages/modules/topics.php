@@ -2911,9 +2911,9 @@ END;
 	}
 
 	/**
-	 * Get Javascript to restrict post lengths.
+	 * Get JavaScript to restrict post lengths.
 	 *
-	 * @return string			The post Javascript
+	 * @return string			The post JavaScript
 	 */
 	function _post_javascript()
 	{

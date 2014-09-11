@@ -105,7 +105,7 @@ function apply_emoticons($text)
  * @param  ?MEMBER		The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully (NULL: current member)
  * @param  boolean		Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one. Note that if this is passed false, and $source_member is an admin, it will be parsed using admin privileges anyway.
  * @param  ?integer		The position to conduct wordwrapping at (NULL: do not conduct word-wrapping)
- * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between Javascript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
+ * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between JavaScript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
  * @param  ?object		The database connection to use (NULL: standard site connection)
  * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
  * @param  boolean		Whether this is being pre-parsed, to pick up errors before row insertion.

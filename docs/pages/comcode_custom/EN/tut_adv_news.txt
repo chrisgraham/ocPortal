@@ -52,9 +52,9 @@ You may also use the compressed version intended for the sides of pages:
 [code][block="http://example.com/feed.xml"]side_rss[/block][/code]
 
 [media width="150" description="FeedReader is a good free program for viewing feeds" float="right"]data_custom/images/docs/adv_news_feedreader.png[/media]
-Please note that you should trust a feed before you consider placing it on your site, as it is possible for them to contain Javascript that could intercept your password cookies, and perform other malicious actions.
+Please note that you should trust a feed before you consider placing it on your site, as it is possible for them to contain JavaScript that could intercept your password cookies, and perform other malicious actions.
 
-Before RSS and Atom became popular, there was a type of feed called a 'Javascript feed', and also feeds that work via 'iframes'. ocPortal supports use of these feeds simply by putting the HTML that the feed maintainers ask you to use in your website, inside a Comcode HTML tag. The nature of these feeds are such that they embed portions of HTML into your own site, either via Javascript adding it directly on the client-side (users computers), or via a frame: they provide a simple bridge, rather than a clean feed.
+Before RSS and Atom became popular, there was a type of feed called a 'JavaScript feed', and also feeds that work via 'iframes'. ocPortal supports use of these feeds simply by putting the HTML that the feed maintainers ask you to use in your website, inside a Comcode HTML tag. The nature of these feeds are such that they embed portions of HTML into your own site, either via JavaScript adding it directly on the client-side (users computers), or via a frame: they provide a simple bridge, rather than a clean feed.
 
 To see all the feeds available in ocPortal (news is just the most typical usage for them), you may go to [tt]http://yourbaseurl/backend.php[/tt]: you will be presented with a screen that lists the feeds. The screen here is written in yet another language named OPML, and again made viewable in a web browser using XSLT.
 

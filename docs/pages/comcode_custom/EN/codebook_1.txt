@@ -23,7 +23,7 @@ To learn more about how ocPortal composes pages from it's various elements, and 
 ocPortal initialisation can be controlled by a few global variables in the entry-point script. They all default to [tt]0[/tt].
  - [tt]$MICRO_BOOTUP[/tt] ([tt]1[/tt] will tell ocPortal to not use a user login, skip the ability for sophisticated interfaces, and skip permissions)
  - [tt]$MICRO_AJAX_BOOTUP[/tt] ([tt]1[/tt] will skip a lot of stuff loading, intended for AJAX scripts that run a lot; this is intended to reduce server load)
- - [tt]$KNOWN_UTF8[/tt] ([tt]true[/tt] will tell ocPortal the request character set is definitely in Unicode, as the request came from Javascript)
+ - [tt]$KNOWN_UTF8[/tt] ([tt]true[/tt] will tell ocPortal the request character set is definitely in Unicode, as the request came from JavaScript)
  - [tt]$FORCE_INVISIBLE_GUEST[/tt] ([tt]1[/tt] will tell ocPortal to not use a member login)
 
 [title="3"]Addons[/title]
@@ -664,7 +664,7 @@ ocPortal has a multi-faceted testing strategy as there is no perfect solution fo
 10) ocPortal development mode, which applies lots of tricksy things, checking various things are done at run-time, and turning features on and off randomly, and doing some performance testing
 11) Test spider (longer term this will be integrated with unit test framework/ocPortal, as another menu option) -- now also implemented as a unit test
 12) For very quick tests, we use a bash script to run the PHP parser over all the ocPortal PHP files
-13) Other things we use: MySQL strict mode, Strict Javascript errors, Firefox HTML Validator extension, Word's grammar/spelling checker
+13) Other things we use: MySQL strict mode, Strict JavaScript errors, Firefox HTML Validator extension, Word's grammar/spelling checker
 14) Manual code reviews (via our aforementioned standards spreadsheet)
 15) ocPortal error mails
 
@@ -757,9 +757,9 @@ A source of great confusion in programming is all the different kinds of 'escapi
 
 Therefore I will summarise the kinds of escaping here...
 
-[title="4"]Javascript/PHP escaping[/title]
+[title="4"]JavaScript/PHP escaping[/title]
 
-If you want to output a string in Javascript/PHP that contains quotes, you need to prefix the quote with a '\' symbol. The same applies for '\' symbols themselves. The reason for this is because strings themselves are bounded by these quotes and hence to actually use these quotes within these quotes they need to be distinguished. This convention was taken from C and is used in many languages.
+If you want to output a string in JavaScript/PHP that contains quotes, you need to prefix the quote with a '\' symbol. The same applies for '\' symbols themselves. The reason for this is because strings themselves are bounded by these quotes and hence to actually use these quotes within these quotes they need to be distinguished. This convention was taken from C and is used in many languages.
 For example,
 [code="PHP"]
 echo 'Hello \'reader\'';
@@ -790,7 +790,7 @@ Escaping all data embedded in HTML is a key part of security.
 
 [title="4"]URL parameter escaping[/title]
 
-Parameters in URL's are separated by '&'. Keys and values and separated by '='. Also spaces are not allowed, amongst many other characters. If you pass any complex data that will go into a URL, use the [tt]urlencode[/tt] function ('[tt]window.encodeURIComponent[/tt]' in Javascript) which will sort all this for you. The ocPortal [tt]build_url[/tt] function handles it all in a much better way though, so you should actually almost always use this.
+Parameters in URL's are separated by '&'. Keys and values and separated by '='. Also spaces are not allowed, amongst many other characters. If you pass any complex data that will go into a URL, use the [tt]urlencode[/tt] function ('[tt]window.encodeURIComponent[/tt]' in JavaScript) which will sort all this for you. The ocPortal [tt]build_url[/tt] function handles it all in a much better way though, so you should actually almost always use this.
 
 [title="3"]Security[/title]
 
@@ -837,7 +837,7 @@ ocPortal protects against this kind of attack in three major ways
  - our own custom version of PHP that we develop on, that can automatically detect these vulnerabilities in any code whenever that code is run (yes we can do his amazingly enough -- it is a very cool technology!)
 Every value in a template that is not meant to contain HTML is marked as an escaped value ({VALUE*}). This means that 'html entities' are put in replacement of HTML control characters, making it impossible for such data to contain HTML tags.
 
-Header poisoning is a technique whereby malicious header information is inserted to totally bypass HTML restrictions. Because the attack operates at the header level, it is important that headers with new-line symbols do not ever get inserted . An example attack would be to inject a complex header that causes (a) HTML output to begin early, and then (b) some special Javascript to be injected (e.g. [tt]\r\n\r\n<script>alert('hack');</script>[/tt]).
+Header poisoning is a technique whereby malicious header information is inserted to totally bypass HTML restrictions. Because the attack operates at the header level, it is important that headers with new-line symbols do not ever get inserted . An example attack would be to inject a complex header that causes (a) HTML output to begin early, and then (b) some special JavaScript to be injected (e.g. [tt]\r\n\r\n<script>alert('hack');</script>[/tt]).
 
 Code uploading is when malicious programs are placed on the server using ocPortal's attachment system. Such attacks are prevented by file type filtering, inside the upload abstraction code -- so always use the [tt]get_url[/tt] function to handle uploads.
 
@@ -875,7 +875,7 @@ There are many important programming considerations that need to be applied in m
 
 [title="3"]Type strictness[/title]
 
-Type strictness comes naturally in most traditional programming languages, but languages like PHP and Javascript are 'weak typed' and automatically perform conversions on the fly. For simple systems this is good as it makes things quicker and easier, but for complex systems like ocPortal it poses a problem.
+Type strictness comes naturally in most traditional programming languages, but languages like PHP and JavaScript are 'weak typed' and automatically perform conversions on the fly. For simple systems this is good as it makes things quicker and easier, but for complex systems like ocPortal it poses a problem.
 
 As a strict rule we always use strict typing. The custom version of PHP ocProducts uses enforces this.
 

@@ -117,7 +117,7 @@ The race is on.
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]
  - [page="_SEARCH:tut_framework"]The ocPortal programming framework[/page]
  - [page="_SEARCH:tut_programming"]Introduction to programming[/page]
- - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and Javascript[/page]
+ - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
  - [page="_SEARCH:tut_tempcode"]Tempcode programming[/page]
  - [page="_SEARCH:tut_sql"]Manually editing your database with phpMyAdmin[/page]
  - [page="_SEARCH:codebook"]ocPortal Code Book[/page]

@@ -19,7 +19,7 @@ Most modern designs are fixed with on desktop computers, and have "responsive de
 
 [title="2"]See Also[/title]
 
- - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and Javascript[/page]
+ - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
  - [page="_SEARCH:tut_releasing_themes"]Themeing your site[/page]
  - [page="_SEARCH:tut_tempcode"]Tempcode programming[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]

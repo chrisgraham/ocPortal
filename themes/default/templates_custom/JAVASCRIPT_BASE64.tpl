@@ -70,7 +70,7 @@ var Base64 = {
 		// concatenated and output.
 		input = input.replace("=","");		// Padding characters are redundant
 		// The index/character relationship in the following string acts as a
-		// lookup table to convert from base 64 numerals to Javascript integers
+		// lookup table to convert from base 64 numerals to JavaScript integers
 		var swaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		var output_binary = "";
 		var output = "";

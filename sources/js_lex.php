@@ -182,7 +182,7 @@ function init__js_lex()
 }
 
 /**
- * Lex some Javascript code.
+ * Lex some JavaScript code.
  *
  * @param  string			The code
  * @return list			List of lexed tokens

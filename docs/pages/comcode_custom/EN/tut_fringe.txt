@@ -71,7 +71,7 @@ It's well known that web browser font support is severely limited, for two reaso
 
 Web developers solve these problems using two potential methods:
 1) Usually the developer will just cut out fonts as an image and place the image. This has the clear disadvantage that it can't be content-managed
-2) More experienced developers will often use something called sIFR. This involves using the Flash plugin to display fonts instead of XHTML, but gracefully degrades to regular XHTML if Flash is not available. Getting this working involves placing and configuring a number of files, configuring some Javascript, and compiling a TTF file into a flash file
+2) More experienced developers will often use something called sIFR. This involves using the Flash plugin to display fonts instead of XHTML, but gracefully degrades to regular XHTML if Flash is not available. Getting this working involves placing and configuring a number of files, configuring some JavaScript, and compiling a TTF file into a flash file
 
 Now in ocPortal it will be very easy to deploy sIFR. We've built everything into the framework so the only thing to consider is getting the compiled TTF font. Once you have this, it's as easy as pie to add pretty text into Comcode:
 
@@ -79,7 +79,7 @@ Now in ocPortal it will be very easy to deploy sIFR. We've built everything into
 [block="sifr" data="Test title" font="Chalkboard" color="#2222FF" tag="h2"]main_custom_gfx[/block]
 [/code]
 
-(you can still apply sIFR using the official Javascript technique if you want to -- that is cleaner but also more awkward to set up)
+(you can still apply sIFR using the official JavaScript technique if you want to -- that is cleaner but also more awkward to set up)
 
 Full list of parameters:
  - data (the text to write)
@@ -133,6 +133,6 @@ You have probably spotted that all these examples are using a new block, 'main_c
 
 [title="2"]See also[/title]
 
- - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and Javascript[/page]
+ - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
 
 

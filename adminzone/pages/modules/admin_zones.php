@@ -549,7 +549,7 @@ class Module_admin_zones
 	 * @param  ?ID_TEXT		The theme (NULL: no override)
 	 * @param  BINARY			Whether the zone requires a session for pages to be used
 	 * @param  ?ID_TEXT		Name of the zone (NULL: unknown)
-	 * @return array			A tuple: The tempcode for the fields, hidden fields, and extra Javascript
+	 * @return array			A tuple: The tempcode for the fields, hidden fields, and extra JavaScript
 	 */
 	function get_form_fields($in_zone_editor=false,$title='',$default_page='start',$header_text='',$theme=NULL,$require_session=0,$zone=NULL)
 	{

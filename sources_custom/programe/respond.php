@@ -874,7 +874,7 @@ function handlenode($xmlnode,$inputstar,$thatstar,$topicstar){
 		return $allout;
 
 	}
-	// For Javascript to work you need:
+	// For JavaScript to work you need:
 	//				1. Java.
 	//				2. PHP compiled with Java support.
 	//				3. js.jar in your php/java directory.

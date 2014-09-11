@@ -163,7 +163,7 @@ class virtual_bash
 
 			define('STREAM_STDOUT',2); // STDOUT (text-only) stream
 			define('STREAM_STDHTML',1); // STDHTML (XHTML) stream
-			define('STREAM_STDCOMMAND',0); // STDCOMMAND (Javascript) stream
+			define('STREAM_STDCOMMAND',0); // STDCOMMAND (JavaScript) stream
 			define('STREAM_STDERR',3); // STDERR (text-only error) stream
 
 			define('SECTION_COMMAND',0); // The command section: e.g. echo
@@ -275,7 +275,7 @@ class virtual_bash
 		{
 			// Exit with an error
 			if ($this->output[STREAM_STDERR]!='')
-				$this->output[STREAM_STDERR]=do_lang('PROBLEM_ACCESSING_RESPONSE')."\n".$this->output[STREAM_STDERR]; // Ugh...got to work with language strings designed for Javascript
+				$this->output[STREAM_STDERR]=do_lang('PROBLEM_ACCESSING_RESPONSE')."\n".$this->output[STREAM_STDERR]; // Ugh...got to work with language strings designed for JavaScript
 			else
 				$this->output[STREAM_STDERR]=do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
 

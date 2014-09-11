@@ -62,7 +62,7 @@ The upgrade process involves a number of stages (the upgrader will step you thro
 
 [title="2"]Browser cache[/title]
 
-Often browsers will cache CSS and Javascript files, even when changed on the server. Usually completely restarting the browser will make it recheck cache times. If you get Javascript errors after upgrading, chances are fair that you need to empty your browser cache.
+Often browsers will cache CSS and JavaScript files, even when changed on the server. Usually completely restarting the browser will make it recheck cache times. If you get JavaScript errors after upgrading, chances are fair that you need to empty your browser cache.
 
 [title="2"]Assistance[/title]
 

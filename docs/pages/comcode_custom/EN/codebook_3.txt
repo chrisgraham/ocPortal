@@ -20,7 +20,7 @@ Input:
  - File/HTTP I/O stubs
 Output:
  - Find character set (fast default case: hard-coded character set optimisation)
- - CSS and Javascript inclusion/merging
+ - CSS and JavaScript inclusion/merging
  - Breadcrumbs (disableable)
  - Comcode-page rendering (fast default case: Comcode cache)
  - Date/time rendering
@@ -68,7 +68,7 @@ Context detection:
  - Mobile detection
  - Rendering option detection [e.g. wide mode]
  - Cookie detection (may be disabled)
- - Javascript detection (may be disabled)
+ - JavaScript detection (may be disabled)
  - Browser capability/flag detection
  - IP banning (disableable)
  - Detection of user language (fast default case if internationalisation disabled)
@@ -164,7 +164,7 @@ The extra strictness of XHTML is now largely historic, as no websites (including
 Never-the-less, it encourages good coding discipline -- clean, intuitive code.
 
 ocPortal notes:
- - Ideally do not use the [tt].innerHTML[/tt] Javascript property. Instead you will should use the ocPortal  [tt]set_inner_html[/tt] and [tt]get_inner_html[/tt] functions that ocPortal supplies. Our functions have been carefully tuned over the years to work on all browsers to handle things like embedded Javascript code in a consistent way.
+ - Ideally do not use the [tt].innerHTML[/tt] JavaScript property. Instead you will should use the ocPortal  [tt]set_inner_html[/tt] and [tt]get_inner_html[/tt] functions that ocPortal supplies. Our functions have been carefully tuned over the years to work on all browsers to handle things like embedded JavaScript code in a consistent way.
 
 [title="3"]MySQL errors[/title]
 
@@ -220,9 +220,9 @@ To save time and auto-populate form fields during testing, if you have the Web d
 
 Use the Firefox Firebug extension's 'Inspect' tool, or an equivalent utility in your web browser of choice. It will save you a lot of time.
 
-[title="3"]Debugging Javascript[/title]
+[title="3"]Debugging JavaScript[/title]
 
-Use the Firefox Firebug extension's Javascript breakpoint facility, or an equivalent utility in your web browser of choice. It will save you a lot of time.
+Use the Firefox Firebug extension's JavaScript breakpoint facility, or an equivalent utility in your web browser of choice. It will save you a lot of time.
 
 [title="2"]Advanced deployment and customisation[/title]
 
@@ -248,7 +248,7 @@ We have the following which are either unlikely to be useful, or potentially uns
  - Integrations
   - [tt]force_admin_auth[/tt] -- set this to '1' if you want any super-administrator to have to have some kind of authorisation-based login by redirecting them to [tt]http://base_url/admin_login/[/tt] which presumably you have configured to be a redirect-through that catches logins (Apache only)
   - [tt]no_password_hashing[/tt] -- set this to '1' if you want passwords to be stored as plain-text in the database (not recommended)
-  - [tt]xhtml_strict[/tt] -- set this to '1' to do some magic to make ocPortal's output XHTML strict. This is slow and not really advisable as it will degrade the user experience if Javascript is not available (new-window links would break)
+  - [tt]xhtml_strict[/tt] -- set this to '1' to do some magic to make ocPortal's output XHTML strict. This is slow and not really advisable as it will degrade the user experience if JavaScript is not available (new-window links would break)
   - [tt]webdav_root[/tt] -- set this to the subdirectory the WebDAV addon should run from. On Windows it needs to run from the root, i.e. '/'. However, to do this you would need to map onto a separate domain name. If you change this setting, you'll need to change the redirect in your [tt].htaccess[/tt] file
  - Unsupported functionality
   - [tt]unofficial_ecommerce[/tt] -- set to '1' if your forum driver contains usergroup manipulation functions (we don't support this, but wanted to be able to allow those willing to extend forum drivers to use our full eCommerce framework)
@@ -326,7 +326,7 @@ We have the following which are either unlikely to be useful, or potentially uns
   - [tt]no_flood_control[/tt] -- set this to '1' if you will not have flood control
   - [tt]implicit_usergroup_sync[/tt] -- set this to '1' to enable synching of implicit usergroups (see the advanced members tutorial for more information)
   - [tt]shortened_tempcode[/tt] -- set this to '1' to not store parameter reference origins in Tempcode, which makes Tempcode use less memory/storage/CPU
-  - [tt]advanced_admin_cache[/tt] -- set this to '1' to enable the Advanced Admin Cache (AAC). The AAC loads fully cached pages for administrators whilst checking the server for any updates. The result is that you see a cached page for about 1 second until the latest version is retrieved, making browsing feel much snappier. This feature is highly experimental, and only works on the very fast modern web browsers: Google Chrome, Opera, and Safari. It may be unstable even in these browsers though. If your site is on a shared domain where other users can run their own Javascript code then you should not use it as it will lead to a serious security vulnerability.
+  - [tt]advanced_admin_cache[/tt] -- set this to '1' to enable the Advanced Admin Cache (AAC). The AAC loads fully cached pages for administrators whilst checking the server for any updates. The result is that you see a cached page for about 1 second until the latest version is retrieved, making browsing feel much snappier. This feature is highly experimental, and only works on the very fast modern web browsers: Google Chrome, Opera, and Safari. It may be unstable even in these browsers though. If your site is on a shared domain where other users can run their own JavaScript code then you should not use it as it will lead to a serious security vulnerability.
   - [tt]save_jpegs_as_png[/tt] -- set this to '1' to allow ocPortal to detect when JPEG files would be smaller, and save JPEG data into PNG file extensions. It is a bit of a hack, and goes against standards, but works well
  - Performance tuning (negative)
   - [tt]allow_admin_in_other_zones[/tt] -- set this to '1' if you want to allow admin and CMS modules to run in other zones (small performance cost)
@@ -347,7 +347,7 @@ The 'keep' parameters available are:
  - [tt]keep_textonly[/tt] -- set to '1' if the 'text only' stylesheet is to be used
  - [tt]keep_simplified_donext[/tt] -- set to '1' to temporarily act as if the simplified do-next option is turned on
  - [tt]keep_mobile[/tt] -- set to '1' to pretend you're using a PDA
- - [tt]keep_has_js[/tt] -- set to '1' to force ocPortal to think you have Javascript (useful if the has-JS cookie isn't saving yet you need to use a JS-based interface)
+ - [tt]keep_has_js[/tt] -- set to '1' to force ocPortal to think you have JavaScript (useful if the has-JS cookie isn't saving yet you need to use a JS-based interface)
  - [tt]keep_ldap_debug[/tt] -- set to '1' to forcefully show LDAP errors, when suppressing them might normally be wise due to over-sensitivity
  - [tt]keep_hide_mail_failure[/tt] -- set to '1' if you want to avoid showing e-mailing errors
  - [tt]keep_huge[/tt] -- set to '1' if you want to override the precautionary filesize check used by the JS validator
@@ -369,7 +369,7 @@ The 'keep' parameters available are:
  - [tt]keep_show_parse_errors[/tt] -- set this to '1' if you think you have a corrupt PHP file but you can't tell which as your PHP display errors option isn't on (and hence just get blank screens). This will allow ocPortal to generate stack traces for most corrupt files it tries to include. Note another cause of blank screens can be the PHP memory limit being exceeded.
  - [tt]keep_send_immediately[/tt] -- set this to '1' if you want to debug newsletter code, and not have newsletters sent in the background
  - [tt]keep_su_online[/tt] -- set this to '1' if you want the user '[tt]keep_su[/tt]' is used with to also show as online, and for their last online/submit statuses to be updated
- - [tt]keep_no_minify[/tt] -- set this to '1' if you want to use a Javascript debugger and hence do not want the JS to be minified (unreadable)
+ - [tt]keep_no_minify[/tt] -- set this to '1' if you want to use a JavaScript debugger and hence do not want the JS to be minified (unreadable)
  - [tt]keep_show_loading[/tt] -- set this to '1' if you want comments inside the HTML source showing memory usage taken up as server-side scripts load
  - [tt]keep_no_swfupload[/tt] -- set this to '1' if you don't want the flash uploader to be used
  - [tt]keep_avoid_memory_limit[/tt] -- do not put on a memory limit; using this will also add in the option to remove paginations, for those with the remove_page_split privilege
@@ -379,7 +379,7 @@ The 'keep' parameters available are:
  - [tt]keep_debug_notifications[/tt] -- set this to '1' if you are debugging the notifications system and therefore need them to be sent before the page output finishes
  - [tt]keep_debug_tasks[/tt] -- set this to '1' if you are debugging the tasks system and therefore need them to be run immediately (i.e. without going into the task queue)
  - [tt]keep_devtest[/tt] -- used during development mode to test URL building is working correctly, of no use manually
- - [tt]keep_debug_has_cookies[/tt] -- useful for developers to tell ocPortal cookies are supported when Javascript may be off
+ - [tt]keep_debug_has_cookies[/tt] -- useful for developers to tell ocPortal cookies are supported when JavaScript may be off
  - [tt]keep_memory_limit_test[/tt] -- set to a number of megabytes under 32 to reduce the memory limit to this value; useful for performance debugging
  - [tt]keep_no_chain[/tt] -- useful when working with the XML forum driver, tells it to not do reads from the configured chain database
  - [tt]keep_realtime_test[/tt] -- used for testing the realtime feature's display (it injects random data)
@@ -453,7 +453,7 @@ It's overkill to apply the full range of ocPortal coding standards if you're wri
  - You can make more assumptions than you ordinarily would be able to. For example, you might be able to assume cURL is installed. It is sensible to document your assumptions though, to make sure they continue to be met, or so someone breaking them has an idea that they need to act to change your code.
  - For simple dynamic functionality you can use minimodules and miniblocks instead of full blown object-orientated modules and blocks.
  - You do not need to write PHPdoc comments unless you think other developer's would benefit from them.
- - On some sites you may be able to assume Javascript is enabled, or that accessibility isn't an issue (e.g. on a video site it's unlikely to need to cater for blind users -- unless you plan to support audio description). Generally we would advise to be very cautious here, it usually does not take much longer to support full accessibility, and is worth doing routinely. But it is worth us pointing this out because some sites may require particular complex Javascript interfaces and it might be unviable to support Javascript being disabled.
+ - On some sites you may be able to assume JavaScript is enabled, or that accessibility isn't an issue (e.g. on a video site it's unlikely to need to cater for blind users -- unless you plan to support audio description). Generally we would advise to be very cautious here, it usually does not take much longer to support full accessibility, and is worth doing routinely. But it is worth us pointing this out because some sites may require particular complex JavaScript interfaces and it might be unviable to support JavaScript being disabled.
 
 Bear in mind that some sites need maintenance or have multiple people working on them, so you should bear this in mind when you decide the level of engineered design and code documentation to implement for your custom functionality. It is a trade-off between initial development cost, and long-term time savings.
 

@@ -100,7 +100,7 @@ function block_menu__cache_on($map)
 {
 	/*
 	Menu caching is problematic. "Is active" caching theoretically would need doing against each URL.
-	 (or to use Javascript, or Tempcode pre-processing, to implement that -- but that would be messy)
+	 (or to use JavaScript, or Tempcode pre-processing, to implement that -- but that would be messy)
 	We therefore assume that menu links are maximally distinguished by zone&page&type parameters.
 	 (special case -- catalogue index screens are also distinguished by ID, as catalogues vary a lot)
 

@@ -101,7 +101,7 @@ echo '
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>';
 	echo '
-		<script language="javascript" src="data/editarea/edit_area_full.js"></script>
+		<script src="data/editarea/edit_area_full.js"></script>
 
 		<meta name="robots" content="noindex, nofollow" />
 		';
@@ -463,7 +463,7 @@ END;
 				if ($myfile===false)
 				{
 					echo <<<END
-<script language="Javascript">
+<script>
 var msg='Access denied. You probably should have specified FTP details.';
 if (window.alert!==null)
 {
@@ -482,7 +482,7 @@ END;
 				{
 					fclose($myfile);
 					echo <<<END
-<script language="Javascript">
+<script>
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
 {
@@ -508,7 +508,7 @@ END;
 				{
 					fclose($h);
 					echo <<<END
-<script language="Javascript">
+<script>
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
 {
@@ -528,7 +528,7 @@ END;
 				if ($ftp_success===false)
 				{
 					echo <<<END
-<script language="Javascript">
+<script>
 var msg='Could not save via FTP ['.@strval($php_errormsg).'].';
 if (window.alert!==null)
 {
@@ -594,7 +594,7 @@ END;
 		else
 			$message="Deleted ".code_editor_escape_html($save_path).". You may edit to recreate the file if you wish however.";
 		echo <<<END
-<script language="Javascript">
+<script>
 var msg='{$message}';
 if (window.alert!==null)
 {

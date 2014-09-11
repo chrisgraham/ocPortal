@@ -600,7 +600,7 @@ function _find_comcode_tag_embed_required($tag)
  * @param  boolean		Whether the tag contents input has also been handled here.
  * @param  array			Default parameter values.
  * @param  array			List of tag parameters.
- * @param  string			Javascript to deploy.
+ * @param  string			JavaScript to deploy.
  * @param  boolean		Whether previewing will be allowed.
  * @return boolean		Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
 */
@@ -812,7 +812,7 @@ function _try_for_special_comcode_tag_extra_param_ui($tag,$actual_tag,&$fields,&
  * @param  tempcode		Advanced UI fields.
  * @param  tempcode		Hidden fields.
  * @param  string			Default embed contents.
- * @param  string			Javascript to deploy.
+ * @param  string			JavaScript to deploy.
  * @param  boolean		Whether previewing will be allowed.
  * @return boolean		Whether we did render specialisation code (if not, standard code will be deployed by the calling function).
 */

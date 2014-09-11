@@ -104,7 +104,7 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
 }
 
 /**
- * Compile a Javascript file.
+ * Compile a JavaScript file.
  *
  * @param  ID_TEXT		Name of the JS file
  * @param  PATH			Full path to the JS file
@@ -341,10 +341,10 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify=true)
 }
 
 /**
- * Minimise the given Javascript
+ * Minimise the given JavaScript
  *
- * @param 	string		Javascript to minimise
- * @return 	string		Minimised Javascript
+ * @param 	string		JavaScript to minimise
+ * @return 	string		Minimised JavaScript
  */
 function js_minify($js)
 {

@@ -42,7 +42,7 @@
  ************************************************************************************/
 
 $language_data = array (
-    'LANG_NAME' => 'Javascript',
+    'LANG_NAME' => 'JavaScript',
     'COMMENT_SINGLE' => array(1 => '//'),
     'COMMENT_MULTI' => array('/*' => '*/'),
     //Regular Expressions

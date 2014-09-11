@@ -454,7 +454,7 @@ $featuretree=array(
 				NULL, // divider
 				array('Include other templates, blocks, or pages, within a template'),
 				array('Create and use standard boxes','Avoid having to copy and paste complex segments of <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>'),
-				array('Easy web browser sniffing','Present different markup to different web browsers, detect whether Javascript is enabled, detect bots, and detect PDAs/Smartphones'),
+				array('Easy web browser sniffing','Present different markup to different web browsers, detect whether JavaScript is enabled, detect bots, and detect PDAs/Smartphones'),
 				array('Randomisation features'),
 				array('Pull up member details with ease','For example, show the current users avatar or point count'),
 				array('Easily pull different banner rotations into your templates'),
@@ -514,7 +514,7 @@ $featuretree=array(
 			'Ease of use <a target="_blank" class="link_exempt no_print" title="(Opens in new window) Example of Ease of use" href="{$BRAND_BASE_URL}/docs/"><img class="inline_image_3" alt="" src="{$IMG*,help_small}" /></a>',
 			array(
 				array('Professionally designed user interfaces'),
-				array('<abbr title="Asynchronous Javascript And XML">AJAX</abbr> techniques','Streamlined website interaction'),
+				array('<abbr title="Asynchronous JavaScript And XML">AJAX</abbr> techniques','Streamlined website interaction'),
 				array('<abbr title="What You See Is What You Get">WYSIWYG</abbr> editing'),
 				array('Tutorials','Over 100 written tutorials, and a growing collection of video tutorials'),
 				array('Displays great on mobiles','Mobile browsers can be automatically detected, or the user can select the mobile version from the footer. All public website features work great on <abbr title="Quarter VGA, a mobile display size standard">QVGA</abbr> or higher.'),
@@ -538,9 +538,9 @@ $featuretree=array(
 				array('<abbr title="Web Content Accessibility Guidelines">WCAG</abbr>, <abbr title="Authoring Tool Accessibility Guidelines">ATAG</abbr>','Meeting of accessibility guidelines in full'),
 				array('Tableless <abbr title="Cascading Style Sheets">CSS</abbr> markup, with no hacks'),
 				NULL, // divider
-				array('Inbuilt tools for checking validity of <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr>, and Javascript'),
+				array('Inbuilt tools for checking validity of <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>, <abbr title="Cascading Style Sheets">CSS</abbr>, and JavaScript'),
 				array('Extra markup semantics, including Dublin Core support and microformats'),
-				array('Standards-based (modern <abbr title="Document Object Model">DOM</abbr> and <abbr title="Asynchronous Javascript And XML">AJAX</abbr>, no DOM-0 or innerHTML) Javascript'),
+				array('Standards-based (modern <abbr title="Document Object Model">DOM</abbr> and <abbr title="Asynchronous JavaScript And XML">AJAX</abbr>, no DOM-0 or innerHTML) JavaScript'),
 				array('Automatic cleanup of bad <abbr title="eXtensible HyperText Markup Language">XHTML</abbr>','XHTML outside your control (e.g. from <abbr title="Really Simple Syndication">RSS</abbr>) will be cleaned up for you'),
 			),
 		),

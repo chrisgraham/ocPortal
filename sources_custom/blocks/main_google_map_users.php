@@ -125,7 +125,7 @@ class Block_main_google_map_users
 				return paragraph(do_lang_tempcode('NO_ENTRIES'),'','nothing_here');
 		}
 
-		// Make marker data Javascript-friendly
+		// Make marker data JavaScript-friendly
 		$member_data_js="var data=[";
 		foreach($members_to_show as $i=>$member_data)
 		{

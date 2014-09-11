@@ -21,7 +21,7 @@
 class Hook_choose_image
 {
 	/**
-	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by Javascript and expanded on-demand (via new calls).
+	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
 	 *
 	 * @param  ?ID_TEXT		The ID to do under (NULL: root)
 	 * @param  array			Options being passed through

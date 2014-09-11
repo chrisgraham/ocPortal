@@ -196,9 +196,9 @@ XHTML goes here
 
 If you have some simple content that is just plain text, it's best to just write it in Comcode. Otherwise, it does not matter a lot if you use XHTML. Comcode exists to make it easier for non-experts to write content, but you know XHTML already.
 
-[title="3"]Javascript libraries (such as jQuery)[/title]
+[title="3"]JavaScript libraries (such as jQuery)[/title]
 
-You may have used some Javascript libraries in your design. jQuery is very common nowadays. You can reference these Javascript resources very simply in the [tt]<head>[/tt] tag just like you would in any simple static website, and it won't cause any problems.
+You may have used some JavaScript libraries in your design. jQuery is very common nowadays. You can reference these JavaScript resources very simply in the [tt]<head>[/tt] tag just like you would in any simple static website, and it won't cause any problems.
 
 If you are using jQuery you may want to consider linking to the online copy that Google host's, because then visitors will get a faster page load time because it's probably already cached on their computers (because many sites use the same copies). Obviously only do this if your site is always going to be viewed on the live Internet (it's not good for Intranets!).
 
@@ -231,7 +231,7 @@ This is actually important for security, if you don't properly "escape" your dat
 
 Therefore we quite consistently escape our symbols and template parameters, even if we trust them. E.g. we say [tt]{$SITE_NAME*}[/tt] not [tt]{$SITE_NAME}[/tt] if we are embedding the site name into an XHTML template.
 
-ocPortal does not handle this automatically because the conversion carries an assumption, and it is up to you to decide in what context your data is being used (e.g. a Javascript template likely would not want XHTML escaping applied). But in 99% of cases it will need the '*'.
+ocPortal does not handle this automatically because the conversion carries an assumption, and it is up to you to decide in what context your data is being used (e.g. a JavaScript template likely would not want XHTML escaping applied). But in 99% of cases it will need the '*'.
 
 [title="2"]Specific advice for specific situations[/title]
 
@@ -372,7 +372,7 @@ These are achieved using ocPortal's [tt]main_screen_actions[/tt] block. We have 
 
 A lot of designs have buttons to change the font size. Personally I think this is a dreadful feature (because it's already a feature of every web browser, so achievable by the end user in a consistent way that works across all websites), but a lot of clients like it because they think it is a mark of an accessible website.
 
-Assuming your designs use 'em' font sizes then you can easily achieve it by adding a little Javascript like this to your text size buttons:
+Assuming your designs use 'em' font sizes then you can easily achieve it by adding a little JavaScript like this to your text size buttons:
 [code]
 onclick="document.body.style.fontSize='120%'; return false;
 [/code]

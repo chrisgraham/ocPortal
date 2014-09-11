@@ -284,10 +284,10 @@ function _load_blank_output_state($just_tempcode=false,$true_blank=false)
 		$HELPER_PANEL_TEXT='';
 		$HELPER_PANEL_TUTORIAL='';
 
-		// Register basic CSS and Javascript requirements
+		// Register basic CSS and JavaScript requirements
 		global $JAVASCRIPT,$JAVASCRIPTS,$CSSS,$JAVASCRIPTS_DEFAULT;
 		$JAVASCRIPT=NULL;
-		/** List of required Javascript files.
+		/** List of required JavaScript files.
 		 * @sets_output_state
 		 *
 		 * @global ?array $JAVASCRIPTS
@@ -432,7 +432,7 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 		$middle->handle_symbol_preprocessing();
 		$global=$TEMPCODE_CURRENT_PAGE_OUTPUTTING;
 		$global->singular_bind('MIDDLE',$middle);
-		// NB: We also considered the idea of using document.write() as a way to reset the output stream, but Javascript execution will not happen before the parser (even if you force a flush and delay)
+		// NB: We also considered the idea of using document.write() as a way to reset the output stream, but JavaScript execution will not happen before the parser (even if you force a flush and delay)
 	} else
 	{
 		$global=do_template('GLOBAL_HTML_WRAP',array(
@@ -2295,9 +2295,9 @@ function has_cookies() // Will fail on users first visit, but then will catch on
 
 /**
  * Determine whether the user's browser supports JavaScript or not.
- * Unfortunately this function will only return true once a user has been to the site more than once... Javascript will set a cookie, indicating it works.
+ * Unfortunately this function will only return true once a user has been to the site more than once... JavaScript will set a cookie, indicating it works.
  *
- * @return boolean		Whether the user has definitely got Javascript
+ * @return boolean		Whether the user has definitely got JavaScript
  */
 function has_js()
 {
@@ -2607,7 +2607,7 @@ function strip_html($in)
 	if ((strpos($in,'<')===false) && (strpos($in,'&')===false)) return $in; // Optimisation
 
 	$search=array(
-		'#<script[^>]*?'.'>.*?</script>#si',	// Strip out Javascript
+		'#<script[^>]*?'.'>.*?</script>#si',	// Strip out JavaScript
 		'#<style[^>]*?'.'>.*?</style>#siU',		// Strip style tags properly
 		'#<![\s\S]*?--[ \t\n\r]*>#',			// Strip multi-line comments including CDATA
 	);

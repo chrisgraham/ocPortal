@@ -254,7 +254,7 @@ function activities_ajax_update_list_handler()
 				// CDATA can't be nested (as it's a form of comment), we take this
 				// into account by base64 encoding the whole template and decoding
 				// it in the browser. We wrap it in some arbitrary XML and a CDATA
-				// tag so that the Javascript knows what it's received
+				// tag so that the JavaScript knows what it's received
 				$list_items.='<listitem id="'.strval($row['id']).'"><![CDATA['.base64_encode($list_item->evaluate()).']]></listitem>';
 
 			}
@@ -324,7 +324,7 @@ function activities_ajax_removal_handler()
 
 /**
  * Maintains a text file in data_custom. This contains the latest activity's ID.
- * Since the Javascript polls for updates, it can check against this before
+ * Since the JavaScript polls for updates, it can check against this before
  * running any PHP.
  * Locking timeout code provided by "administrator at proxy-list dot org" on
  * http://php.net/manual/en/function.flock.php

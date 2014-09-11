@@ -7,7 +7,7 @@ This tutorial will explain some of the more advanced aspects of the Comcode syst
 [title="2"]Comcode Security[/title]
 
 A great deal of emphasis is placed on making sure Comcode is secure, as it is available to all members of an ocPortal website. There is a privilege, 'allow insecure Comcode', and another 'allow nuisance Comcode': we recommend that these are left turned off except for staff.
-There are additional mechanisms in Comcode to aid security, such as ones to stop Javascript-powered URLs, and ones to stop people trying to using HTML entities to bypass Javascript filtering.
+There are additional mechanisms in Comcode to aid security, such as ones to stop JavaScript-powered URLs, and ones to stop people trying to using HTML entities to bypass JavaScript filtering.
 
 Users can use HTML in Comcode, but it is subject to a security filter. There are two security filters used:
 1) The whitelist filter. This is the most secure filter, and is used by default. It only allows certain HTML fragments to be used (fragments likely to be produced via usage of the WYSIWYG editor).

@@ -36,10 +36,10 @@ function init__tempcode__runtime()
 	define('NL_ESCAPED',4); // New lines disappear
 	define('CC_ESCAPED',5); // Comcode
 	define('UL_ESCAPED',6); // URL
-	define('JSHTML_ESCAPED',7); // Javascript </ -> <\/
+	define('JSHTML_ESCAPED',7); // JavaScript </ -> <\/
 	define('NL2_ESCAPED',8); // New lines go to \n
 	define('ID_ESCAPED',9); // Strings to to usable IDs
-	define('NAUGHTY_ESCAPED',10); // Used as a Javascript variable name, for example... to prevent code injection
+	define('NAUGHTY_ESCAPED',10); // Used as a JavaScript variable name, for example... to prevent code injection
 	define('NULL_ESCAPED',11); // This is useful to mark something that takes strings but does not need escaping (usually because it is escaped further down the line)
 	define('FORCIBLY_ENTITY_ESCAPED',12); // To force a language string to be escaped
 	define('CSS_ESCAPED',13); // To stop CSS injection

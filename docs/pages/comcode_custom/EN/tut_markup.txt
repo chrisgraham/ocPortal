@@ -1,4 +1,4 @@
-[title sub="Written by Philip Withnall, ocProducts"]ocPortal Tutorial: Introduction to XHTML, CSS and Javascript[/title]
+[title sub="Written by Philip Withnall, ocProducts"]ocPortal Tutorial: Introduction to XHTML, CSS and JavaScript[/title]
 
 This tutorial is an introduction to the main standard web technologies that ocPortal is built upon. It does not explain any technologies specific to ocPortal. If you need to learn about the ocPortal's own Tempcode technology, please read the [page="_SEARCH:tut_tempcode"]Tempcode programming[/page] tutorial.
 
@@ -9,10 +9,10 @@ This tutorial is an introduction to the main standard web technologies that ocPo
 ocPortal is built on top of standard web/Internet technologies. These technologies are as follows:
  - [abbr="Transfer Control Protocol / Internet Protocol"]TCP/IP[/abbr] -- this is the protocol for transmitting Internet data and is where IP addresses come from
  - [abbr="HyperText Transfer Protocol"]HTTP[/abbr], and cookies [i](optional)[/i] -- this is the protocol for transmitting web data and is where [abbr="Uniform Resource Locator"]URL[/abbr]s come
- - [abbr="eXtensible Markup Language"]XML[/abbr] (including [abbr="Really Simple Syndication"]RSS[/abbr], Atom, [abbr="Outline Processor Markup Language"]OPML[/abbr], [abbr="Scalable Vector Graphics"]SVG[/abbr] and use in [abbr="Asynchronous Javascript and XML"]AJAX[/abbr]) -- this is a standard for structuring data, used for many web formats that ocPortal supports
+ - [abbr="eXtensible Markup Language"]XML[/abbr] (including [abbr="Really Simple Syndication"]RSS[/abbr], Atom, [abbr="Outline Processor Markup Language"]OPML[/abbr], [abbr="Scalable Vector Graphics"]SVG[/abbr] and use in [abbr="Asynchronous JavaScript and XML"]AJAX[/abbr]) -- this is a standard for structuring data, used for many web formats that ocPortal supports
  - [abbr="eXtensible HyperText Markup Language"]XHTML5[/abbr] (and microformats) -- this is the standard for web pages
  - [abbr="Cascading Style Sheets"]CSS[/abbr] -- this is the standard for styling web pages; it ties into the XHTML
- - Javascript (aka ECMA-Script) [i](optional)[/i] and [abbr="Document Object Model"]DOM[/abbr] -- this is the standard to make web pages interactive; it ties into the XHTML
+ - JavaScript (aka ECMA-Script) [i](optional)[/i] and [abbr="Document Object Model"]DOM[/abbr] -- this is the standard to make web pages interactive; it ties into the XHTML
  - Dublin Core -- this is the standard for adding meta-data to web pages; it ties into the XHTML (ocPortal 4.2+)
  - PHP -- this is the programming language ocPortal is written in
  - Web server -- this is the software applicaton that serves data over HTTP, and ties into PHP; Apache and [abbr="Internet Information Server"]IIS[/abbr] are examples of the web server applications ocPortal can use
@@ -26,12 +26,12 @@ ocPortal is built on top of standard web/Internet technologies. These technologi
 
 ocPortal includes some technologies of its own:
  - Tempcode -- this is ocPortal's template technology (ocPortal combines data with XHTML templates in order to construct XHTML web pages)
- - Comcode -- this is ocPortal's easy-to-use content language (lumps of text are written in this, and there are optional ways of encoding sophisticated behaviours; it compiles to more complex XHTML/CSS/Javascript, via templates)
+ - Comcode -- this is ocPortal's easy-to-use content language (lumps of text are written in this, and there are optional ways of encoding sophisticated behaviours; it compiles to more complex XHTML/CSS/JavaScript, via templates)
  - Dublin Core extensions -- ocPortal extends Dublin Core (described above)
  - OcCLE -- A command line interface to an ocPortal website
  - Page-links -- A simple technology for generating link between pages, that compiles to HTTP URLs; page-links are local to a website (i.e. they can only work to generate links within a site), and are consistent regardless of the SEO URL scheme employed (ocPortal supports URL rewriting, which can make the appearance of final URLs vary considerably)
 
-This tutorial focuses mainly on XHTML, CSS and Javascript, which are the three technologies one needs to understand to do advanced themeing. Links to full resources for learning these technologies are also provided.
+This tutorial focuses mainly on XHTML, CSS and JavaScript, which are the three technologies one needs to understand to do advanced themeing. Links to full resources for learning these technologies are also provided.
 
 [title="2"]URLs[/title]
 
@@ -250,7 +250,7 @@ Anyway: some XHTML elements.
 			<kbd>name</kbd>
 			(the name with which to refer to the input on the server), <kbd>id</kbd>
 			(the <strong>unique</strong> identifier with which to refer to this element
-			(see CSS and Javascript sections below)).</p>
+			(see CSS and JavaScript sections below)).</p>
 		</td>
 	</tr>
 	<tr>
@@ -327,7 +327,7 @@ Anyway: some XHTML elements.
 			<p>A drop-down list. Recommended attributes: <kbd>name</kbd>
 			(the name with which to refer to the input on the server), <kbd>id</kbd>
 			(the <strong>unique</strong> identifier with which to refer to this element
-			(see CSS and Javascript sections below)).</p>
+			(see CSS and JavaScript sections below)).</p>
 		</td>
 	</tr>
 	<tr>
@@ -395,7 +395,7 @@ Anyway: some XHTML elements.
 			(how many character rows to display). Recommended attributes: <kbd>name</kbd>
 			(the name with which to refer to the input on the server), <kbd>id</kbd>
 			(the <strong>unique</strong> identifier with which to refer to this element
-			(see CSS and Javascript sections below)).</p>
+			(see CSS and JavaScript sections below)).</p>
 		</td>
 	</tr>
 	<tr>
@@ -462,7 +462,7 @@ Although this table doesn't list all of the XHTML elements (it lists approximate
 			</td>
 			<td>
 				<p>The <strong>unique</strong> identifier for the element
-				(see CSS and Javascript sections below).</p>
+				(see CSS and JavaScript sections below).</p>
 			</td>
 		</tr>
 		<tr>
@@ -489,7 +489,7 @@ Although this table doesn't list all of the XHTML elements (it lists approximate
 	</table>
 [/html]
 
-There are other standard attributes, but only four, and they're used exceedingly infrequently. Note that there are also event attributes (see Javascript section below).
+There are other standard attributes, but only four, and they're used exceedingly infrequently. Note that there are also event attributes (see JavaScript section below).
 
 Now that you've learnt all the XHTML elements, how to use them, and their attributes, you might think it's all over. This is not true; XHTML has a final surprise for you.
 
@@ -607,7 +607,7 @@ A little aside explanation about the XHTML class attribute is probably required 
 [/code]
 In that example, the [tt]<span>[/tt] tag has two CSS classes attached. However, it should be noted that when naming CSS classes, you should name them for their [i]function[/i], rather than for their [i]appearance[/i]. This is for maintenance considerations: if you name a class 'red', then change the colour to blue, you'd have to rename it, and change all the references to it, or leave it as a mess.
 
-ID [i]selectors[/i] are another basic selector type, which apply properties to elements based upon their ID attribute (for more information on the ID attribute, see the Javascript section below).
+ID [i]selectors[/i] are another basic selector type, which apply properties to elements based upon their ID attribute (for more information on the ID attribute, see the JavaScript section below).
 [code="CSS"]
 #main_doc
 {
@@ -829,17 +829,17 @@ The final part of the CSS jigsaw is [i]inheritance[/i], or [i]cascade[/i]. This 
 
 [i]Cascade[/i] is actually a variation of inheritance, on a larger scale. Specifically, it is the inheritance of rules in the hierarchy of stylesheets. Although only applicable for very large sites, it is important to know about: a stylesheet can import another stylesheet using something called the '@import' rule. [i]Cascade[/i] is when the rules and properties from the first stylesheet cascade into the second stylesheet, and are applied to elements unless overruled.
 
-[title="2"]Javascript[/title]
+[title="2"]JavaScript[/title]
 
-Javascript is the final piece in the web development puzzle. It allows dynamic, event-driven, interactive functionality, and is the prime component of emerging technologies such as Ajax.
+JavaScript is the final piece in the web development puzzle. It allows dynamic, event-driven, interactive functionality, and is the prime component of emerging technologies such as Ajax.
 
-It would be pointless to go into a detailed explanation of Javascript and how to script in it, as all the Javascript a developer could ever require is available online already.
-However, it is useful to be able to understand roughly what some Javascript does, and the concepts behind it.
+It would be pointless to go into a detailed explanation of JavaScript and how to script in it, as all the JavaScript a developer could ever require is available online already.
+However, it is useful to be able to understand roughly what some JavaScript does, and the concepts behind it.
 
-Javascript is a [i]client-side[/i] scripting language; the web server sends the raw Javascript to the client's browser, which goes through it, performing the specified operations. It is very fast, and can manipulate a webpage in microscopic detail.
+JavaScript is a [i]client-side[/i] scripting language; the web server sends the raw JavaScript to the client's browser, which goes through it, performing the specified operations. It is very fast, and can manipulate a webpage in microscopic detail.
 
-Javascript generally consists of [concept]function[/concept]s, which contain lines of code.
-[code="Javascript"]
+JavaScript generally consists of [concept]function[/concept]s, which contain lines of code.
+[code="JavaScript"]
 function function-name(argument1,argument2)
 {
 	lines-of-code;
@@ -848,7 +848,7 @@ function function-name(argument1,argument2)
 Functions have to start with the [i]keyword[/i] 'function', then the name of the function, and the arguments required to be passed to the function in brackets. Following this should be the lines of code in the function, surrounded by curly brackets.
 
 The lines of code themselves have to follow strict rules (which are beyond the scope of this document), and have to be terminated with a semicolon.
-[code="Javascript"]
+[code="JavaScript"]
 function is_IE()
 {
 	if(navigator.appName=="Microsoft Internet Explorer")
@@ -860,11 +860,11 @@ function is_IE()
 }
 [/code]
 
-If you are knowledgeable in the area of programming, you will notice that Javascript uses C-style syntax.
+If you are knowledgeable in the area of programming, you will notice that JavaScript uses C-style syntax.
 
-Javascript is most powerful when applied to the DOM -- the Document Object Model, which is a way of accessing the properties and attributes of every node in the document tree of an XHTML (or XML, etc.) page. You don't need to know about how to use the DOM in Javascript, you just need to know that the DOM extensively references the IDs of XHTML elements, specified by their ID tag.
+JavaScript is most powerful when applied to the DOM -- the Document Object Model, which is a way of accessing the properties and attributes of every node in the document tree of an XHTML (or XML, etc.) page. You don't need to know about how to use the DOM in JavaScript, you just need to know that the DOM extensively references the IDs of XHTML elements, specified by their ID tag.
 
-Another feature of Javascript is its event model. You can specify Javascript functions or code to be called when, for example, a link is clicked. You do this either via the event attributes in an XHTML document, or through event listening functions in Javascript.
+Another feature of JavaScript is its event model. You can specify JavaScript functions or code to be called when, for example, a link is clicked. You do this either via the event attributes in an XHTML document, or through event listening functions in JavaScript.
 
 [html]
 <table class="columned_table results_table wide_table">
@@ -936,13 +936,13 @@ To use these event attributes, simply put them into the tag.
 [/code]
 
 You can also put more than just a function call into event attributes.
-[code="Javascript"]
+[code="JavaScript"]
 <a href="http://example.com/" title="Example website" onclick="window.alert('You clicked the link!'); log_click('http://example.com/'); ">example.com</a>
 [/code]
 
-Javascript is a flexible language, and many things can be achieved by using it. However, you must remember that styling should be left to CSS, structure should be left to the XHTML, and Javascript should be used for interactivity.
+JavaScript is a flexible language, and many things can be achieved by using it. However, you must remember that styling should be left to CSS, structure should be left to the XHTML, and JavaScript should be used for interactivity.
 
-It should also be stressed as a last point that [b]Javascript is not secure[/b]; if you write a login system in Javascript that checks an inputted password against a one coded into the Javascript, anybody can just view the source of the Javascript using their browser, look through it, and extract the password with ease. This goes for other similar situations as well, such as quizzes; the answers, passwords, or any other potent information that should be kept secret. It should be stored, processed, and handled exclusively [b]on a server[/b]!
+It should also be stressed as a last point that [b]JavaScript is not secure[/b]; if you write a login system in JavaScript that checks an inputted password against a one coded into the JavaScript, anybody can just view the source of the JavaScript using their browser, look through it, and extract the password with ease. This goes for other similar situations as well, such as quizzes; the answers, passwords, or any other potent information that should be kept secret. It should be stored, processed, and handled exclusively [b]on a server[/b]!
 
 [title="2"]Online tools and references[/title]
 
@@ -973,7 +973,7 @@ It should also be stressed as a last point that [b]Javascript is not secure[/b];
  - http://www.eskimo.com/~bloo/indexdot/css/index.html
  - http://www.alistapart.com/
 
-[title="3"]Javascript tools/references[/title]
+[title="3"]JavaScript tools/references[/title]
 
  - http://www.tizag.com/
  - http://javascriptkit.com/
@@ -993,19 +993,19 @@ It should also be stressed as a last point that [b]Javascript is not secure[/b];
  2_key="HTML"         2_value="HyperText Markup Language: a language for the documents of the world wide web"
  3_key="XHTML"        3_value="eXtensible HyperText Markup Language: HTML adapted to follow XML rules"
  4_key="CSS"          4_value="Cascading Style Sheets: a technology that allows style to be specified in a config-file like fashion, and mapped to XHTML structure"
- 5_key="Javascript"   5_value="The standard client-side scripting language for the Internet, allowing web pages to be dynamic without reloading of pages. In standardisation, it is known as ECMA-Script, but that term is rarely used."
+ 5_key="JavaScript"   5_value="The standard client-side scripting language for the Internet, allowing web pages to be dynamic without reloading of pages. In standardisation, it is known as ECMA-Script, but that term is rarely used."
  6_key="tag"          6_value="A piece of structure: an XML tree is made up of tags"
  7_key="element"      7_value="Another name for a tag really"
  8_key="(tag) attribute"           8_value="Tags may contain attributes that specify properties for the tag"
  9_key="inline (tag)"  9_value="A tag that wraps around a portion of HTML to apply something to it, or to use it"
  10_key="block (tag)"  10_value="A tag that takes up a boxed area of the screen space, and may have its own background. Block tags force a visual line-break after them, unless they are styled to be inline"
  11_key="(tag) class"  11_value="A tag class is generally used so as to join XHTML tags to CSS styles"
- 12_key="(XML) ID"     12_value="An ID is generally used so as to allow Javascript code to reference specific XHTML tags"
- 13_key="(Javascript) event"        13_value="Javascript hooks on to web browser actions via an event model; tags 'fire' events, and Javascript can be set up to launch certain code upon the event firing"
+ 12_key="(XML) ID"     12_value="An ID is generally used so as to allow JavaScript code to reference specific XHTML tags"
+ 13_key="(JavaScript) event"        13_value="JavaScript hooks on to web browser actions via an event model; tags 'fire' events, and JavaScript can be set up to launch certain code upon the event firing"
  14_key="(CSS) selector"            14_value="CSS rules apply to certain tags, and selectors are used to determine which tags; selectors are very powerful, although Internet Explorer only supports a few of them"
  15_key="(CSS) property"            15_value="CSS rules specify values for properties in order to style"
- 16_key="DOM"          16_value="Document Object Model. A scheme of referencing a document based upon the XHRML structure. Usually used with Javascript."
- 17_key="DHTML"        17_value="Dynamic HTML. Almost a synonym for Javascript"
+ 16_key="DOM"          16_value="Document Object Model. A scheme of referencing a document based upon the XHRML structure. Usually used with JavaScript."
+ 17_key="DHTML"        17_value="Dynamic HTML. Almost a synonym for JavaScript"
  18_key="client-side"  18_value="Code that is processed on a viewer's computer. The opposite of server-side"
 ]Concepts[/concepts]
 

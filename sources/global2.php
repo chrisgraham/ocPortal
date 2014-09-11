@@ -1554,7 +1554,7 @@ function unixify_line_format($in,$desired_charset=NULL,$html=false,$from_disk=fa
 }
 
 /**
- * Force a Javascript file to be cached (ordinarily we can rely on this to be automated by require_javascript/javascript_tempcode).
+ * Force a JavaScript file to be cached (ordinarily we can rely on this to be automated by require_javascript/javascript_tempcode).
  *
  * @param  string			The javascript file required
  * @param  ?ID_TEXT		The name of the theme (NULL: current theme)
@@ -1570,7 +1570,7 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 
 	global $SITE_INFO;
 
-	// Make sure the Javascript exists
+	// Make sure the JavaScript exists
 	if ($theme===NULL)
 		$theme=filter_naughty($GLOBALS['FORUM_DRIVER']->get_theme());
 	$dir=get_custom_file_base().'/themes/'.$theme.'/templates_cached/'.filter_naughty(user_lang());
@@ -1619,11 +1619,11 @@ function javascript_enforce($j,$theme=NULL,$minify=NULL)
 }
 
 /**
- * Get tempcode to tie in (to the HTML, in <head>) all the Javascript files that have been required.
+ * Get tempcode to tie in (to the HTML, in <head>) all the JavaScript files that have been required.
  *
- * @param  ?string		Position to get Javascript for (NULL: all positions)
+ * @param  ?string		Position to get JavaScript for (NULL: all positions)
  * @set NULL header footer
- * @return tempcode		The tempcode to tie in the Javascript files
+ * @return tempcode		The tempcode to tie in the JavaScript files
  */
 function javascript_tempcode($position=NULL)
 {
@@ -1636,7 +1636,7 @@ function javascript_tempcode($position=NULL)
 
 	$grouping_codename=_handle_web_resource_merging('.js',$JAVASCRIPTS,$minify,$https,$mobile);
 
-	// Fix order, so our main Javascript runs first
+	// Fix order, so our main JavaScript runs first
 	if (isset($JAVASCRIPTS['javascript']))
 	{
 		$arr_backup=$JAVASCRIPTS;
@@ -1953,7 +1953,7 @@ function require_css($css)
 }
 
 /**
- * Handle web resource merging optimisation, for merging groups of CSS/Javascript files that are used across the site, to reduce request quantity.
+ * Handle web resource merging optimisation, for merging groups of CSS/JavaScript files that are used across the site, to reduce request quantity.
  *
  * @param  ID_TEXT			Resource type
  * @set .css .js
@@ -1965,7 +1965,7 @@ function require_css($css)
  */
 function _handle_web_resource_merging($type,&$arr,$minify,$https,$mobile)
 {
-	if (!$minify) return; // Optimisation disabled if no minification. Turn off minificiation when debugging Javascript/CSS, as smart caching won't work with the merge system.
+	if (!$minify) return; // Optimisation disabled if no minification. Turn off minificiation when debugging JavaScript/CSS, as smart caching won't work with the merge system.
 
 	$is_admin=$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());
 	$zone_name=get_zone_name();

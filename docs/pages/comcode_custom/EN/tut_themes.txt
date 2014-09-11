@@ -177,7 +177,7 @@ For more tips, see [page="forum:topicview:misc:9553"]a walk-through guide[/page]
 
 [title="2"]See also[/title]
 
- - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and Javascript[/page]
+ - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
  - [page="_SEARCH:tut_designer_themes"]Designer themes, implementing a clean-room design[/page]
  - [page="tut_tempcode"]Tempcode programming[/page]
  - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]

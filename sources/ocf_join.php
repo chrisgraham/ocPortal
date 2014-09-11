@@ -47,7 +47,7 @@ function check_joining_allowed()
  * @param  boolean		Whether to ask for intro messages (if enabled at all)
  * @param  boolean		Whether to check for invites (if enabled at all)
  * @param  boolean		Whether to check email-address restrictions (if enabled at all)
- * @return array			A tuple: Necessary Javascript code, the form
+ * @return array			A tuple: Necessary JavaScript code, the form
  */
 function ocf_join_form($url,$captcha_if_enabled=true,$intro_message_if_enabled=true,$invites_if_enabled=true,$one_per_email_address_if_enabled=true)
 {

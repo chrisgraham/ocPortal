@@ -1,4 +1,4 @@
-{$,If editing this template, make sure that the set_required Javascript function is updated}
+{$,If editing this template, make sure that the set_required JavaScript function is updated}
 
 {$SET,randomised_id,{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}}
 

@@ -111,7 +111,7 @@ The above example creates a flip between text A and text B, taking 400ms. This i
 	{
 		return array(
 			'requires'=>array(
-				'Javascript enabled',
+				'JavaScript enabled',
 			),
 			'recommends'=>array(
 			),

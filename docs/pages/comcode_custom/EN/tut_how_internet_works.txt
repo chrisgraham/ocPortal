@@ -188,7 +188,7 @@ Thanks for reading!
 [title="2"]See Also[/title]
 
  - [page="_SEARCH:tut_domain_names"]How domain names work[/page]
- - [page="_SEARCH:tut_cookies"]Introduction to Cookies and sessions (and Javascript)[/page]
+ - [page="_SEARCH:tut_cookies"]Introduction to Cookies and sessions (and JavaScript)[/page]
  - [page="_SEARCH:tut_email"]Understanding and configuring e-mail[/page]
- - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and Javascript[/page]
+ - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
 

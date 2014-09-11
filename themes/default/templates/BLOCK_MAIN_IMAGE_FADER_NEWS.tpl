@@ -37,7 +37,7 @@
 		fp_animation.parentNode.style.position='relative';
 		fp_animation.parentNode.style.display='block';
 
-		{$,Copy Tempcode array into Javascript renderables}
+		{$,Copy Tempcode array into JavaScript renderables}
 		var data=[];
 		{+START,LOOP,NEWS}
 			{+START,SET,layout}

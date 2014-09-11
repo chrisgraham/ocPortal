@@ -9,7 +9,7 @@
  * General Public License (LGPL), found in the file LICENSE that is
  * included with this package, and is also available at
  * http://www.gnu.org/copyleft/lesser.html.
- * @package	  Javascript
+ * @package	  JavaScript
  *
  * @author		Dieter Raber <dieter@dieterraber.net>
  * @copyright	2004-12-27
@@ -221,7 +221,7 @@ function print_r(expr)
  * General Public License (LPGL), found in the file LICENSE that is
  * included with this package, and is also available at
  * http://www.gnu.org/copyleft/lesser.html.
- * @package	  Javascript
+ * @package	  JavaScript
  *
  * @author		Dieter Raber <dieter@dieterraber.net>
  * @copyright	2004-12-27
@@ -343,7 +343,7 @@ Array.prototype.arrayDelete = function(needle)
  * General Public License (LPGL), found in the file LICENSE that is
  * included with this package, and is also available at
  * http://www.gnu.org/copyleft/lesser.html.
- * @package	  Javascript
+ * @package	  JavaScript
  *
  * @author		Dieter Raber <dieter@dieterraber.net>
  * @copyright	2004-12-27
@@ -422,7 +422,7 @@ var _GET = readGet();
  * General Public License (LPGL), found in the file LICENSE that is
  * included with this package, and is also available at
  * http://www.gnu.org/copyleft/lesser.html.
- * @package	  Javascript
+ * @package	  JavaScript
  *
  * @author		Dieter Raber <dieter@dieterraber.net>
  * @copyright	2004-12-27

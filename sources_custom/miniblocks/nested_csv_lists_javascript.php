@@ -24,7 +24,7 @@ foreach ($csv_structure['csv_files'] as $csv_filename=>$csv_file)
 	}
 }
 
-// Output Javascript
+// Output JavaScript
 echo "
 	window.nested_csv_structure=".json_encode($csv_structure).";
 

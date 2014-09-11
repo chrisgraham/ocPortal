@@ -143,7 +143,7 @@ function ecv2_CONFIG_OPTION($lang,$escaped,$param)
 
 	if (isset($param[0]))
 	{
-		if ($GLOBALS['IN_MINIKERNEL_VERSION']) // Installer, likely executing JAVASCRIPT.tpl. We need a saner default for Javascript
+		if ($GLOBALS['IN_MINIKERNEL_VERSION']) // Installer, likely executing JAVASCRIPT.tpl. We need a saner default for JavaScript
 		{
 			$value='0';
 		} else

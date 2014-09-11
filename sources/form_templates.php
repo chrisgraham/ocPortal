@@ -294,7 +294,7 @@ function get_attachments($posting_field_name)
  * @param  string			Extra info to put on the posting form
  * @param  ?tempcode		A buildup of trailing extra fields, in a format compatible with the templates used by this function. (NULL: none)
  * @param  ?tempcode		The parsed Comcode. (NULL: calculate)
- * @param  ?string		Javascript code to include (NULL: none)
+ * @param  ?string		JavaScript code to include (NULL: none)
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  boolean		Whether this is a required input field
  * @param  boolean		Whether the form supports previewing

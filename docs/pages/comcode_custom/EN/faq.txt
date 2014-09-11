@@ -241,7 +241,7 @@ It may seem possible to perform this action by editing the _config.php file, but
 
 [title="3"]My new install seems slow?[/title]
 
-A new install will be slow at first, while templates/CSS/Javascript/blocks compile. It should be fast the second time you come back to something. If things are slow and:
+A new install will be slow at first, while templates/CSS/JavaScript/blocks compile. It should be fast the second time you come back to something. If things are slow and:
 1) you're not on ridiculously cheap hosting
 2) you haven't turned on a large number of blocks to display at once (compared to the amount of functionality comparable sites may show)
 3) you haven't disabled the caches

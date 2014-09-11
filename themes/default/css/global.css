@@ -987,7 +987,7 @@ footer .global_minilinks a:hover, footer .global_minilinks .button_hyperlink:hov
 	width: 100%;
 }
 
-.textarea_scroll { /* Turns off word-wrapping for a textarea: this has to be done using Javascript so that the invalid 'wrap' property isn't written into the XHTML */
+.textarea_scroll { /* Turns off word-wrapping for a textarea: this has to be done using JavaScript so that the invalid 'wrap' property isn't written into the XHTML */
 }
 
 body .accessibility_hidden { /* Contents should be made visible (or interpreted) for accessibly representation but hidden for normal visual display */

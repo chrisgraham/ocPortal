@@ -234,11 +234,11 @@ function load_redirect_cache()
 }
 
 /**
- * Attach some extra Javascript to <head>. Don't use this too commonly, it's not a 'tidy' way of doing things.
+ * Attach some extra JavaScript to <head>. Don't use this too commonly, it's not a 'tidy' way of doing things.
  *
  * @sets_output_state
  *
- * @param  mixed			Javascript to attach (Tempcode or string)
+ * @param  mixed			JavaScript to attach (Tempcode or string)
  */
 function attach_to_javascript($data)
 {

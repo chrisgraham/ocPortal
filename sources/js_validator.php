@@ -27,10 +27,10 @@ No support for:
  - (Most) HTML attributes hardcoded into DOM objects	REASON: no reason to do it, and less compatible and clear than getAttribute
  - ";" insertion	REASON: very sloppy
  - New 'HTML5' APIs (not well supported yet)
- - checking against argument types	REASON: Javascript extension, but we could do. Not a lot of advantage, quite a lot of work
- - checking for locked	REASON: Javascript extension, but we could do. Not a lot of advantage, quite a lot of work
+ - checking against argument types	REASON: JavaScript extension, but we could do. Not a lot of advantage, quite a lot of work
+ - checking for locked	REASON: JavaScript extension, but we could do. Not a lot of advantage, quite a lot of work
 
-Some checks are commented out, as practical Javascript does not tend to be at all type-strict.
+Some checks are commented out, as practical JavaScript does not tend to be at all type-strict.
 */
 
 /**
@@ -159,7 +159,7 @@ function init__js_validator()
  */
 function reset_js_global_variables()
 {
-	// These are the global Javascript objects (static prototypes like 'Math') are also used but those are difference because they can be instantiated, and because some, like Array, can act like functions). In actual fact, everything is "window.", but we don't want to force qualifying into window because it would block our detection
+	// These are the global JavaScript objects (static prototypes like 'Math') are also used but those are difference because they can be instantiated, and because some, like Array, can act like functions). In actual fact, everything is "window.", but we don't want to force qualifying into window because it would block our detection
 	global $JS_GLOBAL_VARIABLES;
 	$JS_GLOBAL_VARIABLES=array(
 		'window'=>array('function_return'=>NULL,'unused_value'=>NULL,'first_mention'=>0,'is_global'=>true,'types'=>array('Window')),

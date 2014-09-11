@@ -93,7 +93,7 @@ function get_tutorial_info($tut)
 
 		case 'markup':
 			$result=array(
-				"Intro to XHTML, CSS and Javascript",
+				"Intro to XHTML, CSS and JavaScript",
 				"This tutorial is an introduction to the main standard web technologies that ocPortal is built upon.",
 				"May 2009",
 				"orange",
@@ -112,7 +112,7 @@ function get_tutorial_info($tut)
 		case 'comcode':
 			$result=array(
 				"Comcode and attachments",
-				"Create dynamic effects and display rich media, without having to write any XHTML, CSS, or Javascript.",
+				"Create dynamic effects and display rich media, without having to write any XHTML, CSS, or JavaScript.",
 				"Sep 2008",
 				"blue",
 			); break;
@@ -161,7 +161,7 @@ function get_tutorial_info($tut)
 		case 'browsers':
 			$result=array(
 				"Browser version requirements",
-				"This tutorial details the browser requirements for visitors to an ocPortal site, determined by the CSS/XHTML/Javascript in our default theme.",
+				"This tutorial details the browser requirements for visitors to an ocPortal site, determined by the CSS/XHTML/JavaScript in our default theme.",
 				"Aug 2008",
 				"blue",
 			); break;
@@ -404,7 +404,7 @@ function get_tutorial_info($tut)
 
 		case 'cookies':
 			$result=array(
-				"Cookie, sessions, and Javascript",
+				"Cookie, sessions, and JavaScript",
 				"Want to know everything there is to know about cookies and sessions? You probably don't, but if you do, read this!",
 				"Aug 2008",
 				"red",

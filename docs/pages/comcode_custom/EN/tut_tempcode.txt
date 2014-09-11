@@ -46,18 +46,18 @@ Any Tempcode construct may be escaped (made to fit in an encoding scheme, such a
 	(e.g. [tt]Use the \[url] tag[/tt]  [html]&rarr;[/html]  [tt]Use the \\\[url] tag[/tt])
 [*][tt]'[/tt] CSS
 	(anything that isn't a part of a very constrained non-string value is stripped)
-[*][tt]/[/tt] Special Javascript SGML-issue
+[*][tt]/[/tt] Special JavaScript SGML-issue
 	(e.g. [tt]print('</p>');[/tt]  [html]&rarr;[/html]  [tt]print('<\/p')[/tt])
 [*][tt]^[/tt] Where new lines become '\n'
 	(multiple lines drawn together with [tt]\n[/tt] as a separator)
 [*][tt]&[/tt] URL parameters   (or [tt].[/tt] if you don't want extra ocPortal URL escaping to happen)
 	(e.g. [tt]a&b[/tt]  [html]&rarr;[/html]  [tt]a%26b[/tt])
-[*][tt]|[/tt] Javascript IDs
+[*][tt]|[/tt] JavaScript IDs
 	(e.g. [tt]This is a -terrible- ID[/tt]  [html]&rarr;[/html]  [tt]This__is__a____terrible____ID[/tt])
 [*][tt]%[/tt] Strict codenames
 	(e.g. [tt]ThiS[/tt] [html]&rarr;[/html] [tt]ThiS[/tt]   [i]but[/i]  [tt]This is[/tt]  --> \[\[hack attack]] triggered)
 [/list]
-You can also use [tt]-[/tt] to indicate that a symbol should not be pre-processed, which is very occasionally useful if you want to stop something like a block being preloaded if it is buried under a Tempcode IF directive and hence doesn't always run. Stopping pre-processing will stop any Javascript or [abbr="Cascading Style Sheets"]CSS[/abbr] dependencies being called up, however.
+You can also use [tt]-[/tt] to indicate that a symbol should not be pre-processed, which is very occasionally useful if you want to stop something like a block being preloaded if it is buried under a Tempcode IF directive and hence doesn't always run. Stopping pre-processing will stop any JavaScript or [abbr="Cascading Style Sheets"]CSS[/abbr] dependencies being called up, however.
 
 An optimisation is to use [tt]+[/tt] as the only escaping symbol. This indicates that something:
  - should not be escaped
@@ -148,11 +148,11 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$REQUIRE_JAVASCRIPT,javascript_example}</td>
-		<td>Include a Javascript file in the output stream. If you set the second parameter to '1', then loading will be deferred until the end of the page</td>
+		<td>Include a JavaScript file in the output stream. If you set the second parameter to '1', then loading will be deferred until the end of the page</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$FACILITATE_AJAX_BLOCK_CALL,block code,differing parameters}</td>
-		<td>This symbol generates a string parameter suitable for the ocPortal Javascript <kbd>call_block</kbd> function, which is used to make an AJAX call to load up a block and overwrite the contents of a specific div with it. Calling this symbol has the side-effects of triggering an include of ocPortal's AJAX code, and setting up a permission so that the server-side AJAX handler knows that the current session is authorised to load up this pattern of block. The symbol is best used by example -- see how it is currently used by code.</td>
+		<td>This symbol generates a string parameter suitable for the ocPortal JavaScript <kbd>call_block</kbd> function, which is used to make an AJAX call to load up a block and overwrite the contents of a specific div with it. Calling this symbol has the side-effects of triggering an include of ocPortal's AJAX code, and setting up a permission so that the server-side AJAX handler knows that the current session is authorised to load up this pattern of block. The symbol is best used by example -- see how it is currently used by code.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$REQUIRE_CSS,css_example}</td>
@@ -497,7 +497,7 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$JS_ON}</td>
-		<td>Whether Javascript is enabled (Tempcode boolean)</td>
+		<td>Whether JavaScript is enabled (Tempcode boolean)</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>{$LANG}</td>
@@ -1487,7 +1487,7 @@ Note that you cannot use directives for symbol parameters because directives con
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>NO_PREPROCESS</td>
-		<td>Don't do any pre-processing under this directive. This improves performance for complex Tempcode trees (especially for conditionally displayed blocks), but it does mean that things like CSS and Javascript includes that are required by blocks may not be detected.</td>
+		<td>Don't do any pre-processing under this directive. This improves performance for complex Tempcode trees (especially for conditionally displayed blocks), but it does mean that things like CSS and JavaScript includes that are required by blocks may not be detected.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
 		<td>CASES</td>
@@ -1651,7 +1651,7 @@ If you enter the template editor from the 'Template tree' screen then you will b
 
 [title="2"]See also[/title]
 
- - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and Javascript[/page]
+ - [page="_SEARCH:tut_markup"]Introduction to XHTML, CSS and JavaScript[/page]
  - [page="_SEARCH:tut_releasing_themes"]Releasing a theme[/page]
  - [page="_SEARCH:tut_themes"]Themeing your site[/page]
  - [page="_SEARCH:tut_structure"]ocPortal site structure[/page]

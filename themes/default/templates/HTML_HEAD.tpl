@@ -141,7 +141,7 @@
 	</script>
 {+END}{+END}
 
-{$,Detecting of Timezones and Javascript support}
+{$,Detecting of Timezones and JavaScript support}
 <script>// <![CDATA[
 	{+START,IF,{$CONFIG_OPTION,detect_javascript}}
 		{+START,IF,{$AND,{$EQ,,{$_GET,keep_has_js}},{$NOT,{$JS_ON}}}}
@@ -153,13 +153,13 @@
 	var {+START,IF,{$CONFIG_OPTION,is_on_timezone_detection}}server_timestamp={$FROM_TIMESTAMP%},{+END}ocp_lang='{$LANG;}',ocp_theme='{$THEME;}',ocp_username='{$USERNAME;}'{+START,IF,{$IS_STAFF}},ocp_is_staff=true{+END};
 //]]></script>
 
-{$,Javascript code (usually) from ocPortal page}
+{$,JavaScript code (usually) from ocPortal page}
 {$EXTRA_HEAD}
 
 {$,CSS includes from ocPortal page}
 {$CSS_TEMPCODE}
 
-{$,Javascript includes from ocPortal page}
+{$,JavaScript includes from ocPortal page}
 {$JS_TEMPCODE,header}
 <!--[if lt IE 9]>
 <script src="{$BASE_URL*}/data/html5.js"></script>

@@ -6,13 +6,13 @@ ocPortal "Long text" Comcode content is, by default, edited using a WYSIWYG edit
 
 [title="2"]WYSIWYG editors on the web[/title]
 
-A WYSIWYG (What You See Is What You Get) editor is a document editor where the editor's editing interface mirrors the appearance of the final document. Web sites deploy WYSIWYG editors via a combination of Javascript and built-in (non-standard) editing features that are present in some of the popular modern web browsers. Online WYSIWYG editors are HTML editors: the document created is manipulated and transmitted as HTML.
+A WYSIWYG (What You See Is What You Get) editor is a document editor where the editor's editing interface mirrors the appearance of the final document. Web sites deploy WYSIWYG editors via a combination of JavaScript and built-in (non-standard) editing features that are present in some of the popular modern web browsers. Online WYSIWYG editors are HTML editors: the document created is manipulated and transmitted as HTML.
 
 [title="2"]Origins of the editor[/title]
 
 The ocPortal WYSIWYG editor is (as of version 5.1) CKEditor.
 
-ocPortal can, in principle, support almost any WYSIWYG editor component. ocPortal binds itself to the editor via Javascript code stored in ocPortal's [tt]WYSIWYG_LOAD[/tt], [tt]WYSIWYG_SETTINGS[/tt], and [tt]JAVASCRIPT_POSTING[/tt] templates. The editor itself is stored in [tt]data/ckeditor[/tt].
+ocPortal can, in principle, support almost any WYSIWYG editor component. ocPortal binds itself to the editor via JavaScript code stored in ocPortal's [tt]WYSIWYG_LOAD[/tt], [tt]WYSIWYG_SETTINGS[/tt], and [tt]JAVASCRIPT_POSTING[/tt] templates. The editor itself is stored in [tt]data/ckeditor[/tt].
 
 [title="2"]Highlighting of Comcode tags[/title]
 
@@ -61,7 +61,7 @@ However, one handy convention for ocPortal website administrators, is to upload 
 
 Toward the top-left of the editor is a button to toggle HTML source view in the editor. When in HTML source view, you may manually enter and edit the HTML that will be used. This is useful:
  - in circumstances where things have not pasted into the editor as you expected
- - when you have some specific HTML in mind that is hard to re-create visually, such as HTML involving Javascript (note that only super-administrators may input Javascript)
+ - when you have some specific HTML in mind that is hard to re-create visually, such as HTML involving JavaScript (note that only super-administrators may input JavaScript)
 
 [title="2"]HTML filtering[/title]
 
@@ -72,7 +72,7 @@ ocPortal does not accept the HTML from the WYSIWYG editor directly as input for 
 
 [title="3"]Security filtering[/title]
 
-HTML acts as a container for numerous technologies, including CSS and Javascript. Javascript can be used as a vehicle for attacking websites via a technique called 'XSS' (Cross Site Scripting). Basically an XSS attack can be used to steal logins; it works by a user submitting content that includes malicious Javascript code that causes hijacking of the web browser of the viewer of the said-content. This is a major issue, and means that ocPortal has to go to great lengths to protect against it.
+HTML acts as a container for numerous technologies, including CSS and JavaScript. JavaScript can be used as a vehicle for attacking websites via a technique called 'XSS' (Cross Site Scripting). Basically an XSS attack can be used to steal logins; it works by a user submitting content that includes malicious JavaScript code that causes hijacking of the web browser of the viewer of the said-content. This is a major issue, and means that ocPortal has to go to great lengths to protect against it.
 
 The HTML is treated to one of two possible security filters, depending on circumstances:
  - The white-list filter (more finicky)
@@ -81,7 +81,7 @@ The HTML is treated to one of two possible security filters, depending on circum
 
 The white-list filter is subjected to those users who do not have the "Use Dangerous Comcode" permission, and blocks any HTML that is not known as safe. Users subjected to the white-list filter will find that some complex formatting may be lost.
 
-The black-list filter is subjected to the users who do have the "Subject to a more liberal HTML filter" permission, and will go to great lengths to try and strip any Javascript from the HTML. There are no known problems with the black-list filter, but ocProducts can not accept any liability for the consequences of using it (although we have gone to great lengths to make the black-list filter very safe).
+The black-list filter is subjected to the users who do have the "Subject to a more liberal HTML filter" permission, and will go to great lengths to try and strip any JavaScript from the HTML. There are no known problems with the black-list filter, but ocProducts can not accept any liability for the consequences of using it (although we have gone to great lengths to make the black-list filter very safe).
 
 [title="3"]Cleanup[/title]
 
@@ -115,7 +115,7 @@ If you are using the WYSIWYG editor to edit e-mails, it is very ill-advised to d
 [title="2"]Problem areas, and turning the editor off[/title]
 
 Sometimes WYSIWYG editing is more trouble than it's worth. When particularly complex layouts are produced, or code pasted from documents, it can still result messy and slow code; especially when content is long. This is particularly bad for web-sites that favour very high web standards (such as perfect WCAG accessibility), which will always need to have a degree of hand-coding in them, to maintain those high standards.
-Generally it's also not a good idea to have anything that is not directly WYSIWYG in the WYSIWYG editor, including careful use of tags to apply custom CSS styles, or Javascript. Various things can relate to it getting stripped or corrupted.
+Generally it's also not a good idea to have anything that is not directly WYSIWYG in the WYSIWYG editor, including careful use of tags to apply custom CSS styles, or JavaScript. Various things can relate to it getting stripped or corrupted.
 For these situations it is best to simply turn the WYSIWYG editor off. You can do this on a per document basis by pasting this bit into your code:
 [code]
 {$,page hint: no_wysiwyg}

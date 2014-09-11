@@ -160,7 +160,7 @@ There are two major problems with this approach:
 If you are trying to integrate a system that is non-interactive, and outputs all important information in either the RSS or Atom families of feed formats, you may be able to perform an integration by simply using the 'main_rss' block in combination with the feed URL (or if it is date based information, overlaying the feed URL onto the calendar).
 This form of integration is most appropriate for news and calendars, although other forms of information do sometimes fit it well.
 
-[title="2"]Integrating Javascript libraries[/title]
+[title="2"]Integrating JavaScript libraries[/title]
 
 [title="3"]If you're integrating it to your own new PHP code[/title]
 
@@ -170,9 +170,9 @@ To include that library in PHP code, you would run [tt]require_javascript('javas
 
 [title="3"]If you're using it for your own theme, not new PHP code[/title]
 
-Edit the [tt]JAVASCRIPT_CUSTOM_GLOBALS[/tt] template and paste all the Javascript in there.
+Edit the [tt]JAVASCRIPT_CUSTOM_GLOBALS[/tt] template and paste all the JavaScript in there.
 
-Alternatively, if keeping the filenames matters, edit the [tt]HTML_HEAD[/tt] or [tt]GLOBAL_HTML_WRAP[/tt] template to include it in the normal documented way for the Javascript library, and upload the files. The canonical place to put extra files in ocPortal is [tt]uploads/website_specific[/tt] and reference them from there, but you can put them somewhere else if you prefer.
+Alternatively, if keeping the filenames matters, edit the [tt]HTML_HEAD[/tt] or [tt]GLOBAL_HTML_WRAP[/tt] template to include it in the normal documented way for the JavaScript library, and upload the files. The canonical place to put extra files in ocPortal is [tt]uploads/website_specific[/tt] and reference them from there, but you can put them somewhere else if you prefer.
 
 [title="2"]Integrating CSS[/title]
 

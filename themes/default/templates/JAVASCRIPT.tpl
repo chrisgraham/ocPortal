@@ -42,7 +42,7 @@ function script_load_stuff()
 	// Textarea scroll support
 	handle_textarea_scrolling();
 
-	// Tell the server we have Javascript, so do not degrade things for reasons of compatibility - plus also set other things the server would like to know
+	// Tell the server we have JavaScript, so do not degrade things for reasons of compatibility - plus also set other things the server would like to know
 	{+START,IF,{$CONFIG_OPTION,detect_javascript}}
 		set_cookie('js_on',1,120);
 	{+END}
@@ -2748,7 +2748,7 @@ function set_outer_html(element,target_html)
 }
 
 /* Put some new HTML into the given element */
-// Note that embedded Javascript IS run unlike the normal .innerHTML - in fact we go to effort to guarantee it - even onload attached Javascript
+// Note that embedded JavaScript IS run unlike the normal .innerHTML - in fact we go to effort to guarantee it - even onload attached JavaScript
 function set_inner_html(element,target_html,append,force_dom)
 {
 	// Parser hint: .innerHTML okay

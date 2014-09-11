@@ -34,8 +34,8 @@ function _convert_data_encodings($known_utf8=false)
 
 	$done_something=false;
 
-	// Conversion of parameters that might be in the wrong character encoding (e.g. Javascript uses UTF to make requests regardless of document encoding, so the stuff needs converting)
-	//  If we don't have any PHP extensions (mbstring etc) that can perform the detection/conversion, our code will take this into account and use utf8_decode at points where it knows that it's being communicated with by Javascript.
+	// Conversion of parameters that might be in the wrong character encoding (e.g. JavaScript uses UTF to make requests regardless of document encoding, so the stuff needs converting)
+	//  If we don't have any PHP extensions (mbstring etc) that can perform the detection/conversion, our code will take this into account and use utf8_decode at points where it knows that it's being communicated with by JavaScript.
 	if (@strlen(ini_get('unicode.runtime_encoding'))>0)
 	{
 		@ini_set('default_charset',$charset);

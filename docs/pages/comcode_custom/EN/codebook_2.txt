@@ -53,9 +53,9 @@ Any Tempcode construct may be escaped (made to fit in an encoding scheme, such a
  - [tt](#)[/tt] Between double quotes (e.g. [tt]She said, "Hello"[/tt] --> [tt]She said, \"Hello\"[/tt])
  - [tt](~)[/tt] Where new lines are not allowed (text is drawn up to reside on a single line)
  - [tt](@)[/tt] Comcode (e.g. [tt]Use the [url] tag[/tt] --> [tt]Use the \[url] tag[/tt])
- - [tt](/)[/tt] Special Javascript SGML-issue (e.g. [tt]print('</p>');[/tt] --> [tt]print('<\/p')[/tt])
+ - [tt](/)[/tt] Special JavaScript SGML-issue (e.g. [tt]print('</p>');[/tt] --> [tt]print('<\/p')[/tt])
  - [tt](^)[/tt] Where new lines become "\n" (multiple lines drawn together with \n as a separator)
- - [tt](|)[/tt] Javascript Ids (e.g. [tt]This is a -terrible- ID[/tt] --> [tt]This__is__a____terrible____ID[/tt])
+ - [tt](|)[/tt] JavaScript Ids (e.g. [tt]This is a -terrible- ID[/tt] --> [tt]This__is__a____terrible____ID[/tt])
 It is absolutely crucial that Tempcode programmers use the proper escaping. Without it, all kinds of insecurities and unreliabilities can develop. About 50% of parameters in the default ocPortal templates actually use HTML escaping so that plain text placed inside a template does not interfere with the HTML structure itself and displays literally.
 
 A full description of the Tempcode language is available in the [page="docs:tut_tempcode"]Tempcode programming[/page] tutorial.
@@ -103,37 +103,37 @@ Besides the lack of animation, and problems on IE6, there is one further problem
  - Start optimi[sz]ing. Choose your files. You must do the optimisation one directory at a time because PNGGauntlet will erase the task list each time you click 'Choose files to optimize'.
  - Once done, you may need to tell Windows to reset the permissions in the images folder from that of the parent folder (because PNGGauntlet will copy the compressed image in from a temp dir, with the permissions of that temp dir). If you don't do this, you may find you get a permission denied when viewing the images and lots of red crosses.
 
-[title="3"]Javascript[/title]
+[title="3"]JavaScript[/title]
 
-Javascript is separate from Java, and built into web browsers directly. It is used to provide an interactive element to the user's experience in their web browser. ocPortal has a loose framework for producing templates that use Javascript.
+JavaScript is separate from Java, and built into web browsers directly. It is used to provide an interactive element to the user's experience in their web browser. ocPortal has a loose framework for producing templates that use JavaScript.
 
-[title="3"]Javascript libraries[/title]
+[title="3"]JavaScript libraries[/title]
 
-ocPortal has an inbuilt set of Javascript libraries, which are split across a number of Javascript template files that each begin with the name 'JAVASCRIPT'. The core library that is loaded onto every screen is named just [tt]JAVASCRIPT.tpl[/tt]. This core library is very general and doesn't know about ocPortal's individual modules- it is a general-purpose library to provide functionality usable anywhere. Most of the other Javascript libraries are specific to individual modules (e.g. the chat module uses [tt]JAVASCRIPT_CHAT.tpl[/tt]) or to specific aspects of ocPortal (e.g. the Comcode editing interface uses [tt]JAVASCRIPT_EDITING.tpl[/tt]). There are a few additional general purpose Javascript libraries:
+ocPortal has an inbuilt set of JavaScript libraries, which are split across a number of JavaScript template files that each begin with the name 'JAVASCRIPT'. The core library that is loaded onto every screen is named just [tt]JAVASCRIPT.tpl[/tt]. This core library is very general and doesn't know about ocPortal's individual modules- it is a general-purpose library to provide functionality usable anywhere. Most of the other JavaScript libraries are specific to individual modules (e.g. the chat module uses [tt]JAVASCRIPT_CHAT.tpl[/tt]) or to specific aspects of ocPortal (e.g. the Comcode editing interface uses [tt]JAVASCRIPT_EDITING.tpl[/tt]). There are a few additional general purpose JavaScript libraries:
 1) [tt]JAVASCRIPT_AJAX[/tt] -- AJAX call functionality, which should be used for all AJAX code.
 2) [tt]JAVASCRIPT_DRAGDROP[/tt] -- A drag and drop library (do not use this unless drag & drop really is the best way to build an interface, which is very rare)
-3) [tt]JAVASCRIPT_MORE[/tt] -- A supplementary library of useful functions that are not important enough to be loaded up for every screen. Consider making use of this if you are making a Javascript-intensive screen.
+3) [tt]JAVASCRIPT_MORE[/tt] -- A supplementary library of useful functions that are not important enough to be loaded up for every screen. Consider making use of this if you are making a JavaScript-intensive screen.
 4) [tt]JAVASCRIPT_TRANSITIONS[/tt] -- Provide various transition/animation effects.
 
-To flag a javascript file to be loaded up, use the 'require_javascript' API command in the PHP code. For example, if you wanted to load up the Javascript defined in the 'JAVASCRIPT_MORE' template, use:
+To flag a javascript file to be loaded up, use the 'require_javascript' API command in the PHP code. For example, if you wanted to load up the JavaScript defined in the 'JAVASCRIPT_MORE' template, use:
 require_javascript('javascript_more');
 This command is usually best placed:
 1) in screen functions if it is not used by all screens in your module
 2) or, in the [tt]run[/tt] function if it is used by all/most screens in your module
 
-Alternatively, you can load Javascript from a template with a command like:
+Alternatively, you can load JavaScript from a template with a command like:
 [code="HTML"]
 {$REQUIRE_JAVASCRIPT,javascript_more}
 [/code]
 
-You may add new Javascript templates as needed. Just make sure to follow the naming convention.
-When writing new Javascript code try to make good use of the existing functions that are defined in whatever Javascript you already have included. For example, use the standard cookie manipulation functions and standard AJAX functions, rather than making new ones. If existing functions are not sufficient consider improving those functions. If you are porting some existing Javascript libraries to ocPortal you may need to resolve the following:
- - After renaming files, you may find Javascript makes assumptions about the naming and paths to other files, such as images, or other complementary Javascript files. You'll need to adjust the associated code for that. In the case of references to images, it is best to use the ocPortal theme-image system, and thus reference them using the '[tt]{$IMG,...}[/tt]' symbol.
- - You may find you need to put some "\" symbols before some "{" symbols, to stop certain bits being parsed as Javascript.
+You may add new JavaScript templates as needed. Just make sure to follow the naming convention.
+When writing new JavaScript code try to make good use of the existing functions that are defined in whatever JavaScript you already have included. For example, use the standard cookie manipulation functions and standard AJAX functions, rather than making new ones. If existing functions are not sufficient consider improving those functions. If you are porting some existing JavaScript libraries to ocPortal you may need to resolve the following:
+ - After renaming files, you may find JavaScript makes assumptions about the naming and paths to other files, such as images, or other complementary JavaScript files. You'll need to adjust the associated code for that. In the case of references to images, it is best to use the ocPortal theme-image system, and thus reference them using the '[tt]{$IMG,...}[/tt]' symbol.
+ - You may find you need to put some "\" symbols before some "{" symbols, to stop certain bits being parsed as JavaScript.
 
-In ocPortal, Javascript libraries are automatically minified to save on bandwidth, unless [tt]&keep_no_minify=1[/tt] is in the URL (very useful for debugging).
+In ocPortal, JavaScript libraries are automatically minified to save on bandwidth, unless [tt]&keep_no_minify=1[/tt] is in the URL (very useful for debugging).
 
-[title="3"]Useful ocPortal Javascript functions[/title]
+[title="3"]Useful ocPortal JavaScript functions[/title]
 
  - Escaping: escape_html, escape_comcode
  - Cookies: set_cookie, read_cookie
@@ -147,16 +147,16 @@ In ocPortal, Javascript libraries are automatically minified to save on bandwidt
  - AJAX: JAVASCRIPT_AJAX: do_ajax_request
  - Animation: toggleable_tray, smooth_scroll, JAVASCRIPT_TRANSITIONS: fade_transition
 
-[title="3"]Integrating third-party Javascript libraries[/title]
+[title="3"]Integrating third-party JavaScript libraries[/title]
 
-If you're working on a standalone website you can just edit [tt]GLOBAL_HTML_WRAP.tpl[/tt] to include whatever Javascript calls you like. If you're working on an addon, however, you will want to code it into your addon to insert the necessary code into [tt]<head>[/tt] dynamically. You can do this by calling [tt]attach_to_screen_header[/tt] with whatever Tempcode is required. Typical code will look like:
+If you're working on a standalone website you can just edit [tt]GLOBAL_HTML_WRAP.tpl[/tt] to include whatever JavaScript calls you like. If you're working on an addon, however, you will want to code it into your addon to insert the necessary code into [tt]<head>[/tt] dynamically. You can do this by calling [tt]attach_to_screen_header[/tt] with whatever Tempcode is required. Typical code will look like:
 [code="PHP"]
 attach_to_screen_header(make_string_tempcode('Extra code goes here'));
 [/code]
 
-[title="3"]Javascript event handlers[/title]
+[title="3"]JavaScript event handlers[/title]
 
-Add in Javascript event handlers to your HTML normally as required. For example, to make a popup window link:
+Add in JavaScript event handlers to your HTML normally as required. For example, to make a popup window link:
 [code="HTML"]
 <a href="{BASE_URL*}/popup.htm"
 	onclick="window.open(this.getAttribute('href'));">Click me</a>
@@ -166,13 +166,13 @@ It's acceptable to write inline event handler code like this as long as it doesn
 Sometimes it is not appropriate to add an event directly to an HTML node, usually for one of these reasons:
  - You can't always make the assumption that a node will only have a single event handler
  - Sometimes event handlers need putting on generic events such as 'onload'
- - Sometimes you want to add event handlers from inside Javascript code, on-the-fly
+ - Sometimes you want to add event handlers from inside JavaScript code, on-the-fly
 In these circumstances you can add the event to an HTML node indirectly by using the [tt]add_event_listener_abstract[/tt] function. This function works consistently across browsers (so long as you don't try and use 'this' inside the event handler code).
 
-[title="3"]Inline Javascript[/title]
+[title="3"]Inline JavaScript[/title]
 
-It's acceptable to use inline Javascript (the 'script' tag) if it's only a short amount of code. This is a useful technique:
-1) if you want to pass template parameters directly into Javascript variables
+It's acceptable to use inline JavaScript (the 'script' tag) if it's only a short amount of code. This is a useful technique:
+1) if you want to pass template parameters directly into JavaScript variables
 2) or, if you need the code to run as soon as the screen loads
 
 You should use 'CDATA' for your <script> tag, like:
@@ -184,19 +184,19 @@ You should use 'CDATA' for your <script> tag, like:
 
 It is important that:
 [list]
-[*]You use the "//" bits. Usually ocPortal will be running as HTML even though it is marked-up as XHTML (this is a little known fact but is the case for almost websites out there, whatever they are running). HTML interprets everything in the script tag as CDATA automatically so everything inside there is parsed as Javascript; the "//" bits are simply Javascript comments to stop the CDATA bits being interpreted as Javascript code.
+[*]You use the "//" bits. Usually ocPortal will be running as HTML even though it is marked-up as XHTML (this is a little known fact but is the case for almost websites out there, whatever they are running). HTML interprets everything in the script tag as CDATA automatically so everything inside there is parsed as JavaScript; the "//" bits are simply JavaScript comments to stop the CDATA bits being interpreted as JavaScript code.
 [*]You should actually use CDATA so the document does validate as XHTML.
-[*]You should not put it all on one line, because then the Javascript line-comment will end up commenting all the code out and nothing will happen.
-[*]Don't use any ocPortal Javascript except for Javascript in the main '[tt]JAVASCRIPT.tpl[/tt]' library, unless you have put it inside an '[tt]onload[/tt]' event handler, like:
+[*]You should not put it all on one line, because then the JavaScript line-comment will end up commenting all the code out and nothing will happen.
+[*]Don't use any ocPortal JavaScript except for JavaScript in the main '[tt]JAVASCRIPT.tpl[/tt]' library, unless you have put it inside an '[tt]onload[/tt]' event handler, like:
 [code="HTML"]
 add_event_listener_abstract(window,'load',function () { ... } );
 [/code]
-[*]This is because ocPortal does not want to pre-load any more Javascript library code than is necessary via loading it in <head> (it stops the page rendering at all until the files have been downloaded), and we can't assume the order Javascript will be loaded in compared to the order in which inline code is executed (it changes randomly, and between browsers). By putting our code inside an onload handler we force it to only run after all our dependent Javascript files have loaded.
+[*]This is because ocPortal does not want to pre-load any more JavaScript library code than is necessary via loading it in <head> (it stops the page rendering at all until the files have been downloaded), and we can't assume the order JavaScript will be loaded in compared to the order in which inline code is executed (it changes randomly, and between browsers). By putting our code inside an onload handler we force it to only run after all our dependent JavaScript files have loaded.
 [/list]
 
-[title="4"]Example: mixing event handlers, inline Javascript, and a library[/title]
+[title="4"]Example: mixing event handlers, inline JavaScript, and a library[/title]
 
-This is a little example that does something completely pointless. This complex combination of event handlers, inline Javascript, and a Javascript library, should only be used if there is a reason for it. If there is no reason, simpler code is better. The complex example is shown here to show how different Javascript methods can fit together if they need to.
+This is a little example that does something completely pointless. This complex combination of event handlers, inline JavaScript, and a JavaScript library, should only be used if there is a reason for it. If there is no reason, simpler code is better. The complex example is shown here to show how different JavaScript methods can fit together if they need to.
 
 In the template:
 [code="HTML"]
@@ -211,7 +211,7 @@ window.my_template_parameter='{MY_TEMPLATE_PARAMETER;/}';
 <a href="#" onclick="output_my_parameter();">Click me</a>
 [/code]
 
-In the Javascript library (which must have been loaded using require_javascript):
+In the JavaScript library (which must have been loaded using require_javascript):
 [code="HTML"]
 function output_my_parameter()
 {
@@ -231,7 +231,7 @@ In the template:
 	onclick="output_my_parameter('{MY_TEMPLATE_PARAMETER;*}');"
 >Click me</a>
 [/code]
-In the Javascript library:
+In the JavaScript library:
 [code="HTML"]
 function output_my_parameter(message)
 {
@@ -246,14 +246,14 @@ For adding an ajax functionality, we can use the functions defined in the [tt]JA
 require_javascript('javascript_ajax');
 [/code]
 
-Also we need our own Javascript template file to implement our AJAX-tied behaviour, because the code is probably going to be too long to include in-line with the HTML. For example, create a new file named [tt]JAVASCRIPT_EXAMPLE.tpl[/tt], which would be loaded up from PHP code by:
+Also we need our own JavaScript template file to implement our AJAX-tied behaviour, because the code is probably going to be too long to include in-line with the HTML. For example, create a new file named [tt]JAVASCRIPT_EXAMPLE.tpl[/tt], which would be loaded up from PHP code by:
 [code="HTML"]
 require_javascript('javascript_example');
 [/code]
 
-AJAX requests can be either synchronous or asynchronous. A synchronous request runs linearly: Javascript makes the call and then the browser will wait for the response before resuming execution. An asynchronous request involves a later (at an unknown point) 'call back' to a response handler (the "method") that we would write specially. Technically a synchronous-AJAX request is a contradiction (the 'A' in AJAX means 'asynchronous'), but the way people use the term AJAX means it's best we not worry about this. It's rare for us to use synchronous requests as it can make the browser freeze whilst it waits.
+AJAX requests can be either synchronous or asynchronous. A synchronous request runs linearly: JavaScript makes the call and then the browser will wait for the response before resuming execution. An asynchronous request involves a later (at an unknown point) 'call back' to a response handler (the "method") that we would write specially. Technically a synchronous-AJAX request is a contradiction (the 'A' in AJAX means 'asynchronous'), but the way people use the term AJAX means it's best we not worry about this. It's rare for us to use synchronous requests as it can make the browser freeze whilst it waits.
 
-In our Javascript template file, we typically define basically two functions if we are writing asynchronous AJAX. One function is for initiating the AJAX event (can be any name you like) and another is to handle the response of the AJAX script (has any name, but it must be passed to the ocPortal [tt]do_ajax_request[/tt] function). If you are writing synchronous AJAX you can pass the null value instead of a function, and the [tt]do_ajax_request[/tt] function will respond with the result.
+In our JavaScript template file, we typically define basically two functions if we are writing asynchronous AJAX. One function is for initiating the AJAX event (can be any name you like) and another is to handle the response of the AJAX script (has any name, but it must be passed to the ocPortal [tt]do_ajax_request[/tt] function). If you are writing synchronous AJAX you can pass the null value instead of a function, and the [tt]do_ajax_request[/tt] function will respond with the result.
 
 To handle the AJAX request on the server-side we will need to call a new entry-point script that we'll place in the 'data' folder; so we make a URL to this script, and of course we also need to write it.
 In the [tt]data/<script-name>.php[/tt], we [tt]require_code[/tt] a file that will contain a new PHP function to implement our server-side behaviour and then call that function (and nothing else). It is an ocPortal convention to define this function in [tt]sources/ajax.php[/tt], but we don't have to (and shouldn't if it's not a very core AJAX function to ocPortal). Remember if you are writing third-party functionality it should go into a file under '[tt]sources_custom/[/tt]' instead.
@@ -280,7 +280,7 @@ The XML frame you should output from PHP should be structured as follows:
 		(Some kind of informational message that will be put in an alert)
 	</message>
 	<method>
-		(Javascript function name that overrides what was passed to do_ajax_request)
+		(JavaScript function name that overrides what was passed to do_ajax_request)
 	</method>
 </request>
 [/code]
@@ -297,7 +297,7 @@ echo '</result></request>';
 Once the server has returned a result to the client, it will be processed for handling.
  - For synchronous requests, the result object is returned from [tt]do_ajax_request[/tt] linearly (asynchronous requests will return nothing from [tt]do_ajax_request[/tt]). Code may then use the '[tt]responseText[/tt]' and '[tt]responseXML[/tt]' properties of this as required.
  - For asynchronous requests, the response handler (the 'method') function is called, with two parameters: [tt]ajax_result_frame[/tt] (the full XML), and [tt]ajax_result[/tt] (the pay-load XML). It is the responsibility for the method function to process the XML in ajax_result (ajax_result_frame is unlikely to be used by the method) -- the code can assume the XML will be valid because HTTP status error handling and XML frame error handling will already have occurred.
-There is an implied format contract between the PHP code we wrote and the Javascript we wrote. In other words, we are not likely to have incompatibilities between the data of the server (PHP) and client (Javascript) as you will have designed them together. Therefore you don't need to write any special error handling code to make sure the structure returned is correct, unless you've written in your own extra error handling into the pay-load.
+There is an implied format contract between the PHP code we wrote and the JavaScript we wrote. In other words, we are not likely to have incompatibilities between the data of the server (PHP) and client (JavaScript) as you will have designed them together. Therefore you don't need to write any special error handling code to make sure the structure returned is correct, unless you've written in your own extra error handling into the pay-load.
 
 Example:
  - Template -- [tt]JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl[/tt]

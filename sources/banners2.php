@@ -39,7 +39,7 @@
  * @param  BINARY				Whether the banner has been validated
  * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
  * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
- * @return array				A pair: The input field tempcode, Javascript code
+ * @return array				A pair: The input field tempcode, JavaScript code
  */
 function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_url='',$caption='',$direct_code='',$notes='',$importancemodulus=3,$campaignremaining=50,$the_type=1,$expiry_date=NULL,$submitter=NULL,$validated=1,$b_type='',$title_text='')
 {

@@ -190,7 +190,7 @@ function occle_command_response(ajax_result_frame,ajax_result)
 
 	if (stdcommand!='')
 	{
-		// Javascript commands; eval() them.
+		// JavaScript commands; eval() them.
 		eval(stdcommand);
 
 		var stdcommand_text=document.createTextNode('{!JAVASCRIPT_EXECUTED;^}');

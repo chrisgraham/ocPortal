@@ -358,7 +358,7 @@ If ocPortal is running out of a git repository, or with our own custom version o
  - The template cache will randomly get emptied.
  - Extra error messages if you try and pass a number to '[tt]do_lang[/tt]' or '[tt]do_lang_tempcode[/tt]' (you are supposed to convert to a string first manually).
  - You'll get an error if you don't call a template ending '_SCREEN' at some point during your code.
- - Relative URLs will intentionally not work, due to an intentionally broken 'base' tag. This forces you to use absolute URLs as per coding standards. One exception is URLs like '#example', which are broken by the 'base' tag, but then fixed at run time using Javascript -- you are allowed to use those.
+ - Relative URLs will intentionally not work, due to an intentionally broken 'base' tag. This forces you to use absolute URLs as per coding standards. One exception is URLs like '#example', which are broken by the 'base' tag, but then fixed at run time using JavaScript -- you are allowed to use those.
  - To save time you can define language strings inline in PHP code, and then ocPortal will automatically find the closest matching loaded language file to the name of the page you are running, and then move your inline definition into that file whilst removing it from your PHP file. For example, you can write: do_lang('EXAMPLE=This is an example'); and as soon as it runs for the first time the definition will be shifted into a proper language file. Note that if the call does not get executed, nothing is done -- but that's a good way to see if you're not testing your code fully.
 
 You can turn off most of development mode by putting "[tt]&keep_no_dev_mode=1[/tt]" into the URL, but this is not promoted as development mode was intentionally written to help us do on-the-fly testing of things that might otherwise go unnoticed.
@@ -769,7 +769,7 @@ Often they also define the following:
  - [tt]user_facing[/tt], whether regular users are likely to have access to the module (adds in extra user-friendly references that might seem a bit odd for a regular administrative module).
  - [tt]send_validation_request[/tt], whether to send out e-mail notifications to staff when non-validated resources are submitted.
  - [tt]upload[/tt], if set it should be 'image' or 'file', and has the effect of extra 'maximum file size' messages being output, as well as other extra mechanism preparation.
- - [tt]javascript[/tt], Javascript code to be included when add/edit forms are shown; it is common to put code in here to handle field alternation ([tt]standard_alternate_fields[/tt]), automatic field disabling based on values in other fields (e.g. not allowing specifying of the fine details to something if that something is not entered at all), or extra custom field value validations.
+ - [tt]javascript[/tt], JavaScript code to be included when add/edit forms are shown; it is common to put code in here to handle field alternation ([tt]standard_alternate_fields[/tt]), automatic field disabling based on values in other fields (e.g. not allowing specifying of the fine details to something if that something is not entered at all), or extra custom field value validations.
  - [tt]non_integer_id[/tt], whether the ID field for the table is a string (a 'codename' in ocPortal terminology).
 (there are also many more to choose from -- see what is defaulted at the top of [tt]crud_module.php[/tt]).
 

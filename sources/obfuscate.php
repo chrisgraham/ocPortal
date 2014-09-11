@@ -79,7 +79,7 @@ function obfuscate_email_address($email)
 	return substr($email,0,$at_pos).mt_rand(0,100000).substr($email,$at_pos);
 	*/
 
-	/* Another possibility would be to write some Javascript that scans the page after loading, and re-write algorithmically mangled addresses. (You'd need to write some Javascript to match this, we haven't)
+	/* Another possibility would be to write some JavaScript that scans the page after loading, and re-write algorithmically mangled addresses. (You'd need to write some JavaScript to match this, we haven't)
 	$remap=array('a'=>'alpha',
 					 'b'=>'beta',
 					 'c'=>'no',

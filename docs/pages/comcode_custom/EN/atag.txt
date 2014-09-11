@@ -16,7 +16,7 @@ At the time of writing we believe ocPortal does indeed fully comply with ATAG, a
 [b]WCAG version[/b]: [url="1.0"]http://www.w3.org/TR/WAI-WEBCONTENT/[/url] [most of the checkpoints for WCAG 2.0 are met]
 [b]URL to this document[/b]: {$TUTORIAL_URL,atag}
 [b]User agents[/b]: Internet Explorer 6.0, Opera 8.0, Firefox 1.5
-[b]Content-type[/b]: XHTML 1.0 + CSS 2.0 + PNG images [ + optional Javascript: Javascript may not be accessible, therefore it is assumed to be disabled for the purposes of accessibility]
+[b]Content-type[/b]: XHTML 1.0 + CSS 2.0 + PNG images [ + optional JavaScript: JavaScript may not be accessible, therefore it is assumed to be disabled for the purposes of accessibility]
 
 [title="2"]ACAG Compliance details[/title]
 

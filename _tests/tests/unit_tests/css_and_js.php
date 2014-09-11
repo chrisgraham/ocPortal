@@ -42,7 +42,7 @@ class css_and_js_test_set extends ocp_test_case
 		parent::setUp();
 	}
 
-	function testJavascript()
+	function testJavaScript()
 	{
 		require_code('js_validator');
 
