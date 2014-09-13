@@ -316,7 +316,7 @@ class Module_lost_password
 			// Send password in mail
 			$_login_url=build_url(array('page'=>'login','username'=>$GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('login'),NULL,false,false,true);
 			$login_url=$_login_url->evaluate();
-			$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,comcode_escape(get_site_name()),comcode_escape($username));
+			$message=do_lang('MAIL_NEW_PASSWORD',comcode_escape($new_password),$login_url,array(comcode_escape(get_site_name()),comcode_escape($username)));
 			require_code('mail');
 			mail_wrap(do_lang('LOST_PASSWORD'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username($member_id,true),'','',3,NULL,false,NULL,false,false,false,'MAIL',true,NULL,NULL,$join_time);
 		}
