@@ -297,7 +297,7 @@ class Module_vforums
 			$full_query.=$query;
 			if (($start<200) && (is_null($initial_table)) && (multi_lang_content()))
 			{
-				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query($full_query,$max,$start,NULL,NULL,false,false,array('t_cache_first_post'=>'?LONG_TRANS__COMCODE')));
+				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query($full_query,$max,$start,false,false,array('t_cache_first_post'=>'?LONG_TRANS__COMCODE')));
 			} else
 			{
 				$topic_rows=array_merge($topic_rows,$GLOBALS['FORUM_DB']->query($full_query,$max,$start));

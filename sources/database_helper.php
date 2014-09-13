@@ -252,7 +252,7 @@ function _helper_create_index($this_ref,$table_name,$index_name,$fields,$unique_
 				$_fields.='(255)';
 		}
 
-		if ((multi_lang_content()) && (isset($TABLE_LANG_FIELDS[$table_name][$field])) && (substr($index_name,0,1)=='#') && ($table_name!='translate'))
+		if ((multi_lang_content()) && (strpos($index_name,'__combined')!==false) && (substr($index_name,0,1)=='#') && ($table_name!='translate'))
 		{
 			$ok_to_create=false;
 		}

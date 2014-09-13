@@ -1046,13 +1046,20 @@ class database_driver
 
 					foreach ($lang_fields as $field=>$field_type)
 					{
-						$join=' LEFT JOIN '.$this->table_prefix.'translate t_'.$field.' ON t_'.$field.'.id='.$field_prefix.$field;
-						if (strpos($query,'t_'.$field.'.text_original')===false)
-							$join.=' AND '.db_string_equal_to('t_'.$field.'.language',$lang);
+						$field_stripped=preg_replace('#.*\.#','',$field);
+
+						$join=' LEFT JOIN '.$this->table_prefix.'translate t_'.$field_stripped.' ON t_'.$field_stripped.'.id='.$field_prefix.$field;
+						if (strpos($query,'t_'.$field_stripped.'.text_original')===false)
+							$join.=' AND '.db_string_equal_to('t_'.$field_stripped.'.language',$lang);
 
 						$_query=strtoupper($query);
-						$from_pos=strrpos($_query,' FROM ');
-						$where_pos=strrpos($_query,' WHERE ');
+						$from_pos=strpos($_query,' FROM ');
+						$where_pos=strpos($_query,' WHERE ');
+						if (($from_pos!==false) && (strpos(substr($_query,0,$from_pos),'(SELECT')!==false))
+						{
+							$from_pos=strrpos($_query,' FROM ');
+							$where_pos=strrpos($_query,' WHERE ');
+						}
 						if ($where_pos===false)
 						{
 							$_where_pos=0;
@@ -1084,12 +1091,12 @@ class database_driver
 						$before_from=substr($query,0,$from_pos);
 						if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)
 						{
-							$original='t_'.$field.'.text_original AS t_'.$field.'__text_original';
-							$parsed='t_'.$field.'.text_parsed AS t_'.$field.'__text_parsed';
+							$original='t_'.$field_stripped.'.text_original AS t_'.$field_stripped.'__text_original';
+							$parsed='t_'.$field_stripped.'.text_parsed AS t_'.$field_stripped.'__text_parsed';
 
 							$query=$before_from.','.$original.','.$parsed.substr($query,$from_pos);
 
-							$lang_strings_expecting[]=array($field,'t_'.$field.'__text_original','t_'.$field.'__text_parsed');
+							$lang_strings_expecting[]=array($field,'t_'.$field_stripped.'__text_original','t_'.$field_stripped.'__text_parsed');
 						}
 					}
 				}
@@ -1099,7 +1106,12 @@ class database_driver
 				{
 					if (strpos($field_type,'__COMCODE')!==false)
 					{
-						$from_pos=strrpos(strtoupper($query),' FROM ');
+						$_query=strtoupper($query);
+						$from_pos=strpos($_query,' FROM ');
+						if (($from_pos!==false) && (strpos(substr($_query,0,$from_pos),'(SELECT')!==false))
+						{
+							$from_pos=strrpos($_query,' FROM ');
+						}
 						$before_from=substr($query,0,$from_pos);
 
 						if (preg_match('#(COUNT|SUM|AVG|MIN|MAX)\(#',$before_from)==0) // If we're returning full result sets (as opposed probably to just joining so we can use translate_field_ref)

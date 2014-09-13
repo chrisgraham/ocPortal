@@ -740,7 +740,7 @@ class Module_admin_version
 			));
 
 			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
-				'the_zone'=>'site',
+				'the_zone'=>'',
 				'the_page'=>'keymap',
 				'p_parent_page'=>'help',
 				'p_validated'=>1,

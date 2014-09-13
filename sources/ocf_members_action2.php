@@ -1273,8 +1273,8 @@ function ocf_delete_custom_field($id)
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_back;
 
-	global $TABLE_LANG_FIELDS;
-	unset($TABLE_LANG_FIELDS['f_member_custom_fields']);
+	global $TABLE_LANG_FIELDS_CACHE;
+	unset($TABLE_LANG_FIELDS_CACHE['f_member_custom_fields']);
 
 	log_it('DELETE_CUSTOM_PROFILE_FIELD',strval($id),get_translated_text($_name,$GLOBALS['FORUM_DB']));
 

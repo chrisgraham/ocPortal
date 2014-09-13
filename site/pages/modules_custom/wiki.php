@@ -37,7 +37,8 @@ class Mx_wiki extends Module_wiki
 {
 	function changes()
 	{
-		$url=get_option('wiki_alt_changes_link');
+		$url=get_option('wiki_alt_changes_link_stub');
+		if ($url=='') return parent::changes();
 
 		$_id=get_param('id',NULL);
 		$id=NULL;

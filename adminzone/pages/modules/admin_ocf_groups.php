@@ -351,24 +351,24 @@ class Module_admin_ocf_groups extends standard_crud_module
 	{
 		require_code('templates_results_table');
 
-		$default_order='g_promotion_threshold ASC,id ASC';
+		$default_order='g_promotion_threshold ASC,r.id ASC';
 		$current_ordering=get_param('sort',$default_order,true);
 		$sortables=array(
 			'g_name'=>do_lang_tempcode('NAME'),
 			'g_is_presented_at_install'=>do_lang_tempcode('IS_PRESENTED_AT_INSTALL'),
 			'g_is_default'=>do_lang_tempcode('DEFAULT_GROUP'),
 			'g_open_membership'=>do_lang_tempcode('OPEN_MEMBERSHIP'),
-			'g_promotion_threshold ASC,id'=>do_lang_tempcode('PROMOTION_TARGET'),
+			'g_promotion_threshold ASC,r.id'=>do_lang_tempcode('PROMOTION_TARGET'),
 			'g_is_super_admin'=>do_lang_tempcode('SUPER_ADMIN'),
 			'g_order'=>do_lang_tempcode('ORDER'),
 		);
-		if ($current_ordering=='g_promotion_threshold ASC,id ASC')
+		if ($current_ordering=='g_promotion_threshold ASC,r.id ASC')
 		{
-			list($sortable,$sort_order)=array('g_promotion_threshold ASC,id','ASC');
+			list($sortable,$sort_order)=array('g_promotion_threshold ASC,r.id','ASC');
 		}
-		elseif (($current_ordering=='g_promotion_threshold DESC,id DESC') || ($current_ordering=='g_promotion_threshold ASC,id DESC'))
+		elseif (($current_ordering=='g_promotion_threshold DESC,r.id DESC') || ($current_ordering=='g_promotion_threshold ASC,r.id DESC'))
 		{
-			list($sortable,$sort_order)=array('g_promotion_threshold DESC,id','DESC');
+			list($sortable,$sort_order)=array('g_promotion_threshold DESC,r.id','DESC');
 		} else
 		{
 			if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));

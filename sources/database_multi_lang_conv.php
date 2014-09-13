@@ -25,7 +25,7 @@
  */
 function rebuild_indices($only_trans=false)
 {
-	global $TABLE_LANG_FIELDS;
+	global $TABLE_LANG_FIELDS_CACHE;
 
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
@@ -36,7 +36,7 @@ function rebuild_indices($only_trans=false)
 		$ok=false;
 		foreach ($fields as $field)
 		{
-			if ((isset($TABLE_LANG_FIELDS[$index['i_table']][$field])) || (!$only_trans))
+			if ((isset($TABLE_LANG_FIELDS_CACHE[$index['i_table']][$field])) || (!$only_trans))
 			{
 				$ok=true;
 				break;

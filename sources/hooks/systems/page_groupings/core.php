@@ -72,7 +72,7 @@ class Hook_page_groupings_core
 			((get_forum_type()=='ocf')/*Is on members menu*/ || (addon_installed('securitylogging')))?NULL:array('tools','menu/adminzone/tools/users/investigate_user',array('admin_lookup',array(),get_module_zone('admin_lookup')),do_lang_tempcode('lookup:INVESTIGATE_USER'),'lookup:DOC_INVESTIGATE_USER'),
 			addon_installed('xml_fields')?array('setup','menu/adminzone/setup/xml_fields',array('admin_config',array('type'=>'xml_fields'),get_module_zone('admin_config')),do_lang_tempcode('config:FIELD_FILTERS'),'config:DOC_FIELD_FILTERS'):NULL,
 
-			(get_forum_type()!='ocf')?NULL:array('tools','menu/adminzone/tools/users/member_add',array('admin_ocf_members',array('type'=>'misc'),get_module_zone('admin_ocf_members')),do_lang_tempcode('MEMBERS'),'ocf:DOC_MEMBERS'),
+			(get_forum_type()!='ocf')?NULL:array('tools','menu/adminzone/tools/users/member_add',array('admin_ocf_members',array(),get_module_zone('admin_ocf_members')),do_lang_tempcode('MEMBERS'),'ocf:DOC_MEMBERS'),
 			//((get_forum_type()!='ocf')||(!has_privilege($member_id,'control_usergroups')))?NULL:array('tools','menu/social/groups',array('groups',array('type'=>'misc'),get_module_zone('groups'),do_lang_tempcode('SWITCH_ZONE_WARNING')),do_lang_tempcode('SECONDARY_GROUP_MEMBERSHIP'),'DOC_SECONDARY_GROUP_MEMBERSHIP'),
 			array('tools','menu/adminzone/tools/cleanup',array('admin_cleanup',array('type'=>'misc'),get_module_zone('admin_cleanup')),do_lang_tempcode('cleanup:CLEANUP_TOOLS'),'cleanup:DOC_CLEANUP_TOOLS'),
 			(is_null(get_value('brand_base_url')))?array('tools','menu/adminzone/tools/upgrade',array('admin_config',array('type'=>'upgrader'),get_module_zone('admin_config')),do_lang_tempcode('upgrade:FU_UPGRADER_TITLE'),'upgrade:FU_UPGRADER_INTRO'):NULL,

@@ -287,15 +287,19 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
 	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
 	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
+	if (multi_lang_content())
+	{
+		$post_query_sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t_p_post ON t_p_post.id=p.p_post ';
+	}
 	$post_query_sql.='WHERE '.$post_query_where.' ORDER BY p_time,p.id';
 
 	if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result)
 		$query.=' AND EXISTS('.$post_query_sql.')';
 
-	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
+	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
 	if ($limit==0) return array();
 	$order_by=(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC';
-	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
+	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true);
 
 	$out=array();
 	foreach ($rows as $i=>$r)

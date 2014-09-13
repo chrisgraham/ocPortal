@@ -54,7 +54,7 @@ class Hook_rss_ocf_unread_topics
 		$query.=' WHERE ('.$condition.') AND t_forum_id IS NOT NULL '.((!has_privilege(get_member(),'see_unvalidated'))?' AND t_validated=1 ':'').' ORDER BY t_cache_last_time DESC';
 		if (multi_lang_content())
 		{
-			$rows=$GLOBALS['FORUM_DB']->query($query,$max,NULL,false,array('t_cache_first_post'));
+			$rows=$GLOBALS['FORUM_DB']->query($query,$max,NULL,false,false,array('t_cache_first_post'=>'LONG_TRANS__COMCODE'));
 		} else
 		{
 			$rows=$GLOBALS['FORUM_DB']->query($query,$max,NULL,false);
