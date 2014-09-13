@@ -56,6 +56,7 @@ function rebuild_indices($only_trans=false)
 function disable_content_translation()
 {
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+	$GLOBALS['NO_QUERY_LIMIT']=true;
 
 	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 	if (!multi_lang_content()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -66,9 +67,11 @@ function disable_content_translation()
 
 	$type_remap=$db->static_ob->db_get_type_remap();
 
-	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'');
+	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\' ORDER BY m_table,m_name');
 	foreach ($_table_lang_fields as $field)
 	{
+		if (running_script('execute_temp')) @var_dump($field);
+
 		// Add new implied fields for holding extra Comcode details, and new field to hold main Comcode
 		$to_add=array('new'=>'LONG_TEXT');
 		if (strpos($field['m_type'],'__COMCODE')!==false)
@@ -134,6 +137,7 @@ function disable_content_translation()
 function enable_content_translation()
 {
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
+	$GLOBALS['NO_QUERY_LIMIT']=true;
 
 	if (get_file_base()!=get_custom_file_base()) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
 	if (multi_lang_content()) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -144,9 +148,11 @@ function enable_content_translation()
 
 	$type_remap=$db->static_ob->db_get_type_remap();
 
-	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\'');
+	$_table_lang_fields=$db->query('SELECT m_table,m_name,m_type FROM '.$db->get_table_prefix().'db_meta WHERE m_type LIKE \''.db_encode_like('%_TRANS%').'\' ORDER BY m_table,m_name');
 	foreach ($_table_lang_fields as $field)
 	{
+		if (running_script('execute_temp')) @var_dump($field);
+
 		// Remove old fulltext search index
 		$GLOBALS['SITE_DB']->delete_index_if_exists($field['m_table'],'#'.$field['m_name']);
 

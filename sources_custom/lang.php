@@ -305,7 +305,7 @@ if (!function_exists('get_translated_text'))
 	{
 		if (!multi_lang_content()) return $entry;
 
-		if ($entry==0) return do_lang('FAILED_ENTRY');
+		if ($entry===0) return do_lang('FAILED_ENTRY');
 
 		if ($entry===NULL) fatal_exit(do_lang_tempcode('NULL_LANG_STRING'));
 

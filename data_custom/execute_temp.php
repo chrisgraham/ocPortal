@@ -55,6 +55,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'adminzone'),'',1);
-	$GLOBALS['SITE_DB']->query_update('zones',array('zone_theme'=>'admin'),array('zone_name'=>'cms'),'',1);
+	require_code('database_multi_lang_conv');
+	enable_content_translation();
+	exit();
 }
