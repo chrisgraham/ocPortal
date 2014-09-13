@@ -271,7 +271,10 @@ class Module_topicview
 
 		$first_unread_id=-1;
 
-		$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_notification_code'=>'ocf_topic','d_code_category'=>strval($id),'d_to_member_id'=>get_member()));
+		if (!is_null($id))
+		{
+			$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_notification_code'=>'ocf_topic','d_code_category'=>strval($id),'d_to_member_id'=>get_member()));
+		}
 
 		// Mark as read
 		if (!is_null($id))

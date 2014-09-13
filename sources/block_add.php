@@ -65,7 +65,7 @@ function block_helper_script()
 			$matches=array();
 			if (preg_match('#function get_file_list\(\)\s*\{([^\}]*)\}#',$hook_file,$matches)!=0)
 			{
-				if (!HIPHOP_PHP)
+				if (!HHVM)
 				{
 					$addon_files=eval($matches[1]);
 					if ($addon_files===false) $addon_files=array(); // Some kind of PHP error

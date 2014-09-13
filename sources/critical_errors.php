@@ -210,10 +210,11 @@ if (strpos($error,'Allowed memory')===false)
 {
 	$file_contents=''; // Can't load files if dying due to memory limit
 }
-$css=((preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',$file_contents))))));
+$css=((preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',$file_contents)))))));
 echo htmlentities($css);
 echo <<<END
 		.screen_title { text-decoration: underline; display: block; min-height: 42px; padding: 3px 0 0 0; }
+		.button_screen { padding: 0.5em 0.3em !important; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	]]></style>
 </head>

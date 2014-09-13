@@ -13,7 +13,7 @@
  * @package		weather
  */
 
-class Hook_Notification_error_occurred_weather extends Hook_Notification__Staff
+class Hook_Notification_wiki_failed_git_pull extends Hook_Notification__Staff
 {
 	/**
 	 * Get a list of all the notification codes this hook can handle.
@@ -24,7 +24,7 @@ class Hook_Notification_error_occurred_weather extends Hook_Notification__Staff
 	function list_handled_codes()
 	{
 		$list=array();
-		$list['wiki_failed_git_pull.php']=array(do_lang('ERRORS'),do_lang('wiki_sync:NOTIFICATION_TYPE_wiki_failed_git_pull.php'));
+		$list['wiki_failed_git_pull']=array(do_lang('ERRORS'),do_lang('wiki_sync:NOTIFICATION_TYPE_wiki_failed_git_pull'));
 		return $list;
 	}
 }

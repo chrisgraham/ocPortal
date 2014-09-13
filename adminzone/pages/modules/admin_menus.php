@@ -145,7 +145,8 @@ class Module_admin_menus
 		$set_title=do_lang_tempcode('MENU');
 		$field_set=alternate_fields_set__start($set_name);
 
-		$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('EXISTING_MENU'),'id',$list,NULL,true,false));
+		if (!$list->is_empty())
+			$field_set->attach(form_input_list(do_lang_tempcode('EXISTING'),do_lang_tempcode('EXISTING_MENU'),'id',$list,NULL,true,false));
 
 		$field_set->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('NEW_MENU'),'id_new','',false));
 

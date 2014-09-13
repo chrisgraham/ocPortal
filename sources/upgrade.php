@@ -1044,7 +1044,7 @@ function run_integrity_check($basic=false,$allow_merging=true,$unix_help=false)
 		$matches=array();
 		if (preg_match('#function get_file_list\(\)\s*\{([^\}]*)\}#',$hook_file,$matches)!=0)
 		{
-			if (!HIPHOP_PHP)
+			if (!HHVM)
 			{
 				$files_to_check=array_merge($files_to_check,eval($matches[1]));
 			} else

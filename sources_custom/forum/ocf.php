@@ -11,8 +11,6 @@ if (!function_exists('init__forum__ocf'))
 {
 	function init__forum__ocf($in=NULL)
 	{
-		if (is_null($in)) return $in; // HipHop PHP can't do code rewrites, but will call init functions if there is none in the original. Do nothing.
-
 		$option=get_option('ocjester_name_changes');
 		if ($option=='') return $in;
 

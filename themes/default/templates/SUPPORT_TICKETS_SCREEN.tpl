@@ -12,7 +12,7 @@
 			<select id="ticket_type_id" name="ticket_type_id" class="input_list_required">
 				<option value="">&mdash;</option>
 				{+START,LOOP,TYPES}
-					<option value="{TICKET_TYPE*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
+					<option value="{TICKET_TYPE_ID*}"{+START,IF,{SELECTED}} selected="selected"{+END}>{NAME*}</option>{$,You can also use {LEAD_TIME} to get the ticket type's lead time}
 				{+END}
 			</select>
 			<input onclick="disable_button_just_clicked(this);" class="buttons__filter button_screen_item" type="submit" value="{!FILTER}" />

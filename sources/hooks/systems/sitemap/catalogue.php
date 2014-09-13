@@ -242,6 +242,8 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
 		}
 		elseif (strpos($page_link,':atoz:')!==false)
 		{
+			$struct['page_link']=$page_link;
+
 			$struct['extra_meta']['description']=NULL;
 
 			$struct['title']=do_lang_tempcode('catalogues:ATOZ');

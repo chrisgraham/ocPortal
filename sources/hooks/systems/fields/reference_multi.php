@@ -39,7 +39,7 @@ class Hook_fields_reference_multi
 		$ret=array();
 		foreach ($cats as $cat)
 		{
-			$ret['cx_'.$cat['c_name']]=do_lang_tempcode('FIELD_TYPE_reference_multi_x',get_translated_tempcode('catalogues',$cat,'c_title'));
+			$ret['cx_'.$cat['c_name']]=do_lang_tempcode('FIELD_TYPE_reference_multi_x',get_translated_text($cat['c_title']));
 		}
 		return $ret;
 	}

@@ -142,25 +142,27 @@
 		</div>
 	{+END}
 
-	<div class="float_surrounder">
-		<div class="buttons_group ocf_buttons_screen">
-			{+START,INCLUDE,NOTIFICATION_BUTTONS}
-				NOTIFICATIONS_TYPE=ocf_topic
-				NOTIFICATIONS_ID={ID}
-				NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_topic:{ID}
-			{+END}
-			{BUTTON_SCREENS}
-		</div>
+	{+START,IF_NON_EMPTY,{POSTS}}
+		<div class="float_surrounder">
+			<div class="buttons_group ocf_buttons_screen">
+				{+START,INCLUDE,NOTIFICATION_BUTTONS}
+					NOTIFICATIONS_TYPE=ocf_topic
+					NOTIFICATIONS_ID={ID}
+					NOTIFICATIONS_PAGE_LINK=forum:topics:toggle_notifications_topic:{ID}
+				{+END}
+				{BUTTON_SCREENS}
+			</div>
 
-		{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
-			<div class="non_accessibility_redundancy left"><nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
-				<p class="breadcrumbs">
-					<img class="breadcrumbs_img" src="{$IMG*,1x/breadcrumbs}" srcset="{$IMG*,2x/breadcrumbs} 2x" alt="&gt; " title="{!YOU_ARE_HERE}" />
-					{BREADCRUMBS}
-				</p>
-			</nav></div>
-		{+END}
-	</div>
+			{+START,IF,{$CONFIG_OPTION,enable_forum_dupe_buttons}}
+				<div class="non_accessibility_redundancy left"><nav class="breadcrumbs" itemprop="breadcrumb" role="navigation">
+					<p class="breadcrumbs">
+						<img class="breadcrumbs_img" src="{$IMG*,1x/breadcrumbs}" srcset="{$IMG*,2x/breadcrumbs} 2x" alt="&gt; " title="{!YOU_ARE_HERE}" />
+						{BREADCRUMBS}
+					</p>
+				</nav></div>
+			{+END}
+		</div>
+	{+END}
 
 	<div class="ocf_quick_reply">
 		{QUICK_REPLY}

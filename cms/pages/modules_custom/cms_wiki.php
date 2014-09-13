@@ -22,12 +22,12 @@ function init__cms__pages__modules_custom__cms_wiki($code)
 {
 	$code=str_replace(
 		'$add_url,$hidden,$fields,NULL,\'\',$fields2);',
-		'$add_url,$hidden,$fields,NULL,\'\',$fields2,NULL,NULL,NULL,true,true,get_option(\'wiki_enable_wysiwyg\')==\'0\'));',
+		'$add_url,$hidden,$fields,NULL,\'\',$fields2,NULL,NULL,NULL,true,true,get_option(\'wiki_enable_wysiwyg\')==\'0\');',
 		$code
 	);
 	$code=str_replace(
 		',$fields2,$_description,NULL,NULL,false);',
-		',$fields2,$_description,NULL,NULL,false,true,get_option(\'wiki_enable_wysiwyg\')==\'0\'));',
+		',$fields2,$_description,NULL,NULL,false,true,get_option(\'wiki_enable_wysiwyg\')==\'0\');',
 		$code
 	);
 	return $code;

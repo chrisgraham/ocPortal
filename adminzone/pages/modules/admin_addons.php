@@ -315,6 +315,8 @@ class Module_admin_addons
 	{
 		if (function_exists('set_time_limit')) @set_time_limit(180); // So it can scan inside addons
 
+		$GLOBALS['NO_QUERY_LIMIT']=true;
+
 		$addons_installed=find_installed_addons();
 		$addons_available_for_installation=find_available_addons();
 

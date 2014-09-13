@@ -703,9 +703,7 @@ function find_all_themes($full_details=false)
 
 	if ($full_details)
 	{
-		global $M_SORT_KEY;
-		$M_SORT_KEY='title';
-		uasort($themes,'multi_sort');
+		sort_maps_by($themes,'title');
 	} else
 	{
 		natsort($themes);

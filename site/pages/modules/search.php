@@ -275,6 +275,7 @@ class Module_search
 					'HOOK'=>$ajax_hook,
 					'ROOT_ID'=>'',
 					'OPTIONS'=>serialize($ajax_options),
+					'DESCRIPTION'=>'',
 				));
 			} else
 			{

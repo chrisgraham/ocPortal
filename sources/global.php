@@ -113,7 +113,7 @@ function require_code($codename,$light_exit=false)
 			{
 				$functions_before=get_defined_functions();
 				$classes_before=get_declared_classes();
-				if (HIPHOP_PHP)
+				if (HHVM)
 				{
 					hhvm_include($path_a); // Include our override
 				} else
@@ -168,7 +168,7 @@ function require_code($codename,$light_exit=false)
 
 				if (!$doing_code_modifier_init && !$overlaps) // To make stack traces more helpful and help with opcode caching
 				{
-					if (HIPHOP_PHP)
+					if (HHVM)
 					{
 						hhvm_include($path_b);
 					} else
@@ -200,7 +200,7 @@ function require_code($codename,$light_exit=false)
 					}
 				} else
 				{
-					if (HIPHOP_PHP)
+					if (HHVM)
 					{
 						hhvm_include($path_b);
 					} else
@@ -219,7 +219,7 @@ function require_code($codename,$light_exit=false)
 					}
 				} else
 				{
-					if (HIPHOP_PHP)
+					if (HHVM)
 					{
 						hhvm_include($path_a);
 					} else
@@ -241,7 +241,7 @@ function require_code($codename,$light_exit=false)
 				}
 			} else
 			{
-				if (HIPHOP_PHP)
+				if (HHVM)
 				{
 					hhvm_include($path_a);
 				} else
@@ -285,7 +285,7 @@ function require_code($codename,$light_exit=false)
 		} else
 		{
 			$php_errormsg='';
-			if (HIPHOP_PHP)
+			if (HHVM)
 			{
 				@hhvm_include($path_b);
 			} else
@@ -501,7 +501,7 @@ if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('
 }
 
 // Are we in a special version of PHP?
-define('HIPHOP_PHP',strpos(PHP_VERSION,'hiphop')!==false);
+define('HHVM',strpos(PHP_VERSION,'hiphop')!==false);
 define('GOOGLE_APPENGINE',isset($_SERVER['APPLICATION_ID']));
 
 // Sanitise the PHP environment some more

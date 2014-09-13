@@ -362,9 +362,10 @@ class Block_main_multi_content
 
 		global $TABLE_LANG_FIELDS_CACHE;
 		$lang_fields=isset($TABLE_LANG_FIELDS_CACHE[$info['table']])?$TABLE_LANG_FIELDS_CACHE[$info['table']]:array();
-		foreach ($lang_fields as $i=>$lang_field)
+		foreach ($lang_fields as $lang_field=>$lang_field_type)
 		{
-			$lang_fields[$i]='r.'.$lang_field;
+			unset($lang_fields[$lang_field]);
+			$lang_fields['r.'.$lang_field]=$lang_field_type;
 		}
 
 		$first_id_field=is_array($info['id_field'])?$info['id_field'][0]:$info['id_field'];

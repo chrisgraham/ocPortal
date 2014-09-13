@@ -26,7 +26,7 @@ if ($csv)
 require_code('ocf_members');
 require_code('mantis');
 require_lang('customers');
-$title=do_lang_tempcode('UNSPENT_SUPPORT_CREDITS');
+$title=get_screen_title('UNSPENT_SUPPORT_CREDITS');
 
 $field_id=get_credits_profile_field_id();
 if (!is_null($field_id))

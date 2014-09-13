@@ -199,7 +199,7 @@ class Module_vforums
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 
 		$title=do_lang_tempcode('INVOLVED_TOPICS');
-		$condition=array('p_poster='.strval(get_member()));
+		$condition=array('pos.p_poster='.strval(get_member()));
 
 		return $this->_vforum($title,$condition,'t_cache_last_time DESC',true,NULL,$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts pos LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top ON top.id=pos.p_topic_id');
 	}
@@ -292,7 +292,7 @@ class Module_vforums
 				$full_query.=',t_cache_first_post AS p_post';
 			} else
 			{
-				$full_query.=',p_post,p_post__text_parsed,p_post__source_user';
+				$full_query.=',p.p_post,p.p_post__text_parsed,p.p_post__source_user';
 			}
 			$full_query.=$query;
 			if (($start<200) && (is_null($initial_table)) && (multi_lang_content()))

@@ -11,8 +11,6 @@ if (!function_exists('init__comcode_compiler'))
 {
 	function init__comcode_compiler($in=NULL)
 	{
-		if (is_null($in)) return $in; // HipHop PHP can't do code rewrites, but will call init functions if there is none in the original. Do nothing.
-
 		$new_code='
 			require_code(\'textfiles\');
 			$whitelists=explode("\n",read_text_file(\'comcode_whitelist\',NULL,true));

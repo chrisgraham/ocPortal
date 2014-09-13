@@ -11,8 +11,6 @@ if (!function_exists('init__comcode_renderer'))
 {
 	function init__comcode_renderer($in=NULL)
 	{
-		if (is_null($in)) return $in; // HipHop PHP can't do code rewrites, but will call init functions if there is none in the original. Do nothing.
-
 		$before='if ((isset($DANGEROUS_TAGS[$tag])) && (!$comcode_dangerous))';
 		$after='if ((isset($DANGEROUS_TAGS[$tag])) && (!$comcode_dangerous) && (!comcode_white_listed($tag,$marker,$comcode)))';
 		$in=str_replace($before,$after,$in);

@@ -52,7 +52,7 @@ function get_chmod_array($lang)
 			$matches=array();
 			if (preg_match('#function get_chmod_array\(\)\s*\{([^\}]*)\}#',file_get_contents($path),$matches)!=0)
 			{
-				if (!HIPHOP_PHP)
+				if (!HHVM)
 				{
 					$extra_files=array_merge($extra_files,eval($matches[1]));
 				} else

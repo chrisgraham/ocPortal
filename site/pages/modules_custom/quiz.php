@@ -9,8 +9,6 @@
 
 function init__site__pages__modules_custom__quiz($in=NULL)
 {
-	if (is_null($in)) return $in; // HipHop PHP can't do code rewrites, but will call init functions if there is none in the original. Do nothing.
-
 	$before='if ($minimum_percentage>=$quiz[\'q_percentage\'])';
 	$after='if ((addon_installed(\'points\')) && ($quiz[\'q_points_for_passing\']!=0)) { require_code(\'points2\'); $cost=$quiz[\'q_points_for_passing\']/2; $points_difference-=$cost; } if ($minimum_percentage>=$quiz[\'q_percentage\'])';
 	$in=str_replace($before,$after,$in);

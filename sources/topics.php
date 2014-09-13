@@ -153,8 +153,7 @@ class OCP_Topic
 			if (get_forum_type()=='ocf')
 			{
 				$_topic_info=$GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id'=>$topic_id),'',1);
-				if (!array_key_exists(0,$_topic_info)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-				$topic_info=$_topic_info[0];
+				if (array_key_exists(0,$_topic_info)) $topic_info=$_topic_info[0];
 			}
 
 			// Posts

@@ -9,8 +9,6 @@
 
 function init__forum__pages__modules_custom__topicview($in=NULL)
 {
-	if (is_null($in)) return $in; // HipHop PHP can't do code rewrites, but will call init functions if there is none in the original. Do nothing.
-
 	$in=str_replace('$_postdetails[\'post\']','ocjester_filtering_wrap($_postdetails[\'post\']->evaluate())',$in);
 
 	return $in;

@@ -67,7 +67,7 @@ $GLOBALS['SEMI_DEV_MODE']=true;
 @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 // Are we in a special version of PHP?
-define('HIPHOP_PHP',strpos(PHP_VERSION,'hiphop')!==false);
+define('HHVM',strpos(PHP_VERSION,'hiphop')!==false);
 define('GOOGLE_APPENGINE',isset($_SERVER['APPLICATION_ID']));
 
 if (!array_key_exists('type',$_GET))

@@ -95,9 +95,10 @@ function code_editor_do_header($type,$target='_top')
 	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 	<style>
 ';
-@print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css'))))));
+@print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css')))))));
 echo '
 		.screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/icons/48x48/menu/_generic_admin/tool.png\') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
+		.button_screen { padding: 0.5em 0.3em !important; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>';
 	echo '
