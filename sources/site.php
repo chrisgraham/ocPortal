@@ -104,7 +104,7 @@ function init__site()
 	{
 		global $SITE_INFO;
 		$access_host=preg_replace('#:.*#','',ocp_srv('HTTP_HOST'));
-		if (($access_host!='') && ((isset($_SERVER['HTTP_HOST'])) || (isset($_ENV['HTTP_HOST']))))
+		if (($access_host!='') && ((isset($_SERVER['HTTP_HOST'])) || (isset($_ENV['HTTP_HOST']))) && (!$GLOBALS['EXTERNAL_CALL']))
 		{
 			$parsed_base_url=parse_url(get_base_url());
 

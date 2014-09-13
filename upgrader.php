@@ -29,6 +29,8 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST=true;
+global $EXTERNAL_CALL;
+$EXTERNAL_CALL=false;
 if (array_key_exists('ocf',$_GET)) $_GET['use_ocf']=1;
 
 $_GET['keep_show_parse_errors']='1'; // So if things go wrong we can better see what

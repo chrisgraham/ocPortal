@@ -34,6 +34,8 @@ if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level f
 
 global $FORCE_INVISIBLE_GUEST;
 $FORCE_INVISIBLE_GUEST=false;
+global $EXTERNAL_CALL;
+$EXTERNAL_CALL=false;
 global $MICRO_AJAX_BOOTUP;
 $MICRO_AJAX_BOOTUP=true;
 global $KNOWN_UTF8;
