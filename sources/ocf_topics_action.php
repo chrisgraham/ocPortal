@@ -89,7 +89,7 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 		't_forum_id'=>$forum_id,
 		't_pt_from'=>$pt_from,
 		't_pt_to'=>$pt_to,
-		't_description'=>$description,
+		't_description'=>substr($description,0,255),
 		't_description_link'=>substr($description_link,0,255),
 		't_emoticon'=>$emoticon,
 		't_num_views'=>$num_views,

@@ -29,7 +29,7 @@ function init__config()
 		load_options();
 
 		$VALUES=persistent_cache_get('VALUES');
-		if ($VALUES===NULL)
+		if (!is_array($VALUES))
 		{
 			$VALUES=$GLOBALS['SITE_DB']->query_select('values',array('*'));
 			$VALUES=list_to_map('the_name',$VALUES);

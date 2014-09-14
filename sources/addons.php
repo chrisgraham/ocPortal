@@ -694,18 +694,7 @@ function uninstall_addon($name)
 	require_code('zones2');
 	require_code('zones3');
 	require_code('abstract_file_manager');
-
-	// Clear some cacheing
 	require_code('view_modes');
-	require_code('zones2');
-	require_code('zones3');
-	erase_comcode_page_cache();
-	erase_tempcode_cache();
-	persistent_cache_empty();
-	erase_cached_templates();
-	erase_cached_language();
-	global $HOOKS_CACHE;
-	$HOOKS_CACHE=array();
 
 	// Remove addon info from database, modules, blocks, and files
 	$last=array();
@@ -748,6 +737,15 @@ function uninstall_addon($name)
 	unset($ADDON_INSTALLED_CACHE[$addon_row['addon_name']]);
 	if (function_exists('persistent_cache_set')) persistent_cache_set('ADDONS_INSTALLED',$ADDON_INSTALLED_CACHE,true);
 
+	// Clear some cacheing
+	erase_comcode_page_cache();
+	erase_tempcode_cache();
+	persistent_cache_empty();
+	erase_cached_templates();
+	erase_cached_language();
+	global $HOOKS_CACHE;
+	$HOOKS_CACHE=array();
+
 	log_it('UNINSTALL_ADDON',$addon_row['addon_name']);
 }
 
@@ -787,6 +785,8 @@ function inform_about_addon_install($file,$also_uninstalling=NULL,$also_installi
 
 	foreach ($directory as $i=>$entry)
 	{
+		$entry['path']=trim($entry['path']); // Weirdness can get into source ini file sometimes
+
 		if ($entry['path']=='mod.inf') continue;
 		if ($entry['path']=='mod.php') continue;
 		if (substr($entry['path'],-1)=='/') continue;

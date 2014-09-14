@@ -1130,6 +1130,7 @@ function ocf_delete_custom_field($id)
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
 	$info=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('cf_name','cf_description'),array('id'=>$id),'',1);
+	if (!array_key_exists(0,$info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$_name=$info[0]['cf_name'];
 	$_description=$info[0]['cf_description'];
 

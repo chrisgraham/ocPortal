@@ -197,7 +197,7 @@ class Block_main_content
 			$x2='';
 			if (($filter!='') && (!is_null($category_field_access)))
 			{
-				$x1=$this->build_filter($filter,$info,$category_field_access,is_array($info['category_is_string'])?$info['category_is_string'][0]:$info['category_is_string']);
+				$x1=$this->build_filter($filter,$info,'g.'.$category_field_access,is_array($info['category_is_string'])?$info['category_is_string'][0]:$info['category_is_string']);
 				$parent_spec__table_name=array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:NULL;
 				if (!is_null($parent_spec__table_name))
 				{
@@ -206,7 +206,7 @@ class Block_main_content
 			}
 			if (($filter_b!='') && (!is_null($category_field_filter)))
 			{
-				$x2=$this->build_filter($filter_b,$info,$category_field_filter,is_array($info['category_is_string'])?$info['category_is_string'][1]:$info['category_is_string']);
+				$x2=$this->build_filter($filter_b,$info,'g.'.$category_field_filter,is_array($info['category_is_string'])?$info['category_is_string'][1]:$info['category_is_string']);
 			}
 
 			if ($where.$x1.$x2!='')

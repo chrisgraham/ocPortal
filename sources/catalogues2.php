@@ -816,6 +816,9 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 		elseif ($sup_table_name=='integer')
 		{
 			$smap=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>((is_null($val)) || ($val==''))?NULL:intval($val));
+		} elseif ($sup_table_name=='short')
+		{
+			$smap=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>substr($val,0,255));
 		} else
 		{
 			$smap=array('cf_id'=>$field_id,'ce_id'=>$id,'cv_value'=>$val);

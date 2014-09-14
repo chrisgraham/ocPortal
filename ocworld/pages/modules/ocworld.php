@@ -57,10 +57,13 @@ class Module_ocworld
 
 		require_code('ocworld');
 
-		$prices=get_ocworld_prices_default();
-		foreach (array_keys($prices) as $name)
+		if (addon_installed('pointstore')) // If pointstore not removed yet
 		{
-			$GLOBALS['SITE_DB']->query_delete('prices',array('name'=>$name),'',1);
+			$prices=get_ocworld_prices_default();
+			foreach (array_keys($prices) as $name)
+			{
+				$GLOBALS['SITE_DB']->query_delete('prices',array('name'=>$name),'',1);
+			}
 		}
 
 		delete_specific_permission('administer_ocworld');

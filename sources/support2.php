@@ -215,7 +215,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 	} else
 	{
 		$ip_bans=persistent_cache_get('IP_BANS');
-		if (is_null($ip_bans))
+		if (!is_array($ip_bans))
 		{
 			$ip_bans=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'usersubmitban_ip',NULL,NULL,true);
 			if (!is_null($ip_bans))
