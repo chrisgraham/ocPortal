@@ -1763,9 +1763,12 @@ function get_bot_type()
 	$agent=ocp_srv('HTTP_USER_AGENT');
 	if (strpos($agent,'WebKit')!==false || strpos($agent,'Trident')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false)
 	{
-		// Quick exit path
-		$CACHE_BOT_TYPE=NULL;
-		return NULL;
+		if (strpos($agent,'bot')===false)
+		{
+			// Quick exit path
+			$CACHE_BOT_TYPE=NULL;
+			return NULL;
+		}
 	}
 	$agent=strtolower($agent);
 

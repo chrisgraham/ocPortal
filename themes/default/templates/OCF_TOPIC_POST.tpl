@@ -33,7 +33,7 @@
 		<div class="ocf_post_details_grapple">
 			{+START,IF_NON_EMPTY,{URL}}
 				{+START,IF_NON_EMPTY,{POST_ID*}}
-					<a href="{URL*}">#{POST_ID*}</a>
+					<a href="{URL*}" rel="nofollow">#{POST_ID*}</a>
 				{+END}
 			{+END}
 			{+START,IF,{$EQ,{ID},{TOPIC_FIRST_POST_ID},}}{+START,IF_NON_EMPTY,{TOPIC_ID}}

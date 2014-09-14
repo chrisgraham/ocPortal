@@ -2916,7 +2916,7 @@ function keep_symbol($param)
 {
 	$value='';
 	$get_vars=$_GET;
-	if ((isset($param[1])) && ($param[1]=='1') && (!array_key_exists('keep_session',$get_vars))) $get_vars['keep_session']=strval(get_session_id());
+	if ((isset($param[1])) && ($param[1]=='1') && (is_null(get_bot_type())) && (!array_key_exists('keep_session',$get_vars))) $get_vars['keep_session']=strval(get_session_id());
 
 	if (count($get_vars)>0)
 	{
