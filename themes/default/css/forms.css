@@ -186,10 +186,12 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	border: 1px solid {$GET,pale_border};
 }
 
-.field_checkbox_description {
-	margin-top: -1.5em !important;
-	margin-{!en_left}: 25px !important;
-}
+{+START,IF,{$NOT,{$MOBILE}}}
+	.field_checkbox_description {
+		margin-top: -1.5em !important;
+		margin-{!en_left}: 25px !important;
+	}
+{+END}
 
 .password_strength {
 	float: right;
@@ -212,6 +214,23 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 .input_author_required, .input_username_required, .input_colour_required, .input_email_required, .input_codename_required,
 .input_tick_required, .input_float_required, .input_text_required, .input_upload_required {
 }
+
+.input_dimensions input {
+	width: 3em;
+}
+.input_dimensions, .input_dimensions * {
+	vertical-align: middle;
+}
+
+.upload_field input[type="button"] {
+	margin-top: 2px;
+}
+
+{+START,IF,{$MOBILE}}
+	.input_upload, .input_upload_required {
+		max-width: 240px;
+	}
+{+END}
 
 .radio_description {
 	margin-top: -1.3em !important;

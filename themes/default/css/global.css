@@ -1310,6 +1310,9 @@ th.meta_data_title {
 .box_inner>h2>.right .button_page {
 	vertical-align: top;
 }
+.box_inner>h2>.right select {
+	margin: 0;
+}
 
 .box_inner>h1 a, .box_inner>h2 a, .box_inner>h3 a, .box_inner>h4 a, .box_inner>h5 a, .box_inner>h6 a, .toggleable_tray_title a, .box_inner>h1 a:visited, .box_inner>h2 a:visited, .box_inner>h3 a:visited, .box_inner>h4 a:visited, .box_inner>h5 a:visited, .box_inner>h6 a:visited, .toggleable_tray_title a:visited {
 	color: inherit;

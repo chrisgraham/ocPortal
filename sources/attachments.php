@@ -446,7 +446,10 @@ function render_attachment($tag,$attributes,$attachment,$pass_id,$source_member,
 				require_code('images');
 				ensure_thumbnail($attachment['a_url'],$attachment['a_thumb_url'],'attachments','attachments',intval($attachment['id']),'a_thumb_url',NULL,true);
 
-				$temp_tpl=do_template('ATTACHMENT_IMG'.(((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1'))?'_MINI':''),map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
+				$tpl_name='ATTACHMENT_IMG';
+				if ($type=='lightbox') $tpl_name.='_LIGHTBOX';
+				if ((array_key_exists('mini',$attachment)) && ($attachment['mini']=='1')) $tpl_name.='_MINI';
+				$temp_tpl=do_template($tpl_name,map_keys_to_upper($attachment)+array('WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true));
 				if (($type=='left') || ($type=='left_inline'))
 				{
 					$temp_tpl=do_template('ATTACHMENT_LEFT',array('_GUID'=>'aee2a6842d369c8dae212c3478a3a3e9','WYSIWYG_SAFE'=>($tag=='attachment')?NULL:true,'CONTENT'=>$temp_tpl));

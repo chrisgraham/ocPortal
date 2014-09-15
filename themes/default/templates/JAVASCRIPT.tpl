@@ -1545,6 +1545,11 @@ function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 {
 	if (typeof not_relative=='undefined') var not_relative=false;
 
+	if ((typeof not_relative!='undefined') && (not_relative) && (typeof obj.getBoundingClientRect!='undefined'))
+	{
+		return obj.getBoundingClientRect().left+get_window_scroll_x();
+	}
+
 	if (!obj && typeof window.console!='undefined') { console.log(find_pos_x.caller); return 0; }
 	var call_obj=obj;
 
@@ -1568,6 +1573,11 @@ function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_rel
 function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
 	if (typeof not_relative=='undefined') var not_relative=false;
+
+	if ((typeof not_relative!='undefined') && (not_relative) && (typeof obj.getBoundingClientRect!='undefined'))
+	{
+		return obj.getBoundingClientRect().top+get_window_scroll_y();
+	}
 
 	if (!obj && typeof window.console!='undefined') { console.log(find_pos_y.caller); return 0; }
 	var call_obj=obj;

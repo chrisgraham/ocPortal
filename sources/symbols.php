@@ -1573,23 +1573,53 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'HAS_SUBMIT_PERMISSION':
-				if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')))
+				if (isset($param[0]))
 				{
-					$value=has_submit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),((!is_null($param)) && (isset($param[2])))?$param[2]:get_ip_address(),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
+					$range=strtolower($param[0]);
+					$ip_address=$param[1];
+					$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+					$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+					if (array_key_exists(5,$param))
+					{
+						$value=has_submit_permission($range,$member,$ip_address,$cms_page,array($param[5],$param[6]))?'1':'0';
+					} else
+					{
+						$value=has_submit_permission($range,$member,$ip_address,$cms_page)?'1':'0';
+					}
 				}
 				break;
 
 			case 'HAS_DELETE_PERMISSION':
-				if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
+				if (isset($param[1]))
 				{
-					$value=has_delete_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
+					$range=strtolower($param[0]);
+					$owner=intval($param[1]);
+					$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+					$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+					if (array_key_exists(5,$param))
+					{
+						$value=has_delete_permission($range,$member,$owner,$cms_page,array($param[5],$param[6]))?'1':'0';
+					} else
+					{
+						$value=has_delete_permission($range,$member,$owner,$cms_page)?'1':'0';
+					}
 				}
 				break;
 
 			case 'HAS_EDIT_PERMISSION':
-				if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
+				if (isset($param[1]))
 				{
-					$value=has_edit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
+					$range=strtolower($param[0]);
+					$owner=intval($param[1]);
+					$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+					$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+					if (array_key_exists(5,$param))
+					{
+						$value=has_edit_permission($range,$member,$owner,$cms_page,array($param[5],$param[6]))?'1':'0';
+					} else
+					{
+						$value=has_edit_permission($range,$member,$owner,$cms_page)?'1':'0';
+					}
 				}
 				break;
 
@@ -2301,6 +2331,22 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'SUPPORTS_FRACTIONAL_EDITABLE':
+				$value='0';
+				if (isset($param[1]))
+				{
+					$edit_pagelink=$param[0];
+					$has_permission=(isset($param[1])?$param[1]:NULL)==='1';
+
+					list($zone,$attributes,)=page_link_decode($edit_pagelink);
+					if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
+					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (($has_permission===true) || (($has_permission===NULL) && (has_zone_access(get_member(),'adminzone')))))
+					{
+						$value='1';
+					}
+				}
+				break;
+
 			default:
 				global $EXTRA_SYMBOLS;
 				if (is_null($EXTRA_SYMBOLS))
@@ -2404,10 +2450,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$edit_param_name=$param[1]->evaluate();
 					$edit_pagelink=$param[2]->evaluate();
 					$supports_comcode=(isset($param[4])?$param[3]->evaluate():'0')=='1';
+					$explicit_editing_links=(isset($param[5])?$param[4]->evaluate():'0')=='1';
+					$has_permission=(isset($param[6])?$param[5]->evaluate():NULL)==='1';
 
 					list($zone,$attributes,)=page_link_decode($edit_pagelink);
 					if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
-					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (has_zone_access(get_member(),'adminzone')))
+					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (($has_permission===true) || (($has_permission===NULL) && (has_zone_access(get_member(),'adminzone')))))
 					{
 						$keep=symbol_tempcode('KEEP');
 						$url=find_script('fractional_edit').'?edit_param_name='.urlencode($edit_param_name).'&supports_comcode='.($supports_comcode?'1':'0').'&zone='.urlencode($zone).$keep->evaluate();
@@ -2417,7 +2465,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 						}
 
 						$_value=$param[count($param)-1];
-						$_value=do_template('FRACTIONAL_EDIT',array('_GUID'=>'075ac126c427d28b309004bc67b32b08','VALUE'=>$_value,'URL'=>$url,'EDIT_TEXT'=>$edit_text,'EDIT_PARAM_NAME'=>$edit_param_name));
+						$_value=do_template('FRACTIONAL_EDIT',array(
+							'_GUID'=>'075ac126c427d28b309004bc67b32b08',
+							'VALUE'=>$_value,
+							'URL'=>$url,
+							'EDIT_TEXT'=>$edit_text,
+							'EDIT_PARAM_NAME'=>$edit_param_name,
+							'EXPLICIT_EDITING_LINKS'=>$explicit_editing_links,
+						));
 						$value=$_value->evaluate();
 					} else
 					{

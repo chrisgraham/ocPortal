@@ -85,6 +85,7 @@ class Hook_addon_registry_core_rich_media
 			'ATTACHMENT_DOWNLOAD.tpl',
 			'ATTACHMENT_DOWNLOAD_REMOTE.tpl',
 			'ATTACHMENT_IMG.tpl',
+			'ATTACHMENT_IMG_LIGHTBOX.tpl',
 			'ATTACHMENT_IMG_MINI.tpl',
 			'ATTACHMENT_MEDIA.tpl',
 			'ATTACHMENT_QT.tpl',
@@ -335,6 +336,7 @@ class Hook_addon_registry_core_rich_media
 			'ATTACHMENTS_BROWSER_ATTACHMENT.tpl'=>'attachments_browser',
 			'ATTACHMENTS_BROWSER.tpl'=>'attachments_browser',
 			'ATTACHMENT_IMG.tpl'=>'attachment_left',
+			'ATTACHMENT_IMG_LIGHTBOX'=>'attachment_img_lightbox',
 			'ATTACHMENT_IMG_MINI.tpl'=>'attachment_left',
 			'ATTACHMENT_LEFT.tpl'=>'attachment_left',
 			'ATTACHMENT_RIGHT.tpl'=>'attachment_right',
@@ -1879,6 +1881,33 @@ class Hook_addon_registry_core_rich_media
 			lorem_globalise(do_lorem_template('ATTACHMENT_LEFT', array(
 				'CONTENT'=>$temp_tpl
 			)), NULL, '', true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/Javascript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__attachment_img_lightbox()
+	{
+		$temp_tpl=do_lorem_template('ATTACHMENT_IMG_LIGHTBOX', array(
+			'A_DESCRIPTION'=>lorem_phrase(),
+			'SCRIPT'=>placeholder_url(),
+			'PASS_ID'=>placeholder_id(),
+			'ID'=>placeholder_id(),
+			'A_THUMB'=>placeholder_image_url(),
+			'A_URL'=>placeholder_url(),
+			'A_THUMB_URL'=>placeholder_image_url(),
+
+			'A_WIDTH'=>placeholder_number(),
+			'A_HEIGHT'=>placeholder_number(),
+			'A_ORIGINAL_FILENAME'=>lorem_word()
+		));
+		return array(
+			lorem_globalise($temp_tpl, NULL, '', true)
 		);
 	}
 

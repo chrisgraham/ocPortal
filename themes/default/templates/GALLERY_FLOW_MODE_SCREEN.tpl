@@ -26,13 +26,15 @@
 
 	{CURRENT_ENTRY}
 
-	{+START,IF_NON_EMPTY,{CHILDREN}{CURRENT_ENTRY}{BROWSE}}
-		<hr class="spaced_rule" />
-	{+END}
-
 	{+START,IF_NON_EMPTY,{ENTRIES}}
 		<div class="box box___gallery_flow_mode_screen__other"><div class="box_inner">
-			<h2>{!OTHER_IMAGES_IN_GALLERY}</h2>
+			<h2>
+				<span class="right">
+					{SORTING}
+				</span>
+
+				{!OTHER_IMAGES_IN_GALLERY}
+			</h2>
 
 			{$REQUIRE_JAVASCRIPT,javascript_dyn_comcode}
 
@@ -56,11 +58,11 @@
 				} );
 			//]]></script>
 
+			<hr />
+
 			<p class="gallery_start_slideshow">
 				<span class="associated_link"><a target="_blank" title="{!_SLIDESHOW}: {!LINK_NEW_WINDOW}" href="{$PAGE_LINK*,_SELF:galleries:{FIRST_ENTRY_ID*}:slideshow=1:wide_high=1}">{!_SLIDESHOW}</a></span>
 			</p>
-
-			{SORTING}
 		</div></div>
 	{+END}
 

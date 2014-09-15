@@ -77,6 +77,7 @@ class Module_admin_config
 										'spam_check_usernames','implied_spammer_confidence','spam_blackhole_detection','honeypot_url','honeypot_phrase',
 										'filetype_icons',
 										'complex_uploader','wysiwyg','editarea','autoban','js_overlays','likes','captcha_single_guess','css_captcha','tree_lists',
+										'default_media_attachment_type',
 										);
 
 		foreach ($config_options as $option)
@@ -290,6 +291,7 @@ class Module_admin_config
 			add_config_option('HONEYPOT_PHRASE','honeypot_phrase','line','return \'\';','SECURITY','SPAMMER_DETECTION');
 			add_config_option('RULES_LINK','bottom_show_rules_link','tick','return \'1\';','FEATURE','BOTTOM_LINKS');
 			add_config_option('FILETYPE_ICONS','filetype_icons','tick','return \'1\';','THEME','GENERAL');
+			add_config_option('DEFAULT_MEDIA_ATTACHMENT_TYPE','default_media_attachment_type','list','return \'lightbox\';','SITE','_COMCODE',0,'lightbox|island|inline|download');
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<8))

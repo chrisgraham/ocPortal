@@ -617,10 +617,10 @@ function do_attachment(field_name,id,description)
 	var comcode;
 	if (!is_comcode_xml(element))
 	{
-		comcode='\n\n[attachment type="island" description="'+escape_comcode(description)+'"]'+id+'[/attachment]';
+		comcode='\n\n[attachment type="{$CONFIG_OPTION;,default_media_attachment_type}" description="'+escape_comcode(description)+'"]'+id+'[/attachment]';
 	} else
 	{
-		comcode='<br /><br /><attachment type="island"><attachmentDescription>'+description+'</attachmentDescription>'+id+'</attachment>';
+		comcode='<br /><br /><attachment type="{$CONFIG_OPTION;,default_media_attachment_type}"><attachmentDescription>'+description+'</attachmentDescription>'+id+'</attachment>';
 	}
 
 	insert_textbox_opener(element,comcode);

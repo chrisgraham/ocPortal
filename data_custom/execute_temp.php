@@ -55,4 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
+	add_config_option('DEFAULT_MEDIA_ATTACHMENT_TYPE','default_media_attachment_type','list','return \'lightbox\';','SITE','_COMCODE',0,'lightbox|island|inline|download');
 }

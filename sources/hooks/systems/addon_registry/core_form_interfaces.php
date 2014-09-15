@@ -100,6 +100,7 @@ class Hook_addon_registry_core_form_interfaces
 			'FORM_SCREEN_INPUT_HUGE_COMCODE.tpl',
 			'FORM_SCREEN_INPUT_HUGE_LIST.tpl',
 			'FORM_SCREEN_INPUT_INTEGER.tpl',
+			'FORM_SCREEN_INPUT_DIMENSIONS.tpl',
 			'FORM_SCREEN_INPUT_LINE.tpl',
 			'FORM_SCREEN_INPUT_CODENAME.tpl',
 			'FORM_SCREEN_INPUT_LINE_MULTI.tpl',
@@ -490,6 +491,7 @@ class Hook_addon_registry_core_form_interfaces
 			'FORM_SCREEN_INPUT_DATE_NULL.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_DATE.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_INTEGER.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_DIMENSIONS.tpl'=>'form_screen_2',
 			'FORM_SCREEN_INPUT_FLOAT.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_HIDDEN_2.tpl'=>'form_screen_2',
 			'FORM_SCREEN_FIELD.tpl'=>'form_screen_1',
@@ -925,6 +927,27 @@ class Hook_addon_registry_core_form_interfaces
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'DEFAULT'=>''
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
+		)));
+
+		$name_width=placeholder_random_id();
+		$name_height=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_DIMENSIONS', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME_WIDTH'=>$name_width,
+			'DEFAULT_WIDTH'=>'',
+			'NAME_HEIGHT'=>$name_height,
+			'DEFAULT_HEIGHT'=>'',
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,

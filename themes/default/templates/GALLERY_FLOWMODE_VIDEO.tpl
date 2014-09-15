@@ -16,6 +16,15 @@
 					{+END}
 
 					<tbody>
+						{+START,IF_NON_EMPTY,{_TITLE}}
+							<tr>
+								<th class="de_th meta_data_title">{!TITLE}</th>
+								<td>
+									{+START,FRACTIONAL_EDITABLE,{_TITLE},title,_SEARCH:cms_galleries:type=__ev:id={ID},1,1,{$HAS_EDIT_PERMISSION,mid,{SUBMITTER},{$MEMBER},cms_galleries,galleries,{CAT}}}{_TITLE*}{+END}
+								</td>
+							</tr>
+						{+END}
+
 						<tr>
 							<th class="de_th meta_data_title">{!ADDED}</th>
 							<td>

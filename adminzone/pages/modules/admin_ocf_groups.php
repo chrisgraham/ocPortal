@@ -255,8 +255,7 @@ class Module_admin_ocf_groups extends standard_aed_module
 		$fields->attach(form_input_integer(do_lang_tempcode('MAX_DAILY_UPLOAD_MB'),do_lang_tempcode('DESCRIPTION_MAX_DAILY_UPLOAD_MB'),'max_daily_upload_mb',$max_daily_upload_mb,true));
 		if (addon_installed('ocf_member_avatars'))
 		{
-			$fields->attach(form_input_integer(do_lang_tempcode('MAX_AVATAR_WIDTH'),do_lang_tempcode('DESCRIPTION_MAX_AVATAR_WIDTH'),'max_avatar_width',$max_avatar_width,true));
-			$fields->attach(form_input_integer(do_lang_tempcode('MAX_AVATAR_HEIGHT'),do_lang_tempcode('DESCRIPTION_MAX_AVATAR_HEIGHT'),'max_avatar_height',$max_avatar_height,true));
+			$fields->attach(form_input_dimensions(do_lang_tempcode('MAX_AVATAR_DIMENSIONS'),do_lang_tempcode('DESCRIPTION_MAX_AVATAR_DIMENSIONS'),'max_avatar_width','max_avatar_height',$max_avatar_width,$max_avatar_height,true))
 		}
 		$fields->attach(form_input_integer(do_lang_tempcode('MAX_POST_LENGTH_COMCODE'),do_lang_tempcode('DESCRIPTION_MAX_POST_LENGTH_COMCODE'),'max_post_length_comcode',$max_post_length_comcode,true));
 		if (addon_installed('ocf_signatures'))

@@ -1168,7 +1168,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if (get_magic_quotes_gpc()) $original_filename=stripslashes($original_filename);
 
 					// Special code to re-orientate JPEG images if required (browsers cannot do this)
-					if (($attributes['type']=='inline') || ($attributes['type']=='island'))
+					if (($attributes['type']=='inline') || ($attributes['type']=='island') || ($attributes['type']=='lightbox'))
 					{
 						require_code('images');
 						$attachment_path=get_custom_file_base().'/'.rawurldecode($urls[0]);

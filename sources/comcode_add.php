@@ -322,6 +322,7 @@ function comcode_helper_script()
 		{
 			$tag_description=protect_from_escaping(do_lang('COMCODE_TAG_'.$tag));
 		}
+		$has_full_tag_description=false;
 
 		if (array_key_exists($tag,$tag_list))
 		{
@@ -478,8 +479,9 @@ function comcode_helper_script()
 											if (($item=='inline_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
 											if (($item=='island_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
 
+											if (($item=='inline') && (get_param_integer('is_image',NULL)===0)) continue;
 											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
-											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
+											if (($item=='lightbox') && (get_param_integer('is_image',NULL)===0)) continue;
 
 											if (($item=='code') && ((get_param_integer('is_image',NULL)===1) || (get_param_integer('is_archive',NULL)===1))) continue;
 
@@ -495,7 +497,15 @@ function comcode_helper_script()
 								$field=form_input_list($parameter_name,'',$param,$list,NULL,false,false);
 							} elseif ($param=='width' || $param=='height')
 							{
-								$field=form_input_integer($parameter_name,protect_from_escaping($descriptiont),$param,($default=='')?NULL:intval($default),false);
+								if ($param=='width')
+								{
+									$default_width=array_key_exists('width',$defaults)?$defaults['width']:get_param('default_width','');
+									$default_height=array_key_exists('height',$defaults)?$defaults['height']:get_param('default_height','');
+									$field=form_input_dimensions(do_lang_tempcode('DIMENSIONS'),do_lang_tempcode('COMCODE_TAG_PARAM_dimensions'),'width','height',($default_width=='')?NULL:intval($default_width),($default_height=='')?NULL:intval($default_height),false);
+								} else
+								{
+									$field=new ocp_tempcode();
+								}
 							} else
 							{
 								if ($supports_comcode)
@@ -505,6 +515,10 @@ function comcode_helper_script()
 								{
 									$field=form_input_line($parameter_name,protect_from_escaping($descriptiont),$param,$default,false);
 								}
+							}
+							if ((($tag=='attachment') || ($tag=='attachment_safe')) && (($param=='type' || $param=='float' || $param=='width' || $param=='height')) && (/*Assumed needs routine heavy control*/!has_specific_permission(get_member(),'use_very_dangerous_comcode')))
+							{
+								$is_advanced=true;
 							}
 							if ($is_advanced)
 							{
@@ -550,7 +564,8 @@ function comcode_helper_script()
 			if (($default_embed!='') || (!addon_installed('filedump')))
 			{
 				$hidden->attach(form_input_hidden('tag_contents',$default_embed));
-				$tag_description=new ocp_tempcode();
+				$tag_description=do_lang_tempcode('COMCODE_TAG_attachment_simplified');
+				$has_full_tag_description=true;
 
 				if (substr($default_embed,0,4)=='new_') $preview=NULL;
 			} else
@@ -617,10 +632,10 @@ function comcode_helper_script()
 			$fields->attach(form_input_tick(do_lang_tempcode('REMOVE'),'','_delete',false));
 		} else
 		{
-			$submit_name=do_lang_tempcode('USE');
+			$submit_name=do_lang_tempcode('ADD');
 		}
 
-		$text=$tag_description->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
+		$text=($has_full_tag_description || $tag_description->is_empty())?$tag_description:do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
 		$hidden->attach(form_input_hidden('tag',$tag));
 		$content=do_template('FORM_SCREEN',array('_GUID'=>'270058349d048a8be6570bba97c81fa2','TITLE'=>$title,'JAVASCRIPT'=>$javascript,'TARGET'=>'_self','SKIP_VALIDATION'=>true,'FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_NAME'=>$submit_name,'HIDDEN'=>$hidden,'PREVIEW'=>$preview,'THEME'=>$GLOBALS['FORUM_DRIVER']->get_theme()));
 	}

@@ -79,7 +79,7 @@ function set_attachment(field_name,number,filename)
 		url+='&tag='+(is_image?'attachment_safe':'attachment');
 		url+='&default=new_'+number;
 		url+='&default_thumb=1';
-		url+='&default_type='+(is_archive?'download':(is_image?'inline':'island'));
+		url+='&default_type='+(is_archive?'download':(is_image?'{$CONFIG_OPTION;,default_media_attachment_type}':'island'));
 		url+='&is_archive='+(is_archive?'1':'0');
 		url+='&is_image='+(is_image?'1':'0');
 		url+='&caption='+window.encodeURIComponent(filepath); // Default caption to local file path

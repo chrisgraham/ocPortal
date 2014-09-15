@@ -2,7 +2,7 @@
 
 function fractional_edit(event,object,url,edit_text,edit_param_name)
 {
-	if (magic_keypress(event))
+	if (magic_keypress(event) || object!=event.target)
 	{
 		// Bubbling needs to be stopped because shift+click will open a new window on some lower event handler (in firefox anyway)
 		cancel_bubbling(event);
@@ -13,8 +13,8 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		// Position form
 		var width=find_width(object);
 		if (width<180) width=180;
-		var x=find_pos_x(object);
-		var y=find_pos_y(object);
+		var x=find_pos_x(object,true);
+		var y=find_pos_y(object,true);
 
 		// Record possible old JS events
 		object.old_onclick=object.onclick;
@@ -28,7 +28,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 		var input=document.createElement('input');
 		input.style.position='absolute';
 		input.style.left=(x-1)+'px';
-		input.style.top=(y-1)+'px';
+		input.style.top=(y-2)+'px';
 		input.style.width=width+'px';
 		input.name=edit_param_name;
 		input.value=edit_text;
@@ -132,8 +132,7 @@ function fractional_edit(event,object,url,edit_text,edit_param_name)
 
 		// Add in form
 		form.appendChild(input);
-		var website_inner=document.getElementById('main_website_inner'); // So x/y positioning is correct
-		if (!website_inner) website_inner=document.body;
+		var website_inner=document.body;
 		website_inner.appendChild(form);
 		input.focus();
 		input.select();
