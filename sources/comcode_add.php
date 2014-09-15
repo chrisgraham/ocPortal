@@ -478,7 +478,7 @@ function comcode_helper_script()
 											if (($item=='inline_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
 											if (($item=='island_extract') && (get_param_integer('is_archive',NULL)===0)) continue;
 
-											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
+											if (($item=='inline') && (get_param_integer('is_image',NULL)===0)) continue;
 											if (($item=='island') && (get_param_integer('is_image',NULL)===0)) continue;
 
 											if (($item=='code') && ((get_param_integer('is_image',NULL)===1) || (get_param_integer('is_archive',NULL)===1))) continue;
