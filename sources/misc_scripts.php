@@ -140,9 +140,16 @@ function preview_script()
 	require_code('preview');
 	list($output,$validation,$keyword_density,$spelling)=build_preview(true);
 
-	$output=do_template('PREVIEW_SCRIPT',array('_GUID'=>'97bd8909e8b9983a0bbf7ab68fab92f3','OUTPUT'=>$output->evaluate(),'VALIDATION'=>$validation,'KEYWORD_DENSITY'=>$keyword_density,'SPELLING'=>$spelling,'HIDDEN'=>build_keep_post_fields()));
+	if (get_param_integer('js_only',0)==0)
+	{
+		$output=do_template('PREVIEW_SCRIPT',array('_GUID'=>'97bd8909e8b9983a0bbf7ab68fab92f3','OUTPUT'=>$output->evaluate(),'VALIDATION'=>$validation,'KEYWORD_DENSITY'=>$keyword_density,'SPELLING'=>$spelling,'HIDDEN'=>build_keep_post_fields()));
 
-	$tpl=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+		$tpl=do_template('STANDALONE_HTML_WRAP',array('TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+	} else
+	{
+		$tpl=$output;
+	}
+
 	$tpl->handle_symbol_preprocessing();
 	$tpl->evaluate_echo();
 }
@@ -918,7 +925,18 @@ function block_helper_script()
 
 		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
-		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE_XML'=>$comcode_xml,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
+		$content=do_template('BLOCK_HELPER_DONE',array(
+			'_GUID'=>'575d6c8120d6001c8156560be518f296',
+			'TITLE'=>$title,
+			'FIELD_NAME'=>$field_name,
+			'TAG_CONTENTS'=>'',
+			'SAVE_TO_ID'=>get_param('save_to_id',''),
+			'DELETE'=>(post_param_integer('delete',0)==1),
+			'BLOCK'=>$block,
+			'COMCODE_XML'=>$comcode_xml,
+			'COMCODE'=>$comcode,
+			'COMCODE_SEMIHTML'=>$comcode_semihtml,
+		));
 	}
 
 	global $EXTRA_HEAD;

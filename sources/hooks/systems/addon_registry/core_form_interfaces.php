@@ -1869,9 +1869,12 @@ class Hook_addon_registry_core_form_interfaces
 				'TITLE'=>lorem_phrase(),
 				'FIELD_NAME'=>placeholder_id(),
 				'BLOCK'=>lorem_phrase(),
+				'TAG_CONTENTS'=>'',
+				'SAVE_TO_ID'=>'',
+				'DELETE'=>false,
 				'COMCODE_XML'=>lorem_phrase(),
 				'COMCODE'=>lorem_phrase(),
-				'COMCODE_SEMIHTML'=>lorem_phrase()
+				'COMCODE_SEMIHTML'=>lorem_phrase(),
 			)), NULL, '', true)
 		);
 	}

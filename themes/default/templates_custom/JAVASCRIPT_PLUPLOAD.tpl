@@ -13166,7 +13166,7 @@ function fireFakeChangeFor(name,value)
 	var ob=rep.swfob;
 	if (typeof ob.settings=='undefined') return;
 
-	if (ob.settings.immediate_submit{+START,IF,{$VALUE_OPTION,aviary}} || true{+END})
+	if (ob.settings.immediate_submit)
 	{
 		var txtID = document.getElementById(ob.settings.txtFileDbID);
 		var txtFileName = document.getElementById(ob.settings.txtFileNameID);
@@ -13239,9 +13239,6 @@ function uploadSuccess(ob,file,data) {
 	if (id.value!='') id.value+=':';
 	id.value += decodedData['upload_id'];
 
-	{+START,IF,{$VALUE_OPTION,aviary}}
-		if (id.value.indexOf(':')==-1) implement_aviary(decodedData['upload_savename'],decodedData['upload_name'],id);
-	{+END}
 	if (typeof window.handle_meta_data_receipt!='undefined') handle_meta_data_receipt(decodedData);
 
 	if ((typeof ob.submitting!='undefined') && (ob.submitting))
@@ -13313,22 +13310,10 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	if (!filter) filter='{$CONFIG_OPTION#,valid_types}';
 	filter+=','+filter.toUpperCase();
 
-	{+START,IF,{$VALUE_OPTION,aviary}}
-		if (typeof window.done_aviary=='undefined') do_aviary();
-	{+END}
-
 	var rep=document.getElementById(name);
 	if (!rep.originally_disabled) rep.disabled=false;
 
 	if (typeof window.no_java=='undefined') window.no_java=false;
-
-	var java_method=false;
-	{+START,IF,{$CONFIG_OPTION,java_upload}}
-		if (window.location.search.indexOf('keep_java=1')!=-1)
-		{
-			if ((!window.no_java) && (isValidJVM())) java_method=true;
-		}
-	{+END}
 
 	// Mark so we don't do more than once
 	if (typeof rep.replaced_with_swfupload!='undefined') return;
@@ -13365,124 +13350,15 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	progressDiv.className='flash';
 	maindiv.appendChild(progressDiv);
 
-	if (!java_method)
-	{
-		var filenameField=document.createElement('input');
-		filenameField.setAttribute('size',21);
-		filenameField.setAttribute('id','txtFileName_'+name);
-		filenameField.setAttribute('type','text');
-		filenameField.value='';
-		filenameField.className='top_vertical_alignment button_micro';
-		filenameField.name='txtFileName_'+name;
-		filenameField.disabled=true;
-		subdiv.appendChild(filenameField);
-	}
-
-	if (java_method)
-	{
-		var btnSubmit=document.getElementById(_btnSubmitID);
-
-		var hidFileName=document.createElement('input');
-		hidFileName.setAttribute('id','hidFileName_'+name);
-		hidFileName.name='hidFileName_'+name;
-		hidFileName.setAttribute('type','hidden');
-		hidFileName.value='';
-		maindiv.appendChild(hidFileName);
-
-		var random=Math.floor(Math.random()*100000);
-
-		var base="{$CONFIG_OPTION#*,java_ftp_path}";
-		if (base.substr(base.length-1,1)!='/') base+='/';
-		hidFileID.value=''+random+'.dat';
-
-		var colorAt=rep.parentNode,backgroundColor;
-		do
-		{
-			backgroundColor=abstract_get_computed_style(colorAt,'background-color');
-			colorAt=colorAt.parentNode;
-		}
-		while ((colorAt) && (backgroundColor) && (backgroundColor=='transparent'));
-		if ((!backgroundColor) || (backgroundColor=='transparent')) backgroundColor='#FFFFFF';
-		var foregroundColor=abstract_get_computed_style(rep.parentNode,'color');
-		if (!foregroundColor) foregroundColor='#000000';
-		var matches;
-		function dec_to_hex(number)
-		{
-			var hexbase="0123456789ABCDEF";
-			return hexbase.charAt((number>>4)&0xf)+hexbase.charAt(number&0xf);
-		}
-		matches=backgroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) backgroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
-		matches=foregroundColor.match(/^\s*rgba?\s*\(\s*(\d+),\s*(\d+),\s*(\d+)\s*(,\s*(\d+)\s*)?\)\s*$/i);
-		if (matches) foregroundColor='#'+dec_to_hex(matches[1])+dec_to_hex(matches[2])+dec_to_hex(matches[3]);
-
-		var out='';
-		var maxLength=(typeof btnSubmit.form.elements['MAX_FILE_SIZE']=='undefined')?'2000000000':(btnSubmit.form.elements['MAX_FILE_SIZE'].value);
-		out+='<object width="430" height="29" classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93">';
-		out+='	<param name="codebase" value="{$BASE_URL*;}/data/javaupload/" />';
-		out+='	<param name="code" value="Uploader.class" />';
-		out+='	<param name="archive" value="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" />';
-		out+='	<param name="scriptable" VALUE="true" />';
-		out+='	<param name="mayscript" VALUE="true" />';
-		out+='	<param name="address" value="{$CONFIG_OPTION*;,java_ftp_host}" />';
-		out+='	<param name="username" value="{$CONFIG_OPTION*;,java_username}" />';
-		out+='	<param name="password" value="{$CONFIG_OPTION*;,java_password}" />';
-		out+='	<param name="uploadedFileName" value="'+base+random+'.dat" />';
-		out+='	<param name="backgroundColor" value="'+backgroundColor+'" />';
-		out+='	<param name="foregroundColor" value="'+foregroundColor+'" />';
-		out+='	<param name="fileNameID" value="hidFileName_'+name+'" />';
-		out+='	<param name="nameID" value="'+name+'" />';
-		out+='	<param name="maxLength" value="'+maxLength+'" />';
-		out+='	<param name="page_type" value="'+page_type+'" />';
-		out+='	<param name="posting_field_name" value="'+posting_field_name+'" />';
-		out+='	<param name="_btnSubmitID" value="'+_btnSubmitID+'" />';
-		out+='	<param name="types" value="'+escape_html(filter)+'" />';
-		out+='	<param name="fail_message" value="{$REPLACE*, />,\\n,{!JAVA_FTP_fail_message;^}}" />';
-		out+='	<param name="uploaded_message" value="{!JAVA_FTP_uploaded_message*;^}" />';
-		out+='	<param name="reverting_title" value="{!JAVA_FTP_reverting_title*;^}" />';
-		out+='	<param name="valid_types_label" value="{!JAVA_FTP_valid_types_label*;^}" />';
-		out+='	<param name="refused_connection" value="{!JAVA_FTP_refused_connection*;^}" />';
-		out+='	<param name="output_complete" value="{!JAVA_FTP_output_complete*;^}" />';
-		out+='	<param name="transfer_error" value="{!JAVA_FTP_transfer_error*;^}" />';
-		out+='	<param name="file_name_label" value="{!JAVA_FTP_file_name_label*;^}" />';
-		out+='	<param name="browse_label" value="{!JAVA_FTP_browse_label*;^}" />';
-		out+='	<param name="upload_label" value="{!JAVA_FTP_upload_label*;^}" />';
-		out+='	<param name="please_choose_file" value="{!JAVA_FTP_please_choose_file*;^}" />';
-		out+='	<param name="wrong_path" value="{!JAVA_FTP_wrong_path*;^}" />';
-		out+='	<param name="max_size_label" value="{!JAVA_FTP_max_size_label*;^}" />';
-		out+='	<param name="too_large" value="{!JAVA_FTP_too_large*;^}" />';
-		out+='	<comment>';
-		out+='		<embed width="430" height="29" fail_message="{$REPLACE*,<br />,\\n,{!JAVA_FTP_fail_message;^}}" uploaded_message="{!JAVA_FTP_uploaded_message*;^}" reverting_title="{!JAVA_FTP_reverting_title*;^}" valid_types_label="{!JAVA_FTP_valid_types_label*;^}" refused_connection="{!JAVA_FTP_refused_connection*;^}" output_complete="{!JAVA_FTP_output_complete*;^}" transfer_error="{!JAVA_FTP_transfer_error*;^}" file_name_label="{!JAVA_FTP_file_name_label*;^}" browse_label="{!JAVA_FTP_browse_label*;^}" upload_label="{!JAVA_FTP_upload_label*;^}" please_choose_file="{!JAVA_FTP_please_choose_file*;^}" wrong_path="{!JAVA_FTP_wrong_path*;^}" max_size_label="{!JAVA_FTP_max_size_label*;^}" too_large="{!JAVA_FTP_too_large*;^}" _btnSubmitID="'+_btnSubmitID+'" page_type="'+page_type+'" nameID="'+name+'" types="{$CONFIG_OPTION,valid_types}" maxLength="'+maxLength+'" fileNameID="hidFileName_'+name+'" address="{$CONFIG_OPTION*;,java_ftp_host}" username="{$CONFIG_OPTION*;,java_username}" password="{$CONFIG_OPTION*;,java_password}" uploadedFileName="'+base+random+'.dat" backgroundColor="'+backgroundColor+'" foregroundColor="'+foregroundColor+'" scriptable="true" mayscript="true" codebase="{$BASE_URL*;}/data/javaupload/" code="Uploader.class" archive="{$BASE_URL*;}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL*;}/data/javaupload/Net.jar" type="application/x-java-applet" pluginspage="http://java.sun.com/products/plugin/index.html#download">';
-		out+='		</embed>';
-		out+='	</comment>';
-		out+='</object>';
-		/*out+='<applet mayscript="true" scriptable="true" code="Uploader.class" archive="{$BASE_URL}/data/javaupload/Uploader.jar?cachebreak='+random+',{$BASE_URL}/data/javaupload/Net.jar" width="430" height="29" id="uploader_'+name+'">';
-		out+='</applet>';*/
-		set_inner_html(progressDiv,out);
-
-		var old_onclick=btnSubmit.onclick;
-		btnSubmit.onclick=function() {
-			if ((rep2.value=='1') || (rep.className.indexOf('required')==-1))
-			{
-				window.form_submitting=btnSubmit.form; // For IE
-				old_onclick();
-				return;
-			}
-			window.fauxmodal_alert('{!UPLOAD_FIRST;^}');
-			btnSubmit.disabled=true;
-			var timer=window.setInterval(function() {
-				if (rep2.value=='1')
-				{
-					window.clearTimeout(timer);
-					btnSubmit.disabled=false;
-					window.form_submitting=btnSubmit.form; // For IE
-					old_onclick();
-				}
-			} , 500);
-		}
-
-		return;
-	}
+	var filenameField=document.createElement('input');
+	filenameField.setAttribute('size',21);
+	filenameField.setAttribute('id','txtFileName_'+name);
+	filenameField.setAttribute('type','text');
+	filenameField.value='';
+	filenameField.className='top_vertical_alignment button_micro';
+	filenameField.name='txtFileName_'+name;
+	filenameField.disabled=true;
+	subdiv.appendChild(filenameField);
 
 	var uploadButton=document.createElement('input');
 	uploadButton.type='button';
@@ -13529,7 +13405,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		multi_selection: (page_type=='upload_multi'),
 
 		// General settings
-		runtimes : 'html5,silverlight,flash,gears,browserplus',
+		runtimes : 'html5,silverlight,flash',
 		url : "{$FIND_SCRIPT,incoming_uploads}"+keep_stub(true),
 		max_file_size : (typeof mfs=='undefined')?'2000mb':(((typeof mfs[0]!='undefined')?mfs[0].value:mfs.value)+'b'),
 
@@ -13556,9 +13432,6 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 		immediate_submit : true
 	};
 
-	if (window.location.hash=='#picup_test')
-		window.location.hash='#serverResponse={upload_id:51,upload_name:\'example.jpg\'}&field_name=file1'; // Useful for testing picup
-
 	var ob=new plupload.Uploader(settings);
 	ob.bind('Init',plUploadLoaded);
 	ob.bind('FilesAdded',fileDialogComplete);
@@ -13583,7 +13456,7 @@ function replaceFileInput(page_type,name,_btnSubmitID,posting_field_name,filter)
 	//newClearBtn.setAttribute('src','{$IMG;,pageitem/clear}'.replace(/^http:/,window.location.protocol));
 	newClearBtn.style.marginLeft='8px';
 	newClearBtn.style.verticalAlign='top';
-	newClearBtn.alt='{+START,IF,{$VALUE_OPTION,aviary}}{!UPLOAD;^} {+END}{!CLEAR;^}';
+	newClearBtn.alt='{!CLEAR;^}';
 	newClearBtn.value='{!CLEAR;^}';
 	subdiv.appendChild(newClearBtn);
 
@@ -13767,87 +13640,6 @@ FileProgress.prototype.disappear = function () {
 		this.fileProgressWrapper.style.display = "none";
 	}
 };
-
-{+START,IF,{$VALUE_OPTION,aviary}}
-/* Add in Aviary to image URLs */
-
-function do_aviary()
-{
-	{+START,IF,{$NOT,{$DEV_MODE}}}
-		if (running_locally()) return;
-	{+END}
-
-	var fields=document.getElementsByTagName('input');
-	for (var i=0;i<fields.length;i++)
-	{
-		var url=fields[i].value;
-		var filename=url.replace(/^.*\//,'');
-		implement_aviary(url,filename,fields[i],true);
-	}
-	window.done_aviary=true;
-}
-
-function running_locally()
-{
-	return (('{$DOMAIN;}'=='localhost') || ('{$DOMAIN;}'=='127.0.0.1') || ('{$DOMAIN;}'.substr(0,4)=='192.') || ('{$DOMAIN;}'.substr(0,3)=='10.') || ('{$DOMAIN;}'.indexOf('.')==-1));
-}
-
-function implement_aviary(url,filename,field,recalculate_url_on_click)
-{
-	if (filename.substr(-4).match(/\.(jpg|jpeg|png|gif)$/i))
-	{
-		var old_link=document.getElementById('edit_for_'+field.id);
-		if (old_link) old_link.parentNode.removeChild(old_link);
-
-		var url_raw=url;
-		if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
-		{+START,IF,{$DEV_MODE}}
-			if (running_locally()) url='http://ocportal.com/themes/ocproducts/images//newlogo-top.gif';
-		{+END}
-		{+START,IF,{$NOT,{$DEV_MODE}}}
-			if (running_locally()) return;
-		{+END}
-
-		var edit_link=document.createElement('a');
-		set_inner_html(edit_link,'({!EDIT;})');
-		edit_link.className='associated_details';
-		edit_link.id='edit_for_'+field.id;
-		edit_link.target='_blank';
-		edit_link.title='{!LINK_NEW_WINDOW;}';
-		edit_link.onmousedown=function() {
-			if (recalculate_url_on_click)
-			{
-				url=field.value;
-				url_raw=url;
-				if (url.indexOf('://')==-1) url='{$CUSTOM_BASE_URL;}/'+url;
-				{+START,IF,{$DEV_MODE}}
-					if (running_locally()) url='http://ocportal.com/themes/ocproducts/images//newlogo-top.gif';
-				{+END}
-				{+START,IF,{$NOT,{$DEV_MODE}}}
-					if (running_locally()) return;
-				{+END}
-				filename=url.replace(/^.*\//,'');
-			}
-
-			edit_link.href='http://www.aviary.com/online/image-editor?apil=2833e6c91&posturl={$FIND_SCRIPT.;,incoming_uploads}'+window.encodeURIComponent('?image_url_sub_for='+window.encodeURIComponent(url_raw)+keep_stub())+'&userhash=dfdsfdsfsd4&exiturl={$PAGE_LINK.;,site:}&exiturltarget=replace&postagent=client&sitename={$SITE_NAME.;}&loadurl='+window.encodeURIComponent(url)+'&defaultfilename='+window.encodeURIComponent(filename);
-		};
-		edit_link.onclick=function()
-		{
-			window.fauxmodal_confirm(
-				'You will be directed to an external online image editor called Aviary Phoenix. {$SITE_NAME;} will associate the latest saved file from there with this image and use it here. When you save don\'t worry about setting the filename/description/tags for the image as they\'ll all be ignored.',
-				function(result)
-				{
-					if (result) click_link(edit_link);
-				}
-			);
-			return false;
-		};
-		edit_link.onmousedown();
-		//field.parentNode.appendChild(document.createElement('br'));
-		field.parentNode.appendChild(edit_link);
-	}
-}
-{+END}
 
 
 /* HTML5 UPLOAD */

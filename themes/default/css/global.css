@@ -3754,7 +3754,7 @@ div:hover>.edit_menu_link_inline, div:hover>.edit_page_link_inline {
 	margin: 1em 0;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		border: 1px solid {$GET,standard_border};
-		padding: 0.5em;
+		padding: 0.5em !important;
 	{+END}
 	font-size: 0.9em;
 	white-space: nowrap;
@@ -3789,6 +3789,10 @@ figure {
 /* Make inline images look a little nicer, including with Wordpress imports (but native too) */
 .alignleft, .alignright, .aligncenter, .alignnone, .alignnone, a[rel="lightbox"] img.attachment_img {
 	border: 2px solid {$GET,pale_border};
+}
+
+.attachment img {
+	vertical-align: middle;
 }
 
 .attachment figcaption {
