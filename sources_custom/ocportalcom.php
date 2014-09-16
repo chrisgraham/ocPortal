@@ -206,7 +206,7 @@ function myocp_add_site($codename,$name,$email_address,$password,$description,$c
 	require_lang('sites');
 	require_code('mail');
 	$subject=do_lang('MO_EMAIL_SUBJECT');
-	$message=do_lang('MO_EMAIL_BODY',comcode_escape($codename),comcode_escape($password));
+	$message=do_lang('MO_EMAIL_BODY',comcode_escape($codename)/*email is not secure,comcode_escape($password)*/);
 	mail_wrap($subject,$message,array($email_address));
 }
 
