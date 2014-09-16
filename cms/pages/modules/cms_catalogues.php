@@ -79,6 +79,9 @@ class Module_cms_catalogues extends standard_crud_module
 			'export'=>array('CATALOGUE_EXPORT','menu/_generic_admin/export'),
 		);
 
+		$this->cat_crud_module=class_exists('Mx_cms_catalogues_cat')?new Mx_cms_catalogues_cat():new Module_cms_catalogues_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_catalogues_alt')?new Mx_cms_catalogues_alt():new Module_cms_catalogues_alt();
+
 		$ret+=parent::get_entry_points();
 		unset($ret['ac']);
 		unset($ret['ec']);

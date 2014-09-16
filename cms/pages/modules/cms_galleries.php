@@ -65,6 +65,9 @@ class Module_cms_galleries extends standard_crud_module
 			$ret['gimp']=array('GALLERY_IMPORT','menu/_generic_admin/import');
 		}
 
+		$this->cat_crud_module=class_exists('Mx_cms_galleries_cat')?new Mx_cms_galleries_cat():new Module_cms_galleries_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_galleries_alt')?new Mx_cms_galleries_alt():new Module_cms_galleries_alt();
+
 		$ret+=parent::get_entry_points();
 
 		if ($support_crosslinks)

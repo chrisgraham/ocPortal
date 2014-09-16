@@ -56,6 +56,9 @@ class Module_cms_downloads extends standard_crud_module
 			'misc'=>array('MANAGE_DOWNLOADS','menu/rich_content/downloads'),
 		);
 
+		$this->cat_crud_module=class_exists('Mx_cms_downloads_cat')?new Mx_cms_downloads_cat():new Module_cms_downloads_cat();
+		$this->alt_crud_module=class_exists('Mx_cms_downloads_alt')?new Mx_cms_downloads_alt():new Module_cms_downloads_alt();
+
 		$ret+=parent::get_entry_points();
 
 		$ret+=array(
