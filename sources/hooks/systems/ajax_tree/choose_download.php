@@ -57,11 +57,18 @@ class Hook_choose_download
 		$editable_filter=array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
 		$tar_filter=array_key_exists('tar_filter',$options)?($options['original_filename']):false;
 		$tree=get_downloads_tree($only_owned,is_null($id)?NULL:intval($id),NULL,NULL,$shun,(get_param_integer('full_depth',0)==1)?NULL:(is_null($id)?0:1),false,$editable_filter,$tar_filter);
+
+		$levels_to_expand=array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__'.substr(get_class($this),5)));
+		$options['levels_to_expand']=max(0,$levels_to_expand-1);
+
 		if (!has_actual_page_access(NULL,'downloads')) $tree=array();
 
 		$file_type=get_param('file_type','');
 
 		$out='';
+
+		$out.='<options>'.serialize($options).'</options>';
+
 		foreach ($tree as $t)
 		{
 			$_id=$t['id'];
@@ -131,6 +138,11 @@ class Hook_choose_download
 			$has_children=($t['child_count']!=0) || ($t['child_entry_count']!=0);
 
 			$out.='<category id="'.xmlentities(strval($_id)).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="false"></category>';
+
+			if ($levels_to_expand>0)
+			{
+				$out.='<expand>'.xmlentities(strval($_id)).'</expand>';
+			}
 		}
 
 		// Mark parent cats for pre-expansion

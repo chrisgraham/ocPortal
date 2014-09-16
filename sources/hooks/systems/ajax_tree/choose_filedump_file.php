@@ -38,9 +38,14 @@ class Hook_choose_filedump_file
 		if ($id!='')
 			$fullpath.='/'.$id;
 
+		$levels_to_expand=array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__'.substr(get_class($this),5)));
+		$options['levels_to_expand']=max(0,$levels_to_expand-1);
+
 		$folder=((isset($options['folder'])) && ($options['folder'])); // We want to select folders, not files
 
 		$out='';
+
+		$out.='<options>'.serialize($options).'</options>';
 
 		if ((has_actual_page_access(NULL,'filedump')) && (file_exists($fullpath)))
 		{
@@ -56,6 +61,11 @@ class Hook_choose_filedump_file
 					$has_children=(count(get_directory_contents($fullpath.'/'.$f,'',false,false))>0);
 
 					$out.='<category id="'.xmlentities((($id=='')?'':($id.'/')).$f).'" title="'.xmlentities($f).'" has_children="'.($has_children?'true':'false').'" selectable="'.($folder?'true':'false').'"></category>';
+
+					if ($levels_to_expand>0)
+					{
+						$out.='<expand>'.xmlentities((($id=='')?'':($id.'/')).$f).'</expand>';
+					}
 				} elseif (!$folder)
 				{
 					if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f)))

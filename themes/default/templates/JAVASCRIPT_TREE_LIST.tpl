@@ -160,6 +160,13 @@ tree_list.prototype.render_tree=function(xml,html,element)
 		if (node.nodeName=='#text') continue; // A text-node
 		if (node.nodeName.toLowerCase()=='attribute') continue;
 
+		// Special handling of 'options' nodes, inject new options
+		if (node.nodeName=='options')
+		{
+			this.options=window.encodeURIComponent(get_inner_html(node));
+			continue;
+		}
+
 		// Special handling of 'expand' nodes, which say to pre-expand some categories as soon as the page loads
 		if (node.nodeName=='expand')
 		{

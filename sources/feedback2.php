@@ -155,9 +155,10 @@ function trackback_script()
  * @param  boolean		Whether the default values for the allow options is actually off (this determines how the tray auto-hides itself)
  * @param  boolean		If there's to be a notes field
  * @param  boolean		Whether to show a header
+ * @param  string			Field name prefix
  * @return tempcode		The feedback editing fields
  */
-function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews=NULL,$default_off=false,$has_notes=true,$show_header=true)
+function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews=NULL,$default_off=false,$has_notes=true,$show_header=true,$field_name_prefix='')
 {
 	if (get_option('enable_feedback')=='0') return new ocp_tempcode();
 
@@ -167,11 +168,11 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 	if (($send_trackbacks) && (get_option('is_on_trackbacks')=='1'))
 	{
 		require_lang('trackbacks');
-		$fields->attach(form_input_line(do_lang_tempcode('SEND_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_SEND_TRACKBACKS'),'send_trackbacks',get_param('trackback',''),false));
+		$fields->attach(form_input_line(do_lang_tempcode('SEND_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_SEND_TRACKBACKS'),$field_name_prefix.'send_trackbacks',get_param('trackback',''),false));
 	}
 	if (get_option('is_on_rating')=='1')
 	{
-		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_RATING'),do_lang_tempcode('DESCRIPTION_ALLOW_RATING'),'allow_rating',$allow_rating));
+		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_RATING'),do_lang_tempcode('DESCRIPTION_ALLOW_RATING'),$field_name_prefix.'allow_rating',$allow_rating));
 	}
 	if (get_option('is_on_comments')=='1')
 	{
@@ -181,19 +182,19 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 			$choices->attach(form_input_list_entry('0',!$allow_comments && !$allow_reviews,do_lang('NO')));
 			$choices->attach(form_input_list_entry('1',$allow_comments && !$allow_reviews,do_lang('ALLOW_COMMENTS_ONLY')));
 			$choices->attach(form_input_list_entry('2',$allow_reviews,do_lang('ALLOW_REVIEWS')));
-			$fields->attach(form_input_list(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),'allow_comments',$choices,NULL,false,false));
+			$fields->attach(form_input_list(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),$field_name_prefix.'allow_comments',$choices,NULL,false,false));
 		} else
 		{
-			$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),'allow_comments',$allow_comments));
+			$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),$field_name_prefix.'allow_comments',$allow_comments));
 		}
 	}
 	if ((get_option('is_on_trackbacks')=='1') && (!is_null($allow_trackbacks)))
 	{
 		require_lang('trackbacks');
-		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_ALLOW_TRACKBACKS'),'allow_trackbacks',$allow_trackbacks));
+		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_ALLOW_TRACKBACKS'),$field_name_prefix.'allow_trackbacks',$allow_trackbacks));
 	}
 	if ((get_option('enable_staff_notes')=='1') && ($has_notes))
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),$field_name_prefix.'notes',$notes,false));
 
 	if ($show_header)
 	{

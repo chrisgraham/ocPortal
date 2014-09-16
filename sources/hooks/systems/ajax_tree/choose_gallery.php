@@ -45,6 +45,9 @@ class Hook_choose_gallery
 		$stripped_id=($compound_list?preg_replace('#,.*$#','',$id):$id);
 		$tree=get_gallery_tree(is_null($id)?'root':$stripped_id,'',NULL,true,$filter,false,false,$purity,$compound_list,is_null($id)?0:1,$member_id,$addable_filter,$editable_filter);
 
+		$levels_to_expand=array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__'.substr(get_class($this),5)));
+		$options['levels_to_expand']=max(0,$levels_to_expand-1);
+
 		if (!has_actual_page_access(NULL,'galleries')) $tree=array();
 
 		if ($compound_list)
@@ -53,6 +56,9 @@ class Hook_choose_gallery
 		}
 
 		$out='';
+
+		$out.='<options>'.serialize($options).'</options>';
+
 		for ($i=0;$i<count($tree);$i++)
 		{
 			$t=$tree[$i];
@@ -87,15 +93,20 @@ class Hook_choose_gallery
 			$tag='category'; // category
 			$out.='<'.$tag.' id="'.xmlentities($_id).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
 
-			// Mark parent cats for pre-expansion
-			if ((!is_null($default)) && ($default!=''))
+			if ($levels_to_expand>0)
 			{
-				$cat=$default;
-				while ((!is_null($cat)) && ($cat!=''))
-				{
-					$out.='<expand>'.$cat.'</expand>';
-					$cat=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>$cat));
-				}
+				$out.='<expand>'.xmlentities($_id).'</expand>';
+			}
+		}
+
+		// Mark parent cats for pre-expansion
+		if ((!is_null($default)) && ($default!=''))
+		{
+			$cat=$default;
+			while ((!is_null($cat)) && ($cat!=''))
+			{
+				$out.='<expand>'.$cat.'</expand>';
+				$cat=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>$cat));
 			}
 		}
 

@@ -134,7 +134,7 @@ class Module_cms_galleries extends standard_crud_module
 
 		if (($type=='ss') || ($type=='sa') || ($type=='sd'))
 		{
-			$cat=post_param('cat');
+			$cat=post_param('ss_cat');
 			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_GALLERIES')),array('_SELF:_SELF:gimp',do_lang_tempcode('CHOOSE')),array('_SELF:_SELF:_gimp:name='.$cat,do_lang_tempcode('GALLERY_IMPORT'))));
 			breadcrumb_set_self(do_lang_tempcode('DONE'));
 		}
@@ -397,17 +397,17 @@ class Module_cms_galleries extends standard_crud_module
 				$fields_2=new ocp_tempcode();
 				$hidden_2=new ocp_tempcode();
 
-				$hidden_2->attach(form_input_hidden('cat',$cat));
-				$fields_2->attach(form_input_multi_list(do_lang_tempcode('ENTRIES'),'','files',$orphaned_content));
+				$hidden_2->attach(form_input_hidden('ss_cat',$cat));
+				$fields_2->attach(form_input_multi_list(do_lang_tempcode('ENTRIES'),'','ss_files',$orphaned_content));
 				if ($this->has_at_least_one_watermark($cat))
-					$fields_2->attach(form_input_various_ticks(array(array(do_lang_tempcode('WATERMARK'),'watermark',true,''),array(do_lang_tempcode('ALLOW_RATING'),'allow_rating',true,''),array(do_lang_tempcode('ALLOW_COMMENTS'),'allow_comments',true,''),array(do_lang_tempcode('ALLOW_REVIEWS'),'allow_reviews',false,''),array(do_lang_tempcode('ALLOW_TRACKBACKS'),'allow_trackbacks',true,''),),'',NULL,do_lang_tempcode('OPTIONS')));
+					$fields_2->attach(form_input_various_ticks(array(array(do_lang_tempcode('WATERMARK'),'ss_watermark',true,'')),'',NULL,do_lang_tempcode('OPTIONS')));
 				$radios=new ocp_tempcode();
 				$radios->attach(form_input_radio_entry('type','sa',true,do_lang_tempcode('ADD_GALLERY_SELECTION')));
 				$radios->attach(form_input_radio_entry('type','sd',false,do_lang_tempcode('DELETE_GALLERY_SELECTION')));
 				$fields_2->attach(form_input_radio(do_lang_tempcode('ACTION'),'','type',$radios,true));
 				// Feedback
 				require_code('feedback2');
-				$fields_2->attach(feedback_fields(true,true,true,false,''));
+				$fields_2->attach(feedback_fields(true,true,true,false,'',NULL,false,true,true,'ss_'));
 
 				$form2=do_template('FORM',array('_GUID'=>'79c9fd4f29197460f08443bf2ffdf8b2','SECONDARY_FORM'=>true,'TABINDEX'=>strval(get_form_field_tabindex()),'FIELDS'=>$fields_2,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>do_lang_tempcode('PROCEED'),'URL'=>$add_url,'TEXT'=>'','HIDDEN'=>$hidden_2));
 			} else $form2=new ocp_tempcode();
@@ -622,7 +622,7 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function ss()
 	{
-		$cat=post_param('cat');
+		$cat=post_param('ss_cat');
 
 		require_code('images');
 		require_code('exif');
@@ -633,9 +633,9 @@ class Module_cms_galleries extends standard_crud_module
 
 		make_member_gallery_if_needed($cat);
 
-		if (array_key_exists('files',$_POST))
+		if (array_key_exists('ss_files',$_POST))
 		{
-			foreach ($_POST['files'] as $file)
+			foreach ($_POST['ss_files'] as $file)
 			{
 				$url='uploads/galleries/'.str_replace('%2F','/',rawurlencode($file));
 				$thumb_url='uploads/galleries_thumbs/'.str_replace('%2F','/',rawurlencode($file));
@@ -650,7 +650,7 @@ class Module_cms_galleries extends standard_crud_module
 						if (is_null($height)) $height=intval(get_option('default_video_height'));
 						if (is_null($length)) $length=0;
 						$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
-						$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'',$length,$width,$height);
+						$id=add_video($exif['UserComment'],$cat,'',$url,'',1,post_param_integer('ss_allow_rating',0),post_param_integer('ss_allow_reviews',post_param_integer('ss_allow_comments',0)),post_param_integer('ss_allow_trackbacks',0),'',$length,$width,$height);
 						store_exif('video',strval($id),$exif);
 
 						require_code('users2');
@@ -681,11 +681,18 @@ class Module_cms_galleries extends standard_crud_module
 							make_missing_directory($path);
 						}
 						$ok=convert_image(get_custom_base_url().'/'.$url,get_custom_file_base().'/'.rawurldecode($thumb_url),-1,-1,intval(get_option('thumb_width')),false);
+
+						// See if we need to do watermarking
+						$watermark=(post_param_integer('ss_watermark',0)==1);
+						if ($watermark)
+						{
+							watermark_gallery_image($cat,rawurldecode($url),$file);
+						}
 					}
 					if ($ok)
 					{
 						$exif=get_exif_data(get_custom_file_base().'/'.rawurldecode($url),$file);
-						$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('allow_rating',0),post_param_integer('allow_reviews',post_param_integer('allow_comments',0)),post_param_integer('allow_trackbacks',0),'');
+						$id=add_image($exif['UserComment'],$cat,'',$url,$thumb_url,1,post_param_integer('ss_allow_rating',0),post_param_integer('ss_allow_reviews',post_param_integer('ss_allow_comments',0)),post_param_integer('ss_allow_trackbacks',0),'');
 						store_exif('image',strval($id),$exif);
 
 						require_code('users2');
@@ -893,8 +900,8 @@ class Module_cms_galleries extends standard_crud_module
 					constrain_gallery_image_to_max_size(get_custom_file_base().'/'.rawurldecode($url),$file,intval(get_option('maximum_image_size')));
 
 					// See if we need to do watermarking
-					$watermark=post_param_integer('watermark',0);
-					if ($watermark==1)
+					$watermark=(post_param_integer('watermark',0)==1);
+					if ($watermark)
 					{
 						watermark_gallery_image($cat,rawurldecode($url),$file);
 					}

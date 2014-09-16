@@ -10,7 +10,7 @@
 	<div class="orphaned_content">
 		<h2>{!ORPHANED_IMAGES}</h2>
 
-		{$REPLACE, for=", for="second_,{$REPLACE, id=", id="second_,{FORM2}}}
+		{FORM2}
 
 		<script>// <![CDATA[
 			function preview_generator_mouseover(event)

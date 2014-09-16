@@ -1,4 +1,4 @@
-<div class="upload_field">
+<div class="upload_field inline_block">
 	<div class="accessibility_hidden"><label for="{NAME_STUB*}_{I*}">{!UPLOAD}</label></div>
 	<div class="vertical_alignment inline_block">
 		<input tabindex="{TABINDEX*}" class="input_upload{REQUIRED*}" onchange="if (!key_pressed(event,9)) ensure_next_field_upload(this);" type="file" id="{NAME_STUB*}_{I*}" name="{NAME_STUB*}_{I*}" />

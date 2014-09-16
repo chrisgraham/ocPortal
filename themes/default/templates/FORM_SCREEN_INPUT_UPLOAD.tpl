@@ -1,4 +1,4 @@
-<div class="upload_field">
+<div class="upload_field inline_block">
 	<div class="vertical_alignment inline_block">
 		<input tabindex="{TABINDEX*}" class="input_upload{REQUIRED*}" type="file" id="{NAME*}" name="{NAME*}" />
 		{+START,IF,{EDIT}}

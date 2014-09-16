@@ -36,9 +36,14 @@ class Hook_choose_wiki_page
 		$wiki_seen=array();
 		$tree=get_wiki_page_tree($wiki_seen,is_null($id)?NULL:intval($id),NULL,NULL,true,false,is_null($id)?0:1);
 
+		$levels_to_expand=array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__'.substr(get_class($this),5)));
+		$options['levels_to_expand']=max(0,$levels_to_expand-1);
+
 		$stripped_id=$id;
 
 		$out='';
+
+		$out.='<options>'.serialize($options).'</options>';
 
 		if (!has_actual_page_access(NULL,'wiki')) $tree=array();
 
@@ -53,7 +58,12 @@ class Hook_choose_wiki_page
 			$selectable=true;
 
 			$tag='category'; // category
-			$out.='<'.$tag.' id="'.$_id.'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
+			$out.='<'.$tag.' id="'.xmlentities($_id).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
+
+			if ($levels_to_expand>0)
+			{
+				$out.='<expand>'.xmlentities($_id).'</expand>';
+			}
 		}
 
 		if (is_null($id))

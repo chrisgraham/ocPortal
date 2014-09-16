@@ -50,6 +50,10 @@ class Hook_choose_catalogue_category
 		{
 			$tree=get_catalogue_category_tree($catalogue_name,is_null($id)?NULL:intval($id),NULL,NULL,1,$addable_filter,$compound_list);
 		}
+
+		$levels_to_expand=array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__'.substr(get_class($this),5)));
+		$options['levels_to_expand']=max(0,$levels_to_expand-1);
+
 		if (!has_actual_page_access(NULL,'catalogues')) $tree=array();
 
 		$out='';
@@ -70,7 +74,12 @@ class Hook_choose_catalogue_category
 			$selectable=(($addable_filter!==true) || $t['addable']);
 
 			$tag='category'; // category
-			$out.='<'.$tag.' id="'.$_id.'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
+			$out.='<'.$tag.' id="'.xmlentities($_id).'" title="'.xmlentities($title).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
+
+			if ($levels_to_expand>0)
+			{
+				$out.='<expand>'.xmlentities($_id).'</expand>';
+			}
 		}
 
 		// Mark parent cats for pre-expansion
@@ -107,6 +116,9 @@ class Hook_choose_catalogue_category
 		if (is_null($catalogue_name))
 		{
 			$out='';
+
+			$out.='<options>'.serialize($options).'</options>';
+
 			$catalogues=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name'));
 			foreach ($catalogues as $catalogue)
 			{

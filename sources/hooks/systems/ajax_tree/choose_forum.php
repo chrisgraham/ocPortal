@@ -38,9 +38,15 @@ class Hook_choose_forum
 		$stripped_id=($compound_list?preg_replace('#,.*$#','',$id):$id);
 
 		$tree=ocf_get_forum_tree_secure(NULL,is_null($id)?NULL:intval($id),false,NULL,'',NULL,NULL,$compound_list,1,true);
-		$out='';
+
+		$levels_to_expand=array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__'.substr(get_class($this),5)));
+		$options['levels_to_expand']=max(0,$levels_to_expand-1);
 
 		if (!has_actual_page_access(NULL,'forumview')) $tree=$compound_list?array(array(),''):array();
+
+		$out='';
+
+		$out.='<options>'.serialize($options).'</options>';
 
 		$categories=collapse_2d_complexity('id','c_title',$GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id','c_title')));
 
@@ -66,7 +72,12 @@ class Hook_choose_forum
 			$selectable=((!$addable_filter) || ocf_may_post_topic($t['id']));
 
 			$tag='category'; // category
-			$out.='<'.$tag.' id="'.$_id.'" title="'.xmlentities($title).'" description="'.xmlentities($description).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
+			$out.='<'.$tag.' id="'.xmlentities($_id).'" title="'.xmlentities($title).'" description="'.xmlentities($description).'" has_children="'.($has_children?'true':'false').'" selectable="'.($selectable?'true':'false').'"></'.$tag.'>';
+
+			if ($levels_to_expand>0)
+			{
+				$out.='<expand>'.xmlentities($_id).'</expand>';
+			}
 		}
 
 		// Mark parent cats for pre-expansion
