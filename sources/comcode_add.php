@@ -558,7 +558,7 @@ function comcode_helper_script()
 		{
 			if (get_option('eager_wysiwyg')=='0')
 			{
-				$javascript.="document.getElementById('type').onchange=function() { document.getElementById('_safe').checked=(this.options[this.selectedIndex].value=='inline'); };";
+				$javascript.="document.getElementById('type').onchange=function() { document.getElementById('_safe').checked=(this.options[this.selectedIndex].value=='inline' || this.options[this.selectedIndex].value=='island'); };";
 			}
 
 			if (($default_embed!='') || (!addon_installed('filedump')))

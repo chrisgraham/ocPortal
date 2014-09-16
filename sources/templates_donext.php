@@ -268,7 +268,7 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 		$question=do_lang_tempcode('WHAT_NEXT');
 	}
 
-	if ($simplified)
+	if ($simplified && count($entry_passed_2)!=0)
 	{
 		$_url_redirect=build_url(array('page'=>''),'site');
 		require_code('templates_redirect_screen');
