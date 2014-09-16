@@ -1867,7 +1867,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if ($attributes['type']=='left_inline') $attributes['float']='left';
 				if ($attributes['type']=='right_inline') $attributes['float']='right';
 			}
-			elseif ($attributes['type']=='island' || $attributes['type']=='left_island' || $attributes['type']=='right_island')
+			elseif ($attributes['type']=='island' || $attributes['type']=='lightbox' || $attributes['type']=='left_island' || $attributes['type']=='right_island')
 			{
 				$attributes['framed']='1';
 				$attributes['type']='';

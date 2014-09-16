@@ -114,6 +114,7 @@ class Hook_addon_registry_galleries
 			'sources/hooks/systems/snippets/exists_gallery.php',
 			'sources/hooks/modules/admin_setupwizard_installprofiles/portfolio.php',
 			'sources/hooks/systems/config/audio_bitrate.php',
+			'sources/hooks/systems/config/gallery_media_title_required.php',
 			'sources/hooks/systems/config/default_video_height.php',
 			'sources/hooks/systems/config/default_video_width.php',
 			'sources/hooks/systems/config/ffmpeg_path.php',
@@ -626,7 +627,22 @@ class Hook_addon_registry_galleries
 		$entries=new ocp_tempcode();
 		foreach (placeholder_array(10) as $k=>$v)
 		{
-			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('DESCRIPTION'=>lorem_paragraph_html(),'_TITLE'=>lorem_title(),'ID'=>strval($k),'VIEWS'=>placeholder_number(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_date_raw(),'SUBMITTER'=>lorem_word(),'CLASS'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'VIEW_URL_2'=>placeholder_url(),'TYPE'=>lorem_word())));
+			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array(
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'_TITLE'=>lorem_title(),
+				'ID'=>strval($k),
+				'VIEWS'=>placeholder_number(),
+				'ADD_DATE_RAW'=>placeholder_time(),
+				'EDIT_DATE_RAW'=>placeholder_date_raw(),
+				'SUBMITTER'=>lorem_word(),
+				'CLASS'=>lorem_word(),
+				'THUMB'=>placeholder_image(),
+				'VIEW_URL'=>placeholder_url(),
+				'VIEW_URL_2'=>placeholder_url(),
+				'TYPE'=>lorem_word(),
+				'_EDIT_URL'=>placeholder_url(),
+				'CAT'=>placeholder_id(),
+			)));
 		}
 
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));
@@ -704,7 +720,22 @@ class Hook_addon_registry_galleries
 		$entries=new ocp_tempcode();
 		foreach (placeholder_array(10) as $k=>$v)
 		{
-			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array('ID'=>strval($k),'VIEWS'=>placeholder_number(),'ADD_DATE_RAW'=>placeholder_time(),'EDIT_DATE_RAW'=>placeholder_date_raw(),'SUBMITTER'=>lorem_word(),'CLASS'=>lorem_word(),'THUMB'=>placeholder_image(),'VIEW_URL'=>placeholder_url(),'VIEW_URL_2'=>placeholder_url(),'TYPE'=>lorem_word(),'_EDIT_URL'=>placeholder_url())));
+			$entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY',array(
+				'DESCRIPTION'=>lorem_paragraph_html(),
+				'_TITLE'=>lorem_title(),
+				'ID'=>strval($k),
+				'VIEWS'=>placeholder_number(),
+				'ADD_DATE_RAW'=>placeholder_time(),
+				'EDIT_DATE_RAW'=>placeholder_date_raw(),
+				'SUBMITTER'=>lorem_word(),
+				'CLASS'=>lorem_word(),
+				'THUMB'=>placeholder_image(),
+				'VIEW_URL'=>placeholder_url(),
+				'VIEW_URL_2'=>placeholder_url(),
+				'TYPE'=>lorem_word(),
+				'_EDIT_URL'=>placeholder_url(),
+				'CAT'=>placeholder_id(),
+			)));
 		}
 
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array('JOIN_BITS'=>lorem_phrase_html(),'USE_CAPTCHA'=>false,'EMAIL_OPTIONAL'=>lorem_word(),'POST_WARNING'=>'','COMMENT_TEXT'=>'','GET_EMAIL'=>true,'GET_TITLE'=>true,'EM'=>placeholder_emoticon_chooser(),'DISPLAY'=>'block','COMMENT_URL'=>placeholder_url(),'TITLE'=>lorem_phrase(),'MAKE_POST'=>true,'CREATE_TICKET_MAKE_POST'=>true,'FIRST_POST_URL'=>'','FIRST_POST'=>''));

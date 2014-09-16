@@ -1923,6 +1923,40 @@ function form_input_integer($pretty_name,$description,$name,$default,$required,$
 }
 
 /**
+ * Get the tempcode for an width/height input.
+ *
+ * @param  mixed			A human intelligible name for this input field
+ * @param  mixed			A description for this input field
+ * @param  ID_TEXT		The name which this input field is for: width part
+ * @param  ID_TEXT		The name which this input field is for: height part
+ * @param  ?integer		The default value for this input field: width part (NULL: no default)
+ * @param  ?integer		The default value for this input field: height part (NULL: no default)
+ * @param  boolean		Whether this is a required input field
+ * @param  ?integer		The tab index of the field (NULL: not specified)
+ * @return tempcode		The input field
+ */
+function form_input_dimensions($pretty_name,$description,$name_width,$name_height,$default_width,$default_height,$required,$tabindex=NULL)
+{
+	$tabindex=get_form_field_tabindex($tabindex);
+
+	$_default_width=filter_form_field_default($name_width,is_null($default_width)?'':strval($default_width));
+	$default_width=($_default_width=='')?NULL:intval($_default_width);
+	$_default_height=filter_form_field_default($name_height,is_null($default_height)?'':strval($default_height));
+	$default_height=($_default_height=='')?NULL:intval($_default_height);
+
+	$_required=($required)?'_required':'';
+	$input=do_template('FORM_SCREEN_INPUT_DIMENSIONS',array(
+		'TABINDEX'=>strval($tabindex),
+		'REQUIRED'=>$_required,
+		'NAME_WIDTH'=>$name_width,
+		'DEFAULT_WIDTH'=>is_null($default_width)?'':strval($default_width),
+		'NAME_HEIGHT'=>$name_height,
+		'DEFAULT_HEIGHT'=>is_null($default_height)?'':strval($default_height),
+	));
+	return _form_input($name_width,$pretty_name,$description,$input,$required,false,$tabindex);
+}
+
+/**
  * Get the tempcode for a float-only input.
  *
  * @param  mixed			A human intelligible name for this input field

@@ -1026,7 +1026,7 @@ function insert_lang_comcode($field_name,$text,$level,$connection=NULL,$insert_a
  * @param  integer			Comcode parser wrap position
  * @param  boolean			Whether to generate a fatal error if there is invalid Comcode
  * @param  boolean			Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
- * @return array			The language ID save fields
+ * @return array				The language ID save fields
  */
 function insert_lang($field_name,$text,$level,$connection=NULL,$comcode=false,$id=NULL,$lang=NULL,$insert_as_admin=false,$pass_id=NULL,$text_parsed=NULL,$wrap_pos=60,$preparse_mode=true,$save_as_volatile=false)
 {

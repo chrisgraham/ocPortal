@@ -4027,7 +4027,7 @@ td>.comcode_code_wrap>.comcode_quote, td>.comcode_code_wrap>.comcode_code {
 	margin: 1em 0;
 	{+START,IF,{$NOT,{$MOBILE}}}
 		border: 1px solid {$GET,standard_border};
-		padding: 0.5em;
+		padding: 0.5em !important;
 	{+END}
 	font-size: 0.9em;
 	display: inline-block;
@@ -4068,6 +4068,10 @@ figure {
 
 a[rel="lightbox"] {
 	display: inline-block; /* Stops "_" showing when we use white-space */
+}
+
+.attachment img {
+	vertical-align: middle;
 }
 
 .attachment figcaption {

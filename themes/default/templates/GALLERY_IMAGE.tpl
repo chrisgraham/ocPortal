@@ -1,11 +1,5 @@
 {+START,SET,TOOLTIP}
 	<div class="gallery_tooltip">
-		{+START,IF_NON_EMPTY,{TITLE}}
-			<h3>
-				{$TRUNCATE_LEFT,{TITLE},100,0,0}
-			</h3>
-		{+END}
-
 		<table class="map_table results_table">
 			{+START,IF,{$NOT,{$MOBILE}}}
 				<colgroup>
@@ -67,6 +61,10 @@
 		<div class="img_thumb_wrap" onmouseover="if (typeof window.activate_tooltip!='undefined') activate_tooltip(this,event,'{$GET;^*,TOOLTIP}','auto',null,null,false,true);">
 			<a href="{VIEW_URL*}">{$TRIM,{THUMB}}</a>
 		</div>
+
+		<p class="gallery_media_title_cropped">
+			{+START,FRACTIONAL_EDITABLE,{TITLE},title,_SEARCH:cms_galleries:type=__ed:id={ID},1,1,{$HAS_EDIT_PERMISSION,mid,{SUBMITTER},{$MEMBER},cms_galleries,galleries,{CAT}}}{$TRUNCATE_LEFT,{TITLE},23,0,0}{+END}
+		</p>
 
 		{+START,IF_PASSED,RATING_DETAILS}{+START,IF_NON_EMPTY,{RATING_DETAILS}}
 			<div class="grating">{RATING_DETAILS}</div>

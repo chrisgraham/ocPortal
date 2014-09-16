@@ -166,9 +166,15 @@ function preview_script()
 	require_code('preview');
 	list($output,$validation,$keyword_density,$spelling)=build_preview(true);
 
-	$output=do_template('PREVIEW_SCRIPT',array('_GUID'=>'97bd8909e8b9983a0bbf7ab68fab92f3','OUTPUT'=>$output->evaluate(),'VALIDATION'=>$validation,'KEYWORD_DENSITY'=>$keyword_density,'SPELLING'=>$spelling,'HIDDEN'=>build_keep_post_fields()));
+	if (get_param_integer('js_only',0)==0)
+	{
+		$output=do_template('PREVIEW_SCRIPT',array('_GUID'=>'97bd8909e8b9983a0bbf7ab68fab92f3','OUTPUT'=>$output->evaluate(),'VALIDATION'=>$validation,'KEYWORD_DENSITY'=>$keyword_density,'SPELLING'=>$spelling,'HIDDEN'=>build_keep_post_fields()));
 
-	$tpl=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'0a96e3b9be154e8b29bee5b1c1c7cc69','TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+		$tpl=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'0a96e3b9be154e8b29bee5b1c1c7cc69','TITLE'=>do_lang_tempcode('PREVIEW'),'FRAME'=>true,'TARGET'=>'_top','CONTENT'=>$output));
+	} else
+	{
+		$tpl=$output;
+	}
 	$tpl->handle_symbol_preprocessing();
 	$tpl->evaluate_echo();
 }

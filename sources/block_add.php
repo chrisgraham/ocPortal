@@ -501,7 +501,17 @@ function block_helper_script()
 
 		$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
-		$content=do_template('BLOCK_HELPER_DONE',array('_GUID'=>'575d6c8120d6001c8156560be518f296','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$block,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
+		$content=do_template('BLOCK_HELPER_DONE',array(
+			'_GUID'=>'575d6c8120d6001c8156560be518f296',
+			'TITLE'=>$title,
+			'FIELD_NAME'=>$field_name,
+			'TAG_CONTENTS'=>'',
+			'SAVE_TO_ID'=>get_param('save_to_id',''),
+			'DELETE'=>(post_param_integer('delete',0)==1),
+			'BLOCK'=>$block,
+			'COMCODE'=>$comcode,
+			'COMCODE_SEMIHTML'=>$comcode_semihtml,
+		));
 	}
 
 	require_code('site');

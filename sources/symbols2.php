@@ -117,7 +117,6 @@ function ecv2_CHARSET($lang,$escaped,$param)
 function ecv2_ADDON_INSTALLED($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if ((isset($param[0])) && (!running_script('install')))
 	{
@@ -503,7 +502,6 @@ function ecv2_IMG_INLINE($lang,$escaped,$param)
 function ecv2_ADD($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -525,7 +523,6 @@ function ecv2_ADD($lang,$escaped,$param)
 function ecv2_ALREADY_RATED($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -593,7 +590,6 @@ function ecv2_AT($lang,$escaped,$param)
 function ecv2_ATTACHMENT_DOWNLOADS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -618,7 +614,6 @@ function ecv2_ATTACHMENT_DOWNLOADS($lang,$escaped,$param)
 function ecv2_AVAILABLE_POINTS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (addon_installed('points'))
 	{
@@ -641,7 +636,6 @@ function ecv2_AVAILABLE_POINTS($lang,$escaped,$param)
 function ecv2_AWARD_ID($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -959,7 +953,6 @@ function ecv2_COPPA_ON($lang,$escaped,$param)
 function ecv2_CSS_DIMENSION_REDUCE($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -1098,7 +1091,6 @@ function ecv2_DEC($lang,$escaped,$param)
 function ecv2_DIV_CEIL($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -1455,7 +1447,6 @@ function ecv2_GEOLOCATE($lang,$escaped,$param)
 function ecv2_GROUP_ID($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -1505,7 +1496,6 @@ function ecv2_GROUP_NAME($lang,$escaped,$param)
 function ecv2_HAS_CATEGORY_ACCESS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if ((isset($param[0])) && (function_exists('has_category_access')))
 	{
@@ -1527,11 +1517,48 @@ function ecv2_HAS_CATEGORY_ACCESS($lang,$escaped,$param)
 function ecv2_HAS_EDIT_PERMISSION($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
+	if (isset($param[1]))
 	{
-		$value=has_edit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
+		$range=strtolower($param[0]);
+		$owner=intval($param[1]);
+		$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+		$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+		if (array_key_exists(5,$param))
+		{
+			$value=has_edit_permission($range,$member,$owner,$cms_page,array($param[4],$param[5]))?'1':'0';
+		} else
+		{
+			$value=has_edit_permission($range,$member,$owner,$cms_page)?'1':'0';
+		}
+	}
+
+	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+	return $value;
+}
+
+/**
+ * Evaluate a particular Tempcode symbol.
+ *
+ * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array				Array of escaping operations.
+ * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ * @return string				The result.
+ */
+function ecv2_SUPPORTS_FRACTIONAL_EDITABLE($lang,$escaped,$param)
+{
+	$value='0';
+	if (isset($param[1]))
+	{
+		$edit_pagelink=$param[0];
+		$has_permission=(isset($param[1])?$param[1]:NULL)==='1';
+
+		list($zone,$attributes,)=page_link_decode($edit_pagelink);
+		if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
+		if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (($has_permission===true) || (($has_permission===NULL) && (has_zone_access(get_member(),'adminzone')))))
+		{
+			$value='1';
+		}
 	}
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
@@ -1565,7 +1592,6 @@ function ecv2_HAS_FORUM($lang,$escaped,$param)
 function ecv2_HAS_PAGE_ACCESS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if ((isset($param[0])) && (isset($param[1])) && (function_exists('has_page_access')))
 	{
@@ -1587,11 +1613,20 @@ function ecv2_HAS_PAGE_ACCESS($lang,$escaped,$param)
 function ecv2_HAS_SUBMIT_PERMISSION($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')))
+	if (isset($param[0]))
 	{
-		$value=has_submit_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[1])))?intval($param[1]):get_member(),((!is_null($param)) && (isset($param[2])))?$param[2]:get_ip_address(),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
+		$range=strtolower($param[0]);
+		$ip_address=$param[1];
+		$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+		$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+		if (array_key_exists(5,$param))
+		{
+			$value=has_submit_permission($range,$member,$ip_address,$cms_page,array($param[5],$param[6]))?'1':'0';
+		} else
+		{
+			$value=has_submit_permission($range,$member,$ip_address,$cms_page)?'1':'0';
+		}
 	}
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
@@ -1626,7 +1661,6 @@ function ecv2_HTTP_STATUS_CODE($lang,$escaped,$param)
 function ecv2_ISSET($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -1666,7 +1700,6 @@ function ecv2_IS_A_COOKIE_LOGIN($lang,$escaped,$param)
 function ecv2_IS_FRIEND($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -1711,7 +1744,6 @@ function ecv2_IS_VIRTUALISED_REQUEST($lang,$escaped,$param)
 function ecv2_LAST_VISIT_TIME($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (get_forum_type()=='ocf')
 	{
@@ -1756,7 +1788,6 @@ function ecv2_LENGTH($lang,$escaped,$param)
 function ecv2_LT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -1795,7 +1826,6 @@ function ecv2_MEMBER_OVERRIDE($lang,$escaped,$param)
 function ecv2_MOD($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -1837,7 +1867,6 @@ function ecv2_MULT($lang,$escaped,$param)
 function ecv2_NEGATE($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -1913,7 +1942,6 @@ function ecv2_NUMBER_FORMAT($lang,$escaped,$param)
 function ecv2_NUM_NEW_POSTS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (get_forum_type()=='ocf')
 	{
@@ -1938,7 +1966,6 @@ function ecv2_NUM_NEW_POSTS($lang,$escaped,$param)
 function ecv2_NUM_NEW_TOPICS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (get_forum_type()=='ocf')
 	{
@@ -2165,7 +2192,6 @@ function ecv2_PAD_RIGHT($lang,$escaped,$param)
 function ecv2_POINTS_USED($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (addon_installed('points'))
 	{
@@ -2188,7 +2214,6 @@ function ecv2_POINTS_USED($lang,$escaped,$param)
 function ecv2_PREG_MATCH($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -2226,7 +2251,6 @@ function ecv2_QUERY_STRING($lang,$escaped,$param)
 function ecv2_REM($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -2248,7 +2272,6 @@ function ecv2_REM($lang,$escaped,$param)
 function ecv2_RESET_CYCLE($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -2455,7 +2478,6 @@ function ecv2_STAFF_ADDRESS_PURE($lang,$escaped,$param)
 function ecv2_STRPOS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -2478,7 +2500,6 @@ function ecv2_STRPOS($lang,$escaped,$param)
 function ecv2_SUBTRACT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -2562,7 +2583,6 @@ function ecv2_TIME_PERIOD($lang,$escaped,$param)
 function ecv2_TOTAL_POINTS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (addon_installed('points'))
 	{
@@ -2742,7 +2762,6 @@ function ecv2_VERSION($lang,$escaped,$param)
 function ecv2_VIEWS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[2]))
 	{

@@ -292,6 +292,8 @@ function build_preview($multi_return=false)
 		}
 	}
 
+	if (get_param_integer('js_only',0)==1) $output=new ocp_tempcode();
+
 	// This is to get the Comcode attachments updated to the new IDs
 	if (!is_null($new_post_value))
 	{

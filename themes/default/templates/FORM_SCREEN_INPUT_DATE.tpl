@@ -5,7 +5,7 @@
 	<input type="hidden" name="{STUB%}" value="1" />
 {+END}
 
-<div class="vertical_alignment">
+<div class="vertical_alignment inline_block">
 	<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_day" name="{STUB%}_day"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
 		<option value="">-</option>
 		{DAYS}

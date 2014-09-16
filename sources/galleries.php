@@ -584,6 +584,12 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 	$children=array();
 	$sub=false;
 	$query='FROM '.get_table_prefix().'galleries g WHERE '.db_string_equal_to('parent_id',$category_id);
+	if (!is_callable($filter))
+	{
+		require_code('ocfiltering');
+		$ocfilter=ocfilter_to_sqlfragment($filter,'name','galleries','parent_id','parent_id','name',false,false);
+		$query.=' AND '.$ocfilter;
+	}
 	if (current(current($GLOBALS['SITE_DB']->query('SELECT COUNT(*) '.$query)))>=300)
 	{
 		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY add_date',300,NULL,false,false,array('fullname'=>'SHORT_TRANS__COMCODE'));
@@ -591,7 +597,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 	{
 		$rows=$GLOBALS['SITE_DB']->query('SELECT name,fullname,accept_images,accept_videos,is_member_synched,g.fullname '.$query.' ORDER BY '.$GLOBALS['SITE_DB']->translate_field_ref('fullname').' ASC',NULL,NULL,false,false,array('fullname'=>'SHORT_TRANS__COMCODE'));
 	}
-	if (((is_null($filter)) || (call_user_func_array($filter,array($category_id,$member_id,count($rows))))) && ((!$must_accept_images) || (($accept_images) && (!$is_member_synched))) && ((!$must_accept_videos) || (($accept_videos) && (!$is_member_synched))))
+	if (((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter,array($category_id,$member_id,count($rows))))) && ((!$must_accept_images) || (($accept_images) && (!$is_member_synched))) && ((!$must_accept_videos) || (($accept_videos) && (!$is_member_synched))))
 	{
 		// We'll be putting all children in this entire tree into a single list
 		$children[0]['id']=$category_id;
@@ -614,7 +620,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 			$good_row_count=0;
 			foreach ($rows as $row)
 			{
-				if (((is_null($filter)) || (call_user_func_array($filter,array($row['name'],$member_id,1)))) && ((!$must_accept_images) || (($row['accept_images']) && ($row['is_member_synched']==0))) && ((!$must_accept_videos) || (($row['accept_videos']) && ($row['is_member_synched']==0))))
+				if (((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter,array($row['name'],$member_id,1)))) && ((!$must_accept_images) || (($row['accept_images']) && ($row['is_member_synched']==0))) && ((!$must_accept_videos) || (($row['accept_videos']) && ($row['is_member_synched']==0))))
 					$good_row_count++;
 			}
 			$children[0]['child_count']=$good_row_count;
@@ -710,7 +716,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 							}
 						}
 					}
-					if (($has_permission) && (!array_key_exists($member,$found_member_galleries)) && ((is_null($filter)) || (call_user_func_array($filter,array($this_category_id,$member_id,0)))))
+					if (($has_permission) && (!array_key_exists($member,$found_member_galleries)) && ((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter,array($this_category_id,$member_id,0)))))
 					{
 						$own_gallery=array();
 						$own_gallery['id']=$this_category_id;
@@ -737,7 +743,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 		if (((!$done_for_all) || (!$found_own_gallery)) && (!array_key_exists(get_member(),$found_member_galleries)) && (!is_guest()) && (!$purity) && (has_privilege(get_member(),'have_personal_category')))
 		{
 			$this_category_id='member_'.strval(get_member()).'_'.$category_id;
-			if ((is_null($filter)) || (call_user_func_array($filter,array($this_category_id,$member_id,0))))
+			if ((is_null($filter)) || (!is_callable($filter)) || (call_user_func_array($filter,array($this_category_id,$member_id,0))))
 			{
 				$own_gallery=array();
 				$own_gallery['id']=$this_category_id;

@@ -358,7 +358,12 @@ function _lang_remap($field_name,$id,$text,$connection=NULL,$comcode=false,$pass
 		return insert_lang($field_name,$text,3,$connection,$comcode,NULL,NULL,$as_admin,$pass_id);
 	}
 
-	if ($text===STRING_MAGIC_NULL) return $id;
+	if ($text===STRING_MAGIC_NULL)
+	{
+		return array(
+			$field_name=>$id
+		);
+	}
 
 	if (is_null($connection)) $connection=$GLOBALS['SITE_DB'];
 

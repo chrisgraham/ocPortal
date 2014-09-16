@@ -6,8 +6,10 @@
 #openid {
 	background: url({$IMG;,openid/indicator}) center center no-repeat;
 	margin: 0 auto;
-	width: 440px;
-	/*height: 162px;*/
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 440px;
+		/*height: 162px;*/
+	{+END}
 	font: 12px 'Arial';
 }
 
@@ -15,7 +17,9 @@
 	clear: both;
 	display: none;
 	background: url({$IMG;,openid/balloon}) no-repeat;
-	width: 410px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		width: 410px;
+	{+END}
 	height: 48px;
 	color: white;
 	position: absolute;visibility: hidden;height:0; /* Intentionally take the message out of the flow and hide it - it takes too much space */

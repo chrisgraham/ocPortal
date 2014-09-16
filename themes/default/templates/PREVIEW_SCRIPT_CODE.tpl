@@ -16,7 +16,17 @@
 			{
 				if ((inputs[i].value!='-1') && (inputs[i].value!=''))
 				{
-					if (!done_one) window.fauxmodal_alert((old_comcode.indexOf('[attachment_safe')==-1)?'{!javascript:ATTACHMENT_SAVED;^}':'{!javascript:_ATTACHMENT_SAVED;^}');
+					if (!done_one)
+					{
+						if (old_comcode.indexOf('attachment_safe')==-1)
+						{
+							window.fauxmodal_alert('{!javascript:ATTACHMENT_SAVED;^}');
+						} else
+						{
+							if (!window.parent.is_wysiwyg_field(post)) // Only for non-WYSIWYG, as WYSIWYG has preview automated at same point of adding
+								window.fauxmodal_alert('{!javascript:ATTACHMENT_SAVED;^}');
+						}
+					}
 					done_one=true;
 				}
 

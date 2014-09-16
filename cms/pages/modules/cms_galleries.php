@@ -323,7 +323,7 @@ class Module_cms_galleries extends standard_crud_module
 		$supported='tar';
 		if ((function_exists('zip_open')) || (get_option('unzip_cmd')!='')) $supported.=', zip';
 		$fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images').','.get_allowed_video_file_types()))),'file',true,NULL,NULL,true,str_replace(' ','',get_option('valid_images').','.$supported)));
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_GIMP_TITLE'),'set_title','',false));
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_GIMP_TITLE'),'set_title','',get_option('gallery_media_title_required')=='1'));
 		$hidden=new ocp_tempcode();
 		handle_max_file_size($hidden);
 		if (function_exists('imagecreatefromstring'))
@@ -582,7 +582,7 @@ class Module_cms_galleries extends standard_crud_module
 			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
 		}
 
-		return $this->cat_crud_module->_do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$cat);
+		return $this->cat_crud_module->_do_next_manager($this->title,do_lang_tempcode('GIMP_SUCCESS_EDIT_TITLES_INLINE',escape_html(integer_format(count($media_imported)))),$cat);
 	}
 
 	/**
@@ -1067,7 +1067,7 @@ class Module_cms_galleries extends standard_crud_module
 		$filters=array('must_accept_images'=>true,'addable_filter'=>true);
 		if (substr($cat,0,9)!='download_') $filters['filter']='only_conventional_galleries';
 
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,get_option('gallery_media_title_required')=='1'));
 
 		$gallery_title='';
 		if ($cat!='')
@@ -1081,7 +1081,14 @@ class Module_cms_galleries extends standard_crud_module
 		}
 		if ((get_value('no_confirm_url_spec_cats')!=='1') || ($cat==''))
 		{
-			$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
+			$root_cat=get_long_value('root_cat__images');
+			if ((!is_null($root_cat)) && (preg_match('#^\w+$#',$root_cat)==0))
+			{
+				$filters['filter']=$root_cat;
+				$root_cat='';
+			}
+			if (empty($root_cat) && $GLOBALS['SITE_DB']->query_select_value('galleries','accept_images',array('name'=>'root'))==0) $root_cat='root'; // Don't show 'root' itself
+			$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',$root_cat,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
 		} else
 		{
 			$hidden->attach(form_input_hidden('cat',$cat));
@@ -1255,12 +1262,15 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
+		$title=post_param('title','');
+		$description=post_param('description','');
+
 		$cat=post_param('cat');
+
 		if (can_submit_to_gallery($cat)===false) access_denied('SUBMIT_HERE');
 		make_member_gallery_if_needed($cat);
 		$this->check_images_allowed($cat);
 
-		$title=post_param('title');
 		$validated=post_param_integer('validated',0);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
@@ -1277,8 +1287,6 @@ class Module_cms_galleries extends standard_crud_module
 
 		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
-
-		$description=post_param('description');
 
 		require_code('upload_syndication');
 		$urls[0]=handle_upload_syndication('file',$title,$description,$urls[0],$urls[2],false);
@@ -1346,7 +1354,9 @@ class Module_cms_galleries extends standard_crud_module
 			$this->check_images_allowed($cat);
 			$this->handle_resizing_and_watermarking();
 		}
+
 		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
+
 		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'thumb_url','file2');
 		if (!fractional_edit())
 		{
@@ -1365,14 +1375,14 @@ class Module_cms_galleries extends standard_crud_module
 				$url=$urls[0];
 				$thumb_url=$urls[1];
 			}
+
+			if ((substr($urls[0],0,8)!='uploads/') && ($urls[0]!='') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
+				attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 		} else
 		{
 			$url=STRING_MAGIC_NULL;
 			$thumb_url=STRING_MAGIC_NULL;
 		}
-
-		if ((substr($urls[0],0,8)!='uploads/') && ($urls[0]!='') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
-			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
 
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
@@ -1662,7 +1672,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		if (strpos($cat,'?')!==false) $cat=str_replace('?',strval(get_member()),$cat);
 		$filters=array('filter'=>'only_conventional_galleries','must_accept_videos'=>true,'addable_filter'=>true);
 
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,false));
+		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,get_option('gallery_media_title_required')=='1'));
 
 		$gallery_title='';
 		if ($cat!='')
@@ -1676,7 +1686,14 @@ class Module_cms_galleries_alt extends standard_crud_module
 		}
 		if ((get_value('no_confirm_url_spec_cats')!=='1') || ($cat==''))
 		{
-			$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',NULL,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
+			$root_cat=get_long_value('root_cat__videos');
+			if ((!is_null($root_cat)) && (preg_match('#^\w+$#',$root_cat)==0))
+			{
+				$filters['filter']=$root_cat;
+				$root_cat='';
+			}
+			if (empty($root_cat) && $GLOBALS['SITE_DB']->query_select_value('galleries','accept_videos',array('name'=>'root'))==0) $root_cat='root'; // Don't show 'root' itself
+			$fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'),do_lang_tempcode('DESCRIPTION_GALLERY'),'cat',$root_cat,'choose_gallery',$filters,true,$cat,false,NULL,false,$gallery_title));
 		} else
 		{
 			$hidden->attach(form_input_hidden('cat',$cat));
@@ -1731,8 +1748,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 			$fields->attach($description_field);
 		}
 		$fields->attach(form_input_integer(do_lang_tempcode('VIDEO_LENGTH'),do_lang_tempcode('DESCRIPTION_VIDEO_LENGTH'),'video_length',$video_length,false));
-		$fields->attach(form_input_integer(do_lang_tempcode('WIDTH'),do_lang_tempcode('DESCRIPTION_VIDEO_WIDTH'),'video_width',$video_width,false));
-		$fields->attach(form_input_integer(do_lang_tempcode('HEIGHT'),do_lang_tempcode('DESCRIPTION_VIDEO_HEIGHT'),'video_height',$video_height,false));
+		$fields->attach(form_input_dimensions(do_lang_tempcode('DIMENSIONS'),do_lang_tempcode('DESCRIPTION_VIDEO_DIMENSIONS'),'video_width','video_height',$video_width,$video_height,false));
 		if (!$no_thumb_needed)
 		{
 			$fields->attach($validated_field);
@@ -1854,18 +1870,23 @@ class Module_cms_galleries_alt extends standard_crud_module
 	 */
 	function add_actualisation()
 	{
+		$title=post_param('title');
+		$description=post_param('description','');
+
 		$cat=post_param('cat');
+
 		if (can_submit_to_gallery($cat)===false) access_denied('SUBMIT_HERE');
 		make_member_gallery_if_needed($cat);
 		$this->check_videos_allowed($cat);
+
 		$validated=post_param_integer('validated',0);
 		$allow_rating=post_param_integer('allow_rating',0);
 		$allow_comments=post_param_integer('allow_comments',0);
 		$notes=post_param('notes','');
 		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
-		$title=post_param('title');
 
 		list($video_width,$video_height,$video_length)=$this->get_special_video_info();
+
 		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_VIDEO,true,'thumb_url','file2');
 
 		if (($urls[1]=='') && ($urls[0]!=''))
@@ -1881,8 +1902,6 @@ class Module_cms_galleries_alt extends standard_crud_module
 
 		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
 			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
-
-		$description=post_param('description');
 
 		$this->donext_type=$cat;
 
@@ -1931,6 +1950,9 @@ class Module_cms_galleries_alt extends standard_crud_module
 	{
 		$id=intval($_id);
 
+		$title=post_param('title');
+		$description=post_param('description',STRING_MAGIC_NULL);
+
 		$cat=post_param('cat',STRING_MAGIC_NULL);
 		if ($cat!=STRING_MAGIC_NULL)
 		{
@@ -1938,8 +1960,8 @@ class Module_cms_galleries_alt extends standard_crud_module
 			make_member_gallery_if_needed($cat);
 			$this->check_videos_allowed($cat);
 		}
+
 		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$title=post_param('title');
 
 		if (!fractional_edit())
 		{
@@ -1956,30 +1978,29 @@ class Module_cms_galleries_alt extends standard_crud_module
 			{
 				$thumb_url=$urls[1];
 			}
+
+			if ((substr($url,0,8)!='uploads/') && ($url!='') && (is_null(http_download_file($url,0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
+				attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
+
+			if (($thumb_url=='') && ($url!=''))
+				$thumb_url=create_video_thumb($url);
+
+			if ($thumb_url=='')
+			{
+				$rows=$GLOBALS['SITE_DB']->query_select('videos',array('url','thumb_url'),array('id'=>$id),'',1);
+				$thumb_url=$rows[0]['thumb_url'];
+			}
+
+			if (($url=='') || ($thumb_url==''))
+			{
+				warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+			}
 		} else
 		{
 			$url=STRING_MAGIC_NULL;
 			$thumb_url=STRING_MAGIC_NULL;
 		}
 
-		if ((substr($url,0,8)!='uploads/') && ($url!='') && (is_null(http_download_file($url,0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
-			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
-
-		if (($thumb_url=='') && ($url!=''))
-			$thumb_url=create_video_thumb($url);
-
-		if ($thumb_url=='')
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('videos',array('url','thumb_url'),array('id'=>$id),'',1);
-			$thumb_url=$rows[0]['thumb_url'];
-		}
-
-		if (($url=='') || ($thumb_url==''))
-		{
-			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
-		}
-
-		$description=post_param('description',STRING_MAGIC_NULL);
 		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
 		$notes=post_param('notes',fractional_edit()?STRING_MAGIC_NULL:'');

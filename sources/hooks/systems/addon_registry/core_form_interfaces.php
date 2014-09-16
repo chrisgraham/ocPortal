@@ -138,6 +138,7 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/templates/FORM_SCREEN_INPUT_HUGE_COMCODE.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_HUGE_LIST.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_INTEGER.tpl',
+			'themes/default/templates/FORM_SCREEN_INPUT_DIMENSIONS.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_LINE.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_URL.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_CODENAME.tpl',
@@ -531,6 +532,7 @@ class Hook_addon_registry_core_form_interfaces
 			'FORM_SCREEN_INPUT_DATE_NULL.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_DATE.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_INTEGER.tpl'=>'form_screen_2',
+			'FORM_SCREEN_INPUT_DIMENSIONS.tpl'=>'form_screen_2',
 			'FORM_SCREEN_INPUT_FLOAT.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_HIDDEN_2.tpl'=>'form_screen_2',
 			'FORM_SCREEN_FIELD.tpl'=>'form_screen_1',
@@ -1007,6 +1009,27 @@ class Hook_addon_registry_core_form_interfaces
 			'NAME'=>placeholder_random_id(),
 			'CONTENT'=>$entries,
 			'INLINE_LIST'=>false
+		)));
+
+		$name_width=placeholder_random_id();
+		$name_height=placeholder_random_id();
+		$input=do_lorem_template('FORM_SCREEN_INPUT_DIMENSIONS', array(
+			'TABINDEX'=>placeholder_number(),
+			'REQUIRED'=>'',
+			'NAME_WIDTH'=>$name_width,
+			'DEFAULT_WIDTH'=>'',
+			'NAME_HEIGHT'=>$name_height,
+			'DEFAULT_HEIGHT'=>'',
+		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>false,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>''
 		)));
 
 		$name=placeholder_random_id();
@@ -1945,8 +1968,11 @@ class Hook_addon_registry_core_form_interfaces
 				'TITLE'=>lorem_phrase(),
 				'FIELD_NAME'=>placeholder_id(),
 				'BLOCK'=>lorem_phrase(),
+				'TAG_CONTENTS'=>'',
+				'SAVE_TO_ID'=>'',
+				'DELETE'=>false,
 				'COMCODE'=>lorem_phrase(),
-				'COMCODE_SEMIHTML'=>lorem_phrase()
+				'COMCODE_SEMIHTML'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

@@ -19,8 +19,6 @@
 	{$SET,support_mass_select,cms_galleries}
 
 	{+START,IF_NON_EMPTY,{ENTRIES}}
-		<hr class="spaced_rule" />
-
 		<div class="box box___gallery_flow_mode_screen__other"><div class="box_inner">
 			<h2>{!OTHER_IMAGES_IN_GALLERY}</h2>
 
@@ -46,6 +44,8 @@
 					initialise_carousel({$GET,carousel_id});
 				} );
 			//]]></script>
+
+			<hr />
 
 			<ul class="horizontal_links associated_links_block_group">
 				<li>{SORTING}</li>

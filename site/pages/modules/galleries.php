@@ -408,7 +408,19 @@ class Module_galleries
 				$this->title=get_screen_title('VIEW_SLIDESHOW',true,array(make_fractionable_editable('gallery',$cat,$category_name)));
 			} else
 			{
-				$this->title=get_screen_title((((get_translated_text($myrow['title'])=='')?'VIEW_':'_VIEW_').strtoupper($type)),true,array(make_fractionable_editable($type,$id,get_translated_text($myrow['title']))),NULL,$awards);
+				$fe=directive_tempcode(
+					'FRACTIONAL_EDITABLE',
+					escape_html(get_translated_text($myrow['title'])),
+					array(
+						make_string_tempcode(get_translated_text($myrow['title'])),
+						make_string_tempcode('title'),
+						make_string_tempcode('_SEARCH:cms_galleries:type=__ed:id='.strval($id)),
+						make_string_tempcode('1'),
+						make_string_tempcode('1'),
+						make_string_tempcode(has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries',$cat))?'1':'0'),
+					)
+				);
+				$this->title=get_screen_title((((get_translated_text($myrow['title'])=='')?'VIEW_':'_VIEW_').strtoupper($type)),true,array($fe),NULL,$awards);
 			}
 
 			$title_plain=do_lang((((get_translated_text($myrow['title'])=='')?'VIEW_':'_VIEW_').strtoupper($type)),get_translated_text($myrow['title']));
@@ -911,6 +923,7 @@ class Module_galleries
 				'VIEW_URL'=>$probe_url,
 				'VIEW_URL_2'=>$view_url_2,
 				'_EDIT_URL'=>$_edit_url,
+				'CAT'=>$cat,
 			)));
 		}
 

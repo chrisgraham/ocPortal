@@ -590,8 +590,7 @@ class Module_cms_banners_cat extends standard_crud_module
 		{
 			$fields->attach(form_input_tick(do_lang_tempcode('BANNER_IS_TEXTUAL'),do_lang_tempcode('DESCRIPTION_BANNER_IS_TEXTUAL'),'is_textual',$is_textual==1));
 		}
-		$fields->attach(form_input_integer(do_lang_tempcode('WIDTH'),do_lang_tempcode('DESCRIPTION_BANNER_WIDTH'),'image_width',$image_width,true));
-		$fields->attach(form_input_integer(do_lang_tempcode('HEIGHT'),do_lang_tempcode('DESCRIPTION_BANNER_HEIGHT'),'image_height',$image_height,true));
+		$fields->attach(form_input_dimensions(do_lang_tempcode('DIMENSIONS'),do_lang_tempcode('DESCRIPTION_BANNER_DIMENSIONS'),'image_width','image_height',$image_width,$image_height,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('_FILE_SIZE'),do_lang_tempcode('DESCRIPTION_BANNER_FILE_SIZE'),'max_file_size',$max_file_size,true));
 		$fields->attach(form_input_tick(do_lang_tempcode('COMCODE_INLINE'),do_lang_tempcode('DESCRIPTION_COMCODE_INLINE'),'comcode_inline',$comcode_inline==1));
 

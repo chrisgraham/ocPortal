@@ -112,6 +112,9 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	require_lang('do_next');
 	require_css('do_next');
 
+	$keep_simplified_donext=get_param_integer('keep_simplified_donext',NULL);
+	$simplified=((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1));
+
 	$sections=new ocp_tempcode();
 
 	// Main section stuff (the "Main" section is not always shown - it is shown when the do-next screen is being used as a traditional menu, not as a followup-action screen)
@@ -161,8 +164,7 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 				$x=$url_view_this;
 				if (!is_null($x))
 				{
-					$keep_simplified_donext=get_param_integer('keep_simplified_donext',NULL);
-					if ((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1))
+					if ($simplified)
 					{
 						$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
 						return redirect_screen($title,$_url_redirect,$text);
@@ -224,8 +226,7 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 		{
 			if ($option=='view_this' || $option=='view_archive')
 			{
-				$keep_simplified_donext=get_param_integer('keep_simplified_donext',NULL);
-				if ((($keep_simplified_donext!==0) && (get_option('simplified_donext')=='1')) || ($keep_simplified_donext==1))
+				if ($simplified)
 				{
 					$_url_redirect=build_url(array_merge(array('page'=>$x[0]),$x[1]),$x[2]);
 					return redirect_screen($title,$_url_redirect,$text);
@@ -256,6 +257,13 @@ function do_next_manager($title,$text,$main=NULL,$main_title=NULL,$url_add_one=N
 	} else // Where-next
 	{
 		$question=do_lang_tempcode('WHAT_NEXT');
+	}
+
+	if ($simplified)
+	{
+		$_url_redirect=build_url(array('page'=>''),'site');
+		require_code('templates_redirect_screen');
+		return redirect_screen($title,$_url_redirect,$text);
 	}
 
 	if ($text->evaluate()==do_lang('SUCCESS'))

@@ -242,7 +242,8 @@ class Hook_addon_registry_core_abstract_components
 				'VALUE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'EDIT_TEXT'=>lorem_sentence_html(),
-				'EDIT_PARAM_NAME'=>lorem_word_html()
+				'EDIT_PARAM_NAME'=>lorem_word_html(),
+				'EXPLICIT_EDITING_LINKS'=>true,
 			)),NULL,'',true)
 		);
 	}

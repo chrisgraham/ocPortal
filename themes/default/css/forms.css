@@ -266,6 +266,24 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 .input_tick_required, .input_float_required, .input_text_required, .input_upload_required {
 }
 
+.input_dimensions input {
+	width: 3em;
+}
+.input_dimensions, .input_dimensions * {
+	vertical-align: middle;
+}
+
+.upload_field input[type="button"] {
+	margin-top: 2px;
+}
+
+{+START,IF,{$MOBILE}}
+	.input_upload, .input_upload_required {
+		max-width: 240px;
+	}
+{+END}
+
+
 .radio_description {
 	margin-top: -1.3em !important;
 	margin-bottom: 1em !important;

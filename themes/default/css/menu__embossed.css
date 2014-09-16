@@ -4,28 +4,28 @@
 */
 
 /* Embossed menus should be flush to their box */
-.box___block_side_stored_menu_embossed>.box_inner>h3 {
+.box___block_menu_embossed>.box_inner>h3 {
 	margin: 0;
 	padding-left: 0;
 	padding-right: 0;
 }
-.box___block_side_stored_menu_embossed>.box_inner {
+.box___block_menu_embossed>.box_inner {
 	margin: 0;
 	position: relative;
 }
-.box___block_side_stored_menu_embossed>.box_inner .inline_wip_message {
+.box___block_menu_embossed>.box_inner .inline_wip_message {
 	margin: 0.5em;
 }
-.box___block_side_stored_menu_embossed .edit_menu_link_inline {
+.box___block_menu_embossed .edit_menu_link_inline {
 	position: absolute;
 	right: 0;
 	bottom: 1px;
 }
-.box___block_side_stored_menu_embossed nav, .box___block_side_stored_menu_embossed li {
+.box___block_menu_embossed nav, .box___block_menu_embossed li {
 	border-left: 0;
 	border-right: 0;
 }
-.box___block_side_stored_menu_embossed nav, .box___block_side_stored_menu_embossed li:last-child {
+.box___block_menu_embossed nav, .box___block_menu_embossed li:last-child {
 	{$BETA_CSS_PROPERTY,border-bottom-left-radius: 5px;}
 	{$BETA_CSS_PROPERTY,border-bottom-right-radius: 5px;}
 	border-bottom: 0;

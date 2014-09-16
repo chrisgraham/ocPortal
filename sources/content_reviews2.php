@@ -153,6 +153,8 @@ function content_review_get_fields($content_type,$content_id=NULL,$catalogue_nam
  */
 function content_review_set($content_type,$content_id,$old_content_id=NULL)
 {
+	if (fractional_edit()) return;
+
 	if (!is_null($old_content_id)) // Do renaming operation
 	{
 		$GLOBALS['SITE_DB']->query_update('content_reviews',array('content_id'=>$content_id),array(

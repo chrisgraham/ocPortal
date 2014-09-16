@@ -236,10 +236,12 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$edit_param_name=$param[1]->evaluate();
 					$edit_page_link=$param[2]->evaluate();
 					$supports_comcode=(isset($param[4])?$param[3]->evaluate():'0')=='1';
+					$explicit_editing_links=(isset($param[5])?$param[4]->evaluate():'0')=='1';
+					$has_permission=(isset($param[6])?$param[5]->evaluate():NULL)==='1';
 
 					list($zone,$attributes,)=page_link_decode($edit_page_link);
 					if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
-					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (((array_key_exists(4,$param)) && ($param[3]->evaluate()=='1')) || (has_zone_access(get_member(),'adminzone'))))
+					if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (($has_permission===true) || (($has_permission===NULL) && (has_zone_access(get_member(),'adminzone')))))
 					{
 						$keep=symbol_tempcode('KEEP');
 						$url=find_script('fractional_edit').'?edit_param_name='.urlencode($edit_param_name).'&supports_comcode='.($supports_comcode?'1':'0').'&zone='.urlencode($zone).$keep->evaluate();
@@ -249,7 +251,14 @@ function ecv($lang,$escaped,$type,$name,$param)
 						}
 
 						$_value=$param[count($param)-1];
-						$_value=do_template('FRACTIONAL_EDIT',array('_GUID'=>'075ac126c427d28b309004bc67b32b08','VALUE'=>$_value,'URL'=>$url,'EDIT_TEXT'=>$edit_text,'EDIT_PARAM_NAME'=>$edit_param_name));
+						$_value=do_template('FRACTIONAL_EDIT',array(
+							'_GUID'=>'075ac126c427d28b309004bc67b32b08',
+							'VALUE'=>$_value,
+							'URL'=>$url,
+							'EDIT_TEXT'=>$edit_text,
+							'EDIT_PARAM_NAME'=>$edit_param_name,
+							'EXPLICIT_EDITING_LINKS'=>$explicit_editing_links,
+						));
 						$value=$_value->evaluate();
 					} else
 					{
@@ -988,7 +997,6 @@ function keep_symbol($param)
 function ecv_BROWSER($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -999,8 +1007,9 @@ function ecv_BROWSER($lang,$escaped,$param)
 			if ($q) break;
 		}
 		$value=$q?$param[1]:(isset($param[2])?$param[2]:'');
-		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	}
+
+	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -1344,7 +1353,6 @@ function ecv_COMMA_LIST_GET($lang,$escaped,$param)
 function ecv_IS_EMPTY($lang,$escaped,$param)
 {
 	$value='1';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -1366,7 +1374,6 @@ function ecv_IS_EMPTY($lang,$escaped,$param)
 function ecv_IS_NON_EMPTY($lang,$escaped,$param)
 {
 	$value='0';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -1437,7 +1444,6 @@ function ecv_LOAD_PANEL($lang,$escaped,$param)
 function ecv_JS_ON($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -2389,7 +2395,6 @@ function ecv_HIDDENS_FOR_GET_FORM($lang,$escaped,$param)
 function ecv_NOTIFICATIONS_ENABLED($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -2489,7 +2494,6 @@ function ecv_LOAD_PAGE($lang,$escaped,$param)
 function ecv_RUNNING_SCRIPT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -2865,7 +2869,6 @@ function ecv_MEMBER_EMAIL($lang,$escaped,$param)
 function ecv_HAS_PRIVILEGE($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if ((isset($param[0])) && (function_exists('has_privilege')))
 	{
@@ -2887,7 +2890,6 @@ function ecv_HAS_PRIVILEGE($lang,$escaped,$param)
 function ecv_HAS_ZONE_ACCESS($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if ((isset($param[0])) && (function_exists('has_zone_access')))
 	{
@@ -2909,11 +2911,20 @@ function ecv_HAS_ZONE_ACCESS($lang,$escaped,$param)
 function ecv_HAS_DELETE_PERMISSION($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
-	if ((isset($param[0])) && ((strtolower($param[0])=='low') || (strtolower($param[0])=='mid') || (strtolower($param[0])=='high')) && (isset($param[1])))
+	if (isset($param[1]))
 	{
-		$value=has_delete_permission(strtolower($param[0]),((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),intval($param[1]),((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name())?'1':'0';
+		$range=strtolower($param[0]);
+		$owner=intval($param[1]);
+		$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+		$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+		if (array_key_exists(5,$param))
+		{
+			$value=has_delete_permission($range,$member,$owner,$cms_page,array($param[5],$param[6]))?'1':'0';
+		} else
+		{
+			$value=has_delete_permission($range,$member,$owner,$cms_page)?'1':'0';
+		}
 	}
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
@@ -3015,7 +3026,6 @@ function ecv_DEV_MODE($lang,$escaped,$param)
 function ecv_BROWSER_MATCHES($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -3043,7 +3053,6 @@ function ecv_BROWSER_MATCHES($lang,$escaped,$param)
 function ecv_INIT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -3066,7 +3075,6 @@ function ecv_INIT($lang,$escaped,$param)
 function ecv_INC($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -3112,7 +3120,6 @@ function ecv_PREG_REPLACE($lang,$escaped,$param)
 function ecv_MAX($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -3134,7 +3141,6 @@ function ecv_MAX($lang,$escaped,$param)
 function ecv_MIN($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -3156,7 +3162,6 @@ function ecv_MIN($lang,$escaped,$param)
 function ecv_DIV_FLOAT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -3272,7 +3277,6 @@ function ecv_REPLACE($lang,$escaped,$param)
 function ecv_IN_STR($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -3311,7 +3315,6 @@ function ecv_IN_STR($lang,$escaped,$param)
 function ecv_SUBSTR_COUNT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -3382,7 +3385,6 @@ function ecv_ALTERNATOR_TRUNCATED($lang,$escaped,$param) // Alternate values acc
 function ecv_EQ($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (!isset($param[0])) $param[0]='';
 	if (!isset($param[1])) $param[1]='';
@@ -3413,7 +3415,6 @@ function ecv_EQ($lang,$escaped,$param)
 function ecv_NEQ($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (!isset($param[0])) $param[0]='';
 	if (!isset($param[1])) $param[1]='';
@@ -3440,7 +3441,6 @@ function ecv_NEQ($lang,$escaped,$param)
 function ecv_NOT($lang,$escaped,$param)
 {
 	$value='1';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[0]))
 	{
@@ -3462,7 +3462,6 @@ function ecv_NOT($lang,$escaped,$param)
 function ecv_OR($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	$count=0;
 	foreach ($param as $test)
@@ -3551,7 +3550,6 @@ function ecv_NAND($lang,$escaped,$param)
 function ecv_GT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{
@@ -3685,7 +3683,6 @@ function ecv_HONEYPOT_LINK($lang,$escaped,$param)
 function ecv_COMMENT_COUNT($lang,$escaped,$param)
 {
 	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 
 	if (isset($param[1]))
 	{

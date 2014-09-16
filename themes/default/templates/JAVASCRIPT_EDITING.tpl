@@ -176,7 +176,11 @@ function disable_wysiwyg(forms,so,so2,discard)
 
 				// Unload editor
 				var wysiwyg_data=window.wysiwyg_editors[id].getData();
-				window.wysiwyg_editors[id].destroy();
+				try
+				{
+					window.wysiwyg_editors[id].destroy();
+				}
+				catch (e) {};
 				delete window.wysiwyg_editors[id];
 
 				// Comcode conversion
@@ -203,7 +207,11 @@ function disable_wysiwyg(forms,so,so2,discard)
 					set_inner_html(document.getElementById('toggle_wysiwyg_'+id),'<img src="{$IMG*;^,icons/16x16/editor/wysiwyg_on}" srcset="{$IMG;^,icons/16x16/editor/wysiwyg_on} 2x" alt="{!comcode:ENABLE_WYSIWYG;^}" title="{!comcode:ENABLE_WYSIWYG;^}" class="vertical_alignment" />');
 
 				// Unload editor
-				window.wysiwyg_editors[id].destroy();
+				try
+				{
+					window.wysiwyg_editors[id].destroy();
+				}
+				catch (e) {};
 			}
 		}
 	}

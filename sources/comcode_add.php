@@ -410,6 +410,7 @@ function comcode_helper_script_step2()
 	{
 		$tag_description=protect_from_escaping(do_lang('COMCODE_TAG_'.$tag));
 	}
+	$has_full_tag_description=false;
 
 	if (array_key_exists($tag,$tag_list)) // Normal Comcode tag
 	{
@@ -467,7 +468,15 @@ function comcode_helper_script_step2()
 							$field=form_input_list($parameter_name,'',$param,$list,NULL,false,false);
 						} elseif ($param=='width' || $param=='height')
 						{
-							$field=form_input_integer($parameter_name,protect_from_escaping($descriptiont),$param,($default=='')?NULL:intval($default),false);
+							if ($param=='width')
+							{
+								$default_width=array_key_exists('width',$defaults)?$defaults['width']:get_param('default_width','');
+								$default_height=array_key_exists('height',$defaults)?$defaults['height']:get_param('default_height','');
+								$field=form_input_dimensions(do_lang_tempcode('DIMENSIONS'),do_lang_tempcode('COMCODE_TAG_PARAM_dimensions'),'width','height',($default_width=='')?NULL:intval($default_width),($default_height=='')?NULL:intval($default_height),false);
+							} else
+							{
+								$field=new ocp_tempcode();
+							}
 						} else
 						{
 							if ($supports_comcode)
@@ -477,6 +486,10 @@ function comcode_helper_script_step2()
 							{
 								$field=form_input_line($parameter_name,protect_from_escaping($descriptiont),$param,$default,false);
 							}
+						}
+						if ((($tag=='attachment') || ($tag=='attachment_safe')) && (($param=='type' || $param=='float' || $param=='width' || $param=='height')) && (/*Assumed needs routine heavy control*/!has_privilege(get_member(),'use_very_dangerous_comcode')))
+						{
+							$is_advanced=true;
 						}
 						if ($is_advanced)
 						{
@@ -545,10 +558,10 @@ function comcode_helper_script_step2()
 		$fields->attach(form_input_tick(do_lang_tempcode('REMOVE'),'','_delete',false));
 	} else
 	{
-		$submit_name=do_lang_tempcode('USE');
+		$submit_name=do_lang_tempcode('ADD');
 	}
 
-	$text=$tag_description->is_empty()?new ocp_tempcode():do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
+	$text=($has_full_tag_description || $tag_description->is_empty())?$tag_description:do_lang_tempcode('COMCODE_HELPER_2',escape_html($tag),$tag_description);
 
 	if (($tag=='attachment') && (strpos($default_embed,'new_')!==false))
 		$text=do_lang_tempcode('COMCODE_ATTACHMENT_WILL_HAVE_MARKER');
@@ -846,7 +859,8 @@ function _try_for_special_comcode_tag_specific_contents_ui($tag,$actual_tag,&$fi
 		}
 
 		$hidden->attach(form_input_hidden('tag_contents',$default_embed));
-		$tag_description=new ocp_tempcode();
+		$tag_description=do_lang_tempcode('COMCODE_TAG_attachment_simplified');
+		$has_full_tag_description=true;
 
 		if (substr($default_embed,0,4)=='new_') $preview=false;
 	}
@@ -901,7 +915,17 @@ function comcode_helper_script_step3()
 
 	$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
-	return do_template('BLOCK_HELPER_DONE',array('_GUID'=>'d5d5888d89b764f81769823ac71d0827','TITLE'=>$title,'FIELD_NAME'=>$field_name,'BLOCK'=>$tag,'COMCODE'=>$comcode,'COMCODE_SEMIHTML'=>$comcode_semihtml));
+	return do_template('BLOCK_HELPER_DONE',array(
+		'_GUID'=>'d5d5888d89b764f81769823ac71d0827',
+		'TITLE'=>$title,
+		'FIELD_NAME'=>$field_name,
+		'TAG_CONTENTS'=>post_param('tag_contents',''),
+		'SAVE_TO_ID'=>get_param('save_to_id',''),
+		'DELETE'=>(post_param_integer('delete',0)==1),
+		'BLOCK'=>$tag,
+		'COMCODE'=>$comcode,
+		'COMCODE_SEMIHTML'=>$comcode_semihtml,
+	));
 }
 
 /**

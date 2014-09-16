@@ -23,20 +23,22 @@
 				{+END}
 			</th>
 			<td class="form_table_field_input">
-				<div class="accessibility_hidden"><label for="file{I*}">{!UPLOAD}</label></div>
+				<div class="upload_field">
+					<div class="accessibility_hidden"><label for="file{I*}">{!UPLOAD}</label></div>
 
-				<span class="vertical_alignment">
-					<input size="15" type="file" onchange="set_attachment('post',{I*},'');" id="file{I*}" name="file{I*}" />
-					<script>// <![CDATA[
-						document.getElementById('file{I;/}').setAttribute('unselectable','on');
-					//]]></script>
+					<span class="vertical_alignment">
+						<input size="15" type="file" onchange="set_attachment('post',{I*},'');" id="file{I*}" name="file{I*}" />
+						<script>// <![CDATA[
+							document.getElementById('file{I;/}').setAttribute('unselectable','on');
+						//]]></script>
 
-					{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<input class="buttons__clear button_micro" type="button" id="clear_button_file{I*}" value="{!CLEAR}" onclick="var new_contents=get_textbox(form.elements['post']).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_{I;*}\\[/(attachment|attachment_safe)\\]'),''); set_textbox(form.elements['post'],new_contents,new_contents); document.getElementById('file{I;/}').value=''; return false;" title="{!CLEAR}: {!ATTACHMENT,{I*}}" />{+END}
-				</span>
+						{+START,IF,{$AND,{$JS_ON},{$BROWSER_MATCHES,gecko}}}<input class="buttons__clear button_micro" type="button" id="clear_button_file{I*}" value="{!CLEAR}" onclick="var new_contents=get_textbox(form.elements['post']).replace(new RegExp('\\[(attachment|attachment_safe)[^\\]]*\\]new_{I;*}\\[/(attachment|attachment_safe)\\]'),''); set_textbox(form.elements['post'],new_contents,new_contents); document.getElementById('file{I;/}').value=''; return false;" title="{!CLEAR}: {!ATTACHMENT,{I*}}" />{+END}
+					</span>
 
-				{+START,IF_PASSED,SYNDICATION_JSON}
-					<div id="file{I*}_syndication_options" class="syndication_options"></div>
-				{+END}
+					{+START,IF_PASSED,SYNDICATION_JSON}
+						<div id="file{I*}_syndication_options" class="syndication_options"></div>
+					{+END}
+				</div>
 			</td>
 		</tr>
 	</tbody>

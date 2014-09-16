@@ -456,7 +456,26 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_members','primary_group',array('m_primary_group'));
 		$GLOBALS['FORUM_DB']->create_index('f_members','avatar_url',array('m_avatar_url')); // Used for uniform avatar randomisation
 
-		$no_use_topics=array('party'=>1,'christmas'=>1,'offtopic'=>1,'rockon'=>1,'guitar'=>1,'sinner'=>1,'wink'=>1,'kiss'=>1,'nod'=>1,'smile'=>1,'mellow'=>1,'whistle'=>1,'shutup'=>1,'cyborg'=>1);
+		$no_use_topics=array(
+			'party'=>1,
+			'christmas'=>1,
+			'offtopic'=>1,
+			'rockon'=>1,
+			'guitar'=>1,
+			'sinner'=>1,
+			'wink'=>1,
+			'kiss'=>1,
+			'nod'=>1,
+			'smile'=>1,
+			'mellow'=>1,
+			'whistle'=>1,
+			'shutup'=>1,
+			'cyborg'=>1,
+			'idea'=>1,
+			'boat'=>1,
+			'fishing'=>1,
+			'reallybadday'=>1,
+		);
 		$core_emoticons=array(
 			':P'=>'cheeky',
 			":'("=>'cry',

@@ -8,7 +8,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 
 	if (raw_text.length>255) return null; // Cannot process this
 
-	if ((magic_keypress(event)) || (was_double_click))
+	if ((magic_keypress(event)) || (was_double_click) || (object!=event.target))
 	{
 		cancel_bubbling(event);
 		if (typeof event.preventDefault!='undefined') event.preventDefault();
@@ -208,8 +208,7 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 
 		// Add in form
 		form.appendChild(input);
-		var website_inner=document.getElementById('main_website_inner'); // So x/y positioning is correct
-		if (!website_inner) website_inner=document.body;
+		var website_inner=document.body;
 		website_inner.appendChild(form);
 		input.focus();
 		if (typeof input.select!='undefined') input.select();

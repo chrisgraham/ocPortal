@@ -417,11 +417,17 @@ function ajax_form_submit__admin__headless(event,form,block_name,map)
 
 	cancel_bubbling(event);
 
-	var comcode='[block'+map+']'+block_name+'[/block]';
-	var post='data='+window.encodeURIComponent(comcode);
+	var post='';
+	if (typeof block_name!='undefined')
+	{
+		if (typeof map=='undefined') var map='';
+		var comcode='[block'+map+']'+block_name+'[/block]';
+		post+='data='+window.encodeURIComponent(comcode);
+	}
 	for (var i=0;i<form.elements.length;i++)
 	{
-		post+='&'+form.elements[i].name+'='+window.encodeURIComponent(clever_find_value(form,form.elements[i]));
+		if (!form.elements[i].disabled)
+			post+='&'+form.elements[i].name+'='+window.encodeURIComponent(clever_find_value(form,form.elements[i]));
 	}
 	var request=do_ajax_request(maintain_theme_in_link('{$FIND_SCRIPT_NOHTTP;,comcode_convert}'+keep_stub(true)),null,post);
 

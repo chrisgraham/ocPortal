@@ -36,23 +36,21 @@
 
 	{+START,IF_PASSED,EXTRA_BUTTONS}{EXTRA_BUTTONS}{+END}
 	{+START,IF_PASSED_AND_TRUE,PREVIEW}{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}
-		<input class="tabs__preview button_screen" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; if (do_form_preview(event,form,'{$PREVIEW_URL;*}{$KEEP;*}{+START,IF_PASSED,THEME}&amp;utheme={THEME*}{+END}'{+START,IF_PASSED_AND_TRUE,SEPARATE_PREVIEW},true{+END})) { if ((typeof window.just_checking_requirements=='undefined') || (!window.just_checking_requirements)) form.submit(); return true; } return false;" id="preview_button" accesskey="p" tabindex="{+START,IF_PASSED,TABINDEX}{TABINDEX}{+END}{+START,IF_NON_PASSED,TABINDEX}250{+END}" type="button" value="{!PREVIEW}" />
+		<input class="tabs__preview button_screen" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; if (do_form_preview(event,form,window.form_preview_url{+START,IF_PASSED_AND_TRUE,SEPARATE_PREVIEW},true{+END})) { if ((typeof window.just_checking_requirements=='undefined') || (!window.just_checking_requirements)) form.submit(); return true; } return false;" id="preview_button" accesskey="p" tabindex="{+START,IF_PASSED,TABINDEX}{TABINDEX}{+END}{+START,IF_NON_PASSED,TABINDEX}250{+END}" type="button" value="{!PREVIEW}" />
 	{+END}{+END}{+END}
 	<input class="{SUBMIT_ICON*} button_screen" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; return do_form_submit(form,event);" {+START,IF_NON_PASSED_OR_FALSE,SECONDARY_FORM}id="submit_button" accesskey="u" {+END}tabindex="{+START,IF_PASSED,TABINDEX}{TABINDEX}{+END}{+START,IF_NON_PASSED,TABINDEX}250{+END}" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END} value="{SUBMIT_NAME*}" />
 </p>
 
-{+START,IF_PASSED_AND_TRUE,PREVIEW}{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}
-	{+START,IF,{$FORCE_PREVIEWS}}
-		<script>// <![CDATA[
-			document.getElementById('submit_button').style.display='none';
-		//]]></script>
-	{+END}
-
-	<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} title="{!PREVIEW}" name="preview_iframe" id="preview_iframe" src="{$BASE_URL*}/uploads/index.html" class="hidden_preview_frame">{!PREVIEW}</iframe>
-{+END}{+END}{+END}
-
 <script>// <![CDATA[
-	add_event_listener_abstract(window,"load",function() {
+	window.form_preview_url='{$PREVIEW_URL;/}{$KEEP;/}{+START,IF_PASSED,THEME}&utheme={THEME;/}{+END}';
+
+	{+START,IF_PASSED_AND_TRUE,PREVIEW}{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}
+		{+START,IF,{$FORCE_PREVIEWS}}
+			document.getElementById('submit_button').style.display='none';
+		{+END}
+	{+END}{+END}{+END}
+
+	add_event_listener_abstract(window,'load',function() {
 		{+START,IF_PASSED,JAVASCRIPT}
 			{JAVASCRIPT`}
 		{+END}
@@ -61,6 +59,10 @@
 		{+END}
 	} );
 //]]></script>
+
+{+START,IF_PASSED_AND_TRUE,PREVIEW}{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}
+	<iframe{$?,{$BROWSER_MATCHES,ie}, frameBorder="0" scrolling="no"} title="{!PREVIEW}" name="preview_iframe" id="preview_iframe" src="{$BASE_URL*}/uploads/index.html" class="hidden_preview_frame">{!PREVIEW}</iframe>
+{+END}{+END}{+END}
 
 {$,Load up the staff actions template to display staff actions uniformly (we relay our parameters to it)...}
 {+START,IF,{$HAS_PRIVILEGE,see_software_docs}}{+START,IF_PASSED,STAFF_HELP_URL}{+START,IF,{$SHOW_DOCS}}

@@ -138,6 +138,8 @@ function read_privacy_fields($prefix='')
  */
 function save_privacy_form_fields($content_type,$content_id,$privacy_level,$additional_access,$send_invites=true)
 {
+	if (fractional_edit()) return false;
+
 	if (is_guest()) return false;
 	if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) return false;
 

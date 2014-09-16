@@ -154,7 +154,7 @@ function put_into_cache($codename,$ttl,$cache_identifier,$cache,$_langs_required
 	$dependencies.='!';
 	$dependencies.=(is_null($_csss_required))?'':implode(':',$_csss_required);
 
-	$big_mainstream_cache=false;//($codename!='side_stored_menu') && ($ttl>60*5) && (get_users_timezone(get_member())==get_site_timezone());
+	$big_mainstream_cache=false;//($codename!='menu') && ($ttl>60*5) && (get_users_timezone(get_member())==get_site_timezone());
 	if ($big_mainstream_cache)
 		ocp_profile_start_for('put_into_cache');
 

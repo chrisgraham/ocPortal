@@ -15,10 +15,10 @@
 /**
  * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright	ocProducts Ltd
- * @package		core_configuration
+ * @package		galleries
  */
 
-class Hook_config_thumb_width
+class Hook_config_gallery_media_title_required
 {
 	/**
 	 * Gets the details relating to the config option.
@@ -28,16 +28,15 @@ class Hook_config_thumb_width
 	function get_details()
 	{
 		return array(
-			'human_name'=>'THUMB_WIDTH',
-			'type'=>'integer',
+			'human_name'=>'GALLERY_MEDIA_TITLE_REQUIRED',
+			'type'=>'tick',
 			'category'=>'FEATURE',
-			'group'=>'MEDIA',
-			'explanation'=>'CONFIG_OPTION_thumb_width',
+			'group'=>'GALLERIES',
+			'explanation'=>'CONFIG_OPTION_gallery_media_title_required',
 			'shared_hosting_restricted'=>'0',
 			'list_options'=>'',
-			'order_in_category_group'=>1,
 
-			'addon'=>'core_configuration',
+			'addon'=>'galleries',
 		);
 	}
 
@@ -48,7 +47,7 @@ class Hook_config_thumb_width
 	 */
 	function get_default()
 	{
-		return '168';
+		return '1';
 	}
 }
 

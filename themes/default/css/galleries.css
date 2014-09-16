@@ -98,6 +98,17 @@
 	{+END}
 }
 
+.gallery_media_title_cropped * {
+	vertical-align: middle;
+}
+.gallery_media_title_cropped>span {
+	max-width: 120px;
+	display: inline-block;
+	white-space: nowrap;
+	{$BETA_CSS_PROPERTY,text-overflow: ellipsis;}
+	overflow: hidden;
+}
+
 .img_thumb_wrap {
 	/* Essentially adds padding around thumbnails; the thumbnails are sized to fit a box as tightly as possible, but unused space is not stored inside the images themselves */
 	width: {$GET,gallery_thumb_size};
