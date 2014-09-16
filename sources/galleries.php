@@ -584,7 +584,7 @@ function get_gallery_tree($category_id='root',$breadcrumbs='',$gallery_info=NULL
 	$children=array();
 	$sub=false;
 	$query='FROM '.get_table_prefix().'galleries g WHERE '.db_string_equal_to('parent_id',$category_id);
-	if (!is_callable($filter))
+	if ((!is_null($filter)) && (!is_callable($filter)))
 	{
 		require_code('ocfiltering');
 		$ocfilter=ocfilter_to_sqlfragment($filter,'name','galleries','parent_id','parent_id','name',false,false);
