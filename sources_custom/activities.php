@@ -194,7 +194,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
  *
  * @param  array			Database row
  * @param  boolean		Whether the rendered activity will be shown in a live ocPortal (as opposed to being e-mailed, for example)
- * @return tempcode		Rendered activity
+ * @return array			Rendered activity
  */
 function render_activity($row,$use_inside_ocp=true)
 {
@@ -209,7 +209,8 @@ function render_activity($row,$use_inside_ocp=true)
 
 	$message=new ocp_tempcode();
 
-	$test=do_lang($row['a_language_string_code'],'{1}','{2}','{3}');
+	$test=do_lang($row['a_language_string_code'],'{1}','{2}','{3}',NULL,false);
+	if (is_null($test)) $test=do_lang('UNKNOWN');
 
 	// Convert our parameters and links to Tempcode
 	$label=array();

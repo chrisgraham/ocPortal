@@ -645,6 +645,9 @@ class Module_admin_version
 					'f_description',
 					'f_intro_question',
 				),
+				'f_usergroup_subs'=>array(
+					's_description',
+				),
 			);
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 			foreach ($comcode_lang_fields as $table=>$fields)

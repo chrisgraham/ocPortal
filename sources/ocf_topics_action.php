@@ -116,8 +116,6 @@ function ocf_make_topic($forum_id,$description='',$emoticon='',$validated=NULL,$
 	} else
 	{
 		$map['t_cache_first_post']='';
-		$map['t_cache_first_post__text_parsed']='';
-		$map['t_cache_first_post__source_user']=db_get_first_id();
 	}
 	if (!is_null($id)) $map['id']=$id;
 

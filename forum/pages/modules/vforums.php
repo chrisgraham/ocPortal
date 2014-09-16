@@ -184,7 +184,7 @@ class Module_vforums
 	function unanswered_topics()
 	{
 		$title=do_lang_tempcode('UNANSWERED_TOPICS');
-		$condition=array('(t_cache_num_posts=1 OR (SELECT COUNT(DISTINCT p_poster) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p WHERE p.p_topic_id=top.id)=1)');
+		$condition=array('(t_cache_num_posts=1 OR (SELECT COUNT(DISTINCT p2.p_poster) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 WHERE p2.p_topic_id=top.id)=1)');
 
 		return $this->_vforum($title,$condition,'t_cache_last_time DESC',true);
 	}

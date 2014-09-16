@@ -88,7 +88,7 @@ class Module_subscriptions
 			$GLOBALS['SITE_DB']->create_table('f_usergroup_subs',array(
 				'id'=>'*AUTO',
 				's_title'=>'SHORT_TRANS',
-				's_description'=>'LONG_TRANS',
+				's_description'=>'LONG_TRANS__COMCODE',
 				's_cost'=>'SHORT_TEXT',
 				's_length'=>'INTEGER',
 				's_length_units'=>'SHORT_TEXT',
