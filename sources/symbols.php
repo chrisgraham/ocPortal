@@ -1615,7 +1615,7 @@ function ecv($lang,$escaped,$type,$name,$param)
 					$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
 					if (array_key_exists(5,$param))
 					{
-						$value=has_edit_permission($range,$member,$owner,$cms_page,array($param[5],$param[6]))?'1':'0';
+						$value=has_edit_permission($range,$member,$owner,$cms_page,array($param[4],$param[5]))?'1':'0';
 					} else
 					{
 						$value=has_edit_permission($range,$member,$owner,$cms_page)?'1':'0';

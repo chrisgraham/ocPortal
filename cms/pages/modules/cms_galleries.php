@@ -1438,7 +1438,7 @@ class Module_cms_galleries_alt extends standard_aed_module
 			$fields->attach($description_field);
 		}
 		$fields->attach(form_input_integer(do_lang_tempcode('VIDEO_LENGTH'),do_lang_tempcode('DESCRIPTION_VIDEO_LENGTH'),'video_length',$video_length,false));
-		$fields->attach(form_input_dimensions(do_lang_tempcode('DIMENSIONS'),do_lang_tempcode('DESCRIPTION_VIDEO_DIMENSIONS'),'video_width','video_height',$video_width,$video_height,false))
+		$fields->attach(form_input_dimensions(do_lang_tempcode('DIMENSIONS'),do_lang_tempcode('DESCRIPTION_VIDEO_DIMENSIONS'),'video_width','video_height',$video_width,$video_height,false));
 		if (!$no_thumb_needed)
 		{
 			$fields->attach($validated_field);
