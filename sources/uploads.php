@@ -169,7 +169,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 		$upload_folder_full=get_custom_file_base().'/'.$upload_folder;
 	$thumb_folder=preg_replace('#^uploads/([^/]+)#','${1}_thumbs',$upload_folder);
 	if (is_null($thumb_folder_full))
-		$thumb_folder_full=get_custom_file_base().'/'.$thumb_folder;
+		$thumb_folder_full=get_custom_file_base().'/uploads/'.$thumb_folder;
 
 	$out=array();
 	$thumb=NULL;
@@ -473,6 +473,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 					$place=$thumb_folder_full.'/'.$thumb_filename.$ext;
 					$i++;
 				}
+				file_put_contents($place,''); // Lock it in ASAP, to stop race conditions
 				$url_full=url_is_local($url[0])?get_custom_base_url().'/'.$url[0]:$url[0];
 
 				convert_image($url_full,$place,-1,-1,intval(get_option('thumb_width')),true,NULL,false,$only_make_smaller);
@@ -776,6 +777,7 @@ function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_f
 				$place=$upload_folder_full.'/'.$filename;
 				$i++;
 			}
+			file_put_contents($place,''); // Lock it in ASAP, to stop race conditions
 		}
 		else // A result of some randomness
 		{

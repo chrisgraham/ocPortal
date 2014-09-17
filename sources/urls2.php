@@ -605,6 +605,7 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new=fa
 		'm_resource_type'=>$type,
 		'm_resource_id'=>$id,
 		'm_moniker'=>$moniker,
+		'm_moniker_reversed'=>strrev($moniker),
 		'm_deprecated'=>0,
 		'm_manually_chosen'=>0,
 	));
@@ -654,8 +655,9 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for=NULL,
 			$dupe_sql.=db_string_equal_to('m_moniker',$scope_context.$moniker);
 		} else
 		{
-			$dupe_sql.=db_string_equal_to('m_moniker',$moniker);
-			$dupe_sql.=' OR m_moniker LIKE \''.db_encode_like('%/'.$moniker).'\'';
+			// Use reversing for better indexing performance
+			$dupe_sql.=db_string_equal_to('m_moniker_reversed',strrev($moniker));
+			$dupe_sql.=' OR m_moniker_reversed LIKE \''.db_encode_like(strrev('%/'.$moniker)).'\'';
 		}
 		$dupe_sql.=')';
 		$test=$GLOBALS['SITE_DB']->query_value_if_there($dupe_sql,false,true);

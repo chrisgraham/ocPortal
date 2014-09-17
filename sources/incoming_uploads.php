@@ -86,6 +86,12 @@ function incoming_uploads_script()
 		}
 	}
 
+	// Fix names that are too common
+	if (in_array($name,array('image.jpg'/*iOS*/)))
+	{
+		$name=uniqid(true).'.'.get_file_extension($name);
+	}
+
 	if ($is_uploaded)
 	{
 		$max_length=255;

@@ -13113,8 +13113,16 @@ function doSubmit(e,ob,recurse) {
 		if (typeof e.preventDefault!='undefined') e.preventDefault();
 	}
 
-	var txtID = document.getElementById(ob.settings.txtFileDbID);
-	if (txtID.value == '-1')
+	var all_done=true;
+	var txtID=document.getElementById(ob.settings.txtFileDbID);
+	if (txtID.value=='-1') all_done=false;
+	var form=document.getElementById(ob.settings.txtName).form;
+	for (var i=0;i<form.elements.length;i++)
+	{
+		if ((typeof form.elements[i].swfob!='undefined') && (form.elements[i].swfob.total.percent<100) && (form.elements[i].swfob.total.size!=0))
+			all_done=false;
+	}
+	if (!all_done)
 	{
 		disable_buttons_just_clicked(document.getElementsByTagName('input'),true);
 		disable_buttons_just_clicked(document.getElementsByTagName('button'),true);

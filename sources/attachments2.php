@@ -322,6 +322,7 @@ function _handle_attachment_extraction(&$comcode,$key,$type,$id,$matches_extract
 					$place=get_custom_file_base().'/uploads/attachments/'.$_file;
 					$i++;
 				}
+				file_put_contents($place,''); // Lock it in ASAP, to stop race conditions
 
 				$i=2;
 				$_file_thumb=basename($entry['path']);
@@ -333,6 +334,7 @@ function _handle_attachment_extraction(&$comcode,$key,$type,$id,$matches_extract
 					$place_thumb=get_custom_file_base().'/uploads/attachments_thumbs/'.$_file_thumb;
 					$i++;
 				}
+				file_put_contents($place_thumb,''); // Lock it in ASAP, to stop race conditions
 
 				if ($arcext=='tar')
 				{

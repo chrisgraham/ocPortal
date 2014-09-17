@@ -388,6 +388,7 @@ function ensure_thumbnail($full_url,$thumb_url,$thumb_dir,$table,$id,$thumb_fiel
 		$i++;
 	}
 	while (file_exists($thumb_path));
+	file_put_contents($thumb_path,''); // Lock it in ASAP, to stop race conditions
 	$thumb_url='uploads/'.$thumb_dir.'_thumbs/'.rawurlencode($file).'.'.$ext;
 	if ((substr($table,0,2)=='f_') && (get_forum_type()=='ocf'))
 	{

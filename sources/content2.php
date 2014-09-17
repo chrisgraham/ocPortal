@@ -426,6 +426,7 @@ function actual_meta_data_get_fields($content_type,$content_id,$fields_to_skip=N
 						'm_resource_type'=>$type,
 						'm_resource_id'=>$_content_id,
 						'm_moniker'=>$url_moniker,
+						'm_moniker_reversed'=>strrev($url_moniker),
 						'm_deprecated'=>0,
 						'm_manually_chosen'=>1,
 					));

@@ -55,7 +55,7 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	require_code('database_multi_lang_conv');
-	enable_content_translation();
-	exit();
+	$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_moniker_reversed','SHORT_TEXT');
+	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'url_id_monikers SET m_moniker_reversed=REVERSE(m_moniker)');
+	$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_monrev',array('m_moniker_reversed'));
 }

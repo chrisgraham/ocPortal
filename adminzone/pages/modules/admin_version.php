@@ -330,11 +330,13 @@ class Module_admin_version
 				'm_resource_type'=>'ID_TEXT',
 				'm_resource_id'=>'ID_TEXT',
 				'm_moniker'=>'SHORT_TEXT',
+				'm_moniker_reversed'=>'SHORT_TEXT', // For indexed tail-end searching
 				'm_deprecated'=>'BINARY',
 				'm_manually_chosen'=>'BINARY',
 			));
 			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_page_link',array('m_resource_page','m_resource_type','m_resource_id'));
 			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_moniker',array('m_moniker'));
+			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_monrev',array('m_moniker_reversed'));
 
 			$GLOBALS['SITE_DB']->create_table('review_supplement',array(
 				'r_post_id'=>'*AUTO_LINK',
@@ -754,6 +756,10 @@ class Module_admin_version
 			));
 
 			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','#page_search__combined',array('cc_page_title','string_index'));
+
+			$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_moniker_reversed','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'url_id_monikers SET m_moniker_reversed=REVERSE(m_moniker)');
+			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_monrev',array('m_moniker_reversed'));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
