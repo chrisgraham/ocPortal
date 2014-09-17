@@ -21,7 +21,7 @@
 class Hook_sw_printer_friendly_block
 {
 	/**
-	 * Standard modular run function for blocks in the setup wizard.
+	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */

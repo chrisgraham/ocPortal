@@ -39,9 +39,9 @@ function init__hooks__modules__admin_import__phpbb2()
 class Hook_phpbb2
 {
 	/**
-	 * Standard modular info function.
+	 * Standard importer hook info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
 	 */
 	function info()
 	{

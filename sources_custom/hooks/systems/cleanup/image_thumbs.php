@@ -3,9 +3,9 @@
 class Hook_image_thumbs
 {
 	/**
-	 * Standard modular info function.
+	 * Find details about this cleanup hook.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
 	function info()
 	{

@@ -21,7 +21,7 @@
 class Hook_trackback_news
 {
 	/**
-	 * Standard modular run function for trackback hooks. They see if content of an ID relating to this content has trackback enabled.
+	 * Run function for trackback hooks. They see if content of an ID relating to this content has trackback enabled.
 	 *
 	 * @param  ID_TEXT		The ID
 	 * @return boolean		Whether trackback is enabled

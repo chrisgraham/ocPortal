@@ -21,7 +21,7 @@
 class Hook_im_friends_rejig
 {
 	/**
-	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
+	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */

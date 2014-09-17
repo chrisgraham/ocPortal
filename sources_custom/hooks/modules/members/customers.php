@@ -16,10 +16,10 @@
 class Hook_members_customers
 {
 	/**
-	 * Standard modular run function.
+	 * Find member-related links to inject.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of tuples for results. Each tuple is: type,title,url
+	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
 	 */
 	function run($member_id)
 	{

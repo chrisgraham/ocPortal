@@ -16,7 +16,7 @@
 class Hook_comcode_self_destruct
 {
 	/**
-	 * Standard modular run function for comcode hooks. They find the custom-comcode-row-like attributes of the tag.
+	 * Run function for comcode hooks. They find the custom-comcode-row-like attributes of the tag.
 	 *
 	 * @return array			Fake custom Comcode row
 	 */

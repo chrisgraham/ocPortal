@@ -21,9 +21,9 @@
 class Block_main_multi_content
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of the block.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
 	function info()
 	{
@@ -62,9 +62,9 @@ class Block_main_multi_content
 	}
 
 	/**
-	 * Standard modular cache function.
+	 * Find cacheing details for the block.
 	 *
-	 * @return ?array		Map of cache details (cache_on and ttl) (NULL: module is disabled).
+	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
 	function cacheing_environment()
 	{
@@ -103,7 +103,7 @@ class Block_main_multi_content
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the block.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
@@ -120,7 +120,7 @@ class Block_main_multi_content
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the block.
 	 */
 	function uninstall()
 	{
@@ -128,7 +128,7 @@ class Block_main_multi_content
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.

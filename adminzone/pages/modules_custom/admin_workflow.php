@@ -23,7 +23,7 @@ class Module_admin_workflow extends standard_crud_module
 	var $appended_actions_already=true;
 
 	/**
-	 * Standard modular info function.
+	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
@@ -41,7 +41,7 @@ class Module_admin_workflow extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the module.
 	 */
 	function uninstall()
 	{
@@ -54,7 +54,7 @@ class Module_admin_workflow extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
@@ -112,7 +112,7 @@ class Module_admin_workflow extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -131,7 +131,7 @@ class Module_admin_workflow extends standard_crud_module
 	var $doing;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
@@ -598,7 +598,7 @@ class Module_admin_workflow extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI/actualiser to add an entry.
+	 * Standard CRUD-module UI/actualiser to add an entry.
 	 *
 	 * @return tempcode	The UI
 	 */
@@ -643,7 +643,7 @@ class Module_admin_workflow extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI/actualiser to edit an entry.
+	 * Standard CRUD-module UI/actualiser to edit an entry.
 	 *
 	 * @return tempcode	The UI
 	 */

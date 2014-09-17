@@ -21,9 +21,9 @@
 class Block_main_notes
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of the block.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
 	function info()
 	{
@@ -39,7 +39,7 @@ class Block_main_notes
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.

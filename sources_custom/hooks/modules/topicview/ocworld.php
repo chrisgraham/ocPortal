@@ -16,7 +16,7 @@
 class Hook_ocworld
 {
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting detail hooks for
 	 * @return ?tempcode	Results (NULL: no action)

@@ -32,7 +32,7 @@ class Hook_Preview_comcode_tag
 	}
 
 	/**
-	 * Standard modular run function for preview hooks.
+	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */

@@ -21,7 +21,7 @@
 class Hook_occle_fs_extended_config__match_key_message
 {
 	/**
-	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
+	 * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
@@ -32,7 +32,7 @@ class Hook_occle_fs_extended_config__match_key_message
 	}
 
 	/**
-	 * Standard modular file reading function for OcCLE FS hooks.
+	 * Standard occle_fs file reading function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
@@ -55,7 +55,7 @@ class Hook_occle_fs_extended_config__match_key_message
 	}
 
 	/**
-	 * Standard modular file writing function for OcCLE FS hooks.
+	 * Standard occle_fs file writing function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory

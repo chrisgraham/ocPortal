@@ -33,7 +33,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	var $title_is_multi_lang=false;
 
 	/**
-	 * Standard modular info function.
+	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
@@ -51,7 +51,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the module.
 	 */
 	function uninstall()
 	{
@@ -61,7 +61,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
@@ -95,7 +95,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -117,7 +117,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 	var $title;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).

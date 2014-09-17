@@ -21,10 +21,10 @@
 class Hook_search_filedump
 {
 	/**
-	 * Standard modular info function.
+	 * Find details for this search hook.
 	 *
 	 * @param  boolean	Whether to check permissions.
-	 * @return ?array		Map of module info (NULL: module is disabled).
+	 * @return ?array		Map of search hook details (NULL: hook is disabled).
 	 */
 	function info($check_permissions=true)
 	{
@@ -71,7 +71,7 @@ class Hook_search_filedump
 	}
 
 	/**
-	 * Standard modular run function for search results.
+	 * Run function for search results.
 	 *
 	 * @param  string			Search string
 	 * @param  boolean		Whether to only do a META (tags) search

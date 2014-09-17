@@ -11,7 +11,7 @@ class Mx_chat extends Module_chat
 {
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -27,7 +27,7 @@ class Mx_chat extends Module_chat
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */

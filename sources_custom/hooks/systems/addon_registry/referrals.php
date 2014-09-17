@@ -164,7 +164,7 @@ Allows people to specify who referred them when they join your site or other con
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the addon.
 	 */
 	function uninstall()
 	{
@@ -173,7 +173,7 @@ Allows people to specify who referred them when they join your site or other con
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the addon.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 */

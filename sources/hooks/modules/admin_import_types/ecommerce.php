@@ -21,9 +21,9 @@
 class Hook_admin_import_types_ecommerce
 {
 	/**
-	 * Standard modular run function.
+	 * Get a map of valid import types.
 	 *
-	 * @return array		Results
+	 * @return array		A map from codename to the language string that names them to the user.
 	 */
 	function run()
 	{

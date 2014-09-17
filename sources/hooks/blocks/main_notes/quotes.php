@@ -21,7 +21,7 @@
 class Hook_notes_quotes
 {
 	/**
-	 * Standard modular run function. See if we have to decache based on the passed filename.
+	 * Decacheing trigger for main_notes saves. See if we have to decache based on the passed filename.
 	 *
 	 * @param PATH		Filename.
 	 */

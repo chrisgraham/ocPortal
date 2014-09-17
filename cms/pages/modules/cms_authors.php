@@ -24,7 +24,7 @@
 class Module_cms_authors
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
@@ -41,7 +41,7 @@ class Module_cms_authors
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -66,7 +66,7 @@ class Module_cms_authors
 	}
 
 	/**
-	 * Standard modular privilege-override finder function.
+	 * Find privileges defined as overridable by this module.
 	 *
 	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
@@ -80,7 +80,7 @@ class Module_cms_authors
 	var $author;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
@@ -137,7 +137,7 @@ class Module_cms_authors
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */

@@ -21,7 +21,7 @@
 class Hook_sw_news
 {
 	/**
-	 * Standard modular run function for features in the setup wizard.
+	 * Run function for features in the setup wizard.
 	 *
 	 * @return array		Current settings.
 	 */
@@ -48,7 +48,7 @@ class Hook_sw_news
 	}
 
 	/**
-	 * Standard modular run function for features in the setup wizard.
+	 * Run function for features in the setup wizard.
 	 *
 	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
@@ -72,7 +72,7 @@ class Hook_sw_news
 	}
 
 	/**
-	 * Standard modular run function for setting features from the setup wizard.
+	 * Run function for setting features from the setup wizard.
 	 */
 	function set_fields()
 	{
@@ -104,7 +104,7 @@ class Hook_sw_news
 	}
 
 	/**
-	 * Standard modular run function for blocks in the setup wizard.
+	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */

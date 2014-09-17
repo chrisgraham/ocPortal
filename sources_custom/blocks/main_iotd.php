@@ -16,9 +16,9 @@
 class Block_main_iotd
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of the block.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
 	function info()
 	{
@@ -34,9 +34,9 @@ class Block_main_iotd
 	}
 
 	/**
-	 * Standard modular cache function.
+	 * Find cacheing details for the block.
 	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: module is disabled).
+	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
 	function cacheing_environment()
 	{
@@ -47,7 +47,7 @@ class Block_main_iotd
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.

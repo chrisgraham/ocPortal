@@ -21,7 +21,7 @@
 class Hook_whats_news_wiki
 {
 	/**
-	 * Standard modular run function for newsletter hooks.
+	 * Run function for newsletter hooks.
 	 *
 	 * @param  TIME				The time that the entries found must be newer than
 	 * @param  LANGUAGE_NAME	The language the entries found must be in

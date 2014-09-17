@@ -21,7 +21,7 @@
 class Hook_realtime_rain_chat
 {
 	/**
-	 * Standard modular run function for realtime-rain hooks.
+	 * Run function for realtime-rain hooks.
 	 *
 	 * @param  TIME			Start of time range.
 	 * @param  TIME			End of time range.

@@ -21,7 +21,7 @@
 class Hook_realtime_rain_load
 {
 	/**
-	 * Standard modular run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
+	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */

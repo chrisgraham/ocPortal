@@ -28,7 +28,7 @@ class Hook_Profiles_Tabs_activities
 	}
 
 	/**
-	 * Standard modular render function for profile tab hooks.
+	 * Render function for profile tab hooks.
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing

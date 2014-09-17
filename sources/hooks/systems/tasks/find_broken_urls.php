@@ -159,7 +159,7 @@ class Hook_task_find_broken_urls
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Check to see if a URL is broken.
 	 *
 	 * @param  URLPATH		URL to check
 	 * @param  ID_TEXT		Table name

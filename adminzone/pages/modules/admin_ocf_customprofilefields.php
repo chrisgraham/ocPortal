@@ -33,7 +33,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	var $title_is_multi_lang=true;
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -68,7 +68,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	var $title;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).

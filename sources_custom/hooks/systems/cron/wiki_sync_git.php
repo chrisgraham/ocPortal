@@ -16,7 +16,7 @@
 class Hook_cron_wiki_sync_git
 {
 	/**
-	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
+	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
 	function run()
 	{

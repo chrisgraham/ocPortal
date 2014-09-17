@@ -98,7 +98,7 @@ function make_functions_dat_do_dir($dir,$no_custom=false)
 class Hook_occle_command_find_function
 {
 	/**
-	 * Standard modular run function for OcCLE hooks.
+	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
 	 * @param  array	The parameters with which the command was called

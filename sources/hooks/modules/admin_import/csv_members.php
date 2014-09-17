@@ -21,9 +21,9 @@
 class Hook_csv_members
 {
 	/**
-	 * Standard modular info function.
+	 * Standard importer hook info function.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Importer handling details (NULL: importer is disabled).
 	 */
 	function info()
 	{

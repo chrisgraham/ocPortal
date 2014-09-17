@@ -46,7 +46,7 @@ class Hook_Preview_ocf_welcome_email
 	}
 
 	/**
-	 * Standard modular run function for preview hooks.
+	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */

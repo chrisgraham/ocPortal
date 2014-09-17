@@ -32,7 +32,7 @@ class Hook_Preview_setupwizard_blocks
 	}
 
 	/**
-	 * Standard modular run function for preview hooks.
+	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */

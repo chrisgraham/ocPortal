@@ -21,7 +21,7 @@
 class Hook_content_meta_aware_author
 {
 	/**
-	 * Standard modular info function for content hooks. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
+	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
@@ -91,7 +91,7 @@ class Hook_content_meta_aware_author
 	}
 
 	/**
-	 * Standard modular run function for content hooks. Renders a content box for an award/randomisation.
+	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
 	 * @param  ID_TEXT	The zone to display in

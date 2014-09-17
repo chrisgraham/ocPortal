@@ -21,7 +21,7 @@
 class Hook_choose_video
 {
 	/**
-	 * Standard modular run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
+	 * Run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
 	 *
 	 * @param  ?ID_TEXT		The ID to do under (NULL: root)
 	 * @param  array			Options being passed through
@@ -90,7 +90,7 @@ class Hook_choose_video
 	}
 
 	/**
-	 * Standard modular simple function for ajax-tree hooks. Returns a normal <select> style <option>-list, for fallback purposes
+	 * Generate a simple selection list for the ajax-tree hook. Returns a normal <select> style <option>-list, for fallback purposes
 	 *
 	 * @param  ?ID_TEXT		The ID to do under (NULL: root) - not always supported
 	 * @param  array			Options being passed through

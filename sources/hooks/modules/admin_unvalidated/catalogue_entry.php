@@ -21,9 +21,9 @@
 class Hook_unvalidated_catalogue_entry
 {
 	/**
-	 * Standard modular info function.
+	 * Find details on the unvalidated hook.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
 	function info()
 	{

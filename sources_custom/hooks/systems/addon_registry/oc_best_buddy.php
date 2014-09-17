@@ -138,7 +138,7 @@ New users should then be assigned a mentor/buddy who will receive an equal amoun
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the addon.
 	 */
 	function uninstall()
 	{
@@ -146,7 +146,7 @@ New users should then be assigned a mentor/buddy who will receive an equal amoun
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the addon.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 */

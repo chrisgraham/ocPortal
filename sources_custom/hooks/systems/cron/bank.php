@@ -15,7 +15,7 @@
 class Hook_cron_bank
 {
 	/**
-	 * Standard modular run function for CRON hooks. Searches for tasks to perform.
+	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
 	function run()
 	{

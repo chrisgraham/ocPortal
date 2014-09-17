@@ -21,7 +21,7 @@
 class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE_PLAIN
 {
 	/**
-	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
+	 * Run function for symbol hooks. Searches for tasks to perform.
     *
     * @param  array		Symbol parameters
     * @return string		Result

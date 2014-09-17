@@ -21,9 +21,9 @@
 class Hook_admin_theme_images
 {
 	/**
-	 * Standard modular info function.
+	 * Find details about this cleanup hook.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
 	function info()
 	{
@@ -36,7 +36,7 @@ class Hook_admin_theme_images
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */

@@ -16,9 +16,9 @@
 class Hook_admin_themewizard_ocworld
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of images to include/exclude in the Theme Wizard.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return array	A pair: List of theme image patterns to include, List of theme image patterns to exclude
 	 */
 	function run()
 	{

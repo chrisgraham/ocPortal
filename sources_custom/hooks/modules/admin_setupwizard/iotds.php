@@ -16,7 +16,7 @@
 class Hook_sw_iotds
 {
 	/**
-	 * Standard modular run function for blocks in the setup wizard.
+	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */

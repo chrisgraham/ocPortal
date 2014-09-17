@@ -26,7 +26,7 @@
 class Hook_comcode_link_handler_media_rendering
 {
 	/**
-	 * Standard modular bind function for Comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
+	 * Bind function for Comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
 	 *
 	 * @param  URLPATH		Link to use or reject
 	 * @param  boolean		Whether we are allowed to proceed even if this tag is marked as 'dangerous'

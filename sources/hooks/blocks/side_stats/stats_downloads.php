@@ -21,7 +21,7 @@
 class Hook_stats_downloads
 {
 	/**
-	 * Standard modular run function.
+	 * Show a stats section.
 	 *
 	 * @return tempcode	The result of execution.
 	 */

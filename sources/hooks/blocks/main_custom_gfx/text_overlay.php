@@ -21,7 +21,7 @@
 class Hook_main_custom_gfx_text_overlay
 {
 	/**
-	 * Standard modular run function. Creates custom graphics from parameters.
+	 * Standard graphic generator function. Creates custom graphics from parameters.
 	 *
 	 * @param  array		Map of hook parameters (relayed from block parameters map).
 	 * @param  object		The block itself (contains utility methods).

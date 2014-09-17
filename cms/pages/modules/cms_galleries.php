@@ -42,7 +42,7 @@ class Module_cms_galleries extends standard_crud_module
 	var $donext_type=NULL;
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -79,7 +79,7 @@ class Module_cms_galleries extends standard_crud_module
 	}
 
 	/**
-	 * Standard modular privilege-override finder function.
+	 * Find privileges defined as overridable by this module.
 	 *
 	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
@@ -92,7 +92,7 @@ class Module_cms_galleries extends standard_crud_module
 	var $title;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).

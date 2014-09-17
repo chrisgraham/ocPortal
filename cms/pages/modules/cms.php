@@ -24,7 +24,7 @@
 class Module_cms
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
@@ -41,7 +41,7 @@ class Module_cms
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -59,7 +59,7 @@ class Module_cms
 	var $title;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
@@ -77,7 +77,7 @@ class Module_cms
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */

@@ -110,7 +110,7 @@ class Hook_addon_registry_sms
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the addon.
 	 */
 	function uninstall()
 	{
@@ -123,7 +123,7 @@ class Hook_addon_registry_sms
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the addon.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 */

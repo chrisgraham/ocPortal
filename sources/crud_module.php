@@ -110,7 +110,7 @@ class standard_crud_module
 	var $table=NULL; // Actually, this is used by choose_feedback_fields_statistically also
 
 	/**
-	 * Standard modular info function.
+	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
@@ -127,7 +127,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -166,7 +166,7 @@ class standard_crud_module
 	var $success_message_str;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
@@ -418,7 +418,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
@@ -555,7 +555,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular permission chooser.
+	 * Standard CRUD-module permission chooser.
 	 *
 	 * @param  ?ID_TEXT		The category ID the permissions are being chosen for (NULL: new category)
 	 * @param  ?tempcode		Extra help to show in interface (NULL: none)
@@ -689,7 +689,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI for a separate preview.
+	 * Standard CRUD-module UI for a separate preview.
 	 *
 	 * @param  tempcode	The page title
 	 * @return tempcode	The UI
@@ -722,7 +722,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI to add an entry.
+	 * Standard CRUD-module UI to add an entry.
 	 *
 	 * @return tempcode	The UI
 	 */
@@ -889,7 +889,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI/actualiser to add an entry.
+	 * Standard CRUD-module UI/actualiser to add an entry.
 	 *
 	 * @return tempcode	The UI
 	 */
@@ -983,7 +983,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular entry function to get rows for selection from.
+	 * Standard CRUD-module entry function to get rows for selection from.
 	 *
 	 * @param  boolean		Whether to force a recache
 	 * @param  ?ID_TEXT		Order to use (NULL: automatic)
@@ -1056,7 +1056,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular entry list fetcher.
+	 * Standard CRUD-module entry list fetcher.
 	 *
 	 * @return tempcode		The selection list
 	 */
@@ -1074,7 +1074,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI to choose an entry to edit.
+	 * Standard CRUD-module UI to choose an entry to edit.
 	 *
 	 * @return tempcode	The UI
 	 */
@@ -1210,7 +1210,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI to edit an entry.
+	 * Standard CRUD-module UI to edit an entry.
 	 *
 	 * @return tempcode	The UI
 	 */
@@ -1446,7 +1446,7 @@ class standard_crud_module
 	}
 
 	/**
-	 * Standard modular UI/actualiser to edit an entry.
+	 * Standard CRUD-module UI/actualiser to edit an entry.
 	 *
 	 * @return tempcode	The UI
 	 */

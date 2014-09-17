@@ -21,7 +21,7 @@
 class Hook_symbol_CHAT_IM
 {
 	/**
-	 * Standard modular run function for symbol hooks. Searches for tasks to perform.
+	 * Run function for symbol hooks. Searches for tasks to perform.
     *
     * @param  array		Symbol parameters
     * @return string		Result

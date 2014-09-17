@@ -16,7 +16,7 @@
 class Hook_rss_iotds
 {
 	/**
-	 * Standard modular run function for RSS hooks.
+	 * Run function for RSS hooks.
 	 *
 	 * @param  string			A list of categories we accept from
 	 * @param  TIME			Cutoff time, before which we do not show results from

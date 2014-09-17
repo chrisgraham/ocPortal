@@ -21,9 +21,9 @@
 class Hook_admin_stats_ocf_demographics
 {
 	/**
-	 * Standard modular info function.
+	 * Define stats screens implemented in this hook.
 	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
+	 * @return ?array	List of screens, each being a map written as do-next icon specification style (NULL: hook is disabled).
 	 */
 	function info()
 	{

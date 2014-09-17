@@ -33,7 +33,7 @@ class Hook_Profiles_Tabs_Edit_signature
 	}
 
 	/**
-	 * Standard modular render function for profile tabs edit hooks.
+	 * Render function for profile tabs edit hooks.
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing

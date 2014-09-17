@@ -162,14 +162,14 @@ class Hook_addon_registry_oc_smiles
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the addon.
 	 */
 	function uninstall()
 	{
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the addon.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 */

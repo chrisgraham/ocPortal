@@ -30,7 +30,7 @@ UPDATE ocp_test_sections SET s_assigned_to=4 WHERE id IN (2,18,19,20,21,22,34,35
 class Module_tester
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
@@ -47,7 +47,7 @@ class Module_tester
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the module.
 	 */
 	function uninstall()
 	{
@@ -60,7 +60,7 @@ class Module_tester
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
@@ -91,7 +91,7 @@ class Module_tester
 	}
 
 	/**
-	 * Standard modular icon finder function, to find icon for wrapper node. Defined when there is no entry-point for a default page call.
+	 * Find icon for this module, specifically to find an icon for the module's main sitemap node. Defined when there is no entry-point for a default page call.
 	 *
 	 * @return string		Icon.
 	 */
@@ -101,7 +101,7 @@ class Module_tester
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -126,7 +126,7 @@ class Module_tester
 	var $test;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
@@ -217,7 +217,7 @@ class Module_tester
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */

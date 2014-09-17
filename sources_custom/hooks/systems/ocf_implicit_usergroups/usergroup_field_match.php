@@ -47,7 +47,7 @@ class Hook_implicit_usergroups_usergroup_field_match
 	}
 
 	/**
-	 * Standard modular run function for implicit usergroup hooks. Finds the group IDs it is bound to.
+	 * Run function for implicit usergroup hooks. Finds the group IDs it is bound to.
 	 *
 	 * @return array		A list of usergroup IDs.
 	 */
@@ -57,7 +57,7 @@ class Hook_implicit_usergroups_usergroup_field_match
 	}
 
 	/**
-	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
+	 * Run function for implicit usergroup hooks. Finds all members in the group.
 	 *
 	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
 	 * @return ?array		The list of members as a map between member ID and member row (NULL: unsupported by hook).
@@ -83,7 +83,7 @@ class Hook_implicit_usergroups_usergroup_field_match
 	}
 
 	/**
-	 * Standard modular run function for implicit usergroup hooks. Finds all members in the group.
+	 * Run function for implicit usergroup hooks. Finds all members in the group.
 	 *
 	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
 	 * @return ?array		The list of members (NULL: unsupported by hook).
@@ -120,7 +120,7 @@ class Hook_implicit_usergroups_usergroup_field_match
 	}
 
 	/**
-	 * Standard modular run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
+	 * Run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
 	 *
 	 * @param  MEMBER		The member ID.
 	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).

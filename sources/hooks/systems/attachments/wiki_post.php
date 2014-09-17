@@ -21,7 +21,7 @@
 class Hook_attachments_wiki_post
 {
 	/**
-	 * Standard modular run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
+	 * Run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
 	 * @param  ID_TEXT		The ID
 	 * @param  object			The database connection to check on

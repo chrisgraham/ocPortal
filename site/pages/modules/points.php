@@ -24,7 +24,7 @@
 class Module_points
 {
 	/**
-	 * Standard modular info function.
+	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
@@ -42,7 +42,7 @@ class Module_points
 	}
 
 	/**
-	 * Standard modular uninstall function.
+	 * Uninstall the module.
 	 */
 	function uninstall()
 	{
@@ -63,7 +63,7 @@ class Module_points
 	}
 
 	/**
-	 * Standard modular install function.
+	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
@@ -118,7 +118,7 @@ class Module_points
 	}
 
 	/**
-	 * Standard modular entry-point finder function.
+	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
@@ -141,7 +141,7 @@ class Module_points
 	var $member_id_of;
 
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
@@ -196,7 +196,7 @@ class Module_points
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */

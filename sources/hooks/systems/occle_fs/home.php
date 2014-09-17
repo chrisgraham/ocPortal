@@ -21,7 +21,7 @@
 class Hook_occle_fs_home
 {
 	/**
-	 * Standard modular listing function for OcCLE FS hooks.
+	 * Standard occle_fs listing function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
@@ -58,7 +58,7 @@ class Hook_occle_fs_home
 	}
 
 	/**
-	 * Standard modular directory creation function for OcCLE FS hooks.
+	 * Standard occle_fs directory creation function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
@@ -83,7 +83,7 @@ class Hook_occle_fs_home
 	}
 
 	/**
-	 * Standard modular directory removal function for OcCLE FS hooks.
+	 * Standard occle_fs directory removal function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
@@ -109,7 +109,7 @@ class Hook_occle_fs_home
 	}
 
 	/**
-	 * Standard modular file removal function for OcCLE FS hooks.
+	 * Standard occle_fs file removal function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
@@ -133,7 +133,7 @@ class Hook_occle_fs_home
 	}
 
 	/**
-	 * Standard modular file reading function for OcCLE FS hooks.
+	 * Standard occle_fs file reading function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory
@@ -155,7 +155,7 @@ class Hook_occle_fs_home
 	}
 
 	/**
-	 * Standard modular file writing function for OcCLE FS hooks.
+	 * Standard occle_fs file writing function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
 	 * @param  string		The root node of the current meta-directory

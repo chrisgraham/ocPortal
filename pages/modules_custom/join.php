@@ -21,7 +21,7 @@
 class Mx_join extends Module_join
 {
 	/**
-	 * Standard modular pre-run function, so we know meta-data for <head> before we start streaming output.
+	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
@@ -32,7 +32,7 @@ class Mx_join extends Module_join
 	}
 
 	/**
-	 * Standard modular run function.
+	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */

@@ -21,7 +21,7 @@
 class Hook_page_groupings_occle
 {
 	/**
-	 * Standard modular run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
+	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries

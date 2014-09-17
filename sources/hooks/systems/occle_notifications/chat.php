@@ -21,7 +21,7 @@
 class Hook_occle_notification_chat
 {
 	/**
-	* Standard modular run function for OcCLE notification hooks.
+	* Run function for OcCLE notification hooks.
 	*
 	* @param  ?integer	The "current" time on which to base queries (NULL: now)
 	* @return ~array		Array of section, type and message responses (false: nothing)

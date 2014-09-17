@@ -34,7 +34,7 @@ class Hook_Preview_block_comcode
 	}
 
 	/**
-	 * Standard modular run function for preview hooks.
+	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */

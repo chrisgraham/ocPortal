@@ -21,7 +21,7 @@
 class Hook_whats_news_news
 {
 	/**
-	 * Standard modular run function for newsletter hooks.
+	 * Find selectable (filterable) categories.
 	 *
 	 * @return ?array				Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
 	 */
@@ -36,7 +36,7 @@ class Hook_whats_news_news
 	}
 
 	/**
-	 * Standard modular run function for newsletter hooks.
+	 * Run function for newsletter hooks.
 	 *
 	 * @param  TIME				The time that the entries found must be newer than
 	 * @param  LANGUAGE_NAME	The language the entries found must be in

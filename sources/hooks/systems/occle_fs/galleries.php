@@ -26,7 +26,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	var $file_resource_type=array('image','video');
 
 	/**
-	 * Standard modular function for seeing how many resources are. Useful for determining whether to do a full rebuild.
+	 * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.
 	 *
 	 * @param  ID_TEXT		The resource type
 	 * @return integer		How many resources there are
@@ -46,7 +46,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular function for searching for a resource by label.
+	 * Standard occle_fs function for searching for a resource by label.
 	 *
 	 * @param  ID_TEXT		The resource type
 	 * @param  LONG_TEXT		The resource label
@@ -74,7 +74,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular introspection function.
+	 * Standard occle_fs introspection function.
 	 *
 	 * @return array			The properties available for the resource type
 	 */
@@ -103,7 +103,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
+	 * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @param  array			Resource row (not full, but does contain the ID)
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
@@ -115,7 +115,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
+	 * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
 	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
@@ -157,7 +157,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
+	 * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
@@ -197,7 +197,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for resource-fs hooks. Edits the resource to the given properties.
+	 * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -240,7 +240,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
+	 * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -257,7 +257,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular introspection function.
+	 * Standard occle_fs introspection function.
 	 *
 	 * @return array			The properties available for the resource type
 	 */
@@ -314,7 +314,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular add function for resource-fs hooks. Adds some resource with the given label and properties.
+	 * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
 	 *
 	 * @param  LONG_TEXT		Filename OR Resource label
 	 * @param  string			The path (blank: root / not applicable)
@@ -377,7 +377,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular load function for resource-fs hooks. Finds the properties for some resource.
+	 * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
 	 *
 	 * @param  SHORT_TEXT	Filename
 	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
@@ -427,7 +427,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular edit function for resource-fs hooks. Edits the resource to the given properties.
+	 * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)
@@ -490,7 +490,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
 	}
 
 	/**
-	 * Standard modular delete function for resource-fs hooks. Deletes the resource.
+	 * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
 	 *
 	 * @param  ID_TEXT		The filename
 	 * @param  string			The path (blank: root / not applicable)

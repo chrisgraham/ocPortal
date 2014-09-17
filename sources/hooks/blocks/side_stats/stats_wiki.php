@@ -21,7 +21,7 @@
 class Hook_stats_wiki
 {
 	/**
-	 * Standard modular run function.
+	 * Show a stats section.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
