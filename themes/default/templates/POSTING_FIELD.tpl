@@ -66,7 +66,7 @@
 			{+END}
 
 			<div id="container_for_{NAME*}" class="constrain_field container_for_wysiwyg">
-				<textarea accesskey="x" class="{CLASS*}{+START,IF,{REQUIRED}} posting_required{+END} wide_field" tabindex="{TABINDEX_PF*}" id="{NAME*}" name="{NAME*}" cols="70" rows="17">{POST*}</textarea>
+				<textarea{+START,IF,{$NOT,{$MOBILE}}} onchange="manage_scroll_height(this);" onkeyup="manage_scroll_height(this);"{+END} accesskey="x" class="{CLASS*}{+START,IF,{REQUIRED}} posting_required{+END} wide_field" tabindex="{TABINDEX_PF*}" id="{NAME*}" name="{NAME*}" cols="70" rows="17">{POST*}</textarea>
 
 				{+START,IF_PASSED,WORD_COUNTER}
 					{$SET,word_count_id,{$RAND}}
@@ -106,6 +106,7 @@
 		{+END}
 
 		<script type="text/javascript">// <![CDATA[
+			manage_scroll_height(document.getElementById('{NAME;/}'));
 			{+START,INCLUDE,AUTOCOMPLETE_LOAD}{+END}
 		//]]></script>
 	</td>

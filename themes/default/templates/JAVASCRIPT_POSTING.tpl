@@ -679,6 +679,7 @@ function init_form_saving(form_id)
 						if ((posting_form.elements[key]) && (posting_form.elements[key].style))
 						{
 							set_textbox(posting_form.elements[key],fields_to_do[key],fields_to_do[key]);
+							if (posting_form.elements[key].onchange) posting_form.elements[key].onchange();
 						}
 					}
 				} else

@@ -13,7 +13,7 @@
 <form title="{!PRIMARY_PAGE_FORM}" action="{URL*}" method="post">
 	<p class="lonely_label"><label for="bans">{!BANNED_ADDRESSES}:</label></p>
 	<div class="constrain_field">
-		<textarea cols="30" rows="14" class="wide_field textarea_scroll" id="bans" name="bans">{BANS*}</textarea>
+		<textarea{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} cols="30" rows="14" class="wide_field textarea_scroll" id="bans" name="bans">{BANS*}</textarea>
 	</div>
 
 	<p class="lonely_label"><label for="locked_bans">{!EXTERNALLY_BANNED_ADDRESSES}:</label></p>
@@ -26,3 +26,6 @@
 	</p>
 </form>
 
+<script>// <![CDATA[
+	manage_scroll_height(document.getElementById('bans'));
+//]]></script>

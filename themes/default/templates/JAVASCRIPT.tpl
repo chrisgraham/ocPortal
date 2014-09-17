@@ -476,12 +476,12 @@ function disable_button_just_clicked(input,permanent)
 /* Making the height of a textarea match its contents */
 function manage_scroll_height(ob)
 {
-	var dif=0;
-	if ((browser_matches('chrome'))/* || (browser_matches('ie')) This is some gap but it is needed for the scrollbox rendering */) dif=-4;
-	var height=(ob.scrollHeight-sts(ob.style.paddingTop)-sts(ob.style.paddingBottom)-sts(ob.style.marginTop)-sts(ob.style.marginBottom)+dif)
+	var height=ob.scrollHeight;
 	if ((height>5) && (sts(ob.style.height)<height) && (find_height(ob)<height))
 	{
 		ob.style.height=height+'px';
+		ob.style.boxSizing='border-box';
+		ob.style.overflowY='hidden';
 		trigger_resize();
 	}
 }
