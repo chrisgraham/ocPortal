@@ -7,7 +7,7 @@
 {+END}
 
 {+START,IF_PASSED,POST_URL}{+START,IF_PASSED,SUBMIT_NAME}
-	<form title="{!PRIMARY_PAGE_FORM}" {+START,IF_NON_PASSED_OR_FALSE,GET}method="post" {+END}{+START,IF_PASSED_AND_TRUE,GET}method="get" {+END}action="{POST_URL*}">
+	<form title="{!PRIMARY_PAGE_FORM}" {+START,IF_PASSED,FORM_ID}id="{FORM_ID}" {+END}{+START,IF_NON_PASSED_OR_FALSE,GET}method="post" {+END}{+START,IF_PASSED_AND_TRUE,GET}method="get" {+END}action="{POST_URL*}">
 		{$SET,DEFER_RESULTS_TABLE_BROWSER,1}
 		{TABLE}
 		{$SET,DEFER_RESULTS_TABLE_BROWSER,0}
@@ -34,7 +34,7 @@
 		{+END}
 
 		{+START,IF_PASSED,SUBMIT_NAME}
-			<p class="proceed_button">
+			<p class="proceed_button" id="selection_submit" >
 				<input class="{SUBMIT_ICON*} button_screen" type="submit" value="{SUBMIT_NAME*}" />
 			</p>
 		{+END}
@@ -60,7 +60,8 @@
 {+START,IF_PASSED,JAVASCRIPT}
 	<script>// <![CDATA[
 		add_event_listener_abstract(window,"load",function() {
-			{JAVASCRIPT`}
+			{JAVASCRIPT}
 		} );
-	//]]></script>
+	//]]>
+	</script>
 {+END}

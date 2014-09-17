@@ -66,6 +66,7 @@ class standard_crud_module
 	var $posting_form_tabindex=NULL;
 	var $javascript=NULL;
 	var $javascript_for_choose=NULL;
+	var $form_id='selection_table';
 	var $type_code='d';
 	var $catalogue=false;
 	var $non_integer_id=false;
@@ -1132,6 +1133,7 @@ class standard_crud_module
 			$tpl=do_template('COLUMNED_TABLE_SCREEN',array(
 				'_GUID'=>'3a3e7cf1bef6ca31f8c992c69a80449e',
 				'TITLE'=>$this->title,
+				'FORM_ID'=>$this->form_id,
 				'TEXT'=>$text,
 				'TABLE'=>$table,
 				'SUBMIT_ICON'=>'buttons__sort',
