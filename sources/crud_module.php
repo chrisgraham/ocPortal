@@ -1017,17 +1017,20 @@ class standard_crud_module
 		if (($orderer_is_multi_lang) && (preg_replace('# (ASC|DESC)$#','',$orderer)==$select_field))
 		{
 			$orderer=$GLOBALS['SITE_DB']->translate_field_ref(preg_replace('# (ASC|DESC)$#','',$orderer));
+		} else
+		{
+			$orderer='r.'.$orderer;
 		}
 		if ($force_site_db)
 		{
 			$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
 			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 		}
-		$max_rows=$db->query_select_value($table.$join,'COUNT(*)',$where,'ORDER BY r.'.$orderer,false,isset($GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw])?$GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw]:NULL);
+		$max_rows=$db->query_select_value($table.$join,'COUNT(*)',$where,'ORDER BY '.$orderer,false,isset($GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw])?$GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw]:NULL);
 		if ($max_rows==0) return array(array(),0);
 		$start=get_param_integer('start',0);
 		$max=get_param_integer('max',20);
-		$rows=$db->query_select($table.$join,array('r.*'),$where,'ORDER BY r.'.$orderer,$max,$start,false,isset($GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw])?$GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw]:NULL);
+		$rows=$db->query_select($table.$join,array('r.*'),$where,'ORDER BY '.$orderer,$max,$start,false,isset($GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw])?$GLOBALS['TABLE_LANG_FIELDS_CACHE'][$table_raw]:NULL);
 		if ($force_site_db)
 		{
 			$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
