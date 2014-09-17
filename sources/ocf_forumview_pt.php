@@ -73,7 +73,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	elseif ($sort=='title') $sort2='t_cache_first_title ASC';
 	if (get_option('enable_sunk')=='1')
 		$sort2='t_sunk ASC,'.$sort2;
-	$query_full='SELECT *';
+	$query_full='SELECT top.*';
 	if (multi_lang_content())
 	{
 		$query_full.=',t_cache_first_post AS p_post';

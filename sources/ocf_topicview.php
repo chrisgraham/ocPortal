@@ -251,7 +251,7 @@ function ocf_read_in_topic($topic_id,$start,$max,$view_poll_results=false,$check
 			$select[]='t_cache_first_post AS p_post';
 		} else
 		{
-			$table.=' JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
+			$table.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=t.t_cache_first_post_id';
 			$select[]='p_post,p_post__text_parsed,p_post__source_user';
 		}
 		$_topic_info=$GLOBALS['FORUM_DB']->query_select($table,$select,array('t.id'=>$topic_id),'',1);
