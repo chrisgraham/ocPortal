@@ -245,7 +245,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 	function create_selection_list_choose_table($url_map)
 	{
 		require_code('templates_results_table');
-
+		$form_id='selection_table';
 		$current_ordering=get_param('sort','cf_order ASC');
 		if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 		list($sortable,$sort_order)=explode(' ',$current_ordering,2);
@@ -284,19 +284,45 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			if (is_null($_hook)) continue;
 			$to_keep+=$_hook->to_enable();
 		}
-
+		$record_start=get_param_integer('start',0);
+		$record_max=get_param_integer('max',20);
+		$record_counter=$record_start;
 		$fields=new ocp_tempcode();
 		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,NULL);
 		$changed=false;
-		foreach ($rows as $row)
+		//sorting code starts from here//
+		if (strtoupper($sort_order)!='DESC')
 		{
-			$order=post_param_integer('order_'.strval($row['id']),NULL);
-			if (!is_null($order)) // Ah, it's been set, better save that
+			for ($record_counter=$record_start;$record_counter<$record_start+$record_max;$record_counter++)
 			{
-				$GLOBALS['FORUM_DB']->query_update('f_custom_fields',array('cf_order'=>$order),array('id'=>$row['id']),'',1);
-				$changed=true;
+				$new_order_value=post_param_integer('order_'.strval($record_counter),NULL);
+				if ($new_order_value!==$record_counter && !is_null($new_order_value))
+				{
+					$this->change_order($new_order_value,$record_counter,$current_ordering);
+					$changed=true;
+				}
+			}
+		} else
+		{
+			if (!$record_start)
+			{
+				$record_start=$max_rows;
+			} else
+			{
+				$record_start=$max_rows-$record_start;
+			}
+			$record_max=$record_start-$record_max;
+			for ($record_counter=$record_max;$record_counter<=$record_start;$record_counter++)
+			{
+				$new_order_value=post_param_integer('order_'.strval($record_counter),NULL);
+				if ($new_order_value!==$record_counter && !is_null($new_order_value))
+				{
+					$this->change_order($new_order_value,$record_counter,$current_ordering);
+					$changed=true;
+				}
 			}
 		}
+		//sorting code ends here//
 		if ($changed)
 		{
 			list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
@@ -333,7 +359,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 			{
 				$orderlist->attach(form_input_list_entry(strval($order),true,integer_format($order+1)));
 			}
-			$orderer=do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('_GUID'=>'0c35279246e34d94fd4a41c432cdffed','LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['id']),'LIST'=>$orderlist));
+			$orderer=do_template('COLUMNED_TABLE_ROW_CELL_SELECT',array('_GUID'=>'0c35279246e34d94fd4a41c432cdffed','LABEL'=>do_lang_tempcode('ORDER'),'NAME'=>'order_'.strval($row['cf_order']),'LIST'=>$orderlist));
 
 			$fr=array();
 			$fr[]=$trans;
@@ -356,8 +382,64 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 
 			$fields->attach(results_entry($fr,true));
 		}
-
+		$this->javascript_for_choose='
+			var select_elements=document.getElementById(\''.$this->form_id.'\').getElementsByTagName(\'select\');
+			var select_submit=document.getElementById(\'selection_submit\');
+			var select_element_length=select_elements.length;
+			for (var counter=0;counter<select_element_length;counter++)
+			{
+				select_elements[counter].onchange=change_handler;
+				function change_handler()
+				{
+					this.form.submit();
+				}
+			}
+			select_submit.style.display=\'none\';
+		';
 		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort',NULL,NULL,NULL,8,'gdfg43tfdgdfgdrfgd',true),true);
+	}
+
+	/**
+	 * Method to change the order of custom profile fields.
+	 * @param  integer		Record start count.
+	 * @param  integer		Record end count.
+	 */
+	function change_order($start_order=0, $end_order=0)
+	{
+		$rows=null;
+		$row_cf_order=0;
+		$table=get_table_prefix().$this->table;
+		$db=((substr($table,0,2)=='f_') && (get_forum_type()!='none'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+		if ($start_order>$end_order)
+		{
+			$rows=$db->_query('SELECT * FROM '.$table.' WHERE cf_order BETWEEN '.strval($end_order).' AND '.strval($start_order).' ORDER BY cf_order ASC');
+			foreach ($rows as $row)
+			{
+				$row_cf_order=$row['cf_order'];
+				if ($row_cf_order==$end_order)
+				{
+					$GLOBALS['FORUM_DB']->query_update('f_custom_fields',array('cf_order'=>$start_order),array('id'=>$row['id']),'',1);	
+				} else
+				{
+					$GLOBALS['FORUM_DB']->query_update('f_custom_fields',array('cf_order'=>--$row_cf_order),array('id'=>$row['id']),'',1);	
+				}
+			}
+		} else
+		{
+			$rows=$db->_query('SELECT * FROM '.$table.' WHERE cf_order BETWEEN '.strval($start_order).' AND '.strval($end_order).' ORDER BY cf_order ASC');
+			foreach ($rows as $row)
+			{
+				$row_cf_order=$row['cf_order'];
+				if ($row_cf_order==$end_order)
+				{
+					$GLOBALS['FORUM_DB']->query_update('f_custom_fields',array('cf_order'=>$start_order),array('id'=>$row['id']),'',1);	
+				} else
+				{
+					$GLOBALS['FORUM_DB']->query_update('f_custom_fields',array('cf_order'=>++$row_cf_order),array('id'=>$row['id']),'',1);	
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
