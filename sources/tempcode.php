@@ -1558,8 +1558,8 @@ class ocp_tempcode
 	 */
 	function handle_symbol_preprocessing()
 	{
-		if (!$GLOBALS['OUTPUT_STREAMING']) return;
-		if (isset($this->preprocessed)) return;
+		if ($GLOBALS['OUTPUT_STREAMING']) return;
+		if (isset($this->preprocessed) && $this->preprocessed) return;
 
 		foreach ($this->preprocessable_bits as $seq_part)
 			handle_symbol_preprocessing($seq_part,$this->children);
