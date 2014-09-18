@@ -1,5 +1,3 @@
-{$REQUIRE_CSS,swfupload}
-
 <div aria-busy="true" class="spaced" id="loading_space">
 	<div class="ajax_loading vertical_alignment">
 		<img id="loading_image" src="{$IMG*,loading}" title="{!LOADING}" alt="{!LOADING}" />
@@ -8,8 +6,6 @@
 </div>
 
 <script>// <![CDATA[
-	window.returnValue=true;
-
 	var element;
 	var target_window=window.opener?window.opener:window.parent;
 	element=target_window.document.getElementById('{FIELD_NAME;/}');
@@ -20,6 +16,11 @@
 	}
 	element=ensure_true_id(element,'{FIELD_NAME;/}');
 	var is_wysiwyg=target_window.is_wysiwyg_field(element);
+
+	var comcode,comcode_semihtml;
+	comcode='{COMCODE;^/}';
+	window.returnValue=comcode;
+	comcode_semihtml='{COMCODE_SEMIHTML;^/}';
 
 	var loading_space=document.getElementById('loading_space');
 
@@ -37,9 +38,6 @@
 
 	function dispatch_block_helper()
 	{
-		var comcode,comcode_semihtml;
-		comcode='{COMCODE;^/}';
-		comcode_semihtml='{COMCODE_SEMIHTML;^/}';
 		var win=window;
 		if ('{SAVE_TO_ID;/}'!='')
 		{
@@ -59,28 +57,13 @@
 			shutdown_overlay();
 		} else
 		{
-			if ((element.value.indexOf(comcode_semihtml)==-1) || (comcode.indexOf('[attachment')==-1)) // Don't allow attachments to add twice
-			{
-				target_window.insert_textbox(element,comcode,target_window.document.selection?target_window.document.selection:null,true,comcode_semihtml);
-			}
-
 			var message='';
-			if (comcode.indexOf('[attachment')==0)
+			if (comcode.indexOf('[attachment')!=-1)
 			{
-				if (comcode.indexOf('[attachment_safe')==0)
+				if (comcode.indexOf('[attachment_safe')!=-1)
 				{
 					if (is_wysiwyg)
 					{
-						var post='';
-						var form=element.form;
-						for (var i=0;i<form.elements.length;i++)
-						{
-							if (!form.elements[i].disabled)
-								post+='&'+form.elements[i].name+'='+window.encodeURIComponent(target_window.clever_find_value(form,form.elements[i]));
-						}
-
-						var preview_ret=target_window.do_ajax_request(target_window.form_preview_url+'&js_only=1',null,post);
-						target_window.set_inner_html(loading_space,preview_ret.responseText);
 						message='';//'{!ADDED_COMCODE_ONLY_SAFE_ATTACHMENT_INSTANT;}'; Not really needed
 					} else
 					{
@@ -102,6 +85,11 @@
 				{
 					_comcode_semihtml=_comcode_semihtml.replace(rep_from,rep_to);
 					_comcode=_comcode.replace(rep_from,rep_to);
+				}
+
+				if ((element.value.indexOf(comcode_semihtml)==-1) || (comcode.indexOf('[attachment')==-1)) // Don't allow attachments to add twice
+				{
+					target_window.insert_textbox(element,_comcode,target_window.document.selection?target_window.document.selection:null,true,_comcode_semihtml);
 				}
 			};
 			target_window.insert_comcode_tag();
@@ -133,14 +121,17 @@
 				var ob=upload_element.swfob;
 				if (ob.state==target_window.plupload.STARTED)
 				{
-					ob.bind('FileUploaded',dispatch_block_helper);
+					ob.bind('UploadComplete',function() { window.setTimeout(dispatch_block_helper,100);/*Give enough time for everything else to update*/ });
 					ob.bind('Error',shutdown_overlay);
 
 					// Keep copying the upload indicator
 					var progress=get_inner_html(target_window.document.getElementById('fsUploadProgress_'+field));
 					window.setInterval(function() {
-						set_inner_html(loading_space,progress);
-						document.getElementById('loading_space').className='spaced flash';
+						if (progress!='')
+						{
+							set_inner_html(loading_space,progress);
+							loading_space.className='spaced flash';
+						}
 					},100);
 
 					attached_event_action=true;

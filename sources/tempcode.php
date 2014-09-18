@@ -879,24 +879,27 @@ function handle_symbol_preprocessing($seq_part,&$children)
 				{
 					$before=memory_get_usage();
 				}
-				$b_value=do_block($block_parms['block'],$block_parms);
-				if ((isset($_GET['keep_show_loading'])) && (function_exists('memory_get_usage')) && ($_GET['keep_show_loading']=='1'))
+				if (isset($block_parms['block']))
 				{
-					require_code('files');
-					@ob_end_flush();
-					@ob_end_flush();
-					@ob_end_flush();
-					print('<!-- block: '.htmlentities($block_parms['block']).' ('.clean_file_size(memory_get_usage()-$before).' bytes used, now at '.integer_format(memory_get_usage()).') -->'."\n");
-					flush();
-				}
+					$b_value=do_block($block_parms['block'],$block_parms);
+					if ((isset($_GET['keep_show_loading'])) && (function_exists('memory_get_usage')) && ($_GET['keep_show_loading']=='1'))
+					{
+						require_code('files');
+						@ob_end_flush();
+						@ob_end_flush();
+						@ob_end_flush();
+						print('<!-- block: '.htmlentities($block_parms['block']).' ('.clean_file_size(memory_get_usage()-$before).' bytes used, now at '.integer_format(memory_get_usage()).') -->'."\n");
+						flush();
+					}
 
-				if ($GLOBALS['RECORD_TEMPLATES_TREE'])
-				{
-					$children[]=array(':block: '.$block_parms['block'],array(array($b_value->codename,isset($b_value->children)?$b_value->children:array(),isset($b_value->fresh)?$b_value->fresh:false)),true);
-				}
-				$b_value->handle_symbol_preprocessing();
+					if ($GLOBALS['RECORD_TEMPLATES_TREE'])
+					{
+						$children[]=array(':block: '.$block_parms['block'],array(array($b_value->codename,isset($b_value->children)?$b_value->children:array(),isset($b_value->fresh)?$b_value->fresh:false)),true);
+					}
+					$b_value->handle_symbol_preprocessing();
 
-				$BLOCKS_CACHE[serialize($param)]=$b_value;
+					$BLOCKS_CACHE[serialize($param)]=$b_value;
+				}
 			}
 
 			$REQUEST_BLOCK_NEST_LEVEL--;

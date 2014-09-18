@@ -79,12 +79,7 @@
 }
 
 .gallery_grid_cell {
-	{+START,IF,{$NOT,{$MOBILE}}}
-		float: {!en_left};
-	{+END}
-	{+START,IF,{$MOBILE}}
-		text-align: center;
-	{+END}
+	float: {!en_left};
 	padding: 0.4em;
 }
 

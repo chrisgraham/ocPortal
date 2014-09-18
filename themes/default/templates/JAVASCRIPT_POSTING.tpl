@@ -121,7 +121,7 @@ function set_attachment(field_name,number,filename,multi)
 		var url='{$FIND_SCRIPT;,comcode_helper}';
 		url+='?field_name='+field_name;
 		url+='&type=step2';
-		url+='&tag='+'attachment';//(is_image?'attachment_safe':'attachment');
+		url+='&tag='+(is_image?'attachment_safe':'attachment');
 		url+='&default=new_'+number;
 		url+='&is_image='+(is_image?'1':'0');
 		url+='&is_archive='+(is_archive?'1':'0');
@@ -138,9 +138,9 @@ function set_attachment(field_name,number,filename,multi)
 				maintain_theme_in_link(url),
 				'',
 				'width=750,height=auto,status=no,resizable=yes,scrollbars=yes,unadorned=yes',
-				function(ret)
+				function(comcode_added)
 				{
-					if (ret)
+					if (comcode_added)
 					{
 						// Add in additional Comcode buttons for the other files selected at the same time
 						if (multi)
@@ -160,6 +160,25 @@ function set_attachment(field_name,number,filename,multi)
 						if (add_another_field)
 						{
 							add_attachment(window.num_attachments+1,field_name);
+						}
+
+						// Do insta-preview
+						if (comcode_added.indexOf('[attachment_safe')!=-1)
+						{
+							var form_post='';
+							var form=post.form;
+							for (var i=0;i<form.elements.length;i++)
+							{
+								if (!form.elements[i].disabled)
+								{
+									var name=form.elements[i].name;
+									var value=clever_find_value(form,form.elements[i]);
+									if (name=='title' && value=='') value='x'; // Fudge, title must be filled in on many forms
+									form_post+='&'+name+'='+window.encodeURIComponent(value);
+								}
+							}
+							var preview_ret=do_ajax_request(form_preview_url+'&js_only=1',null,form_post);
+							eval(preview_ret.responseText.replace('<script>','').replace('</script>',''));
 						}
 					} else // Cancelled
 					{

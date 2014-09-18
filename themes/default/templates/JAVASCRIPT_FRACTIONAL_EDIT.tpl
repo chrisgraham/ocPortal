@@ -65,9 +65,15 @@ function fractional_edit(event,object,url,raw_text,edit_param_name,was_double_cl
 				break;
 		}
 		input.style.position='absolute';
-		input.style.left=(x)+'px';
-		input.style.top=(y)+'px';
-		input.style.width=width+'px';
+		{+START,IF,{$MOBILE}}
+			input.style.left='0px';
+			input.style.width=get_window_width()+'px';
+		{+END}
+		{+START,IF,{$NOT,{$MOBILE}}}
+			input.style.left=(x)+'px';
+			input.style.width=width+'px';
+		{+END}
+		input.style.top=(y+8)+'px';
 		input.style.margin=0;
 		var to_copy=['padding-top','padding-left','font-size','font-weight','font-style'];
 		if (type=='line')

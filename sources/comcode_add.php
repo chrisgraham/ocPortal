@@ -915,6 +915,8 @@ function comcode_helper_script_step3()
 
 	$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
 
+	require_css('swfupload');
+
 	return do_template('BLOCK_HELPER_DONE',array(
 		'_GUID'=>'d5d5888d89b764f81769823ac71d0827',
 		'TITLE'=>$title,

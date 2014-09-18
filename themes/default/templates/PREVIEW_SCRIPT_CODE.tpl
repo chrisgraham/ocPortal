@@ -1,9 +1,11 @@
 <script>// <![CDATA[
-	var post=window.parent.document.getElementById('post');
+	var main_window=get_main_ocp_window();
+
+	var post=main_window.document.getElementById('post');
 
 	// Replace Comcode
-	var old_comcode=window.parent.get_textbox(post);
-	window.parent.set_textbox(post,'{NEW_POST_VALUE;^/}','{NEW_POST_VALUE_HTML;^/}');
+	var old_comcode=main_window.get_textbox(post);
+	main_window.set_textbox(post,'{NEW_POST_VALUE;^/}','{NEW_POST_VALUE_HTML;^/}');
 
 	// Remove attachment uploads
 	var inputs=post.form.elements,btn;
@@ -23,7 +25,7 @@
 							window.fauxmodal_alert('{!javascript:ATTACHMENT_SAVED;^}');
 						} else
 						{
-							if (!window.parent.is_wysiwyg_field(post)) // Only for non-WYSIWYG, as WYSIWYG has preview automated at same point of adding
+							if (!main_window.is_wysiwyg_field(post)) // Only for non-WYSIWYG, as WYSIWYG has preview automated at same point of adding
 								window.fauxmodal_alert('{!javascript:ATTACHMENT_SAVED;^}');
 						}
 					}
@@ -35,7 +37,7 @@
 					inputs[i].swfob.setButtonDisabled(false);
 				} else
 				{
-					window.parent.document.getElementById('uploadButton_'+inputs[i].name).disabled=true;
+					main_window.document.getElementById('uploadButton_'+inputs[i].name).disabled=true;
 				}
 				inputs[i].value='-1';
 			} else

@@ -25,7 +25,11 @@
 
 	<div class="boxless_space">
 		<div class="box box___comments_wrapper"><div class="box_inner">
-			<span class="right float_separation">
+			{+START,IF,{$MOBILE}}
+				<h2>{$?,{$IS_NON_EMPTY,{REVIEW_RATING_CRITERIA}},{$GET,REVIEWS_TITLE},{!COMMENTS}}</h2>
+			{+END}
+
+			<span class="{+START,IF,{$NOT,{$MOBILE}}}right {+END}float_separation">
 				{+START,INCLUDE,NOTIFICATION_BUTTONS}
 					NOTIFICATIONS_TYPE=comment_posted
 					NOTIFICATIONS_ID={TYPE}_{ID}
@@ -35,7 +39,7 @@
 				{+END}
 			</span>
 
-			<div class="inline right">
+			<div class="inline{+START,IF,{$NOT,{$MOBILE}}} right{+END}">
 				<form title="{!SORT}" class="inline" action="{$SELF_URL*}" method="post">
 					<label for="comments_sort">{!SORT_BY}:</label>
 					<select onchange="/*guarded*/this.form.submit();" id="comments_sort" name="comments_sort">
@@ -48,7 +52,9 @@
 				</form>
 			</div>
 
-			<h2>{$?,{$IS_NON_EMPTY,{REVIEW_RATING_CRITERIA}},{$GET,REVIEWS_TITLE},{!COMMENTS}}</h2>
+			{+START,IF,{$NOT,{$MOBILE}}}
+				<h2>{$?,{$IS_NON_EMPTY,{REVIEW_RATING_CRITERIA}},{$GET,REVIEWS_TITLE},{!COMMENTS}}</h2>
+			{+END}
 
 			{+START,LOOP,REVIEW_RATING_CRITERIA}
 				{+START,IF_NON_EMPTY,{REVIEW_RATING}}

@@ -391,7 +391,7 @@ body.website_body.frame {
 	/* Responsive design for tablets etc */
 	@media screen and (max-width:1024px) {
 		#main_website #main_website_inner {
-			margin: 0;
+			margin: 0 0 0 0.5em;
 			border: 0;
 			{$BETA_CSS_PROPERTY,box-shadow: none;}
 		}
@@ -1166,7 +1166,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 		margin-left: 2em;
 	{+END}
 	{+START,IF,{$MOBILE}}
-		width: 33%;
+		width: 110px;
 		margin-left: 0.5em;
 	{+END}
 	text-align: left;
@@ -1175,7 +1175,12 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 	text-align: center;
 }
 .trinav_mid.text {
-	padding-top: 6px;
+	{+START,IF,{$NOT,{$MOBILE}}}
+		padding-top: 6px;
+	{+END}
+	{+START,IF,{$MOBILE}}
+		padding-top: 1px;
+	{+END}
 }
 .trinav_mid.text>span:before {
 	content: "(";
@@ -1190,7 +1195,7 @@ body input.button_hyperlink, body input.button_hyperlink:hover {
 		margin-right: 2em;
 	{+END}
 	{+START,IF,{$MOBILE}}
-		width: 33%;
+		width: 110px;
 		margin-right: 0.5em;
 	{+END}
 	text-align: right;
