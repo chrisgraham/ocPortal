@@ -54,7 +54,7 @@ AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application
 <IfModule mod_rewrite.c>
 
 # Needed for mod_rewrite. Disable this line if your server does not have AllowOverride permission (can be one cause of Internal Server Errors)
-Options +FollowSymLinks
+Options +SymLinksIfOwnerMatch
 
 RewriteEngine on
 

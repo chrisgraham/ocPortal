@@ -25,7 +25,7 @@
  */
 function init__symbols()
 {
-	global $BLOCKS_CACHE,$PAGES_CACHE,$PANELS_CACHE,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$THEME_IMG_DIMS_CACHE,$CANONICAL_URL,$STATIC_TEMPLATE_TEST_MODE;
+	global $BLOCKS_CACHE,$PAGES_CACHE,$PANELS_CACHE,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$CANONICAL_URL,$STATIC_TEMPLATE_TEST_MODE;
 	$BLOCKS_CACHE=array();
 	$PAGES_CACHE=array();
 	$PANELS_CACHE=array();
@@ -44,7 +44,6 @@ function init__symbols()
 	);
 	$EXTRA_SYMBOLS=NULL;
 	$CANONICAL_URL=NULL;
-	$THEME_IMG_DIMS_CACHE=mixed();
 	$STATIC_TEMPLATE_TEST_MODE=false;
 }
 
@@ -963,7 +962,7 @@ function keep_symbol($param)
 {
 	$value='';
 	$get_vars=$_GET;
-	if ((isset($param[1])) && ($param[1]=='1') && (!isset($get_vars['keep_session']))) $get_vars['keep_session']=strval(get_session_id());
+	if ((isset($param[1])) && ($param[1]=='1') && (is_null(get_bot_type())) && (!isset($get_vars['keep_session']))) $get_vars['keep_session']=strval(get_session_id());
 
 	if (count($get_vars)>0)
 	{

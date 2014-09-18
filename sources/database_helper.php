@@ -563,7 +563,15 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 	$extra2='';
 	if (substr(get_db_type(),0,5)=='mysql') $extra2='IGNORE ';
 	$query='ALTER '.$extra2.'TABLE '.$this_ref->table_prefix.$table_name;
-	$query.=' CHANGE '.$name.' '.$extra.' '.$type_remap[$type].' '.$tag;
+	$query.=' CHANGE ';
+	if (strpos(get_db_type(),'mysql')!==false)
+	{
+		$query.='`'.$name.'`'; // In case we renamed due to change in keywords
+	} else
+	{
+		$query.=$name;
+	}
+	$query.=$name.' '.$extra.' '.$type_remap[$type].' '.$tag;
 	if (substr($_type,0,1)=='*') $query.=', ADD PRIMARY KEY ('.((!is_null($new_name))?$new_name:$name).')';
 	$this_ref->_query($query);
 

@@ -80,7 +80,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 	global $THEME_IMAGES_CACHE;
 	if (!isset($THEME_IMAGES_CACHE[$site]))
 	{
-		$cache=NULL;
+		static $cache=NULL;
 		if (($site=='site') && (function_exists('persistent_cache_get')))
 		{
 			$cache=persistent_cache_get('THEME_IMAGES');
@@ -91,10 +91,10 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 			$THEME_IMAGES_CACHE[$site]=$db->query_select('theme_images',array('id','path'),array('theme'=>$true_theme,'lang'=>$true_lang));
 			$THEME_IMAGES_CACHE[$site]=collapse_2d_complexity('id','path',$THEME_IMAGES_CACHE[$site]);
 
-			if ($site=='site')
+			if (($site=='site') || (!is_ocf_satellite_site()))
 			{
 				if ($cache===NULL) $cache=array();
-				$cache[$theme][$lang]=$THEME_IMAGES_CACHE[$site];
+				$cache[$theme][$true_lang]=$THEME_IMAGES_CACHE[$site];
 				persistent_cache_set('THEME_IMAGES',$cache);
 			}
 		} else
@@ -229,7 +229,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 		global $SITE_INFO;
 
-		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (url_is_local($path)) && (!is_file(get_file_base().'/'.rawurldecode($path))) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
+		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (url_is_local($path)) && ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0')) && (!is_file(get_file_base().'/'.rawurldecode($path))) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
 		{
 			unset($THEME_IMAGES_CACHE[$site][$id]);
 			return find_theme_image($id,$silent_fail,$leave_local,$theme,$lang,$db,$pure_only);
@@ -244,7 +244,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		{
 			global $SITE_INFO;
 			$missing=(!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']!='1')) && (!is_file(get_custom_file_base().'/'.rawurldecode($path))));
-			if ((substr($path,0,22)=='themes/default/images/') || ($missing) || (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Not found, so throw away custom theme image and look in default theme images to restore default
+			if ((substr($path,0,22)=='themes/default/images/') || ($missing) || ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0')) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Not found, so throw away custom theme image and look in default theme images to restore default
 			{
 				if (($missing) && (!is_file(get_file_base().'/'.rawurldecode($path))))
 				{

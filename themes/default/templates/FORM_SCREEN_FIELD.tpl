@@ -38,9 +38,9 @@
 	{+END}
 
 	<td id="form_table_field_input__{$GET,randomised_id}" class="form_table_field_input{+START,IF,{REQUIRED}} required{+END}">
-		{+START,IF,{$NOT,{$MOBILE}}}
+		{+START,IF,{$NOT,{$MOBILE}}}{+START,IF,{$NOT,{$_GET,overlay}}}
 			{COMCODE}
-		{+END}
+		{+END}{+END}
 
 		{INPUT}
 

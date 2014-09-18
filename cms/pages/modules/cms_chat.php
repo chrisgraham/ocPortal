@@ -403,7 +403,7 @@ class Module_cms_chat
 		if ($confirm_needed)
 		{
 			$hidden=form_input_hidden('member_id',strval($member_id));
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'7d04bebbac2c49be4458afdbf5619dc7','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE_BAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'7d04bebbac2c49be4458afdbf5619dc7','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE_BAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden,'FIELDS'=>''));
 		}
 
 		chatroom_ban_to($member_id,$id);
@@ -440,7 +440,7 @@ class Module_cms_chat
 		if ($confirm_needed)
 		{
 			$hidden=form_input_hidden('member_id',strval($member_id));
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'6e90c87aa46814a8f4b8c5b2fee6c29d','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE_UNBAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden));
+			return do_template('CONFIRM_SCREEN',array('_GUID'=>'6e90c87aa46814a8f4b8c5b2fee6c29d','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('Q_SURE_UNBAN',escape_html($username)),'URL'=>get_self_url(),'HIDDEN'=>$hidden,'FIELDS'=>''));
 		}
 
 		chatroom_unban_to($member_id,$id);

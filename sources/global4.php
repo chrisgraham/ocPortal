@@ -176,6 +176,9 @@ function geolocate_ip($ip=NULL)
  */
 function member_personal_links_and_details($member_id)
 {
+	static $cache=array();
+	if (isset($cache[$member_id])) return $cache[$member_id];
+
 	$details=new ocp_tempcode();
 	$links=new ocp_tempcode();
 
@@ -339,7 +342,8 @@ function member_personal_links_and_details($member_id)
 		$num_unread_pps=0;
 	}
 
-	return array($links,$details,$num_unread_pps);
+	$cache[$member_id]=array($links,$details,$num_unread_pps);
+	return $cache[$member_id];
 }
 
 /**

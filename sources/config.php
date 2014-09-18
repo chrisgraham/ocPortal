@@ -29,7 +29,7 @@ function init__config()
 		load_options();
 
 		$VALUE_OPTIONS_CACHE=persistent_cache_get('VALUES');
-		if ($VALUE_OPTIONS_CACHE===NULL)
+		if (!is_array($VALUE_OPTIONS_CACHE))
 		{
 			$VALUE_OPTIONS_CACHE=$GLOBALS['SITE_DB']->query_select('values',array('*'));
 			$VALUE_OPTIONS_CACHE=list_to_map('the_name',$VALUE_OPTIONS_CACHE);

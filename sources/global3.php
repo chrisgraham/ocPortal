@@ -1709,7 +1709,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 		if ($ip_bans===NULL)
 		{
 			$ip_bans=$GLOBALS['SITE_DB']->query_select('banned_ip',array('*'),NULL,'',NULL,NULL,true);
-			if ($ip_bans===NULL)
+			if (!is_array($ip_bans))
 				$ip_bans=$GLOBALS['SITE_DB']->query_select('usersubmitban_ip',array('*'),NULL,'',NULL,NULL,true);
 			if ($ip_bans!==NULL)
 			{
@@ -1755,7 +1755,7 @@ function ip_banned($ip,$force_db=false,$handle_uncertainties=false) // This is t
 				}
 			}
 
-			if (($self_ip!='') && (!compare_ip_address($ban['ip'],$self_ip))) continue;
+			if (($self_ip!='') && (compare_ip_address($ban['ip'],$self_ip))) continue;
 			if (compare_ip_address($ban['ip'],'127.0.0.1')) continue;
 			if (compare_ip_address($ban['ip'],'fe00:0000:0000:0000:0000:0000:0000:0000')) continue;
 
@@ -2204,9 +2204,12 @@ function get_bot_type()
 	$agent=ocp_srv('HTTP_USER_AGENT');
 	if (strpos($agent,'WebKit')!==false || strpos($agent,'Trident')!==false || strpos($agent,'MSIE')!==false || strpos($agent,'Firefox')!==false || strpos($agent,'Opera')!==false)
 	{
-		// Quick exit path
-		$BOT_TYPE_CACHE=NULL;
-		return NULL;
+		if (strpos($agent,'bot')===false)
+		{
+			// Quick exit path
+			$BOT_TYPE_CACHE=NULL;
+			return NULL;
+		}
 	}
 	$agent=strtolower($agent);
 

@@ -38,6 +38,8 @@ When you add an event, you may define the following special settings:
  - Priority. This is displayed in the interface, to help make it clear how a calendar user should plan their time.
  - Reminder signing-up. You can sign yourself, and members of select usergroups, up for reminders. You may also select how much notice there is for that reminder.
 
+For monthly events you can also specify a special day-of-week position, from the start or end of the month. For example, the 2nd Tuesday of the month. If you wish to specify something like this, but once a year (e.g. the 2nd Tuesday of April, each year), specify a monthly recurrence with a recurrence pattern of [tt]100000000000[/tt].
+
 A member may remove reminders for events, and also have multiple reminders with different notice times.
 
 [title="2"]Views[/title]

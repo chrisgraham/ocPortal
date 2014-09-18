@@ -70,11 +70,7 @@ function get_download_archive_size()
 			set_value('archive_size',strval($value));
 	}
 
-	if (intval($value)>1024*1024*1024) $_value=integer_format(intval(round(floatval($value)/floatval(1024*1024*1024),2))).' Gb';
-	elseif (intval($value)>1024*1024) $_value=integer_format(intval(round(floatval($value)/floatval(1024*1024)))).' Mb';
-	elseif (intval($value)>1024) $_value=integer_format(intval(round(floatval($value)/floatval(1024)))).' Kb';
-	else $_value=integer_format(intval($value)).' Bytes';
-	return $_value;
+	return clean_file_size($value);
 }
 
 /**

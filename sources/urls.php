@@ -1083,6 +1083,8 @@ function find_id_moniker($url_parts,$zone)
 
 							if ($or_list!='') $or_list.=' OR ';
 							$or_list.='('.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_equal_to('m_resource_id',$id).')';
+
+							$LOADED_MONIKERS_CACHE[$page][$type][$id]=$id; // Will be replaced with correct value if it is looked up
 						}
 					}
 				}

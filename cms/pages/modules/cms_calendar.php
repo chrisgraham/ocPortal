@@ -735,7 +735,7 @@ class Module_cms_calendar extends standard_crud_module
 			}
 		}
 
-		if ($recurrence!='monthly')
+		if (substr($recurrence,0,strlen('monthly'))!='monthly')
 		{
 			$start_monthly_spec_type=fractional_edit()?STRING_MAGIC_NULL:'day_of_month';
 			$end_monthly_spec_type=fractional_edit()?STRING_MAGIC_NULL:'day_of_month';
@@ -1461,7 +1461,7 @@ class Module_cms_calendar_cat extends standard_crud_module
 
 		if (!fractional_edit())
 		{
-			$this->set_permissions(strval($id));
+			$this->set_permissions($id);
 		}
 
 		if (addon_installed('content_reviews'))

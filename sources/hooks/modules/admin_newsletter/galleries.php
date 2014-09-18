@@ -89,6 +89,8 @@ class Hook_whats_news_galleries
 				$galleries[$row['cat']]=get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries','fullname',array('name'=>$row['cat'])));
 			}
 			$name=$galleries[$row['cat']];
+			$_name=get_translated_text($row['title']);
+			if ($_name!='') $name=$_name;
 			$description=get_translated_text($row['description'],NULL,$lang);
 			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
 			$thumbnail=$row['thumb_url'];

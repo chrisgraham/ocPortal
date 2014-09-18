@@ -213,6 +213,7 @@ abbr.dtstart, abbr.dtend {
 	padding: 0.3em;
 	margin-left: -1px; /* To stop the double borders at join points */
 	padding: 0.5em 0;
+	min-height: 1.3em;
 }
 
 .calendar_date_span_link:first-child .calendar_date_span_link_inner {

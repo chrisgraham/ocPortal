@@ -175,6 +175,16 @@ php /home/funkysite/htdocs/data/cron_bridge.php
 [/code]
 On Linux, the system level scheduler is 'Cron', and the process of adding a task is known as 'setting up a Cronjob'. Many web hosting control panels allow you to do this.
 
+[title="4"]Sandboxes CRON[/title]
+
+Some webhosts only allow you to execute CRON commands directly under your home directory. This means you cannot call up the PHP command directory like above.
+A workaround is to make a [tt]data/cron_bridge.sh[/tt] file (with execute permissions) containing:
+[code]
+#!/bin/sh
+php cron_bridge.php
+[/code]
+and tell CRON to execute [tt]/home/funkysite/htdocs/data/cron_bridge.sh[/tt].
+
 [title="3"]Specific advice for Windows[/title]
 
 On Windows the following command might work for an ocPortal installation in the '[tt]c:\sites\funkysite\www[/tt]' directory:
@@ -232,6 +242,10 @@ In the event your hosting platform does not allow you access to CRON, there are 
  - Other free options are http://www.mywebcron.com/ (up to every 5 minutes), http://www.setcronjob.com/ (up to every 5 minutes but the schedule needs to be re-set every week) and http://www.onlinecronjobs.com/ (up to 5 jobs twice a day).
 
 Simply sign up and  add the URL i.e. [tt]http://yourwebsiteaddress.com/data/cron_bridge.php[/tt] to the scheduler and set how often you want it to run.
+
+[title="3"]Caveats[/title]
+
+If you enable the mail queue (recommended for performance), then e-mail will be sent in the background via the scheduler. However, if the scheduler stops running for a period, e-mails could queue up. We have had a report of this happening to a user and then the webhost deciding to block the scheduler from running, compounding the problem. If such an event happens it is best to discuss it with the webhost, then perhaps deciding to ease CRON back in on a lower execution interval (e.g. once per hour, then back to normal after the queue is emptied).
 
 [title="2"]Closed site, and opening[/title]
 [surround]

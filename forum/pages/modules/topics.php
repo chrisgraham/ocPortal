@@ -1809,7 +1809,7 @@ class Module_topics
 		}
 		if (ocf_may_make_private_topic())
 		{
-			if (($_intended_solely_for!='') || (get_option('inline_pp_advertise')=='1'))
+			if ((($_intended_solely_for!='') || (get_option('inline_pp_advertise')=='1')) && (!is_null($forum_id)))
 				$specialisation->attach(form_input_username(do_lang_tempcode('WHISPER'),do_lang_tempcode('DESCRIPTION_WHISPER'),'intended_solely_for',$_intended_solely_for,false));
 		}
 
@@ -2532,7 +2532,7 @@ END;
 					}
 				}
 
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'ec5fd36fd869e42c59a0e7e3efa8a123','TITLE'=>get_screen_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden));
+				return do_template('CONFIRM_SCREEN',array('_GUID'=>'ec5fd36fd869e42c59a0e7e3efa8a123','TITLE'=>get_screen_title('DELETE_POSTS'),'TEXT'=>do_lang_tempcode('CONFIRM_DELETE',$stuff),'URL'=>$post_url,'HIDDEN'=>$hidden,'FIELDS'=>''));
 			}
 
 			foreach ($posts as $post)

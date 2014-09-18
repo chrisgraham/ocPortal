@@ -195,7 +195,11 @@ function handle_active_login($username)
 		enforce_temporary_passwords($member);
 	} else
 	{
-		$GLOBALS['SITE_DB']->query_insert('failedlogins',array('failed_account'=>trim(post_param('login_username')),'date_and_time'=>time(),'ip'=>get_ip_address()));
+		$GLOBALS['SITE_DB']->query_insert('failedlogins',array(
+			'failed_account'=>substr(trim(post_param('login_username')),0,255),
+			'date_and_time'=>time(),
+			'ip'=>get_ip_address(),
+		));
 
 		$brute_force_login_minutes=intval(get_option('brute_force_login_minutes'));
 		$brute_force_threshold=intval(get_option('brute_force_threshold'));

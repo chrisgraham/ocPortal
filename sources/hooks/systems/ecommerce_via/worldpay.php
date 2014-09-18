@@ -115,7 +115,7 @@ class Hook_worldpay
 			'ITEM_NAME'=>$item_name,
 			'DIGEST'=>$digest,
 			'TEST_MODE'=>ecommerce_test_mode(),
-			'PURCHASE_ID'=>strval($trans_id),
+			'PURCHASE_ID'=>$trans_id, // cartID in Worldpay, has to be unique so we generate a transaction ID and store true purchase_id within that
 			'AMOUNT'=>float_to_raw_string($amount),
 			'CURRENCY'=>$currency,
 			'USERNAME'=>$username,

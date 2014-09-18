@@ -702,16 +702,6 @@ function uninstall_addon($addon)
 	require_code('zones2');
 	require_code('zones3');
 
-	// Clear some cacheing
-	require_code('caches3');
-	erase_comcode_page_cache();
-	erase_block_cache();
-	erase_persistent_cache();
-	erase_cached_templates();
-	erase_cached_language();
-	global $HOOKS_CACHE;
-	$HOOKS_CACHE=array();
-
 	// Remove addon info from database, modules, blocks, and files
 	uninstall_addon_soft($addon);
 	$last=array();
@@ -748,6 +738,16 @@ function uninstall_addon($addon)
 	{
 		afm_delete_file($filename);
 	}
+
+	// Clear some cacheing
+	require_code('caches3');
+	erase_comcode_page_cache();
+	erase_block_cache();
+	erase_persistent_cache();
+	erase_cached_templates();
+	erase_cached_language();
+	global $HOOKS_CACHE;
+	$HOOKS_CACHE=array();
 
 	global $ADDON_INSTALLED_CACHE;
 	unset($ADDON_INSTALLED_CACHE[$addon_info['name']]);

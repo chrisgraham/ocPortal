@@ -795,7 +795,7 @@ class Module_calendar
 			$description=(intval($down)<3)?new ocp_tempcode():((!is_string($event['e_content']) && !isset($event['e_content__text_parsed']))?get_translated_tempcode('calendar_events',$just_event_row,'e_content'):$event['e_content']);
 			$priority_lang=do_lang_tempcode('PRIORITY_'.strval($event['e_priority']));
 			$priority_icon='calendar/priority_'.strval($event['e_priority']);
-			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$_title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none','VALIDATED'=>$event['validated']==1);
+			$streams[$found_stream][$from_h]=array('TPL'=>'CALENDAR_DAY_ENTRY','DESCRIPTION'=>$description,'DOWN'=>$down,'ID'=>is_string($event['e_id'])?$event['e_id']:strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$_title,'URL'=>$url,'PRIORITY_LANG'=>$priority_lang,'PRIORITY_ICON'=>$priority_icon,'RECURRING'=>$event['e_recurrence']!='none','VALIDATED'=>$event['validated']==1);
 			for ($h=$from_h+1;$h<$to_h;$h++)
 			{
 				$streams[$found_stream][$h]=array('TPL'=>'-1');
@@ -942,7 +942,7 @@ class Module_calendar
 						$_title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 						$entries->attach(do_template('CALENDAR_WEEK_ENTRY',array(
 							'_GUID'=>'a5577fb634ecc5480789d1cd21f686fb',
-							'ID'=>strval($event['e_id']),
+							'ID'=>is_string($event['e_id'])?$event['e_id']:strval($event['e_id']),
 							'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS',
 							'PRIORITY'=>strval($event['e_priority']),
 							'ICON'=>$icon,
@@ -1185,7 +1185,7 @@ class Module_calendar
 					$_title=is_integer($event['e_title'])?get_translated_text($event['e_title']):$event['e_title'];
 					$entries->attach(do_template('CALENDAR_MONTH_ENTRY',array(
 						'_GUID'=>'58353fc64595f981d41da303cfe40855',
-						'ID'=>strval($event['e_id']),
+						'ID'=>is_string($event['e_id'])?$event['e_id']:strval($event['e_id']),
 						'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS',
 						'PRIORITY'=>strval($event['e_priority']),
 						'ICON'=>$icon,
@@ -1301,7 +1301,7 @@ class Module_calendar
 
 						if (!array_key_exists($_day,$entries))
 						{
-							$entries[$_day]=array('ID'=>strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$_title,'URL'=>$url);
+							$entries[$_day]=array('ID'=>is_string($event['e_id'])?$event['e_id']:strval($event['e_id']),'T_TITLE'=>array_key_exists('t_title',$event)?(is_string($event['t_title'])?$event['t_title']:get_translated_text($event['t_title'])):'RSS','PRIORITY'=>strval($event['e_priority']),'ICON'=>$icon,'TIME'=>$date,'TITLE'=>$_title,'URL'=>$url);
 							$priorities[$_day]=$event['e_priority'];
 						} else // If we have more than one, we don't store a map, we just count them
 						{

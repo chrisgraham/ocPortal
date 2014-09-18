@@ -1226,11 +1226,11 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 		$indices_count=$GLOBALS['FORUM_DB']->query_select_value('db_meta_indices','COUNT(*)',array('i_table'=>'f_member_custom_fields'));
 		if ($indices_count<60) // Could be 64 but trying to be careful here...
 		{
-			if ($_type!='LONG_TEXT')
+			if ($type!='LONG_TEXT')
 			{
 				$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf'.strval($id),array('field_'.strval($id)),'mf_member_id');
 			}
-			if (strpos($_type,'_TEXT')!==false)
+			if (strpos($type,'_TEXT')!==false)
 			{
 				$GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf_ft_'.strval($id),array('field_'.strval($id)),'mf_member_id');
 			}
@@ -1261,6 +1261,7 @@ function ocf_delete_custom_field($id)
 	$GLOBALS['NO_DB_SCOPE_CHECK']=true;
 
 	$info=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('cf_name','cf_description'),array('id'=>$id),'',1);
+	if (!array_key_exists(0,$info)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 	$_name=$info[0]['cf_name'];
 	$_description=$info[0]['cf_description'];
 

@@ -40,7 +40,15 @@ class Module_admin_customers
 	 */
 	function uninstall()
 	{
+		/* NB: Does not delete CPFs and multi-mods. But that doesn't actually matter */
+		delete_config_option('support_credit_value');
+		delete_config_option('support_budget_priority');
+		delete_config_option('support_normal_priority');
+		delete_config_option('support_day_priority');
+		delete_config_option('support_high_priority');
+		delete_config_option('support_emergency_priority');
 		$GLOBALS['SITE_DB']->drop_table_if_exists('credit_purchases');
+		$GLOBALS['SITE_DB']->drop_table_if_exists('credit_charge_log');
 
 		// MANTIS TABLE DELETION
 
@@ -93,7 +101,7 @@ class Module_admin_customers
 		require_code('mantis');
 		$cur_id=NULL;
 		$cur_id=get_credits_profile_field_id('ocp_currency');
-		if (!is_null($cur_id ))
+		if (!is_null($cur_id))
 		{
 			$GLOBALS['SITE_DB']->query_update('f_custom_fields',array('cf_owner_view'=>1,'cf_owner_set'=>1),array('id'=>$cur_id),'',1);
 		}
@@ -106,11 +114,20 @@ class Module_admin_customers
 
 		$GLOBALS['SITE_DB']->create_table('credit_purchases',array(
 			'purchase_id'=>'*AUTO',
-			'member_id'=>'AUTO_LINK',
+			'member_id'=>'USER',
 			'num_credits'=>'INTEGER',
 			'date_and_time'=>'TIME',
 			'purchase_validated'=>'BINARY',
 			'is_manual'=>'BINARY'
+		));
+
+		$GLOBALS['SITE_DB']->create_table('credit_charge_log',array(
+			'id'=>'*AUTO',
+			'member_id'=>'USER',
+			'charging_member_id'=>'USER',
+			'num_credits'=>'INTEGER',
+			'date_and_time'=>'TIME',
+			'reason'=>'SHORT_TEXT',
 		));
 
 		if (get_db_type()!='xml')
@@ -719,6 +736,7 @@ class Module_admin_customers
 		$fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','member_username',$username,true));
 		$fields->attach(form_input_integer(do_lang_tempcode('CREDIT_AMOUNT'),do_lang_tempcode('CREDIT_AMOUNT_DESCRIPTION'),'amount',get_param_integer('amount',3),true));
 		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_OVERDRAFT'),do_lang_tempcode('DESCRIPTION_ALLOW_OVERDRAFT'),'allow_overdraft',true));
+		$fields->attach(form_input_line(do_lang_tempcode('REASON'),'If for a ticket, you can just paste in the ticket URL.','reason','',true));
 
 		if (!is_null($member_id))
 		{
@@ -739,6 +757,30 @@ class Module_admin_customers
 
 			$text=do_lang_tempcode('CUSTOMER_CURRENTLY_HAS',escape_html(number_format($num_credits)));
 		} else $text=new ocp_tempcode();
+
+		require_code('templates_columned_table');
+		$rows=new ocp_tempcode();
+		$logs=$GLOBALS['SITE_DB']->query_select('credit_charge_log',array('charging_member_id','num_credits','date_and_time','reason'),array('member_id'=>$member_id),'ORDER BY date_and_time DESC',10);
+		foreach ($logs as $log)
+		{
+			$charging_username=$GLOBALS['FORUM_DRIVER']->get_username($log['charging_member_id']);
+			if (is_null($charging_username)) $charging_username=do_lang_tempcode('DELETED');
+			$_num_credits=integer_format($log['num_credits']);
+			$date_and_time=get_timezoned_date($log['date_and_time']);
+			$reason=$log['reason'];
+			$rows->attach(columned_table_row(array($charging_username,$_num_credits,$date_and_time,$reason),true));
+		}
+		if (!$rows->is_empty())
+		{
+			$_header_row=array(
+				do_lang_tempcode('USERNAME'),
+				do_lang_tempcode('AMOUNT'),
+				do_lang_tempcode('DATE_TIME'),
+				do_lang_tempcode('REASON'),
+			);
+			$header_row=columned_table_header_row($_header_row);
+			$text->attach(do_template('COLUMNED_TABLE',array('HEADER_ROW'=>$header_row,'ROWS'=>$rows)));
+		}
 
 		return do_template('FORM_SCREEN',array('_GUID'=>'f91185ee725f47ffa652d5fef8d85c0b','TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>$text,'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
 	}
@@ -770,10 +812,22 @@ class Module_admin_customers
 		$new_amount=$fields['field_'.strval($cpf_id)]-$amount;
 		if (post_param_integer('allow_overdraft',0)==0)
 		{
-			if ($new_amount<0) $new_amount=0;
+			if ($new_amount<0)
+			{
+				$new_amount=0;
+				$amount=$fields['field_'.strval($cpf_id)]-$new_amount;
+			}
 		}
 
 		ocf_set_custom_field($member_id,$cpf_id,$new_amount);
+
+		$GLOBALS['SITE_DB']->query_insert('credit_charge_log',array(
+			'member_id'=>$member_id,
+			'charging_member_id'=>get_member(),
+			'num_credits'=>$amount,
+			'date_and_time'=>time(),
+			'reason'=>post_param('reason',''),
+		));
 
 		// Show it worked / Refresh
 		$url=build_url(array('page'=>'_SELF','type'=>'misc','username'=>$username),'_SELF');

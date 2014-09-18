@@ -267,6 +267,7 @@ class Hook_paypal
 						exit(); // We ignore cancel transactions as we don't want to process them immediately - we just let things run until the end-of-term (see below). Maybe ideally we would process these in ocPortal as a separate state, but it would over-complicate things
 
 					case 'subscr_eot': // NB: An 'eot' means "end of *final* term" (i.e. if a payment fail / cancel / natural last term, has happened). PayPal's terminology is a little dodgy here.
+					case 'recurring_payment_suspended_due_to_max_failed_payment':
 						$payment_status='SCancelled';
 						$txn_id=post_param('subscr_id').'-c';
 						break;

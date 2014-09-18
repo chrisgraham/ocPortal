@@ -50,7 +50,7 @@
 
 				{+START,IF,{$CONFIG_OPTION,mobile_support}}
 					<p>
-						<label for="mobile_version">{!MOBILE_VERSION;} <input{+START,IF,{$MOBILE}} checked="checked"{+END} onclick="return preview_mobile_button(this);" type="checkbox" id="mobile_version" name="_mobile_version" /></label>
+						<label for="mobile_version">{!MOBILE_VERSION}: <input{+START,IF,{$MOBILE}} checked="checked"{+END} onclick="return preview_mobile_button(this);" type="checkbox" id="mobile_version" name="_mobile_version" /></label>
 						{+START,IF,{$MOBILE}}
 							&ndash; <em>{!USE_MOUSE_WHEEL_SCROLL}</em>
 						{+END}
