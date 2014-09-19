@@ -291,6 +291,7 @@ function _notification_setting_available($setting,$member_id=NULL)
 			$system_wide=(addon_installed('sms')) && (get_option('sms_api_id')!='');
 			if ($system_wide && !is_null($member_id))
 			{
+				require_code('permissions');
 				if (has_specific_permission($member_id,'use_sms'))
 				{
 					require_code('sms');
@@ -307,7 +308,11 @@ function _notification_setting_available($setting,$member_id=NULL)
 			break;
 		case A_INSTANT_PT:
 			$system_wide=(get_forum_type()=='ocf') && (addon_installed('ocf_forum'));
-			if ($system_wide && !is_null($member_id)) $for_member=has_specific_permission($member_id,'use_pt');
+			if ($system_wide && !is_null($member_id))
+			{
+				require_code('permissions');
+				$for_member=has_specific_permission($member_id,'use_pt');
+			}
 			break;
 	}
 	$ret=$system_wide && (is_null($member_id) || $for_member);
@@ -823,6 +828,7 @@ class Hook_Notification
 	{
 		list($_members,$possibly_has_more)=$to_filter;
 		$members=array();
+		require_code('permissions');
 		foreach ($_members as $member=>$setting)
 		{
 			if (has_specific_permission($member,$sp))
@@ -1135,6 +1141,7 @@ class Hook_Notification__Staff extends Hook_Notification
 	{
 		$test=is_null($only_if_enabled_on__notification_code)?true:notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id);
 
+		require_code('permissions');
 		return (($test) && (has_specific_permission($member_id,'may_enable_staff_notifications')));
 	}
 }
