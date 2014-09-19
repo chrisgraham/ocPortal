@@ -1374,7 +1374,7 @@ class Hook_addon_registry_core_rich_media
 			if (substr($key, 0, 5)=='left_')
 			{
 				$left=$val;
-				$right=array_key_exists('right_'.substr($key, 5), $attributes) ? $attributes['right_'.substr($key, 5)] : '';
+				$right=array_key_exists('right_'.substr($key,5),$attributes)?$attributes['right_'.substr($key,5)]:'';
 
 				$left=make_string_tempcode($left);
 				$right=make_string_tempcode($right);

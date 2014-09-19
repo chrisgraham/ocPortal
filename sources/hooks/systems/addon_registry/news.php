@@ -581,7 +581,7 @@ class Hook_addon_registry_news
 					'TYPE'=>'',
 				)),
 				'CATEGORIES'=>placeholder_array(),
-				'NEWSLETTER_URL'=>addon_installed('newsletter') ? placeholder_url() : '',
+				'NEWSLETTER_URL'=>addon_installed('newsletter')?placeholder_url():'',
 				'ADD_DATE_RAW'=>placeholder_date_raw(),
 				'EDIT_DATE_RAW'=>'',
 				'SUBMITTER'=>placeholder_id(),
