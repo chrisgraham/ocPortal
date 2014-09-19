@@ -292,7 +292,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('COLUMNED_TABLE_ACTION_TRANSLATE',array(
 				'URL'=>placeholder_url(),
-				'NAME'=>lorem_phrase()
+				'NAME'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -310,7 +310,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('COLUMNED_TABLE_ACTION_DOWNLOAD',array(
 				'URL'=>placeholder_url(),
-				'NAME'=>lorem_phrase()
+				'NAME'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -328,7 +328,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			lorem_globalise(do_lorem_template('REDIRECT_SCREEN',array(
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
-				'TEXT'=>lorem_sentence_html()
+				'TEXT'=>lorem_sentence_html(),
 			)),NULL,'',true)
 		);
 	}
@@ -348,7 +348,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'BACK_URL'=>placeholder_url(),
 				'PREVIEW'=>lorem_phrase(),
 				'FIELDS'=>lorem_phrase(),
-				'TITLE'=>lorem_title()
+				'TITLE'=>lorem_title(),
 			)),NULL,'',true)
 		);
 	}
@@ -378,7 +378,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'TITLE'=>lorem_title(),
 				'PRE'=>lorem_phrase(),
 				'POST'=>lorem_phrase(),
-				'CONTENT'=>$entry
+				'CONTENT'=>$entry,
 			)),NULL,'',true)
 		);
 	}
@@ -410,7 +410,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'TITLE'=>lorem_title(),
 				'POST'=>lorem_phrase(),
 				'PRE'=>lorem_phrase(),
-				'ADD_URL'=>placeholder_url()
+				'ADD_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -447,7 +447,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('MAP_TABLE',array(
 				'WIDTH'=>placeholder_number(),
-				'FIELDS'=>$fields
+				'FIELDS'=>$fields,
 			)),NULL,'',true)
 		);
 	}
@@ -470,7 +470,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('MAP_TABLE_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'FIELDS'=>$fields
+				'FIELDS'=>$fields,
 			)),NULL,'',true)
 		);
 	}
@@ -487,7 +487,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('COLUMNED_TABLE_ACTION_DELETE_CATEGORY',array(
 				'URL'=>placeholder_url(),
-				'NAME'=>lorem_phrase()
+				'NAME'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -503,7 +503,7 @@ class Hook_addon_registry_core_abstract_interfaces
 	{
 		return array(
 			lorem_globalise(do_lorem_template('WARNING_BOX',array(
-				'WARNING'=>lorem_phrase()
+				'WARNING'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -520,7 +520,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('SIMPLE_PREVIEW_BOX',array(
 				'SUMMARY'=>lorem_paragraph_html(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -537,7 +537,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('INFORM_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'TEXT'=>lorem_sentence()
+				'TEXT'=>lorem_sentence(),
 			)),NULL,'',true)
 		);
 	}
@@ -557,7 +557,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'REFRESH_IF_CHANGED'=>lorem_phrase(),
 				'CHANGE_DETECTION_URL'=>placeholder_url(),
 				'REFRESH_TIME'=>placeholder_date_raw(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -576,7 +576,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'TITLE'=>lorem_title(),
 				'WEBSERVICE_RESULT'=>lorem_phrase(),
 				'TEXT'=>lorem_sentence(),
-				'PROVIDE_BACK'=>placeholder_id()
+				'PROVIDE_BACK'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}
@@ -633,14 +633,14 @@ class Hook_addon_registry_core_abstract_interfaces
 				'URL'=>placeholder_url(),
 				'NUM_SIBLINGS'=>strval(count($list)),
 				'DOC'=>'',
-				'WARNING'=>''
+				'WARNING'=>'',
 			)));
 			$i++;
 		}
 		$do_next_section=do_lorem_template('DO_NEXT_SECTION',array(
 			'I'=>placeholder_number(),
 			'TITLE'=>lorem_phrase(),
-			'CONTENT'=>$next_items
+			'CONTENT'=>$next_items,
 		));
 		$sections->attach($do_next_section);
 
@@ -649,7 +649,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'INTRO'=>lorem_phrase_html(),
 				'QUESTION'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
-				'SECTIONS'=>$sections
+				'SECTIONS'=>$sections,
 			)),NULL,'',true)
 		);
 	}
@@ -668,7 +668,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'BUTTONS'=>placeholder_array(),
 				'IMAGES'=>array(),
 				'TITLE'=>lorem_phrase(),
-				'MESSAGE'=>lorem_phrase()
+				'MESSAGE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -686,7 +686,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			lorem_globalise(do_lorem_template('PAGINATION_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CONTENT'=>lorem_phrase(),
-				'BROWSE'=>placeholder_pagination()
+				'BROWSE'=>placeholder_pagination(),
 			)),NULL,'',true)
 		);
 	}
@@ -703,7 +703,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			lorem_globalise(do_lorem_template('FULL_MESSAGE_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'TEXT'=>lorem_sentence()
+				'TEXT'=>lorem_sentence(),
 			)),NULL,'',true)
 		);
 	}
@@ -777,12 +777,12 @@ class Hook_addon_registry_core_abstract_interfaces
 			foreach ($values as $value)
 			{
 				$cells->attach(do_lorem_template('COLUMNED_TABLE_ROW_CELL',array(
-					'VALUE'=>$value
+					'VALUE'=>$value,
 				)));
 			}
 
 			$tpl=do_lorem_template('COLUMNED_TABLE_ROW',array(
-				'CELLS'=>$cells
+				'CELLS'=>$cells,
 			));
 			$table_rows->attach($tpl);
 		}
@@ -801,22 +801,22 @@ class Hook_addon_registry_core_abstract_interfaces
 		foreach ($values as $value)
 		{
 			$cells->attach(do_lorem_template('COLUMNED_TABLE_HEADER_ROW_CELL',array(
-				'VALUE'=>$value
+				'VALUE'=>$value,
 			)));
 		}
 
 		$header_row=do_lorem_template('COLUMNED_TABLE_HEADER_ROW',array(
-			'CELLS'=>$cells
+			'CELLS'=>$cells,
 		));
 
 		$field_rows=do_lorem_template('COLUMNED_TABLE',array(
 			'HEADER_ROW'=>$header_row,
-			'ROWS'=>$table_rows
+			'ROWS'=>$table_rows,
 		));
 
 		$return=do_lorem_template('FORM_GROUPED',array(
-			'TEXT'=>"",
-			'URL'=>"#",
+			'TEXT'=>'',
+			'URL'=>'#',
 			'FIELD_GROUPS'=>$field_rows,
 			'SUBMIT_ICON'=>'buttons__proceed',
 			'SUBMIT_NAME'=>lorem_word_2()
@@ -844,7 +844,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		{
 			if ($k==1)
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
-					'VALUE'=>$v
+					'VALUE'=>$v,
 				)));
 			else
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE_SORTABLE',array(
@@ -867,11 +867,11 @@ class Hook_addon_registry_core_abstract_interfaces
 					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2)
 				));
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
-					'VALUE'=>$tick
+					'VALUE'=>$tick,
 				)));
 			}
 			$order_entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array(
-				'VALUES'=>$cells
+				'VALUES'=>$cells,
 			)));
 		}
 		//results_entry ends
@@ -883,14 +883,14 @@ class Hook_addon_registry_core_abstract_interfaces
 			$selectors->attach(do_lorem_template('PAGINATION_SORTER',array(
 				'SELECTED'=>'',
 				'NAME'=>$v,
-				'VALUE'=>$v
+				'VALUE'=>$v,
 			)));
 		}
 		$sort=do_lorem_template('PAGINATION_SORT',array(
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
-			'SELECTORS'=>$selectors
+			'SELECTORS'=>$selectors,
 		));
 
 		$results_table=do_lorem_template('RESULTS_TABLE',array(
@@ -906,7 +906,7 @@ class Hook_addon_registry_core_abstract_interfaces
 
 		$table=do_lorem_template('RESULTS_TABLE_SCREEN',array(
 			'TITLE'=>lorem_title(),
-			'RESULTS_TABLE'=>$results_table
+			'RESULTS_TABLE'=>$results_table,
 		));
 
 		return array(
@@ -931,7 +931,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		{
 			if ($k==1)
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
-					'VALUE'=>$v
+					'VALUE'=>$v,
 				)));
 			else
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE_SORTABLE',array(
@@ -954,11 +954,11 @@ class Hook_addon_registry_core_abstract_interfaces
 					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2)
 				));
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
-					'VALUE'=>$tick
+					'VALUE'=>$tick,
 				)));
 			}
 			$order_entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array(
-				'VALUES'=>$cells
+				'VALUES'=>$cells,
 			)));
 		}
 		//results_entry ends
@@ -970,14 +970,14 @@ class Hook_addon_registry_core_abstract_interfaces
 			$selectors->attach(do_lorem_template('PAGINATION_SORTER',array(
 				'SELECTED'=>'',
 				'NAME'=>$v,
-				'VALUE'=>$v
+				'VALUE'=>$v,
 			)));
 		}
 		$sort=do_lorem_template('PAGINATION_SORT',array(
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
-			'SELECTORS'=>$selectors
+			'SELECTORS'=>$selectors,
 		));
 
 		$results_table=do_lorem_template('RESULTS_TABLE',array(
@@ -993,7 +993,7 @@ class Hook_addon_registry_core_abstract_interfaces
 
 		$table=do_lorem_template('RESULTS_TABLE_SCREEN',array(
 			'TITLE'=>lorem_title(),
-			'RESULTS_TABLE'=>$results_table
+			'RESULTS_TABLE'=>$results_table,
 		));
 
 		return array(
@@ -1028,7 +1028,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		}
 
 		$pages=do_lorem_template('RESULTS_LAUNCHER_WRAP',array(
-			'PART'=>$part
+			'PART'=>$part,
 		));
 
 		return array(
@@ -1051,7 +1051,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'TABLE'=>placeholder_table(),
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
-				'POST_URL'=>placeholder_url()
+				'POST_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 

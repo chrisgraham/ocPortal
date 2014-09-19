@@ -73,7 +73,7 @@ class Hook_addon_registry_authors
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -153,7 +153,7 @@ class Hook_addon_registry_authors
 			lorem_globalise(do_lorem_template('AUTHOR_MANAGE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'DEFINE_FORM'=>placeholder_form(),
-				'MERGE_FORM'=>placeholder_form()
+				'MERGE_FORM'=>placeholder_form(),
 			)),NULL,'',true)
 		);
 	}
@@ -177,7 +177,7 @@ class Hook_addon_registry_authors
 				'URL'=>placeholder_url(),
 				'NEWS_TITLE_PLAIN'=>lorem_word(),
 				'ID'=>placeholder_id(),
-				'NEWS_TITLE'=>lorem_word()
+				'NEWS_TITLE'=>lorem_word(),
 			));
 			$news_released->attach($tpl);
 		}
@@ -225,7 +225,7 @@ class Hook_addon_registry_authors
 				'SEARCH_DETAILS'=>$search_details,
 				'FORUM_DETAILS'=>$forum_details,
 				'SKILLS'=>$skills,
-				'DESCRIPTION'=>$description
+				'DESCRIPTION'=>$description,
 			)),NULL,'',true)
 		);
 	}

@@ -154,7 +154,7 @@ class Hook_addon_registry_setupwizard
 			lorem_globalise(do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW',array(
 				'LEFT'=>lorem_paragraph(),
 				'RIGHT'=>lorem_paragraph(),
-				'START'=>lorem_paragraph()
+				'START'=>lorem_paragraph(),
 			)),NULL,'',true)
 		);
 	}

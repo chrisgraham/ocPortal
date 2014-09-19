@@ -1344,7 +1344,7 @@ class Hook_addon_registry_core
 				'AWARD_DATE'=>placeholder_time(),
 				'CONTENT'=>lorem_phrase_html(),
 				'SUBMIT_URL'=>placeholder_url(),
-				'ARCHIVE_URL'=>placeholder_url()
+				'ARCHIVE_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -1423,7 +1423,7 @@ class Hook_addon_registry_core
 				'TITLE'=>lorem_title(),
 				'RESULTS_TABLE'=>placeholder_table(),
 				'MASS_DELETE_URL'=>placeholder_url(),
-				'MASS_SEND_URL'=>placeholder_url()
+				'MASS_SEND_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -1458,7 +1458,7 @@ class Hook_addon_registry_core
 				'type'=>lorem_phrase(),
 				'id'=>lorem_phrase(),
 				'mode'=>lorem_phrase(),
-				'action_id'=>lorem_phrase()
+				'action_id'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -1475,7 +1475,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('ACTIONLOGS_SCREEN',array(
 				'TABLE'=>placeholder_table(),
-				'TITLE'=>lorem_title()
+				'TITLE'=>lorem_title(),
 			)),NULL,'',true)
 		);
 	}
@@ -1498,7 +1498,7 @@ class Hook_addon_registry_core
 				'JOIN_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
 				'LOGIN_URL'=>placeholder_url(),
-				'PASSION'=>''
+				'PASSION'=>'',
 			)),NULL,'',true)
 		);
 	}
@@ -1518,7 +1518,7 @@ class Hook_addon_registry_core
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence_html(),
 				'URL'=>placeholder_url(),
-				'POST'=>lorem_phrase()
+				'POST'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -1534,7 +1534,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FORUMS_EMBED',array(
-				'FORUMS'=>placeholder_url()
+				'FORUMS'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -1566,7 +1566,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED_INLINE',array(
-				'CODE'=>placeholder_javascript_code()
+				'CODE'=>placeholder_javascript_code(),
 			)),NULL,'',true)
 		);
 	}
@@ -1582,7 +1582,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED_INLINE',array(
-				'CODE'=>''
+				'CODE'=>'',
 			)),NULL,'',true)
 		);
 	}
@@ -1600,7 +1600,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('FATAL_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'MESSAGE'=>lorem_phrase(),
-				'TRACE'=>lorem_phrase()
+				'TRACE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -1628,14 +1628,14 @@ class Hook_addon_registry_core
 				)));
 			}
 			$trace->attach(do_lorem_template('STACK_TRACE_WRAP',array(
-				'TRACES'=>$traces
+				'TRACES'=>$traces,
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('STACK_TRACE_HYPER_WRAP',array(
 				'CONTENT'=>$trace,
-				'POST'=>placeholder_array()
+				'POST'=>placeholder_array(),
 			)),NULL,'',true)
 		);
 	}
@@ -1652,7 +1652,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('INLINE_WIP_MESSAGE',array(
 				'MESSAGE'=>lorem_phrase(),
-				'NO_ENTRIES'=>lorem_word()
+				'NO_ENTRIES'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -1672,7 +1672,7 @@ class Hook_addon_registry_core
 				'ADD_URL'=>placeholder_url(),
 				'PAGE'=>lorem_phrase(),
 				'DID_MEAN'=>lorem_word(),
-				'ADD_REDIRECT_URL'=>placeholder_url()
+				'ADD_REDIRECT_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -1690,7 +1690,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('PARAM_INFO',array(
 				'MAP'=>array(
 					'A'=>'a',
-					'B'=>'b'
+					'B'=>'b',
 				)
 			)),NULL,'',true)
 		);
@@ -1707,7 +1707,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('JAVASCRIPT_NEED',array(
-				'CODE'=>placeholder_javascript_code()
+				'CODE'=>placeholder_javascript_code(),
 			)),NULL,'',true)
 		);
 	}
@@ -1723,7 +1723,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED',array(
-				'CODE'=>lorem_phrase()
+				'CODE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -1754,7 +1754,7 @@ class Hook_addon_registry_core
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array(
 			'NAME'=>lorem_word(),
 			'URL'=>placeholder_url(),
-			'REL'=>'me'
+			'REL'=>'me',
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array(
@@ -1772,7 +1772,7 @@ class Hook_addon_registry_core
 				'AVATAR_URL'=>placeholder_avatar(),
 				'LINKS'=>$links,
 				'DETAILS'=>$details,
-				'USERNAME'=>lorem_word()
+				'USERNAME'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -1803,7 +1803,7 @@ class Hook_addon_registry_core
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array(
 			'NAME'=>lorem_word(),
 			'URL'=>placeholder_url(),
-			'REL'=>'me'
+			'REL'=>'me',
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array(
@@ -1841,7 +1841,7 @@ class Hook_addon_registry_core
 				'TITLE'=>lorem_phrase(),
 				'FULL_LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url(),
-				'LOGIN_URL'=>placeholder_url()
+				'LOGIN_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -1860,7 +1860,7 @@ class Hook_addon_registry_core
 				'TITLE'=>lorem_phrase(),
 				'FULL_LOGIN_URL'=>placeholder_url(),
 				'JOIN_URL'=>placeholder_url(),
-				'LOGIN_URL'=>placeholder_url()
+				'LOGIN_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -1883,7 +1883,7 @@ class Hook_addon_registry_core
 				'SUBMIT_URL'=>placeholder_url(),
 				'RECENT'=>lorem_word(),
 				'MEMBERS'=>lorem_word(),
-				'NO_ENTRIES'=>lorem_word()
+				'NO_ENTRIES'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -1915,7 +1915,7 @@ class Hook_addon_registry_core
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES',array(
-				'ENTRIES'=>$entries
+				'ENTRIES'=>$entries,
 			)),NULL,'',true)
 		);
 	}
@@ -1932,7 +1932,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('JOIN_OR_LOGIN',array(
 				'LOGIN_URL'=>placeholder_url(),
-				'JOIN_URL'=>placeholder_url()
+				'JOIN_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -1962,7 +1962,7 @@ class Hook_addon_registry_core
 				'CHILDREN'=>$children,
 				'THE_PAGE'=>lorem_phrase(),
 				'THE_ZONE'=>lorem_phrase(),
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -1990,7 +1990,7 @@ class Hook_addon_registry_core
 				'TITLE'=>lorem_title(),
 				'TOTAL'=>lorem_phrase(),
 				'TOTAL_TIME'=>placeholder_number(),
-				'QUERIES'=>$queries
+				'QUERIES'=>$queries,
 			)),NULL,'',true)
 		);
 	}
@@ -2010,7 +2010,7 @@ class Hook_addon_registry_core
 		{
 			$found_404[]=array(
 				'URL'=>placeholder_url(),
-				'SPOT'=>$value
+				'SPOT'=>$value,
 			);
 		}
 
@@ -2028,7 +2028,7 @@ class Hook_addon_registry_core
 		return array(
 			lorem_globalise(do_lorem_template('BROKEN_URLS',array(
 				'FOUND'=>$found,
-				'FOUND_404'=>$found_404
+				'FOUND_404'=>$found_404,
 			)),NULL,'',true)
 		);
 	}
@@ -2047,7 +2047,7 @@ class Hook_addon_registry_core
 			lorem_globalise(do_lorem_template('BROKEN_LANG_STRINGS',array(
 				'MISSING_LANG_STRINGS'=>placeholder_array(),
 				'FUSED_LANG_STRINGS'=>placeholder_array(),
-				'ORPHANED_LANG_STRINGS'=>placeholder_array()
+				'ORPHANED_LANG_STRINGS'=>placeholder_array(),
 			)),NULL,'',true)
 		);
 	}
@@ -2063,7 +2063,7 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('FORUM_ATTACHMENT_IMAGE',array(
-				'URL'=>placeholder_image_url()
+				'URL'=>placeholder_image_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -2112,7 +2112,7 @@ class Hook_addon_registry_core
 					array(
 						'A'=>'',
 						'B'=>'',
-						'C'=>''
+						'C'=>'',
 					)
 				)
 			)),NULL,'',true)
@@ -2208,7 +2208,7 @@ class Hook_addon_registry_core
 			'DESCRIPTION'=>lorem_sentence(),
 			'NAME'=>placeholder_random_id(),
 			'DEFAULT'=>'',
-			'ROWS'=>"20"
+			'ROWS'=>'20',
 		)));
 
 		return array(
@@ -2221,7 +2221,7 @@ class Hook_addon_registry_core
 				'FIELDS'=>$fields,
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
-				'TEXT'=>''
+				'TEXT'=>'',
 			)),NULL,'',true)
 		);
 	}

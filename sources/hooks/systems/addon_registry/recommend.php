@@ -149,7 +149,7 @@ class Hook_addon_registry_recommend
 				'PRINT_URL'=>placeholder_url(),
 				'RECOMMEND_URL'=>placeholder_url(),
 				'EASY_SELF_URL'=>placeholder_url(),
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

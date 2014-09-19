@@ -144,7 +144,7 @@ class Hook_addon_registry_unvalidated
 				'USERNAME'=>lorem_word(),
 				'TYPE'=>lorem_phrase(),
 				'ID'=>placeholder_id(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -165,7 +165,7 @@ class Hook_addon_registry_unvalidated
 		return array(
 			lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'SECTIONS'=>$section
+				'SECTIONS'=>$section,
 			)),NULL,'',true)
 		);
 	}

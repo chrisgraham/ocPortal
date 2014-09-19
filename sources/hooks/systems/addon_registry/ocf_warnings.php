@@ -159,7 +159,7 @@ class Hook_addon_registry_ocf_warnings
 				'MESSAGE'=>lorem_phrase(),
 				'EXPLANATION'=>lorem_phrase(),
 				'TITLE'=>lorem_word(),
-				'DELETE_LINK'=>placeholder_link()
+				'DELETE_LINK'=>placeholder_link(),
 			)),NULL,'',true)
 		);
 	}
@@ -182,7 +182,7 @@ class Hook_addon_registry_ocf_warnings
 				'EDIT_PROFILE_URL'=>placeholder_url(),
 				'VIEW_PROFILE_URL'=>placeholder_url(),
 				'ADD_WARNING_URL'=>placeholder_url(),
-				'RESULTS_TABLE'=>placeholder_table()
+				'RESULTS_TABLE'=>placeholder_table(),
 			)),NULL,'',true)
 		);
 	}

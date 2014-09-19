@@ -155,7 +155,7 @@ class Hook_addon_registry_staff_messaging
 			'MAKE_POST'=>true,
 			'CREATE_TICKET_MAKE_POST'=>true,
 			'FIRST_POST_URL'=>'',
-			'FIRST_POST'=>''
+			'FIRST_POST'=>'',
 		));
 
 		return array(
@@ -170,7 +170,7 @@ class Hook_addon_registry_staff_messaging
 				'RESPONSIBLE'=>lorem_phrase(),
 				'USERNAME'=>lorem_word(),
 				'DATE'=>placeholder_time(),
-				'MEMBER_URL'=>placeholder_url()
+				'MEMBER_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -199,7 +199,7 @@ class Hook_addon_registry_staff_messaging
 			'MAKE_POST'=>true,
 			'CREATE_TICKET_MAKE_POST'=>true,
 			'FIRST_POST_URL'=>'',
-			'FIRST_POST'=>''
+			'FIRST_POST'=>'',
 		));
 
 		return array(
@@ -208,7 +208,7 @@ class Hook_addon_registry_staff_messaging
 				'MESSAGE'=>lorem_phrase(),
 				'NOTIFICATIONS_ENABLED'=>lorem_phrase(),
 				'TYPE'=>placeholder_id(),
-				'FIRST_POST'=>lorem_paragraph_html()
+				'FIRST_POST'=>lorem_paragraph_html(),
 			)),NULL,'',true)
 		);
 	}
@@ -238,14 +238,14 @@ class Hook_addon_registry_staff_messaging
 			'TITLE'=>lorem_phrase(),
 			'COMMENT_URL'=>placeholder_url(),
 			'MAKE_POST'=>true,
-			'CREATE_TICKET_MAKE_POST'=>true
+			'CREATE_TICKET_MAKE_POST'=>true,
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_SIMPLE',array(
 				'EMAIL_OPTIONAL'=>lorem_word_html(),
 				'COMMENT_DETAILS'=>$comment_details,
-				'MESSAGE'=>lorem_phrase()
+				'MESSAGE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

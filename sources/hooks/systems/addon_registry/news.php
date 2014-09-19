@@ -358,7 +358,7 @@ class Hook_addon_registry_news
 				'LASTMEMBERID'=>lorem_word(),
 				'DATE_RAW'=>lorem_word(),
 				'GIVE_CONTEXT'=>false,
-				'TAGS'=>''
+				'TAGS'=>'',
 			)));
 		}
 
@@ -396,7 +396,7 @@ class Hook_addon_registry_news
 			lorem_globalise(do_lorem_template('NEWS_WORDPRESS_IMPORT_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'XML_UPLOAD_FORM'=>placeholder_form(),
-				'DB_IMPORT_FORM'=>placeholder_form()
+				'DB_IMPORT_FORM'=>placeholder_form(),
 			)),NULL,'',true)
 		);
 	}
@@ -442,7 +442,7 @@ class Hook_addon_registry_news
 
 		return array(
 			lorem_globalise(do_lorem_template('NEWS_CHICKLETS',array(
-				'RSS_URL'=>placeholder_url()
+				'RSS_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -480,7 +480,7 @@ class Hook_addon_registry_news
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$contents,
 				'SUBMIT_URL'=>placeholder_url(),
-				'ARCHIVE_URL'=>placeholder_url()
+				'ARCHIVE_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -508,7 +508,7 @@ class Hook_addon_registry_news
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_NEWS_CATEGORIES',array(
 				'CONTENT'=>$contents,
 				'PRE'=>'',
-				'POST'=>''
+				'POST'=>'',
 			)),NULL,'',true)
 		);
 	}
@@ -526,7 +526,7 @@ class Hook_addon_registry_news
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_BOTTOM_NEWS',array(
 				'BLOG'=>TRUE,
-				'POSTS'=>$contents_arr
+				'POSTS'=>$contents_arr,
 			)),NULL,'',true)
 		);
 	}
@@ -567,7 +567,7 @@ class Hook_addon_registry_news
 			'MAKE_POST'=>true,
 			'CREATE_TICKET_MAKE_POST'=>true,
 			'FIRST_POST_URL'=>'',
-			'FIRST_POST'=>''
+			'FIRST_POST'=>'',
 		));
 
 		return array(
@@ -578,7 +578,7 @@ class Hook_addon_registry_news
 				'_TITLE'=>lorem_phrase(),
 				'TAGS'=>do_lorem_template('TAGS',array(
 					'TAGS'=>$tags,
-					'TYPE'=>''
+					'TYPE'=>'',
 				)),
 				'CATEGORIES'=>placeholder_array(),
 				'NEWSLETTER_URL'=>addon_installed('newsletter') ? placeholder_url() : '',
@@ -588,7 +588,7 @@ class Hook_addon_registry_news
 				'CATEGORY'=>lorem_word(),
 				'IMG'=>placeholder_image(),
 				'TITLE'=>lorem_title(),
-				'VIEWS'=>"3",
+				'VIEWS'=>'3',
 				'COMMENT_DETAILS'=>$comment_details,
 				'RATING_DETAILS'=>lorem_sentence(),
 				'TRACKBACK_DETAILS'=>lorem_sentence(),
@@ -600,7 +600,7 @@ class Hook_addon_registry_news
 				'EDIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url(),
 				'SUBMIT_URL'=>placeholder_url(),
-				'WARNING_DETAILS'=>''
+				'WARNING_DETAILS'=>'',
 			)),NULL,'',true)
 		);
 	}

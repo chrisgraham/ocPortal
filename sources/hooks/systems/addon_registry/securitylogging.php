@@ -156,7 +156,7 @@ class Hook_addon_registry_securitylogging
 				'TITLE'=>lorem_title(),
 				'BANS'=>placeholder_ip(),
 				'LOCKED_BANS'=>placeholder_ip(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -183,7 +183,7 @@ class Hook_addon_registry_securitylogging
 				'TIME_RAW'=>placeholder_date_raw(),
 				'TIME'=>placeholder_date(),
 				'URL'=>placeholder_url(),
-				'POST'=>lorem_phrase()
+				'POST'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -205,7 +205,7 @@ class Hook_addon_registry_securitylogging
 				'NUM_FAILED_LOGINS'=>placeholder_number(),
 				'ALERTS'=>lorem_phrase(),
 				'NUM_ALERTS'=>placeholder_number(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -230,7 +230,7 @@ class Hook_addon_registry_securitylogging
 				'IP'=>lorem_phrase(),
 				'USERNAME'=>lorem_word_html(),
 				'POST'=>lorem_phrase(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -278,7 +278,7 @@ class Hook_addon_registry_securitylogging
 				'AUTHOR_URL'=>placeholder_url(),
 				'POINTS_URL'=>placeholder_url(),
 				'PROFILE_URL'=>placeholder_url(),
-				'ACTIONLOG_URL'=>placeholder_url()
+				'ACTIONLOG_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}

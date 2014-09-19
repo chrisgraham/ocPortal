@@ -159,7 +159,7 @@ class Hook_addon_registry_custom_comcode
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS',array(
-				'TAGS'=>$content
+				'TAGS'=>$content,
 			)),NULL,'',true)
 		);
 	}

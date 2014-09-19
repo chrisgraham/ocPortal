@@ -137,7 +137,7 @@ class Hook_addon_registry_random_quotes
 				'EDIT_URL'=>placeholder_url(),
 				'FILE'=>lorem_phrase(),
 				'CONTENT'=>lorem_phrase(),
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

@@ -212,7 +212,7 @@ class Hook_addon_registry_wiki
 			lorem_globalise(do_lorem_template('WIKI_LIST_TREE_LINE',array(
 				'BREADCRUMBS'=>lorem_phrase(),
 				'TITLE'=>lorem_word(),
-				'ID'=>placeholder_id()
+				'ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}
@@ -234,7 +234,7 @@ class Hook_addon_registry_wiki
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('EDIT'),
 			'FULL_TITLE'=>do_lang_tempcode('EDIT'),
-			'IMG'=>'buttons__edit'
+			'IMG'=>'buttons__edit',
 		));
 
 		$extra->attach(do_lorem_template('BUTTON_SCREEN_ITEM',array(
@@ -243,13 +243,13 @@ class Hook_addon_registry_wiki
 			'URL'=>placeholder_url(),
 			'TITLE'=>do_lang_tempcode('MOVE'),
 			'FULL_TITLE'=>do_lang_tempcode('MOVE'),
-			'IMG'=>'buttons__move'
+			'IMG'=>'buttons__move',
 		)));
 
 		$all_rating_criteria=array();
 		$all_rating_criteria[]=array(
 			'TITLE'=>lorem_word(),
-			'RATING'=>make_string_tempcode("6"),
+			'RATING'=>make_string_tempcode('6'),
 			'NUM_RATINGS'=>placeholder_number(),
 			'TYPE'=>lorem_word()
 		);
@@ -262,14 +262,14 @@ class Hook_addon_registry_wiki
 			'OVERALL_NUM_RATINGS'=>placeholder_number(),
 			'HAS_RATINGS'=>true,
 			'SIMPLISTIC'=>true,
-			'ERROR'=>''
+			'ERROR'=>'',
 		));
 
 		$rating_details=do_lorem_template('WIKI_RATING',array(
 			'OVERALL_NUM_RATINGS'=>placeholder_number(),
 			'RATING_FORM'=>$rating_inside,
 			'ALL_RATING_CRITERIA'=>$all_rating_criteria,
-			'HAS_RATINGS'=>true
+			'HAS_RATINGS'=>true,
 		));
 
 		$posts=do_lorem_template('WIKI_POST',array(
@@ -285,7 +285,7 @@ class Hook_addon_registry_wiki
 			'POST_DATE_RAW'=>placeholder_date(),
 			'POST_DATE'=>placeholder_date(),
 			'POST'=>lorem_phrase(),
-			'BUTTONS'=>$extra
+			'BUTTONS'=>$extra,
 		));
 
 		$_child=do_lorem_template('WIKI_SUBCATEGORY_CHILDREN',array(
@@ -312,7 +312,7 @@ class Hook_addon_registry_wiki
 				'CHILDREN'=>$child,
 				'POSTS'=>$posts,
 				'NUM_POSTS'=>placeholder_number(),
-				'BUTTONS'=>placeholder_button()
+				'BUTTONS'=>placeholder_button(),
 			)),NULL,'',true)
 		);
 	}
@@ -329,7 +329,7 @@ class Hook_addon_registry_wiki
 		return array(
 			lorem_globalise(do_lorem_template('WIKI_CHANGES_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'RESULTS'=>lorem_phrase()
+				'RESULTS'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -378,7 +378,7 @@ class Hook_addon_registry_wiki
 				'WARNING_DETAILS'=>'',
 				'TEXT'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
-				'POSTING_FORM'=>$posting_form
+				'POSTING_FORM'=>$posting_form,
 			)),NULL,'',true)
 		);
 	}

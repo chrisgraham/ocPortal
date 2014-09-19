@@ -135,7 +135,7 @@ class Hook_addon_registry_ocf_member_photos
 			lorem_globalise(do_lorem_template('OCF_EDIT_PHOTO_TAB',array(
 				'USERNAME'=>lorem_word(),
 				'PHOTO'=>placeholder_image_url(),
-				'TEXT'=>''
+				'TEXT'=>'',
 			)),NULL,'',true)
 		);
 	}

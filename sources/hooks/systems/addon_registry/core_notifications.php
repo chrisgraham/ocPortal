@@ -396,7 +396,7 @@ class Hook_addon_registry_core_notifications
 			'NOTIFICATION_CODE'=>placeholder_id(),
 			'NOTIFICATION_LABEL'=>lorem_phrase(),
 			'NOTIFICATION_TYPES'=>$notification_types,
-			'SUPPORTS_CATEGORIES'=>true
+			'SUPPORTS_CATEGORIES'=>true,
 		);
 		do_lorem_template('NOTIFICATION_TYPES', $notification_code_map); // To make coverage test pass (is actually INCLUDE'd)
 		$notification_sections=array();
@@ -409,7 +409,7 @@ class Hook_addon_registry_core_notifications
 		$interface=do_lorem_template('NOTIFICATIONS_MANAGE',array(
 			'COLOR'=>'FFFFFF',
 			'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
-			'NOTIFICATION_SECTIONS'=>$notification_sections
+			'NOTIFICATION_SECTIONS'=>$notification_sections,
 		));
 		$out=do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'TITLE'=>lorem_title(),
@@ -451,11 +451,11 @@ class Hook_addon_registry_core_notifications
 			'NOTIFICATION_TYPES'=>$notification_types,
 			'CATEGORY_TITLE'=>lorem_phrase(),
 			'CHECKED'=>true,
-			'CHILDREN'=>''
+			'CHILDREN'=>'',
 		);
 		$tree=do_lorem_template('NOTIFICATIONS_TREE',array(
 			'NOTIFICATION_CODE'=>placeholder_id(),
-			'NOTIFICATION_CATEGORIES'=>$notification_categories
+			'NOTIFICATION_CATEGORIES'=>$notification_categories,
 		));
 		$notification_types_titles=array();
 		$notification_types_titles[]=array(

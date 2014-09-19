@@ -135,7 +135,7 @@ class Hook_addon_registry_sms
 				'id'=>'*AUTO',
 				's_member_id'=>'MEMBER',
 				's_time'=>'TIME',
-				's_trigger_ip'=>'IP'
+				's_trigger_ip'=>'IP',
 			));
 			$GLOBALS['SITE_DB']->create_index('sms_log','sms_log_for',array('s_member_id','s_time'));
 			$GLOBALS['SITE_DB']->create_index('sms_log','sms_trigger_ip',array('s_trigger_ip'));
@@ -147,7 +147,7 @@ class Hook_addon_registry_sms
 				'm_phone_number'=>'*SHORT_TEXT',
 				'm_member_id'=>'MEMBER',
 				'm_time'=>'TIME',
-				'm_confirm_code'=>'IP'
+				'm_confirm_code'=>'IP',
 			));*/
 			/*$GLOBALS['SITE_DB']->create_index('confirmed_mobiles','confirmed_numbers',array('m_confirm_code'));*/
 		}

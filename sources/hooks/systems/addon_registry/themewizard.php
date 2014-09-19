@@ -202,7 +202,7 @@ class Hook_addon_registry_themewizard
 				'LD'=>lorem_phrase(),
 				'TITLE'=>lorem_title(),
 				'CHANGE_URL'=>placeholder_url(),
-				'STAGE3_URL'=>placeholder_url()
+				'STAGE3_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -231,7 +231,7 @@ class Hook_addon_registry_themewizard
 				'BACK_URL'=>placeholder_url(),
 				'PREVIEW'=>$preview,
 				'FIELDS'=>'',
-				'TITLE'=>lorem_title()
+				'TITLE'=>lorem_title(),
 			)),NULL,'',true)
 		);
 	}

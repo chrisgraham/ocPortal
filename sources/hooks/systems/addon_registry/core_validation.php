@@ -184,7 +184,7 @@ class Hook_addon_registry_core_validation
 		)));
 
 		$display->attach(do_lorem_template('VALIDATE_TAG_START',array(
-			'COLOUR'=>'#b7b7b7'
+			'COLOUR'=>'#b7b7b7',
 		)));
 		$display->attach(lorem_word());
 		$display->attach(do_lorem_template('VALIDATE_TAG_END',array()));
@@ -223,7 +223,7 @@ class Hook_addon_registry_core_validation
 				'I'=>lorem_word().strval($key),
 				'LINE'=>placeholder_number(),
 				'POS'=>placeholder_number(),
-				'ERROR'=>$_error
+				'ERROR'=>$_error,
 			)));
 		}
 
@@ -243,7 +243,7 @@ class Hook_addon_registry_core_validation
 		{
 			$markers->attach(do_lorem_template('VALIDATE_MARKER',array(
 				'I'=>lorem_word().strval($key),
-				'ERROR'=>$_error
+				'ERROR'=>$_error,
 			)));
 		}
 		$display->attach(do_lorem_template('VALIDATE_LINE_ERROR',array(

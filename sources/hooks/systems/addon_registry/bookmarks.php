@@ -148,7 +148,7 @@ class Hook_addon_registry_bookmarks
 				'TITLE'=>lorem_title(),
 				'FORM_URL'=>placeholder_url(),
 				'FORM'=>placeholder_form(),
-				'BOOKMARKS'=>$bookmarks
+				'BOOKMARKS'=>$bookmarks,
 			)),NULL,'',true)
 		);
 	}

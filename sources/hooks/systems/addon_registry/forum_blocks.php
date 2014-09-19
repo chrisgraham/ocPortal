@@ -161,7 +161,7 @@ class Hook_addon_registry_forum_blocks
 				'TITLE'=>lorem_word(),
 				'CONTENT'=>$out,
 				'FORUM_NAME'=>lorem_word_html(),
-				'SUBMIT_URL'=>placeholder_url()
+				'SUBMIT_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -204,7 +204,7 @@ class Hook_addon_registry_forum_blocks
 				'TITLE'=>lorem_phrase(),
 				'CONTENT'=>$out,
 				'SUBMIT_URL'=>placeholder_url(),
-				'ARCHIVE_URL'=>placeholder_url()
+				'ARCHIVE_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}

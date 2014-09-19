@@ -183,7 +183,7 @@ class Hook_addon_registry_stats
 			lorem_globalise(do_lorem_template('STATS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'GRAPH'=>$graph,
-				'STATS'=>placeholder_table()
+				'STATS'=>placeholder_table(),
 			)),NULL,'',true)
 		);
 	}
@@ -202,7 +202,7 @@ class Hook_addon_registry_stats
 				'TITLE'=>lorem_title(),
 				'STATS_VIEWS'=>placeholder_table(),
 				'GRAPH_VIEWS_MONTHLY'=>lorem_phrase(),
-				'STATS_VIEWS_MONTHLY'=>lorem_phrase()
+				'STATS_VIEWS_MONTHLY'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -247,7 +247,7 @@ class Hook_addon_registry_stats
 				'GRAPH_REFERRER'=>lorem_phrase(),
 				'STATS_REFERRER'=>lorem_phrase(),
 				'GRAPH_OS'=>lorem_phrase(),
-				'STATS_OS'=>lorem_phrase()
+				'STATS_OS'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

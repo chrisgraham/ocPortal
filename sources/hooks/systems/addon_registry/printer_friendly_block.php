@@ -125,7 +125,7 @@ class Hook_addon_registry_printer_friendly_block
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_PRINTER_FRIENDLY',array(
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}

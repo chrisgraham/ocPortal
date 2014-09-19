@@ -227,7 +227,7 @@ class Hook_addon_registry_downloads
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE',array(
 				'BREADCRUMBS'=>lorem_word(),
-				'DOWNLOAD'=>lorem_phrase()
+				'DOWNLOAD'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -244,7 +244,7 @@ class Hook_addon_registry_downloads
 		return array(
 			lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE_2',array(
 				'BREADCRUMBS'=>lorem_phrase(),
-				'FILECOUNT'=>placeholder_number()
+				'FILECOUNT'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}
@@ -295,7 +295,7 @@ class Hook_addon_registry_downloads
 				'SUBCATEGORIES'=>$subcategories,
 				'DOWNLOADS'=>$downloads,
 				'SORTING'=>lorem_phrase(),
-				'ID'=>placeholder_id()
+				'ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}
@@ -346,7 +346,7 @@ class Hook_addon_registry_downloads
 				'SUBMIT_URL'=>placeholder_url(),
 				'ADD_CAT_URL'=>placeholder_url(),
 				'EDIT_CAT_URL'=>placeholder_url(),
-				'SUB_CATEGORIES'=>$subcats
+				'SUB_CATEGORIES'=>$subcats,
 			)),NULL,'',true)
 		);
 	}
@@ -373,11 +373,11 @@ class Hook_addon_registry_downloads
 			));
 
 			$cell=do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL',array(
-				'CONTENT'=>$image
+				'CONTENT'=>$image,
 			));
 
 			$images_details->attach(do_lorem_template('DOWNLOAD_GALLERY_ROW',array(
-				'CELLS'=>$cell
+				'CELLS'=>$cell,
 			)));
 		}
 
@@ -412,7 +412,7 @@ class Hook_addon_registry_downloads
 				'RATING_DETAILS'=>lorem_sentence_html(),
 				'COMMENT_DETAILS'=>lorem_sentence_html(),
 				'MAY_DOWNLOAD'=>true,
-				'NUM_IMAGES'=>'3'
+				'NUM_IMAGES'=>'3',
 			)),NULL,'',true)
 		);
 	}

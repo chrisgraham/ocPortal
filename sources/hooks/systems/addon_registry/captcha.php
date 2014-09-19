@@ -185,7 +185,7 @@ class Hook_addon_registry_captcha
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
 			'INPUT'=>$input,
-			'COMCODE'=>''
+			'COMCODE'=>'',
 		));
 
 		return array(
@@ -197,7 +197,7 @@ class Hook_addon_registry_captcha
 				'FIELDS'=>$captcha,
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_word(),
-				'TEXT'=>lorem_sentence_html()
+				'TEXT'=>lorem_sentence_html(),
 			)),NULL,'',true)
 		);
 	}

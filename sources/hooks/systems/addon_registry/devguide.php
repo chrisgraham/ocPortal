@@ -155,11 +155,11 @@ class Hook_addon_registry_devguide
 
 			$bits=do_lorem_template('PHP_PARAMETER_BIT',array(
 				'NAME'=>lorem_word(),
-				'VALUE'=>$value
+				'VALUE'=>$value,
 			));
 
 			$full_parameters->attach(do_lorem_template('PHP_PARAMETER',array(
-				'BITS'=>$bits
+				'BITS'=>$bits,
 			)));
 		}
 
@@ -180,7 +180,7 @@ class Hook_addon_registry_devguide
 				'PARAMETERS'=>$parameters,
 				'DESCRIPTION'=>lorem_paragraph_html(),
 				'FULL_PARAMETERS'=>$full_parameters,
-				'RETURN'=>$return
+				'RETURN'=>$return,
 			));
 
 
@@ -189,20 +189,20 @@ class Hook_addon_registry_devguide
 				'RETURN_TYPE'=>lorem_word(),
 				'CLASS'=>lorem_word_2(),
 				'FUNCTION'=>lorem_word().strval($k),
-				'PARAMETERS'=>$parameters
+				'PARAMETERS'=>$parameters,
 			));
 
 			$classes->attach(do_lorem_template('PHP_CLASS',array(
 				'CLASS_NAME'=>lorem_word().strval($k),
 				'FUNCTION_SUMMARIES'=>$summary,
-				'FUNCTIONS'=>$function
+				'FUNCTIONS'=>$function,
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('PHP_FILE',array(
 				'FILENAME'=>lorem_word(),
-				'CLASSES'=>$classes
+				'CLASSES'=>$classes,
 			)),NULL,'',true)
 		);
 	}
@@ -231,7 +231,7 @@ class Hook_addon_registry_devguide
 				'NAME'=>lorem_word(),
 				'DESCRIPTION'=>lorem_paragraph(),
 				'USE'=>lorem_phrase(),
-				'PARAMETERS'=>$parameters
+				'PARAMETERS'=>$parameters,
 			)),NULL,'',true)
 		);
 	}

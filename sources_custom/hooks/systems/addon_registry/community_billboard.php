@@ -250,7 +250,7 @@ class Hook_addon_registry_community_billboard
 			'REQUIRED'=>'_required',
 			'NAME'=>lorem_word(),
 			'CONTENT'=>$out,
-			'INLINE_LIST'=>true
+			'INLINE_LIST'=>true,
 		));
 		$fields=do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
@@ -260,7 +260,7 @@ class Hook_addon_registry_community_billboard
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
 			'INPUT'=>$input,
-			'COMCODE'=>''
+			'COMCODE'=>'',
 		));
 
 		return array(
@@ -272,7 +272,7 @@ class Hook_addon_registry_community_billboard
 				'GET'=>true,
 				'FIELDS'=>$fields,
 				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word()
+				'SUBMIT_NAME'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}

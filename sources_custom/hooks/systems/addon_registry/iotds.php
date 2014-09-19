@@ -224,7 +224,7 @@ class Hook_addon_registry_iotds
 				'USED_URL'=>placeholder_url(),
 				'CURRENT_IOTD'=>$current_iotd,
 				'UNUSED_IOTD'=>$unused_iotd,
-				'USED_IOTD'=>$used_iotd
+				'USED_IOTD'=>$used_iotd,
 			)),NULL,'',true)
 		);
 	}
@@ -249,7 +249,7 @@ class Hook_addon_registry_iotds
 				'VIEW_URL'=>placeholder_url(),
 				'SUBMIT_URL'=>placeholder_url(),
 				'ARCHIVE_URL'=>placeholder_url(),
-				'ID'=>placeholder_id()
+				'ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}
@@ -344,7 +344,7 @@ class Hook_addon_registry_iotds
 			'COMMENT_URL'=>placeholder_url(),
 			'TITLE'=>lorem_word(),
 			'MAKE_POST'=>true,
-			'CREATE_TICKET_MAKE_POST'=>true
+			'CREATE_TICKET_MAKE_POST'=>true,
 		));
 
 		$comment_details=do_lorem_template('COMMENTS_WRAPPER',array(
@@ -374,7 +374,7 @@ class Hook_addon_registry_iotds
 				'RATING_DETAILS'=>$rating_details,
 				'COMMENT_DETAILS'=>$comment_details,
 				'EDIT_URL'=>placeholder_url(),
-				'URL'=>placeholder_image_url()
+				'URL'=>placeholder_image_url(),
 			)),NULL,'',true)
 		);
 	}

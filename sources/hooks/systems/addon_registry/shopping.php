@@ -209,7 +209,7 @@ class Hook_addon_registry_shopping
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_SHOPPING_CART_STAGE_PAY',array(
-				'TRANSACTION_BUTTON'=>placeholder_button()
+				'TRANSACTION_BUTTON'=>placeholder_button(),
 			)),NULL,'',true)
 		);
 	}
@@ -253,7 +253,7 @@ class Hook_addon_registry_shopping
 		) as $k=>$v)
 		{
 			$fields_title->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
-				'VALUE'=>$v
+				'VALUE'=>$v,
 			)));
 		}
 		$entries=new ocp_tempcode();
@@ -271,11 +271,11 @@ class Hook_addon_registry_shopping
 			foreach ($entry_data as $_k=>$_v)
 			{
 				$cells->attach(do_lorem_template('RESULTS_TABLE_'.$tplset.'FIELD',array(
-					'VALUE'=>$_v
+					'VALUE'=>$_v,
 				)));
 			}
 			$entries->attach(do_lorem_template('RESULTS_TABLE_'.$tplset.'ENTRY',array(
-				'VALUES'=>$cells
+				'VALUES'=>$cells,
 			)));
 		}
 
@@ -285,7 +285,7 @@ class Hook_addon_registry_shopping
 			$selectors->attach(do_lorem_template('PAGINATION_SORTER',array(
 				'SELECTED'=>'',
 				'NAME'=>$v,
-				'VALUE'=>$v
+				'VALUE'=>$v,
 			)));
 		}
 
@@ -293,7 +293,7 @@ class Hook_addon_registry_shopping
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
-			'SELECTORS'=>$selectors
+			'SELECTORS'=>$selectors,
 		));
 
 		return do_lorem_template('RESULTS_'.$tplset.'TABLE',array(
@@ -351,7 +351,7 @@ class Hook_addon_registry_shopping
 				'ORDER_STATUS'=>lorem_phrase(),
 				'NOTES'=>lorem_phrase(),
 				'ORDER_ACTIONS'=>$order_actions,
-				'SHIPPING_ADDRESS'=>$shipping_address
+				'SHIPPING_ADDRESS'=>$shipping_address,
 			)),NULL,'',true)
 		);
 	}
@@ -367,7 +367,7 @@ class Hook_addon_registry_shopping
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ECOM_ITEM_DETAILS',array(
-				'FIELDS'=>placeholder_fields()
+				'FIELDS'=>placeholder_fields(),
 			)),NULL,'',true)
 		);
 	}
@@ -398,7 +398,7 @@ class Hook_addon_registry_shopping
 				'IPN_URL'=>placeholder_url(),
 				'ORDER_ID'=>placeholder_id(),
 				'NOTIFICATION_TEXT'=>lorem_sentence_html(),
-				'MEMBER_ADDRESS'=>placeholder_array()
+				'MEMBER_ADDRESS'=>placeholder_array(),
 			)),NULL,'',true)
 		);
 	}
@@ -423,7 +423,7 @@ class Hook_addon_registry_shopping
 			foreach (placeholder_array(8) as $_v)
 			{
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
-					'VALUE'=>$_v
+					'VALUE'=>$_v,
 				)));
 			}
 			$fields_title=$cells;
@@ -454,11 +454,11 @@ class Hook_addon_registry_shopping
 			{
 				$cells->attach(do_lorem_template('RESULTS_TABLE_cart_FIELD',array(
 					'VALUE'=>$value,
-					'CLASS'=>''
+					'CLASS'=>'',
 				)));
 			}
 			$shopping_cart->attach(do_lorem_template('RESULTS_TABLE_cart_ENTRY',array(
-				'VALUES'=>$cells
+				'VALUES'=>$cells,
 			)));
 		}
 		//results_entry ends
@@ -476,7 +476,7 @@ class Hook_addon_registry_shopping
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
-			'SELECTORS'=>$selectors
+			'SELECTORS'=>$selectors,
 		));
 
 		$results_table=do_lorem_template('RESULTS_cart_TABLE',array(
@@ -509,7 +509,7 @@ class Hook_addon_registry_shopping
 				'EMPTY_CART_URL'=>placeholder_url(),
 				'PROCEED_BOX'=>$proceed_box,
 				'ALLOW_OPTOUT_TAX'=>lorem_phrase(),
-				'ALLOW_OPTOUT_TAX_VALUE'=>lorem_phrase()
+				'ALLOW_OPTOUT_TAX_VALUE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -539,7 +539,7 @@ class Hook_addon_registry_shopping
 			lorem_globalise(do_lorem_template('ECOM_ORDERS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
-				'ORDERS'=>$orders
+				'ORDERS'=>$orders,
 			)),NULL,'',true)
 		);
 	}
@@ -560,7 +560,7 @@ class Hook_addon_registry_shopping
 				'PRODUCT_DET_URL'=>placeholder_url(),
 				'PRODUCT_NAME'=>lorem_word(),
 				'AMOUNT'=>placeholder_id(),
-				'QUANTITY'=>"2",
+				'QUANTITY'=>'2',
 				'DISPATCH_STATUS'=>lorem_word_2()
 			);
 		}
@@ -568,7 +568,7 @@ class Hook_addon_registry_shopping
 			lorem_globalise(do_lorem_template('ECOM_ORDERS_DETAILS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'CURRENCY'=>lorem_phrase(),
-				'PRODUCTS'=>$orders
+				'PRODUCTS'=>$orders,
 			)),NULL,'',true)
 		);
 	}
@@ -652,7 +652,7 @@ class Hook_addon_registry_shopping
 				'_EDIT_LINK'=>placeholder_link(),
 				'TRACKBACK_DETAILS'=>lorem_phrase(),
 				'RATING_DETAILS'=>lorem_phrase(),
-				'COMMENT_DETAILS'=>lorem_phrase()
+				'COMMENT_DETAILS'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -780,7 +780,7 @@ class Hook_addon_registry_shopping
 		{
 			if ($k==1)
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE',array(
-					'VALUE'=>$v
+					'VALUE'=>$v,
 				)));
 			else
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE_SORTABLE',array(
@@ -803,11 +803,11 @@ class Hook_addon_registry_shopping
 					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2)
 				));
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
-					'VALUE'=>$tick
+					'VALUE'=>$tick,
 				)));
 			}
 			$order_entries->attach(do_lorem_template('RESULTS_TABLE_ENTRY',array(
-				'VALUES'=>$cells
+				'VALUES'=>$cells,
 			)));
 		}
 		//results_entry ends
@@ -819,14 +819,14 @@ class Hook_addon_registry_shopping
 			$selectors->attach(do_lorem_template('PAGINATION_SORTER',array(
 				'SELECTED'=>'',
 				'NAME'=>$v,
-				'VALUE'=>$v
+				'VALUE'=>$v,
 			)));
 		}
 		$sort=do_lorem_template('PAGINATION_SORT',array(
 			'HIDDEN'=>'',
 			'SORT'=>lorem_word(),
 			'URL'=>placeholder_url(),
-			'SELECTORS'=>$selectors
+			'SELECTORS'=>$selectors,
 		));
 
 		return array(

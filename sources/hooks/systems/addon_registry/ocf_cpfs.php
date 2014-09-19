@@ -135,7 +135,7 @@ class Hook_addon_registry_ocf_cpfs
 	{
 		return array(
 			lorem_globalise(do_lorem_template('OCF_CPF_PERMISSIONS_TAB',array(
-				'FIELDS'=>placeholder_fields()
+				'FIELDS'=>placeholder_fields(),
 			)),NULL,'',true)
 		);
 	}
@@ -161,7 +161,7 @@ class Hook_addon_registry_ocf_cpfs
 		return array(
 			lorem_globalise(do_lorem_template('OCF_CPF_STATS_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'STATS'=>$lines
+				'STATS'=>$lines,
 			)),NULL,'',true)
 		);
 	}

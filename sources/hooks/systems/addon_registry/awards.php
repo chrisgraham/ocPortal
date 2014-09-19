@@ -154,7 +154,7 @@ class Hook_addon_registry_awards
 				'AWARD_DATE'=>placeholder_time(),
 				'CONTENT'=>lorem_phrase_html(),
 				'SUBMIT_URL'=>placeholder_url(),
-				'ARCHIVE_URL'=>placeholder_url()
+				'ARCHIVE_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -175,7 +175,7 @@ class Hook_addon_registry_awards
 				'AWARDEE_USERNAME'=>lorem_word(),
 				'RAW_AWARD_DATE'=>placeholder_time(),
 				'AWARD_DATE'=>placeholder_time(),
-				'CONTENT'=>lorem_phrase()
+				'CONTENT'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

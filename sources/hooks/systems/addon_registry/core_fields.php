@@ -183,7 +183,7 @@ class Hook_addon_registry_core_fields
 						'OPTION'=>lorem_phrase()
 					)
 				),
-				'FIELD_ID'=>placeholder_id()
+				'FIELD_ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}
@@ -201,7 +201,7 @@ class Hook_addon_registry_core_fields
 			lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_PICTURE',array(
 				'URL'=>placeholder_url(),
 				'THUMB_URL'=>placeholder_image_url(),
-				'I'=>'0'
+				'I'=>'0',
 			)),NULL,'',true)
 		);
 	}

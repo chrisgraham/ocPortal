@@ -193,7 +193,7 @@ class Hook_addon_registry_banners
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BANNER_PREVIEW',array(
-				'PREVIEW'=>lorem_phrase()
+				'PREVIEW'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -212,7 +212,7 @@ class Hook_addon_registry_banners
 				'NAME'=>lorem_word(),
 				'WIDTH'=>placeholder_number(),
 				'HEIGHT'=>placeholder_number(),
-				'TYPE'=>lorem_word()
+				'TYPE'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -232,7 +232,7 @@ class Hook_addon_registry_banners
 				'TEXT'=>lorem_sentence_html(),
 				'BANNER_CODE'=>lorem_phrase(),
 				'STATS_URL'=>placeholder_url(),
-				'DO_NEXT'=>lorem_phrase()
+				'DO_NEXT'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -254,7 +254,7 @@ class Hook_addon_registry_banners
 				'DESCRIPTION'=>lorem_word(),
 				'BANNER'=>lorem_word_2(),
 				'HITSFROM'=>placeholder_number(),
-				'HITSTO'=>placeholder_number()
+				'HITSTO'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}
@@ -306,7 +306,7 @@ class Hook_addon_registry_banners
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_BANNER_WAVE',array(
 				'EXTRA'=>lorem_phrase(),
 				'TYPE'=>lorem_phrase(),
-				'ASSEMBLE'=>$assemble
+				'ASSEMBLE'=>$assemble,
 			)),NULL,'',true)
 		);
 	}
@@ -322,7 +322,7 @@ class Hook_addon_registry_banners
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BANNERS_NONE',array(
-				'ADD_BANNER_URL'=>placeholder_url()
+				'ADD_BANNER_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -344,7 +344,7 @@ class Hook_addon_registry_banners
 				'SOURCE'=>lorem_phrase(),
 				'DEST'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
-				'IMG'=>placeholder_image_url()
+				'IMG'=>placeholder_image_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -367,7 +367,7 @@ class Hook_addon_registry_banners
 				'SOURCE'=>lorem_phrase(),
 				'DEST'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
-				'IMG'=>placeholder_image_url()
+				'IMG'=>placeholder_image_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -386,7 +386,7 @@ class Hook_addon_registry_banners
 				'B_TYPE'=>lorem_phrase(),
 				'IMG'=>placeholder_image_url(),
 				'WIDTH'=>placeholder_number(),
-				'HEIGHT'=>placeholder_number()
+				'HEIGHT'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}
@@ -408,7 +408,7 @@ class Hook_addon_registry_banners
 				'SOURCE'=>lorem_phrase(),
 				'DEST'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
-				'FILTERED_URL'=>placeholder_url()
+				'FILTERED_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -425,7 +425,7 @@ class Hook_addon_registry_banners
 		require_lang('pointstore');
 		return array(
 			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_2',array(
-				'BANNER_URL'=>placeholder_url()
+				'BANNER_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -442,7 +442,7 @@ class Hook_addon_registry_banners
 		require_lang('pointstore');
 		return array(
 			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_UPGRADE',array(
-				'UPGRADE_URL'=>placeholder_url()
+				'UPGRADE_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -459,7 +459,7 @@ class Hook_addon_registry_banners
 		require_lang('pointstore');
 		return array(
 			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_ACTIVATE',array(
-				'ACTIVATE_URL'=>placeholder_url()
+				'ACTIVATE_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -478,7 +478,7 @@ class Hook_addon_registry_banners
 			lorem_globalise(do_lorem_template('POINTSTORE_BANNERS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ACTIVATE'=>lorem_phrase(),
-				'UPGRADE'=>lorem_phrase()
+				'UPGRADE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

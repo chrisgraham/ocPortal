@@ -298,7 +298,7 @@ class Hook_addon_registry_core_configuration
 				'GROUP_DESCRIPTION'=>lorem_word(),
 				'GROUP_NAME'=>$group,
 				'GROUP'=>placeholder_fields(),
-				'GROUP_TITLE'=>"ID$k"
+				'GROUP_TITLE'=>'ID'.strval($k),
 			));
 			$groups->attach($group->evaluate());
 		}
@@ -313,7 +313,7 @@ class Hook_addon_registry_core_configuration
 				'URL'=>placeholder_url(),
 				'GROUPS'=>$groups,
 				'SUBMIT_ICON'=>'buttons__save',
-				'SUBMIT_NAME'=>lorem_word()
+				'SUBMIT_NAME'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -331,7 +331,7 @@ class Hook_addon_registry_core_configuration
 			lorem_globalise(do_lorem_template('XML_CONFIG_SCREEN',array(
 				'XML'=>'<test />',
 				'POST_URL'=>placeholder_url(),
-				'TITLE'=>lorem_title()
+				'TITLE'=>lorem_title(),
 			)),NULL,'',true)
 		);
 	}

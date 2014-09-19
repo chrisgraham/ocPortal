@@ -130,7 +130,7 @@ class Hook_addon_registry_errorlog
 			lorem_globalise(do_lorem_template('ERRORLOG_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'ERROR'=>lorem_phrase(),
-				'PERMISSION'=>lorem_phrase()
+				'PERMISSION'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

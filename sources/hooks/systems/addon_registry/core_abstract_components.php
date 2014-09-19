@@ -165,7 +165,7 @@ class Hook_addon_registry_core_abstract_components
 
 		return array(
 			lorem_globalise(do_lorem_template('REVISION_HISTORY_WRAP',array(
-				'CONTENT'=>$revision_history
+				'CONTENT'=>$revision_history,
 			)),NULL,'',true)
 		);
 	}
@@ -188,7 +188,7 @@ class Hook_addon_registry_core_abstract_components
 				'3_TITLE'=>lorem_phrase(),
 				'3_URL'=>placeholder_url(),
 				'4_TITLE'=>lorem_phrase(),
-				'4_URL'=>placeholder_url()
+				'4_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -223,7 +223,7 @@ class Hook_addon_registry_core_abstract_components
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
 				'FULL_TITLE'=>lorem_phrase(),
-				'IMG'=>'buttons__edit'
+				'IMG'=>'buttons__edit',
 			)),NULL,'',true)
 		);
 	}
@@ -260,7 +260,7 @@ class Hook_addon_registry_core_abstract_components
 		return array(
 			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE',array(
 				'TEXT_SMALL'=>lorem_sentence_html(),
-				'TEXT_LARGE'=>lorem_sentence_html()
+				'TEXT_LARGE'=>lorem_sentence_html(),
 			)),NULL,'',true)
 		);
 	}
@@ -278,7 +278,7 @@ class Hook_addon_registry_core_abstract_components
 			lorem_globalise(do_lorem_template('IMG_THUMB',array(
 				'JS_TOOLTIP'=>lorem_phrase(),
 				'CAPTION'=>lorem_phrase(),
-				'URL'=>placeholder_image_url()
+				'URL'=>placeholder_image_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -295,7 +295,7 @@ class Hook_addon_registry_core_abstract_components
 		return array(
 			lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER',array(
 				'TEXT_LARGE'=>lorem_phrase(),
-				'TEXT_SMALL'=>lorem_phrase()
+				'TEXT_SMALL'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -364,7 +364,7 @@ class Hook_addon_registry_core_abstract_components
 		{
 			$meta[]=array(
 				'KEY'=>strval($k),
-				'VALUE'=>$v
+				'VALUE'=>$v,
 			);
 		}
 

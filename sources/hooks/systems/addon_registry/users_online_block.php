@@ -164,7 +164,7 @@ class Hook_addon_registry_users_online_block
 				'_GUESTS'=>lorem_phrase(),
 				'_MEMBERS'=>lorem_phrase(),
 				'BIRTHDAYS'=>$birthdays,
-				'NEWEST'=>$newest
+				'NEWEST'=>$newest,
 			)),NULL,'',true)
 		);
 	}

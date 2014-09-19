@@ -226,7 +226,7 @@ class Hook_addon_registry_core_feedback_features
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
 				'EXCERPT'=>lorem_phrase(),
-				'NAME'=>$value
+				'NAME'=>$value,
 			)));
 		}
 
@@ -234,7 +234,7 @@ class Hook_addon_registry_core_feedback_features
 			lorem_globalise(do_lorem_template('TRACKBACK_DELETE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TRACKBACKS'=>$trackbacks,
-				'LOTS'=>lorem_phrase()
+				'LOTS'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -250,7 +250,7 @@ class Hook_addon_registry_core_feedback_features
 	{
 		return array(
 			lorem_globalise(do_lorem_template('TRACKBACK_XML_ERROR',array(
-				'TRACKBACK_ERROR'=>lorem_phrase()
+				'TRACKBACK_ERROR'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -272,7 +272,7 @@ class Hook_addon_registry_core_feedback_features
 		$xml->attach(do_lorem_template('TRACKBACK_XML_NO_ERROR',array()));
 		return array(
 			lorem_globalise(do_lorem_template('TRACKBACK_XML_WRAPPER',array(
-				'XML'=>$xml
+				'XML'=>$xml,
 			)),NULL,'',true)
 		);
 	}
@@ -294,7 +294,7 @@ class Hook_addon_registry_core_feedback_features
 
 		$content=do_lorem_template('ATTACHMENT',array(
 			'I'=>placeholder_number(),
-			'POSTING_FIELD_NAME'=>''
+			'POSTING_FIELD_NAME'=>'',
 		));
 
 		$attachments=do_lorem_template('ATTACHMENTS',array(
@@ -329,7 +329,7 @@ class Hook_addon_registry_core_feedback_features
 		$ret->attach(do_lorem_template('COMMENT_AJAX_HANDLER',array(
 			'OPTIONS'=>'',
 			'IS_THREADED'=>false,
-			'HASH'=>''
+			'HASH'=>'',
 		)));
 
 		return array(
@@ -414,7 +414,7 @@ class Hook_addon_registry_core_feedback_features
 			'COMMENT_URL'=>placeholder_url(),
 			'TITLE'=>lorem_word(),
 			'MAKE_POST'=>true,
-			'CREATE_TICKET_MAKE_POST'=>true
+			'CREATE_TICKET_MAKE_POST'=>true,
 		));
 
 		$out=do_lorem_template('COMMENTS_WRAPPER',array(
@@ -471,7 +471,7 @@ class Hook_addon_registry_core_feedback_features
 				'TRACKBACKS'=>$content,
 				'TRACKBACK_PAGE'=>lorem_word(),
 				'TRACKBACK_ID'=>placeholder_id(),
-				'TRACKBACK_TITLE'=>lorem_phrase()
+				'TRACKBACK_TITLE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -508,7 +508,7 @@ class Hook_addon_registry_core_feedback_features
 		$all_rating_criteria=array();
 		$all_rating_criteria[]=array(
 			'TITLE'=>lorem_word(),
-			'RATING'=>make_string_tempcode("6"),
+			'RATING'=>make_string_tempcode('6'),
 			'NUM_RATINGS'=>placeholder_number(),
 			'TYPE'=>lorem_word()
 		);
@@ -534,9 +534,9 @@ class Hook_addon_registry_core_feedback_features
 				'ID'=>placeholder_id(),
 				'HAS_RATINGS'=>true,
 				'ALL_RATING_CRITERIA'=>$all_rating_criteria,
-				'NUM_RATINGS'=>"10",
+				'NUM_RATINGS'=>'10',
 				'RATING_FORM'=>$rating_form,
-				'ERROR'=>''
+				'ERROR'=>'',
 			)),NULL,'',true)
 		);
 	}
@@ -568,7 +568,7 @@ class Hook_addon_registry_core_feedback_features
 			'ALL_RATING_CRITERIA'=>$all_rating_criteria,
 			'HAS_RATINGS'=>true,
 			'SIMPLISTIC'=>false,
-			'ERROR'=>''
+			'ERROR'=>'',
 
 		));
 		return array(
@@ -581,7 +581,7 @@ class Hook_addon_registry_core_feedback_features
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
 				'RATING_FORM'=>$rating_form,
 				'ERROR'=>'',
-				'LIKES'=>false
+				'LIKES'=>false,
 			)),NULL,'',true)
 		);
 	}
@@ -613,7 +613,7 @@ class Hook_addon_registry_core_feedback_features
 			'HAS_RATINGS'=>true,
 			'SIMPLISTIC'=>false,
 			'ERROR'=>'',
-			'LIKES'=>true
+			'LIKES'=>true,
 		));
 		return array(
 			lorem_globalise(do_lorem_template('RATING_INLINE_DYNAMIC',array(
@@ -625,7 +625,7 @@ class Hook_addon_registry_core_feedback_features
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
 				'RATING_FORM'=>$rating_form,
 				'ERROR'=>'',
-				'LIKES'=>false
+				'LIKES'=>false,
 			)),NULL,'',true)
 		);
 	}
@@ -657,7 +657,7 @@ class Hook_addon_registry_core_feedback_features
 			'HAS_RATINGS'=>true,
 			'SIMPLISTIC'=>false,
 			'ERROR'=>'',
-			'LIKES'=>true
+			'LIKES'=>true,
 		));
 		return array(
 			lorem_globalise(do_lorem_template('RATING_DISPLAY_SHARED',array(
@@ -670,7 +670,7 @@ class Hook_addon_registry_core_feedback_features
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
 				'RATING_FORM'=>$rating_form,
 				'ERROR'=>'',
-				'LIKES'=>false
+				'LIKES'=>false,
 			)),NULL,'',true)
 		);
 	}

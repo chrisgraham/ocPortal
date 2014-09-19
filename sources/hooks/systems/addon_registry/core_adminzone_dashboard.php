@@ -238,7 +238,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'UNFORMATTED_LINKS'=>$unformatted,
 				'URL'=>placeholder_url(),
 				'BLOCK_NAME'=>'',
-				'MAP'=>''
+				'MAP'=>'',
 			)),NULL,'',true)
 		);
 	}
@@ -259,7 +259,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'CONTENTS'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'BLOCK_NAME'=>'',
-				'MAP'=>''
+				'MAP'=>'',
 			)),NULL,'',true)
 		);
 	}
@@ -291,7 +291,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 		$url=build_url(array(
 			'page'=>'admin_orders',
 			'type'=>'show_orders',
-			'filter'=>'undispatched'
+			'filter'=>'undispatched',
 		), get_module_zone('admin_orders'));
 
 		$no_times=do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array(
@@ -340,7 +340,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'CUSTOM_TASKS'=>$custom_task,
 				'DATES'=>$dates,
 				'NO_TIMES'=>$no_times,
-				'TODO_COUNTS'=>$todo
+				'TODO_COUNTS'=>$todo,
 			)),NULL,'',true)
 		);
 	}
@@ -379,7 +379,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'TIP'=>lorem_phrase(),
 				'TIP_CODE'=>lorem_phrase(),
 				'LEVEL'=>lorem_phrase(),
-				'COUNT'=>placeholder_number()
+				'COUNT'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}

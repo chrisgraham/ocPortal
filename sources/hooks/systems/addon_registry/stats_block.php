@@ -157,12 +157,12 @@ class Hook_addon_registry_stats_block
 		}
 		$full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION',array(
 			'SECTION'=>lorem_phrase(),
-			'CONTENT'=>$bits
+			'CONTENT'=>$bits,
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS',array(
-				'CONTENT'=>$full_tpl
+				'CONTENT'=>$full_tpl,
 			)),NULL,'',true)
 		);
 	}

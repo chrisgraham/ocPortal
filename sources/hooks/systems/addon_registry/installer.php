@@ -164,7 +164,7 @@ class Hook_addon_registry_installer
 
 		return array(
 			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
-				'CSS_NOCACHE'=>".nocss{}",
+				'CSS_NOCACHE'=>'.nocss{}',
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
 				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
@@ -172,7 +172,7 @@ class Hook_addon_registry_installer
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>lorem_paragraph_html(),
-				'VERSION'=>lorem_phrase()
+				'VERSION'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -209,7 +209,7 @@ class Hook_addon_registry_installer
 				'DISABLED'=>false,
 				'NAME'=>$lang,
 				'CLASS'=>'',
-				'TEXT'=>$lang
+				'TEXT'=>$lang,
 			));
 			$languages->attach($entry);
 		}
@@ -217,11 +217,11 @@ class Hook_addon_registry_installer
 			'URL'=>placeholder_url(),
 			'WARNINGS'=>$warning,
 			'HIDDEN'=>'',
-			'LANGUAGES'=>$languages
+			'LANGUAGES'=>$languages,
 		));
 		return array(
 			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
-				'CSS_NOCACHE'=>".nocss{}",
+				'CSS_NOCACHE'=>'.nocss{}',
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
 				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
@@ -229,7 +229,7 @@ class Hook_addon_registry_installer
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$content,
-				'VERSION'=>lorem_phrase()
+				'VERSION'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -255,7 +255,7 @@ class Hook_addon_registry_installer
 		));
 		return array(
 			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
-				'CSS_NOCACHE'=>".nocss{}",
+				'CSS_NOCACHE'=>'.nocss{}',
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
 				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
@@ -263,7 +263,7 @@ class Hook_addon_registry_installer
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$content,
-				'VERSION'=>lorem_phrase()
+				'VERSION'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -285,7 +285,7 @@ class Hook_addon_registry_installer
 		$forum_array=array(
 			array(
 				'1'=>'forum1',
-				'2'=>'forum2'
+				'2'=>'forum2',
 			)
 		);
 		$tforums=new ocp_tempcode();
@@ -302,14 +302,14 @@ class Hook_addon_registry_installer
 					'CLASS'=>$forum,
 					'NAME'=>$forum,
 					'VERSION'=>$version,
-					'EXTRA'=>''
+					'EXTRA'=>'',
 				)));
 				$simple_forums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION',array(
 					'IS_DEFAULT'=>false,
 					'CLASS'=>$forum,
 					'NAME'=>$forum,
 					'VERSION'=>$version,
-					'EXTRA'=>''
+					'EXTRA'=>'',
 				)));
 			}
 			$tforums->attach(do_lorem_template('INSTALLER_FORUM_CHOICE',array(
@@ -317,7 +317,7 @@ class Hook_addon_registry_installer
 				'REC'=>'',
 				'TEXT'=>lorem_phrase(),
 				'VERSIONS'=>$versions,
-				'EXTRA'=>''
+				'EXTRA'=>'',
 			)));
 		}
 
@@ -330,7 +330,7 @@ class Hook_addon_registry_installer
 				'DISABLED'=>false,
 				'NAME'=>$dbname,
 				'CLASS'=>'',
-				'TEXT'=>$dbname
+				'TEXT'=>$dbname,
 			));
 			$tdatabase->attach($entry);
 		}
@@ -344,12 +344,12 @@ class Hook_addon_registry_installer
 			'FORUMS'=>$tforums,
 			'DATABASES'=>$tdatabase,
 			'VERSION'=>$default_version,
-			'IS_QUICK'=>false
+			'IS_QUICK'=>false,
 		));
 
 		return array(
 			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
-				'CSS_NOCACHE'=>".nocss{}",
+				'CSS_NOCACHE'=>'.nocss{}',
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
 				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
@@ -357,7 +357,7 @@ class Hook_addon_registry_installer
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$step3,
-				'VERSION'=>lorem_phrase()
+				'VERSION'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -375,14 +375,14 @@ class Hook_addon_registry_installer
 	{
 		$input=do_lorem_template('INSTALLER_INPUT_TICK',array(
 			'CHECKED'=>$value==1,
-			'NAME'=>$name
+			'NAME'=>$name,
 		));
 		return do_lorem_template('INSTALLER_STEP_4_SECTION_OPTION',array(
 			'_GUID'=>'0723f86908f66da7f67ebc4cd07bff2e',
 			'NAME'=>$name,
 			'INPUT'=>$input,
 			'NICE_NAME'=>$nice_name,
-			'DESCRIPTION'=>$description
+			'DESCRIPTION'=>$description,
 		));
 	}
 
@@ -404,7 +404,7 @@ class Hook_addon_registry_installer
 			$input=do_lorem_template('INSTALLER_INPUT_PASSWORD',array(
 				'REQUIRED'=>$required,
 				'NAME'=>$name,
-				'VALUE'=>$value
+				'VALUE'=>$value,
 			));
 		}
 		else
@@ -412,7 +412,7 @@ class Hook_addon_registry_installer
 			$input=do_lorem_template('INSTALLER_INPUT_LINE',array(
 				'REQUIRED'=>$required,
 				'NAME'=>$name,
-				'VALUE'=>$value
+				'VALUE'=>$value,
 			));
 		}
 
@@ -420,7 +420,7 @@ class Hook_addon_registry_installer
 			'NAME'=>$name,
 			'INPUT'=>$input,
 			'NICE_NAME'=>$nice_name,
-			'DESCRIPTION'=>$description
+			'DESCRIPTION'=>$description,
 		));
 	}
 
@@ -448,7 +448,7 @@ class Hook_addon_registry_installer
 			'HIDDEN'=>'',
 			'TITLE'=>lorem_word(),
 			'TEXT'=>lorem_sentence_html(),
-			'OPTIONS'=>$options
+			'OPTIONS'=>$options,
 		));
 
 		$section->attach(do_lorem_template('INSTALLER_STEP_4_SECTION_HIDE',array(
@@ -465,11 +465,11 @@ class Hook_addon_registry_installer
 			'FORUM_TYPE'=>lorem_phrase(),
 			'BOARD_PATH'=>lorem_phrase(),
 			'SECTIONS'=>$section,
-			'MAX'=>'1000'
+			'MAX'=>'1000',
 		));
 		return array(
 			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
-				'CSS_NOCACHE'=>".nocss{}",
+				'CSS_NOCACHE'=>'.nocss{}',
 				'DEFAULT_FORUM'=>lorem_phrase(),
 				'PASSWORD_PROMPT'=>lorem_phrase(),
 				'CSS_URL'=>get_base_url().'/themes/default/css/installer.css',
@@ -477,7 +477,7 @@ class Hook_addon_registry_installer
 				'LOGO_URL'=>placeholder_image_url(),
 				'STEP'=>'1',
 				'CONTENT'=>$content,
-				'VERSION'=>lorem_phrase()
+				'VERSION'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -501,7 +501,7 @@ class Hook_addon_registry_installer
 				'PREVIOUS_STEP'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
 				'LOG'=>$message,
-				'HIDDEN'=>''
+				'HIDDEN'=>'',
 			)),NULL,'',true)
 		);
 	}
@@ -527,7 +527,7 @@ class Hook_addon_registry_installer
 			lorem_globalise(do_lorem_template('INSTALLER_STEP_10',array(
 				'PREVIOUS_STEP'=>lorem_phrase(),
 				'FINAL'=>lorem_phrase(),
-				'LOG'=>$message
+				'LOG'=>$message,
 			)),NULL,'',true)
 		);
 	}

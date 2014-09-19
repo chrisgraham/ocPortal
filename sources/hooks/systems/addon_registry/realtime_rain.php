@@ -403,7 +403,7 @@ class Hook_addon_registry_realtime_rain
 		require_lang('realtime_rain');
 		return array(
 			lorem_globalise(do_lorem_template('REALTIME_RAIN_OVERLAY',array(
-				'MIN_TIME'=>placeholder_id()
+				'MIN_TIME'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}
@@ -428,8 +428,7 @@ class Hook_addon_registry_realtime_rain
 				'TICKER_TEXT'=>lorem_phrase(),
 				'TYPE'=>lorem_word(),
 				'IS_POSITIVE'=>true,
-				'IS_NEGATIVE'=>false
-				// 					''=>(),
+				'IS_NEGATIVE'=>false,
 			)),NULL,'',true)
 		);
 	}

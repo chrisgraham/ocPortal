@@ -144,7 +144,7 @@ class Hook_addon_registry_redirects_editor
 				'FROM_PAGE'=>lorem_word(),
 				'TO_PAGE'=>lorem_word_2(),
 				'TICKED'=>true,
-				'NAME'=>"is_transparent_$i"
+				'NAME'=>'is_transparent_'.strval($i),
 			)));
 		}
 
@@ -155,7 +155,7 @@ class Hook_addon_registry_redirects_editor
 			'FROM_PAGE'=>'',
 			'TO_PAGE'=>'',
 			'TICKED'=>false,
-			'NAME'=>'is_transparent_new'
+			'NAME'=>'is_transparent_new',
 		));
 
 		$out=do_lorem_template('REDIRECTE_TABLE_SCREEN',array(

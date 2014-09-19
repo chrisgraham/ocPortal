@@ -187,7 +187,7 @@ class Hook_addon_registry_import
 				'HIDDEN'=>'',
 				'IMPORTER'=>lorem_phrase(),
 				'IMPORT_LIST'=>$import_list,
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -205,7 +205,7 @@ class Hook_addon_registry_import
 			lorem_globalise(do_lorem_template('XML_STORAGE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'IMPORT_FORM'=>placeholder_form(),
-				'EXPORT_FORM'=>placeholder_form()
+				'EXPORT_FORM'=>placeholder_form(),
 			)),NULL,'',true)
 		);
 	}
@@ -231,7 +231,7 @@ class Hook_addon_registry_import
 		return array(
 			lorem_globalise(do_lorem_template('XML_STORAGE_IMPORT_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'OPS'=>$ops_nice
+				'OPS'=>$ops_nice,
 			)),NULL,'',true)
 		);
 	}
@@ -248,7 +248,7 @@ class Hook_addon_registry_import
 		return array(
 			lorem_globalise(do_lorem_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'XML'=>lorem_phrase()
+				'XML'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -269,7 +269,7 @@ class Hook_addon_registry_import
 				'PAGE_HEADER'=>lorem_phrase(),
 				'TEXT'=>lorem_sentence_html(),
 				'PAGE_FOOTER'=>lorem_phrase(),
-				'SIGNATURE'=>lorem_phrase()
+				'SIGNATURE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -290,7 +290,7 @@ class Hook_addon_registry_import
 				'PAGE_HEADER'=>lorem_phrase(),
 				'TEXT'=>lorem_sentence_html(),
 				'PAGE_FOOTER'=>lorem_phrase(),
-				'SIGNATURE'=>lorem_phrase()
+				'SIGNATURE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

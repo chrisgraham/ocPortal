@@ -194,7 +194,7 @@ class Hook_addon_registry_newsletter
 
 		return array(
 			lorem_globalise(do_lorem_template('NEWSLETTER_AUTOMATED_FCOMCODE',array(
-				'CONTENT'=>$content
+				'CONTENT'=>$content,
 			)),NULL,'',true)
 		);
 	}
@@ -232,7 +232,7 @@ class Hook_addon_registry_newsletter
 				'SUBSCRIBERS'=>$outs,
 				'PAGINATION'=>'',
 				'TITLE'=>lorem_title(),
-				'DOMAINS'=>placeholder_array()
+				'DOMAINS'=>placeholder_array(),
 			)),NULL,'',true)
 		);
 	}
@@ -276,7 +276,7 @@ class Hook_addon_registry_newsletter
 				'BACK_URL'=>placeholder_url(),
 				'PREVIEW'=>$preview,
 				'FIELDS'=>new ocp_tempcode(),
-				'TITLE'=>lorem_title()
+				'TITLE'=>lorem_title(),
 			)),NULL,'',true)
 		);
 	}
@@ -293,7 +293,7 @@ class Hook_addon_registry_newsletter
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array(
 				'PASSWORD'=>lorem_phrase(),
-				'NEWSLETTER_TITLE'=>lorem_word()
+				'NEWSLETTER_TITLE'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -312,7 +312,7 @@ class Hook_addon_registry_newsletter
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array(
 				'URL'=>placeholder_url(),
 				'NEWSLETTER_TITLE'=>lorem_word(),
-				'NID'=>placeholder_id()
+				'NID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}

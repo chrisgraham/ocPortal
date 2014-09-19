@@ -145,7 +145,7 @@ class Hook_addon_registry_ocf_post_templates
 
 		$input=do_lorem_template('OCF_POST_TEMPLATE_SELECT',array(
 			'TABINDEX'=>placeholder_number(),
-			'LIST'=>$list
+			'LIST'=>$list,
 		));
 
 		$fields=new ocp_tempcode();
@@ -157,7 +157,7 @@ class Hook_addon_registry_ocf_post_templates
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
 			'INPUT'=>$input,
-			'COMCODE'=>''
+			'COMCODE'=>'',
 		)));
 
 		return array(
@@ -169,7 +169,7 @@ class Hook_addon_registry_ocf_post_templates
 				'FIELDS'=>$fields,
 				'SUBMIT_ICON'=>'buttons__proceed',
 				'SUBMIT_NAME'=>lorem_phrase(),
-				'TEXT'=>lorem_sentence_html()
+				'TEXT'=>lorem_sentence_html(),
 			)),NULL,'',true)
 		);
 	}

@@ -170,7 +170,7 @@ class Hook_addon_registry_core_permission_management
 		$groups=new ocp_tempcode();
 		foreach (placeholder_array() as $id=>$group_name)
 		{
-			$groups->attach(form_input_list_entry("$id", false, $group_name));
+			$groups->attach(form_input_list_entry(strval($id), false, $group_name));
 		}
 
 		return array(
@@ -180,7 +180,7 @@ class Hook_addon_registry_core_permission_management
 				'INITIAL_GROUP'=>lorem_phrase(),
 				'COLOR'=>lorem_phrase(),
 				'GROUPS'=>$groups,
-				'EDITOR'=>lorem_phrase()
+				'EDITOR'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -205,13 +205,13 @@ class Hook_addon_registry_core_permission_management
 		{
 			$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL',array(
 				'COLOR'=>$color,
-				'GROUP'=>$name
+				'GROUP'=>$name,
 			)));
 		}
 
 		$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL',array(
 			'COLOR'=>$color,
-			'GROUP'=>'+/-'
+			'GROUP'=>'+/-',
 		)));
 
 		$rows=new ocp_tempcode();
@@ -233,9 +233,9 @@ class Hook_addon_registry_core_permission_management
 			$rows->attach(do_lorem_template('PERMISSION_KEYS_PERMISSION_ROW',array(
 				'ALL_OFF'=>false,
 				'KEY'=>lorem_word(),
-				'UID'=>"$id",
+				'UID'=>strval($id),
 				'CODE'=>'',
-				'CELLS'=>$cells
+				'CELLS'=>$cells,
 			)));
 		}
 
@@ -244,7 +244,7 @@ class Hook_addon_registry_core_permission_management
 		$m_rows[]=array(
 			'id'=>'new_1',
 			'k_message'=>'',
-			'k_match_key'=>''
+			'k_match_key'=>'',
 		);
 
 		$rows2=new ocp_tempcode();
@@ -254,7 +254,7 @@ class Hook_addon_registry_core_permission_management
 			$rows2->attach(do_lorem_template('PERMISSION_KEYS_MESSAGE_ROW',array(
 				'KEY'=>lorem_word(),
 				'MSG'=>$msg,
-				'UID'=>$row['id']
+				'UID'=>$row['id'],
 			)));
 		}
 
@@ -288,12 +288,12 @@ class Hook_addon_registry_core_permission_management
 		{
 			$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL',array(
 				'COLOR'=>'b7b7b7',
-				'GROUP'=>$name
+				'GROUP'=>$name,
 			)));
 		}
 		$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL',array(
 			'COLOR'=>'b7b7b7',
-			'GROUP'=>''
+			'GROUP'=>'',
 		)));
 
 		$cols=new ocp_tempcode();
@@ -316,7 +316,7 @@ class Hook_addon_registry_core_permission_management
 					$cells->attach(do_lorem_template('PERMISSION_CELL',array(
 						'CHECKED'=>true,
 						'HUMAN'=>lorem_phrase(),
-						'NAME'=>"id_".strval($k)
+						'NAME'=>'id_'.strval($k)
 					)));
 					$k++;
 				}
@@ -326,7 +326,7 @@ class Hook_addon_registry_core_permission_management
 					'ABBR'=>lorem_word(),
 					'PERMISSION'=>lorem_word_2(),
 					'CELLS'=>$cells,
-					'CODE'=>''
+					'CODE'=>'',
 				)));
 			}
 		}
@@ -338,7 +338,7 @@ class Hook_addon_registry_core_permission_management
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'HEADER_CELLS'=>$header_cells,
-				'ROWS'=>$rows
+				'ROWS'=>$rows,
 			)),NULL,'',true)
 		);
 	}
@@ -391,13 +391,13 @@ class Hook_addon_registry_core_permission_management
 
 			$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL',array(
 				'COLOR'=>'FF00FF',
-				'GROUP'=>$permission
+				'GROUP'=>$permission,
 			)));
 		}
 
 		$header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL',array(
 			'COLOR'=>'FF00FF',
-			'GROUP'=>'+/-'
+			'GROUP'=>'+/-',
 		)));
 
 		$sections->attach(do_lorem_template('PERMISSION_PRIVILEGES_SECTION',array(
@@ -410,7 +410,7 @@ class Hook_addon_registry_core_permission_management
 		$out=do_lorem_template('PERMISSION_PRIVILEGES_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'URL'=>placeholder_url(),
-			'SECTIONS'=>$sections
+			'SECTIONS'=>$sections,
 		));
 
 		return array(

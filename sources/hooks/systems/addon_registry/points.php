@@ -207,7 +207,7 @@ class Hook_addon_registry_points
 			lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD',array(
 				'URL'=>placeholder_url(),
 				'LIMIT'=>placeholder_number(),
-				'ROWS'=>$out
+				'ROWS'=>$out,
 			)),NULL,'',true)
 		);
 	}
@@ -238,14 +238,14 @@ class Hook_addon_registry_points
 			}
 			$out->attach(do_lorem_template('POINTS_LEADER_BOARD_WEEK',array(
 				'WEEK'=>placeholder_number(),
-				'ROWS'=>$week_tpl
+				'ROWS'=>$week_tpl,
 			)));
 		}
 
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'WEEKS'=>$out
+				'WEEKS'=>$out,
 			)),NULL,'',true)
 		);
 	}
@@ -272,7 +272,7 @@ class Hook_addon_registry_points
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_SEARCH_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'RESULTS'=>$results
+				'RESULTS'=>$results,
 			)),NULL,'',true)
 		);
 	}
@@ -345,7 +345,7 @@ class Hook_addon_registry_points
 		return array(
 			lorem_globalise(do_lorem_template('POINTS_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'CONTENT'=>$content
+				'CONTENT'=>$content,
 			)),NULL,'',true)
 		);
 	}

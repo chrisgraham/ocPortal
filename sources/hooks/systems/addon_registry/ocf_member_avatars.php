@@ -141,7 +141,7 @@ class Hook_addon_registry_ocf_member_avatars
 				'USERNAME'=>lorem_word(),
 				'AVATAR'=>$avatar,
 				'WIDTH'=>placeholder_number(),
-				'HEIGHT'=>placeholder_number()
+				'HEIGHT'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}

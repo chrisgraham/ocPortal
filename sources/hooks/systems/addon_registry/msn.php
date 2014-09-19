@@ -135,7 +135,7 @@ class Hook_addon_registry_msn
 	{
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_NETWORK',array(
-				'CONTENT'=>lorem_phrase()
+				'CONTENT'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -158,7 +158,7 @@ class Hook_addon_registry_msn
 
 		return array(
 			lorem_globalise(do_lorem_template('NETLINK',array(
-				'CONTENT'=>$content
+				'CONTENT'=>$content,
 			)),NULL,'',true)
 		);
 	}

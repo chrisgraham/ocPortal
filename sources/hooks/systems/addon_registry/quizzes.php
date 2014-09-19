@@ -180,7 +180,7 @@ class Hook_addon_registry_quizzes
 		}
 		$summary=do_lorem_template('MAP_TABLE',array(
 			'WIDTH'=>placeholder_number(),
-			'FIELDS'=>$fields
+			'FIELDS'=>$fields,
 		));
 
 		return array(
@@ -300,7 +300,7 @@ class Hook_addon_registry_quizzes
 				'CONTENT_SURVEYS'=>$content_surveys,
 				'CONTENT_COMPETITIONS'=>$content_competitions,
 				'CONTENT_TESTS'=>$content_tests,
-				'PAGINATION'=>placeholder_pagination()
+				'PAGINATION'=>placeholder_pagination(),
 			)),NULL,'',true)
 		);
 	}

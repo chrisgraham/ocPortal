@@ -262,7 +262,7 @@ class Hook_addon_registry_core_themeing
 				'URL'=>placeholder_url(),
 				'FILE'=>lorem_phrase(),
 				'ENTRIES'=>$colour_chooser,
-				'OLD_CONTENTS'=>lorem_word()
+				'OLD_CONTENTS'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -282,7 +282,7 @@ class Hook_addon_registry_core_themeing
 				'PING_URL'=>placeholder_url(),
 				'WARNING_DETAILS'=>'',
 				'TITLE'=>lorem_title(),
-				'EDIT_FORM'=>placeholder_form()
+				'EDIT_FORM'=>placeholder_form(),
 			)),NULL,'',true)
 		);
 	}
@@ -302,7 +302,7 @@ class Hook_addon_registry_core_themeing
 			$guids[]=array(
 				'FILENAME'=>$_guid,
 				'LINE'=>placeholder_number(),
-				'THIS_GUID'=>$_guid
+				'THIS_GUID'=>$_guid,
 			);
 		}
 
@@ -376,7 +376,7 @@ class Hook_addon_registry_core_themeing
 			lorem_globalise(do_lorem_template('THEME_IMAGE_MANAGE_SCREEN',array(
 				'ADD_URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
-				'FORM'=>placeholder_form()
+				'FORM'=>placeholder_form(),
 			)),NULL,'',true)
 		);
 	}
@@ -395,7 +395,7 @@ class Hook_addon_registry_core_themeing
 				'WIDTH'=>placeholder_number(),
 				'HEIGHT'=>placeholder_number(),
 				'URL'=>placeholder_image_url(),
-				'UNMODIFIED'=>lorem_phrase()
+				'UNMODIFIED'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -423,7 +423,7 @@ class Hook_addon_registry_core_themeing
 				'URL'=>placeholder_url(),
 				'COLOR'=>'green',
 				'TEMPLATE'=>lorem_word(),
-				'LIST'=>""
+				'LIST'=>'',
 			)));
 		}
 
@@ -464,14 +464,14 @@ class Hook_addon_registry_core_themeing
 		}
 
 		$tree->attach(do_lorem_template('TEMPLATE_TREE_NODE',array(
-			'ITEMS'=>$middle
+			'ITEMS'=>$middle,
 		)));
 
 		return array(
 			lorem_globalise(do_lorem_template('TEMPLATE_TREE',array(
 				'HIDDEN'=>'',
 				'EDIT_URL'=>placeholder_url(),
-				'TREE'=>$tree
+				'TREE'=>$tree,
 			)),NULL,'',true)
 		);
 	}
@@ -498,7 +498,7 @@ class Hook_addon_registry_core_themeing
 		return array(
 			lorem_globalise(do_lorem_template('TEMPLATE_LIST_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'TEMPLATES'=>$ftemp
+				'TEMPLATES'=>$ftemp,
 			)),NULL,'',true)
 		);
 	}
@@ -521,7 +521,7 @@ class Hook_addon_registry_core_themeing
 		);
 
 		$param_info=do_lorem_template('PARAM_INFO',array(
-			'MAP'=>$parameters
+			'MAP'=>$parameters,
 		));
 
 		return array(
@@ -529,7 +529,7 @@ class Hook_addon_registry_core_themeing
 				'PARAM_INFO'=>$param_info,
 				'CONTENTS'=>lorem_paragraph_html(),
 				'CODENAME'=>lorem_word(),
-				'EDIT_URL'=>placeholder_url()
+				'EDIT_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 

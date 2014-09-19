@@ -164,7 +164,7 @@ class Hook_addon_registry_core_cleanup_tools
 		}
 
 		$message=do_lorem_template('CLEANUP_ORPHANED_UPLOADS',array(
-			'FOUND'=>$url
+			'FOUND'=>$url,
 		));
 		$message->attach(do_lorem_template('CLEANUP_PAGE_STATS',array(
 			'STATS_BACKUP_URL'=>placeholder_url()
@@ -172,7 +172,7 @@ class Hook_addon_registry_core_cleanup_tools
 		return array(
 			lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN',array(
 				'TITLE'=>lorem_title(),
-				'MESSAGES'=>$message
+				'MESSAGES'=>$message,
 			)),NULL,'',true)
 		);
 	}

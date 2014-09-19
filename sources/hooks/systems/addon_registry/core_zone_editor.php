@@ -135,7 +135,7 @@ class Hook_addon_registry_core_zone_editor
 			'DIVIDER'=>true,
 			'FIELD_NAME'=>lorem_word(),
 			'TITLE'=>lorem_word(),
-			'B'=>'block'
+			'B'=>'block',
 		));
 
 		$editor=array();
@@ -157,7 +157,7 @@ class Hook_addon_registry_core_zone_editor
 				'TYPE'=>lorem_phrase(),
 				'EDIT_URL'=>placeholder_url(),
 				'SETTINGS'=>NULL,
-				'COMCODE_EDITOR'=>$comcode_editor
+				'COMCODE_EDITOR'=>$comcode_editor,
 			));
 		}
 
@@ -171,7 +171,7 @@ class Hook_addon_registry_core_zone_editor
 				'URL'=>placeholder_url(),
 				'LEFT_EDITOR'=>$editor['panel_left'],
 				'RIGHT_EDITOR'=>$editor['panel_right'],
-				'MIDDLE_EDITOR'=>$editor['panel_middle']
+				'MIDDLE_EDITOR'=>$editor['panel_middle'],
 			)),NULL,'',true)
 		);
 	}

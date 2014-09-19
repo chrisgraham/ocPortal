@@ -157,7 +157,7 @@ New users should then be assigned a mentor/buddy who will receive an equal amoun
 			$GLOBALS['SITE_DB']->create_table('members_mentors',array(
 				'id'=>'*AUTO',
 				'member_id'=>'*INTEGER',
-				'mentor_id'=>'*INTEGER'
+				'mentor_id'=>'*INTEGER',
 			));
 		}
 	}

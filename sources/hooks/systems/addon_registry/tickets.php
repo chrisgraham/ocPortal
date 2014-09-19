@@ -199,7 +199,7 @@ class Hook_addon_registry_tickets
 				'SELECTED'=>true,
 				'ADD_TICKET_URL'=>placeholder_url(),
 				'TYPES'=>placeholder_array(),
-				'LEAD_TIME'=>placeholder_number()
+				'LEAD_TIME'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}
@@ -236,7 +236,7 @@ class Hook_addon_registry_tickets
 			'SUBMIT_NAME'=>lorem_phrase(),
 			'TITLE'=>lorem_phrase(),
 			'MAKE_POST'=>true,
-			'CREATE_TICKET_MAKE_POST'=>true
+			'CREATE_TICKET_MAKE_POST'=>true,
 		));
 
 		$other_tickets=new ocp_tempcode();
@@ -304,7 +304,7 @@ class Hook_addon_registry_tickets
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'POST_FIELDS'=>'',
-				'RESULTS'=>lorem_phrase()
+				'RESULTS'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -322,7 +322,7 @@ class Hook_addon_registry_tickets
 			lorem_globalise(do_lorem_template('SUPPORT_TICKET_TYPE_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TPL'=>placeholder_form(),
-				'ADD_FORM'=>placeholder_form()
+				'ADD_FORM'=>placeholder_form(),
 			)),NULL,'',true)
 		);
 	}

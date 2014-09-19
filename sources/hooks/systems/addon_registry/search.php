@@ -186,7 +186,7 @@ class Hook_addon_registry_search
 				'CONJUNCTIVE_OPERATOR'=>'AND',
 				'LIMIT_TO'=>placeholder_array(),
 				'URL'=>placeholder_url(),
-				'FULL_SEARCH_URL'=>placeholder_url()
+				'FULL_SEARCH_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -214,7 +214,7 @@ class Hook_addon_registry_search
 				'CONJUNCTIVE_OPERATOR'=>'AND',
 				'LIMIT_TO'=>placeholder_array(),
 				'URL'=>placeholder_url(),
-				'FULL_SEARCH_URL'=>placeholder_url()
+				'FULL_SEARCH_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -238,7 +238,7 @@ class Hook_addon_registry_search
 			$em=1.0;
 			$tpl_tags[]=array(
 				'TAG'=>$tag,
-				'COUNT'=>"$count",
+				'COUNT'=>strval($count),
 				'EM'=>float_to_raw_string($em),
 				'LINK'=>placeholder_url()
 			);
@@ -247,7 +247,7 @@ class Hook_addon_registry_search
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD',array(
 				'TITLE'=>lorem_phrase(),
-				'TAGS'=>$tpl_tags
+				'TAGS'=>$tpl_tags,
 			)),NULL,'',true)
 		);
 	}
@@ -273,7 +273,7 @@ class Hook_addon_registry_search
 						'TAG'=>lorem_word()
 					)
 				),
-				'TYPE'=>lorem_phrase()
+				'TYPE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -289,7 +289,7 @@ class Hook_addon_registry_search
 	{
 		return array(
 			lorem_globalise(do_lorem_template('OPENSEARCH',array(
-				'DESCRIPTION'=>lorem_paragraph()
+				'DESCRIPTION'=>lorem_paragraph(),
 			)),NULL,'',true)
 		);
 	}
@@ -320,21 +320,21 @@ class Hook_addon_registry_search
 			'NAME'=>placeholder_random(),
 			'DISPLAY'=>lorem_word(),
 			'SPECIAL'=>placeholder_options(),
-			'CHECKED'=>false
+			'CHECKED'=>false,
 		)));
 
 		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT',array(
 			'NAME'=>placeholder_random(),
 			'DISPLAY'=>lorem_word(),
 			'SPECIAL'=>lorem_word(),
-			'CHECKED'=>false
+			'CHECKED'=>false,
 		)));
 
 		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK',array(
 			'NAME'=>placeholder_random(),
 			'DISPLAY'=>lorem_word(),
 			'SPECIAL'=>lorem_word(),
-			'CHECKED'=>false
+			'CHECKED'=>false,
 		)));
 
 		$specialisation=do_lorem_template('SEARCH_ADVANCED',array(
@@ -357,7 +357,7 @@ class Hook_addon_registry_search
 		}
 
 		$specialisation->attach(do_lorem_template('SEARCH_DOMAINS',array(
-			'SEARCH_DOMAINS'=>$search_domains
+			'SEARCH_DOMAINS'=>$search_domains,
 		)));
 
 		$result=new ocp_tempcode();
@@ -375,7 +375,7 @@ class Hook_addon_registry_search
 
 		$result->attach(do_lorem_template('SEARCH_RESULT_TABLE',array(
 			'HEADERS'=>placeholder_array(),
-			'ROWS'=>$types_results
+			'ROWS'=>$types_results,
 		)));
 
 		require_lang('catalogues');
@@ -408,7 +408,7 @@ class Hook_addon_registry_search
 				'AUTHOR'=>lorem_phrase(),
 				'SPECIALISATION'=>$specialisation,
 				'URL'=>placeholder_url(),
-				'HAS_TEMPLATE_SEARCH'=>true
+				'HAS_TEMPLATE_SEARCH'=>true,
 			)),NULL,'',true)
 		);
 	}

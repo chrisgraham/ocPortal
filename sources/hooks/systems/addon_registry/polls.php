@@ -200,7 +200,7 @@ class Hook_addon_registry_polls
 				'AUTHOR'=>lorem_word(),
 				'ID'=>placeholder_id(),
 				'NEWS'=>lorem_paragraph(),
-				'DATE'=>placeholder_time()
+				'DATE'=>placeholder_time(),
 			)),NULL,'',true)
 		);
 	}
@@ -330,7 +330,7 @@ class Hook_addon_registry_polls
 		return array(
 			lorem_globalise(do_lorem_template('POLL_LIST_ENTRY',array(
 				'QUESTION'=>lorem_phrase(),
-				'STATUS'=>lorem_phrase()
+				'STATUS'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -395,7 +395,7 @@ class Hook_addon_registry_polls
 				'EDIT_URL'=>placeholder_url(),
 				'POLL_DETAILS'=>$poll_details,
 				'SUBMITTER'=>placeholder_id(),
-				'ID'=>placeholder_id()
+				'ID'=>placeholder_id(),
 			)),NULL,'',true)
 		);
 	}

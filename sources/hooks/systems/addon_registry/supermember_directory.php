@@ -153,7 +153,7 @@ class Hook_addon_registry_supermember_directory
 			lorem_globalise(do_lorem_template('SUPERMEMBERS_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'GROUPS'=>$groups,
-				'TEXT'=>lorem_sentence_html()
+				'TEXT'=>lorem_sentence_html(),
 			)),NULL,'',true)
 		);
 	}

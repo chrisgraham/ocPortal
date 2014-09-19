@@ -134,7 +134,7 @@ class Hook_addon_registry_counting_blocks
 				'PRECISION'=>placeholder_number(),
 				'MILLISECONDS_FOR_PRECISION'=>placeholder_number(),
 				'DISTANCE_FOR_PRECISION'=>placeholder_number(),
-				'TAILING'=>false
+				'TAILING'=>false,
 			)),NULL,'',true)
 		);
 	}
@@ -151,7 +151,7 @@ class Hook_addon_registry_counting_blocks
 		return array(
 			lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNT',array(
 				'NAME'=>lorem_word(),
-				'VALUE'=>placeholder_random()
+				'VALUE'=>placeholder_random(),
 			)),NULL,'',true)
 		);
 	}

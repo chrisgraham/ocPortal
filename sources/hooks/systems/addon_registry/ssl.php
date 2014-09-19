@@ -139,7 +139,7 @@ class Hook_addon_registry_ssl
 				$content->attach(do_lorem_template('SSL_CONFIGURATION_ENTRY',array(
 					'TICKED'=>lorem_word(),
 					'PAGE'=>$v,
-					'ZONE'=>$v2
+					'ZONE'=>$v2,
 				)));
 			}
 		}
@@ -148,7 +148,7 @@ class Hook_addon_registry_ssl
 			lorem_globalise(do_lorem_template('SSL_CONFIGURATION_SCREEN',array(
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_title(),
-				'CONTENT'=>$content
+				'CONTENT'=>$content,
 			)),NULL,'',true)
 		);
 	}

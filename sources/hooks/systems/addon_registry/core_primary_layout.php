@@ -168,7 +168,7 @@ class Hook_addon_registry_core_primary_layout
 			lorem_globalise(do_lorem_template('CLOSED_SITE',array(
 				'CLOSED'=>lorem_phrase(),
 				'LOGIN_URL'=>placeholder_url(),
-				'JOIN_URL'=>placeholder_url()
+				'JOIN_URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -184,7 +184,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('CSS_NEED_FULL',array(
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)),NULL,'',true)
 		);
 	}
@@ -201,7 +201,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			lorem_globalise(do_lorem_template('MESSAGE',array(
 				'TYPE'=>placeholder_img_code('icons/24x24/status'),
-				'MESSAGE'=>lorem_phrase()
+				'MESSAGE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -217,7 +217,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MAIL_SUBJECT',array(
-				'SUBJECT_LINE'=>lorem_word()
+				'SUBJECT_LINE'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}
@@ -238,7 +238,7 @@ class Hook_addon_registry_core_primary_layout
 				'LOGOMAP'=>'',
 				'LANG'=>fallback_lang(),
 				'TITLE'=>lorem_phrase(),
-				'CONTENT'=>lorem_paragraph()
+				'CONTENT'=>lorem_paragraph(),
 			)),NULL,'',true)
 		);
 	}
@@ -284,7 +284,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			lorem_globalise(do_lorem_template('SCREEN_TITLE',array(
 				'TITLE'=>lorem_phrase(),
-				'AWARDS'=>$awards
+				'AWARDS'=>$awards,
 			)),NULL,'',true)
 		);
 	}
@@ -300,7 +300,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('MINOR_TITLE',array(
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}
@@ -316,7 +316,7 @@ class Hook_addon_registry_core_primary_layout
 	{
 		return array(
 			lorem_globalise(do_lorem_template('SECTION_TITLE',array(
-				'TITLE'=>lorem_phrase()
+				'TITLE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

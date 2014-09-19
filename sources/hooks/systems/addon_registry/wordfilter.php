@@ -74,7 +74,7 @@ class Hook_addon_registry_wordfilter
 			'recommends'=>array(),
 			'conflicts_with'=>array(),
 			'previously_in_addon'=>array(
-				'core_wordfilter'
+				'core_wordfilter',
 			)
 		);
 	}
@@ -135,7 +135,7 @@ class Hook_addon_registry_wordfilter
 			lorem_globalise(do_lorem_template('WORDFILTER_SCREEN',array(
 				'TITLE'=>lorem_title(),
 				'TPL'=>lorem_phrase(),
-				'ADD_FORM'=>placeholder_form()
+				'ADD_FORM'=>placeholder_form(),
 			)),NULL,'',true)
 		);
 	}

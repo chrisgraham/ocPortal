@@ -155,17 +155,17 @@ class Hook_addon_registry_ocf_signatures
 				'DIVIDER'=>true,
 				'FIELD_NAME'=>lorem_word(),
 				'TITLE'=>lorem_phrase(),
-				'B'=>$button
+				'B'=>$button,
 			)));
 		}
 
 		$micro_buttons=new ocp_tempcode();
 		$_micro_buttons=array(
 			array(
-				't'=>'b'
+				't'=>'b',
 			),
 			array(
-				't'=>'i'
+				't'=>'i',
 			)
 		);
 
@@ -174,14 +174,14 @@ class Hook_addon_registry_ocf_signatures
 			$micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON',array(
 				'FIELD_NAME'=>lorem_word(),
 				'TITLE'=>lorem_phrase(),
-				'B'=>$button['t']
+				'B'=>$button['t'],
 			)));
 		}
 
 		$comcode_editor=do_lorem_template('COMCODE_EDITOR',array(
 			'POSTING_FIELD'=>lorem_word(),
 			'BUTTONS'=>$buttons,
-			'MICRO_BUTTONS'=>$micro_buttons
+			'MICRO_BUTTONS'=>$micro_buttons,
 		));
 
 		$posting_form=do_lorem_template('POSTING_FORM',array(
@@ -211,7 +211,7 @@ class Hook_addon_registry_ocf_signatures
 		return array(
 			lorem_globalise(do_lorem_template('OCF_EDIT_SIGNATURE_TAB',array(
 				'SIZE'=>placeholder_filesize(),
-				'SIGNATURE'=>lorem_phrase()
+				'SIGNATURE'=>lorem_phrase(),
 			)),NULL,'',true)
 		);
 	}

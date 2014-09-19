@@ -181,7 +181,7 @@ class Hook_addon_registry_ldap
 				'TITLE'=>lorem_title(),
 				'MEMBERS_DELETE'=>$members_delete,
 				'GROUPS_DELETE'=>$groups_delete,
-				'GROUPS_ADD'=>$groups_add
+				'GROUPS_ADD'=>$groups_add,
 			)),NULL,'',true)
 		);
 	}
