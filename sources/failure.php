@@ -872,8 +872,6 @@ function get_webservice_result($error_message)
  */
 function _fatal_exit($text,$return=false)
 {
-	@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
-
 	if (is_object($text))
 	{
 		$text=$text->evaluate();

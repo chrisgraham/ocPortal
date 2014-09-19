@@ -257,7 +257,7 @@ class Hook_Profiles_Tabs_about
 		$best_yet_forum=0; // Initialise to integer type
 		$best_yet_forum=NULL;
 		$most_active_forum=NULL;
-		$_best_yet_forum=$GLOBALS['FORUM_DB']->query_select('f_posts',array('COUNT(*) as cnt','p_cache_forum_id'),array('p_poster'=>$member_id_of),'GROUP BY p_cache_forum_id');
+		$_best_yet_forum=$GLOBALS['FORUM_DB']->query_select('f_posts',array('COUNT(*) as cnt','p_cache_forum_id'),array('p_poster'=>$member_id_of),'GROUP BY p_cache_forum_id ORDER BY COUNT(*) DESC',1); // order by and limit have been added since original code, makes it run a bit faster
 		$_best_yet_forum=collapse_2d_complexity('p_cache_forum_id','cnt',$_best_yet_forum);
 		foreach ($forums as $forum)
 		{

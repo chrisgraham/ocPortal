@@ -1348,6 +1348,7 @@ function get_param($name,$default=false,$no_security=false)
 	{
 		if (((isset($a[100])) && (strpos(substr($a,10),'::slash::slash:')===false) && (strpos(substr($a,10),'://')===false) && (strpos(substr($a,10),'::slash::slash:')===false)) || (preg_match('#\n|\000|<|(".*[=<>])|\.\./|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0))
 		{
+			if ($name=='page') $_GET[$name]=''; // Stop loops
 			log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 		}
 	} else
@@ -1356,6 +1357,7 @@ function get_param($name,$default=false,$no_security=false)
 		{
 			if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0)
 			{
+				if ($name=='page') $_GET[$name]=''; // Stop loops
 				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 			}
 

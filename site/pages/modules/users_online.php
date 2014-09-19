@@ -124,7 +124,7 @@ class Module_users_online
 				$at_url=build_url($map,$row['the_zone']);
 			}
 			$ip=$row['ip'];
-			if (substr($ip,-1)=='*') // sessions IPs are not full
+			if (substr($ip,-1)=='*') // sessions IPs are not full so try and resolve to full
 			{
 				if (is_guest($member))
 				{
@@ -136,7 +136,7 @@ class Module_users_online
 							$ip=$test;
 						} else
 						{
-							$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT ip FROM '.get_table_prefix().'stats WHERE ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\' ORDER BY date_and_time DESC');
+							$test=$GLOBALS['SITE_DB']->query_value_if_there('SELECT ip FROM '.get_table_prefix().'stats WHERE ip LIKE \''.db_encode_like(str_replace('*','%',$ip)).'\' AND date_and_time>='.strval(time()-intval(60.0*60.0*floatval(get_option('session_expiry_time')))).' ORDER BY date_and_time DESC');
 							if ((!is_null($test)) && ($test!='')) $ip=$test;
 						}
 					}
