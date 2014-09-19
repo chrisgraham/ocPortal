@@ -72,7 +72,7 @@ class Hook_addon_registry_ecommerce
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -273,7 +273,7 @@ class Hook_addon_registry_ecommerce
 				'AMOUNT'=>placeholder_number(),
 				'TIME'=>placeholder_time(),
 				'NOTE'=>lorem_phrase(),
-				'TYPE_CODE'=>lorem_phrase()
+				'TYPE_CODE'=>lorem_phrase(),
 			);
 		}
 
@@ -320,7 +320,7 @@ class Hook_addon_registry_ecommerce
 			$types[]=array(
 				'TYPE'=>lorem_word(),
 				'AMOUNT'=>placeholder_number(),
-				'SPECIAL'=>placeholder_number()
+				'SPECIAL'=>placeholder_number(),
 			);
 		}
 		return array(
@@ -357,7 +357,7 @@ class Hook_addon_registry_ecommerce
 	function tpl_preview__purchase_wizard_screen()
 	{
 		$fields=do_lorem_template('PURCHASE_WIZARD_STAGE_TRANSACT',array(
-			'FIELDS'=>placeholder_fields()
+			'FIELDS'=>placeholder_fields(),
 		));
 
 		return array(
@@ -724,7 +724,7 @@ class Hook_addon_registry_ecommerce
 				'DELIVERABLE'=>lorem_word(),
 				'PAYABLE'=>lorem_word(),
 				'NOTE'=>lorem_phrase(),
-				'TYPE_CODE'=>lorem_word()
+				'TYPE_CODE'=>lorem_word(),
 			);
 		}
 
@@ -748,7 +748,7 @@ class Hook_addon_registry_ecommerce
 	{
 		$button=do_lorem_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array(
 			'STATUS'=>lorem_phrase(),
-			'TRIGGER_URL'=>placeholder_url()
+			'TRIGGER_URL'=>placeholder_url(),
 		));
 
 		$subscriptions=array();
@@ -876,7 +876,7 @@ class Hook_addon_registry_ecommerce
 	{
 		$button=do_lorem_template('ECOM_TRANSACTION_LOGS_MANUAL_TRIGGER',array(
 			'STATUS'=>lorem_phrase(),
-			'TRIGGER_URL'=>placeholder_url()
+			'TRIGGER_URL'=>placeholder_url(),
 		));
 
 		$subscriptions=array();

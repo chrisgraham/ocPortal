@@ -74,7 +74,7 @@ class Hook_addon_registry_forum_blocks
 				'news_shared'
 			),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -151,7 +151,7 @@ class Hook_addon_registry_forum_blocks
 				'DATE_RAW'=>placeholder_date_raw(),
 				'USERNAME'=>lorem_word(),
 				'MEMBER_ID'=>NULL,
-				'NUM_POSTS'=>placeholder_number()
+				'NUM_POSTS'=>placeholder_number(),
 			)));
 		}
 
@@ -193,7 +193,7 @@ class Hook_addon_registry_forum_blocks
 				'_DATE'=>placeholder_date_raw(),
 				'DATE'=>placeholder_time(),
 				'FULL_URL'=>placeholder_url(),
-				'NEWS_TITLE'=>escape_html(lorem_word())
+				'NEWS_TITLE'=>escape_html(lorem_word()),
 			)));
 		}
 

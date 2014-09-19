@@ -74,7 +74,7 @@ class Hook_addon_registry_ocf_post_templates
 				'ocf_forum'
 			),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -139,7 +139,7 @@ class Hook_addon_registry_ocf_post_templates
 				'DISABLED'=>false,
 				'CLASS'=>'',
 				'NAME'=>lorem_word().strval($key),
-				'TEXT'=>lorem_phrase()
+				'TEXT'=>lorem_phrase(),
 			)));
 		}
 

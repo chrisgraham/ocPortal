@@ -205,7 +205,7 @@ class Hook_addon_registry_community_billboard
 					'TITLE'=>lorem_title(),
 					'TEXT_URL'=>placeholder_url(),
 					'QUEUE'=>placeholder_number(),
-					'COST'=>placeholder_number()
+					'COST'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -226,7 +226,7 @@ class Hook_addon_registry_community_billboard
 			'USERNAME'=>lorem_word_html(),
 			'DAYS_ORDERED'=>lorem_phrase(),
 			'DATE_RAW'=>placeholder_time(),
-			'DATE'=>placeholder_time()
+			'DATE'=>placeholder_time(),
 		));
 
 		$out=new ocp_tempcode();
@@ -241,7 +241,7 @@ class Hook_addon_registry_community_billboard
 				'DISABLED'=>false,
 				'CLASS'=>'',
 				'NAME'=>strval($key),
-				'TEXT'=>$text->evaluate()
+				'TEXT'=>$text->evaluate(),
 			)));
 		}
 

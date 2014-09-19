@@ -165,7 +165,7 @@ class Hook_addon_registry_page_management
 		{
 			$content->attach(do_lorem_template('VALIDATE_CHECK_ERROR',array(
 				'URL'=>placeholder_url(),
-				'POINT'=>lorem_phrase()
+				'POINT'=>lorem_phrase(),
 			)));
 		}
 		return array(

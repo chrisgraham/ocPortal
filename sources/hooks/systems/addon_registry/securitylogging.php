@@ -252,7 +252,7 @@ class Hook_addon_registry_securitylogging
 				'_DATE'=>placeholder_time(),
 				'IP'=>placeholder_ip(),
 				'BANNED'=>do_lang_tempcode('YES'),
-				'UNIQID'=>placeholder_random()
+				'UNIQID'=>placeholder_random(),
 			)));
 
 		$group=do_lorem_template('LOOKUP_IP_LIST_GROUP',array(
@@ -260,7 +260,7 @@ class Hook_addon_registry_securitylogging
 			'MASK'=>placeholder_ip(),
 			'GROUP'=>$inner_ip_list,
 			'OPEN_DEFAULT'=>true,
-			'UNIQID'=>placeholder_random()
+			'UNIQID'=>placeholder_random(),
 		));
 		return array(
 			lorem_globalise(do_lorem_template('LOOKUP_SCREEN',array(

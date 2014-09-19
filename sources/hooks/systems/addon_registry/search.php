@@ -240,7 +240,7 @@ class Hook_addon_registry_search
 				'TAG'=>$tag,
 				'COUNT'=>strval($count),
 				'EM'=>float_to_raw_string($em),
-				'LINK'=>placeholder_url()
+				'LINK'=>placeholder_url(),
 			);
 		}
 
@@ -266,11 +266,11 @@ class Hook_addon_registry_search
 				'TAGS'=>array(
 					array(
 						'LINK_FULLSCOPE'=>placeholder_url(),
-						'TAG'=>lorem_word()
+						'TAG'=>lorem_word(),
 					),
 					array(
 						'LINK_FULLSCOPE'=>placeholder_url(),
-						'TAG'=>lorem_word()
+						'TAG'=>lorem_word(),
 					)
 				),
 				'TYPE'=>lorem_phrase(),
@@ -312,7 +312,7 @@ class Hook_addon_registry_search
 				'NAME'=>placeholder_random(),
 				'DISPLAY'=>lorem_phrase(),
 				'SPECIAL'=>lorem_phrase(),
-				'CHECKED'=>lorem_phrase()
+				'CHECKED'=>lorem_phrase(),
 			)));
 		}
 
@@ -341,7 +341,7 @@ class Hook_addon_registry_search
 			'AJAX'=>lorem_phrase(),
 			'OPTIONS'=>$options,
 			'TREE'=>'',
-			'UNDERNEATH'=>lorem_phrase()
+			'UNDERNEATH'=>lorem_phrase(),
 		));
 
 		$search_domains=new ocp_tempcode();
@@ -352,7 +352,7 @@ class Hook_addon_registry_search
 				'CHECKED'=>lorem_phrase(),
 				'OPTIONS_URL'=>placeholder_url(),
 				'LANG'=>lorem_phrase(),
-				'NAME'=>placeholder_random()
+				'NAME'=>placeholder_random(),
 			)));
 		}
 
@@ -364,13 +364,13 @@ class Hook_addon_registry_search
 		$result->attach(do_lorem_template('SEARCH_RESULT',array(
 			'CONTENT'=>lorem_paragraph_html(),
 			'TYPE'=>placeholder_id(),
-			'ID'=>placeholder_id()
+			'ID'=>placeholder_id(),
 		)));
 
 		$types_results=array();
 		foreach (placeholder_array() as $i=>$r)
 			$types_results[$i]=array(
-				'R'=>placeholder_array()
+				'R'=>placeholder_array(),
 			);
 
 		$result->attach(do_lorem_template('SEARCH_RESULT_TABLE',array(
@@ -382,7 +382,7 @@ class Hook_addon_registry_search
 		$result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array(
 			'BUILDUP'=>lorem_phrase(),
 			'NAME'=>lorem_word(),
-			'TITLE'=>lorem_word_2()
+			'TITLE'=>lorem_word_2(),
 		)));
 
 

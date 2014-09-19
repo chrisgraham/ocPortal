@@ -74,7 +74,7 @@ class Hook_addon_registry_installer
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -193,13 +193,13 @@ class Hook_addon_registry_installer
 
 		$warning=do_lorem_template('INSTALLER_WARNING_LONG',array(
 			'FILES'=>placeholder_array(),
-			'MESSAGE'=>lorem_sentence_html()
+			'MESSAGE'=>lorem_sentence_html(),
 		));
 		$warning->attach(do_lorem_template('INSTALLER_WARNING',array(
-			'MESSAGE'=>lorem_sentence_html()
+			'MESSAGE'=>lorem_sentence_html(),
 		)));
 		$warning->attach(do_lorem_template('INSTALLER_NOTICE',array(
-			'MESSAGE'=>lorem_sentence_html()
+			'MESSAGE'=>lorem_sentence_html(),
 		)));
 		$languages=new ocp_tempcode();
 		foreach (placeholder_array() as $lang)
@@ -251,7 +251,7 @@ class Hook_addon_registry_installer
 		$content=do_lorem_template('INSTALLER_STEP_2',array(
 			'URL'=>placeholder_url(),
 			'HIDDEN'=>'',
-			'LICENCE'=>lorem_chunk()
+			'LICENCE'=>lorem_chunk(),
 		));
 		return array(
 			lorem_globalise(do_lorem_template('INSTALLER_HTML_WRAP',array(
@@ -453,7 +453,7 @@ class Hook_addon_registry_installer
 
 		$section->attach(do_lorem_template('INSTALLER_STEP_4_SECTION_HIDE',array(
 			'TITLE'=>lorem_phrase(),
-			'CONTENT'=>lorem_phrase()
+			'CONTENT'=>lorem_phrase(),
 		)));
 
 		$content=do_lorem_template('INSTALLER_STEP_4',array(
@@ -492,7 +492,7 @@ class Hook_addon_registry_installer
 	function tpl_preview__administrative__installer_step_log()
 	{
 		$message=do_lorem_template('INSTALLER_DONE_SOMETHING',array(
-			'SOMETHING'=>lorem_sentence()
+			'SOMETHING'=>lorem_sentence(),
 		));
 
 		require_css('install');
@@ -520,7 +520,7 @@ class Hook_addon_registry_installer
 		require_lang('version');
 
 		$message=do_lorem_template('INSTALLER_DONE_SOMETHING',array(
-			'SOMETHING'=>lorem_sentence()
+			'SOMETHING'=>lorem_sentence(),
 		));
 
 		return array(

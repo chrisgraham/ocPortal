@@ -340,7 +340,7 @@ class Hook_addon_registry_pointstore
 					'TITLE'=>lorem_title(),
 					'ACTIVATE'=>$activate,
 					'QUOTA'=>$quota,
-					'INITIAL_QUOTA'=>placeholder_number()
+					'INITIAL_QUOTA'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -392,7 +392,7 @@ class Hook_addon_registry_pointstore
 					'FIELDS'=>$fields,
 					'TEXT'=>$text,
 					'SUBMIT_ICON'=>'buttons__proceed',
-					'SUBMIT_NAME'=>lorem_word()
+					'SUBMIT_NAME'=>lorem_word(),
 				)
 			),NULL,'',true),
 		);
@@ -414,7 +414,7 @@ class Hook_addon_registry_pointstore
 					'QUOTA'=>placeholder_number(),
 					'EMAIL'=>lorem_word(),
 					'QUOTA_URL'=>placeholder_url(),
-					'PRICE'=>placeholder_number()
+					'PRICE'=>placeholder_number(),
 				)
 			),NULL,'',true),
 		);
@@ -531,7 +531,7 @@ class Hook_addon_registry_pointstore
 		return array(
 			lorem_globalise(
 				do_lorem_template('POINTSTORE_GAMBLING',array(
-					'NEXT_URL'=>placeholder_url()
+					'NEXT_URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
 		);
@@ -549,7 +549,7 @@ class Hook_addon_registry_pointstore
 		return array(
 			lorem_globalise(
 				do_lorem_template('POINTSTORE_HIGHLIGHT_NAME',array(
-					'NEXT_URL'=>placeholder_url()
+					'NEXT_URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
 		);
@@ -569,7 +569,7 @@ class Hook_addon_registry_pointstore
 				do_lorem_template('POINTSTORE_PERMISSION',array(
 					'TITLE'=>lorem_phrase(),
 					'DESCRIPTION'=>lorem_sentence(),
-					'NEXT_URL'=>placeholder_url()
+					'NEXT_URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
 		);
@@ -587,7 +587,7 @@ class Hook_addon_registry_pointstore
 		return array(
 			lorem_globalise(
 				do_lorem_template('POINTSTORE_TOPIC_PIN',array(
-					'NEXT_URL'=>placeholder_url()
+					'NEXT_URL'=>placeholder_url(),
 				)
 			),NULL,'',true),
 		);

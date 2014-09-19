@@ -72,7 +72,7 @@ class Hook_addon_registry_polls
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -179,13 +179,13 @@ class Hook_addon_registry_polls
 		require_code('xml');
 
 		$_summary=do_lorem_template('POLL_RSS_SUMMARY',array(
-			'ANSWERS'=>placeholder_array()
+			'ANSWERS'=>placeholder_array(),
 		));
 		$summary=xmlentities($_summary->evaluate());
 
 		$if_comments=do_lorem_template('RSS_ENTRY_COMMENTS',array(
 			'COMMENT_URL'=>placeholder_url(),
-			'ID'=>placeholder_id()
+			'ID'=>placeholder_id(),
 		));
 
 		return array(
@@ -251,7 +251,7 @@ class Hook_addon_registry_polls
 						'CAST'=>strval($k),
 						'VOTE_URL'=>placeholder_url(),
 						'ANSWER'=>lorem_phrase(),
-						'ANSWER_PLAIN'=>lorem_phrase()
+						'ANSWER_PLAIN'=>lorem_phrase(),
 					)));
 				}
 				break;
@@ -266,7 +266,7 @@ class Hook_addon_registry_polls
 						'ANSWER'=>lorem_phrase(),
 						'ANSWER_PLAIN'=>lorem_phrase(),
 						'WIDTH'=>strval($k),
-						'VOTES'=>placeholder_number()
+						'VOTES'=>placeholder_number(),
 					)));
 				}
 				break;
@@ -280,7 +280,7 @@ class Hook_addon_registry_polls
 						'CAST'=>strval($k),
 						'VOTE_URL'=>placeholder_url(),
 						'ANSWER'=>lorem_phrase(),
-						'ANSWER_PLAIN'=>lorem_phrase()
+						'ANSWER_PLAIN'=>lorem_phrase(),
 					)));
 				}
 				foreach (placeholder_array() as $k=>$v)
@@ -292,7 +292,7 @@ class Hook_addon_registry_polls
 						'ANSWER'=>lorem_phrase(),
 						'ANSWER_PLAIN'=>lorem_phrase(),
 						'WIDTH'=>strval($k),
-						'VOTES'=>placeholder_number()
+						'VOTES'=>placeholder_number(),
 					)));
 				}
 		}
@@ -310,7 +310,7 @@ class Hook_addon_registry_polls
 			'QUESTION_PLAIN'=>lorem_phrase(),
 			'QUESTION'=>lorem_phrase(),
 			'CONTENT'=>$tpl,
-			'FULL_URL'=>placeholder_url()
+			'FULL_URL'=>placeholder_url(),
 		));
 
 		return array(
@@ -355,14 +355,14 @@ class Hook_addon_registry_polls
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
 				'EXCERPT'=>lorem_paragraph(),
-				'NAME'=>lorem_phrase()
+				'NAME'=>lorem_phrase(),
 			)));
 		}
 		$trackback_details=do_lorem_template('TRACKBACK_WRAPPER',array(
 			'TRACKBACKS'=>$trackbacks,
 			'TRACKBACK_PAGE'=>placeholder_id(),
 			'TRACKBACK_ID'=>placeholder_id(),
-			'TRACKBACK_TITLE'=>lorem_phrase()
+			'TRACKBACK_TITLE'=>lorem_phrase(),
 		));
 
 		$rating_details='';

@@ -72,7 +72,7 @@ class Hook_addon_registry_core_addon_management
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -179,7 +179,7 @@ class Hook_addon_registry_core_addon_management
 				'GET'=>true,
 				'NAME'=>lorem_phrase(),
 				'HIDDEN'=>'',
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			));
 			$status=do_lang_tempcode('STATUS_NOT_INSTALLED');
 
@@ -273,7 +273,7 @@ class Hook_addon_registry_core_addon_management
 
 		$warning=do_lorem_template('ADDON_INSTALL_WARNING',array(
 			'WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES', $_dependencies, lorem_phrase()),
-			'ADDON_WARNING_OVERWRITE'=>lorem_phrase()
+			'ADDON_WARNING_OVERWRITE'=>lorem_phrase(),
 		));
 		$files=new ocp_tempcode();
 		foreach (placeholder_array() as $val)
@@ -281,7 +281,7 @@ class Hook_addon_registry_core_addon_management
 			$files->attach(do_lorem_template('ADDON_INSTALL_FILES_WARNING',array(
 				'PATH'=>lorem_phrase(),
 				'ABOUT'=>do_lang_tempcode('ADDON_FILE_WILL_OVERWRITE'),
-				'I'=>placeholder_random()
+				'I'=>placeholder_random(),
 			)));
 		}
 		foreach (placeholder_array() as $val)
@@ -289,7 +289,7 @@ class Hook_addon_registry_core_addon_management
 			$files->attach(do_lorem_template('ADDON_INSTALL_FILES',array(
 				'PATH'=>lorem_phrase(),
 				'ABOUT'=>do_lang_tempcode('ADDON_FILE_NORMAL'),
-				'I'=>placeholder_random()
+				'I'=>placeholder_random(),
 			)));
 		}
 		return array(
@@ -432,7 +432,7 @@ class Hook_addon_registry_core_addon_management
 				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY',array(
 					'HIDDEN'=>'',
 					'NAME'=>lorem_phrase(),
-					'URL'=>placeholder_url()
+					'URL'=>placeholder_url(),
 				)));
 				$status=do_lang_tempcode('STATUS_CURRENT');
 			}
@@ -440,7 +440,7 @@ class Hook_addon_registry_core_addon_management
 				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY',array(
 					'HIDDEN'=>'',
 					'NAME'=>lorem_phrase(),
-					'URL'=>placeholder_url()
+					'URL'=>placeholder_url(),
 				)));
 
 			$tpl_modules->attach(do_lorem_template('MODULE_SCREEN_MODULE',array(

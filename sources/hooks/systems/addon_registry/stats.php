@@ -72,7 +72,7 @@ class Hook_addon_registry_stats
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -176,7 +176,7 @@ class Hook_addon_registry_stats
 			'TITLE'=>lorem_phrase(),
 			'TEXT'=>lorem_sentence(),
 			'KEYWORDS_SHARE'=>lorem_word(),
-			'DESCRIPTION_KEYWORDS_SHARE'=>lorem_word()
+			'DESCRIPTION_KEYWORDS_SHARE'=>lorem_word(),
 		));
 
 		return array(
@@ -221,7 +221,7 @@ class Hook_addon_registry_stats
 			'TITLE'=>lorem_phrase(),
 			'TEXT'=>lorem_sentence(),
 			'KEYWORDS_SHARE'=>lorem_word(),
-			'DESCRIPTION_KEYWORDS_SHARE'=>lorem_word()
+			'DESCRIPTION_KEYWORDS_SHARE'=>lorem_word(),
 		));
 
 		return array(

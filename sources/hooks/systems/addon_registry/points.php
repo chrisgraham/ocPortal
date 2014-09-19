@@ -72,7 +72,7 @@ class Hook_addon_registry_points
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -265,7 +265,7 @@ class Hook_addon_registry_points
 			$results->attach(do_lorem_template('POINTS_SEARCH_RESULT',array(
 				'URL'=>placeholder_url(),
 				'ID'=>placeholder_id(),
-				'USERNAME'=>lorem_word()
+				'USERNAME'=>lorem_word(),
 			)));
 		}
 
@@ -288,23 +288,23 @@ class Hook_addon_registry_points
 	{
 		$chargelog_details=do_lorem_template('POINTS_TRANSACTIONS_WRAP',array(
 			'CONTENT'=>placeholder_table(),
-			'TITLE'=>lorem_phrase()
+			'TITLE'=>lorem_phrase(),
 		));
 
 		$from=do_lorem_template('POINTS_TRANSACTIONS_WRAP',array(
 			'CONTENT'=>placeholder_table(),
-			'TITLE'=>lorem_phrase()
+			'TITLE'=>lorem_phrase(),
 		));
 
 		$to=do_lorem_template('POINTS_TRANSACTIONS_WRAP',array(
 			'CONTENT'=>placeholder_table(),
-			'TITLE'=>lorem_phrase()
+			'TITLE'=>lorem_phrase(),
 		));
 
 		$give_template=do_lorem_template('POINTS_GIVE',array(
 			'GIVE_URL'=>placeholder_url(),
 			'MEMBER'=>lorem_phrase(),
-			'VIEWER_GIFT_POINTS_AVAILABLE'=>placeholder_number()
+			'VIEWER_GIFT_POINTS_AVAILABLE'=>placeholder_number(),
 		));
 
 		$content=do_lorem_template('POINTS_PROFILE',array(
@@ -339,7 +339,7 @@ class Hook_addon_registry_points
 			'MULT_POINTS_CHAT_POSTING'=>placeholder_number(),
 			'MULT_POINTS_WIKI_POSTING'=>placeholder_number(),
 			'MULT_POINTS_POSTING'=>placeholder_number(),
-			'MULT_POINTS_PER_DAY'=>placeholder_number()
+			'MULT_POINTS_PER_DAY'=>placeholder_number(),
 		));
 
 		return array(

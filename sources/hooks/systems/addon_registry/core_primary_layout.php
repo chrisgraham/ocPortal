@@ -73,7 +73,7 @@ class Hook_addon_registry_core_primary_layout
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -277,7 +277,7 @@ class Hook_addon_registry_core_primary_layout
 			$awards=array(
 				array(
 					'AWARD_TYPE'=>lorem_title(),
-					'AWARD_TIMESTAMP'=>placeholder_time()
+					'AWARD_TIMESTAMP'=>placeholder_time(),
 				)
 			);
 		}

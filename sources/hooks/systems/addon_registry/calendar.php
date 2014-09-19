@@ -72,7 +72,7 @@ class Hook_addon_registry_calendar
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -308,7 +308,7 @@ class Hook_addon_registry_calendar
 					'CURRENT'=>lorem_word(),
 					'DAY_URL'=>placeholder_url(),
 					'DATE'=>placeholder_date(),
-					'DAY'=>lorem_word_2()
+					'DAY'=>lorem_word_2(),
 				)));
 			else
 				$__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array(
@@ -323,7 +323,7 @@ class Hook_addon_registry_calendar
 					'DAY'=>placeholder_number(),
 					'ICON'=>'',
 					'COUNT'=>placeholder_number(),
-					'EVENTS_AND_PRIORITY_LANG'=>lorem_phrase()
+					'EVENTS_AND_PRIORITY_LANG'=>lorem_phrase(),
 				)));
 
 			if ($dotw==6)
@@ -441,7 +441,7 @@ class Hook_addon_registry_calendar
 					{
 						$entry=do_lorem_template('CALENDAR_DAY_ENTRY_FREE',array(
 							'CLASS'=>lorem_word(),
-							'TEXT'=>lorem_phrase()
+							'TEXT'=>lorem_phrase(),
 						));
 						$_streams->attach(do_lorem_template('CALENDAR_DAY_STREAM_HOUR',array(
 							'CURRENT'=>lorem_word(),
@@ -482,7 +482,7 @@ class Hook_addon_registry_calendar
 				$main=do_lorem_template('CALENDAR_DAY',array(
 					'HOURS'=>$hours,
 					'PERIOD_START'=>placeholder_date_raw(),
-					'PERIOD_END'=>placeholder_date_raw()
+					'PERIOD_END'=>placeholder_date_raw(),
 				));
 				break;
 
@@ -546,7 +546,7 @@ class Hook_addon_registry_calendar
 					'SUNDAY_URL'=>placeholder_url(),
 					'HOURS'=>$hours,
 					'PERIOD_START'=>placeholder_date_raw(),
-					'PERIOD_END'=>placeholder_date_raw()
+					'PERIOD_END'=>placeholder_date_raw(),
 				));
 				break;
 
@@ -597,7 +597,7 @@ class Hook_addon_registry_calendar
 				$main=do_lorem_template('CALENDAR_MONTH',array(
 					'WEEKS'=>$weeks,
 					'PERIOD_START'=>placeholder_date_raw(),
-					'PERIOD_END'=>placeholder_date_raw()
+					'PERIOD_END'=>placeholder_date_raw(),
 				));
 				break;
 
@@ -615,7 +615,7 @@ class Hook_addon_registry_calendar
 							'MONTH_C_URL'=>placeholder_url(),
 							'MONTH_A'=>lorem_word(),
 							'MONTH_B'=>lorem_word(),
-							'MONTH_C'=>lorem_word()
+							'MONTH_C'=>lorem_word(),
 						)));
 						$months='';
 					}
@@ -632,7 +632,7 @@ class Hook_addon_registry_calendar
 								'CURRENT'=>lorem_word(),
 								'DAY_URL'=>placeholder_url(),
 								'DATE'=>placeholder_date(),
-								'DAY'=>lorem_word_2()
+								'DAY'=>lorem_word_2(),
 							)));
 						} else
 						{
@@ -648,7 +648,7 @@ class Hook_addon_registry_calendar
 								'DAY'=>placeholder_number(),
 								'ICON'=>'',
 								'COUNT'=>placeholder_number(),
-								'EVENTS_AND_PRIORITY_LANG'=>lorem_phrase()
+								'EVENTS_AND_PRIORITY_LANG'=>lorem_phrase(),
 							)));
 						}
 
@@ -684,13 +684,13 @@ class Hook_addon_registry_calendar
 					'MONTH_C_URL'=>placeholder_url(),
 					'MONTH_A'=>lorem_word(),
 					'MONTH_B'=>lorem_word(),
-					'MONTH_C'=>lorem_word()
+					'MONTH_C'=>lorem_word(),
 				)));
 
 				$main=do_lorem_template('CALENDAR_YEAR',array(
 					'MONTH_ROWS'=>$month_rows,
 					'PERIOD_START'=>placeholder_date_raw(),
-					'PERIOD_END'=>placeholder_date_raw()
+					'PERIOD_END'=>placeholder_date_raw(),
 				));
 				break;
 		}
@@ -698,13 +698,13 @@ class Hook_addon_registry_calendar
 			'S'=>'I',
 			'INTERESTED'=>'interested',
 			'TYPE'=>lorem_phrase(),
-			'TYPE_ID'=>placeholder_id()
+			'TYPE_ID'=>placeholder_id(),
 		));
 		$events2=do_lorem_template('CALENDAR_EVENT_TYPE',array(
 			'S'=>'F',
 			'INTERESTED'=>'not_interested',
 			'TYPE'=>lorem_phrase(),
-			'TYPE_ID'=>placeholder_id()
+			'TYPE_ID'=>placeholder_id(),
 		));
 		return do_lorem_template('CALENDAR_MAIN_SCREEN',array(
 			'RSS_FORM'=>placeholder_form(),
@@ -741,7 +741,7 @@ class Hook_addon_registry_calendar
 		{
 			$sub->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_PERSONAL_SUBSCRIPTION',array(
 				'UNSUBSCRIBE_URL'=>placeholder_url(),
-				'TIME'=>placeholder_time()
+				'TIME'=>placeholder_time(),
 			)));
 		}
 		$subed=new ocp_tempcode();
@@ -750,7 +750,7 @@ class Hook_addon_registry_calendar
 			$subed->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION',array(
 				'MEMBER_ID'=>placeholder_id(),
 				'MEMBER_URL'=>placeholder_url(),
-				'USERNAME'=>lorem_word()
+				'USERNAME'=>lorem_word(),
 			)));
 		}
 		$comment_details=do_lorem_template('COMMENTS_POSTING_FORM',array(

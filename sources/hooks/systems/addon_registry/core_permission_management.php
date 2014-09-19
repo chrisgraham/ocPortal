@@ -72,7 +72,7 @@ class Hook_addon_registry_core_permission_management
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -226,7 +226,7 @@ class Hook_addon_registry_core_permission_management
 				$cells->attach(do_lorem_template('PERMISSION_CELL',array(
 					'CHECKED'=>true,
 					'HUMAN'=>lorem_phrase(),
-					'NAME'=>'p_'.strval($id).'__'.strval($gid)
+					'NAME'=>'p_'.strval($id).'__'.strval($gid),
 				)));
 			}
 
@@ -316,7 +316,7 @@ class Hook_addon_registry_core_permission_management
 					$cells->attach(do_lorem_template('PERMISSION_CELL',array(
 						'CHECKED'=>true,
 						'HUMAN'=>lorem_phrase(),
-						'NAME'=>'id_'.strval($k)
+						'NAME'=>'id_'.strval($k),
 					)));
 					$k++;
 				}
@@ -372,7 +372,7 @@ class Hook_addon_registry_core_permission_management
 				$cells->attach(do_lorem_template('PERMISSION_CELL',array(
 					'CHECKED'=>true,
 					'HUMAN'=>lorem_phrase(),
-					'NAME'=>$group.strval($k)
+					'NAME'=>$group.strval($k),
 				)));
 			}
 
@@ -382,7 +382,7 @@ class Hook_addon_registry_core_permission_management
 				'PERMISSION'=>lorem_phrase(),
 				'CELLS'=>$cells,
 				'CODE'=>'',
-				'DESCRIPTION'=>lorem_phrase()
+				'DESCRIPTION'=>lorem_phrase(),
 			);
 
 			$rows->attach(do_lorem_template('PERMISSION_ROW', $tpl_map));
@@ -404,7 +404,7 @@ class Hook_addon_registry_core_permission_management
 			'HEADER_CELLS'=>$header_cells,
 			'SECTION'=>$rows,
 			'COLS'=>'',
-			'CURRENT_SECTION'=>lorem_word()
+			'CURRENT_SECTION'=>lorem_word(),
 		)));
 
 		$out=do_lorem_template('PERMISSION_PRIVILEGES_SCREEN',array(

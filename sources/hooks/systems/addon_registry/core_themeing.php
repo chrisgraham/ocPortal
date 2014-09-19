@@ -77,7 +77,7 @@ class Hook_addon_registry_core_themeing
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -205,7 +205,7 @@ class Hook_addon_registry_core_themeing
 				'DELETABLE'=>placeholder_table(),
 				'EDIT_URL'=>placeholder_url(),
 				'DELETE_URL'=>placeholder_url(),
-				'SCREEN_PREVIEW_URL'=>placeholder_url()
+				'SCREEN_PREVIEW_URL'=>placeholder_url(),
 			)));
 		}
 
@@ -214,7 +214,7 @@ class Hook_addon_registry_core_themeing
 		{
 			$zones[]=array(
 				'0'=>lorem_word(),
-				'1'=>lorem_word_2()
+				'1'=>lorem_word_2(),
 			);
 		}
 
@@ -245,7 +245,7 @@ class Hook_addon_registry_core_themeing
 		$colour_chooser=do_lorem_template('THEME_COLOUR_CHOOSER',array(
 			'COLOR'=>'#ffffff',
 			'NAME'=>lorem_word(),
-			'CONTEXT'=>lorem_sentence()
+			'CONTEXT'=>lorem_sentence(),
 		));
 
 		return array(
@@ -319,7 +319,7 @@ class Hook_addon_registry_core_themeing
 				'ID'=>placeholder_id().strval($i),
 				'PARAMETERS'=>$_parameters,
 				'NAME'=>lorem_word().strval($i),
-				'LANG'=>lorem_phrase()
+				'LANG'=>lorem_phrase(),
 			));
 		}
 
@@ -345,7 +345,7 @@ class Hook_addon_registry_core_themeing
 			'OLD_CONTENTS'=>lorem_paragraph(),
 			'CONTENTS'=>lorem_paragraph(),
 			'REVISION_HISTORY'=>lorem_phrase(),
-			'PREVIEW_URL'=>placeholder_url()
+			'PREVIEW_URL'=>placeholder_url(),
 		)));
 
 		return array(
@@ -429,7 +429,7 @@ class Hook_addon_registry_core_themeing
 
 		$post=do_lorem_template('TEMPLATE_LIST_WRAP',array(
 			'LI'=>$lis,
-			'TITLE'=>lorem_phrase()
+			'TITLE'=>lorem_phrase(),
 		));
 
 		return array(
@@ -450,7 +450,7 @@ class Hook_addon_registry_core_themeing
 			'FILE'=>lorem_phrase(),
 			'EDIT_URL'=>placeholder_url(),
 			'CODENAME'=>lorem_word(),
-			'ID'=>placeholder_random_id()
+			'ID'=>placeholder_random_id(),
 		);
 
 		$tree=do_lorem_template('TEMPLATE_TREE_ITEM', $parameters);
@@ -459,7 +459,7 @@ class Hook_addon_registry_core_themeing
 		foreach (placeholder_array() as $value)
 		{
 			$middle->attach(do_lorem_template('TEMPLATE_TREE_ITEM_WRAP',array(
-				'CONTENT'=>lorem_phrase()
+				'CONTENT'=>lorem_phrase(),
 			)));
 		}
 
@@ -491,7 +491,7 @@ class Hook_addon_registry_core_themeing
 			$ftemp->attach(do_lorem_template('TEMPLATE_LIST_ENTRY',array(
 				'COUNT'=>placeholder_number(),
 				'NAME'=>lorem_word(),
-				'EDIT_URL'=>placeholder_url()
+				'EDIT_URL'=>placeholder_url(),
 			)));
 		}
 
@@ -517,7 +517,7 @@ class Hook_addon_registry_core_themeing
 			'EDIT_URL'=>placeholder_url(),
 			'CODENAME'=>lorem_word(),
 			'GUID'=>placeholder_id(),
-			'ID'=>placeholder_random_id()
+			'ID'=>placeholder_random_id(),
 		);
 
 		$param_info=do_lorem_template('PARAM_INFO',array(

@@ -72,7 +72,7 @@ class Hook_addon_registry_import
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -168,14 +168,14 @@ class Hook_addon_registry_import
 	function tpl_preview__administrative__import_action_screen()
 	{
 		$extra=do_lorem_template('IMPORT_MESSAGE',array(
-			'MESSAGE'=>lorem_phrase()
+			'MESSAGE'=>lorem_phrase(),
 		));
 		$import_list=do_lorem_template('IMPORT_ACTION_LINE',array(
 			'CHECKED'=>false,
 			'DISABLED'=>true,
 			'NAME'=>lorem_word(),
 			'TEXT'=>lorem_phrase(),
-			'ADVANCED_URL'=>placeholder_url()
+			'ADVANCED_URL'=>placeholder_url(),
 		));
 
 		return array(
@@ -225,7 +225,7 @@ class Hook_addon_registry_import
 			$ops_nice[]=array(
 				'OP'=>lorem_word(),
 				'PARAM_A'=>lorem_word_2(),
-				'PARAM_B'=>lorem_word_2()
+				'PARAM_B'=>lorem_word_2(),
 			);
 		}
 		return array(

@@ -72,7 +72,7 @@ class Hook_addon_registry_core_cleanup_tools
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -159,7 +159,7 @@ class Hook_addon_registry_core_cleanup_tools
 		foreach (placeholder_array() as $v)
 		{
 			$url[]=array(
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			);
 		}
 
@@ -167,7 +167,7 @@ class Hook_addon_registry_core_cleanup_tools
 			'FOUND'=>$url,
 		));
 		$message->attach(do_lorem_template('CLEANUP_PAGE_STATS',array(
-			'STATS_BACKUP_URL'=>placeholder_url()
+			'STATS_BACKUP_URL'=>placeholder_url(),
 		)));
 		return array(
 			lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN',array(

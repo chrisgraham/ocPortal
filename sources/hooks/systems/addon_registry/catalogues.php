@@ -73,7 +73,7 @@ class Hook_addon_registry_catalogues
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -258,7 +258,7 @@ class Hook_addon_registry_catalogues
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
-			'TAG'=>lorem_word()
+			'TAG'=>lorem_word(),
 		));
 
 		$entries=new ocp_tempcode();
@@ -274,13 +274,13 @@ class Hook_addon_registry_catalogues
 				'_FIELDID'=>placeholder_id(),
 				'FIELDTYPE'=>lorem_word(),
 				'VALUE_PLAIN'=>lorem_phrase(),
-				'VALUE'=>lorem_phrase()
+				'VALUE'=>lorem_phrase(),
 			)));
 		}
 		$content=do_lorem_template('CATALOGUE_DEFAULT_GRID_ENTRY_WRAP',array(
 			'FIELDS'=>$fields,
 			'VIEW_URL'=>placeholder_url(),
-			'FIELD_0'=>lorem_word()
+			'FIELD_0'=>lorem_word(),
 		));
 
 		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
@@ -332,7 +332,7 @@ class Hook_addon_registry_catalogues
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
-			'TAG'=>lorem_word()
+			'TAG'=>lorem_word(),
 		));
 
 		$entries=new ocp_tempcode();
@@ -348,7 +348,7 @@ class Hook_addon_registry_catalogues
 				'_FIELDID'=>placeholder_id(),
 				'FIELDTYPE'=>lorem_word(),
 				'VALUE_PLAIN'=>lorem_phrase(),
-				'VALUE'=>lorem_phrase()
+				'VALUE'=>lorem_phrase(),
 			)));
 		}
 		$content=do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP',array(
@@ -418,7 +418,7 @@ class Hook_addon_registry_catalogues
 				'VIEW_URL'=>placeholder_url(),
 				'ID'=>placeholder_url(),
 				'FIELD_0'=>lorem_word_2(),
-				'FIELD_0_PLAIN'=>lorem_word()
+				'FIELD_0_PLAIN'=>lorem_word(),
 			)));
 		}
 		$entries=do_lorem_template('CATALOGUE_DEFAULT_TITLELIST_WRAP',array(
@@ -430,7 +430,7 @@ class Hook_addon_registry_catalogues
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
-			'TAG'=>lorem_word()
+			'TAG'=>lorem_word(),
 		));
 
 		$entries=do_lorem_template('CATALOGUE_DEFAULT_CATEGORY_EMBED',array(
@@ -482,7 +482,7 @@ class Hook_addon_registry_catalogues
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
-			'TAG'=>lorem_word()
+			'TAG'=>lorem_word(),
 		));
 
 		$row=new ocp_tempcode();
@@ -504,14 +504,14 @@ class Hook_addon_registry_catalogues
 			$entry_fields->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_FIELD',array(
 				'FIELDID'=>placeholder_random_id(),
 				'ENTRYID'=>placeholder_random_id(),
-				'VALUE'=>lorem_phrase()
+				'VALUE'=>lorem_phrase(),
 			)));
 		}
 		$row->attach(do_lorem_template('CATALOGUE_links_TABULAR_ENTRY_WRAP',array(
 			'FIELDS_TABULAR'=>$entry_fields,
 			'VIEW_URL'=>placeholder_url(),
 			'EDIT_URL'=>placeholder_url(),
-			'FIELD_1_PLAIN'=>lorem_phrase()
+			'FIELD_1_PLAIN'=>lorem_phrase(),
 		)));
 		$content=do_lorem_template('CATALOGUE_links_TABULAR_WRAP',array(
 			'CATALOGUE'=>lorem_word(),
@@ -569,7 +569,7 @@ class Hook_addon_registry_catalogues
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
-			'TAG'=>lorem_word()
+			'TAG'=>lorem_word(),
 		));
 
 		$entries=new ocp_tempcode();
@@ -588,12 +588,12 @@ class Hook_addon_registry_catalogues
 		$fields->attach(do_lorem_template('CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD',array(
 			'FIELDID'=>placeholder_id(),
 			'ENTRYID'=>placeholder_id(),
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		)));
 		$entries->attach(do_lorem_template('CATALOGUE_DEFAULT_TABULAR_ENTRY_WRAP',array(
 			'FIELDS_TABULAR'=>$fields,
 			'EDIT_URL'=>placeholder_url(),
-			'VIEW_URL'=>placeholder_url()
+			'VIEW_URL'=>placeholder_url(),
 		)));
 		$content=do_lorem_template('CATALOGUE_DEFAULT_TABULAR_WRAP',array(
 			'CATALOGUE'=>lorem_word(),
@@ -650,7 +650,7 @@ class Hook_addon_registry_catalogues
 			'TAGS'=>placeholder_array(),
 			'TYPE'=>NULL,
 			'LINK_FULLSCOPE'=>placeholder_url(),
-			'TAG'=>lorem_word()
+			'TAG'=>lorem_word(),
 		));
 
 		$fields=new ocp_tempcode();
@@ -664,7 +664,7 @@ class Hook_addon_registry_catalogues
 				'_FIELDID'=>placeholder_id(),
 				'FIELDTYPE'=>lorem_word(),
 				'VALUE_PLAIN'=>lorem_phrase(),
-				'VALUE'=>lorem_phrase()
+				'VALUE'=>lorem_phrase(),
 			)));
 
 		$entry=do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP',array(

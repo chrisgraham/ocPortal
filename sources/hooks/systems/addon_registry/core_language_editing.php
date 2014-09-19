@@ -73,7 +73,7 @@ class Hook_addon_registry_core_language_editing
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -158,13 +158,13 @@ class Hook_addon_registry_core_language_editing
 		foreach (placeholder_array() as $value)
 		{
 			$crit=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM',array(
-				'CRITICISM'=>lorem_sentence()
+				'CRITICISM'=>lorem_sentence(),
 			));
 			$file->attach($crit);
 		}
 		$file_result=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_FILE',array(
 			'COMPLAINTS'=>$file,
-			'FILENAME'=>do_lang_tempcode('NA_EM')
+			'FILENAME'=>do_lang_tempcode('NA_EM'),
 		));
 
 		$files.=$file_result->evaluate();
@@ -202,7 +202,7 @@ class Hook_addon_registry_core_language_editing
 				'OLD'=>$value,
 				'CURRENT'=>$value,
 				'ACTIONS'=>$actions,
-				'PRIORITY'=>lorem_word()
+				'PRIORITY'=>lorem_word(),
 			)));
 		}
 
@@ -242,7 +242,7 @@ class Hook_addon_registry_core_language_editing
 				'NAME'=>lorem_word().strval($i),
 				'OLD'=>str_replace('\n', "\n", $value),
 				'CURRENT'=>$value,
-				'ACTIONS'=>lorem_phrase()
+				'ACTIONS'=>lorem_phrase(),
 			));
 			$lines.=$temp->evaluate();
 		}

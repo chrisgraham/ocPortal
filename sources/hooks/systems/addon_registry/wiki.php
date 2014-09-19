@@ -73,7 +73,7 @@ class Hook_addon_registry_wiki
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -251,7 +251,7 @@ class Hook_addon_registry_wiki
 			'TITLE'=>lorem_word(),
 			'RATING'=>make_string_tempcode('6'),
 			'NUM_RATINGS'=>placeholder_number(),
-			'TYPE'=>lorem_word()
+			'TYPE'=>lorem_word(),
 		);
 		$rating_inside=do_lorem_template('WIKI_RATING_FORM',array(
 			'LIKES'=>true,
@@ -290,12 +290,12 @@ class Hook_addon_registry_wiki
 
 		$_child=do_lorem_template('WIKI_SUBCATEGORY_CHILDREN',array(
 			'MY_CHILD_POSTS'=>lorem_phrase(),
-			'MY_CHILD_CHILDREN'=>lorem_phrase()
+			'MY_CHILD_CHILDREN'=>lorem_phrase(),
 		));
 		$child=do_lorem_template('WIKI_SUBCATEGORY_LINK',array(
 			'URL'=>placeholder_url(),
 			'CHILD'=>$_child,
-			'SUP'=>lorem_phrase()
+			'SUP'=>lorem_phrase(),
 		));
 
 

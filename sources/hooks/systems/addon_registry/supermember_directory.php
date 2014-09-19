@@ -74,7 +74,7 @@ class Hook_addon_registry_supermember_directory
 				'collaboration_zone'
 			),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -143,10 +143,10 @@ class Hook_addon_registry_supermember_directory
 					'AUTHOR_URL'=>placeholder_url(),
 					'POINTS_URL'=>placeholder_url(),
 					'PM_URL'=>placeholder_url(),
-					'SKILLS'=>lorem_phrase()
+					'SKILLS'=>lorem_phrase(),
 				),
 			),
-			'GROUP_NAME'=>lorem_phrase()
+			'GROUP_NAME'=>lorem_phrase(),
 		));
 
 		return array(

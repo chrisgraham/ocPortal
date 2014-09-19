@@ -72,7 +72,7 @@ class Hook_addon_registry_users_online_block
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -151,7 +151,7 @@ class Hook_addon_registry_users_online_block
 				'PROFILE_URL'=>placeholder_url(),
 				'USERNAME'=>lorem_phrase(),
 				'MEMBER_ID'=>placeholder_id(),
-				'AT'=>lorem_phrase()
+				'AT'=>lorem_phrase(),
 			));
 			$birthdays->attach($birthday);
 		}

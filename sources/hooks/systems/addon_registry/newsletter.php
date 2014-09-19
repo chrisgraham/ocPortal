@@ -72,7 +72,7 @@ class Hook_addon_registry_newsletter
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -181,7 +181,7 @@ class Hook_addon_registry_newsletter
 			$tmp=do_lorem_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array(
 				'I'=>lorem_word(),
 				'TITLE'=>lorem_phrase(),
-				'CONTENT'=>lorem_sentence()
+				'CONTENT'=>lorem_sentence(),
 			));
 			$automatic[]=$tmp->evaluate();
 		}
@@ -217,14 +217,14 @@ class Hook_addon_registry_newsletter
 				'SURNAME'=>lorem_word(),
 				'NAME'=>lorem_word(),
 				'NEWSLETTER_SEND_ID'=>placeholder_id(),
-				'NEWSLETTER_HASH'=>lorem_word()
+				'NEWSLETTER_HASH'=>lorem_word(),
 			)));
 		}
 
 		$outs=array();
 		$outs[]=array(
 			'SUB'=>$out,
-			'TEXT'=>lorem_phrase()
+			'TEXT'=>lorem_phrase(),
 		);
 
 		return array(
@@ -267,7 +267,7 @@ class Hook_addon_registry_newsletter
 		$preview=do_lorem_template('NEWSLETTER_CONFIRM_WRAP',array(
 			'TEXT_PREVIEW'=>lorem_sentence(),
 			'PREVIEW'=>lorem_phrase(),
-			'SUBJECT'=>lorem_phrase()
+			'SUBJECT'=>lorem_phrase(),
 		));
 
 		return array(

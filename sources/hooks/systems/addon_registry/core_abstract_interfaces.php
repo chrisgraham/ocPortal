@@ -72,7 +72,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -369,7 +369,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			$entry->attach(do_lorem_template('INDEX_SCREEN_ENTRY',array(
 				'NAME'=>lorem_word(),
 				'URL'=>placeholder_url(),
-				'DISPLAY_STRING'=>lorem_phrase()
+				'DISPLAY_STRING'=>lorem_phrase(),
 			)));
 		}
 
@@ -400,7 +400,7 @@ class Hook_addon_registry_core_abstract_interfaces
 				'URL'=>placeholder_url(),
 				'NAME'=>$value,
 				'DESCRIPTION'=>lorem_paragraph_html(),
-				'COUNT'=>placeholder_random()
+				'COUNT'=>placeholder_random(),
 			)));
 		}
 
@@ -427,21 +427,21 @@ class Hook_addon_registry_core_abstract_interfaces
 		$fields=new ocp_tempcode();
 		$fields->attach(do_lorem_template('MAP_TABLE_FIELD',array(
 			'NAME'=>lorem_word(),
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		)));
 		$fields->attach(do_lorem_template('MAP_TABLE_FIELD_ABBR',array(
 			'ABBR'=>lorem_phrase(),
 			'NAME'=>lorem_word(),
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		)));
 		$fields->attach(do_lorem_template('MAP_TABLE_FIELD_RAW_ABBR',array(
 			'ABBR'=>lorem_phrase(),
 			'NAME'=>lorem_word(),
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		)));
 		$fields->attach(do_lorem_template('MAP_TABLE_FIELD_RAW',array(
 			'NAME'=>lorem_word(),
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		)));
 
 		return array(
@@ -464,7 +464,7 @@ class Hook_addon_registry_core_abstract_interfaces
 		$fields=do_lorem_template('MAP_TABLE_FIELD',array(
 			'ABBR'=>lorem_phrase(),
 			'NAME'=>lorem_word(),
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		));
 
 		return array(
@@ -724,25 +724,25 @@ class Hook_addon_registry_core_abstract_interfaces
 				'GET'=>true,
 				'HIDDEN'=>'',
 				'NAME'=>lorem_phrase(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			));
 			$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY',array(
 				'GET'=>true,
 				'HIDDEN'=>'',
 				'NAME'=>lorem_phrase(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)));
 			$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY',array(
 				'GET'=>true,
 				'HIDDEN'=>'',
 				'NAME'=>lorem_phrase(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)));
 			$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY',array(
 				'GET'=>true,
 				'HIDDEN'=>'',
 				'NAME'=>lorem_phrase(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			)));
 
 			$line=do_lorem_template('COLUMNED_TABLE_ROW_CELL_LINE',array(
@@ -754,7 +754,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			$select=do_lorem_template('COLUMNED_TABLE_ROW_CELL_SELECT',array(
 				'LABEL'=>lorem_phrase(),
 				'NAME'=>placeholder_random_id(),
-				'LIST'=>placeholder_options()
+				'LIST'=>placeholder_options(),
 			));
 
 			$tick=do_lorem_template('COLUMNED_TABLE_ROW_CELL_TICK',array(
@@ -819,7 +819,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'URL'=>'#',
 			'FIELD_GROUPS'=>$field_rows,
 			'SUBMIT_ICON'=>'buttons__proceed',
-			'SUBMIT_NAME'=>lorem_word_2()
+			'SUBMIT_NAME'=>lorem_word_2(),
 		));
 
 		return array(
@@ -852,7 +852,7 @@ class Hook_addon_registry_core_abstract_interfaces
 					'SORT_URL_DESC'=>placeholder_url(),
 					'SORT_DESC_SELECTED'=>lorem_word(),
 					'SORT_ASC_SELECTED'=>lorem_word(),
-					'SORT_URL_ASC'=>placeholder_url()
+					'SORT_URL_ASC'=>placeholder_url(),
 				)));
 		}
 		$fields_title=$cells;
@@ -864,7 +864,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			foreach ($array as $k2=>$v2)
 			{
 				$tick=do_lorem_template('RESULTS_TABLE_TICK',array(
-					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2)
+					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2),
 				));
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
 					'VALUE'=>$tick,
@@ -900,7 +900,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'FIELDS'=>$order_entries,
 			'MESSAGE'=>'',
 			'SORT'=>$sort,
-			'PAGINATION'=>placeholder_pagination()
+			'PAGINATION'=>placeholder_pagination(),
 		));
 		//results_table ends
 
@@ -939,7 +939,7 @@ class Hook_addon_registry_core_abstract_interfaces
 					'SORT_URL_DESC'=>placeholder_url(),
 					'SORT_DESC_SELECTED'=>lorem_word(),
 					'SORT_ASC_SELECTED'=>lorem_word(),
-					'SORT_URL_ASC'=>placeholder_url()
+					'SORT_URL_ASC'=>placeholder_url(),
 				)));
 		}
 		$fields_title=$cells;
@@ -951,7 +951,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			foreach ($array as $k2=>$v2)
 			{
 				$tick=do_lorem_template('RESULTS_TABLE_TICK',array(
-					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2)
+					'ID'=>placeholder_id().'_'.strval($k1).'_'.strval($k2),
 				));
 				$cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array(
 					'VALUE'=>$tick,
@@ -987,7 +987,7 @@ class Hook_addon_registry_core_abstract_interfaces
 			'FIELDS'=>$order_entries,
 			'MESSAGE'=>'',
 			'SORT'=>$sort,
-			'PAGINATION'=>placeholder_pagination()
+			'PAGINATION'=>placeholder_pagination(),
 		));
 		//results_table ends
 
@@ -1017,13 +1017,13 @@ class Hook_addon_registry_core_abstract_interfaces
 			$part->attach(do_lorem_template('RESULTS_LAUNCHER_PAGE_NUMBER_LINK',array(
 				'TITLE'=>lorem_phrase(),
 				'URL'=>placeholder_url(),
-				'P'=>placeholder_number()
+				'P'=>placeholder_number(),
 			)));
 			$part->attach(do_lorem_template('RESULTS_LAUNCHER_CONTINUE',array(
 				'TITLE'=>lorem_phrase(),
 				'MAX'=>placeholder_number(),
 				'NUM_PAGES'=>placeholder_number(),
-				'URL_STUB'=>placeholder_url()
+				'URL_STUB'=>placeholder_url(),
 			)));
 		}
 

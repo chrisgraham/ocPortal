@@ -72,7 +72,7 @@ class Hook_addon_registry_core_fields
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -176,11 +176,11 @@ class Hook_addon_registry_core_fields
 				'ALL'=>array(
 					array(
 						'HAS'=>true,
-						'OPTION'=>lorem_phrase()
+						'OPTION'=>lorem_phrase(),
 					),
 					array(
 						'HAS'=>false,
-						'OPTION'=>lorem_phrase()
+						'OPTION'=>lorem_phrase(),
 					)
 				),
 				'FIELD_ID'=>placeholder_id(),

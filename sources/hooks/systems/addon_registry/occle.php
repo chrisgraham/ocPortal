@@ -73,7 +73,7 @@ class Hook_addon_registry_occle
 		return array(
 			'requires'=>array('import'),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -280,7 +280,7 @@ class Hook_addon_registry_occle
 		$content=do_lorem_template('OCCLE_MAIN',array(
 			'SUBMIT_URL'=>placeholder_url(),
 			'PROMPT'=>lorem_phrase(),
-			'COMMANDS'=>lorem_phrase()
+			'COMMANDS'=>lorem_phrase(),
 		));
 
 		return array(
@@ -303,7 +303,7 @@ class Hook_addon_registry_occle
 		$notifications=do_lorem_template('OCCLE_NOTIFICATION',array(
 			'SECTION'=>lorem_phrase(),
 			'TYPE'=>lorem_phrase(),
-			'NOTIFICATION_CONTENT'=>lorem_phrase()
+			'NOTIFICATION_CONTENT'=>lorem_phrase(),
 		));
 
 		return array(
@@ -329,7 +329,7 @@ class Hook_addon_registry_occle
 	{
 		$elements=do_lorem_template('OCCLE_ARRAY_ELEMENT',array(
 			'KEY'=>lorem_phrase(),
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		));
 
 		return array(
@@ -402,7 +402,7 @@ class Hook_addon_registry_occle
 			'FULL_URL'=>placeholder_url(),
 			'NEWS_TITLE'=>lorem_phrase(),
 			'DATE'=>placeholder_time(),
-			'SUMMARY'=>lorem_paragraph()
+			'SUMMARY'=>lorem_paragraph(),
 		));
 
 		return array(
@@ -584,7 +584,7 @@ class Hook_addon_registry_occle
 		{
 			$topics[]=array(
 				'_loop_var'=>placeholder_url(),
-				'_loop_key'=>lorem_word()
+				'_loop_key'=>lorem_word(),
 			);
 		}
 		return array(
@@ -608,7 +608,7 @@ class Hook_addon_registry_occle
 		{
 			$topics[]=array(
 				'_loop_var'=>placeholder_url(),
-				'_loop_key'=>lorem_word()
+				'_loop_key'=>lorem_word(),
 			);
 		}
 		return array(

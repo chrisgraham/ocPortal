@@ -175,7 +175,7 @@ class Hook_addon_registry_setupwizard
 			'TITLE'=>lorem_title(),
 			'URL'=>placeholder_url(),
 			'SUBMIT_ICON'=>'buttons__proceed',
-			'SUBMIT_NAME'=>lorem_word()
+			'SUBMIT_NAME'=>lorem_word(),
 		));
 
 		return array(
@@ -203,7 +203,7 @@ class Hook_addon_registry_setupwizard
 			'FORM'=>placeholder_form(),
 			'BALANCED'=>lorem_phrase(),
 			'LIBERAL'=>lorem_phrase(),
-			'CORPORATE'=>lorem_phrase()
+			'CORPORATE'=>lorem_phrase(),
 		));
 
 		return array(

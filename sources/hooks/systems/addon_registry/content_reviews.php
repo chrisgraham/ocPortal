@@ -72,7 +72,7 @@ class Hook_addon_registry_content_reviews
 		return array(
 			'requires'=>array('unvalidated','occle'),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 

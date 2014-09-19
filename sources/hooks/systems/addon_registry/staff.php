@@ -74,7 +74,7 @@ class Hook_addon_registry_staff
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -142,7 +142,7 @@ class Hook_addon_registry_staff
 		{
 			$available->attach(do_lorem_template('STAFF_EDIT_WRAPPER',array(
 				'FORM'=>placeholder_form(),
-				'USERNAME'=>lorem_word()
+				'USERNAME'=>lorem_word(),
 			)));
 		}
 

@@ -72,7 +72,7 @@ class Hook_addon_registry_realtime_rain
 		return array(
 			'requires'=>array('stats'),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 

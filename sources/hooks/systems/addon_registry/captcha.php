@@ -175,7 +175,7 @@ class Hook_addon_registry_captcha
 		require_css('forms');
 
 		$input=do_lorem_template('FORM_SCREEN_INPUT_CAPTCHA',array(
-			'TABINDEX'=>placeholder_number()
+			'TABINDEX'=>placeholder_number(),
 		));
 		$captcha=do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,

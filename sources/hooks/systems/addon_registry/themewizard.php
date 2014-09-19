@@ -73,7 +73,7 @@ class Hook_addon_registry_themewizard
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -222,7 +222,7 @@ class Hook_addon_registry_themewizard
 			'NAME'=>lorem_phrase(),
 			'LOGO_THEME_IMAGE'=>'logo/default_logos/1',
 			'BACKGROUND_THEME_IMAGE'=>'logo/default_backgrounds/1',
-			'THEME'=>lorem_phrase()
+			'THEME'=>lorem_phrase(),
 		));
 
 		return array(

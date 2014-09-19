@@ -74,7 +74,7 @@ class Hook_addon_registry_core
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -1624,7 +1624,7 @@ class Hook_addon_registry_core
 					'LINE'=>$value1,
 					'FILE'=>lorem_phrase(),
 					'KEY'=>ucfirst($value1),
-					'VALUE'=>lorem_sentence()
+					'VALUE'=>lorem_sentence(),
 				)));
 			}
 			$trace->attach(do_lorem_template('STACK_TRACE_WRAP',array(
@@ -1742,13 +1742,13 @@ class Hook_addon_registry_core
 
 		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array(
 			'KEY'=>lorem_word(),
-			'VALUE'=>placeholder_number()
+			'VALUE'=>placeholder_number(),
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array(
 			'NAME'=>lorem_word_2(),
 			'DESCRIPTION'=>lorem_phrase(),
-			'URL'=>placeholder_url()
+			'URL'=>placeholder_url(),
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array(
@@ -1759,12 +1759,12 @@ class Hook_addon_registry_core
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array(
 			'NAME'=>do_lang_tempcode('LOGOUT'),
-			'URL'=>placeholder_url()
+			'URL'=>placeholder_url(),
 		)));
 
 		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX',array(
 			'KEY'=>do_lang_tempcode('GROUP'),
-			'VALUE'=>placeholder_link()
+			'VALUE'=>placeholder_link(),
 		)));
 
 		return array(
@@ -1791,13 +1791,13 @@ class Hook_addon_registry_core
 
 		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE',array(
 			'KEY'=>lorem_word(),
-			'VALUE'=>placeholder_number()
+			'VALUE'=>placeholder_number(),
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK_2',array(
 			'NAME'=>lorem_word_2(),
 			'DESCRIPTION'=>lorem_phrase(),
-			'URL'=>placeholder_url()
+			'URL'=>placeholder_url(),
 		)));
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINK',array(
@@ -1808,12 +1808,12 @@ class Hook_addon_registry_core
 
 		$links->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LOGOUT',array(
 			'NAME'=>do_lang_tempcode('LOGOUT'),
-			'URL'=>placeholder_url()
+			'URL'=>placeholder_url(),
 		)));
 
 		$details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE_COMPLEX',array(
 			'KEY'=>do_lang_tempcode('GROUP'),
-			'VALUE'=>placeholder_link()
+			'VALUE'=>placeholder_link(),
 		)));
 
 		return array(
@@ -1908,7 +1908,7 @@ class Hook_addon_registry_core
 			{
 				$entries->attach(do_lorem_template('BLOCK_MAIN_EMOTICON_CODES_ENTRY',array(
 					'CODE'=>$code,
-					'TPL'=>do_emoticon($imgcode)
+					'TPL'=>do_emoticon($imgcode),
 				)));
 			}
 		}
@@ -1981,7 +1981,7 @@ class Hook_addon_registry_core
 		{
 			$queries->attach(do_lorem_template('QUERY_LOG',array(
 				'TIME'=>placeholder_number(),
-				'TEXT'=>lorem_sentence()
+				'TEXT'=>lorem_sentence(),
 			)));
 		}
 
@@ -2021,7 +2021,7 @@ class Hook_addon_registry_core
 				'URL'=>placeholder_url(),
 				'TABLE'=>$value,
 				'FIELD'=>lorem_word_2(),
-				'ID'=>strval($k)
+				'ID'=>strval($k),
 			);
 		}
 
@@ -2079,14 +2079,14 @@ class Hook_addon_registry_core
 	{
 		$content=do_lorem_template('FORUM_ATTACHMENT_IMAGE_THUMB',array(
 			'FULL'=>placeholder_url(),
-			'URL'=>placeholder_image_url()
+			'URL'=>placeholder_image_url(),
 		));
 
 		$content->attach(do_lorem_template('FORUM_ATTACHMENT_LINK',array(
 			'FULL'=>placeholder_url(),
 			'FILENAME'=>lorem_word(),
 			'CLEAN_SIZE'=>placeholder_filesize(),
-			'NUM_DOWNLOADS'=>placeholder_number()
+			'NUM_DOWNLOADS'=>placeholder_number(),
 		)));
 		return array(
 			lorem_globalise($content,NULL,'',true)
@@ -2243,7 +2243,7 @@ class Hook_addon_registry_core
 					array(
 						'ACTIVE'=>true,
 						'TITLE'=>lorem_phrase(),
-						'URL'=>placeholder_url()
+						'URL'=>placeholder_url(),
 					)
 				)
 			)),NULL,'',true)

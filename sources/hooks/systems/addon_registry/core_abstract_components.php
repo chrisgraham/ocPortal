@@ -72,7 +72,7 @@ class Hook_addon_registry_core_abstract_components
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -160,7 +160,7 @@ class Hook_addon_registry_core_abstract_components
 			'DATE_RAW'=>placeholder_date_raw(),
 			'RESTORE_URL'=>placeholder_url(),
 			'URL'=>placeholder_url(),
-			'SIZE'=>placeholder_filesize()
+			'SIZE'=>placeholder_filesize(),
 		));
 
 		return array(

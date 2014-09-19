@@ -72,7 +72,7 @@ class Hook_addon_registry_bookmarks
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -139,7 +139,7 @@ class Hook_addon_registry_bookmarks
 				'CAPTION'=>lorem_word(),
 				'ID'=>placeholder_id(),
 				'FOLDER'=>lorem_word_2(),
-				'PAGE_LINK'=>placeholder_url()
+				'PAGE_LINK'=>placeholder_url(),
 			)
 		);
 

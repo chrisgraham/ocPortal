@@ -72,7 +72,7 @@ class Hook_addon_registry_chat
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -266,7 +266,7 @@ class Hook_addon_registry_chat
 			'USERNAME'=>lorem_phrase(),
 			'URL'=>placeholder_url(),
 			'F_ID'=>placeholder_id(),
-			'BOX'=>placeholder_table()
+			'BOX'=>placeholder_table(),
 		);
 		$friends_arr=array();
 		$friends_arr[]=$friend_map;
@@ -286,7 +286,7 @@ class Hook_addon_registry_chat
 			'MEMBER_ID'=>placeholder_id(),
 			'ADD_FRIEND_URL'=>placeholder_url(),
 			'REMOVE_FRIEND_URL'=>placeholder_url(),
-			'BOX'=>lorem_paragraph()
+			'BOX'=>lorem_paragraph(),
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true)
@@ -327,7 +327,7 @@ class Hook_addon_registry_chat
 			'CHAT_BAN_URL'=>placeholder_url(),
 			'CHAT_UNBAN_URL'=>placeholder_url(),
 			'EDIT_URL'=>placeholder_url(),
-			'BAN_URL'=>placeholder_url()
+			'BAN_URL'=>placeholder_url(),
 		));
 
 		return array(
@@ -399,7 +399,7 @@ class Hook_addon_registry_chat
 			'MEMBER'=>lorem_word(),
 			'MESSAGE'=>lorem_phrase(),
 			'TIME_RAW'=>placeholder_time(),
-			'TIME'=>placeholder_time()
+			'TIME'=>placeholder_time(),
 		));
 
 		return array(
@@ -483,7 +483,7 @@ class Hook_addon_registry_chat
 		$chat_sound=do_lorem_template('CHAT_SOUND',array(
 			'SOUND_EFFECTS'=>placeholder_array(),
 			'KEY'=>lorem_word(),
-			'VALUE'=>lorem_word_2()
+			'VALUE'=>lorem_word_2(),
 		));
 
 		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA',array(
@@ -499,7 +499,7 @@ class Hook_addon_registry_chat
 			'ONLINE'=>'__online__',
 			'AVATAR_URL'=>'__avatar_url__',
 			'MAKE_FRIEND_URL'=>placeholder_url(),
-			'BLOCK_MEMBER_URL'=>placeholder_url()
+			'BLOCK_MEMBER_URL'=>placeholder_url(),
 		));
 
 		$fields=new ocp_tempcode();
@@ -520,7 +520,7 @@ class Hook_addon_registry_chat
 					'USERNAME'=>$user,
 					'MEMBER_ID'=>placeholder_id(),
 					'COLOUR'=>'black',
-					'AT'=>lorem_phrase()
+					'AT'=>lorem_phrase(),
 				)));
 
 			$room_link=do_lorem_template('CHAT_ROOM_LINK',array(
@@ -528,7 +528,7 @@ class Hook_addon_registry_chat
 				'ID'=>strval($key),
 				'NAME'=>$room,
 				'USERNAMES'=>$usernames,
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			));
 			$fields->attach($room_link);
 		}
@@ -542,7 +542,7 @@ class Hook_addon_registry_chat
 				'MEMBER_PROFILE_URL'=>placeholder_url(),
 				'MEMBER_ID'=>strval($key),
 				'USERNAME'=>lorem_word(),
-				'ONLINE_TEXT'=>lorem_phrase()
+				'ONLINE_TEXT'=>lorem_phrase(),
 			);
 		}
 
@@ -596,7 +596,7 @@ class Hook_addon_registry_chat
 		$chat_sound=do_lorem_template('CHAT_SOUND',array(
 			'SOUND_EFFECTS'=>placeholder_array(),
 			'KEY'=>lorem_word(),
-			'VALUE'=>lorem_word_2()
+			'VALUE'=>lorem_word_2(),
 		));
 
 		$_buttons=array(
@@ -643,7 +643,7 @@ class Hook_addon_registry_chat
 				'USERNAME'=>$user,
 				'MEMBER_ID'=>placeholder_id(),
 				'COLOUR'=>'black',
-				'AT'=>lorem_phrase()
+				'AT'=>lorem_phrase(),
 			)));
 
 		return array(
@@ -701,13 +701,13 @@ class Hook_addon_registry_chat
 					'USERNAME'=>lorem_phrase(),
 					'EFFECT_TITLE'=>lorem_word(),
 					'EFFECT_SHORT'=>lorem_word_2(),
-					'EFFECT'=>lorem_word()
+					'EFFECT'=>lorem_word(),
 				);
 			}
 			$block=do_lorem_template('CHAT_SET_EFFECTS_SETTING_BLOCK',array(
 				'HAS_SOME'=>false,
 				'EFFECTS'=>$effects,
-				'LIBRARY'=>placeholder_array()
+				'LIBRARY'=>placeholder_array(),
 			));
 			$setting_blocks->attach($block);
 		}
@@ -736,7 +736,7 @@ class Hook_addon_registry_chat
 	{
 		$im_area_template=do_lorem_template('CHAT_LOBBY_IM_AREA',array(
 			'MESSAGES_PHP'=>find_script('messages'),
-			'CHATROOM_ID'=>placeholder_id()
+			'CHATROOM_ID'=>placeholder_id(),
 		));
 		return array(
 			lorem_globalise(do_lorem_template('CHAT_SITEWIDE_IM_POPUP',array(

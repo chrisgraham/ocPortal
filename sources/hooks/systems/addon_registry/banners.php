@@ -72,7 +72,7 @@ class Hook_addon_registry_banners
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -276,7 +276,7 @@ class Hook_addon_registry_banners
 			'SOURCE'=>lorem_phrase(),
 			'DEST'=>lorem_phrase(),
 			'CAPTION'=>lorem_phrase(),
-			'IMG'=>placeholder_image_url()
+			'IMG'=>placeholder_image_url(),
 		)));
 		$banners->attach(do_lorem_template('BANNER_IMAGE',array(
 			'URL'=>placeholder_url(),
@@ -286,20 +286,20 @@ class Hook_addon_registry_banners
 			'SOURCE'=>lorem_phrase(),
 			'DEST'=>lorem_phrase(),
 			'CAPTION'=>lorem_phrase(),
-			'IMG'=>placeholder_image_url()
+			'IMG'=>placeholder_image_url(),
 		)));
 		$banners->attach(do_lorem_template('BANNER_IFRAME',array(
 			'B_TYPE'=>lorem_phrase(),
 			'IMG'=>placeholder_image_url(),
 			'WIDTH'=>placeholder_number(),
-			'HEIGHT'=>placeholder_number()
+			'HEIGHT'=>placeholder_number(),
 		)));
 
 		$assemble=do_lorem_template('BLOCK_MAIN_BANNER_WAVE_BWRAP',array(
 			'EXTRA'=>lorem_phrase(),
 			'TYPE'=>lorem_phrase(),
 			'BANNER'=>$banners,
-			'MORE_COMING'=>lorem_phrase()
+			'MORE_COMING'=>lorem_phrase(),
 		));
 
 		return array(

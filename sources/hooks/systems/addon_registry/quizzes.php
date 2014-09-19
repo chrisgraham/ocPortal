@@ -72,7 +72,7 @@ class Hook_addon_registry_quizzes
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -175,7 +175,7 @@ class Hook_addon_registry_quizzes
 			$fields->attach(do_lorem_template('MAP_TABLE_FIELD_RAW',array(
 				'ABBR'=>'',
 				'NAME'=>lorem_phrase(),
-				'VALUE'=>lorem_phrase()
+				'VALUE'=>lorem_phrase(),
 			)));
 		}
 		$summary=do_lorem_template('MAP_TABLE',array(
@@ -318,7 +318,7 @@ class Hook_addon_registry_quizzes
 		require_javascript('javascript_ajax');
 
 		$warning_details=do_lorem_template('WARNING_BOX',array(
-			'WARNING'=>lorem_phrase()
+			'WARNING'=>lorem_phrase(),
 		));
 
 		return array(

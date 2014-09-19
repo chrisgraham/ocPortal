@@ -72,7 +72,7 @@ class Hook_addon_registry_ocf_cpfs
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -154,7 +154,7 @@ class Hook_addon_registry_ocf_cpfs
 		{
 			$lines->attach(do_lorem_template('OCF_CPF_STATS_LINE',array(
 				'CNT'=>placeholder_number(),
-				'VAL'=>lorem_phrase()
+				'VAL'=>lorem_phrase(),
 			)));
 		}
 

@@ -74,7 +74,7 @@ class Hook_addon_registry_downloads
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -369,7 +369,7 @@ class Hook_addon_registry_downloads
 				'VIEW_URL'=>placeholder_url(),
 				'EDIT_URL'=>placeholder_url(),
 				'THUMB'=>placeholder_image(),
-				'DESCRIPTION'=>lorem_phrase()
+				'DESCRIPTION'=>lorem_phrase(),
 			));
 
 			$cell=do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL',array(

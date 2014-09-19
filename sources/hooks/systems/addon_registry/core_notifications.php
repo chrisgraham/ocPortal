@@ -72,7 +72,7 @@ class Hook_addon_registry_core_notifications
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -384,13 +384,13 @@ class Hook_addon_registry_core_notifications
 			'CHECKED'=>true,
 			'RAW'=>placeholder_number(),
 			'AVAILABLE'=>true,
-			'SCOPE'=>placeholder_id()
+			'SCOPE'=>placeholder_id(),
 		);
 		$notification_types_titles=array();
 		$notification_types_titles[]=array(
 			'NTYPE'=>placeholder_id(),
 			'LABEL'=>lorem_phrase(),
-			'RAW'=>placeholder_number()
+			'RAW'=>placeholder_number(),
 		);
 		$notification_code_map=array(
 			'NOTIFICATION_CODE'=>placeholder_id(),
@@ -414,7 +414,7 @@ class Hook_addon_registry_core_notifications
 		$out=do_lorem_template('NOTIFICATIONS_MANAGE_SCREEN',array(
 			'TITLE'=>lorem_title(),
 			'INTERFACE'=>$interface,
-			'ACTION_URL'=>get_self_url()
+			'ACTION_URL'=>get_self_url(),
 		));
 
 		return array(
@@ -441,7 +441,7 @@ class Hook_addon_registry_core_notifications
 			'CHECKED'=>true,
 			'RAW'=>placeholder_number(),
 			'AVAILABLE'=>true,
-			'SCOPE'=>placeholder_id()
+			'SCOPE'=>placeholder_id(),
 		);
 		$notification_categories=array();
 		$notification_categories[]=array(
@@ -461,7 +461,7 @@ class Hook_addon_registry_core_notifications
 		$notification_types_titles[]=array(
 			'NTYPE'=>placeholder_id(),
 			'LABEL'=>lorem_phrase(),
-			'RAW'=>placeholder_number()
+			'RAW'=>placeholder_number(),
 		);
 		$out=do_lorem_template('NOTIFICATIONS_MANAGE_ADVANCED_SCREEN',array(
 			'TITLE'=>lorem_title(),
@@ -470,7 +470,7 @@ class Hook_addon_registry_core_notifications
 			'ACTION_URL'=>placeholder_url(),
 			'NOTIFICATION_TYPES_TITLES'=>$notification_types_titles,
 			'TREE'=>$tree,
-			'NOTIFICATION_CODE'=>placeholder_id()
+			'NOTIFICATION_CODE'=>placeholder_id(),
 		));
 
 		return array(

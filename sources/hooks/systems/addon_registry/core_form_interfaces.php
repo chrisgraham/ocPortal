@@ -72,7 +72,7 @@ class Hook_addon_registry_core_form_interfaces
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -758,12 +758,12 @@ class Hook_addon_registry_core_form_interfaces
 				'DISABLED'=>false,
 				'CLASS'=>'',
 				'NAME'=>placeholder_random_id(),
-				'TEXT'=>lorem_phrase()
+				'TEXT'=>lorem_phrase(),
 			)));
 		}
 		$list=do_lorem_template('FORM_SCREEN_INPUT_LIST_GROUP',array(
 			'ENTRIES'=>$list,
-			'TITLE'=>lorem_phrase()
+			'TITLE'=>lorem_phrase(),
 		));
 		$radios=new ocp_tempcode();
 		$name=placeholder_random_id();
@@ -773,7 +773,7 @@ class Hook_addon_registry_core_form_interfaces
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>placeholder_random(),
-			'TEXT'=>lorem_phrase()
+			'TEXT'=>lorem_phrase(),
 		)));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
 			'DESCRIPTION'=>lorem_sentence(),
@@ -781,7 +781,7 @@ class Hook_addon_registry_core_form_interfaces
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>placeholder_random(),
-			'TEXT'=>lorem_phrase()
+			'TEXT'=>lorem_phrase(),
 		)));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
 			'DESCRIPTION'=>lorem_sentence(),
@@ -789,7 +789,7 @@ class Hook_addon_registry_core_form_interfaces
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>placeholder_random(),
-			'TEXT'=>lorem_phrase()
+			'TEXT'=>lorem_phrase(),
 		)));
 
 		$name=placeholder_random_id();
@@ -823,7 +823,7 @@ class Hook_addon_registry_core_form_interfaces
 		$extra=do_lorem_template('HYPERLINK_POPUP_WINDOW',array(
 			'URL'=>placeholder_url(),
 			'TITLE'=>lorem_phrase(),
-			'CAPTION'=>lorem_phrase()
+			'CAPTION'=>lorem_phrase(),
 		));
 		$_description->attach($extra);
 
@@ -863,7 +863,7 @@ class Hook_addon_registry_core_form_interfaces
 			'TABINDEX'=>placeholder_number(),
 			'MINUTES'=>placeholder_options(),
 			'HOURS'=>placeholder_options(),
-			'STUB'=>placeholder_random_id()
+			'STUB'=>placeholder_random_id(),
 		));
 		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
 			'UNLIMITED'=>false,
@@ -939,7 +939,7 @@ class Hook_addon_registry_core_form_interfaces
 		$_comcode=do_lorem_template('COMCODE_MESSAGE',array(
 			'NAME'=>lorem_word(),
 			'W'=>'',
-			'URL'=>placeholder_url()
+			'URL'=>placeholder_url(),
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
 			'SCROLLS'=>'',
@@ -957,7 +957,7 @@ class Hook_addon_registry_core_form_interfaces
 		)));
 
 		$hidden=do_lorem_template('FORM_SCREEN_INPUT_DATE_NULL',array(
-			'STUB'=>placeholder_random_id()
+			'STUB'=>placeholder_random_id(),
 		));
 
 		return array(
@@ -998,7 +998,7 @@ class Hook_addon_registry_core_form_interfaces
 				'DISABLED'=>'',
 				'CLASS'=>'',
 				'NAME'=>placeholder_random_id(),
-				'TEXT'=>lorem_phrase()
+				'TEXT'=>lorem_phrase(),
 			)));
 		}
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_LIST',array(
@@ -1024,7 +1024,7 @@ class Hook_addon_registry_core_form_interfaces
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
 			'REQUIRED'=>true,
 			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
+			'NAME'=>$name_width,
 			'PRETTY_NAME'=>lorem_word(),
 			'DESCRIPTION'=>lorem_sentence_html(),
 			'DESCRIPTION_SIDE'=>'',
@@ -1079,7 +1079,7 @@ class Hook_addon_registry_core_form_interfaces
 		$name=placeholder_random_id();
 		$hidden=do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2',array(
 			'NAME'=>$name,
-			'VALUE'=>lorem_phrase()
+			'VALUE'=>lorem_phrase(),
 		));
 
 		foreach (placeholder_array() as $key=>$value)
@@ -1089,7 +1089,7 @@ class Hook_addon_registry_core_form_interfaces
 				'DISABLED'=>'',
 				'CLASS'=>'',
 				'NAME'=>$value,
-				'TEXT'=>lorem_phrase()
+				'TEXT'=>lorem_phrase(),
 			)));
 		}
 
@@ -1174,7 +1174,7 @@ class Hook_addon_registry_core_form_interfaces
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>lorem_word(),
-			'TEXT'=>lorem_phrase()
+			'TEXT'=>lorem_phrase(),
 		));
 		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
 			'DESCRIPTION'=>lorem_phrase(),
@@ -1182,7 +1182,7 @@ class Hook_addon_registry_core_form_interfaces
 			'TABINDEX'=>placeholder_number(),
 			'NAME'=>$name,
 			'VALUE'=>lorem_word_2(),
-			'TEXT'=>lorem_phrase()
+			'TEXT'=>lorem_phrase(),
 		)));
 		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
 			'CONTENT'=>$radios,
@@ -1256,7 +1256,7 @@ class Hook_addon_registry_core_form_interfaces
 			'NAME'=>$name,
 			'I'=>$name,
 			'NAME_STUB'=>lorem_word(),
-			'EDIT'=>array()
+			'EDIT'=>array(),
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
@@ -1356,7 +1356,7 @@ class Hook_addon_registry_core_form_interfaces
 					'TABINDEX'=>placeholder_number(),
 					'NAME'=>placeholder_random_id(),
 					'PRETTY_NAME'=>lorem_word(),
-					'DESCRIPTION'=>lorem_sentence()
+					'DESCRIPTION'=>lorem_sentence(),
 				);
 			}
 
@@ -1382,7 +1382,7 @@ class Hook_addon_registry_core_form_interfaces
 
 		$hidden->attach(do_lorem_template('FORM_SCREEN_INPUT_HIDDEN',array(
 			'NAME'=>lorem_word(),
-			'VALUE'=>lorem_word()
+			'VALUE'=>lorem_word(),
 		)));
 
 		return array(
@@ -1558,7 +1558,7 @@ class Hook_addon_registry_core_form_interfaces
 				'NAME'=>'path',
 				'VALUE'=>$val,
 				'URL'=>placeholder_image_url(),
-				'PRETTY'=>strval($key)
+				'PRETTY'=>strval($key),
 			));
 			$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 				'REQUIRED'=>true,
@@ -1583,7 +1583,7 @@ class Hook_addon_registry_core_form_interfaces
 					'PRETTY'=>lorem_phrase(),
 					'NAME'=>placeholder_random_id(),
 					'CODE'=>$_v,
-					'URL'=>placeholder_image_url()
+					'URL'=>placeholder_image_url(),
 				));
 				$cells->attach($temp);
 			}
@@ -1592,7 +1592,7 @@ class Hook_addon_registry_core_form_interfaces
 				'DISPLAY'=>'block',
 				'CATEGORY'=>$cells,
 				'FIELD_NAME'=>placeholder_id(),
-				'CATEGORY_NAME'=>lorem_word()
+				'CATEGORY_NAME'=>lorem_word(),
 			));
 			$content->attach($input);
 		}
@@ -1630,7 +1630,7 @@ class Hook_addon_registry_core_form_interfaces
 			'EMOTICON_CHOOSER'=>placeholder_emoticon_chooser(),
 			'POST'=>placeholder_blank(),
 			'DEFAULT_PARSED'=>placeholder_blank(),
-			'ATTACHMENTS'=>placeholder_blank()
+			'ATTACHMENTS'=>placeholder_blank(),
 		)));
 
 		return array(
@@ -1813,7 +1813,7 @@ class Hook_addon_registry_core_form_interfaces
 			'GROUP_ID'=>placeholder_random_id(),
 			'GROUP_NAME'=>lorem_phrase(),
 			'FORCE_PRESETS'=>false,
-			'OVERRIDES'=>placeholder_array()
+			'OVERRIDES'=>placeholder_array(),
 		)));
 
 		$field=do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX',array(
@@ -1868,7 +1868,7 @@ class Hook_addon_registry_core_form_interfaces
 		)));
 
 		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER',array(
-			'INNER'=>lorem_word()
+			'INNER'=>lorem_word(),
 		)));
 
 		return array(
@@ -1922,7 +1922,7 @@ class Hook_addon_registry_core_form_interfaces
 				'USAGE'=>placeholder_array(),
 				'DESCRIPTION'=>lorem_paragraph_html(),
 				'URL'=>placeholder_url(),
-				'LINK_CAPTION'=>lorem_phrase()
+				'LINK_CAPTION'=>lorem_phrase(),
 			)));
 		}
 		return array(

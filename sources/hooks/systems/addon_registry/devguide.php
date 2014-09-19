@@ -72,7 +72,7 @@ class Hook_addon_registry_devguide
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -150,7 +150,7 @@ class Hook_addon_registry_devguide
 		{
 			$parameters->attach(do_lorem_template('PHP_PARAMETER_LIST',array(
 				'TYPE'=>lorem_word(),
-				'NAME'=>lorem_word_2()
+				'NAME'=>lorem_word_2(),
 			)));
 
 			$bits=do_lorem_template('PHP_PARAMETER_BIT',array(
@@ -222,7 +222,7 @@ class Hook_addon_registry_devguide
 		{
 			$parameters->attach(do_lorem_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER',array(
 				'NAME'=>lorem_word(),
-				'DESCRIPTION'=>lorem_paragraph()
+				'DESCRIPTION'=>lorem_paragraph(),
 			)));
 		}
 

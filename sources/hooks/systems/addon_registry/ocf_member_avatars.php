@@ -72,7 +72,7 @@ class Hook_addon_registry_ocf_member_avatars
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -133,7 +133,7 @@ class Hook_addon_registry_ocf_member_avatars
 		require_lang('ocf');
 		require_css('ocf');
 		$avatar=do_lorem_template('OCF_TOPIC_POST_AVATAR',array(
-			'AVATAR'=>placeholder_image_url()
+			'AVATAR'=>placeholder_image_url(),
 		));
 
 		return array(

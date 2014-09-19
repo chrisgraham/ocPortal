@@ -72,7 +72,7 @@ class Hook_addon_registry_ldap
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -150,7 +150,7 @@ class Hook_addon_registry_ldap
 		{
 			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
 				'NAME'=>lorem_word().placeholder_random(),
-				'NICE_NAME'=>lorem_word()
+				'NICE_NAME'=>lorem_word(),
 			));
 			$members_delete->attach($tpl);
 		}
@@ -160,7 +160,7 @@ class Hook_addon_registry_ldap
 		{
 			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
 				'NAME'=>lorem_word().placeholder_random(),
-				'NICE_NAME'=>lorem_word()
+				'NICE_NAME'=>lorem_word(),
 			));
 			$groups_delete->attach($tpl);
 		}
@@ -170,7 +170,7 @@ class Hook_addon_registry_ldap
 		{
 			$tpl=do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
 				'NAME'=>lorem_word().placeholder_random(),
-				'NICE_NAME'=>lorem_word()
+				'NICE_NAME'=>lorem_word(),
 			));
 			$groups_add->attach($tpl);
 		}

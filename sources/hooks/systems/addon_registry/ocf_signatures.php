@@ -72,7 +72,7 @@ class Hook_addon_registry_ocf_signatures
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 

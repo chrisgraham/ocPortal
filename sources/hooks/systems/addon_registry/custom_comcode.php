@@ -153,7 +153,7 @@ class Hook_addon_registry_custom_comcode
 			$content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW',array(
 				'TITLE'=>lorem_word(),
 				'DESCRIPTION'=>lorem_paragraph(),
-				'EXAMPLE'=>lorem_word()
+				'EXAMPLE'=>lorem_word(),
 			)));
 		}
 

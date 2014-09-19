@@ -72,7 +72,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -180,7 +180,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'GRANK'=>placeholder_number(),
 				'ALEXAR'=>placeholder_number(),
 				'ALEXAT'=>placeholder_number(),
-				'URL'=>placeholder_url()
+				'URL'=>placeholder_url(),
 			);
 		}
 
@@ -189,7 +189,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 		{
 			$urls[]=array(
 				'_loop_key'=>lorem_word(),
-				'_loop_var'=>lorem_word_2()
+				'_loop_var'=>lorem_word_2(),
 			);
 		}
 
@@ -220,14 +220,14 @@ class Hook_addon_registry_core_adminzone_dashboard
 		{
 			$formatted[]=array(
 				'TITLE'=>lorem_word(),
-				'DESC'=>lorem_word_2()
+				'DESC'=>lorem_word_2(),
 			);
 		}
 		$unformatted=array();
 		foreach (placeholder_array() as $v)
 		{
 			$unformatted[]=array(
-				'LINKS'=>placeholder_url()
+				'LINKS'=>placeholder_url(),
 			);
 		}
 
@@ -283,7 +283,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 			'CONTACT_US_MESSAGING'=>lorem_phrase(),
 			'TASK'=>lorem_phrase(),
 			'INFO'=>$info,
-			'NUM_QUEUE'=>placeholder_id()
+			'NUM_QUEUE'=>placeholder_id(),
 		));
 
 		$status=do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array());
@@ -300,7 +300,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 			'TASK'=>lorem_phrase(),
 			'CONTACT_US_MESSAGING'=>lorem_phrase(),
 			'INFO'=>lorem_phrase(),
-			'NUM_QUEUE'=>placeholder_id()
+			'NUM_QUEUE'=>placeholder_id(),
 		));
 
 		$todo=new ocp_tempcode();
@@ -310,7 +310,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 			'CONTACT_US_MESSAGING'=>lorem_phrase(),
 			'TASK'=>lorem_phrase(),
 			'INFO'=>lorem_phrase(),
-			'NUM_QUEUE'=>placeholder_id()
+			'NUM_QUEUE'=>placeholder_id(),
 		)));
 		$todo->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array(
 			'URL'=>placeholder_url(),
@@ -318,7 +318,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 			'CONTACT_US_MESSAGING'=>lorem_phrase(),
 			'TASK'=>lorem_phrase(),
 			'INFO'=>lorem_phrase(),
-			'NUM_QUEUE'=>placeholder_id()
+			'NUM_QUEUE'=>placeholder_id(),
 		)));
 
 		$custom_task=new ocp_tempcode();
@@ -329,7 +329,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 				'ADD_TIME'=>placeholder_time(),
 				'RECUR_INTERVAL'=>'',
 				'ID'=>placeholder_id(),
-				'TASK_TITLE'=>lorem_word_2()
+				'TASK_TITLE'=>lorem_word_2(),
 			)));
 		}
 

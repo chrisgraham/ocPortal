@@ -77,7 +77,7 @@ class Hook_addon_registry_core_validation
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -176,11 +176,11 @@ class Hook_addon_registry_core_validation
 			'RETURN_URL'=>placeholder_url(),
 			'TITLE'=>lorem_title(),
 			'MESSY_URL'=>placeholder_url(),
-			'RET'=>lorem_phrase()
+			'RET'=>lorem_phrase(),
 		)));
 
 		$display->attach(do_lorem_template('VALIDATE_LINE',array(
-			'NUMBER'=>placeholder_number()
+			'NUMBER'=>placeholder_number(),
 		)));
 
 		$display->attach(do_lorem_template('VALIDATE_TAG_START',array(
@@ -235,7 +235,7 @@ class Hook_addon_registry_core_validation
 			'IGNORE_URL'=>placeholder_url(),
 			'MESSY_URL'=>placeholder_url(),
 			'ERRORS'=>$errors,
-			'RET'=>lorem_phrase()
+			'RET'=>lorem_phrase(),
 		)));
 
 		$markers=new ocp_tempcode();
@@ -248,7 +248,7 @@ class Hook_addon_registry_core_validation
 		}
 		$display->attach(do_lorem_template('VALIDATE_LINE_ERROR',array(
 			'MARKERS'=>$markers,
-			'NUMBER'=>placeholder_number()
+			'NUMBER'=>placeholder_number(),
 		)));
 		$display->attach(do_lorem_template('VALIDATE_ATTRIBUTE_START',array()));
 		$display->attach(lorem_word());
@@ -257,7 +257,7 @@ class Hook_addon_registry_core_validation
 		$display->attach(lorem_phrase());
 
 		$display->attach(do_lorem_template('VALIDATE_LINE',array(
-			'NUMBER'=>placeholder_number()
+			'NUMBER'=>placeholder_number(),
 		)));
 		$display->attach(do_lorem_template('VALIDATE_LINE_END',array()));
 

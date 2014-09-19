@@ -160,7 +160,7 @@ class Hook_addon_registry_unvalidated
 	{
 		$section=do_lorem_template('UNVALIDATED_SECTION',array(
 			'TITLE'=>lorem_phrase(),
-			'CONTENT'=>lorem_phrase()
+			'CONTENT'=>lorem_phrase(),
 		));
 		return array(
 			lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN',array(

@@ -72,7 +72,7 @@ class Hook_addon_registry_backup
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -152,7 +152,7 @@ class Hook_addon_registry_backup
 				'TITLE'=>lorem_title(),
 				'TEXT'=>lorem_sentence(),
 				'RESULTS'=>lorem_phrase(),
-				'FORM'=>placeholder_form_with_field('submit_button')
+				'FORM'=>placeholder_form_with_field('submit_button'),
 			)),NULL,'',true)
 		);
 	}

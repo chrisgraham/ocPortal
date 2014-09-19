@@ -73,7 +73,7 @@ class Hook_addon_registry_ocf_warnings
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -137,7 +137,7 @@ class Hook_addon_registry_ocf_warnings
 	{
 		$tab_content=do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS',array(
 			'MEMBER_ID'=>placeholder_id(),
-			'WARNINGS'=>lorem_phrase()
+			'WARNINGS'=>lorem_phrase(),
 		));
 		return array(
 			lorem_globalise($tab_content,NULL,'',true)

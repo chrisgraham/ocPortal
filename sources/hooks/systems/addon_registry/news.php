@@ -76,7 +76,7 @@ class Hook_addon_registry_news
 				'news_shared'
 			),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -284,12 +284,12 @@ class Hook_addon_registry_news
 							array(
 								'MONTH'=>'2',
 								'MONTH_STRING'=>do_lang('FEBRUARY'),
-								'URL'=>placeholder_url()
+								'URL'=>placeholder_url(),
 							),
 							array(
 								'MONTH'=>'1',
 								'MONTH_STRING'=>do_lang('JANUARY'),
-								'URL'=>placeholder_url()
+								'URL'=>placeholder_url(),
 							)
 						)
 					),
@@ -299,12 +299,12 @@ class Hook_addon_registry_news
 							array(
 								'MONTH'=>'12',
 								'MONTH_STRING'=>do_lang('DECEMBER'),
-								'URL'=>placeholder_url()
+								'URL'=>placeholder_url(),
 							),
 							array(
 								'MONTH'=>'11',
 								'MONTH_STRING'=>do_lang('NOVEMBER'),
-								'URL'=>placeholder_url()
+								'URL'=>placeholder_url(),
 							)
 						)
 					)
@@ -416,7 +416,7 @@ class Hook_addon_registry_news
 			'URL'=>placeholder_url(),
 			'NEWS_TITLE_PLAIN'=>lorem_word(),
 			'ID'=>placeholder_id(),
-			'NEWS_TITLE'=>lorem_word()
+			'NEWS_TITLE'=>lorem_word(),
 		));
 
 		return array(
@@ -470,7 +470,7 @@ class Hook_addon_registry_news
 				'NEWS'=>lorem_paragraph(),
 				'NEWS_TITLE'=>lorem_phrase(),
 				'_DATE'=>placeholder_date_raw(),
-				'DATE'=>placeholder_time()
+				'DATE'=>placeholder_time(),
 			)));
 		}
 
@@ -501,7 +501,7 @@ class Hook_addon_registry_news
 			$contents->attach(do_lorem_template('BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY',array(
 				'URL'=>placeholder_url(),
 				'NAME'=>lorem_phrase(),
-				'COUNT'=>placeholder_random()
+				'COUNT'=>placeholder_random(),
 			)));
 		}
 		return array(
@@ -520,7 +520,7 @@ class Hook_addon_registry_news
 			$contents_arr[]=array(
 				'DATE'=>placeholder_time(),
 				'FULL_URL'=>placeholder_url(),
-				'NEWS_TITLE'=>lorem_word()
+				'NEWS_TITLE'=>lorem_word(),
 			);
 		}
 		return array(
@@ -548,7 +548,7 @@ class Hook_addon_registry_news
 			$tags[]=array(
 				'TAG'=>lorem_word(),
 				'LINK_LIMITEDSCOPE'=>placeholder_url(),
-				'LINK_FULLSCOPE'=>placeholder_url()
+				'LINK_FULLSCOPE'=>placeholder_url(),
 			);
 		}
 

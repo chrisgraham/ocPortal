@@ -74,7 +74,7 @@ class Hook_addon_registry_ocf_reported_posts
 				'ocf_forum'
 			),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 

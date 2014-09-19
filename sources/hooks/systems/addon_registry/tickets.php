@@ -72,7 +72,7 @@ class Hook_addon_registry_tickets
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -253,7 +253,7 @@ class Hook_addon_registry_tickets
 				'DATE_RAW'=>placeholder_date_raw(),
 				'PROFILE_URL'=>placeholder_url(),
 				'LAST_POSTER'=>lorem_phrase(),
-				'UNCLOSED'=>lorem_word()
+				'UNCLOSED'=>lorem_word(),
 			)));
 		}
 

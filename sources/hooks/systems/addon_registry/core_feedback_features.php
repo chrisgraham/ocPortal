@@ -73,7 +73,7 @@ class Hook_addon_registry_core_feedback_features
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -267,7 +267,7 @@ class Hook_addon_registry_core_feedback_features
 		$xml=do_lorem_template('TRACKBACK_XML',array(
 			'TITLE'=>lorem_phrase(),
 			'LINK'=>placeholder_url(),
-			'EXCERPT'=>lorem_phrase()
+			'EXCERPT'=>lorem_phrase(),
 		));
 		$xml->attach(do_lorem_template('TRACKBACK_XML_NO_ERROR',array()));
 		return array(
@@ -303,7 +303,7 @@ class Hook_addon_registry_core_feedback_features
 			'POSTING_FIELD_NAME'=>'',
 			'ATTACHMENTS'=>$content,
 			'MAX_ATTACHMENTS'=>placeholder_number(),
-			'NUM_ATTACHMENTS'=>placeholder_number()
+			'NUM_ATTACHMENTS'=>placeholder_number(),
 		));
 
 		$ret=do_lorem_template('COMMENTS_POSTING_FORM',array(
@@ -323,7 +323,7 @@ class Hook_addon_registry_core_feedback_features
 			'MAKE_POST'=>true,
 			'CREATE_TICKET_MAKE_POST'=>true,
 			'FIRST_POST'=>lorem_paragraph_html(),
-			'FIRST_POST_URL'=>placeholder_url()
+			'FIRST_POST_URL'=>placeholder_url(),
 		));
 
 		$ret->attach(do_lorem_template('COMMENT_AJAX_HANDLER',array(
@@ -349,7 +349,7 @@ class Hook_addon_registry_core_feedback_features
 		$review_titles=array();
 		$review_titles[]=array(
 			'REVIEW_TITLE'=>lorem_phrase(),
-			'REVIEW_RATING'=>make_string_tempcode(float_format(10.0))
+			'REVIEW_RATING'=>make_string_tempcode(float_format(10.0)),
 		);
 		$comments=new ocp_tempcode();
 		foreach (placeholder_array() as $i=>$comment)
@@ -381,7 +381,7 @@ class Hook_addon_registry_core_feedback_features
 				'TOPIC_ID'=>placeholder_id(),
 				'IS_SPACER_POST'=>false,
 				'IS_THREADED'=>false,
-				'NUM_TO_SHOW_LIMIT'=>placeholder_number()
+				'NUM_TO_SHOW_LIMIT'=>placeholder_number(),
 			);
 			$comments->attach(do_lorem_template('POST', $map));
 			do_lorem_template('POST_CHILD_LOAD_LINK', $map); // INCLUDE'd in above, but test set needs to see it run direct
@@ -462,7 +462,7 @@ class Hook_addon_registry_core_feedback_features
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_word(),
 				'EXCERPT'=>'',
-				'NAME'=>lorem_word()
+				'NAME'=>lorem_word(),
 			)));
 		}
 
@@ -488,7 +488,7 @@ class Hook_addon_registry_core_feedback_features
 		$content=do_lorem_template('TRACKBACK_XML_LISTING',array(
 			'ITEMS'=>lorem_phrase(),
 			'LINK_PAGE'=>lorem_word(),
-			'LINK_ID'=>placeholder_id()
+			'LINK_ID'=>placeholder_id(),
 		));
 
 		return array(
@@ -510,7 +510,7 @@ class Hook_addon_registry_core_feedback_features
 			'TITLE'=>lorem_word(),
 			'RATING'=>make_string_tempcode('6'),
 			'NUM_RATINGS'=>placeholder_number(),
-			'TYPE'=>lorem_word()
+			'TYPE'=>lorem_word(),
 		);
 		$rating_form=do_lorem_template('RATING_FORM',array(
 			'LIKES'=>true,
@@ -557,7 +557,7 @@ class Hook_addon_registry_core_feedback_features
 				'TITLE'=>lorem_word(),
 				'RATING'=>'3',
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
-				'TYPE'=>lorem_word().strval($i)
+				'TYPE'=>lorem_word().strval($i),
 			);
 		}
 		$rating_form=do_lorem_template('RATING_FORM',array(
@@ -602,7 +602,7 @@ class Hook_addon_registry_core_feedback_features
 				'TITLE'=>lorem_word(),
 				'RATING'=>'3',
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
-				'TYPE'=>lorem_word().strval($i)
+				'TYPE'=>lorem_word().strval($i),
 			);
 		}
 		$rating_form=do_lorem_template('RATING_FORM',array(
@@ -646,7 +646,7 @@ class Hook_addon_registry_core_feedback_features
 				'TITLE'=>lorem_word(),
 				'RATING'=>'3',
 				'OVERALL_NUM_RATINGS'=>placeholder_number(),
-				'TYPE'=>lorem_word().strval($i)
+				'TYPE'=>lorem_word().strval($i),
 			);
 		}
 		$rating_form=do_lorem_template('RATING_FORM',array(

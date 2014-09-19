@@ -165,7 +165,7 @@ class Hook_addon_registry_redirects_editor
 			'TITLE'=>lorem_title(),
 			'FIELDS'=>$fields,
 			'NEW'=>$new,
-			'URL'=>placeholder_url()
+			'URL'=>placeholder_url(),
 		));
 
 		return array(

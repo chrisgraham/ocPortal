@@ -72,7 +72,7 @@ class Hook_addon_registry_stats_block
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -152,7 +152,7 @@ class Hook_addon_registry_stats_block
 		{
 			$bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE',array(
 				'KEY'=>lorem_phrase(),
-				'VALUE'=>placeholder_number()
+				'VALUE'=>placeholder_number(),
 			)));
 		}
 		$full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION',array(

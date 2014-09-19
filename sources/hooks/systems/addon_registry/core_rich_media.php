@@ -74,7 +74,7 @@ class Hook_addon_registry_core_rich_media
 		return array(
 			'requires'=>array(),
 			'recommends'=>array(),
-			'conflicts_with'=>array()
+			'conflicts_with'=>array(),
 		);
 	}
 
@@ -455,7 +455,7 @@ class Hook_addon_registry_core_rich_media
 				'PASS_ID'=>lorem_word().strval($i),
 				'CONTENT'=>lorem_paragraph().placeholder_random(),
 				'NAME'=>$v,
-				'DEFAULT'=>($i==0)
+				'DEFAULT'=>($i==0),
 			)));
 		}
 
@@ -539,7 +539,7 @@ class Hook_addon_registry_core_rich_media
 		}
 		$_emt=do_lorem_template('EMOTICON_IMG_CODE_DIR',array(
 			'EMOTICON'=>lorem_word(),
-			'SRC'=>get_base_url().'/themes/default/images//ocf_emoticons/constipated.png'
+			'SRC'=>get_base_url().'/themes/default/images//ocf_emoticons/constipated.png',
 		));
 		$emt->attach(do_lorem_template('EMOTICON_CLICK_CODE',array(
 				'FIELD_NAME'=>lorem_word(),
@@ -579,7 +579,7 @@ class Hook_addon_registry_core_rich_media
 			'ATTACHMENTS'=>$content,
 			'POSTING_FIELD_NAME'=>'',
 			'MAX_ATTACHMENTS'=>placeholder_number(),
-			'NUM_ATTACHMENTS'=>placeholder_number()
+			'NUM_ATTACHMENTS'=>placeholder_number(),
 		));
 
 		return array(
@@ -740,7 +740,7 @@ class Hook_addon_registry_core_rich_media
 				'PASS_ID'=>lorem_word(),
 				'DEFAULT'=>false,
 				'NAME'=>strval($k+1),
-				'CONTENT'=>lorem_paragraph()
+				'CONTENT'=>lorem_paragraph(),
 			)));
 		}
 		$k++;
@@ -748,7 +748,7 @@ class Hook_addon_registry_core_rich_media
 			'PASS_ID'=>lorem_word(),
 			'DEFAULT'=>true,
 			'NAME'=>strval($k+1),
-			'CONTENT'=>lorem_paragraph()
+			'CONTENT'=>lorem_paragraph(),
 		)));
 		$page=array();
 		foreach (placeholder_array(4) as $k=>$v)
@@ -757,7 +757,7 @@ class Hook_addon_registry_core_rich_media
 		}
 		$section->attach(do_lorem_template('COMCODE_SECTION_CONTROLLER',array(
 			'SECTIONS'=>$page,
-			'PASS_ID'=>lorem_word()
+			'PASS_ID'=>lorem_word(),
 		)));
 
 		return array(
@@ -1100,7 +1100,7 @@ class Hook_addon_registry_core_rich_media
 		{
 			$part->attach(do_lorem_template('COMCODE_RANDOM_PART',array(
 				'NUM'=>strval($k),
-				'VAL'=>placeholder_number()
+				'VAL'=>placeholder_number(),
 			)));
 		}
 		return array(
@@ -1123,7 +1123,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__comcode_jumping()
 	{
 		$part=do_lorem_template('COMCODE_JUMPING_PART',array(
-			'PART'=>lorem_phrase()
+			'PART'=>lorem_phrase(),
 		));
 
 		return array(
@@ -1239,7 +1239,7 @@ class Hook_addon_registry_core_rich_media
 			$concept->attach(do_lorem_template('COMCODE_CONCEPTS_CONCEPT',array(
 				'A'=>lorem_word().strval($i),
 				'KEY'=>lorem_phrase(),
-				'VALUE'=>lorem_phrase()
+				'VALUE'=>lorem_phrase(),
 			)));
 		}
 
@@ -1468,7 +1468,7 @@ class Hook_addon_registry_core_rich_media
 		foreach (placeholder_array() as $v)
 		{
 			$line->attach(do_lorem_template('COMCODE_CONTENTS_LINE',array(
-				'LINE'=>lorem_phrase()
+				'LINE'=>lorem_phrase(),
 			)));
 		}
 		$level=do_lorem_template('COMCODE_CONTENTS_LEVEL',array(
@@ -1478,7 +1478,7 @@ class Hook_addon_registry_core_rich_media
 		$level->attach(do_lorem_template('COMCODE_CONTENTS_LINE_FINAL',array(
 			'URL'=>placeholder_url(),
 			'LINE'=>lorem_phrase(),
-			'ID'=>placeholder_id()
+			'ID'=>placeholder_id(),
 		)));
 		$line=do_lorem_template('COMCODE_CONTENTS',array(
 			'LEVELS'=>$level,
@@ -1604,7 +1604,7 @@ class Hook_addon_registry_core_rich_media
 
 		$tag_output->attach(do_lorem_template('COMCODE_REAL_TABLE_START',array(
 			'SUMMARY'=>lorem_phrase(),
-			'CAPTION'=>lorem_word()
+			'CAPTION'=>lorem_word(),
 		)));
 		foreach (placeholder_array(2) as $i=>$table_row)
 		{
@@ -1765,7 +1765,7 @@ class Hook_addon_registry_core_rich_media
 			$content->attach(do_lorem_template('COMCODE_TAB_BODY',array(
 				'DEFAULT'=>($k==0),
 				'TITLE'=>lorem_word().$v,
-				'CONTENT'=>lorem_paragraph_html()
+				'CONTENT'=>lorem_paragraph_html(),
 			)));
 		}
 		return array(

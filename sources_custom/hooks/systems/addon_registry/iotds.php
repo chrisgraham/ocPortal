@@ -272,7 +272,7 @@ class Hook_addon_registry_iotds
 			'DATE'=>placeholder_time(),
 			'DATE_RAW'=>placeholder_date_raw(),
 			'URL'=>placeholder_url(),
-			'CAPTION'=>lorem_phrase()
+			'CAPTION'=>lorem_phrase(),
 		)));
 
 		return array(
@@ -306,14 +306,14 @@ class Hook_addon_registry_iotds
 				'URL'=>placeholder_url(),
 				'TITLE'=>lorem_phrase(),
 				'EXCERPT'=>lorem_paragraph(),
-				'NAME'=>lorem_phrase()
+				'NAME'=>lorem_phrase(),
 			)));
 		}
 		$trackback_details=do_lorem_template('TRACKBACK_WRAPPER',array(
 			'TRACKBACKS'=>$trackbacks,
 			'TRACKBACK_PAGE'=>placeholder_id(),
 			'TRACKBACK_ID'=>placeholder_id(),
-			'TRACKBACK_TITLE'=>lorem_phrase()
+			'TRACKBACK_TITLE'=>lorem_phrase(),
 		));
 
 		$rating_details=new ocp_tempcode();
