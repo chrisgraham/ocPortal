@@ -908,7 +908,7 @@ class standard_aed_module
 		$iframe_url=NULL;
 		if (!$this->special_edit_frontend && (has_js()))
 		{
-			$iframe_url=find_script('iframe').'?zone='.get_zone_name().'&opens_below=1';
+			$iframe_url=find_script('iframe').'?zone='.urlencode(get_zone_name()).'&opens_below=1';
 			foreach ($map as $key=>$val)
 			{
 				$iframe_url.='&'.$key.'='.urlencode(str_replace('_SELF',get_page_name(),$val));
