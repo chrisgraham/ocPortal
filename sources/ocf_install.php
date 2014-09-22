@@ -199,7 +199,7 @@ function install_ocf($upgrade_from=NULL)
 			{
 				foreach ($row as $key=>$val)
 				{
-					if ((substr($key,0,6)=='field_') && (is_string($val)))
+					if ((preg_match('#^field\_\d+$#',$key)!=0) && (is_string($val)))
 					{
 						$val=str_replace('|',"\n",$val);
 						$row[$key]=$val;
@@ -886,6 +886,8 @@ function install_ocf($upgrade_from=NULL)
 	if ((is_null($upgrade_from)) || ($upgrade_from<10.0))
 	{
 		$GLOBALS['FORUM_DB']->create_index('f_members','last_visit_time',array('m_dob_month','m_dob_day','m_last_visit_time'));
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by_in_forum',array('p_poster','p_cache_forum_id'));
+		$GLOBALS['FORUM_DB']->create_index('f_topics','topic_order_4',array('t_forum_id','t_cache_last_time')); // Total index for simple forum topic listing
 
 		$GLOBALS['FORUM_DB']->create_index('f_groups','#groups_search__combined',array('g_name','g_title'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','#posts_search__combined',array('p_post','p_title'));

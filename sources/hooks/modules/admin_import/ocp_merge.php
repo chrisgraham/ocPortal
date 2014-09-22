@@ -1965,7 +1965,7 @@ class Hook_ocp_merge
 					foreach ($rows2[0] as $key=>$val)
 					{
 						if (is_null($val)) $val='';
-						if (substr($key,0,6)=='field_')
+						if (preg_match('#^field\_\d+$#',$key)!=0)
 						{
 							$cpf_id=import_id_remap_get('cpf',substr($key,6),true);
 							if (is_null($cpf_id)) continue;

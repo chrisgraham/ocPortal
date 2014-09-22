@@ -413,7 +413,7 @@ function ocf_get_custom_fields_member($member_id)
 	$result=array();
 	foreach ($row as $column=>$val)
 	{
-		if (substr($column,0,6)=='field_')
+		if (preg_match('#^field\_\d+$#',$column)!=0)
 		{
 			$result[intval(substr($column,6))]=$val;
 		}

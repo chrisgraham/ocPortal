@@ -272,6 +272,9 @@ class Module_cms_wiki
 
 		list($fields,$fields2,$hidden)=$this->get_page_fields(NULL,$_title);
 
+		require_code('seo2');
+		$fields2->attach(seo_get_fields('wiki_page'));
+
 		// Awards?
 		if (addon_installed('awards'))
 		{
@@ -298,7 +301,7 @@ class Module_cms_wiki
 		require_code('content2');
 		$meta_data=actual_meta_data_get_fields('wiki_page',NULL);
 
-		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),(get_option('wiki_enable_content_posts')=='1')?post_param_integer('hide_posts',0):1,$meta_data['submitter'],$meta_data['add_time'],$meta_data['views'],$meta_data['meta_keywords'],$meta_data['meta_description'],NULL,false);
+		$id=wiki_add_page(post_param('title'),post_param('post'),post_param('notes',''),(get_option('wiki_enable_content_posts')=='1')?post_param_integer('hide_posts',0):1,$meta_data['submitter'],$meta_data['add_time'],$meta_data['views'],post_param('meta_keywords',''),post_param('meta_description',''),NULL,false);
 
 		require_code('permissions2');
 		set_category_permissions_from_environment('wiki_page',strval($id),'cms_wiki');

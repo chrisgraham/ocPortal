@@ -232,7 +232,7 @@ class Database_Static_mysql extends Database_super_mysql
 					$GLOBALS['SITE_DB']->connection_write=$db_parts;
 					$GLOBALS['SITE_DB']->connection_read=$db_parts;
 				}
-				$ret=$this->db_query($query,$db_parts,$max,$start,$fail_ok,$get_insert_id);
+				$ret=$this->db_query($query,$db_parts,NULL/*already encoded*/,NULL/*already encoded*/,$fail_ok,$get_insert_id);
 				$this->reconnected_once=false;
 				return $ret;
 			}

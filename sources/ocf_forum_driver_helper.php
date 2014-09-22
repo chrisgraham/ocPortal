@@ -244,6 +244,16 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 		if ($id_list=='') return NULL;
 	}
 
+	$post_query_select='p.p_title,top.id,p.p_poster,p.p_poster_name_if_guest,p.id AS p_id,p_post';
+	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
+	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
+	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
+	if (multi_lang_content())
+	{
+		$post_query_sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t_p_post ON t_p_post.id=p.p_post ';
+	}
+	$post_query_sql.='WHERE '.$post_query_where;
+
 	if ($hot)
 	{
 		$hot_topic_definition=intval(get_option('hot_topic_definition'));
@@ -253,10 +263,20 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 	{
 		if (($filter_topic_title=='') && ($filter_topic_description==''))
 		{
-			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.')'.$topic_filter_sup;
+			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top';
+			if (strpos(get_db_type(),'mysql')!==false)
+			{
+				$query.=' USE INDEX (topic_order_4)';
+			}
+			$query.=' WHERE ('.$id_list.')'.$topic_filter_sup;
+			$query_simplified=$query;
+
+			if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
+				$query.=' AND (t_cache_first_member_id>'.strval(db_get_first_id()).' OR EXISTS('.$post_query_sql.'))';
 		} else
 		{
 			$query='';
+			$query_simplified='';
 			$topic_filters=array();
 			if ($filter_topic_title!='')
 				$topic_filters[]='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
@@ -264,13 +284,25 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 				$topic_filters[]='t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
 			foreach ($topic_filters as $topic_filter)
 			{
-				if ($query!='') $query.=' UNION ';
-				$query.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
+				$query_more='';
+				if ($query!='') $query_more.=' UNION ';
+				$query_more.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top';
+				if (strpos(get_db_type(),'mysql')!==false)
+				{
+					$query_more.=' USE INDEX (in_forum)';
+				}
+				$query_more.=' WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
+				$query.=$query_more;
+				$query_simplified.=$query_more;
+
+				if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
+					$query.=' AND (t_cache_first_member_id>'.strval(db_get_first_id()).' OR EXISTS('.$post_query_sql.'))';
 			}
 		}
 	} else
 	{
 		$query='';
+		$query_simplified='';
 		$topic_filters=array();
 		if ($filter_topic_title!='')
 			$topic_filters[]='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
@@ -278,29 +310,24 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
 			$topic_filters[]='t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
 		foreach ($topic_filters as $topic_filter)
 		{
-			if ($query!='') $query.=' UNION ';
-			$query.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
+			$query_more='';
+			if ($query!='') $query_more.=' UNION ';
+			$query_more.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
+			$query.=$query_more;
+			$query_simplified.=$query_more;
+
+			if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
+				$query.=' AND (t_cache_first_member_id>'.strval(db_get_first_id()).' OR EXISTS('.$post_query_sql.'))';
 		}
 	}
 
-	$post_query_select='p.p_title,top.id,p.p_poster,p.p_poster_name_if_guest,p.id AS p_id,p_post';
-	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
-	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
-	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
-	if (multi_lang_content())
-	{
-		$post_query_sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t_p_post ON t_p_post.id=p.p_post ';
-	}
-	$post_query_sql.='WHERE '.$post_query_where.' ORDER BY p_time,p.id';
-
-	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query),false,true);
-
-	if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
-		$query.=' AND EXISTS('.$post_query_sql.')';
+	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query_simplified),false,true);
 
 	if ($limit==0) return array();
 	$order_by=(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC';
 	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true);
+
+	$post_query_sql.=' ORDER BY p_time,p.id';
 
 	$out=array();
 	foreach ($rows as $i=>$r)

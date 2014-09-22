@@ -847,6 +847,10 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 			$query.=',p_post,p_post__text_parsed,p_post__source_user';
 		}
 		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop';
+		if (strpos(get_db_type(),'mysql')!==false)
+		{
+			$query.=' USE INDEX ('.((get_option('enable_sunk')=='1')?'topic_order_2':'topic_order_3').')';
+		}
 		if (!multi_lang_content())
 		{
 			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=ttop.t_cache_first_post_id';
@@ -862,7 +866,12 @@ function ocf_get_forum_view($forum_id,$forum_info,$start=0,$max=NULL)
 		{
 			$query.=',p_post,p_post__text_parsed,p_post__source_user';
 		}
-		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member());
+		$query.=' FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics ttop';
+		if (strpos(get_db_type(),'mysql')!==false)
+		{
+			$query.=' USE INDEX ('.((get_option('enable_sunk')=='1')?'topic_order_2':'topic_order_3').')';
+		}
+		$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_read_logs l ON ttop.id=l.l_topic_id AND l.l_member_id='.strval(get_member());
 		if (!multi_lang_content())
 		{
 			$query.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=ttop.t_cache_first_post_id';

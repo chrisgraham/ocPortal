@@ -225,7 +225,7 @@ class Database_Static_mysqli extends Database_super_mysql
 				@ini_set('mysqli.reconnect','1');
 				$this->reconnected_once=true;
 				mysqli_ping($db);
-				$ret=$this->db_query($query,$db_parts,$max,$start,$fail_ok,$get_insert_id);
+				$ret=$this->db_query($query,$db_parts,NULL/*already encoded*/,NULL/*already encoded*/,$fail_ok,$get_insert_id);
 				$this->reconnected_once=false;
 				return $ret;
 			}

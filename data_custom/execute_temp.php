@@ -55,7 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_moniker_reversed','SHORT_TEXT');
-	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'url_id_monikers SET m_moniker_reversed=REVERSE(m_moniker)');
-	$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_monrev',array('m_moniker_reversed'));
+	$GLOBALS['FORUM_DB']->create_index('f_topics','topic_order_4',array('t_forum_id','t_cache_last_time')); // Total index for simple forum topic listing
 }
