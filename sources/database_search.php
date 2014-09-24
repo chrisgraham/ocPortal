@@ -852,7 +852,15 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 				$_count_query_main_search='SELECT COUNT(DISTINCT r.id)'.$query;
 			} else
 			{
-				$_count_query_main_search='SELECT COUNT(*)'.$query;
+				if (!db_has_subqueries($db->connection_read))
+				{
+					$_count_query_main_search='SELECT COUNT(*) '.$query;
+				} else // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
+				{
+					$_count_query_main_search='SELECT COUNT(*) FROM (';
+					$_count_query_main_search.='SELECT 1 '.$query;
+					$_count_query_main_search.=' LIMIT 1000) counter';
+				}
 			}
 			$query='SELECT '.$select.$query.($group_by_ok?' GROUP BY r.id':'');
 			if (($order!='') && ($order.' '.$direction!='contextual_relevance DESC') && ($order!='contextual_relevance DESC'))
