@@ -40,6 +40,7 @@ class Hook_admin_import_types_ocf_forum
 			'ocf_multi_moderations'=>'MULTI_MODERATIONS',
 			'notifications'=>'NOTIFICATIONS',
 			'ocf_private_topics'=>'PRIVATE_TOPICS',
+			'saved_warnings'=>'SAVED_WARNINGS',
 		);
 	}
 }
