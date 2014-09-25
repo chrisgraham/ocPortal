@@ -11,7 +11,7 @@
 
 {+START,IF_NON_EMPTY,{URL}}
 	<p class="purchase_button">
-		<input onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; return do_form_submit(form,event);" id="proceed_button" class="buttons__proceed button_screen" accesskey="u" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END} value="{!PROCEED}" />
+		<input id="payment_button" onclick="if (typeof this.form=='undefined') var form=window.form_submitting; else var form=this.form; return do_form_submit(form,event);" id="proceed_button" class="buttons__proceed button_screen" accesskey="u" {+START,IF,{$JS_ON}}type="button"{+END}{+START,IF,{$NOT,{$JS_ON}}}type="submit"{+END} value="{!PROCEED}" />
 	</p>
 </form>
 {+END}

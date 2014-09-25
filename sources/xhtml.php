@@ -266,26 +266,8 @@ function extract_html_body($html)
  */
 function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=false,$grammar_completeness_tolerance=0.0)
 {
-/* TESTS
-	$out='';
-	$out.=xhtml_substr('test',0,NULL)."\n"; //=test
-	$out.=xhtml_substr('test',0,4)."\n"; //=test
-	$out.=xhtml_substr('test',0,3)."\n"; //=tes
-	$out.=xhtml_substr('test',1,3)."\n"; //=est
-	$out.=xhtml_substr('test',1,2)."\n"; //=es
-	$out.=xhtml_substr('test',-3)."\n"; //=est
-	$out.=xhtml_substr('test',-2)."\n"; //=st
-	$out.=xhtml_substr('<i>test</i>',0,NULL)."\n"; //=<i>test</i>
-	$out.=xhtml_substr('<i>test</i>',0,4)."\n"; //=<i>test</i>
-	$out.=xhtml_substr('<i>test</i>',0,3)."\n"; //=<i>tes</i>
-	$out.=xhtml_substr('<i>test</i>',1,3)."\n"; //=<i>est</i>
-	$out.=xhtml_substr('<i>test</i>',1,2)."\n"; //=<i>es</i>
-	$out.=xhtml_substr('<i>test</i>',-3)."\n"; //=<i>est</i>
-	$out.=xhtml_substr('<i>test</i>',-2)."\n"; //=<i>st</i>
-	$out.=xhtml_substr('<a><br /><x><i foo="bar">test</i>',-2)."\n"; //=<a><x><i foo="bar">st</i></x></a>
-*/
-
 	$html=preg_replace('#<\!--.*($|-->)#Us','',$html); // Strip comments
+	$html=preg_replace('#\s+#',' ',$html); // Remove double spaces
 
 	// Sort out the negative offset possibility
 	if ($from<0)
@@ -303,7 +285,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 	$html_buildup=array(); // A stack of HTML tags we need from before we start our portion, to move us into the right tag context. None tags are thrown out.
 
 	// Reset the character counter and pass through (part of) the entire text
-	$c=0;
+	$c=0; // The virtual length so far in the scan
 	$total_length=strlen($html);
 	$total_length_minus_one=$total_length-1;
 	$end_pos=is_null($length)?$total_length:($from+$length);
@@ -351,14 +333,13 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 							// Force termination
 							$length=0;
 							$end_pos=0;
-						}	
+						}
 						if (($current_tag!='br') && ($current_tag!='img') && ($current_tag!='hr')) // A little sanity checking, for HTML used as XHTML
 							$tag_stack[]=$current_tag;
 					}
 				}
 				elseif ($in_tag_type=='CLOSE')
 				{
-						
 					if (@$tag_stack[count($tag_stack)-1]==$current_tag)
 					{
 						array_pop($tag_stack);
@@ -375,7 +356,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 							}
 						}
 					}
-				}					
+				}
 				elseif ($in_tag_type=='SELF_CLOSE')
 				{
 					if (($grammar_completeness_tolerance!=0.0) && (_smart_grammar_says_futile($end_pos,$grammar_completeness_tolerance,$i+1,$html,$length)))
@@ -429,18 +410,24 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 			elseif ($current_char=='<') // Tag starting
 			{
 				$in_tag=true;
+
+				// The regexp just checks for img tag match and grabs the src into $matches[1]
 				$matches=array();
-				//The regexp just checks for img tag match and grabs the src into $matches[1]
-				if (isset($html[$i+1]) && strtolower($html[$i+1])=='i' && preg_match('#^<img[^<>]+src="([^"]+)"#i',substr($html,$i,1000),$matches)!=0)
+				if (isset($html[$i+1]) && strtolower($html[$i+1])=='i'/*Optimisation before we bother looking harder*/ && preg_match('#^<img[^<>]+src="([^"]+)"#i',substr($html,$i,1000),$matches)!=0)
 				{
 					require_code('images');
-					//getimagesize
-					list($width,$height)=_symbol_image_dims(array($matches[1]));
-					if ($width!='')
+					list($width,$height)=_symbol_image_dims(array(html_entity_decode($matches[1],ENT_QUOTES,get_charset()))); // Safe way to grab image dimensions
+					if ($width=='')
 					{
-						$c+=intval((float)(intval($width)*intval($height))/(float)(15*15));
+						$width=strval(get_option('thumb_width'));
+						$height=strval(get_option('thumb_width'));
 					}
+					$pixels=intval($width)*intval($height);
+					$pixels_per_character=15*15;
+					$img_characters=intval((float)$pixels/(float)$pixels_per_character);
+					$c+=$img_characters;
 				}
+
 				$in_tag_type='';
 				$current_tag='';
 				$_html_buildup='';
@@ -461,8 +448,8 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 						$dif=$min-$i;
 						if ($dif>0)
 						{
-							$i=$min;
 							$c+=$dif;
+							$i=$min;
 						}
 					}
 
@@ -628,13 +615,6 @@ function _smart_grammar_says_futile($nieve_end_pos,$grammar_completeness_toleran
  */
 function _smart_grammar_says_continue($nieve_end_pos,$grammar_completeness_tolerance,$real_offset,$html,$desired_length,$testing_ahead=false)
 {
-/*
-Tests...
-	echo xhtml_substr('At least complete the first sentence for me. Second sentence that goes on and on and on so far as to block paragraph completion.',0,33,false,false,0.4); // Expects: "At least complete the first sentence for me."
-	echo xhtml_substr('<p>At least complete the first paragraph for me. Second sentence.</p><p>Next paragraph.</p>',0,50,false,false,0.4); // Expects: "<p>At least complete the first paragraph for me. Second sentence.</p>"
-	echo xhtml_substr('At least complete any open words. Second sentence that goes on and on and on so far as to block paragraph completion.',0,10,false,false,0.4); // Expects: "At least complete"
-*/
-
 	// NOTE: This algorithm isn't perfect. Grammar is exceptionally complex and it does not do a parse as such.
 
 	// Work out "paragraph" end (paragraph end determined by next block/table tag, our block/table tag ending, or the end of $html)
@@ -669,9 +649,14 @@ Tests...
 	{
 		$pos=strpos($html,$l,$real_offset);
 		if ($pos!==false)
-			if ((is_null($best_pos)) || ($best_pos>$pos)) $best_pos=$pos;
+		{
+			if ((is_null($best_pos)) || ($best_pos>$pos))
+			{
+				$best_pos=$pos;
+			}
+		}
 	}
-	$sentence_end_pos=is_null($best_pos)?strlen($html):$best_pos;
+	$sentence_end_pos=is_null($best_pos)?strlen($html):($best_pos+1);
 	if ($sentence_end_pos==$real_offset) return false; // Just finished sentence
 	// Decide, is it worth maintaining the sentence?
 	if ($sentence_end_pos-$nieve_end_pos<=intval(round($grammar_completeness_tolerance*$desired_length))) return true;

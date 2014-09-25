@@ -120,7 +120,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 			}
 		}
 
-		$out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
+		$out['error']=is_null($username)?do_lang_tempcode('MEMBER_NO_EXIST'):do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
 		return $out;
 	}
 	$row=$rows[0];

@@ -2145,7 +2145,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					'a_member_id'=>$on_behalf_of_member,
 					'a_file_size'=>$_size,
 					'a_url'=>$url,
-					'a_thumb_url'=>$attributes['thumb_url'],
+					'a_thumb_url'=>preg_replace('#^'.preg_quote(get_custom_base_url().'/').'#','',$attributes['thumb_url']),
 					'a_original_filename'=>$original_filename,
 					'a_num_downloads'=>0,
 					'a_last_downloaded_time'=>NULL,

@@ -1232,7 +1232,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 							}
 
 							// Link lookahead
-							if ((($textual_area) || (($in_semihtml) && (substr_count(substr($comcode,$pos-1),'[')==substr_count(substr($comcode,$pos-1),']')) && (substr_count(substr($comcode,$pos-1),'<')==substr_count(substr($comcode,$pos-1),'>')))) && (!$in_code_tag) && (trim($next)!='') && (!$differented) && ($next=='h') && ((substr($comcode,$pos-1,strlen('http://'))=='http://') || (substr($comcode,$pos-1,strlen('https://'))=='https://') || (substr($comcode,$pos-1,strlen('ftp://'))=='ftp://')))
+							if (((($textual_area) && (!$in_semihtml)) || (($in_semihtml) && (substr_count(substr($comcode,$pos-1),'[')==substr_count(substr($comcode,$pos-1),']')) && (substr_count(substr($comcode,$pos-1),'<')==substr_count(substr($comcode,$pos-1),'>')))) && (!$in_code_tag) && (trim($next)!='') && (!$differented) && ($next=='h') && ((substr($comcode,$pos-1,strlen('http://'))=='http://') || (substr($comcode,$pos-1,strlen('https://'))=='https://') || (substr($comcode,$pos-1,strlen('ftp://'))=='ftp://')))
 							{
 								// Find the full link portion in the upcoming Comcode
 								$link_end_pos=strlen($comcode);
