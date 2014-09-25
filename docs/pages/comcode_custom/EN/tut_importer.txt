@@ -90,6 +90,7 @@ Other limitations:
  - Shopping orders aren't imported, make sure there are no outstanding orders at the point of importing.
  - OcCLE-fs GUIDs and filenames aren't imported, so these will change post-import.
  - Due to a complex cylic-dependency, usergroup custom fields won't import
+ - Comcode ownership is not imported if multi-lang-content is on
 
 Please note that URL and page-link links will not be altered during the import, meaning it is likely they will need updating (because resource IDs change).
 
