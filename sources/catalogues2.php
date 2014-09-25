@@ -504,26 +504,22 @@ function actual_delete_catalogue($name)
 
 	// Delete anything involved (ha ha destruction!)
 	if (function_exists('set_time_limit')) @set_time_limit(0);
-	$start=0;
 	do
 	{
-		$entries=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('c_name'=>$name),'',500,$start));
+		$entries=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('c_name'=>$name),'',500));
 		foreach ($entries as $entry)
 		{
 			actual_delete_catalogue_entry($entry);
 		}
-		$start+=500;
 	}
-	while (count($entries)==500);
-	$start=0;
+	while (array_key_exists(0,$entries));
 	do
 	{
-		$categories=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id'),array('c_name'=>$name),'',30,$start));
+		$categories=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id'),array('c_name'=>$name),'',30));
 		foreach ($categories as $category)
 		{
 			actual_delete_catalogue_category($category,true);
 		}
-		$start+=30;
 	}
 	while (array_key_exists(0,$categories));
 	$fields=collapse_1d_complexity('id',$GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('c_name'=>$name)));

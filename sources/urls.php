@@ -390,6 +390,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	$stub=get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
 	$stub.='/';
 
+	// For bots we explicitly unset skippable injected 'keep_' params because it bloats the crawl-space
 	if (($BOT_TYPE_CACHE!==NULL) && (get_bot_type()!==NULL))
 	{
 		foreach ($vars as $key=>$val)

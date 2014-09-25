@@ -336,8 +336,11 @@ function _notification_setting_available($setting,$member_id=NULL)
 			break;
 		case A_INSTANT_PT:
 			$system_wide=(get_forum_type()=='ocf') && (addon_installed('ocf_forum'));
-			require_code('permissions');
-			if ($system_wide && !is_null($member_id)) $for_member=has_privilege($member_id,'use_pt');
+			if ($system_wide && !is_null($member_id))
+			{
+				require_code('permissions');
+				$for_member=has_privilege($member_id,'use_pt');
+			}
 			break;
 	}
 	$ret=$system_wide && (is_null($member_id) || $for_member);
