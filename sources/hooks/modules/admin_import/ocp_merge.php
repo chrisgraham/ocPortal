@@ -1019,9 +1019,6 @@ class Hook_ocp_merge
 				$GLOBALS['SITE_DB']->query_insert('news_rss_cloud',$row);
 			}
 		}
-
-
-
 	}
 
 	/**
@@ -3008,7 +3005,7 @@ class Hook_ocp_merge
 	}
 	
 	/**
-	 * Imports zone access.
+	 * Imports member zone access.
 	 *
 	 * @param  object			The DB connection to import from
 	 * @param  string			The table prefix the target prefix is using
@@ -3323,7 +3320,7 @@ class Hook_ocp_merge
 	}
 
 	/**
-	 * Import privacy for a particular record.
+	 * Import review supplement.
 	 * @param  object			The DB connection to import from
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  ID_TEXT		The rating type.
@@ -3348,7 +3345,7 @@ class Hook_ocp_merge
 	}
 
 	/**
-	 * Import privacy for a particular record.
+	 * Import content reviews.
 	 * @param  object			The DB connection to import from
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  ID_TEXT		The content type.
