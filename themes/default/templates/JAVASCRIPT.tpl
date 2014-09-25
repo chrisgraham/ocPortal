@@ -293,7 +293,8 @@ function initialise_error_mechanism()
 			{
 				window.done_one_error=true;
 				var alert='{!JAVASCRIPT_ERROR;^}\n\n'+code+': '+msg+'\n'+file;
-				window.fauxmodal_alert(alert,null,'{!ERROR_OCCURRED;^}');
+				if (window.document.body) // i.e. if loaded
+					window.fauxmodal_alert(alert,null,'{!ERROR_OCCURRED;^}');
 			}
 			return false;
 		};

@@ -31,6 +31,7 @@ function tar_open($path,$mode)
 	if (is_null($path))
 	{
 		$myfile=mixed();
+		$exists=false;
 	} else
 	{
 		$exists=file_exists($path) && (strpos($mode,'a')!==false);
