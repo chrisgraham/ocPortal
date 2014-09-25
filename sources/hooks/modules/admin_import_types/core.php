@@ -45,6 +45,9 @@ class Hook_admin_import_types_core
 			'pages'=>'COMCODE_PAGES',
 			'rss'=>'_RSS',
 			'blocks'=>'_BLOCK_LABEL',
+			'match_key_messages'=>'IMPORT_MATCH_KEY_MESSAGES',
+			'menu_items'=>'MENU_ITEMS',
+			'stafflinks'=>'STAFF_LINKS',
 		);
 		if (addon_installed('ocf_cpfs'))
 			$ret['ocf_custom_profile_fields']='CUSTOM_PROFILE_FIELDS';
