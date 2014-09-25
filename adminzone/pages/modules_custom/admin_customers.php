@@ -114,7 +114,7 @@ class Module_admin_customers
 
 		$GLOBALS['SITE_DB']->create_table('credit_purchases',array(
 			'purchase_id'=>'*AUTO',
-			'member_id'=>'USER',
+			'member_id'=>'MEMBER',
 			'num_credits'=>'INTEGER',
 			'date_and_time'=>'TIME',
 			'purchase_validated'=>'BINARY',
@@ -123,8 +123,8 @@ class Module_admin_customers
 
 		$GLOBALS['SITE_DB']->create_table('credit_charge_log',array(
 			'id'=>'*AUTO',
-			'member_id'=>'USER',
-			'charging_member_id'=>'USER',
+			'member_id'=>'MEMBER',
+			'charging_member_id'=>'MEMBER',
 			'num_credits'=>'INTEGER',
 			'date_and_time'=>'TIME',
 			'reason'=>'SHORT_TEXT',

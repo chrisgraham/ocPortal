@@ -312,7 +312,6 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 		// Load the current character and the next one if the string has not arrived at the last character
 		$current_char=$html[$i];
 		$next_char=($i<$total_length-1)?$html[$i+1]:'';
-
 		if ($in_entity)
 		{
 			if ($current_char==';')
@@ -352,13 +351,14 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 							// Force termination
 							$length=0;
 							$end_pos=0;
-						}
+						}	
 						if (($current_tag!='br') && ($current_tag!='img') && ($current_tag!='hr')) // A little sanity checking, for HTML used as XHTML
 							$tag_stack[]=$current_tag;
 					}
 				}
 				elseif ($in_tag_type=='CLOSE')
 				{
+						
 					if (@$tag_stack[count($tag_stack)-1]==$current_tag)
 					{
 						array_pop($tag_stack);
@@ -375,7 +375,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 							}
 						}
 					}
-				}
+				}					
 				elseif ($in_tag_type=='SELF_CLOSE')
 				{
 					if (($grammar_completeness_tolerance!=0.0) && (_smart_grammar_says_futile($end_pos,$grammar_completeness_tolerance,$i+1,$html,$length)))
@@ -429,6 +429,18 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 			elseif ($current_char=='<') // Tag starting
 			{
 				$in_tag=true;
+				$matches=array();
+				//The regexp just checks for img tag match and grabs the src into $matches[1]
+				if (isset($html[$i+1]) && strtolower($html[$i+1])=='i' && preg_match('#^<img[^<>]+src="([^"]+)"#i',substr($html,$i,1000),$matches)!=0)
+				{
+					require_code('images');
+					//getimagesize
+					list($width,$height)=_symbol_image_dims(array($matches[1]));
+					if ($width!='')
+					{
+						$c+=intval((float)(intval($width)*intval($height))/(float)(15*15));
+					}
+				}
 				$in_tag_type='';
 				$current_tag='';
 				$_html_buildup='';
