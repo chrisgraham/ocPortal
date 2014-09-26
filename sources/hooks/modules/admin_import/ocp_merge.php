@@ -3051,7 +3051,17 @@ class Hook_ocp_merge
 		foreach($child_rows as $row)
 		{
 			unset($row['id']);
-			$row['i_parent']=import_id_remap_get('menu_item',strval($row['i_parent']),true);
+			$i_parent=import_id_remap_get('menu_item',strval($row['i_parent']),true);
+			if (is_null($i_parent))
+			{
+				$parent_row=$db->query_select_value_if_there('menu_items','*',array('id'=>$row['parent_id']));
+				$id_old=strval($parent_row['id']);
+				unset($parent_row['id']);
+				$id_new=$GLOBALS['SITE_DB']->query_insert('menu_items',$parent_row,true);
+				import_id_remap_put('menu_item',$id_old,$id_new);
+				$i_parent=$id_new;
+			}
+			$row['i_parent']=$i_parent;
 			$row['i_caption_long__source_user']=import_id_remap_get('member',strval($row['i_caption_long__source_user']),true);
 
 			$GLOBALS['SITE_DB']->query_insert('menu_items',$row);
