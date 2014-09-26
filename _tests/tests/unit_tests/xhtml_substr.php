@@ -144,11 +144,7 @@ class xhtml_substr_test_set extends ocp_test_case
 		$expected='<a href="www.google.com">My</a><div>f</div>';
 		$this->assertTrue($after==$expected);
 	}
-<<<<<<< HEAD
- 	
-=======
 
->>>>>>> b536e18a87db3be9e8599086b87ac48f23dfd81d
  	function testImage_2()
 	{
 		$before='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="'.get_base_url().'/themes/default/images/ocf_emoticons/cheeky.png" />afterfoo </div>';
@@ -156,11 +152,6 @@ class xhtml_substr_test_set extends ocp_test_case
 		$expected='<a href="www.google.com">My</a>';
 		$this->assertTrue($after==$expected);
 	}
-<<<<<<< HEAD
- 	
-=======
-
->>>>>>> b536e18a87db3be9e8599086b87ac48f23dfd81d
  	function testImage_3()
 	{
 		$before='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="'.get_base_url().'/themes/default/images/ocf_emoticons/cheeky.png" />afterfoo </div>';
@@ -168,7 +159,7 @@ class xhtml_substr_test_set extends ocp_test_case
 		$expected='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="'.get_base_url().'/themes/default/images/ocf_emoticons/cheeky.png" />aft</div>';
 		$this->assertTrue($after==$expected);
 	}
-<<<<<<< HEAD
+
  	function testImage_4()
 	{
 		$before='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="http://192.168.0.251/ocportal/ocportalv10/thumb_nail.jpg" />afterfoo </div>';
@@ -185,6 +176,4 @@ class xhtml_substr_test_set extends ocp_test_case
 		$this->assertTrue($after==$expected);
 	}
 
-=======
->>>>>>> b536e18a87db3be9e8599086b87ac48f23dfd81d
 }
