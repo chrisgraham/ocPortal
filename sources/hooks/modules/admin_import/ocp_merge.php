@@ -76,6 +76,8 @@ class Hook_ocp_merge
 			'stats',
 			'themes',
 			'support_tickets',
+			'tickets',
+			'ticket_known_emailers',
 			'useronline_tracking',
 			'ip_bans',
 			'wordfilter',
@@ -124,8 +126,9 @@ class Hook_ocp_merge
 			'ocf_post_templates'=>array('ocf_forums'),
 			'ocf_warnings'=>array('ocf_members','ocf_groups','ocf_topics','ocf_forums'),
 			'newsletter_subscriptions'=>array('attachments'),
-			'support_tickets'=>array('ocf_forums','ocf_topics','ocf_members'),
-			'awards'=>array('calendar','wiki','news_and_categories','images_and_galleries','catalogues','authors','ocf_topics','ocf_posts','ocf_forums','ocf_groups','ocf_members','downloads_and_categories'),
+			'tickets'=>array('ocf_forums','ocf_topics','ocf_members'),
+			'ticket_known_emailers'=>array('ocf_members'),
+			'awards'=>array('calendar','wiki','news_and_categories','images_and_galleries','authors','ocf_topics','ocf_posts','ocf_forums','ocf_groups','ocf_members','downloads_and_categories'),
 			'ecommerce'=>array('ocf_groups','ocf_members'),
 			'ocf_welcome_emails'=>array('ocf_members'),
 			'bookmarks'=>array('ocf_members'),
@@ -1638,66 +1641,6 @@ class Hook_ocp_merge
 			$ticket_type_id=$GLOBALS['SITE_DB']->query_insert('ticket_types',$map,true);
 			import_id_remap_put('ticket_type',strval($row['id']),$ticket_type_id);
 		}
-
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'tickets',NULL,NULL,true);
-		if (is_null($rows)) return;
-		$this->_fix_comcode_ownership($rows);
-		foreach ($rows as $row)
-		{
-			$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
-			if (is_null($topic_id)) continue;
-			$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
-			if (is_null($forum_id)) continue;
-			$row['topic_id']=strval($topic_id);
-			$row['forum_id']=strval($forum_id);
-
-			$GLOBALS['SITE_DB']->query_insert('tickets',$row);
-		}
-
-		$this->_import_ticket_extra_access($db,$table_prefix);
-		$this->_import_ticket_known_emailers($db,$table_prefix);
-	}
-
-	/**
-	 * Import ticket extra access.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 */
-	function _import_ticket_extra_access($db,$table_prefix)
-	{
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'ticket_extra_access',NULL,NULL,true);
-		if (is_null($rows)) return;
-		$this->_fix_comcode_ownership($rows);
-		foreach ($rows as $row)
-		{
-			$member_id=import_id_remap_get('member',strval($row['member_id']),true);
-			if (is_null($member_id)) continue;
-			$row['member_id']=strval($member_id);
-
-			$GLOBALS['SITE_DB']->query_insert('ticket_extra_access',$row);
-		}
-	}
-
-	/**
-	 * Imports ticket known emailers.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 */
-	function _import_ticket_known_emailers($db,$table_prefix)
-	{
-		$rows=$db->query('SELECT * FROM '.$table_prefix.'ticket_known_emailers',NULL,NULL,true);
-		if (is_null($rows)) return;
-		$this->_fix_comcode_ownership($rows);
-		foreach ($rows as $row)
-		{
-			$member_id=import_id_remap_get('member',strval($row['member_id']),true);
-			if (is_null($member_id)) continue;
-			$row['member_id']=strval($member_id);
-
-			$GLOBALS['SITE_DB']->query_insert('ticket_known_emailers',$row);
-		}
 	}
 
 	/**
@@ -2538,7 +2481,7 @@ class Hook_ocp_merge
 	 *
 	 * @param  object			The DB connection to import from
 	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
+	 * @param  PATH				The base directory we are importing from
 	 */
 	function import_ocf_custom_profile_fields($db,$table_prefix,$file_base)
 	{
@@ -3294,6 +3237,76 @@ class Hook_ocp_merge
 		{
 			unset($row['id']);
 			$GLOBALS['SITE_DB']->query_insert('stafflinks',$row);
+		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_tickets($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'tickets',NULL,NULL,true);
+		if (is_null($rows)) return;
+		$this->_fix_comcode_ownership($rows);
+		foreach ($rows as $row)
+		{
+			$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
+			if (is_null($topic_id)) continue;
+			$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
+			if (is_null($forum_id)) continue;
+			$row['topic_id']=strval($topic_id);
+			$row['forum_id']=strval($forum_id);
+
+			$GLOBALS['SITE_DB']->query_insert('tickets',$row);
+		}
+
+		$this->_import_ticket_extra_access($db,$table_prefix);
+		$this->_import_ticket_known_emailers($db,$table_prefix);
+	}
+
+	/**
+	 * Import ticket extra access.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 */
+	function _import_ticket_extra_access($db,$table_prefix)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'ticket_extra_access',NULL,NULL,true);
+		if (is_null($rows)) return;
+		$this->_fix_comcode_ownership($rows);
+		foreach ($rows as $row)
+		{
+			$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+			if (is_null($member_id)) continue;
+			$row['member_id']=strval($member_id);
+
+			$GLOBALS['SITE_DB']->query_insert('ticket_extra_access',$row);
+		}
+	}
+
+	/**
+	 * Imports ticket known emailers.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 */
+	function _import_ticket_known_emailers($db,$table_prefix)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'ticket_known_emailers',NULL,NULL,true);
+		if (is_null($rows)) return;
+		$this->_fix_comcode_ownership($rows);
+		foreach ($rows as $row)
+		{
+			$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+			if (is_null($member_id)) continue;
+			$row['member_id']=strval($member_id);
+
+			$GLOBALS['SITE_DB']->query_insert('ticket_known_emailers',$row);
 		}
 	}
 
