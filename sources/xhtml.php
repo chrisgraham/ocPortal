@@ -655,7 +655,7 @@ Tests...
 		if ($pos!==false)
 			if ((is_null($best_pos)) || ($best_pos>$pos)) $best_pos=$pos;
 	}
-	$sentence_end_pos=is_null($best_pos)?strlen($html):$best_pos;
+	$sentence_end_pos=is_null($best_pos)?strlen($html):($best_pos+1);
 	if ($sentence_end_pos==$real_offset) return false; // Just finished sentence
 	// Decide, is it worth maintaining the sentence?
 	if ($sentence_end_pos-$nieve_end_pos<=intval(round($grammar_completeness_tolerance*$desired_length))) return true;
