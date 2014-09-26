@@ -716,6 +716,7 @@ class Module_chat
 	function _chat_private()
 	{
 		require_code('chat2');
+		require_code('content2');
 
 		if (is_guest()) access_denied('NOT_AS_GUEST');
 

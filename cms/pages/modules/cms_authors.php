@@ -289,6 +289,7 @@ class Module_cms_authors
 	 */
 	function __ad()
 	{
+		require_code('content2');
 		$author=post_param('author',get_param('author'));
 		if (!has_edit_author_permission(get_member(),$author))
 		{
