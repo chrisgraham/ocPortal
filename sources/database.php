@@ -786,7 +786,7 @@ class database_driver
 				require_code('database_security_filter');
 
 				if (is_simple_query($query))
-					fatal_exit('It is highly recommended to use query_select/query_update/query_delete method instead of the \'query\' method for this query');
+					fatal_exit('It is highly recommended to use query_select/query_update/query_delete helper methods instead of the \'query\' method for this query -- in order to avoid having to write any SQL');
 
 				if (!has_escaped_dynamic_sql($query))
 					fatal_exit('Dynamic SQL has not been escaped properly');

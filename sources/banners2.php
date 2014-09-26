@@ -517,55 +517,6 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 }
 
 /**
- * Add a banner clicks.
- *
- * @param  ID_TEXT			The ID of the banner clicks
- * @param  Date				The date and time for click
- * @param  integer			The id of member who clicked it
- * @param  integer			The image height (ignored for textual banners)
- * @param  integer			The maximum file size for the banners (this is a string length for textual banners)
- * @param  BINARY				Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT			The name
- */
-function add_banner_clicks($id,$c_date_and_time,$c_member_id,$c_ip_address,$c_source,$c_banner_id,$uniqify=false)
-{
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banner_clicks','id',array('id'=>$id));
-	if (!is_null($test))
-	{
-		if ($uniqify)
-		{
-			$id.='_'.uniqid('',true);
-		} else
-		{
-			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($id)));
-		}
-	}
-
-	$GLOBALS['SITE_DB']->query_insert('banner_clicks',array(
-		'id'=>$id,
-		'c_date_and_time'=>$c_date_and_time,
-		'c_member_id'=>$c_member_id,
-		'c_ip_address'=>$c_ip_address,
-		'c_source'=>$c_source,
-		'c_banner_id'=>$c_banner_id,
-	));
-
-	log_it('ADD_BANNER_CLICKS',$id);
-
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('banner_clicks',$id);
-	}
-
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('banner_clicks',$id);
-
-	return $id;
-}
-
-/**
  * Edit a banner type.
  *
  * @param  ID_TEXT			The original ID of the banner type

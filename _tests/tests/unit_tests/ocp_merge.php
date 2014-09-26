@@ -135,5 +135,4 @@ class ocp_merge_test_set extends ocp_test_case
 				$this->assertTrue(strpos($c,$table['m_table'])!==false,'No import defined for '.$table['m_table']);
 		}
 	}
-
 }

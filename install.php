@@ -1927,7 +1927,7 @@ function step_6()
 	require_once(get_file_base().'/'.$config_file);
 	require_code('database');
 	require_code('database_action');
-   require_code('menus2');
+	require_code('menus2');
 	require_code('config');
 	include_ocf();
 

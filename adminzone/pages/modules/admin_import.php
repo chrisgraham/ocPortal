@@ -157,7 +157,7 @@ class Module_admin_import
 
 		if ($type=='import')
 		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer='.$type.':session='.get_param('session'),do_lang_tempcode('IMPORT'))));
+			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('IMPORT')),array('_SELF:_SELF:session',do_lang_tempcode('IMPORT_SESSION')),array('_SELF:_SELF:hook:importer=session2:session='.get_param('session'),do_lang_tempcode('IMPORT'))));
 			breadcrumb_set_self(do_lang_tempcode('START'));
 		}
 
@@ -303,15 +303,15 @@ class Module_admin_import
 		if (($session==-1) || ($session==-2))
 		{
 			// Delete all others
-			$GLOBALS['SITE_DB']->query_delete('DELETE FROM '.get_table_prefix().'import_session');
+			$GLOBALS['SITE_DB']->query_delete('import_session');
 			if ($session==-1)
 			{
-				$GLOBALS['SITE_DB']->query_delete('DELETE FROM '.get_table_prefix().'import_parts_done');
-				$GLOBALS['SITE_DB']->query_delete('DELETE FROM '.get_table_prefix().'import_id_remap');
+				$GLOBALS['SITE_DB']->query_delete('import_parts_done');
+				$GLOBALS['SITE_DB']->query_delete('import_id_remap');
 			} else
 			{
-				$GLOBALS['SITE_DB']->query_delete('DELETE FROM '.get_table_prefix().'import_parts_done WHERE imp_id NOT LIKE \''.db_encode_like('ocf_%').'\'');
-				$GLOBALS['SITE_DB']->query_delete('DELETE FROM '.get_table_prefix().'import_id_remap WHERE (id_type NOT LIKE \''.db_encode_like('ocf_%').'\''.') AND '.db_string_not_equal_to('id_type','category').' AND '.db_string_not_equal_to('id_type','forum').' AND '.db_string_not_equal_to('id_type','topic').' AND '.db_string_not_equal_to('id_type','post').' AND '.db_string_not_equal_to('id_type','f_poll').' AND '.db_string_not_equal_to('id_type','group').' AND '.db_string_not_equal_to('id_type','member'));
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_parts_done WHERE imp_id NOT LIKE \''.db_encode_like('ocf_%').'\'');
+				$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'import_id_remap WHERE (id_type NOT LIKE \''.db_encode_like('ocf_%').'\''.') AND '.db_string_not_equal_to('id_type','category').' AND '.db_string_not_equal_to('id_type','forum').' AND '.db_string_not_equal_to('id_type','topic').' AND '.db_string_not_equal_to('id_type','post').' AND '.db_string_not_equal_to('id_type','f_poll').' AND '.db_string_not_equal_to('id_type','group').' AND '.db_string_not_equal_to('id_type','member'));
 			}
 
 			$session=get_session_id();

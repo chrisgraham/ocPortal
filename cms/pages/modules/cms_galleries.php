@@ -97,7 +97,7 @@ class Module_cms_galleries extends standard_crud_module
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run($top_level=true,$type=NULL)
+	function pre_run($top_level=true)
 	{
 		$this->cat_crud_module=class_exists('Mx_cms_galleries_cat')?new Mx_cms_galleries_cat():new Module_cms_galleries_cat();
 		$this->alt_crud_module=class_exists('Mx_cms_galleries_alt')?new Mx_cms_galleries_alt():new Module_cms_galleries_alt();
@@ -165,6 +165,7 @@ class Module_cms_galleries extends standard_crud_module
 		}
 
 		set_helper_panel_tutorial('tut_galleries');
+
 		return parent::pre_run($top_level);
 	}
 
