@@ -19,6 +19,29 @@
  */
 
 /**
+ * Export neatly named dump of all theme images for active theme.
+ */
+function export_theme_images()
+{
+	header('Content-type: text/csv');
+	header('Content-Disposition: attachment; filename="theme_images.tar"');
+
+	require_code('tar');
+	require_code('files');
+	$my_tar=tar_open(NULL,'wb');
+	$theme_images=$GLOBALS['SITE_DB']->query_select('theme_images',array('DISTINCT id'));
+	foreach ($theme_images as $theme_image)
+	{
+		$path=rawurldecode(find_theme_image($theme_image['id'],true,true));
+		if (($path!='') && (substr($path,0,strlen('themes/default/images/'))!='themes/default/images/'))
+		{
+			tar_add_file($my_tar,$theme_image['id'].'.'.get_file_extension($path),$path,0644,NULL,true);
+		}
+	}
+	tar_close($my_tar);
+}
+
+/**
  * Try and find some CDNs to use.
  *
  * @return string				List of CDNs

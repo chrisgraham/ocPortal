@@ -1234,7 +1234,7 @@ function symbol_truncator($param,$type,$tooltip_if_truncated=NULL)
 		$html=escape_html($param[0]);
 	}
 
-	if ((isset($not_html[$amount])/*optimisation*/) && (ocp_mb_strlen($not_html)>$amount))
+	if ((isset($not_html[$amount])/*optimisation*/) && ((ocp_mb_strlen($not_html)>$amount)) || (strpos(strtolower($html),'<img')!==false))
 	{
 		$tooltip=((isset($param[2])) && ($param[2]=='1'));
 		$literal_pos=isset($param[4])?($param[4]=='1'):false;

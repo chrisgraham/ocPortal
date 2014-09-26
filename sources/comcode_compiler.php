@@ -946,214 +946,208 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 								}
 							}
 
-							if (($textual_area) && (!$in_code_tag) && (trim($next)!='') && (!$differented))
+							// Shortcut lookahead
+							if (!$differented)
 							{
-								// Shortcut lookahead
-								if (!$differented)
+								if (($in_semihtml) && (substr($comcode,$pos-1,3)=='-->')) // To stop shortcut interpretation
 								{
-									if (($in_semihtml) && (substr($comcode,$pos-1,3)=='-->')) // To stop shortcut interpretation
+									$continuation.='-->';
+									$pos+=2;
+									break;
+								}
+								foreach ($shortcuts as $code=>$replacement)
+								{
+									if (($next==$code[0]) && (substr($comcode,$pos-1,strlen($code))==$code))
 									{
-										$continuation.='-->';
-										$pos+=2;
+										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
+										$tag_output->attach($continuation);
+										$continuation='';
+										$pos+=strlen($code)-1;
+										$differented=true;
+										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($replacement);
+										$tag_output->attach($replacement);
 										break;
-									}
-									foreach ($shortcuts as $code=>$replacement)
-									{
-										if (($next==$code[0]) && (substr($comcode,$pos-1,strlen($code))==$code))
-										{
-											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-											$tag_output->attach($continuation);
-											$continuation='';
-											$pos+=strlen($code)-1;
-											$differented=true;
-											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($replacement);
-											$tag_output->attach($replacement);
-											break;
-										}
 									}
 								}
 							}
 
-							if (($textual_area) && (!$in_code_tag) && (trim($next)!='') && (!$differented))
+							// Table syntax
+							if (!$differented)
 							{
-								// Table syntax
-								if (!$differented)
+								if (($pos<$len) && ($comcode[$pos]=='|'))
 								{
-									if (($pos<$len) && ($comcode[$pos]=='|'))
+									$end_tbl=strpos($comcode,"\n".'|}',$pos);
+									if ($end_tbl!==false)
 									{
-										$end_tbl=strpos($comcode,"\n".'|}',$pos);
-										if ($end_tbl!==false)
+										$end_fst_line_pos=strpos($comcode,"\n",$pos);
+										$caption=substr($comcode,$pos+2,max($end_fst_line_pos-$pos-2,0));
+										$pos+=strlen($caption)+1;
+
+										$rows=preg_split('#(\|-|\|\})#Um',substr($comcode,$pos,$end_tbl-$pos));
+										if (preg_match('#(^|\s)floats($|\s)#',$caption)!=0)
 										{
-											$end_fst_line_pos=strpos($comcode,"\n",$pos);
-											$caption=substr($comcode,$pos+2,max($end_fst_line_pos-$pos-2,0));
-											$pos+=strlen($caption)+1;
+											$caption=preg_replace('#(^|\s)floats($|\s)#','',$caption);
 
-											$rows=preg_split('#(\|-|\|\})#Um',substr($comcode,$pos,$end_tbl-$pos));
-											if (preg_match('#(^|\s)floats($|\s)#',$caption)!=0)
+											$ratios=array();
+											$ratios_matches=array();
+											if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches)!=0)
 											{
-												$caption=preg_replace('#(^|\s)floats($|\s)#','',$caption);
-
-												$ratios=array();
-												$ratios_matches=array();
-												if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches)!=0)
-												{
-													$ratios=explode(':',$ratios_matches[2]);
-													$caption=str_replace($ratios_matches[0],'',$caption);
-												}
-
-												foreach ($rows as $h=>$row)
-												{
-													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
-													array_shift($cells); // First one is non-existent empty
-													$spec=true;
-													// Find which to float
-													$to_float=NULL;
-													foreach ($cells as $i=>$cell)
-													{
-														if (!$spec)
-														{
-															if ((strpos($cell,'!')!==false) || (is_null($to_float))) $to_float=$i;
-														}
-														$spec=!$spec;
-													}
-
-													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_START'));
-
-													// Do floated one
-													$i_dir_1=(($to_float==1)?'left':'right');
-													$i_dir_2=(($to_float!=1)?'left':'right');
-													if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
-													{
-														$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START',array(
-															'_GUID'=>'ced8c3a142f74296a464b085ba6891c9',
-															'WIDTH'=>array_key_exists(($to_float==1)?0:(count($cells)-1),
-															$ratios)?$ratios[($to_float==1)?0:(count($cells)-1)]:((count($cells)==2)?'0':float_to_raw_string(97.0/(floatval(count($cells))/2.0-1.0),2).'%'),
-															'FLOAT'=>$i_dir_1,
-															'PADDING'=>($to_float==1)?'':'-left',
-															'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
-														)));
-													} else
-													{
-														$tag_output->attach(do_template('COMCODE_FAKE_TABLE_START',array(
-															'_GUID'=>'90be72fcbb6b9d8a312da0bee5b86cb3',
-															'WIDTH'=>array_key_exists($to_float,$ratios)?$ratios[$to_float]:'',
-															'FLOAT'=>$i_dir_1,
-															'PADDING'=>($to_float==1)?'':'-left',
-															'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2.0)/2.0),2),
-														)));
-													}
-													$tag_output->attach(comcode_to_tempcode(isset($cells[$to_float])?rtrim($cells[$to_float]):'',$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
-													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
-													// Do non-floated ones
-													$cell_i=0;
-													foreach ($cells as $i=>$cell)
-													{
-														if ($i%2==1)
-														{
-															if ($i!=$to_float)
-															{
-																if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
-																{
-																	$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
-																		'_GUID'=>'9bac42a1b62c5c9a2f758639fcb3bb2f',
-																		'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:(float_to_raw_string(97.0/(floatval(count($cells))/2.0),2).'%'),
-																		'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
-																		'FLOAT'=>$i_dir_1,
-																		'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'',
-																	)));
-																} else
-																{
-																	$tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START',array(
-																		'_GUID'=>'0f15f9d5554635ed7ac154c9dc5c72b8',
-																		'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
-																		'FLOAT'=>$i_dir_1,
-																		'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'',
-																		'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
-																	)));
-																}
-																$tag_output->attach(comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
-																$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
-															}
-															$cell_i++;
-														}
-													}
-
-													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END'));
-												}
-											} else
-											{
-												$ratios=array();
-												$ratios_matches=array();
-												if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches)!=0)
-												{
-													$ratios=explode(':',$ratios_matches[2]);
-													$caption=str_replace($ratios_matches[0],'',$caption);
-												}
-
-												if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
-												{
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_START',array('_GUID'=>'9fca9672b9d069a0c8a40ebc6e88602b','SUMMARY'=>preg_replace('#(^|\s)wide($|\s)#','',$caption))));
-												} else
-												{
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY',array('_GUID'=>'0c5674fba61ba14b4b9fa39ea31ff54f','CAPTION'=>$caption)));
-												}
-												$finished_thead=false;
-												foreach ($rows as $table_row)
-												{
-													$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$table_row,-1,PREG_SPLIT_DELIM_CAPTURE);
-													array_shift($cells); // First one is non-existent empty
-													$spec=true;
-													$c_type='';
-													$cell_i=0;
-													$finished_thead_prior=$finished_thead;
-													foreach ($cells as $i=>$cell)
-													{
-														if ($spec)
-														{
-															if (strpos($cell,'!')===false) $finished_thead=true;
-														}
-														$spec=!$spec;
-													}
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('_GUID'=>'98f20d57692f0bded555a0acb7d55024','START_HEAD'=>!$finished_thead,'START_BODY'=>(!$finished_thead_prior) && ($finished_thead))));
-													$spec=true;
-													foreach ($cells as $i=>$cell)
-													{
-														if ($spec)
-														{
-															$c_type=(strpos($cell,'!')!==false)?'th':'td';
-														} else
-														{
-															$_mid=comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
-
-															$tag_output->attach(do_template('COMCODE_REAL_TABLE_CELL',array(
-																'_GUID'=>'6640df8b503f65e3d36f595b0acf7600',
-																'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
-																'C_TYPE'=>$c_type,
-																'MID'=>$_mid,
-																'PADDING'=>($cell_i==0)?'':'-left',
-																'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(5.0/(floatval(count($cells)-2)/2.0),2),
-															)));
-
-															$cell_i++;
-														}
-														$spec=!$spec;
-													}
-
-													$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('_GUID'=>'c3abce83ec5bdbc10d0e80f646c91c23','END_HEAD'=>!$finished_thead)));
-												}
-
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('_GUID'=>'6a843e072e92b60cc950f69576231fe1','END_BODY'=>$finished_thead)));
+												$ratios=explode(':',$ratios_matches[2]);
+												$caption=str_replace($ratios_matches[0],'',$caption);
 											}
 
-											$pos=$end_tbl+3;
-											$differented=true;
+											foreach ($rows as $h=>$row)
+											{
+												$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
+												array_shift($cells); // First one is non-existent empty
+												$spec=true;
+												// Find which to float
+												$to_float=NULL;
+												foreach ($cells as $i=>$cell)
+												{
+													if (!$spec)
+													{
+														if ((strpos($cell,'!')!==false) || (is_null($to_float))) $to_float=$i;
+													}
+													$spec=!$spec;
+												}
+
+												$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_START'));
+
+												// Do floated one
+												$i_dir_1=(($to_float==1)?'left':'right');
+												$i_dir_2=(($to_float!=1)?'left':'right');
+												if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
+												{
+													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START',array(
+														'_GUID'=>'ced8c3a142f74296a464b085ba6891c9',
+														'WIDTH'=>array_key_exists(($to_float==1)?0:(count($cells)-1),
+														$ratios)?$ratios[($to_float==1)?0:(count($cells)-1)]:((count($cells)==2)?'0':float_to_raw_string(97.0/(floatval(count($cells))/2.0-1.0),2).'%'),
+														'FLOAT'=>$i_dir_1,
+														'PADDING'=>($to_float==1)?'':'-left',
+														'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
+													)));
+												} else
+												{
+													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_START',array(
+														'_GUID'=>'90be72fcbb6b9d8a312da0bee5b86cb3',
+														'WIDTH'=>array_key_exists($to_float,$ratios)?$ratios[$to_float]:'',
+														'FLOAT'=>$i_dir_1,
+														'PADDING'=>($to_float==1)?'':'-left',
+														'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2.0)/2.0),2),
+													)));
+												}
+												$tag_output->attach(comcode_to_tempcode(isset($cells[$to_float])?rtrim($cells[$to_float]):'',$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
+												$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
+												// Do non-floated ones
+												$cell_i=0;
+												foreach ($cells as $i=>$cell)
+												{
+													if ($i%2==1)
+													{
+														if ($i!=$to_float)
+														{
+															if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
+															{
+																$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
+																	'_GUID'=>'9bac42a1b62c5c9a2f758639fcb3bb2f',
+																	'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:(float_to_raw_string(97.0/(floatval(count($cells))/2.0),2).'%'),
+																	'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
+																	'FLOAT'=>$i_dir_1,
+																	'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'',
+																)));
+															} else
+															{
+																$tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START',array(
+																	'_GUID'=>'0f15f9d5554635ed7ac154c9dc5c72b8',
+																	'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
+																	'FLOAT'=>$i_dir_1,
+																	'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'',
+																	'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
+																)));
+															}
+															$tag_output->attach(comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
+															$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
+														}
+														$cell_i++;
+													}
+												}
+
+												$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END'));
+											}
+										} else
+										{
+											$ratios=array();
+											$ratios_matches=array();
+											if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches)!=0)
+											{
+												$ratios=explode(':',$ratios_matches[2]);
+												$caption=str_replace($ratios_matches[0],'',$caption);
+											}
+
+											if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
+											{
+												$tag_output->attach(do_template('COMCODE_REAL_TABLE_START',array('_GUID'=>'9fca9672b9d069a0c8a40ebc6e88602b','SUMMARY'=>preg_replace('#(^|\s)wide($|\s)#','',$caption))));
+											} else
+											{
+												$tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY',array('_GUID'=>'0c5674fba61ba14b4b9fa39ea31ff54f','CAPTION'=>$caption)));
+											}
+											$finished_thead=false;
+											foreach ($rows as $table_row)
+											{
+												$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$table_row,-1,PREG_SPLIT_DELIM_CAPTURE);
+												array_shift($cells); // First one is non-existent empty
+												$spec=true;
+												$c_type='';
+												$cell_i=0;
+												$finished_thead_prior=$finished_thead;
+												foreach ($cells as $i=>$cell)
+												{
+													if ($spec)
+													{
+														if (strpos($cell,'!')===false) $finished_thead=true;
+													}
+													$spec=!$spec;
+												}
+												$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('_GUID'=>'98f20d57692f0bded555a0acb7d55024','START_HEAD'=>!$finished_thead,'START_BODY'=>(!$finished_thead_prior) && ($finished_thead))));
+												$spec=true;
+												foreach ($cells as $i=>$cell)
+												{
+													if ($spec)
+													{
+														$c_type=(strpos($cell,'!')!==false)?'th':'td';
+													} else
+													{
+														$_mid=comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
+
+														$tag_output->attach(do_template('COMCODE_REAL_TABLE_CELL',array(
+															'_GUID'=>'6640df8b503f65e3d36f595b0acf7600',
+															'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
+															'C_TYPE'=>$c_type,
+															'MID'=>$_mid,
+															'PADDING'=>($cell_i==0)?'':'-left',
+															'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(5.0/(floatval(count($cells)-2)/2.0),2),
+														)));
+
+														$cell_i++;
+													}
+													$spec=!$spec;
+												}
+
+												$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('_GUID'=>'c3abce83ec5bdbc10d0e80f646c91c23','END_HEAD'=>!$finished_thead)));
+											}
+
+											$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('_GUID'=>'6a843e072e92b60cc950f69576231fe1','END_BODY'=>$finished_thead)));
 										}
+
+										$pos=$end_tbl+3;
+										$differented=true;
 									}
 								}
 
 								// Advertising
 								$b_all=true; // leave true - for test purposes only
-								if ((!$differented) && (!$semiparse_mode) && (!$in_code_tag) && (addon_installed('banners')) && (($b_all) || (!has_privilege($source_member,'banner_free'))))
+								if ((!$semiparse_mode) && (addon_installed('banners')) && (($b_all) || (!has_privilege($source_member,'banner_free'))))
 								{
 									// Pick up correctly, including permission filtering
 									if (is_null($ADVERTISING_BANNERS_CACHE))
@@ -1215,7 +1209,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 								}
 
 								// Search highlighting lookahead
-								if ((!$differented) && ($highlight_bits!==NULL))
+								if ($highlight_bits!==NULL)
 								{
 									foreach ($highlight_bits as $highlight_bit)
 									{
@@ -1235,64 +1229,61 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 										}
 									}
 								}
+							}
 
-								// Link lookahead
-								if ((!$differented) && (!$in_code_tag))
+							// Link lookahead
+							if (((($textual_area) && (!$in_semihtml)) || (($in_semihtml) && (substr_count(substr($comcode,$pos-1),'[')==substr_count(substr($comcode,$pos-1),']')) && (substr_count(substr($comcode,$pos-1),'<')==substr_count(substr($comcode,$pos-1),'>')))) && (!$in_code_tag) && (trim($next)!='') && (!$differented) && ($next=='h') && ((substr($comcode,$pos-1,strlen('http://'))=='http://') || (substr($comcode,$pos-1,strlen('https://'))=='https://') || (substr($comcode,$pos-1,strlen('ftp://'))=='ftp://')))
+							{
+								// Find the full link portion in the upcoming Comcode
+								$link_end_pos=strlen($comcode);
+								foreach (array(' ',"\n",'[',')','"','>','<',".\n",', ','. ',"'",) as $link_terminator_str)
 								{
-									if ((!$in_semihtml) && ($next=='h') && ((substr($comcode,$pos-1,strlen('http://'))=='http://') || (substr($comcode,$pos-1,strlen('https://'))=='https://') || (substr($comcode,$pos-1,strlen('ftp://'))=='ftp://')))
+									$link_end_pos_x=strpos($comcode,$link_terminator_str,$pos-1);
+									if (($link_end_pos_x!==false) && ($link_end_pos_x<$link_end_pos)) $link_end_pos=$link_end_pos_x;
+								}
+								$auto_link=substr($comcode,$pos-1,$link_end_pos-$pos+1);
+
+								// Strip down the link, for security reasons
+								$auto_link=preg_replace('#([?&])(keep|for)_session=[\d\w]*#','${1}',$auto_link);
+
+								if (substr($auto_link,-3)!='://') // If it's not just a hanging protocol
+								{
+									if (substr($auto_link,-1)=='.') // Strip trailing dot (dots may be within, but not at the end)
 									{
-										// Find the full link portion in the upcoming Comcode
-										$link_end_pos=strlen($comcode);
-										foreach (array(' ',"\n",'[',')','"','>','<',".\n",', ','. ',"'",) as $link_terminator_str)
+										$auto_link=substr($auto_link,0,strlen($auto_link)-1);
+										$link_end_pos--;
+									}
+
+									// Find a media renderer for this link
+									$embed_output=mixed();
+									if (!$check_only)
+									{
+										$link_handlers=find_all_hooks('systems','comcode_link_handlers');
+										foreach (array_keys($link_handlers) as $link_handler)
 										{
-											$link_end_pos_x=strpos($comcode,$link_terminator_str,$pos-1);
-											if (($link_end_pos_x!==false) && ($link_end_pos_x<$link_end_pos)) $link_end_pos=$link_end_pos_x;
+											require_code('hooks/systems/comcode_link_handlers/'.$link_handler);
+											$link_handler_ob=object_factory('Hook_comcode_link_handler_'.$link_handler,true);
+											if (is_null($link_handler_ob)) continue;
+											$embed_output=$link_handler_ob->bind($auto_link,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
+											if (!is_null($embed_output)) break;
 										}
-										$auto_link=substr($comcode,$pos-1,$link_end_pos-$pos+1);
+									}
 
-										// Strip down the link, for security reasons
-										$auto_link=preg_replace('#([?&])(keep|for)_session=[\d\w]*#','${1}',$auto_link);
-
-										if (substr($auto_link,-3)!='://') // If it's not just a hanging protocol
+									// If it was successfully rendered as media, put this into the output stream rather than the written link
+									if (!is_null($embed_output))
+									{
+										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
+										$tag_output->attach($continuation);
+										$continuation='';
+										if (!$semiparse_mode)
 										{
-											if (substr($auto_link,-1)=='.') // Strip trailing dot (dots may be within, but not at the end)
-											{
-												$auto_link=substr($auto_link,0,strlen($auto_link)-1);
-												$link_end_pos--;
-											}
-
-											// Find a media renderer for this link
-											$embed_output=mixed();
-											if (!$check_only)
-											{
-												$link_handlers=find_all_hooks('systems','comcode_link_handlers');
-												foreach (array_keys($link_handlers) as $link_handler)
-												{
-													require_code('hooks/systems/comcode_link_handlers/'.$link_handler);
-													$link_handler_ob=object_factory('Hook_comcode_link_handler_'.$link_handler,true);
-													if (is_null($link_handler_ob)) continue;
-													$embed_output=$link_handler_ob->bind($auto_link,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
-													if (!is_null($embed_output)) break;
-												}
-											}
-
-											// If it was successfully rendered as media, put this into the output stream rather than the written link
-											if (!is_null($embed_output))
-											{
-												if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-												$tag_output->attach($continuation);
-												$continuation='';
-												if (!$semiparse_mode)
-												{
-													$tag_output->attach($embed_output);
-												} else
-												{
-													$tag_output->attach(escape_html($auto_link));
-												}
-												$pos+=$link_end_pos-$pos;
-												$differented=true;
-											}
+											$tag_output->attach($embed_output);
+										} else
+										{
+											$tag_output->attach(escape_html($auto_link));
 										}
+										$pos+=$link_end_pos-$pos;
+										$differented=true;
 									}
 								}
 							}
@@ -1824,46 +1815,6 @@ function in_tag_stack($tag_stack,$tags)
 		}
 	}
 	return false;
-}
-
-/**
- * Detect a link in some text.
- *
- * @param  string			The text
- * @param  integer		Search position
- * @return array			A pair: where the link ends in the text, the URL
- */
-function detect_link(&$comcode,$pos)
-{
-	$link_end_pos=strpos($comcode,' ',$pos-1);
-	$link_end_pos_2=strpos($comcode,"\n",$pos-1);
-	$link_end_pos_3=strpos($comcode,'[',$pos-1);
-	$link_end_pos_4_a=strpos($comcode,'(',$pos-1);
-	$link_end_pos_4_b=strpos($comcode,')',$pos-1);
-	if (($link_end_pos_4_a===false) || ($link_end_pos_4_b===false) || ($link_end_pos_4_a>$link_end_pos_4_b))
-	{
-		$link_end_pos_4=$link_end_pos_4_b;
-	} else
-	{
-		$link_end_pos_4=false;
-	}
-	$link_end_pos_5=strpos($comcode,'"',$pos-1);
-	$link_end_pos_6=strpos($comcode,'>',$pos-1);
-	$link_end_pos_7=strpos($comcode,'<',$pos-1);
-	$link_end_pos_8=strpos($comcode,'.'."\n",$pos-1);
-	$link_end_pos_9=strpos($comcode,',',$pos-1);
-	if (($link_end_pos_2!==false) && (($link_end_pos===false) || ($link_end_pos_2<$link_end_pos))) $link_end_pos=$link_end_pos_2;
-	if (($link_end_pos_3!==false) && (($link_end_pos===false) || ($link_end_pos_3<$link_end_pos))) $link_end_pos=$link_end_pos_3;
-	if (($link_end_pos_4!==false) && (($link_end_pos===false) || ($link_end_pos_4<$link_end_pos))) $link_end_pos=$link_end_pos_4;
-	if (($link_end_pos_5!==false) && (($link_end_pos===false) || ($link_end_pos_5<$link_end_pos))) $link_end_pos=$link_end_pos_5;
-	if (($link_end_pos_6!==false) && (($link_end_pos===false) || ($link_end_pos_6<$link_end_pos))) $link_end_pos=$link_end_pos_6;
-	if (($link_end_pos_7!==false) && (($link_end_pos===false) || ($link_end_pos_7<$link_end_pos))) $link_end_pos=$link_end_pos_7;
-	if (($link_end_pos_8!==false) && (($link_end_pos===false) || ($link_end_pos_8<$link_end_pos))) $link_end_pos=$link_end_pos_8;
-	if (($link_end_pos_9!==false) && (($link_end_pos===false) || ($link_end_pos_9<$link_end_pos))) $link_end_pos=$link_end_pos_9;
-	if ($link_end_pos===false) $link_end_pos=strlen($comcode);
-	$auto_link=preg_replace('#keep_session=\d*#','filtered=1',substr($comcode,$pos-1,$link_end_pos-$pos+1));
-
-	return array($link_end_pos,$auto_link);
 }
 
 /**

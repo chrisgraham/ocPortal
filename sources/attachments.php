@@ -235,10 +235,6 @@ function attachments_script()
 		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
 	header('Content-Disposition: inline; filename="'.$original_filename.'"');
 
-	$_full=get_custom_file_base().'/'.rawurldecode($full);
-	$size=filesize($_full);
-	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
-
 	// Is it non-local? If so, redirect
 	if (!url_is_local($full))
 	{
@@ -247,6 +243,10 @@ function attachments_script()
 		header('Location: '.$full);
 		return;
 	}
+
+	$_full=get_custom_file_base().'/'.rawurldecode($full);
+	if (!file_exists($_full)) warn_exit(do_lang_tempcode('_MISSING_RESOURCE','url:'.escape_html($full))); // File is missing, we can't do anything
+	$size=filesize($_full);
 
 	header('Accept-Ranges: bytes');
 

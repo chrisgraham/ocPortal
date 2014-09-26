@@ -27,6 +27,7 @@ class ocp_merge_test_set extends ocp_test_case
 			'addons_files',
 			'adminlogs',
 			'autosave',
+			'bank',
 			'blocks',
 			'bookable',
 			'bookable_blacked',
@@ -68,12 +69,14 @@ class ocp_merge_test_set extends ocp_test_case
 			'iotd',
 			'ip_country',
 			'link_tracker',
+			'locations',
 			'logged',
 			'logged_mail_messages',
 			'long_values',
 			'mayfeature',
 			'members_diseases',
 			'members_gifts',
+			'members_mentors',
 			'member_tracking',
 			'messages_to_render',
 			'modules',
@@ -103,6 +106,7 @@ class ocp_merge_test_set extends ocp_test_case
 			'url_title_cache',
 			'validated_once',
 			'video_transcoding',
+			'workflows',
 			'workflow_content',
 			'workflow_content_status',
 			'workflow_permissions',
@@ -117,6 +121,9 @@ class ocp_merge_test_set extends ocp_test_case
 			// These are imported, but the test can't detect it
 			'catalogue_efv_float',
 			'catalogue_efv_integer',
+
+			// We don't import these, the copy is not the exact equivalent to the original so should identify differently
+			'alternative_ids',
 		);
 
 		$c=file_get_contents(get_file_base().'/sources/hooks/modules/admin_import/ocp_merge.php');
