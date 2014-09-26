@@ -46,6 +46,12 @@ class Hook_admin_import_types_core
 			'pages'=>'COMCODE_PAGES',
 			'rss'=>'_RSS',
 			'blocks'=>'_BLOCK_LABEL',
+			'menu_items'=>'MENU_ITEMS',
+			'stafflinks'=>'STAFF_LINKS',
+			'customtasks'=>'CHECK_LIST',
+			'sitewatchlist'=>'SITE_WATCHLIST',
+			'searches_saved'=>'SAVED_SEARCHES',
+			'notifications'=>'NOTIFICATIONS',
 		);
 		if (addon_installed('ocf_cpfs'))
 			$ret['ocf_custom_profile_fields']='CUSTOM_PROFILE_FIELDS';
@@ -61,6 +67,8 @@ class Hook_admin_import_types_core
 			$ret['ip_bans']='BANNED_ADDRESSES';
 		if (addon_installed('redirects_editor'))
 			$ret['redirects']='REDIRECTS';
+		if (addon_installed('match_key_permissions'))
+			$ret['match_key_messages']='PAGE_MATCH_KEY_ACCESS';
 		return $ret;
 	}
 

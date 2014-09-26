@@ -45,6 +45,9 @@ class Hook_ocp_merge
 								'chat_rooms',
 								'config',
 								'custom_comcode',
+								'comcode_pages',
+								'customtasks',
+								'notifications',
 								'awards',
 								'downloads_and_categories', // including rating, trackbacks, seo
 								'ocf_categories',
@@ -56,14 +59,21 @@ class Hook_ocp_merge
 								'ocf_post_templates',
 								'ocf_posts',
 								'ocf_warnings',
+								'ocf_saved_warnings',
 								'filedump',
 								'images_and_galleries', // including rating, trackbacks, seo
+								'match_key_messages',
+								'menu_items',
 								'iotds', // including rating, trackbacks, seo
 								'news_and_categories', // including rating, trackbacks, seo
 								'newsletter_subscriptions',
 								'polls', // including rating, trackbacks, seo
 								'pointstore',
 								'redirects',
+								'searches_saved',
+								'stafflinks',
+								'sitewatchlist',
+								'searches_saved',
 								'cedi', // including rating, trackbacks, seo
 								'stats',
 								'flagrant',
@@ -83,32 +93,36 @@ class Hook_ocp_merge
 							);
 		$info['dependencies']=array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
 								'attachment_references'=>array('attachments','ocf_members','ocf_posts','news_and_categories','cedi'),
-								'permissions'=>array_diff($info['import'],array('themes','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
+								'permissions'=>array_diff($info['import'],array('feedback','attachment_references','permissions','bookmarks','stats')),
 								'feedback'=>array_diff($info['import'],array('themes','ocf_warnings','feedback','attachment_references','permissions','quizzes','bookmarks','stats')),
-								'authors'=>array('ocf_members'),
+								'authors'=>array('ocf_members','catalogues'),
 								'banners'=>array('ocf_members'),
 								'catalogues'=>array('ocf_members'),
 								'chat_rooms'=>array('ocf_members','ocf_groups'),
-								'downloads_and_categories'=>array('ocf_members'),
-								'filedump'=>array('ocf_members'),
-								'images_and_galleries'=>array('ocf_members'),
+								'downloads_and_categories'=>array('ocf_members','catalogues'),
+								'searches_saved'=>array('ocf_members'),
+								'images_and_galleries'=>array('ocf_members','catalogues'),
+								'news_and_categories'=>array('ocf_members','attachments','catalogues'),
+								'polls'=>array('ocf_members','catalogues'),
 								'iotds'=>array('ocf_members'),
-								'news_and_categories'=>array('ocf_members','attachments'),
-								'polls'=>array('ocf_members'),
+								'notifications'=>array('ocf_members'),
 								'pointstore'=>array('ocf_members'),
-								'cedi'=>array('ocf_members','attachments'),
+								'cedi'=>array('ocf_members','attachments','catalogues'),
 								'flagrant'=>array('ocf_members'),
 								'useronline_tracking'=>array('ocf_members'),
 								'ip_bans'=>array('ocf_members'),
 								'points_gifts_and_charges'=>array('ocf_members'),
-								'calendar'=>array('ocf_members'),
+								'calendar'=>array('ocf_members','catalogues'),
+								'comcode_pages'=>array('ocf_members','catalogues'),
+								'match_key_messages'=>array(),
+								'menu_items'=>array(),
 								'ocf_custom_profile_fields'=>array('ocf_groups'),
 								'ocf_multi_moderations'=>array('ocf_forums'),
 								'ocf_members'=>array('ocf_groups','ocf_custom_profile_fields','attachments'),
-								'ocf_forums'=>array('ocf_categories','ocf_members','ocf_groups'),
-								'ocf_topics'=>array('ocf_forums','ocf_members'),
+								'ocf_forums'=>array('ocf_categories','ocf_members','ocf_groups','catalogues'),
+								'ocf_topics'=>array('ocf_forums','ocf_members','catalogues'),
 								'ocf_polls_and_votes'=>array('ocf_topics','ocf_members'),
-								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members','attachments'),
+								'ocf_posts'=>array('custom_comcode','ocf_topics','ocf_members','attachments','catalogues'),
 								'ocf_personal_topics'=>array('custom_comcode','ocf_members'),
 								'ocf_post_templates'=>array('ocf_forums'),
 								'ocf_warnings'=>array('ocf_members','ocf_groups','ocf_topics','ocf_forums'),
@@ -117,7 +131,7 @@ class Hook_ocp_merge
 								'ecommerce'=>array('ocf_groups','ocf_members'),
 								'ocf_welcome_emails'=>array('ocf_members'),
 								'bookmarks'=>array('ocf_members'),
-								'quizzes'=>array('ocf_members'),
+								'quizzes'=>array('ocf_members','catalogues'),
 							);
 
 		//if (!$this->on_same_msn($file_base))
@@ -350,7 +364,6 @@ class Hook_ocp_merge
 
 			import_id_remap_put('quiz',strval($row['id']),$id_new);
 		}
-
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'quiz_questions');
 		foreach ($rows as $i=>$row)
 		{
@@ -427,6 +440,8 @@ class Hook_ocp_merge
 
 			$GLOBALS['SITE_DB']->query_insert('quiz_winner',array('q_quiz'=>$quiz,'q_entry'=>$entry,'q_winner_level'=>$row['q_winner_level']));
 		}
+
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'quiz','quiz');
 	}
 
 	/**
@@ -635,6 +650,7 @@ class Hook_ocp_merge
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('authors','author',array('author'=>$row['author']));
 			if (is_null($test)) add_author($row['author'],$row['url'],$row['forum_handle'],$this->get_lang_string($db,$row['description']),$this->get_lang_string($db,$row['skills']));
 		}
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'author',NULL);
 	}
 
 	/**
@@ -671,6 +687,22 @@ class Hook_ocp_merge
 				if (is_null($submitter)) $submitter=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 				add_banner($row['name'],$row['img_url'],array_key_exists('b_title_text',$row)?$row['b_title_text']:'',$this->get_lang_string($db,$row['caption']),array_key_exists('direct_code',$row)?$row['direct_code']:'',$row['campaign_remaining'],$row['site_url'],$row['importance_modulus'],$row['notes'],$row['the_type'],$row['expiry_date'],$submitter,$row['validated'],$row['b_type'],$row['add_date'],$row['hits_from'],$row['hits_to'],$row['views_from'],$row['views_to'],$row['edit_date']);
 			}
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'banner_clicks',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$c_member_id=$on_same_msn?$row['c_member_id']:import_id_remap_get('member',$row['c_member_id'],true);
+			if (is_null($c_member_id)) $c_member_id=$GLOBALS['FORUM_DRIVER']->get_guest_id();
+
+			$GLOBALS['SITE_DB']->query_insert('banner_clicks',array(
+				'c_date_and_time'=>$row['c_date_and_time'],
+				'c_member_id'=>$c_member_id,
+				'c_ip_address'=>$row['c_ip_address'],
+				'c_source'=>$row['c_source'],
+				'c_banner_id'=>$row['c_banner_id'],
+			));
 		}
 	}
 
@@ -846,6 +878,8 @@ class Hook_ocp_merge
 
 			import_id_remap_put('poll',strval($row['id']),$id_new);
 		}
+		$this->_import_review_supplement($db,$table_prefix,'polls','poll');
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'poll','poll');
 	}
 
 	/**
@@ -873,6 +907,8 @@ class Hook_ocp_merge
 
 			import_id_remap_put('news_category',strval($row['id']),$id_new);
 		}
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'news_category','news_category');
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'news ORDER BY id');
 		foreach ($rows as $row)
 		{
@@ -894,6 +930,18 @@ class Hook_ocp_merge
 			$id_new=add_news($this->get_lang_string($db,$row['title']),$this->get_lang_string($db,$row['news']),$row['author'],$row['validated'],$row['allow_rating'],$row['allow_comments'],$row['allow_trackbacks'],$row['notes'],$this->get_lang_string($db,$row['news_article']),$main_news_category,$news_category,$row['date_and_time'],$submitter,$row['news_views'],$row['edit_date'],$id,$row['news_image']);
 
 			import_id_remap_put('news',strval($row['id']),$id_new);
+		}
+		$this->_import_review_supplement($db,$table_prefix,'news','news');
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'news','news');
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'news_rss_cloud',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				unset($row['id']);
+				$GLOBALS['SITE_DB']->query_insert('news_rss_cloud',$row);
+			}
 		}
 	}
 
@@ -920,6 +968,7 @@ class Hook_ocp_merge
 
 			$old_format=false;
 		} else $old_format=true;
+
 		$rowsn=$db->query('SELECT * FROM '.$table_prefix.'newsletter',NULL,NULL,true);
 		if (is_null($rowsn)) return;
 		$rows=array();
@@ -941,12 +990,23 @@ class Hook_ocp_merge
 			$newsletter_id=$row['newsletter_id'];
 			if (!$old_format) $newsletter_id=import_id_remap_get('newsletter',$newsletter_id,true);
 			if (is_null($newsletter_id)) continue;
-			$GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array('newsletter_id'=>$newsletter_id,'email'=>$row['email'],'the_level'=>$row['the_level']),false,true);
+			$GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array('newsletter_id'=>$newsletter_id,'email'=>$row['email'],'the_level'=>$row['the_level']));
 		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'newsletter_archive');
 		foreach ($rows as $row)
 		{
 			$GLOBALS['SITE_DB']->query_insert('newsletter_archive',array('date_and_time'=>$row['date_and_time'],'subject'=>$row['subject'],'newsletter'=>$row['newsletter'],'language'=>$row['language'],'importance_level'=>$row['importance_level']));
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'newsletter_periodic',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				unset($row['id']);
+				$GLOBALS['SITE_DB']->query_insert('newsletter_periodic',$row);
+			}
 		}
 	}
 
@@ -975,6 +1035,10 @@ class Hook_ocp_merge
 			unset($row['id']);
 			$GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time'=>$row['date_and_time'],'memberid'=>$member_id,'purchasetype'=>$row['purchasetype'],'details'=>$row['details'],'details2'=>$row['details2']));
 		}
+
+		$this->_import_pstore_customs($db,$table_prefix);
+
+		$this->_import_pstore_permissions($db,$table_prefix);
 	}
 
 	/**
@@ -1020,7 +1084,7 @@ class Hook_ocp_merge
 
 			import_id_remap_put('download_category',strval($row['id']),$id);
 		}
-
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'download_category','download_category');
 		foreach ($rows as $row)
 		{
 			$id=import_id_remap_get('download_category',strval($row['id']));
@@ -1044,6 +1108,8 @@ class Hook_ocp_merge
 
 			import_id_remap_put('download',strval($row['id']),$id_new);
 		}
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'download','download');
+		$this->_import_review_supplement($db,$table_prefix,'downloads','download');
 		foreach ($rows as $row)
 		{
 			if (!is_null($row['out_mode_id']))
@@ -1055,6 +1121,7 @@ class Hook_ocp_merge
 				$GLOBALS['SITE_DB']->query_update('download_downloads',array('out_mode_id'=>$out_mode_id),array('id'=>$id_new),'',1);
 			}
 		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'download_logging');
 		foreach ($rows as $row)
 		{
@@ -1064,6 +1131,13 @@ class Hook_ocp_merge
 			if (is_null($user)) $user=$GLOBALS['FORUM_DRIVER']->get_guest_id();
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('download_logging','ip',array('id'=>$id,'the_user'=>$user));
 			if (is_null($test)) $GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'the_user'=>$user,'ip'=>$row['ip'],'date_and_time'=>$row['date_and_time']));
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'download_licences ORDER BY id',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$GLOBALS['SITE_DB']->query_insert('download_licences',array('l_title'=>$row['l_title'],'l_text'=>$row['l_text']));
 		}
 	}
 
@@ -1088,6 +1162,9 @@ class Hook_ocp_merge
 				add_gallery($row['name'],$this->get_lang_string($db,$row['fullname']),$this->get_lang_string($db,$row['description']),$this->get_lang_string($db,$row['teaser']),$row['notes'],$row['parent_id'],$row['accept_images'],$row['accept_videos'],$row['is_member_synched'],$row['flow_mode_interface'],$row['rep_image'],$row['watermark_top_left'],$row['watermark_top_right'],$row['watermark_bottom_left'],$row['watermark_bottom_right'],$row['allow_rating'],$row['allow_comments'],false,$row['add_date']);
 			}
 		}
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'gallery',NULL);
+		$this->_import_review_supplement($db,$table_prefix,'galleries',NULL);
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'images ORDER BY id');
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
@@ -1101,6 +1178,9 @@ class Hook_ocp_merge
 
 			import_id_remap_put('image',strval($row['id']),$id_new);
 		}
+		$this->_import_review_supplement($db,$table_prefix,'images','image');
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'image',NULL);
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'videos ORDER BY id');
 		foreach ($rows as $row)
 		{
@@ -1113,6 +1193,8 @@ class Hook_ocp_merge
 
 			import_id_remap_put('video',strval($row['id']),$id_new);
 		}
+		$this->_import_review_supplement($db,$table_prefix,'videos','video');
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'video',NULL);
 	}
 
 	/**
@@ -1146,6 +1228,8 @@ class Hook_ocp_merge
 
 			import_id_remap_put('cedi_page',strval($row['id']),$id);
 		}
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'cedi_page','cedi_page');
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'seedy_posts');
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
@@ -1161,6 +1245,8 @@ class Hook_ocp_merge
 
 			import_id_remap_put('cedi_post',strval($row['id']),$id_new);
 		}
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'cedi_post','cedi_post');
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'seedy_changes');
 		foreach ($rows as $row)
 		{
@@ -1230,6 +1316,58 @@ class Hook_ocp_merge
 	 * @param  string			The table prefix the target prefix is using
 	 * @param  PATH			The base directory we are importing from
 	 */
+	function import_comcode_pages($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'comcode_pages',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$p_submitter=import_id_remap_get('member',$row['p_submitter'],true);
+			if (is_null($p_submitter)) continue;
+
+			$the_zone=$row['the_zone'];
+			$the_page=$row['the_page'];
+			$p_parent_page=$row['p_parent_page'];
+			$p_validated=$row['p_validated'];
+			$p_edit_date=$row['p_edit_date'];
+			$p_add_date=$row['p_add_date'];
+			$p_show_as_edit=$row['p_show_as_edit'];
+
+			$GLOBALS['SITE_DB']->query_insert('comcode_pages',array('the_zone'=>$the_zone,'the_page'=>$the_page,'p_parent_page'=>$row['p_parent_page'],'p_validated'=>$row['p_validated'],'p_edit_date'=>$row['p_edit_date'],'p_add_date'=>$row['p_add_date'],'p_submitter'=>$p_submitter,'p_show_as_edit'=>$row['p_show_as_edit']));
+		}
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'comcode_page',NULL);
+	}
+
+	/**
+	 * Import custom tasks.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_customtasks($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'customtasks',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			if (is_null($row['taskisdone']))
+			{
+				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery']));
+			} else
+			{
+				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery'],'taskisdone'=>$row['taskisdone']));
+			}
+		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
 	function import_wordfilter($db,$table_prefix,$file_base)
 	{
 		require_code('word_filter');
@@ -1269,6 +1407,7 @@ class Hook_ocp_merge
 
 			import_id_remap_put('event_type',strval($row['id']),$id_new);
 		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'calendar_interests',NULL,NULL,true);
 		if (is_null($rows))
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'calendar_declarations_of_interest');
@@ -1282,6 +1421,7 @@ class Hook_ocp_merge
 			$GLOBALS['SITE_DB']->query_delete('calendar_interests',array('i_member_id'=>$member,'t_type'=>$type),'',1);
 			$GLOBALS['SITE_DB']->query_insert('calendar_interests',array('i_member_id'=>$member,'t_type'=>$type));
 		}
+
 		$event_rows=$db->query('SELECT * FROM '.$table_prefix.'calendar_events ORDER BY id');
 		foreach ($event_rows as $row)
 		{
@@ -1302,6 +1442,9 @@ class Hook_ocp_merge
 
 			import_id_remap_put('event',strval($row['id']),$id_new);
 		}
+		$this->_import_review_supplement($db,$table_prefix,'events','event');
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'event','event');
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'calendar_reminders');
 		foreach ($rows as $row)
 		{
@@ -1397,6 +1540,20 @@ class Hook_ocp_merge
 			$ticket_type=insert_lang($this->get_lang_string($db,$row['ticket_type']),1);
 			$GLOBALS['SITE_DB']->query_insert('ticket_types',array('search_faq'=>array_key_exists('search_faq',$row)?$row['search_faq']:0,'guest_emails_mandatory'=>array_key_exists('guest_emails_mandatory',$row)?$row['guest_emails_mandatory']:0,'ticket_type'=>$ticket_type));
 			import_id_remap_put('ticket_type',strval($row['ticket_type']),$ticket_type);
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'tickets',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$topic_id=import_id_remap_get('topic',strval($row['topic_id']),true);
+			if (is_null($topic_id)) continue;
+			$forum_id=import_id_remap_get('forum',strval($row['forum_id']),true);
+			if (is_null($forum_id)) continue;
+			$row['topic_id']=strval($topic_id);
+			$row['forum_id']=strval($forum_id);
+
+			$GLOBALS['SITE_DB']->query_insert('tickets',$row);
 		}
 	}
 
@@ -1519,6 +1676,8 @@ class Hook_ocp_merge
 				warn_exit(do_lang_tempcode('CANNOT_MERGE_CATALOGUES'));
 			}
 		}
+		$this->_import_review_supplement($db,$table_prefix,'catalogues','catalogue_entry');
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'catalogue_categories ORDER BY id');
 		$id=mixed();
 		foreach ($rows as $row)
@@ -1541,6 +1700,7 @@ class Hook_ocp_merge
 
 			import_id_remap_put('catalogue_category',strval($row['id']),$id_new);
 		}
+
 		$rows=$GLOBALS['SITE_DB']->query('SELECT id,cc_parent_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'catalogue_categories WHERE cc_parent_id<0');
 		foreach ($rows as $row)
 		{
@@ -1551,8 +1711,7 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
-			if (import_check_if_imported('catalogue_entry',strval($row['id']))) continue;
-
+			if (is_null(import_id_remap_get('catalogue_entry',strval($row['id'])))) continue;
 			$category_id=import_id_remap_get('catalogue_category',$row['cc_id'],true);
 			if (is_null($category_id)) continue;
 			$map=array();
@@ -1595,6 +1754,9 @@ class Hook_ocp_merge
 
 			import_id_remap_put('catalogue_entry',strval($row['id']),$id_new);
 		}
+
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'catalogue',NULL);
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'catalogue_category','catalogue_category');
 	}
 
 	/**
@@ -1613,6 +1775,9 @@ class Hook_ocp_merge
 		$on_same_msn=($this->on_same_msn($file_base));
 		foreach ($rows as $row)
 		{
+			if (import_check_if_imported('chat',strval($row['id']))) continue;
+			$id_old=$row['id'];
+
 			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_rooms','id',array('room_name'=>$row['room_name']));
 			if (!is_null($test)) continue;
 
@@ -1636,9 +1801,44 @@ class Hook_ocp_merge
 			foreach ($_allow_list as $x)
 				$row['allow_list'].=($on_same_msn?$x:strval(import_id_remap_get('member',$x,true))).',';
 
-
 			if (get_param_integer('keep_preserve_ids',0)==0) unset($row['id']);
-			$GLOBALS['SITE_DB']->query_insert('chat_rooms',$row);
+			$id_new=$GLOBALS['SITE_DB']->query_insert('chat_rooms',$row,true);
+
+			import_id_remap_put('chat',strval($id_old),$id_new);
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'chat_blocking',NULL,NULL,true);
+		if (is_null($rows)) return;
+		$on_same_msn=($this->on_same_msn($file_base));
+		foreach ($rows as $row)
+		{
+			$member_blocker=import_id_remap_get('member',$row['member_blocker']);
+			$member_blocked=import_id_remap_get('member',$row['member_blocked']);
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_blocking','member_blocker',array('member_blocker'=>$member_blocker,'member_blocked'=>$member_blocked));
+			if(!is_null($test)) continue;
+			$GLOBALS['SITE_DB']->query_insert('chat_blocking',array('member_blocker'=>$member_blocker,'member_blocked'=>$member_blocked,'date_and_time'=>$row['date_and_time']));
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'chat_buddies',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$member_likes=import_id_remap_get('member',$row['member_likes']);
+			$member_liked=import_id_remap_get('member',$row['member_liked']);
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_buddies','member_likes',array('member_likes'=>$member_likes,'member_liked'=>$member_liked));
+			if (!is_null($test)) continue;
+			$GLOBALS['SITE_DB']->query_insert('chat_buddies',array('member_likes'=>$member_likes,'member_liked'=>$member_liked,'date_and_time'=>$row['date_and_time']));
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'chat_sound_effects',NULL,NULL,true);
+		if (is_null($rows)) return;
+		$on_same_msn=($this->on_same_msn($file_base));
+		foreach ($rows as $row)
+		{
+			$s_member=import_id_remap_get('member',$row['s_member']);
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('chat_sound_effects','s_member',array('s_member'=>$s_member,'s_effect_id'=>$row['s_effect_id']));
+			if (!is_null($test)) continue;
+			$GLOBALS['SITE_DB']->query_insert('chat_sound_effects',array('s_member'=>$s_member,'s_effect_id'=>$row['s_effect_id'],'s_url'=>$row['s_url']));
 		}
 	}
 
@@ -1664,7 +1864,7 @@ class Hook_ocp_merge
 			$row['a_description']=insert_lang($this->get_lang_string($db,$row['a_description']),2);
 
 			$id_old=$row['id'];
-			unset($row['id']);
+			if (get_param_integer('keep_preserve_ids',0)==0) unset($row['id']);
 			$id_new=$GLOBALS['SITE_DB']->query_insert('award_types',$row,true);
 
 			import_id_remap_put('award_type',strval($id_old),$id_new);
@@ -1781,6 +1981,7 @@ class Hook_ocp_merge
 			if (!array_key_exists('the_value',$row)) $row['the_value']='1';
 			$GLOBALS['SITE_DB']->query_insert('gsp',$row);
 		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'group_page_access');
 		foreach ($rows as $row)
 		{
@@ -1789,6 +1990,7 @@ class Hook_ocp_merge
 			$GLOBALS['SITE_DB']->query_delete('group_page_access',$row,'',1);
 			$GLOBALS['SITE_DB']->query_insert('group_page_access',$row);
 		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'group_zone_access');
 		foreach ($rows as $row)
 		{
@@ -1797,12 +1999,14 @@ class Hook_ocp_merge
 			$GLOBALS['SITE_DB']->query_delete('group_zone_access',$row,'',1);
 			$GLOBALS['SITE_DB']->query_insert('group_zone_access',$row);
 		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'https_pages');
 		foreach ($rows as $row)
 		{
 			$GLOBALS['SITE_DB']->query_delete('https_pages',$row);
 			$GLOBALS['SITE_DB']->query_insert('https_pages',$row);
 		}
+
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'group_category_access');
 		foreach ($rows as $row)
 		{
@@ -1859,6 +2063,149 @@ class Hook_ocp_merge
 			}
 			$GLOBALS['SITE_DB']->query_delete('group_category_access',$row,'',1);
 			$GLOBALS['SITE_DB']->query_insert('group_category_access',$row);
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'member_zone_access',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+			if (is_null($member_id)) continue;
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('member_zone_access','zone_name',array('member_id'=>$member_id,'zone_name'=>$row['zone_name']));
+			if (!is_null($test)) continue;
+
+			$GLOBALS['SITE_DB']->query_insert('member_zone_access',array('zone_name'=>$row['zone_name'],'member_id'=>$member_id,'active_until'=>$row['active_until']));
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'member_category_access',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+				if (is_null($member_id)) continue;
+				$test=$GLOBALS['SITE_DB']->query_value_null_ok('member_category_access','module_the_name',array('member_id'=>$member_id,'category_name'=>$row['category_name']));
+				if (!is_null($test)) continue;
+
+				$GLOBALS['SITE_DB']->query_insert('member_category_access',array('module_the_name'=>$row['module_the_name'],'category_name'=>$row['category_name'],'member_id'=>$member_id,'active_until'=>$row['active_until']));
+			}
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'member_page_access',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+				if (is_null($member_id)) continue;
+				$test=$GLOBALS['SITE_DB']->query_value_null_ok('member_page_access','page_name',array('member_id'=>$member_id,'page_name'=>$row['page_name']));
+				if (!is_null($test)) continue;
+				$zone_name=$row['zone_name'];
+				$page_name=$row['page_name'];
+
+				$GLOBALS['SITE_DB']->query_insert('member_page_access',array('page_name'=>$page_name,'zone_name'=>$zone_name,'member_id'=>$member_id,'active_until'=>$row['active_until']));
+			}
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'msp',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+				if (is_null($member_id)) continue;
+				if (is_numeric($row['category_name']))
+				{
+					$import_type=$row['module_the_name'];
+					$is_str=false;
+					switch ($import_type)
+					{
+						case 'galleries':
+							$import_type='gallery';
+							$str=true;
+							break;
+						case 'downloads':
+							$import_type='download_category';
+							break;
+						case 'calendar':
+							$import_type='event_type';
+							break;
+						case 'catalogues_catalogue':
+							$import_type='catalogue';
+							$str=true;
+							break;
+						case 'catalogues_category':
+							$import_type='catalogue_category';
+							break;
+						case 'forums':
+							$import_type='forum';
+							break;
+						case 'topics':
+							$import_type='topic';
+							break;
+						case 'cedi_page':
+							$import_type='cedi_page';
+							break;
+						case 'award':
+							$import_type='award_type';
+							break;
+						case 'news':
+							$import_type='news_category';
+							break;
+						case 'tickets':
+							$import_type='ticket_type';
+							break;
+					}
+					if (!$str)
+					{
+						$id_new=import_id_remap_get($import_type,$row['category_name'],true);
+						if (is_null($id_new)) continue;
+						$row['category_name']=strval($id_new);
+					}
+				}
+				$row['member_id']=$member_id;
+				$GLOBALS['SITE_DB']->query_delete('msp',$row);
+				$GLOBALS['SITE_DB']->query_insert('msp',$row);
+			}
+		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_notifications($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'notifications_enabled',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				$member_id=import_id_remap_get('member',strval($row['l_member_id']));
+				if (is_null($member_id)) continue;
+				$test=$GLOBALS['SITE_DB']->query_value_null_ok('notifications_enabled','id',array('l_member_id'=>$member_id,'l_notification_code'=>$row['l_notification_code']));
+				if (!is_null($test)) continue;
+				unset($row['id']);
+				$row['l_member_id']=strval($member_id);
+
+				$GLOBALS['SITE_DB']->query_insert('notifications_enabled',$row);
+			}
+		}
+
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'notification_lockdown',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				$test=$GLOBALS['SITE_DB']->query_value_null_ok('notification_lockdown','l_notification_code',array('l_notification_code'=>$row['l_notification_code']));
+				if (!is_null($test)) continue;
+				unset($row['id']);
+
+				$GLOBALS['SITE_DB']->query_insert('notification_lockdown',$row);
+			}
 		}
 	}
 
@@ -1992,6 +2339,30 @@ class Hook_ocp_merge
 			if (is_null($row['i_member_id'])) continue;
 			$GLOBALS['SITE_DB']->query_insert('f_member_known_login_ips',$row);
 		}
+
+		// Group member timeouts
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_group_member_timeouts');
+		foreach ($rows as $row)
+		{
+			$member_id=import_id_remap_get('member',strval($row['member_id']));
+			if (is_null($member_id)) continue;
+			$group_id=import_id_remap_get('group',strval($row['group_id']));
+			if (is_null($group_id)) continue;
+			$GLOBALS['SITE_DB']->query_insert('f_group_member_timeouts',array('member_id'=>$member_id,'group_id'=>$group_id,'timeout'=>$row['timeout']));
+		}
+
+		// Invites
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_invites ORDER BY id',NULL,NULL,true);
+		if (!is_null($rows))
+		{
+			foreach ($rows as $row)
+			{
+				$i_inviter=import_id_remap_get('member',strval($row['i_inviter']),true);
+				if (is_null($i_inviter)) continue;
+
+				$GLOBALS['SITE_DB']->query_insert('f_invites',array('i_inviter'=>$i_inviter,'i_email_address'=>$row['i_email_address'],'i_time'=>$row['i_time'],'i_taken'=>$row['i_taken']),false,true);
+			}
+		}
 	}
 
 	/**
@@ -2034,6 +2405,31 @@ class Hook_ocp_merge
 			}
 
 			import_id_remap_put('cpf',strval($row['id']),$id_new);
+		}
+
+		// import member cpf_perms
+		$this->_import_f_member_cpf_perms($db,$table_prefix);
+	}
+
+	/**
+	 * Import cpf premissions.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 */
+	function _import_f_member_cpf_perms($db,$table_prefix)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_member_cpf_perms',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$member_id=import_id_remap_get('member',strval($row['member_id']),true);
+			if (is_null($member_id)) continue;
+			$field_id=import_id_remap_get('cpf',strval($row['field_id']),true);
+			if (is_null($field_id)) continue;
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('f_member_cpf_perms','member_id',array('member_id'=>$member_id,'field_id'=>$field_id));
+			if (is_null($test)) continue;
+			$GLOBALS['SITE_DB']->query_insert('f_member_cpf_perms',array('member_id'=>$member_id,'field_id'=>$field_id,'guest_view'=>$row['guest_view'],'member_view'=>$row['member_view'],'friend_view'=>$row['friend_view'],'group_view'=>$row['group_view']));
 		}
 	}
 
@@ -2124,6 +2520,8 @@ class Hook_ocp_merge
 			if (is_null($parent_id)) $parent_id=db_get_first_id();
 			$GLOBALS['FORUM_DB']->query_update('f_forums',array('f_parent_forum'=>$parent_id),array('id'=>import_id_remap_get('forum',strval($row['id']))),'',1);
 		}
+
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'forum','forum');
 
 		// Intros
 		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_forum_intro_ip');
@@ -2220,6 +2618,8 @@ class Hook_ocp_merge
 			$GLOBALS['FORUM_DB']->query_delete('f_read_logs',$row,'',1);
 			$GLOBALS['FORUM_DB']->query_insert('f_read_logs',$row);
 		}
+
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'topic','topic');
 	}
 
 	/**
@@ -2241,7 +2641,6 @@ class Hook_ocp_merge
 		do
 		{
 			$rows=$db->query('SELECT * FROM '.$table_prefix.'f_posts ORDER BY id',200,$row_start);
-
 			foreach ($rows as $row)
 			{
 				if (import_check_if_imported('post',strval($row['id']))) continue;
@@ -2279,6 +2678,9 @@ class Hook_ocp_merge
 			$row_start+=200;
 		}
 		while (count($rows)>0);
+
+		$this->_import_review_supplement($db,$table_prefix,'post','post');
+		$this->_import_catalogue_entry_linkage($db,$table_prefix,'post','post');
 	}
 
 	/**
@@ -2468,6 +2870,235 @@ class Hook_ocp_merge
 			if (is_null($changed_usergroup_from)) $changed_usergroup_from=NULL;
 
 			ocf_make_warning($member_id,$row['w_explanation'],$by,$row['w_time'],array_key_exists('w_is_warning',$row)?$row['w_is_warning']:1,$silence_from_topic,$silence_from_forum,array_key_exists('w_probation',$row)?$row['w_probation']:0,array_key_exists('w_banned_ip',$row)?$row['w_banned_ip']:'',array_key_exists('w_charged_points',$row)?$row['w_charged_points']:0,array_key_exists('w_banned_member',$row)?$row['w_banned_member']:0,$changed_usergroup_from);
+		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_ocf_saved_warnings($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'f_saved_warnings',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('f_saved_warnings','s_title',array('s_title'=>$row['s_title']));
+			if (!is_null($test)) continue;
+
+			$GLOBALS['SITE_DB']->query_insert('f_saved_warnings',array('s_title'=>$row['s_title'],'s_explanation'=>$row['s_explanation'],'s_message'=>$row['s_message']));
+		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_match_key_messages($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'match_key_messages',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$test=$GLOBALS['SITE_DB']->query_value_null_ok('match_key_messages','id',array('k_match_key'=>$row['k_match_key']));
+			if (!is_null($test)) continue;
+
+			$row['k_message']=$this->get_lang_string($db,$row['k_message']);
+
+			$GLOBALS['SITE_DB']->query_insert('match_key_messages',$row);
+		}
+	}
+
+	/**
+	 * Standard import function.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_menu_items($db,$table_prefix,$file_base)
+	{
+		$parent_rows=$db->query('SELECT * FROM '.get_table_prefix().'menu_items');
+		if (is_null($parent_rows)) return;
+		foreach ($parent_rows as $row)
+		{
+			$id_old=strval($row['id']);
+			unset($row['id']);
+
+			$row['i_parent']=is_null($row['i_parent'])?NULL:(-$row['i_parent']);
+
+			$row['i_caption']=$this->get_lang_string($db,$row['i_caption']);
+			$row['i_caption_long']=$this->get_lang_string($db,$row['i_caption_long']);
+
+			$id_new=$GLOBALS['SITE_DB']->query_insert('menu_items',$row,true);
+			import_id_remap_put('menu_item',$id_old,$id_new);
+		}
+
+		$child_rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'menu_items WHERE i_parent<0');
+		foreach ($child_rows as $row)
+		{
+			$row['i_parent']=import_id_remap_get('menu_item',strval(-$row['i_parent']),true);
+			$GLOBALS['SITE_DB']->query_update('menu_items',$row,array('id'=>$row['id']),'',1);
+		}
+	}
+
+	/**
+	 * Imports custom products.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 */
+	function _import_pstore_customs($db,$table_prefix)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'pstore_customs',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			unset($row['id']);
+
+			$row['c_description']=$this->get_lang_string($db,$row['c_description']);
+
+			$GLOBALS['SITE_DB']->query_insert('pstore_customs',$row);
+		}
+	}
+
+	/**
+	 * Imports product store permissions.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 */
+	function _import_pstore_permissions($db,$table_prefix)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'pstore_permissions',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			unset($row['id']);
+
+			$row['p_description']=$this->get_lang_string($db,$row['p_description']);
+
+			$GLOBALS['SITE_DB']->query_insert('pstore_permissions',$row);
+		}
+	}
+
+	/**
+	 * Import saved searches.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_searches_saved($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'searches_saved',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$member_id=import_id_remap_get('member',strval($row['s_member_id']),true);
+			if (is_null($member_id)) continue;
+			unset($row['id']);
+			$row['s_member_id']=strval($member_id);
+
+			$GLOBALS['SITE_DB']->query_insert('searches_saved',$row);
+		}
+	}
+
+	/**
+	 * Imports site-watch-list.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_sitewatchlist($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'sitewatchlist',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			unset($row['id']);
+			$GLOBALS['SITE_DB']->query_insert('sitewatchlist',$row);
+		}
+	}
+
+	/**
+	 * Imports staff-links.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  PATH			The base directory we are importing from
+	 */
+	function import_stafflinks($db,$table_prefix,$file_base)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'stafflinks',NULL,NULL,true);
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			unset($row['id']);
+			$GLOBALS['SITE_DB']->query_insert('stafflinks',$row);
+		}
+	}
+
+	/**
+	 * Import reviews.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  ID_TEXT		The rating type.
+	 * @param  ?ID_TEXT		The import type to get remapping from (NULL: no remapping).
+	 */
+	function _import_review_supplement($db,$table_prefix,$rating_type,$import_type)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'review_supplement WHERE '.db_string_equal_to('r_rating_type',$rating_type));
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$rating_for_id=is_null($import_type)?$row['r_rating_for_id']:import_id_remap_get($import_type,@strval($row['r_rating_for_id']),true);
+			if (is_null($rating_for_id)) continue;
+
+			$r_post_id=import_id_remap_get('post',strval($row['r_post_id']),true);
+			if (is_null($r_post_id)) continue;
+			$r_topic_id=import_id_remap_get('topic',strval($row['r_topic_id']),true);
+			if (is_null($r_topic_id)) continue;
+			$row['r_post_id']=$r_post_id;
+			$row['r_topic_id']=$r_topic_id;
+			$row['r_rating_for_id']=$rating_for_id;
+
+			$GLOBALS['SITE_DB']->query_insert('review_supplement',$row);
+		}
+	}
+
+	/**
+	 * Import custom fields for a particular record.
+	 *
+	 * @param  object			The DB connection to import from
+	 * @param  string			The table prefix the target prefix is using
+	 * @param  ID_TEXT		The content type.
+	 * @param  ?ID_TEXT		The import type to get remapping from (NULL: no remapping).
+	 */
+	function _import_catalogue_entry_linkage($db,$table_prefix,$content_type,$import_type)
+	{
+		$rows=$db->query('SELECT * FROM '.$table_prefix.'catalogue_entry_linkage WHERE '.db_string_equal_to('content_type',$content_type));
+		if (is_null($rows)) return;
+		foreach ($rows as $row)
+		{
+			$catalogue_entry_id=import_id_remap_get('catalogue_entry',strval($row['catalogue_entry_id']),true);
+			if (is_null($catalogue_entry_id)) continue;
+
+			$content_id=is_null($import_type)?$row['content_id']:import_id_remap_get($import_type,@strval($row['content_id']),true);
+			if (is_null($content_id)) continue;
+
+			$row['catalogue_entry_id']=$catalogue_entry_id;
+			$row['content_id']=$content_id;
+
+			$GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',$row);
 		}
 	}
 

@@ -85,7 +85,11 @@ The 'ocp merge' importer cannot:
 Remember:
  - you must specify to import from an ocPortal database, not a forum database.
 
-The importer does not cover Comcode pages. However these are just .txt files ([tt]<zone>/pages/comcode_custom/<language>/<page>.txt[/tt]) that may be copied from one install to another.
+Other limitations:
+ - The importer does not cover Comcode pages fully, only their meta data. However these are just .txt files ([tt]<zone>/pages/comcode_custom/<language>/<page>.txt[/tt]) that may be copied from one install to another.
+ - Shopping orders aren't imported, make sure there are no outstanding orders at the point of importing.
+ - Due to a complex cylic-dependency, usergroup custom fields won't import
+ - Comcode ownership is not imported if multi-lang-content is on
 
 Please note that URL and page-link links will not be altered during the import, meaning it is likely they will need updating (because resource IDs change).
 
