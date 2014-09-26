@@ -490,15 +490,17 @@ function ocf_invite_to_pt($member_id,$topic_id)
  * @param  AUTO_LINK		ID of the topic
  * @param  MEMBER			Member getting the PT
  * @param  ?MEMBER		Member posting the PT (NULL: current member)
- * @param  ?mixed			Post language ID or post text (NULL: unknown, lookup from $post_id)
+ * @param  ?string		Post text (NULL: unknown, lookup from $post_id)
  * @param  boolean		Whether to also mark the topic as unread
  */
-function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$post=NULL,$mark_unread=false)
+function send_pt_notification($post_id,$subject,$topic_id,$to_id,$from_id=NULL,$post_comcode=NULL,$mark_unread=false)
 {
 	if (is_null($from_id)) $from_id=get_member();
 
-	$post_lang_id=is_integer($post)?$post:$GLOBALS['FORUM_DB']->query_select_value('f_posts','p_post',array('id'=>$post_id));
-	$post_comcode=get_translated_text((integer)$post_lang_id,$GLOBALS['FORUM_DB']);
+	if (is_null($post_comcode))
+	{
+		$post_comcode=get_translated_text($GLOBALS['FORUM_DB']->query_select_value('f_posts','p_post',array('id'=>$post_id)),$GLOBALS['FORUM_DB']);
+	}
 
 	require_code('notifications');
 	$msubject=do_lang('NEW_PRIVATE_TOPIC_SUBJECT',$subject,NULL,NULL,get_lang($to_id));
