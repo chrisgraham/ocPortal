@@ -34,13 +34,8 @@ function internalise_own_screen($screen_content,$refresh_time=NULL,$refresh_if_c
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_internalised_ajax_screen');
 
-<<<<<<< HEAD
 	$params='';
 	foreach ($_GET as $key=>$param)
-=======
-	$url=find_script('iframe').'?zone='.urlencode(get_zone_name()).'&utheme='.urlencode($GLOBALS['FORUM_DRIVER']->get_theme());
-	foreach (array_merge($_GET,$_POST) as $key=>$param)
->>>>>>> v9
 	{
 		if (!is_string($param)) continue;
 		if (($key=='ajax') || ($key=='zone') || ($key=='utheme')) continue;
