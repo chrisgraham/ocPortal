@@ -152,7 +152,6 @@ class xhtml_substr_test_set extends ocp_test_case
 		$expected='<a href="www.google.com">My</a>';
 		$this->assertTrue($after==$expected);
 	}
-
  	function testImage_3()
 	{
 		$before='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="'.get_base_url().'/themes/default/images/ocf_emoticons/cheeky.png" />afterfoo </div>';
@@ -160,4 +159,21 @@ class xhtml_substr_test_set extends ocp_test_case
 		$expected='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="'.get_base_url().'/themes/default/images/ocf_emoticons/cheeky.png" />aft</div>';
 		$this->assertTrue($after==$expected);
 	}
+
+ 	function testImage_4()
+	{
+		$before='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="http://192.168.0.251/ocportal/ocportalv10/thumb_nail.jpg" />afterfoo </div>';
+		$after=xhtml_substr($before,0,12,false,false,0.0);
+		$expected='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="http://192.168.0.251/ocportal/ocportalv10/thumb_nail.jpg" /></div>';
+		$this->assertTrue($after==$expected);
+	}
+
+	function testWordss()
+	{
+		$before='<div>foobar</div>';
+		$after=xhtml_substr($before,0,3,false,false,1.5);
+		$expected='<div>foobar</div>';
+		$this->assertTrue($after==$expected);
+	}
+
 }

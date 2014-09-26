@@ -1964,7 +1964,7 @@ function big_installation_common()
 	}
 
 	require_code('database_action');
-   require_code('menus2');
+    require_code('menus2');
 	require_code('config');
 	require_code('zones2');
 }
