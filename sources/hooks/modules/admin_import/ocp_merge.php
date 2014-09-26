@@ -114,7 +114,7 @@ class Hook_ocp_merge
 			'comcode_pages'=>array('ocf_members','catalogues'),
 			'match_key_messages'=>array(),
 			'menu_items'=>array(),
-			'ocf_custom_profile_fields'=>array('ocf_groups','ocf_members'),
+			'ocf_custom_profile_fields'=>array('ocf_groups'),
 			'ocf_multi_moderations'=>array('ocf_forums'),
 			//'ocf_groups'=>array('catalogues'), Cyclic dependency, so we won't do this one
 			'ocf_members'=>array('ocf_groups','ocf_custom_profile_fields','attachments'),
