@@ -1426,10 +1426,10 @@ class Hook_ocp_merge
 		{
 			if (is_null($row['taskisdone']))
 			{
-				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'the_page'=>$row['the_page'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery']));
+				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery']));
 			} else
 			{
-				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'the_page'=>$row['the_page'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery'],'taskisdone'=>$row['taskisdone']));
+				$GLOBALS['SITE_DB']->query_insert('customtasks',array('tasktitle'=>$row['tasktitle'],'datetimeadded'=>$row['datetimeadded'],'recurinterval'=>$row['recurinterval'],'recurevery'=>$row['recurevery'],'taskisdone'=>$row['taskisdone']));
 			}
 		}
 	}
