@@ -3120,47 +3120,20 @@ class Hook_ocp_merge
 		{
 			$id_old=strval($row['id']);
 			unset($row['id']);
-
 			$row['i_parent']=is_null($row['i_parent'])?NULL:(-$row['i_parent']);
-
 			$row['i_caption']=$this->get_lang_string($db,$row['i_caption']);
 			$row['i_caption_long']=$this->get_lang_string($db,$row['i_caption_long']);
-
 			$id_new=$GLOBALS['SITE_DB']->query_insert('menu_items',$row,true);
 			import_id_remap_put('menu_item',$id_old,$id_new);
 		}
-<<<<<<< HEAD
 		
-		$child_rows=$db->_query('SELECT * FROM '.get_table_prefix().'menu_items'.' WHERE i_parent IS NOT NULL');
-		if (is_null($child_rows)) return;
-		foreach($child_rows as $row)
-		{
-			unset($row['id']);
-			$i_parent=import_id_remap_get('menu_item',strval($row['i_parent']),true);
-			if (is_null($i_parent))
-			{
-				$parent_row=$db->query_select_value_if_there('menu_items','*',array('id'=>$row['parent_id']));
-				$id_old=strval($parent_row['id']);
-				unset($parent_row['id']);
-				$id_new=$GLOBALS['SITE_DB']->query_insert('menu_items',$parent_row,true);
-				import_id_remap_put('menu_item',$id_old,$id_new);
-				$i_parent=$id_new;
-			}
-			$row['i_parent']=$i_parent;
-			$row['i_caption_long__source_user']=import_id_remap_get('member',strval($row['i_caption_long__source_user']),true);
-
-			$GLOBALS['SITE_DB']->query_insert('menu_items',$row);
-		}
-	}
-=======
->>>>>>> b536e18a87db3be9e8599086b87ac48f23dfd81d
-
 		$child_rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'menu_items WHERE i_parent<0');
 		foreach ($child_rows as $row)
 		{
 			$row['i_parent']=import_id_remap_get('menu_item',strval(-$row['i_parent']),true);
 			$GLOBALS['SITE_DB']->query_update('menu_items',$row,array('id'=>$row['id']),'',1);
 		}
+
 	}
 
 	/**
