@@ -305,7 +305,7 @@ class OCP_Topic
 	 *
 	 * @param  ?boolean		Whether to show in reverse date order (affects default search order only) (NULL: read config)
 	 * @return ID_TEXT		Sort order
-    * @set relevance rating newest oldest
+	* @set relevance rating newest oldest
 	 */
 	function _get_sort_order($reverse)
 	{
@@ -983,8 +983,7 @@ class OCP_Topic
 				}
 			}
 
-			// Render
-			$sequence->attach(do_template('POST',array(
+			$post_tempcode=do_template('POST',array(
 				'_GUID'=>'eb7df038959885414e32f58e9f0f9f39',
 				'INDIVIDUAL_REVIEW_RATINGS'=>$individual_review_ratings,
 				'HIGHLIGHT'=>$highlight,
@@ -1011,10 +1010,77 @@ class OCP_Topic
 				'IS_SPACER_POST'=>$is_spacer_post,
 				'NUM_TO_SHOW_LIMIT'=>strval($num_to_show_limit),
 				'IS_THREADED'=>$this->is_threaded,
-			)));
+			));
+
+			// If threaded mode, first post, have replies and post map enabled
+			if ($this->is_threaded && ($this->first_post_id===$post['id']) && (count($rendered)>1) && (get_option('is_on_post_map')=='1')) {
+				$this->_set_level_has_adjacent_sibling($rendered);
+
+				$post_tempcode->attach(do_template('OCF_POST_MAP', array(
+					'_GUID'=>'9fe6a70073284f7d9028c2425948e13a',
+					'ITEMS'=>$this->_render_post_map_items(array_slice($rendered, 1), $post['title']), // Slice off first post because we're listing replies
+				)));
+			}
+
+			// Render
+			$sequence->attach($post_tempcode);
 		}
 
 		return $sequence;
+	}
+
+	/**
+	 * Sets a level_has_adjacent_sibling property on posts, which is a single-dimensional array
+	 * with a boolean value for every parent post and the post itself containing whether it has an adjacent sibling
+	 *
+	 * @param array An array of posts
+	 * @param array For internal use only
+	 */
+	function _set_level_has_adjacent_sibling(array &$posts, array $level_has_adjacent_sibling=array())
+	{
+		foreach ($posts as $i=>&$post) {
+			$post['level_has_adjacent_sibling']=$level_has_adjacent_sibling;
+			$post['level_has_adjacent_sibling'][]=array_key_exists($i + 1, $posts);
+
+			$this->_set_level_has_adjacent_sibling($post['children'][0], $post['level_has_adjacent_sibling']);
+		}
+	}
+
+	/**
+	 * Renders the post map items to a tempcode object
+	 *
+	 * @param array An array of posts
+	 * @param string Topic title
+	 * @param ?ocp_tempcode A tempcode object to attach all post map items to (NULL: instantiate a new one)
+	 * @return ocp_tempcode
+	 */
+	function _render_post_map_items(array $posts, $title, $tempcode=null)
+	{
+		if (is_null($tempcode)) $tempcode = new ocp_tempcode();
+
+		foreach ($posts as $post) {
+			$datetime=get_timezoned_date($post['date']);
+			$poster_url=is_guest($post['member'])?new ocp_tempcode():$GLOBALS['FORUM_DRIVER']->member_profile_url($post['member'],false,true);
+			$poster_name=array_key_exists('username',$post)?$post['username']:$GLOBALS['FORUM_DRIVER']->get_username($post['member']);
+			if (is_null($poster_name)) $poster_name=do_lang('UNKNOWN');
+
+			$tempcode->attach(do_template('OCF_POST_MAP_ITEM', array(
+				'_GUID'=>'763f031c2c8d4af986ff38bc51c8f6f4',
+				'TITLE'=>$title,
+				'URL'=>'#post_'.strval($post['id']),
+				'POSTER_ID'=>strval($post['p_poster']),
+				'POSTER_IS_GUEST'=>is_guest($post['member']),
+				'POSTER_URL'=>$poster_url,
+				'POSTER_NAME'=>$poster_name,
+				'LEVEL_HAS_ADJACENT_SIBLING'=>$post['level_has_adjacent_sibling'],
+				'POST_LEVEL'=>strval(count($post['level_has_adjacent_sibling'])-1), // This post's level is the last one
+				'TIME'=>$datetime,
+			)));
+
+			$this->_render_post_map_items($post['children'][0], $title, $tempcode);
+		}
+
+		return $tempcode;
 	}
 
 	/**
