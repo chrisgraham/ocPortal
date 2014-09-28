@@ -97,7 +97,7 @@ function ecommerce_get_currency_symbol()
  * @param  SHORT_TEXT	The amount
  * @param  ?integer		The length (NULL: not a subscription)
  * @param  ID_TEXT		The length units
- * @return tempcode		The form fields
+ * @return array			A pair: The form fields, Hidden fields
  */
 function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$length,$length_units)
 {
@@ -124,8 +124,10 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	));
 
 	require_code('form_templates');
+
 	$fields=new ocp_tempcode();
-	$fields->attach(form_input_hidden('trans_id',$trans_id));
+	$hidden=new ocp_tempcode();
+
 	$fields->attach(form_input_line(do_lang_tempcode('CARDHOLDER_NAME'),do_lang_tempcode('DESCRIPTION_CARDHOLDER_NAME'),'name',ecommerce_test_mode()?$GLOBALS['FORUM_DRIVER']->get_username(get_member()):get_ocp_cpf('payment_cardholder_name'),true));
 	$fields->attach(form_input_list(do_lang_tempcode('CARD_TYPE'),'','card_type',$object->nice_get_card_types(ecommerce_test_mode()?'Visa':get_ocp_cpf('payment_type'))));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_NUMBER'),do_lang_tempcode('DESCRIPTION_CARD_NUMBER'),'card_number',ecommerce_test_mode()?'4444333322221111':get_ocp_cpf('payment_card_number'),true));
@@ -134,7 +136,7 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	$fields->attach(form_input_integer(do_lang_tempcode('CARD_ISSUE_NUMBER'),do_lang_tempcode('DESCRIPTION_CARD_ISSUE_NUMBER'),'issue_number',intval(get_ocp_cpf('payment_card_issue_number')),false));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_CV2'),do_lang_tempcode('DESCRIPTION_CARD_CV2'),'cv2',ecommerce_test_mode()?'123':get_ocp_cpf('payment_card_cv2'),true));
 
-	//Shipping address fields
+	// Shipping address fields
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_firstname'),'','first_name',get_ocp_cpf('firstname'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_lastname'),'','last_name',get_ocp_cpf('last_name'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_building_name_or_number'),'','address1',get_ocp_cpf('building_name_or_number'),true));
@@ -143,10 +145,12 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_post_code'),'','zip',get_ocp_cpf('post_code'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_country'),'','country',get_ocp_cpf('country'),true));
 
-	//Set purchase id as hidden form field to get back after transaction
-	$fields->attach(form_input_hidden('customfld1',$purchase_id));
+	$hidden->attach(form_input_hidden('trans_id',$trans_id));
 
-	return $fields;
+	// Set purchase ID as hidden form field to get back after transaction
+	$hidden->attach(form_input_hidden('customfld1',$purchase_id));
+
+	return array($fields,$hidden);
 }
 
 /**

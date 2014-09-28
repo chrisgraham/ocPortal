@@ -52,7 +52,7 @@ class Hook_Preview_download
 		if ($licence==-1) $licence=NULL;
 
 		$description=post_param('description','');
-		$author=post_param('author');
+		$author=post_param('author',get_site_name());
 		$comments=post_param('comments','');
 		$default_pic=post_param_integer('default_pic',0);
 		$allow_rating=post_param_integer('allow_rating',0);
