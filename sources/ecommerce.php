@@ -97,13 +97,15 @@ function ecommerce_get_currency_symbol()
  * @param  SHORT_TEXT	The amount
  * @param  ?integer		The length (NULL: not a subscription)
  * @param  ID_TEXT		The length units
+ * @param  ?ID_TEXT		The service the payment will go via via (NULL: autodetect).
  * @return tempcode		The form fields
  */
-function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$length,$length_units)
+function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$length,$length_units,$via=NULL)
 {
+	if (is_null($via)) $via=get_option('payment_gateway');
+
 	if (is_null($trans_id))
 	{
-		$via=get_option('payment_gateway');
 		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
 		$object=object_factory('Hook_'.$via);
 		if (!method_exists($object,'do_transaction')) warn_exit(do_lang_tempcode('LOCAL_PAYMENT_NOT_SUPPORTED',escape_html($via)));
@@ -403,7 +405,12 @@ function handle_transaction_script()
 
 	list($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period)=$object->handle_transaction();
 
-	handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period,$via);
+	$type_code=handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period,$via);
+
+	if (method_exists($object,'show_payment_response'))
+	{
+		echo $object->show_payment_response($product,$purchase_id);
+	}
 
 	return $purchase_id;
 }
@@ -424,6 +431,7 @@ function handle_transaction_script()
  * @param  SHORT_TEXT	The ID of the parent transaction
  * @param  string			The subscription period (blank: N/A / unknown: trust is correct on the gateway)
  * @param  ID_TEXT		The payment gateway
+ * @return ID_TEXT		The product purchased
  */
 function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period,$via)
 {
@@ -597,6 +605,8 @@ function handle_confirmed_transaction($purchase_id,$item_name,$payment_status,$r
 			}
 		}
 	}
+
+	return $type_code;
 }
 
 /**

@@ -384,7 +384,6 @@ class Hook_addon_registry_ecommerce
 				'PD_ADDRESS'=>lorem_phrase(),
 				'PD_EMAIL'=>lorem_word(),
 				'PD_NUMBER'=>placeholder_number(),
-				'PAYMENT_CANCEL_DTR'=>lorem_word(),
 			)),NULL,'',true)
 		);
 	}

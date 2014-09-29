@@ -22,16 +22,13 @@ class Hook_worldpay
 {
 	// Requires:
 	//  the "Payment Response URL" set in control panel should be set to "http://<WPDISPLAY ITEM=MC_callback>"
-	//  the "Payment Response enabled?" and "Enable Recurring Payment Response" and "Enable the Shopper Response" and "Suspension of Payment Response" should all be ticked (checked)
+	//  the "Payment Response enabled?" and "Enable Recurring Payment Response" and "Enable the Shopper Response" should all be ticked (checked)
 	//  the "Payment Response password" is the ocPortal "Callback password" option; it may be blank
 	//  the "Installation ID" (a number given to you) is the ocPortal "Gateway username" and also "Testing mode gateway username" (it's all the same installation ID)
 	//  the "MD5 secret for transactions" is the ocPortal "Gateway digest code" option; it may be blank
 	//  the account must be set as 'live' in control panel once testing is done
-	//  the "Shopper Redirect URL" should be set to "http://<baseurl>/site/index.php?page=purchase&type=finish"
-	//   (typically -- but page=shopping if you use the shopping module, or nothing at all and create custom payment response pages if you use multiple eCommerce types)
-	//   (although actually "Shopper Redirect URL" does not seem to work at all http://stackoverflow.com/questions/8232607/how-do-i-create-returning-page-setting-with-worldpay - so actually you should create custom payment response pages)
-	//  WorldPay-side custom payment response pages will probably want customing (http://www.worldpay.com/support/kb/bg/customisingadvanced/custa.html)
-	//  Logos, refund policies, and contact details [e-mail, phone, postal], may need coding into the templates
+	//  the "Shopper Redirect URL" should be left blank - arbitrary URLs are not supported, and ocPortal automatically injects a redirect response into Payment Response URL
+	//  Logos, refund policies, and contact details [e-mail, phone, postal], may need coding into the templates (Worldpay have policies and checks). ECOM_LOGOS_WORLDPAY.tpl is included into the payment process automatically and does much of this
 	//  FuturePay must be enabled for subscriptions to work (contact WorldPay about it)
 
 	/**
@@ -280,18 +277,27 @@ class Hook_worldpay
 			dispatch_notification('payment_received',NULL,do_lang('PAYMENT_RECEIVED_SUBJECT',$txn_id,NULL,NULL,get_lang($member_id)),do_lang('PAYMENT_RECEIVED_BODY',float_format(floatval($mc_gross)),$mc_currency,get_site_name(),get_lang($member_id)),array($member_id),A_FROM_SYSTEM_PRIVILEGED);
 		}
 
-		if ($success) $_url=build_url(array('page'=>'purchase','type'=>'finish','type_code'=>get_param('type_code',NULL),'message'=>'<WPDISPLAY ITEM=banner>'),get_module_zone('purchase'));
-		else $_url=build_url(array('page'=>'purchase','type'=>'finish','cancel'=>1,'message'=>do_lang_tempcode('DECLINED_MESSAGE',$message)),get_module_zone('purchase'));
-		$url=$_url->evaluate();
-
-		echo http_download_file($url,NULL,false); // WorldPay may or may not show the result of this, depending on if it is 'secure'. It does not actually redirect to the proper target URL like the config implies it should.
-
 		if (addon_installed('shopping'))
 		{
 			$this->store_shipping_address($purchase_id);
 		}
 
 		return array($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,'','');
+	}
+
+	/**
+	 * Show a payment response after IPN runs (for hooks that handle redirects in this way).
+	 *
+	 * @param  ID_TEXT		Product.
+	 * @param  ID_TEXT		Purchase ID.
+	 * @return string			The response.
+	 */
+	function show_payment_response($product,$purchase_id)
+	{
+		$txn_id=post_param('transId');
+		$message=do_lang('TRANSACTION_ID_WRITTEN',$txn_id);
+		$url=build_url(array('page'=>'purchase','type'=>'finish','message'=>$message,'product'=>$product,'purchase_id'=>$purchase_id,'from'=>'worldpay'),get_module_zone('purchase'));
+		return '<meta http-equiv="refresh" content="0;url='.escape_html($url->evaluate()).'" />';
 	}
 
 	/**

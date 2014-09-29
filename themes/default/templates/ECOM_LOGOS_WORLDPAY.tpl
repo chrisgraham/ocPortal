@@ -1,10 +1,6 @@
-<script src="https://www.worldpay.com/cgenerator/cgenerator.php?instId={INST_ID*}"></script>
+<script type="text/javascript" src="https://secure.worldpay.com/wcc/logo?instId={INST_ID*}"></script>
 
 <!--
-
-<p>
-	{PAYMENT_CANCEL_DTR}</p>
-</p>
 
 <address>
 {PD_ADDRESS}

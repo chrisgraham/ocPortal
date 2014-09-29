@@ -1,3 +1,7 @@
+{+START,IF_PASSED,TEXT}
+	{$PARAGRAPH,{TEXT}}
+{+END}
+
 <p>{!TRANSACT_INFO}</p>
 
 <div class="wide_table_wrap"><table class="map_table form_table wide_table">

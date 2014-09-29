@@ -95,6 +95,12 @@ If you edit a post, you get to choose whether it shows as edited or not. The def
 
 Staff can view full post history -- edits aren't secret from staff.
 
+[title="2"]Deleting posts[/title]
+
+If somehow a corrupt post makes it through and obscures the delete button after it, you can manually delete (or edit) it from the edit URL:
+[tt]http://baseurl/forum/topics/edit_post/postid.htm[/tt]
+You can find the post ID from above (before) the post in the topicview.
+
 [concepts
  1_key="discussion forums"   1_value="A system for discussing issues; topics contain posts, and topics are placed within forums which themselves are structured"
  2_key="forum"               2_value="A place for the archiving and posting of topics (discussions)"

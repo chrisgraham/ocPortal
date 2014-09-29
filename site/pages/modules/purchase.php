@@ -304,7 +304,7 @@ class Module_purchase
 				// Ah, not even a message to show - jump ahead
 				return redirect_screen($this->title,$url,'');
 			}
-			$text->attach(paragraph($object->get_message($type_code)));
+			$text->attach($object->get_message($type_code));
 		}
 
 		return $this->_wrap(do_template('PURCHASE_WIZARD_STAGE_MESSAGE',array('_GUID'=>'8667b6b544c4cea645a52bb4d087f816','TITLE'=>'','TEXT'=>$text)),$this->title,$url);
@@ -370,6 +370,10 @@ class Module_purchase
 		$type_code=get_param('type_code');
 		$object=find_product($type_code);
 
+		$via=get_param('via',get_option('payment_gateway'));
+		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
+		$purchase_object=object_factory('Hook_'.$via);
+
 		$test=$this->_check_availability($type_code);
 		if (!is_null($test)) return $test;
 
@@ -400,7 +404,7 @@ class Module_purchase
 					's_time'=>time(),
 					's_auto_fund_source'=>'',
 					's_auto_fund_key'=>'',
-					's_via'=>get_option('payment_gateway'),
+					's_via'=>$via,
 					's_length'=>$temp[$type_code][3]['length'],
 					's_length_units'=>$temp[$type_code][3]['length_units'],
 				),true));
@@ -439,17 +443,30 @@ class Module_purchase
 
 		if (!array_key_exists(4,$temp[$type_code])) $item_name=do_lang('CUSTOM_PRODUCT_'.$type_code,NULL,NULL,NULL,get_site_default_lang());
 
+		$text=mixed();
+		if (get_param_integer('include_message',0)==1)
+		{
+			$text=new ocp_tempcode();
+			if (method_exists($object,'product_info'))
+			{
+				$text->attach($object->product_info(get_param_integer('product'),$title));
+			} elseif (method_exists($object,'get_message'))
+			{
+				$text->attach($object->get_message($product));
+			}
+		}
+
 		if (!perform_local_payment()) // Pass through to the gateway's HTTP server
 		{
 			if ($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)
 			{
-				$transaction_button=make_subscription_button($type_code,$item_name,$purchase_id,floatval($price),$length,$length_units,get_option('currency'));
+				$transaction_button=make_subscription_button($type_code,$item_name,$purchase_id,floatval($price),$length,$length_units,get_option('currency'),$via);
 			} else
 			{
-				$transaction_button=make_transaction_button($type_code,$item_name,$purchase_id,floatval($price),get_option('currency'));
+				$transaction_button=make_transaction_button($type_code,$item_name,$purchase_id,floatval($price),get_option('currency'),$via);
 			}
 			$tpl=($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?'PURCHASE_WIZARD_STAGE_SUBSCRIBE':'PURCHASE_WIZARD_STAGE_PAY';
-			$logos=method_exists($object,'get_logos')?$object->get_logos():new ocp_tempcode();
+			$logos=method_exists($purchase_object,'get_logos')?$purchase_object->get_logos():new ocp_tempcode();
 			$result=do_template($tpl,array(
 				'LOGOS'=>$logos,
 				'TRANSACTION_BUTTON'=>$transaction_button,
@@ -460,6 +477,7 @@ class Module_purchase
 				'LENGTH_UNITS'=>$length_units,
 				'PURCHASE_ID'=>$purchase_id,
 				'PRICE'=>float_to_raw_string(floatval($price)),
+				'TEXT'=>$text,
 			));
 		} else // Handle the transaction internally
 		{
@@ -468,7 +486,7 @@ class Module_purchase
 				warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 			}
 
-			$fields=get_transaction_form_fields(NULL,$purchase_id,$item_name,float_to_raw_string($price),($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?intval($length):NULL,($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?$length_units:'');
+			$fields=get_transaction_form_fields(NULL,$purchase_id,$item_name,float_to_raw_string($price),($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?intval($length):NULL,($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?$length_units:'',$via);
 
 			$finish_url=build_url(array('page'=>'_SELF','type'=>'finish'),'_SELF');
 
@@ -534,7 +552,7 @@ class Module_purchase
 			$type_code=get_param('type_code','');
 			if ($type_code!='')
 			{
-				if (count($_POST)!=0)
+				if (count($_POST)!=0) // Alternative to IPN, *if* posted fields sent here
 				{
 					handle_transaction_script();
 				}
@@ -545,7 +563,7 @@ class Module_purchase
 
 				if (method_exists($product_object,'get_finish_url'))
 				{
-					return redirect_screen($this->title,$product_object->get_finish_url($type_code),$message);
+					return redirect_screen($this->title,$product_object->get_finish_url($type_code,$message,get_param_integer('purchase_id',NULL)),$message);
 				}
 			}
 

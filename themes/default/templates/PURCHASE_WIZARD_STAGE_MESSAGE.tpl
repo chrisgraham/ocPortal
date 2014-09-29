@@ -1,2 +1,2 @@
-{TEXT}
+{$PARAGRAPH,{TEXT}}
 
