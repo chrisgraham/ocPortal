@@ -418,6 +418,9 @@ As of version 9, it is all in the [tt]GLOBAL_HTML_WRAP.tpl[/tt] template.
 [b]How do I edit ocPortal in an HTML editor?[/b]
 It is not possible to do this, as ocPortal screens are constructed by an amalgamation of many template files. It is possible, however, to construct HTML pages, using an HTML editor. HTML pages can be placed into ocPortal zones much like a Comcode page can: however, we would advise you use Comcode pages instead.
 
+[b]How do I prevent users from modifying CMS content?[/b]
+Often webmasters are surprised that by default users allowed into the CMS zone. This is because the default privileges allow submission of content, but subject to validation -- a good feature on community sites. To deny access to the whole CMS zone use the Permission Tree Editor (under Admin Zone > Security).
+
 [b]How can I include Flash?[/b]
 You may insert it using regular HTML via the 'html' Comcode tag, or you may use our 'flash' Comcode tag.
 

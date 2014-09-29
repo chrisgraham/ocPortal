@@ -70,6 +70,7 @@ class Block_main_activities
 		));
 
 		$GLOBALS['SITE_DB']->create_index('activities','a_member_id',array('a_member_id'));
+		$GLOBALS['SITE_DB']->create_index('activities','a_also_involving',array('a_also_involving'));
 		$GLOBALS['SITE_DB']->create_index('activities','a_time',array('a_time'));
 		$GLOBALS['SITE_DB']->create_index('activities','a_filtered_ordered',array('a_member_id','a_time'));
 

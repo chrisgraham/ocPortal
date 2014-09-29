@@ -4,11 +4,11 @@ You can leave us private feedback here. We don't normally reply directly to feed
 
 [semihtml]
 {+START,IF,{$NOT,{$ADDON_INSTALLED,staff_messaging}}}
-	{+START,IF,{$NOT,{$ADDON_INSTALLED,ocf_forum}}}
+	{+START,IF,{$NOT,{$HAS_FORUM}}}
 		[email]{$STAFF_ADDRESS}[/email]
 	{+END}
 
-	{+START,IF,{$ADDON_INSTALLED,ocf_forum}}
+	{+START,IF,{$HAS_FORUM}}
 		[block]main_feedback[/block]
 	{+END}
 {+END}
