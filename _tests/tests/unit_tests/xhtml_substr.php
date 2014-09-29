@@ -163,9 +163,44 @@ class xhtml_substr_test_set extends ocp_test_case
 
  	function testImage_4()
 	{
-		$before='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="http://192.168.0.251/ocportal/ocportalv10/thumb_nail.jpg" />afterfoo </div>';
+		$before='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="'.get_base_url().'/themes/default/images/ocf_emoticons/cheeky.pngthumb_nail.jpg" />afterfoo </div>';
 		$after=xhtml_substr($before,0,12,false,false,0.0);
-		$expected='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="http://192.168.0.251/ocportal/ocportalv10/thumb_nail.jpg" /></div>';
+		$expected='<a href="www.google.com">My</a><div>foobar<img alt = "kevin" src="'.get_base_url().'/themes/default/images/ocf_emoticons/cheeky.pngthumb_nail.jpg" /></div>';
 		$this->assertTrue($after==$expected);
+	}
+
+ 	function testAttachmentDoesNotSpoil()
+	{
+		require_code('lorem');
+		require_code('files');
+
+		$tpl=do_template('MEDIA_IMAGE_WEBSAFE',array(
+			'URL'=>placeholder_url(),
+			'REMOTE_ID'=>placeholder_id(),
+			'THUMB_URL'=>placeholder_image_url(),
+			'FILENAME'=>lorem_word(),
+			'MIME_TYPE'=>lorem_word(),
+			'CLICK_URL'=>placeholder_url(),
+
+			'WIDTH'=>placeholder_number(),
+			'HEIGHT'=>placeholder_number(),
+
+			'LENGTH'=>placeholder_number(),
+
+			'FILESIZE'=>placeholder_number(),
+			'CLEAN_FILESIZE'=>clean_file_size(intval(placeholder_number())),
+
+			'THUMB'=>true,
+			'FRAMED'=>true,
+			'WYSIWYG_EDITABLE'=>true,
+			'NUM_DOWNLOADS'=>placeholder_number(),
+			'DESCRIPTION'=>'',
+		));
+
+		$before=$tpl->evaluate();
+		$after=xhtml_substr($before,0,5,false,false,0.0);
+
+		$expected=$before;
+		$this->assertTrue(preg_replace('#\s#','',$after)==preg_replace('#\s#','',$expected));
 	}
 }

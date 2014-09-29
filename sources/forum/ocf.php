@@ -847,7 +847,7 @@ class forum_driver_ocf extends forum_driver_base
 		} else
 		{
 			$a=$this->connection->query_select('f_members',array('DISTINCT id'),array('m_ip_address'=>$ip));
-			$b=$this->connection->query('f_posts',array('DISTINCT p_poster AS id'),array('p_ip_address'=>$ip));
+			$b=$this->connection->query_select('f_posts',array('DISTINCT p_poster AS id'),array('p_ip_address'=>$ip));
 		}
 		return array_merge($a,$b);
 	}

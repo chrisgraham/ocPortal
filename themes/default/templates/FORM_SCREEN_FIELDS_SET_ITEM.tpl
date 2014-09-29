@@ -4,11 +4,11 @@
 		<input type="radio" name="{SET_NAME*}" id="choose_{NAME*}" />
 
 		<label for="{NAME*}">{PRETTY_NAME*}</label>
+
+		{COMCODE}
 	</div>
 
 	<div class="mini_indent fields_set_contents">
-		{COMCODE}
-
 		{INPUT}
 
 		{+START,IF_NON_EMPTY,{DESCRIPTION}}

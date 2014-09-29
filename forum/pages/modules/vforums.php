@@ -184,7 +184,8 @@ class Module_vforums
 	function unanswered_topics()
 	{
 		$title=do_lang_tempcode('UNANSWERED_TOPICS');
-		$condition=array('(t_cache_num_posts=1 OR (SELECT COUNT(DISTINCT p2.p_poster) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 WHERE p2.p_topic_id=top.id)=1)');
+		$condition=array('(t_cache_num_posts=1 OR t_cache_num_posts<5 AND (SELECT COUNT(DISTINCT p2.p_poster) FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p2 WHERE p2.p_topic_id=top.id)=1)');
+		// NB: "t_cache_num_posts<5" above is an optimisation, to do accurate detection of "only poster" only if there are a handful of posts (scanning huge topics can be slow considering this is just to make a subquery pass). We assume that a topic is not consisting of a single user posting more than 5 times (and if so we can consider them a spammer so rule it out)
 
 		return $this->_vforum($title,$condition,'t_cache_last_time DESC',true);
 	}

@@ -468,6 +468,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 		$ord=ord($current_char);
 		if (
 				(!$in_tag) &&
+				(!in_array('figure',$tag_stack)) && // We want to allow certain tags to finish
 				(!$in_entity) &&
 				(!(($ord>=192) && ($ord<=223))) &&
 				(($literal_pos?$i:$c)>=$end_pos) &&
