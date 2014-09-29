@@ -83,7 +83,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 	$set_title=do_lang_tempcode('MEDIA');
 	$field_set=alternate_fields_set__start($set_name);
 
-	$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_BANNER'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
+	$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_BANNER'),'file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images')).',swf'));
 
 	$field_set->attach(form_input_line(do_lang_tempcode('IMAGE_URL'),do_lang_tempcode('DESCRIPTION_URL_BANNER'),'image_url',$image_url,false));
 
