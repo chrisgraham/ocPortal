@@ -75,7 +75,7 @@ function _img_tag_fixup_raw($matches)
 		$new_url=qualify_url($matches[2],$caller_url);
 	else $new_url=$matches[2];
 
-	$ret='<img'.$matches[1].' src="'.escape_html($new_url).'"'.$matches[3].' />';
+	$ret='<img'.$matches[1].' src="'.escape_html($new_url).'"'.preg_replace('# */$#','',$matches[3]).' />';
 
 	return $ret;
 }
