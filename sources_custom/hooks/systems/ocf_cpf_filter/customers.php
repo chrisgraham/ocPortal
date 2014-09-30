@@ -17,9 +17,9 @@ class Hook_ocf_cpf_filter_customers
 {
 
 	/**
-	 * Find which special CPF's to enable.
+	 * Find which special CPFs to enable.
 	 *
-	 * @return array			A list of CPF's to enable
+	 * @return array			A list of CPFs to enable
 	 */
 	function to_enable()
 	{

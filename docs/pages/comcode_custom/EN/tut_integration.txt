@@ -15,19 +15,19 @@ The simplest form of integration is by simply placing a link on your menu. There
 
 If you don't need to integrate a full web application, just a simple HTML page, this can be done without much trouble.
 
-[title="3"]The old, more robust, way[/title]
-
-[box="Note" width="25em" float="right"]Relative URLs are normally read relative to the path the referencing page is in. For example, if an HTML file is loaded directory, relative URLs that file references would be relative to the path of the HTML file. This behaviour can be changed using an HTML tag 'base', but ocPortal does not use this by default; you may place a 'base' into ocPortal in [tt]HTML_HEAD.tpl[/tt] if you wish, to create a common location for relative-URLs to be relative to. This is possible in ocPortal as ocPortal itself only uses absolute URLs.[/box]
+[title="3"]The careful way[/title]
 
 The two main issues that present themselves are:
  - HTML files tend to have associated data files, and the path these are read from when integrated into ocPortal will not be the same as the path of the HTML file itself (as page files are located in a different location to where the index.php file that handles the page request is located)
  - HTML files contain surrounding mark-up that must be stripped, because ocPortal already provides it
 
+[box="Note" width="25em" float="right"]Relative URLs are normally read relative to the path the referencing page is in. However, this behaviour can be changed using an HTML tag 'base', but ocPortal does not use this by default; you may place a 'base' into ocPortal in [tt]HTML_HEAD.tpl[/tt] if you wish, to create a common location for relative-URLs to be relative to. This is possible in ocPortal as ocPortal itself only uses absolute URLs.[/box]
+
 The best way I can explain how to integrate an HTML page is by presenting a simple scenario.
 
-In this scenario, a HTML page named mypage.html has been made in an editor, and it contains a file myimage.png that is referenced by a relative URL with no path (i.e. it is assumed to be in the same directory as the mypage.html file).
+In this scenario, a HTML page named [tt]mypage.html[/tt] has been made in an editor, and it contains a file [tt]myimage.png[/tt] that is referenced by a relative URL with no path (i.e. it is assumed to be in the same directory as the [tt]mypage.html[/tt] file).
 
-Imagine mypage.html contains...
+Imagine [tt]mypage.html[/tt] contains...
 [code="HTML"]
 <html>
    <head>
@@ -41,22 +41,22 @@ Imagine mypage.html contains...
 
 To integrate this page as [tt]site:mypage[/tt], the following steps would need to be taken:
  - Strip down the file to only contain [tt]<img src="myimage.png" />[/tt].
- - Place myimage.png in the 'site' directory (this assumes that 'short URLs' is turned off -- if it isn't, see the 'Note)
- - Rename the file to mypage.htm (HTML pages in ocPortal must end .htm, not .html or anything else)
- - Place mypage.htm in site/pages/html_custom/EN/
+ - Place [tt]myimage.png[/tt] in the 'site' directory (this assumes that 'short URLs' is turned off -- if you have short URLs enabled then it is best to just use absolute URLs instead)
+ - Rename the file to [tt]mypage.htm[/tt] (HTML pages in ocPortal must end [tt].htm[/tt], not [tt].html[/tt] or anything else)
+ - Place [tt]mypage.htm[/tt] in [tt]site/pages/html_custom/EN/[/tt]
 
-[title="3"]The new, quicker, way[/title]
+[title="3"]The magical way[/title]
 
-As of version 3, ocPortal can handle most things for you.
- - Copy any .htm files into the [kbd]pages/html_custom/EN/[/kbd] directory (.html files should be renamed to .htm files)
-  - [i]Unless[/i] the file is meant to be located in a subdirectory and ocPortal has a zone with the same name as that subdirectory. In this case, you'd place it in the equivalent directory of that zone
-   - For example, don't upload [kbd]pages/html_custom/EN/example/test.htm[/kbd] if you have a zone named 'example. Put the file in [kbd]test/pages/html_custom/EN/[/kbd]
-   - If the directories go more than one level deep, ocPortal will translate '/' to '_' when matching against a zone name (e.g. [kbd]site/more[/kbd] would be considered a zone named [kbd]site_more[/kbd])
- - Copy any non-.htm files (images, etc) into [kbd]uploads/website_specific[/kbd]
+ocPortal can actually handle most things for you if you want to defer control to it:
+ - Copy any [tt].htm[/tt] files into the [tt]pages/html_custom/EN/[/tt] directory ([tt].html[/tt] files should be renamed to [tt].htm[/tt] files)
+  - [i]Unless[/i] the file is meant to be located in a subdirectory and ocPortal has a zone with the same name as that subdirectory. In this case, you'd place it in the equivalent directory of that zone so that ocPortal can better automatically rewrite any links to the page:
+   - For example, don't upload [tt]pages/html_custom/EN/example/test.htm[/tt] if you have a zone named 'example'. Put the file in [tt]example/pages/html_custom/EN/[/tt]
+   - If the directories go more than one level deep, ocPortal will translate '/' to '_' when matching against a zone name (e.g. [tt]site/more[/tt] would be considered a zone named [tt]site_more[/tt])
+ - Copy any non-.htm files (images, etc) into [tt]uploads/website_specific[/tt]
  - Your pages should then show up as normal ocPortal entry-points in the menu editor
- - Go through the pages in ocPortal to find any broken links and adjust them so that they work. ocPortal can't perfectly fix your links for you every-time, but it does do a pretty good job. Read on for more information how link rewriting works
+ - Go through the pages in ocPortal to find any broken links and adjust them so that they work. ocPortal can't perfectly fix your links for you every-time, but it does do a pretty good job. Read on for more information how link rewriting works.
 
-ocPortal link alternation works by replacing simple patterns to local relative links. For example, a link "site/mypage.htm" would go to the ocPortal "site:mypage" entry point. If the mypage.htm file had been correctly copied to pages/html_custom/EN/ then ocPortal would actually load it up as intended.
+ocPortal link alternation works by replacing simple patterns to local relative links. For example, a link "site/mypage.htm" would go to the ocPortal "site:mypage" entry point. If the [tt]mypage.htm[/tt] file had been correctly copied to [tt]pages/html_custom/EN/[/tt] then ocPortal would actually load it up as intended.
 A link "mypage.htm" would go to the ocPortal ":mypage" entry point.
 
 As ocPortal can only rewrite the simple links, the process of fixing broken links is often a matter of simplifying them. For example:
@@ -75,7 +75,7 @@ If you wish for the other system to appear directly inside ocPortal, much like a
 [title="3"]iframe[/title]
 
 [exp_thumb="Creating a new Comcode page to place the iframe" float="right"]integration_cc_page[/exp_thumb]
-An iframe is an HTML construct that allows you to place one site inside a region ('frame') of another. There are two main drawbacks with frame based approaches however:
+An iframe is an HTML construct that allows you to place one site inside a region ('frame') of another. There are a few main drawbacks with frame based approaches however:
  - the browser back button will send the whole ocPortal site back, not the embedded site. In other words, if you have made clicks inside the embedded system, and then click 'back' in your browser, ocPortal will move back, with the likely result being the embedded section is no longer the display ocPortal page
  - sometimes web browser bugs can cause rendering problems, especially when it comes to scrollbars
  - the title-bar titles would not be reflected in the browser title-bar
@@ -117,14 +117,13 @@ function resizeEmbeddedFrame()
 <iframe frameBorder="0" scrolling="no" title="<whatever the embedded system is>" name="frame" id="frame" src="<whatever the system URL is>" style="width: 100%; height: 900px;"><whatever the embedded system is></iframe>
 
 <script type="text/javascript">
-<!--
+// <![CDATA[
 	var tid=window.setInterval(function() { resizeEmbeddedFrame(); },500);
-// -->
-</script>
+//]]></script>
 [/html]
 [/code]
 
-The draw-back on relying on this auto-resizing method is that it is somewhat computationally intensive on users' web browsers (doing a check twice a second). It is likely that users will not notice, however. When ocPortal does iframes it actually ties in a bit of code to anything that would change the frame height, to make it resize on demand, rather than routine checking -- but this is not really very easy to do if you are working with someone else's code.
+The draw-back on relying on this auto-resizing method is that it is somewhat computationally intensive on users' web browsers (doing a check twice a second). It is likely that users will not notice, however. When ocPortal does its own iframes it actually ties in a bit of code to anything that would change the frame height, to make it resize on demand, rather than routine checking -- but this is not really very easy to do if you are working with someone else's code.
 
 [title="3"]Naturally[/title]
 
@@ -191,6 +190,9 @@ It can be a bit tricky to share members between ocPortal and another system. The
 2) Reprogram the other system so that it uses the same member system that ocPortal uses (be that ocPortal's own, or that of a third party system); you might be able to find a modification for the other system that does it already (for instance, if you are using a widespread forum like phpBB, and want to integrate an external system, it is possible that the other system already has a modification to allow it to tie itself to phpBB)
 3) Disable joining of members in the other system, and make it so that login checks against whatever member system ocPortal is using; maintain a separate member database in the other system, but effectively tie it in to whatever ocPortal is using
 4) Use LDAP or HTTP-auth for all systems, with each setting up their own separate 'extra' member information scheme; ocPortal supports LDAP and HTTP-auth, but systems that do are in the minority so it may be a lot of work bringing other involved systems 'up to speed'
+5) Manually synchronise via CSV imports from one system to another
+6) Use the [tt]user_sync[/tt] non-bundled addon to progmatically import from one database to another (requires some limited PHP programming to customise it)
+7) Use the [tt]user_simple_csv_sync[/tt] non-bundled addon to tie together CSV import/export between ocPortal and another system (requires some limited PHP programming to customise it)
 
 These are all very technical tasks, so we do not expect that many users will have the experience to easily carry them out themselves.
 

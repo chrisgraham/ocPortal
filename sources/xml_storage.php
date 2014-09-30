@@ -596,7 +596,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 		$ops[]=array(do_lang('INSERTED_TO_TABLE',$table[0]),make_map_nice($data));
 	}
 
-	// Special case for CPF's
+	// Special case for CPFs
 	if ($table[0]=='f_custom_fields')
 	{
 		$test=$GLOBALS['SITE_DB']->query_select('f_member_custom_fields',array('*'),NULL,'',1);
