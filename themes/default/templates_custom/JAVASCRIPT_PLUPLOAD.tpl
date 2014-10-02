@@ -13316,7 +13316,10 @@ function uploadError(ob,error) {
 	var file=error.file?error.file:ob.files[ob.files.length-1];
 	if (typeof file=='undefined') file=null;
 
-	file.has_error=true;
+	if (file)
+		file.has_error=true;
+
+	if (!file && error.code==plupload.INIT_ERROR) return;
 
 	var progress = new FileProgress(file, ob.settings.progress_target);
 	progress.setError();

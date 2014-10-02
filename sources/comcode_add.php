@@ -91,6 +91,7 @@ function _get_details_comcode_tags()
 		'media'=>array('description','thumb_url','width','height','framed','wysiwyg_editable','type','thumb','length','filename','mime_type','filesize','click_url','float'),
 		'img'=>array('align','float','param','title','rollover','refresh_time'),
 		'thumb'=>array('align','param','caption','float'),
+		'media_set'=>array('width','height'),
 		'url'=>array('param','title','target','rel'),
 		'email'=>array('param','title','subject','body'),
 		'reference'=>array('type','param'),
@@ -185,7 +186,7 @@ function _get_group_tags($group=NULL)
 
 		'execute_code'=>array('semihtml','html'),
 
-		'media'=>array('img','thumb','flash','media'),
+		'media'=>array('img','thumb','flash','media','media_set'),
 
 		'linking'=>array('url','email','reference','page','snapback','post','topic'),
 	);
@@ -547,6 +548,8 @@ function comcode_helper_script_step2()
 	$keep=symbol_tempcode('KEEP');
 	$post_url=find_script('comcode_helper').'?type=step3&field_name='.get_param('field_name').$keep->evaluate();
 	if (get_param('utheme','')!='') $post_url.='&utheme='.get_param('utheme');
+	$prefix=get_param('prefix','',true);
+	if ($prefix!='') $post_url.='&prefix='.urlencode($prefix);
 
 	if (get_param('save_to_id','')!='')
 	{
@@ -803,11 +806,11 @@ function _try_for_special_comcode_tag_specific_param_ui($tag,$actual_tag,$param,
 */
 function _try_for_special_comcode_tag_extra_param_ui($tag,$actual_tag,&$fields,&$fields_advanced,$hidden,$defaults)
 {
-	if ($tag=='attachment')
+	if (($tag=='attachment') && (get_param_integer('multi',0)==0))
 	{
 		if (get_option('eager_wysiwyg')=='0')
 		{
-			if ((!isset($_COOKIE)) || ($_COOKIE['use_wysiwyg']!='0'))
+			if ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg']!='0'))
 			{
 				$field=form_input_tick(do_lang_tempcode('COMCODE_TAG_attachment_safe'),do_lang_tempcode('COMCODE_TAG_attachment_safe_DESCRIPTION'),'_safe',$actual_tag=='attachment_safe');
 				$fields->attach($field);
@@ -852,9 +855,9 @@ function _try_for_special_comcode_tag_specific_contents_ui($tag,$actual_tag,&$fi
 	{
 		if (get_option('eager_wysiwyg')=='0')
 		{
-			if ((!isset($_COOKIE)) || ($_COOKIE['use_wysiwyg']!='0'))
+			if ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg']!='0'))
 			{
-				$javascript.="document.getElementById('framed').onchange=function() { document.getElementById('_safe').checked=!this.checked; };";
+				$javascript.="document.getElementById('framed').onchange=function() { if (!this.checked && document.getElementById('_safe')) document.getElementById('_safe').checked=false; };";
 			}
 		}
 
@@ -907,13 +910,14 @@ function comcode_helper_script_step3()
 
 	if (get_option('eager_wysiwyg')=='0')
 	{
-		if (($tag=='attachment') && (post_param_integer('_safe',0)==1) && ((!isset($_COOKIE)) || ($_COOKIE['use_wysiwyg']!='0')))
+		if (($tag=='attachment') && (post_param_integer('_safe',0)==1) && ((!isset($_COOKIE['use_wysiwyg'])) || ($_COOKIE['use_wysiwyg']!='0')))
 			$tag='attachment_safe';
 	}
 
 	$comcode=_get_preview_environment_comcode($tag);
-
 	$comcode_semihtml=comcode_to_tempcode($comcode,NULL,false,60,NULL,NULL,true,false,false);
+
+	$prefix=get_param('prefix','',true);
 
 	require_css('swfupload');
 
@@ -921,6 +925,7 @@ function comcode_helper_script_step3()
 		'_GUID'=>'d5d5888d89b764f81769823ac71d0827',
 		'TITLE'=>$title,
 		'FIELD_NAME'=>$field_name,
+		'PREFIX'=>($prefix=='')?NULL:$prefix,
 		'TAG_CONTENTS'=>post_param('tag_contents',''),
 		'SAVE_TO_ID'=>get_param('save_to_id',''),
 		'DELETE'=>(post_param_integer('delete',0)==1),

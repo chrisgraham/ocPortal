@@ -92,6 +92,9 @@
 					target_window.insert_textbox(element,_comcode,target_window.document.selection?target_window.document.selection:null,true,_comcode_semihtml);
 				}
 			};
+			{+START,IF_PASSED,PREFIX}
+				target_window.insert_textbox(element,'{PREFIX;}',target_window.document.selection?target_window.document.selection:null,true);
+			{+END}
 			target_window.insert_comcode_tag();
 
 			if (message!='')

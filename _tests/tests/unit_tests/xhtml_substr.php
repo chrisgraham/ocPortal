@@ -203,4 +203,22 @@ class xhtml_substr_test_set extends ocp_test_case
 		$expected=$before;
 		$this->assertTrue(preg_replace('#\s#','',$after)==preg_replace('#\s#','',$expected));
 	}
+
+ 	function testNoBreak()
+	{
+		$before='<div class="xhtml_substr_no_break">Blah blah blah</div>';
+		$after=xhtml_substr($before,0,5,false,false,0.0);
+
+		$expected=$before;
+		$this->assertTrue($after==$expected);
+	}
+
+ 	function testDoesBreak()
+	{
+		$before='<div class="blah">Blah blah blah</div>';
+		$after=xhtml_substr($before,0,5,false,false,0.0);
+
+		$expected=$before;
+		$this->assertTrue($after!=$expected);
+	}
 }

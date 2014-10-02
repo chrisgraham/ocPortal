@@ -424,6 +424,7 @@ class Hook_addon_registry_core_rich_media
 			'MEDIA__DOWNLOAD_LINK.tpl'=>'media__download_link',
 			'COMCODE_MEMBER_LINK.tpl'=>'comcode_member_link',
 			'AUTOCOMPLETE_LOAD.tpl'=>'autocomplete_load',
+			'COMCODE_MEDIA_SET.tpl'=>'comcode_media_set',
 		);
 	}
 
@@ -2163,6 +2164,52 @@ class Hook_addon_registry_core_rich_media
 		return array(
 			lorem_globalise(do_lorem_template('AUTOCOMPLETE_LOAD',array(
 				'NAME'=>'field',
+			)),NULL,'',true)
+		);
+	}
+
+	/**
+	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
+	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
+	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
+	 *
+	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
+	 */
+	function tpl_preview__comcode_media_set()
+	{
+		$media=new ocp_tempcode();
+
+		for ($i=0;$i<3;$i++)
+		{
+			$media->attach(do_lorem_template('MEDIA_IMAGE_WEBSAFE', array(
+				'URL'=>placeholder_url(),
+				'REMOTE_ID'=>placeholder_id(),
+				'THUMB_URL'=>placeholder_image_url(),
+				'FILENAME'=>lorem_word(),
+				'MIME_TYPE'=>lorem_word(),
+				'CLICK_URL'=>placeholder_url(),
+
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number(),
+
+				'LENGTH'=>placeholder_number(),
+
+				'FILESIZE'=>placeholder_number(),
+				'CLEAN_FILESIZE'=>clean_file_size(intval(placeholder_number())),
+
+				'THUMB'=>true,
+				'FRAMED'=>true,
+				'WYSIWYG_EDITABLE'=>true,
+				'NUM_DOWNLOADS'=>placeholder_number(),
+				'DESCRIPTION'=>'',
+			)));
+		}
+
+		return array(
+			lorem_globalise(do_lorem_template('COMCODE_MEDIA_SET',array(
+				'MEDIA'=>$media,
+				'WIDTH'=>placeholder_number(),
+				'HEIGHT'=>placeholder_number(),
 			)),NULL,'',true)
 		);
 	}

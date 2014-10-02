@@ -4318,6 +4318,7 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 
 .overlay {
 	overflow: visible;
+	border: 0;
 }
 
 .overlay_close_button {
@@ -4325,6 +4326,44 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 	top: -16px;
 	right: -16px;
 	cursor: pointer;
+}
+
+.overlay img.lightbox_image {
+	display: block;
+}
+
+.overlay .previous_button, .overlay .next_button {
+	position: absolute;
+	cursor: pointer;
+	top: 45%;
+}
+
+.overlay .previous_button, .overlay .next_button {
+	{$BETA_CSS_PROPERTY,opacity: 0;}
+	{$BETA_CSS_PROPERTY,transition-property : opacity;}
+	{$BETA_CSS_PROPERTY,transition-duration : 0.5s;}
+}
+.overlay .previous_button:hover, .overlay .next_button:hover, .overlay.mousemove .previous_button, .overlay.mousemove .next_button, body.touch_enabled .overlay.mousemove .previous_button, body.touch_enabled .overlay.mousemove .next_button {
+	{$BETA_CSS_PROPERTY,opacity: 1.0 !important;}
+}
+
+.overlay .previous_button {
+	left: 1.5em;
+}
+
+.overlay .next_button {
+	right: 1.5em;
+}
+
+#lightbox_meta {
+	margin: 0.5em 0;
+}
+
+span:not(:empty)+#lightbox_position_in_set:before, span:not(:empty)+#lightbox_full_link:before {
+	margin-left: 0.25em;
+	content: "\00b7" !important;
+	padding-right: 0.5em;
+	vertical-align: middle;
 }
 
 /*

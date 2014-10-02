@@ -1835,6 +1835,17 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			);
 			break;
 
+		case 'media_set':
+			$width=array_key_exists('width',$attributes)?$attributes['width']:'';
+			$height=array_key_exists('height',$attributes)?$attributes['height']:'';
+
+			$temp_tpl=do_template('COMCODE_MEDIA_SET',array(
+				'WIDTH'=>$width,
+				'HEIGHT'=>$height,
+				'MEDIA'=>$embed,
+			));
+			break;
+
 		case 'media':
 			$url_full=$embed->evaluate();
 

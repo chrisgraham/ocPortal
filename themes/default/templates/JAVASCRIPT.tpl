@@ -198,7 +198,7 @@ function new_html__initialise(element)
 				if (rel && rel.match(/(^|\s)lightbox($|\s)/))
 				{
 					element.onclick=function(element) { return function() {
-						if (element.getElementsByTagName('img').length>0)
+						if (element.getElementsByTagName('img').length>0 || element.getElementsByTagName('video').length>0)
 						{
 							open_image_into_lightbox(element);
 						} else

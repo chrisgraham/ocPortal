@@ -39,13 +39,65 @@ function open_link_as_overlay(ob,width,height,target)
 }
 
 {+START,IF,{$CONFIG_OPTION,js_overlays}}
-	function open_image_into_lightbox(a)
+	function open_images_into_lightbox(imgs)
 	{
-		// Set up overlay for Lightbox
-		var lightbox_code='<p class="ajax_loading"><img id="lightbox_image" src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></p>';
+		var modal=_open_image_into_lightbox(imgs[0][0],imgs[0][1],1,imgs.length,true,imgs[0][2]);
+		modal.positionInSet=0;
+
+		var previous_button=document.createElement('img');
+		previous_button.className='previous_button';
+		previous_button.src='{$IMG;,mediaset_previous}';
+		var previous=function(e) {
+			if (typeof e=='undefined') var e=window.event;
+			cancel_bubbling(e);
+
+			var new_position=modal.positionInSet-1;
+			if (new_position<0) new_position=imgs.length-1;
+			modal.positionInSet=new_position;
+			_open_different_image_into_lightbox(modal,new_position,imgs);
+			return false;
+		};
+		previous_button.onclick=previous;
+		modal.left=previous;
+		modal.box_wrapper.childNodes[0].appendChild(previous_button);
+
+		var next_button=document.createElement('img');
+		next_button.className='next_button';
+		next_button.src='{$IMG;,mediaset_next}';
+		var next=function(e) {
+			if (typeof e=='undefined') var e=window.event;
+			cancel_bubbling(e);
+
+			var new_position=modal.positionInSet+1;
+			if (new_position>=imgs.length) new_position=0;
+			modal.positionInSet=new_position;
+			_open_different_image_into_lightbox(modal,new_position,imgs);
+			return false;
+		};
+		next_button.onclick=next;
+		modal.right=next;
+		modal.box_wrapper.childNodes[0].appendChild(next_button);
+	}
+
+	function open_image_into_lightbox(a,is_video)
+	{
+		if (typeof is_video=='undefined') var is_video=false;
 		var has_full_button=(typeof a.childNodes[0]=='undefined') || (a.href!==a.childNodes[0].src);
-		if (has_full_button)
-			lightbox_code+='<p class="associated_link associated_links_block_group"><a href="'+escape_html(a.href)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></p>';
+		_open_image_into_lightbox(a.href,a.title,null,null,has_full_button,is_video);
+	}
+
+	function _open_image_into_lightbox(initial_img_url,description,x,n,has_full_button,is_video)
+	{
+		if (typeof has_full_button=='undefined') var has_full_button=false;
+
+		// Set up overlay for Lightbox
+		var lightbox_code=' \
+			<p class="ajax_loading" id="lightbox_image"><img src="'+'{$IMG*;,loading}'.replace(/^http:/,window.location.protocol)+'" /></p> \
+			<p id="lightbox_meta" style="display: none" class="associated_link associated_links_block_group"> \
+				<span id="lightbox_description">'+description+'</span> \
+				'+((n===null)?'':('<span id="lightbox_position_in_set"><span id="lightbox_position_in_set_x">'+x+'</span> / <span id="lightbox_position_in_set_n">'+n+'</span></span>'))+' \
+				'+(is_video?'':('<span id="lightbox_full_link"><a href="'+escape_html(initial_img_url)+'" target="_blank" title="{$STRIP_TAGS;,{!SEE_FULL_IMAGE}} {!LINK_NEW_WINDOW}">{!SEE_FULL_IMAGE;}</a></span>'))+' \
+			</p>';
 
 		// Show overlay
 		var my_lightbox={
@@ -60,66 +112,138 @@ function open_link_as_overlay(ob,width,height,target)
 
 		// Load proper image
 		window.setTimeout(function() { // Defer execution until the HTML was parsed
-			var img=modal.top_window.document.createElement('img');
-			img.onload=function()
+			if (is_video)
 			{
-				if (!modal.box_wrapper) return; /* Overlay closed already */
-
-				var real_width=img.width;
-				var width=real_width;
-				var real_height=img.height;
-				var height=real_height;
-
-				var dims_func=function()
-				{
-					// Might need to rescale using some maths, if natural size is too big
-					var max_width=modal.top_window.get_window_width()-20;
-					var max_height=modal.top_window.get_window_height()-(has_full_button?180:60);
-					if (width>max_width)
-					{
-						width=max_width;
-						height=window.parseInt(max_width*real_height/real_width-1);
-					}
-					if (height>max_height)
-					{
-						width=window.parseInt(max_height*real_width/real_height-1);
-						height=max_height;
-					}
-
-					img.width=width;
-					img.height=height;
-					modal.reset_dimensions(''+width,''+height,false,true); // Temporarily forced, until real height is known (includes extra text space etc)
-
-					window.setTimeout(function() {
-						modal.reset_dimensions(''+width,''+height,false);
-					},0);
-
-					if (img.parentNode)
-					{
-						img.parentNode.parentNode.parentNode.style.width='auto';
-						img.parentNode.parentNode.parentNode.style.height='auto';
-					}
-				};
-
-				var lightbox_image=modal.top_window.document.getElementById('lightbox_image');
-				var sup=lightbox_image.parentNode.parentNode;
-				sup.removeChild(lightbox_image.parentNode);
-				if (sup.childNodes.length!=0)
-				{
-					sup.insertBefore(img,sup.childNodes[0]);
-				} else
-				{
-					sup.appendChild(img);
-				}
-				sup.className='';
-				sup.style.textAlign='center';
-				sup.style.overflow='hidden';
-
-				dims_func();
-				modal.add_event( window, 'resize', function() { dims_func(); } );
+				var video=document.createElement('video');
+				video.controls='controls';
+				video.autoplay='autoplay';
+				set_inner_html(video,initial_img_url);
+				video.className='lightbox_image';
+				video.id='lightbox_image';
+				add_event_listener_abstract(video,'loadedmetadata',function() { _resize_lightbox_dimensions_img(modal,video,has_full_button,true); } );
+			} else
+			{
+				var img=modal.top_window.document.createElement('img');
+				img.className='lightbox_image';
+				img.id='lightbox_image';
+				img.onload=function() { _resize_lightbox_dimensions_img(modal,img,has_full_button,false); };
+				img.src=initial_img_url;
 			}
-			img.src=a.href;
 		},0);
+
+		return modal;
+	}
+
+	function _open_different_image_into_lightbox(modal,position,imgs)
+	{
+		var is_video=imgs[position][2];
+
+		// Load proper image
+		window.setTimeout(function() { // Defer execution until the HTML was parsed
+			if (is_video)
+			{
+				var video=document.createElement('video');
+				video.controls='controls';
+				video.autoplay='autoplay';
+				set_inner_html(video,imgs[position][0]);
+				video.className='lightbox_image';
+				video.id='lightbox_image';
+				add_event_listener_abstract(video,'loadedmetadata',function() { _resize_lightbox_dimensions_img(modal,video,true,true); } );
+			} else
+			{
+				var img=modal.top_window.document.createElement('img');
+				img.className='lightbox_image';
+				img.id='lightbox_image';
+				img.onload=function() { _resize_lightbox_dimensions_img(modal,img,true,is_video); };
+				img.src=imgs[position][0];
+			}
+
+			var lightbox_description=modal.top_window.document.getElementById('lightbox_description');
+			var lightbox_position_in_set_x=modal.top_window.document.getElementById('lightbox_position_in_set_x');
+			set_inner_html(lightbox_description,imgs[position][1]);
+			set_inner_html(lightbox_position_in_set_x,position+1);
+		},0);
+	}
+
+	function _resize_lightbox_dimensions_img(modal,img,has_full_button,is_video)
+	{
+		if (!modal.box_wrapper) return; /* Overlay closed already */
+
+		var real_width=is_video?img.videoWidth:img.width;
+		var width=real_width;
+		var real_height=is_video?img.videoHeight:img.height;
+		var height=real_height;
+
+		var max_dims=_get_max_lightbox_img_dims(modal,has_full_button);
+		max_width=max_dims[0];
+		max_height=max_dims[1];
+
+		var lightbox_image=modal.top_window.document.getElementById('lightbox_image');
+
+		var lightbox_meta=modal.top_window.document.getElementById('lightbox_meta');
+		var lightbox_description=modal.top_window.document.getElementById('lightbox_description');
+		var lightbox_position_in_set=modal.top_window.document.getElementById('lightbox_position_in_set');
+		var lightbox_full_link=modal.top_window.document.getElementById('lightbox_full_link');
+
+		var dims_func=function()
+		{
+			lightbox_description.style.display=(lightbox_description.childNodes.length>0)?'inline':'none';
+			if (lightbox_full_link) lightbox_full_link.style.display=(!is_video && has_full_button && (real_width>max_width || real_height>max_height))?'inline':'none';
+			lightbox_meta.style.display=(lightbox_description.style.display=='inline' || lightbox_position_in_set!==null || lightbox_full_link && lightbox_full_link.style.display=='inline')?'block':'none';
+
+			// Might need to rescale using some maths, if natural size is too big
+			var max_dims=_get_max_lightbox_img_dims(modal,has_full_button);
+			max_width=max_dims[0];
+			max_height=max_dims[1];
+			if (width>max_width)
+			{
+				width=max_width;
+				height=window.parseInt(max_width*real_height/real_width-1);
+			}
+			if (height>max_height)
+			{
+				width=window.parseInt(max_height*real_width/real_height-1);
+				height=max_height;
+			}
+
+			img.width=width;
+			img.height=height;
+			modal.reset_dimensions(''+width,''+height,false,true); // Temporarily forced, until real height is known (includes extra text space etc)
+
+			window.setTimeout(function() {
+				modal.reset_dimensions(''+width,''+height,false);
+			},0);
+
+			if (img.parentNode)
+			{
+				img.parentNode.parentNode.parentNode.style.width='auto';
+				img.parentNode.parentNode.parentNode.style.height='auto';
+			}
+		};
+
+		var sup=lightbox_image.parentNode;
+		sup.removeChild(lightbox_image);
+		if (sup.childNodes.length!=0)
+		{
+			sup.insertBefore(img,sup.childNodes[0]);
+		} else
+		{
+			sup.appendChild(img);
+		}
+		sup.className='';
+		sup.style.textAlign='center';
+		sup.style.overflow='hidden';
+
+		dims_func();
+		modal.add_event( window, 'resize', function() { dims_func(); } );
+	}
+
+	function _get_max_lightbox_img_dims(modal,has_full_button)
+	{
+		var max_width=modal.top_window.get_window_width()-20;
+		var max_height=modal.top_window.get_window_height()-60;
+		if (has_full_button) max_height-=120;
+		return [max_width,max_height];
 	}
 {+END}
 
@@ -388,6 +512,7 @@ function ModalWindow()
 				this.box_wrapper=null;
 
 				this.remove_event(document,'keyup',this.keyup);
+				this.remove_event(document,'mousemove',this.keyup);
 			}
 			this.opened=false;
 		},
@@ -403,7 +528,8 @@ function ModalWindow()
 				}
 				else this[ method ]();
 			}
-			this.close(win);
+			if (method!='left' && method!='right')
+				this.close(win);
 		},
 
 		reset_dimensions: function(width,height,init,force_height) {
@@ -650,6 +776,14 @@ function ModalWindow()
 				if (!e) e=window.event;
 				var key_code=(e)?(e.which || e.keyCode):null;
 
+				if (key_code==37) // Left arrow
+				{
+					_this.option('left');
+				} else
+				if (key_code==39) // Right arrow
+				{
+					_this.option('right');
+				} else
 				if ((key_code==13/*enter*/) && (this.yes))
 				{
 					_this.option('yes');
@@ -658,6 +792,20 @@ function ModalWindow()
 					_this.option('cancel');
 				}
 			};
+
+			this.mousemove=function(e) {
+				if (!e) e=window.event;
+				if (_this.box_wrapper && _this.box_wrapper.childNodes[0].className.indexOf(' mousemove')==-1)
+				{
+					_this.box_wrapper.childNodes[0].className+=' mousemove';
+					window.setTimeout(function() {
+						if (_this.box_wrapper)
+						{
+							_this.box_wrapper.childNodes[0].className=_this.box_wrapper.childNodes[0].className.replace(/ mousemove/g,'');
+						}
+					},2000);
+				}
+			}
 
 			this.add_event(this.box_wrapper.childNodes[0],'click',function(e) { try { _this.top_window.cancel_bubbling(e); } catch (e) {}; });
 
@@ -909,6 +1057,7 @@ function ModalWindow()
 
 			window.setTimeout(function() { // Timeout needed else keyboard activation of overlay opener may cause instant shutdown also
 				_this.add_event(document,'keyup',_this.keyup);
+				_this.add_event(document,'mousemove',_this.mousemove);
 			},100);
 		},
 

@@ -55,11 +55,19 @@
 
 	{$,Uncomment for a download link \{+START,INCLUDE,MEDIA__DOWNLOAD_LINK\}\{+END\}}
 {+END}
-{+START,IF_PASSED_AND_TRUE,FRAMED}
-	<figure>
-		{$GET,media}
-	</figure>
+{+START,IF,{$GET,raw_video}}
+	<video{+START,IF_NON_EMPTY,{THUMB_URL}} poster="{THUMB_URL*}"{+END} width="{WIDTH*}" height="{HEIGHT*}" controls="controls">
+		<source src="{URL*}" type="{MIME_TYPE*}" />
+		<span>{DESCRIPTION}</span>
+	</video>
 {+END}
-{+START,IF_NON_PASSED_OR_FALSE,FRAMED}
-	{$GET,media}
+{+START,IF,{$NOT,{$GET,raw_video}}}
+	{+START,IF_PASSED_AND_TRUE,FRAMED}
+		<figure>
+			{$GET,media}
+		</figure>
+	{+END}
+	{+START,IF_NON_PASSED_OR_FALSE,FRAMED}
+		{$GET,media}
+	{+END}
 {+END}

@@ -44,7 +44,7 @@ function init__comcode()
 		'section'=>1,'section_controller'=>1,
 		'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,
 		'carousel'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'acronym'=>1,'abbr'=>1,'contents'=>1,'concepts'=>1,'list'=>1,
-		'flash'=>1,'media'=>1,'indent'=>1,'staff_note'=>1,'menu'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
+		'flash'=>1,'media_set'=>1,'media'=>1,'indent'=>1,'staff_note'=>1,'menu'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
 		'if_in_group'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'tt'=>1,'box'=>1,'img'=>1,
 		'url'=>1,'email'=>1,'reference'=>1,'page'=>1,'codebox'=>1,'no_parse'=>1,'code'=>1,'hide'=>1,
 		'quote'=>1,'block'=>1,'semihtml'=>1,'html'=>1,'concept'=>1,'thumb'=>1,

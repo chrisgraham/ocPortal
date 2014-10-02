@@ -276,6 +276,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 	}
 
 	$tag_stack=array(); // A stack of simple tags (opening only, just the names), that we can search
+	$unbreakable_tag_stack=array(); // Booleans specifying whether the current tag must finished
 	$current_tag='';
 	$in_tag=false;
 	$in_entity=false;
@@ -283,6 +284,8 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 	$real_from=0;
 	$_html_buildup='';
 	$html_buildup=array(); // A stack of HTML tags we need from before we start our portion, to move us into the right tag context. None tags are thrown out.
+
+	$has_xhtml_substr_no_break_somewhere=(strpos($html,'xhtml_substr_no_break')!==false); // Optimisation so as to run faster in most cases (only run extended check when needed)
 
 	// Reset the character counter and pass through (part of) the entire text
 	$c=0; // The virtual length so far in the scan
@@ -335,7 +338,10 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 							$end_pos=0;
 						}
 						if (($current_tag!='br') && ($current_tag!='img') && ($current_tag!='hr')) // A little sanity checking, for HTML used as XHTML
+						{
 							$tag_stack[]=$current_tag;
+							$unbreakable_tag_stack[]=(($current_tag=='figure') || ($current_tag=='div') && ($has_xhtml_substr_no_break_somewhere) && (preg_match('#\sclass="[^"<>]*xhtml_substr_no_break[^"<>]*"[^<>]*$#',substr($html,0,$i))!=0));
+						}
 					}
 				}
 				elseif ($in_tag_type=='CLOSE')
@@ -343,15 +349,19 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 					if (@$tag_stack[count($tag_stack)-1]==$current_tag)
 					{
 						array_pop($tag_stack);
+						array_pop($unbreakable_tag_stack);
 					} else // Invalid XHTML, but we need to clean up neatly
 					{
 						$reverse_tag_stack=array_reverse($tag_stack);
+						$reverse_unbreakable_tag_stack=array_reverse($unbreakable_tag_stack);
 						foreach ($reverse_tag_stack as $rti=>$rtt)
 						{
 							if ($rtt==$current_tag)
 							{
 								unset($reverse_tag_stack[$rti]);
+								unset($reverse_unbreakable_tag_stack[$rti]);
 								$tag_stack=array_reverse($reverse_tag_stack);
+								$unbreakable_tag_stack=array_reverse($reverse_unbreakable_tag_stack);
 								break;
 							}
 						}
@@ -468,7 +478,7 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 		$ord=ord($current_char);
 		if (
 				(!$in_tag) &&
-				(!in_array('figure',$tag_stack)) && // We want to allow certain tags to finish
+				(!in_array(true,$unbreakable_tag_stack)) && // We want to allow certain tags to finish
 				(!$in_entity) &&
 				(!(($ord>=192) && ($ord<=223))) &&
 				(($literal_pos?$i:$c)>=$end_pos) &&
