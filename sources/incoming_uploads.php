@@ -86,14 +86,14 @@ function incoming_uploads_script()
 		}
 	}
 
-	// Fix names that are too common
-	if (in_array($name,array('image.jpg'/*iOS*/)))
-	{
-		$name=uniqid(true).'.'.get_file_extension($name);
-	}
-
 	if ($is_uploaded)
 	{
+		// Fix names that are too common
+		if (in_array($name,array('image.jpg'/*iOS*/)))
+		{
+			$name=uniqid(true).'.'.get_file_extension($name);
+		}
+
 		$max_length=255;
 		$field_type_test=$GLOBALS['SITE_DB']->query_select_value('db_meta','m_type',array('m_name'=>'i_orig_filename'));
 		if ($field_type_test=='ID_TEXT') $max_length=80; // Legacy

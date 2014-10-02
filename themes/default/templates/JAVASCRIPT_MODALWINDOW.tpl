@@ -175,8 +175,8 @@ function open_link_as_overlay(ob,width,height,target)
 		var height=real_height;
 
 		var max_dims=_get_max_lightbox_img_dims(modal,has_full_button);
-		max_width=max_dims[0];
-		max_height=max_dims[1];
+		var max_width=max_dims[0];
+		var max_height=max_dims[1];
 
 		var lightbox_image=modal.top_window.document.getElementById('lightbox_image');
 
@@ -193,8 +193,8 @@ function open_link_as_overlay(ob,width,height,target)
 
 			// Might need to rescale using some maths, if natural size is too big
 			var max_dims=_get_max_lightbox_img_dims(modal,has_full_button);
-			max_width=max_dims[0];
-			max_height=max_dims[1];
+			var max_width=max_dims[0];
+			var max_height=max_dims[1];
 			if (width>max_width)
 			{
 				width=max_width;

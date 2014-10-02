@@ -302,6 +302,8 @@ class Hook_addon_registry_core_rich_media
 			'themes/default/templates/JAVASCRIPT_JQUERY.tpl',
 			'themes/default/css/autocomplete.css',
 			'themes/default/templates/AUTOCOMPLETE_LOAD.tpl',
+			'themes/default/images/mediaset_next.png',
+			'themes/default/images/mediaset_previous.png',
 		);
 	}
 

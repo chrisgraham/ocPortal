@@ -478,14 +478,15 @@ function xhtml_substr($html,$from,$length=NULL,$literal_pos=false,$ellipses=fals
 		$ord=ord($current_char);
 		if (
 				(!$in_tag) &&
-				(!in_array(true,$unbreakable_tag_stack)) && // We want to allow certain tags to finish
 				(!$in_entity) &&
 				(!(($ord>=192) && ($ord<=223))) &&
 				(($literal_pos?$i:$c)>=$end_pos) &&
 				(
 					($grammar_completeness_tolerance==0.0) ||
 					(!_smart_grammar_says_continue($end_pos,$grammar_completeness_tolerance,$i,$html,$length))
-				) ||
+				) &&
+				(!in_array(true,$unbreakable_tag_stack)) // We want to allow certain tags to finish
+				||
 				($i==$total_length_minus_one)
 			)
 		{
