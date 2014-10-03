@@ -1023,7 +1023,7 @@ function _confirm_session(callback,username,url)
 }
 
 /* Dynamic inclusion */
-function load_snippet(code,post,callback)
+function load_snippet(snippet_hook,post,callback)
 {
 	var title=get_inner_html(document.getElementsByTagName('title')[0]);
 	title=title.replace(/ \u2013 .*/,'');
@@ -1039,7 +1039,7 @@ function load_snippet(code,post,callback)
 	var html;
 	if (typeof window.do_ajax_request!='undefined')
 	{
-		var url2='{$FIND_SCRIPT_NOHTTP;,snippet}?snippet='+code+'&url='+window.encodeURIComponent(url)+'&title='+window.encodeURIComponent(title)+keep_stub();
+		var url2='{$FIND_SCRIPT_NOHTTP;,snippet}?snippet='+snippet_hook+'&url='+window.encodeURIComponent(url)+'&title='+window.encodeURIComponent(title)+keep_stub();
 		html=do_ajax_request(maintain_theme_in_link(url2),callback,post);
 	}
 	if (callback) return null;

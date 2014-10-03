@@ -1244,7 +1244,8 @@ function get_complex_base_url($at)
 }
 
 /**
- * Get a value (either POST [u]or[/u] GET), or the default if neither can be found.
+ * Get a parameter value (either POST *or* GET, i.e. like $_REQUEST[$name]), or the default if neither can be found.
+ * Implements additional security over the direct PHP access mechanism which should not be used.
  *
  * @param  ID_TEXT		The name of the parameter to get
  * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
@@ -1264,7 +1265,8 @@ function either_param($name,$default=false)
 }
 
 /**
- * Get the value of the specified POST key, if it is found, or the default otherwise.
+ * Get the value of the specified POST parameter (i.e. like $_POST[$name]) if it is passed, or the default otherwise.
+ * Implements additional security over the direct PHP access mechanism which should not be used.
  *
  * @param  ID_TEXT		The name of the parameter to get
  * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
@@ -1321,7 +1323,8 @@ function post_param($name,$default=false,$html=false,$conv_from_wysiwyg=true)
 }
 
 /**
- * Get the value of the specified GET key, if it is found, or the default otherwise.
+ * Get the value of the specified GET parameter (i.e. like $_GET[$name]) if it is passed, or the default otherwise.
+ * Implements additional security over the direct PHP access mechanism which should not be used.
  *
  * @param  ID_TEXT		The name of the parameter to get
  * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: allow missing parameter) (false: give error on missing parameter)
