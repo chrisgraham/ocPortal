@@ -39,10 +39,12 @@ function open_link_as_overlay(ob,width,height,target)
 }
 
 {+START,IF,{$CONFIG_OPTION,js_overlays}}
-	function open_images_into_lightbox(imgs)
+	function open_images_into_lightbox(imgs,start)
 	{
-		var modal=_open_image_into_lightbox(imgs[0][0],imgs[0][1],1,imgs.length,true,imgs[0][2]);
-		modal.positionInSet=0;
+		if (typeof start=='undefined') var start=0;
+
+		var modal=_open_image_into_lightbox(imgs[start][0],imgs[start][1],start+1,imgs.length,true,imgs[start][2]);
+		modal.positionInSet=start;
 
 		var previous_button=document.createElement('img');
 		previous_button.className='previous_button';

@@ -4069,7 +4069,7 @@ figure {
 	margin: 1em;
 }
 /* Make inline images look a little nicer, including with Wordpress imports (but native too) */
-.alignleft, .alignright, .aligncenter, .alignnone, a[rel="lightbox"] img.attachment_img, .attachment_img img {
+.alignleft, .alignright, .aligncenter, .alignnone, .media_set img.attachment_img, a[rel="lightbox"] img.attachment_img, .attachment_img img {
 	border: 2px solid {$GET,pale_border};
 }
 .alignleft img, .alignright img, .aligncenter img, .alignnone img {
@@ -4117,6 +4117,36 @@ a[rel="lightbox"] {
 
 .attachment_img {
 	max-width: 100%;
+}
+
+.media_set {
+	margin: 1em 0;
+	border: 1px solid {$GET,standard_border};
+	background-color: {$GET,area_background};
+	padding-bottom: 0.5em;
+	{$BETA_CSS_PROPERTY,border-radius: 5px;}
+}
+
+.media_set * {
+	vertical-align: top;
+}
+
+.media_set br {
+	display: none;
+}
+
+.media_set a {
+	display: inline-block;
+	margin-top: 0.5em;
+	margin-left: 0.5em;
+	min-width: {$DIV,{$CONFIG_OPTION,thumb_width},2}px;
+	min-height: {$DIV,{$CONFIG_OPTION,thumb_width},2}px;
+	text-align: center;
+}
+
+.media_set img {
+	width: {$DIV,{$CONFIG_OPTION,thumb_width},2}px;
+	height: auto;
 }
 
 /*
@@ -4335,7 +4365,9 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 .overlay .previous_button, .overlay .next_button {
 	position: absolute;
 	cursor: pointer;
-	top: 45%;
+	top: 43%;
+	top: calc(50% - {$DIV,74,2}px);
+	max-width: 20%;
 }
 
 .overlay .previous_button, .overlay .next_button {
