@@ -241,7 +241,6 @@ function ocf_edit_warning($warning_id,$explanation,$is_warning=1)
 
 	$member_id=$GLOBALS['FORUM_DB']->query_value('f_warnings','w_member_id',array('id'=>$warning_id));
 	$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_is_warning'=>1,'w_member_id'=>$member_id));
-
 	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member_id),'',1);
 }
 
@@ -257,9 +256,10 @@ function ocf_delete_warning($warning_id)
 	$member_id=$GLOBALS['FORUM_DB']->query_value_null_ok('f_warnings','w_member_id',array('id'=>$warning_id));
 	if (is_null($member_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_warnings=(m_cache_warnings-1) WHERE id='.strval((integer)$member_id),1);
-
 	$GLOBALS['FORUM_DB']->query_delete('f_warnings',array('id'=>$warning_id),'',1);
+
+	$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_is_warning'=>1,'w_member_id'=>$member_id));
+	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member_id),'',1);
 }
 
 
