@@ -539,9 +539,9 @@ function find_tags_in_editor(editor,element)
 	}
 }
 
-// =============
-// NORMAL EDITOR
-// =============
+// ============
+// BOTH EDITORS
+// ============
 
 function is_comcode_xml(element)
 {
@@ -672,6 +672,17 @@ function set_textbox(element,text,html)
 	element.value=text;
 }
 
+/*
+Insert some text, with WYSIWYG support...
+
+element: non-WYSIWYG element
+text: text to insert (non-HTML)
+sel: Selection DOM object so we know what to *overwrite* with the inserted text (or NULL)
+plain_insert: Set to true if we are doing a simple insert, not inserting complex Comcode that needs to have editing representation
+html: HTML to insert (if not passed then 'text' will be escaped)
+
+(Use insert_textbox_wrapping to wrap Comcode tags around a selection)
+*/
 function insert_textbox(element,text,sel,plain_insert,html)
 {
 	if (is_wysiwyg_field(element))
@@ -782,6 +793,7 @@ function insert_textbox_opener(element,text,sel,plain_insert,html)
 	get_main_ocp_window().insert_textbox(element,text,sel,plain_insert,html);
 }
 
+// Get selected HTML from CKEditor
 function get_selected_html(editor)
 {
 	var my_selection=editor.getSelection();
@@ -806,6 +818,7 @@ function get_selected_html(editor)
 	return selected_text;
 }
 
+// Insert into the editor such as to *wrap* the current selection with something new (typically a new Comcode tag)
 function insert_textbox_wrapping(element,before_wrap_tag,after_wrap_tag)
 {
 	var from,to;

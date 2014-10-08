@@ -631,7 +631,7 @@ function globalise($middle,$message=NULL,$type='',$include_header_and_footer=fal
 
 	global $CYCLES; $CYCLES=array(); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
-	if (!running_script('index'))
+	if (!running_script('dload') && !running_script('attachment') && !running_script('index'))
 	{
 		global $ATTACHED_MESSAGES;
 		$middle->handle_symbol_preprocessing();
