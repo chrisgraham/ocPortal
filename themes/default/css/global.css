@@ -4127,6 +4127,10 @@ a[rel="lightbox"] {
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
+.media_set div {
+	display: inline;
+}
+
 .media_set * {
 	vertical-align: top;
 }

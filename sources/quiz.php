@@ -517,7 +517,7 @@ function typed_answer_is_correct($given_answer,$all_answers,$strict=false)
 			$filtered_answer=preg_replace('#[^\d\w]#','',strtolower(get_translated_text($a['q_answer_text'])));
 		}
 
-		if (get_translated_text($a['q_answer_text'])===$given_answer) return ($a['q_is_correct']==1); // Match exactly; "===" needed to stop PHPs weird type coercion that happens even for strings
+		if (get_translated_text($a['q_answer_text'])===$filtered_given_answer) return ($a['q_is_correct']==1); // Match exactly; "===" needed to stop PHPs weird type coercion that happens even for strings
 
 		if ((!$strict) && (levenshtein($filtered_answer,$filtered_given_answer)<=intval(strlen($filtered_answer)*0.2))) // Matches inexactly
 		{
