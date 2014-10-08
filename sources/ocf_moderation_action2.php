@@ -170,7 +170,13 @@ function warnings_script()
 	foreach ($rows as $myrow)
 	{
 		$delete_link=hyperlink($url,do_lang_tempcode('DELETE'),false,false,'',NULL,form_input_hidden('title',$myrow['s_title']));
-		$content->attach(do_template('OCF_SAVED_WARNING',array('MESSAGE'=>$myrow['s_message'],'EXPLANATION'=>$myrow['s_explanation'],'TITLE'=>$myrow['s_title'],'DELETE_LINK'=>$delete_link)));
+		$content->attach(do_template('OCF_SAVED_WARNING',array(
+			'MESSAGE'=>$myrow['s_message'],
+			'MESSAGE_HTML'=>comcode_to_tempcode($myrow['s_message'],$GLOBALS['FORUM_DRIVER']->get_guest_id()),
+			'EXPLANATION'=>$myrow['s_explanation'],
+			'TITLE'=>$myrow['s_title'],
+			'DELETE_LINK'=>$delete_link,
+		)));
 	}
 	if ($content->is_empty()) $content=paragraph(do_lang_tempcode('NO_ENTRIES'),'rfdsfsdf3t45');
 
