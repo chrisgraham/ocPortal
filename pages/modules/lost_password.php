@@ -327,9 +327,10 @@ class Module_lost_password
 			$new=$new_password;
 		} else
 		{
+			require_code('crypt');
 			$password_compatibility_scheme=($temporary_passwords?'temporary':'');
 			$salt=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
-			$new=md5($salt.md5($new_password));
+			$new=ratchet_hash($new_password,$salt);
 		}
 
 		unset($_GET['code']);

@@ -834,9 +834,10 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 			$update['m_pass_hash_salted']=$password;
 		} else
 		{
+			require_code('crypt');
 			$update['m_password_change_code']='';
 			$salt=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
-			$update['m_pass_hash_salted']=md5($salt.md5($password));
+			$update['m_pass_hash_salted']=ratchet_hash($password,$salt);
 			$update['m_password_compat_scheme']='';
 		}
 

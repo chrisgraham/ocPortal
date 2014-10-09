@@ -1025,7 +1025,16 @@ function step_5()
 		))) continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
-		if ($key=='master_password') $val='!'.md5($val.'ocp');
+		if ($key=='master_password')
+		{
+			if (function_exists('password_hash')) // PHP5.5+
+			{
+				$val=password_hash($val,PASSWORD_BCRYPT,array('cost'=>12));
+			} else
+			{
+				$val='!'.md5($val.'ocp');
+			}
+		}
 		$SITE_INFO[$key]=trim($val);
 	}
 
@@ -1519,7 +1528,16 @@ function step_5_write_config()
 			continue;
 
 		if (get_magic_quotes_gpc()) $val=stripslashes($val);
-		if ($key=='master_password') $val='!'.md5($val.'ocp');
+		if ($key=='master_password')
+		{
+			if (function_exists('password_hash')) // PHP5.5+
+			{
+				$val=password_hash($val,PASSWORD_BCRYPT,array('cost'=>12));
+			} else
+			{
+				$val='!'.md5($val.'ocp');
+			}
+		}
 		if ($key=='base_url') $val=$base_url;
 		$_val=addslashes(trim($val));
 		fwrite($config_file_handle,'$SITE_INFO[\''.$key.'\']=\''.$_val."';\n");
@@ -1964,7 +1982,7 @@ function big_installation_common()
 	}
 
 	require_code('database_action');
-    require_code('menus2');
+	require_code('menus2');
 	require_code('config');
 	require_code('zones2');
 }

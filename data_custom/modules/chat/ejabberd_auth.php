@@ -218,7 +218,7 @@ class JabberAuth {
 		switch ($password_compatibility_scheme)
 		{
 			case '': // ocPortal style salted MD5 algorithm
-				return (md5($row['m_pass_salt'].md5($this->jabber_pass))==$row['m_pass_hash_salted']);
+				return $this->ratchet_hash_verify($this->jabber_pass,$row['m_pass_salt'],$row['m_pass_hash_salted']);
 			case 'vb3': // vBulletin (used on ocportal.com a lot, for legacy reasons)
 				return (md5(md5($this->jabber_pass).$row['m_pass_salt'])==$row['m_pass_hash_salted']);
 			case 'plain':
@@ -228,6 +228,25 @@ class JabberAuth {
 			default:
 				return false;
 		}
+	}
+
+	/**
+	 * Verify a password is correct by comparison of the hashed version.
+	 *
+	 * @param  SHORT_TEXT	The password in plain text
+	 * @param  SHORT_TEXT	The salt
+	 * @param  SHORT_TEXT	The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
+	 * @return boolean		Whether the password if verified
+	 */
+	function ratchet_hash_verify($password,$salt,$pass_hash_salted)
+	{
+		if ((function_exists('password_verify')) && (preg_match('#^\w+$#',$pass_hash_salted)==0))
+		{
+			return password_verify($salt.md5($password),$pass_hash_salted);
+		}
+
+		// Old-style md5'd password
+		return (md5($salt.md5($password))==$pass_hash_salted);
 	}
 
 	function checkuser()

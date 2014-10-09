@@ -105,8 +105,10 @@ function external_db_user_sync($member,$record)
 	$password_field=get_long_value('external_db_login__password_field');
 	$email_address_field=get_long_value('external_db_login__email_address_field');
 
+	require_code('crypt');
 	$salt=$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_pass_salt');
-	$new=md5($salt.md5($record[$password_field]));
+	if ($salt=='') $salt=produce_salt();
+	$new=ratchet_hash($record[$password_field],$salt);
 
 	$update_map=array(
 		'm_email_address'=>$record[$email_address_field],
@@ -114,6 +116,7 @@ function external_db_user_sync($member,$record)
 		'm_password_compat_scheme'=>'',
 		'm_password_change_code'=>'',
 		'm_pass_hash_salted'=>$new,
+		'm_pass_salt'=>$salt,
 	);
 
 	$username=$record[$username_field];

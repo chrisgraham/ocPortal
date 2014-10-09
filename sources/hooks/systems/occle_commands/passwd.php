@@ -63,7 +63,8 @@ class Hook_occle_command_passwd
 			} else
 			{
 				$update['m_password_compat_scheme']='';
-				$update['m_pass_hash_salted']=md5($salt.md5($parameters[0]));
+				require_code('crypt');
+				$update['m_pass_hash_salted']=ratchet_hash($parameters[0],$salt);
 			}
 
 			$GLOBALS['SITE_DB']->query_update('f_members',$update,array('id'=>$member_id),'',1);

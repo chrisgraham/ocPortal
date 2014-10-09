@@ -146,7 +146,8 @@ function bookables_ical_script()
  */
 function bookings_ical_script()
 {
-	$pass_ok=get_param('pass','')==md5('booking_salt_'.$GLOBALS['SITE_INFO']['master_password']);
+	require_code('crypt');
+	$pass_ok=get_param('pass','')==ratchet_hash($GLOBALS['SITE_INFO']['master_password'],get_site_salt());
 	if ((!$pass_ok) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 		access_denied('I_ERROR');
 

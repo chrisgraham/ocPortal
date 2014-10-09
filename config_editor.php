@@ -324,11 +324,16 @@ function do_set()
 		{
 			if (($key=='master_password') || ($key=='confirm_master_password'))
 			{
-				if ($val=='')
+				if ($val=='') $val=$given_password;
+				if (function_exists('password_hash')) // PHP5.5+
 				{
-					$new[$key]='!'.md5($given_password.'ocp');
-				} else $new[$key]='!'.md5($val.'ocp');
-			} else $new[$key]=$val;
+					$val=password_hash($val,PASSWORD_BCRYPT,array('cost'=>12));
+				} else
+				{
+					$val='!'.md5($val.'ocp');
+				}
+			}
+			$new[$key]=$val;
 		}
 	}
 	if ($new['confirm_master_password']!=$new['master_password'])
@@ -482,6 +487,10 @@ function co_check_master_password($password_given)
 	global $SITE_INFO;
 	if (!array_key_exists('master_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
 	$actual_password_hashed=$SITE_INFO['master_password'];
+	if ((function_exists('password_verify')) && (strpos($actual_password_hashed,'$')!==false))
+	{
+		return password_verify($password_given,$actual_password_hashed);
+	}
 	$salt='';
 	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
 	{

@@ -331,6 +331,7 @@ class Module_newsletter
 	function newsletter_maintenance()
 	{
 		require_code('type_validation');
+		require_code('crypt');
 
 		// Add
 		$email=trim(post_param('email'));
@@ -368,10 +369,18 @@ class Module_newsletter
 			}
 			if (!$found_level) warn_exit(do_lang_tempcode('NOT_NEWSLETTER_SUBSCRIBER'));
 
-			require_code('crypt');
 			$code_confirm=mt_rand(1,32000);
 			$salt=produce_salt();
-			$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'language'=>$lang,'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt)));
+			$GLOBALS['SITE_DB']->query_insert('newsletter',array(
+				'n_forename'=>$forename,
+				'n_surname'=>$surname,
+				'join_time'=>time(),
+				'language'=>$lang,
+				'email'=>$email,
+				'code_confirm'=>$code_confirm,
+				'pass_salt'=>$salt,
+				'the_password'=>ratchet_hash($password,$salt,PASSWORD_SALT),
+			));
 			$this->_send_confirmation($email,$code_confirm,NULL,$forename,$surname);
 			$message=do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email));
 		}
@@ -386,7 +395,7 @@ class Module_newsletter
 		// Change/make settings
 		$old_password=$GLOBALS['SITE_DB']->query_select_value('newsletter','the_password',array('email'=>$email));
 		$old_salt=$GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email'=>$email));
-		if ((!has_privilege(get_member(),'change_newsletter_subscriptions')) && ($old_password!='') && ($old_password!=md5($password.$old_salt))) // Access denied. People who can change any subscriptions can't get denied.
+		if ((!has_privilege(get_member(),'change_newsletter_subscriptions')) && ($old_password!='') && (!ratchet_hash_verify($password,$old_salt,$old_password,PASSWORD_SALT))) // Access denied. People who can change any subscriptions can't get denied.
 		{
 			$_reset_url=build_url(array('page'=>'_SELF','type'=>'reset','email'=>$email),'_SELF');
 			$reset_url=$_reset_url->evaluate();
@@ -432,7 +441,7 @@ class Module_newsletter
 		$lang=$GLOBALS['SITE_DB']->query_select_value('newsletter','language',array('email'=>$email));
 		$salt=$GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email'=>$email));
 		$new_password=produce_salt();
-		$GLOBALS['SITE_DB']->query_update('newsletter',array('the_password'=>md5($new_password.$salt)),array('email'=>$email),'',1);
+		$GLOBALS['SITE_DB']->query_update('newsletter',array('the_password'=>ratchet_hash($new_password,$salt,PASSWORD_SALT)),array('email'=>$email),'',1);
 
 		$message=do_lang('NEWSLETTER_PASSWORD_CHANGE',comcode_escape(get_ip_address()),comcode_escape($new_password),NULL,$lang);
 
@@ -457,7 +466,7 @@ class Module_newsletter
 		$subscriber=$_subscriber[0];
 
 		require_code('crypt');
-		$needed_hash=best_hash($subscriber['the_password'],'xunsub');
+		$needed_hash=ratchet_hash($subscriber['the_password'],'xunsub');
 
 		if ($hash!=$needed_hash)
 		{

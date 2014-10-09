@@ -373,7 +373,8 @@ function add_bookable($bookable_details,$codes,$blacked=NULL,$supplements=NULL,$
 	$bookable_id=$GLOBALS['SITE_DB']->query_insert('bookable',$bookable_details,true);
 
 	require_code('calendar2');
-	$external_feed=find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.md5('booking_salt_'.$GLOBALS['SITE_INFO']['master_password']);
+	require_code('crypt');
+	$external_feed=find_script('bookings_ical').'?id='.strval($bookable_id).'&pass='.ratchet_hash($GLOBALS['SITE_INFO']['master_password'],get_site_salt());
 	$bookable_details['calendar_type']=add_event_type($title,'calendar/booking',$external_feed);
 
 	$GLOBALS['SITE_DB']->query_update('bookable',array('calendar_type'=>$bookable_details['calendar_type']),array('id'=>$bookable_id),'',1);

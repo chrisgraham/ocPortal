@@ -776,7 +776,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 					$send_id=(array_key_exists('m_username',$r)?'m':'n').(array_key_exists('id',$r)?strval($r['id']):$email);
 					$hash=array_key_exists('the_password',$r)?$r['the_password']:'';
-					$unsub=array_key_exists('the_password',$r)?best_hash($r['the_password'],'xunsub'):'';
+					$unsub=array_key_exists('the_password',$r)?ratchet_hash($r['the_password'],'xunsub'):'';
 
 					if ($csv==1)
 					{

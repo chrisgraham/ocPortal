@@ -129,7 +129,7 @@ class Hook_cron_ocf_welcome_emails
 						{
 							$sendid='n'.strval($member['id']);
 							require_code('crypt');
-							$hash=best_hash($member['the_password'],'xunsub');
+							$hash=ratchet_hash($member['the_password'],'xunsub');
 						} else
 						{
 							$sendid='w'.strval($member['id']);

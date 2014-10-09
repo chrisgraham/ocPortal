@@ -124,10 +124,12 @@ function bump_password_change_date($member_id,$password,$password_salted,$salt,$
 	// Ensure does not re-use previous password
 	if (!$skip_checks)
 	{
+		require_code('crypt');
+
 		$past_passwords=$GLOBALS['FORUM_DB']->query_select('f_password_history',array('*'),array('p_member_id'=>$member_id),'ORDER BY p_time DESC',1000/*reasonable limit*/);
 		foreach ($past_passwords as $past_password)
 		{
-			if (md5($past_password['p_salt'].md5($password))==$past_password['p_hash_salted'])
+			if (ratchet_hash_verify($password,$past_password['p_salt'],$past_password['p_hash_salted']))
 			{
 				require_lang('password_rules');
 				warn_exit(do_lang_tempcode('CANNOT_REUSE_PASSWORD'));

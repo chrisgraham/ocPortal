@@ -163,7 +163,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 	{
 		require_code('crypt');
 		$salt=produce_salt();
-		$password_salted=md5($salt.md5($password));
+		$password_salted=ratchet_hash($password,$salt);
 	} else
 	{
 		$password_salted=$password;

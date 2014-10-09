@@ -33,7 +33,7 @@ class Hook_comments
 		$hash=get_param('hash');
 
 		require_code('crypt');
-		if (best_hash($serialized_options,get_site_salt())!=$hash) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+		if (ratchet_hash($serialized_options,get_site_salt())!=$hash) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
 
 		secure_serialized_data($serialized_options);
 		list($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,$reverse,$may_reply,$highlight_by_user,$allow_reviews)=unserialize($serialized_options);

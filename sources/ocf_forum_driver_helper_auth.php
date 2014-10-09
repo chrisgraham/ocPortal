@@ -179,7 +179,8 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 					}
 				} else
 				{
-					if (md5($row['m_pass_salt'].$password_hashed)!=$row['m_pass_hash_salted'])
+					require_code('crypt');
+					if (!ratchet_hash_verify($password_raw,$row['m_pass_salt'],$row['m_pass_hash_salted']))
 					{
 						$out['error']=do_lang_tempcode('MEMBER_BAD_PASSWORD');
 						return $out;

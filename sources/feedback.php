@@ -173,7 +173,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
 
 	$serialized_options=serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time));
 	require_code('crypt');
-	$hash=best_hash($serialized_options,get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
+	$hash=ratchet_hash($serialized_options,get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
 
 	// AJAX support
 	$comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
@@ -204,7 +204,7 @@ function post_comment_script()
 	// Check security
 	$hash=either_param('hash');
 	require_code('crypt');
-	if (best_hash($options,get_site_salt())!=$hash)
+	if (ratchet_hash($options,get_site_salt())!=$hash)
 	{
 		header('Content-Type: text/plain; charset='.get_charset());
 		exit();

@@ -547,7 +547,7 @@ class OCP_Topic
 		{
 			$serialized_options=serialize(array($this->topic_id,$num_to_show_limit,true,false,strval($forum_id),$this->reverse,$may_reply,$highlight_by_member,count($all_individual_review_ratings)!=0));
 			require_code('crypt');
-			$hash=best_hash($serialized_options,get_site_salt());
+			$hash=ratchet_hash($serialized_options,get_site_salt());
 		} else
 		{
 			$serialized_options=mixed();
