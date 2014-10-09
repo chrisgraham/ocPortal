@@ -55,7 +55,7 @@ foreach ($advertiser_sessions as $session)
 	}
 
 	$ip=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','ip',array('the_page'=>'site/pages/modules/join.php','member_id'=>$member_id),'',1);
-	$member_id=is_null($ip)?NULL:$GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'stats WHERE '.db_string_equal_to('ip',$ip).' AND member_id>0');
+	$member_id=is_null($ip)?NULL:$GLOBALS['SITE_DB']->query_select_value_if_there('stats','member_id',array('ip'=>$ip));
 	if (!is_null($member_id)) $joining[$from]++;
 	$test=is_null($member_id)?NULL:$GLOBALS['SITE_DB']->query_select_value_if_there('stats','id',array('the_page'=>'site/pages/modules_custom/purchase.php','member_id'=>$member_id));
 	if (!is_null($test)) $success[$from]++; else $failure[$from]++;

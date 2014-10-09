@@ -180,7 +180,7 @@ class Module_lost_password
 
 		require_code('crypt');
 		$code=get_rand_password();
-		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>$code.'__'.strval(get_session_id())),array('id'=>$member_id),'',1);
+		$GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_change_code'=>$code.'__'.get_session_id()),array('id'=>$member_id),'',1);
 
 		log_it('LOST_PASSWORD',strval($member_id),$code);
 
@@ -292,7 +292,7 @@ class Module_lost_password
 		if (get_option('password_reset_process')=='ultra')
 		{
 			list($correct_code,$correct_session)=explode('__',$correct_code);
-			if (intval($correct_session)!=get_session_id())
+			if ($correct_session!=get_session_id())
 				warn_exit(do_lang_tempcode('WRONG_RESET_SESSION',escape_html(display_time_period(60*60*intval(get_option('session_expiry_time'))))));
 		}
 		if ($code!=$correct_code)

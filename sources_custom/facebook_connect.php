@@ -61,7 +61,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 
 		// We are not a normal cookie login so ocPortal has loaded up a Guest session already in the expectation of keeping it. Unsetting it will force a rebind (existing session may be reused though)
 		require_code('users_inactive_occasionals');
-		set_session_id(-1);
+		set_session_id('');
 	}
 
 	// If already session-logged-in onto a Facebook account, or a non-Facebook account (i.e. has a log in on top), don't bother doing anything

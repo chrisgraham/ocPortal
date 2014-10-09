@@ -150,7 +150,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('trackbacks','trackback_time',array('trackback_time'));
 
 			$GLOBALS['SITE_DB']->create_table('captchas',array(
-				'si_session_id'=>'*INTEGER',
+				'si_session_id'=>'*ID_TEXT',
 				'si_time'=>'TIME',
 				'si_code'=>'INTEGER'
 			));
@@ -259,7 +259,7 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->create_table('messages_to_render',array(
 				'id'=>'*AUTO',
-				'r_session_id'=>'AUTO_LINK',
+				'r_session_id'=>'ID_TEXT',
 				'r_message'=>'LONG_TEXT',
 				'r_type'=>'ID_TEXT',
 				'r_time'=>'TIME',
@@ -453,7 +453,7 @@ class Module_admin_version
 		{
 			$GLOBALS['SITE_DB']->create_table('temp_block_permissions',array(
 				'id'=>'*AUTO',
-				'p_session_id'=>'AUTO_LINK',
+				'p_session_id'=>'ID_TEXT',
 				'p_block_constraints'=>'LONG_TEXT',
 				'p_time'=>'TIME',
 			));
@@ -756,10 +756,6 @@ class Module_admin_version
 			));
 
 			$GLOBALS['SITE_DB']->create_index('cached_comcode_pages','#page_search__combined',array('cc_page_title','string_index'));
-
-			$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_moniker_reversed','SHORT_TEXT');
-			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'url_id_monikers SET m_moniker_reversed=REVERSE(m_moniker)');
-			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_monrev',array('m_moniker_reversed'));
 		}
 
 		if ((!is_null($upgrade_from)) && ($upgrade_from<17))
@@ -790,6 +786,14 @@ class Module_admin_version
 
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_displayed_in_menu');
 			$GLOBALS['SITE_DB']->delete_table_field('zones','zone_wide');
+
+			$GLOBALS['SITE_DB']->add_table_field('url_id_monikers','m_moniker_reversed','SHORT_TEXT');
+			$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'url_id_monikers SET m_moniker_reversed=REVERSE(m_moniker)');
+			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_monrev',array('m_moniker_reversed'));
+
+			$GLOBALS['SITE_DB']->alter_table_field('captchas','si_session_id','*ID_TEXT');
+			$GLOBALS['SITE_DB']->alter_table_field('messages_to_render','r_session_id','ID_TEXT');
+			$GLOBALS['SITE_DB']->alter_table_field('temp_block_permissions','p_session_id','ID_TEXT');
 		}
 	}
 

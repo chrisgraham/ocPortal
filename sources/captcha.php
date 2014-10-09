@@ -247,7 +247,7 @@ function generate_captcha()
 	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',$insert_map);
 
 	// Clear out old codes
-	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval(time()-60*30).' OR si_session_id='.strval($session));
+	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval(time()-60*30).' OR '.db_string_equal_to('si_session_id',$session));
 
 	// Create code
 	$numbers_only=($test!==333333333333);

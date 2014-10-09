@@ -92,7 +92,7 @@ function init__site()
 	}
 
 	// Search engine having session in URL, we don't like this
-	if ((get_bot_type()!==NULL) && (count($_POST)==0) && (get_param_integer('keep_session',NULL)!==NULL))
+	if ((get_bot_type()!==NULL) && (count($_POST)==0) && (get_param('keep_session',NULL)!==NULL))
 	{
 		set_http_status_code('301');
 		header('Location: '.get_self_url(true,false,array('keep_session'=>NULL,'keep_print'=>NULL)));
@@ -133,7 +133,7 @@ function init__site()
 	require_code('permissions');
 	global $ZONE;
 	if ($ZONE['zone_require_session']==1) header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
-	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()==-1) || ($SESSION_CONFIRMED_CACHE==0)) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
+	if (($ZONE['zone_name']!='') && (!is_httpauth_login()) && ((get_session_id()=='') || ($SESSION_CONFIRMED_CACHE==0)) && ($ZONE['zone_require_session']==1) && (get_page_name()!='login'))
 	{
 		access_denied((($real_zone=='data') || (has_zone_access(get_member(),$ZONE['zone_name'])))?'ZONE_ACCESS_SESSION':'ZONE_ACCESS',$ZONE['zone_name'],true);
 	} else
@@ -803,7 +803,7 @@ function do_site()
 		}
 		if (count($messages)!=0)
 		{
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'messages_to_render WHERE r_session_id='.strval(get_session_id()).' OR r_time<'.strval(time()-60*60));
+			$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'messages_to_render WHERE '.db_string_equal_to('r_session_id',get_session_id()).' OR r_time<'.strval(time()-60*60));
 		}
 	}
 
@@ -1815,8 +1815,8 @@ function log_stats($string,$pg_time)
 	}
 	$page=$string;
 	$ip=get_ip_address();
+	$session_id=get_session_id();
 	$member=get_member();
-	if (is_guest($member)) $member=-get_session_id();
 	$time=time();
 	$referer=substr(ocp_srv('HTTP_REFERER'),0,255);
 	$browser=substr(get_browser_string(),0,255);
@@ -1825,7 +1825,20 @@ function log_stats($string,$pg_time)
 
 	if ((get_option('bot_stats')=='1') && ((strpos(strtolower($browser),'http:')!==false) || (strpos(strtolower($browser),'bot')!==false) || (get_bot_type()!==NULL))) return;
 
-	$GLOBALS['SITE_DB']->query_insert('stats',array('access_denied_counter'=>0,'browser'=>$browser,'operating_system'=>$os,'the_page'=>$page,'ip'=>$ip,'member_id'=>$member,'date_and_time'=>$time,'referer'=>$referer,'s_get'=>$get,'post'=>$post,'milliseconds'=>intval($pg_time*1000)),false,true);
+	$GLOBALS['SITE_DB']->query_insert('stats',array(
+		'access_denied_counter'=>0,
+		'browser'=>$browser,
+		'operating_system'=>$os,
+		'the_page'=>$page,
+		'ip'=>$ip,
+		'session_id'=>$session_id,
+		'member_id'=>$member,
+		'date_and_time'=>$time,
+		'referer'=>$referer,
+		's_get'=>$get,
+		'post'=>$post,
+		'milliseconds'=>intval($pg_time*1000)
+	),false,true);
 	if (mt_rand(0,1000)==1)
 	{
 		if (!$GLOBALS['SITE_DB']->table_is_locked('stats'))

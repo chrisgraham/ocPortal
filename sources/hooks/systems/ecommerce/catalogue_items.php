@@ -172,7 +172,7 @@ class Hook_catalogue_items
 			$query='SELECT sum(t2.p_quantity) as qty FROM '.get_table_prefix().'shopping_order t1 JOIN '.get_table_prefix().'shopping_order_details t2 ON t1.id=t2.order_id WHERE add_date>'.strval(time()-60*60*intval(get_option('cart_hold_hours'))).' AND '.db_string_equal_to('t1.order_status','ORDER_STATUS_awaiting_payment').' AND t2.p_id='.strval(intval($type_code));
 			if (is_guest())
 			{
-				$query.=' AND t1.session_id<>'.strval(get_session_id());
+				$query.=' AND '.db_string_not_equal_to('t1.session_id',get_session_id());
 			} else
 			{
 				$query.=' AND t1.c_member<>'.strval(get_member());

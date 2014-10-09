@@ -64,7 +64,7 @@ function dispatch_member_mention_notifications($content_type,$content_id,$submit
 			$cma_content_row=content_get_row($content_id,$info);
 			if (!is_null($cma_content_row))
 			{
-				$rendered=preg_replace('#keep_session=\d*#','filtered=1',static_evaluate_tempcode($cma_ob->run($cma_content_row,'_SEARCH',true,true)));
+				$rendered=preg_replace('#keep_session=\w*#','filtered=1',static_evaluate_tempcode($cma_ob->run($cma_content_row,'_SEARCH',true,true)));
 			}
 		}
 

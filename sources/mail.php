@@ -447,7 +447,7 @@ function mail_wrap($subject_line,$message_raw,$to_email=NULL,$to_name=NULL,$from
 			$GLOBALS['NO_LINK_TITLES']=false;
 
 			$_html_content=$html_content->evaluate($lang);
-			$_html_content=preg_replace('#(keep|for)_session=[\d\w]*#','filtered=1',$_html_content);
+			$_html_content=preg_replace('#(keep|for)_session=\w*#','filtered=1',$_html_content);
 			if (strpos($_html_content,'<html')!==false)
 			{
 				$message_html=make_string_tempcode($_html_content);

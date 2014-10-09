@@ -360,7 +360,7 @@ function semihtml_to_comcode($semihtml,$force=false)
 	$semihtml=str_replace('[/semihtml'.($force?']':''),$force?'':'[ / semihtml',$semihtml);
 
 	// This is useful for generally stripping sensitive information anyway. Should be null-op if anti-leech was on, but worth doing just-in-case.
-	$semihtml=preg_replace('#&amp;keep_session=[\d]*(&amp;for_session=[\w\d]*)?#','',$semihtml);
+	$semihtml=preg_replace('#&amp;keep_session=\w*(&amp;for_session=\w*)?#','',$semihtml);
 
 	// We must protect anything that is in CDATA from whitespace/entity cleanup (HTML or XHTML - we have to use lowest common denominator)
 	$semihtml=preg_replace_callback('#(<script[^>]*>)(.*)(</script>)#siU','_cdata_protect',$semihtml);

@@ -230,7 +230,7 @@ function handle_active_logout()
 
 	// Kill session
 	$session=get_session_id();
-	if ($session!=-1)
+	if ($session!='')
 	{
 		delete_session($session);
 	}
@@ -316,12 +316,12 @@ function _enforce_temporary_passwords($member)
 /**
  * Delete a session.
  *
- * @param  integer		The new session
+ * @param  ID_TEXT		The new session
  */
 function delete_session($session)
 {
 	require_code('users_inactive_occasionals');
-	set_session_id(-1);
+	set_session_id('');
 
 	$GLOBALS['SITE_DB']->query_delete('sessions',array('the_session'=>$session),'',1);
 

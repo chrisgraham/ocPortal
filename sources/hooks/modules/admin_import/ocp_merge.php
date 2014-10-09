@@ -3379,6 +3379,8 @@ class Hook_ocp_merge
 
 	/**
 	 * Re-map any Comcode ownership fields.
+	 *
+	 * @param  array			Rows with potential fields to fix
 	 */
 	function _fix_comcode_ownership(&$rows)
 	{

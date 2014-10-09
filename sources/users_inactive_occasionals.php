@@ -56,20 +56,20 @@ function _enforce_sessioned_url($url)
 			$url.='/index.php?';
 		}
 	} else $url.='&';
-	$url=preg_replace('#keep\_session=\d+&#','',$url);
-	$url=preg_replace('#&keep\_session=\d+#','',$url);
+	$url=preg_replace('#keep\_session=\w+&#','',$url);
+	$url=preg_replace('#&keep\_session=\w+#','',$url);
 
 	// Get hash back
 	$url.=$hash;
-	$url=preg_replace('#\?keep\_session=\d+#','',$url);
+	$url=preg_replace('#\?keep\_session=\w+#','',$url);
 
 	// Possibly a nested URL too
-	$url=preg_replace('#keep\_session=\d+'.preg_quote(urlencode('&')).'#','',$url);
-	$url=preg_replace('#'.preg_quote(urlencode('&')).'keep\_session=\d+#','',$url);
-	$url=preg_replace('#'.preg_quote(urlencode('?')).'keep\_session=\d+#','',$url);
+	$url=preg_replace('#keep\_session=\w+'.preg_quote(urlencode('&')).'#','',$url);
+	$url=preg_replace('#'.preg_quote(urlencode('&')).'keep\_session=\w+#','',$url);
+	$url=preg_replace('#'.preg_quote(urlencode('?')).'keep\_session=\w+#','',$url);
 
 	// Put keep_session back
-	$url.='keep_session='.strval(get_session_id());
+	$url.='keep_session='.urlencode(get_session_id());
 
 	// Get hash back
 	$url.=$hash;
@@ -85,7 +85,7 @@ function _enforce_sessioned_url($url)
  * @param  MEMBER			Logged in member
  * @param  BINARY			Whether the session should be considered confirmed
  * @param  boolean		Whether the session should be invisible
- * @return AUTO_LINK		New session ID
+ * @return ID_TEXT		New session ID
  */
 function create_session($member,$session_confirmed=0,$invisible=false)
 {
@@ -100,7 +100,7 @@ function create_session($member,$session_confirmed=0,$invisible=false)
 	{
 		// Generate random session
 		require_code('crypt');
-		$new_session=get_secure_random_number();
+		$new_session=get_rand_password();
 
 		// Store session
 		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
@@ -188,14 +188,14 @@ function create_session($member,$session_confirmed=0,$invisible=false)
  *
  * @sets_output_state
  *
- * @param  integer		The session ID
+ * @param  ID_TEXT		The session ID
  * @param  boolean		Whether this is a guest session (guest sessions will use persistent cookies)
  */
 function set_session_id($id,$guest_session=false)  // NB: Guests sessions can persist because they are more benign
 {
 	// If checking safe mode, can really get in a spin. Don't let it set a session cookie till we've completed startup properly.
 	global $CHECKING_SAFEMODE;
-	if (($CHECKING_SAFEMODE) && ($id==-1)) return;
+	if (($CHECKING_SAFEMODE) && ($id=='')) return;
 
 	// Save cookie
 	$timeout=$guest_session?(time()+intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))):NULL;
@@ -204,14 +204,14 @@ function set_session_id($id,$guest_session=false)  // NB: Guests sessions can pe
 		$test=false;
 	} else*/
 	{
-		$test=@setcookie(get_session_cookie(),strval($id),$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
+		$test=@setcookie(get_session_cookie(),$id,$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
 	}
-	$_COOKIE[get_session_cookie()]=strval($id); // So we remember for this page view
+	$_COOKIE[get_session_cookie()]=$id; // So we remember for this page view
 
 	// If we really have to, store in URL
 	if (((!has_cookies()) || (!$test)) && (!$guest_session/*restorable with no special auth*/) && (is_null(get_bot_type())))
 	{
-		$_GET['keep_session']=strval($id);
+		$_GET['keep_session']=$id;
 	}
 
 	if ($id!=get_session_id()) decache('side_users_online');
@@ -276,7 +276,7 @@ function try_su_login($member)
 		{
 			require_code('crypt');
 			$new_session_row=array(
-				'the_session'=>get_secure_random_number(),
+				'the_session'=>get_rand_password(),
 				'last_activity'=>time(),
 				'member_id'=>$member,
 				'ip'=>get_ip_address(3),

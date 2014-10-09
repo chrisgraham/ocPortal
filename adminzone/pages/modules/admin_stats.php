@@ -66,6 +66,7 @@ class Module_admin_stats
 				'the_page'=>'SHORT_TEXT',
 				'ip'=>'IP',
 				'member_id'=>'MEMBER',
+				'session_id'=>'ID_TEXT',
 				'date_and_time'=>'TIME',
 				'referer'=>'URLPATH',
 				's_get'=>'URLPATH',
@@ -110,6 +111,12 @@ class Module_admin_stats
 		if ((!is_null($upgrade_from)) && ($upgrade_from<9))
 		{
 			$GLOBALS['SITE_DB']->alter_table_field('stats','the_user','MEMBER','member_id');
+			$GLOBALS['SITE_DB']->add_table_field('stats','session_id','ID_TEXT');
+		}
+
+		if ((is_null($upgrade_from)) || ($upgrade_from<9))
+		{
+			$GLOBALS['SITE_DB']->create_index('stats','member_track_4',array('session_id'));
 		}
 	}
 

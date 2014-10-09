@@ -35,7 +35,7 @@ class Module_admin_import
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=6;
+		$info['version']=7;
 		$info['locked']=false;
 		$info['update_require_upgrade']=1;
 		return $info;
@@ -59,6 +59,14 @@ class Module_admin_import
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
+		if ((!is_null($upgrade_from)) && ($upgrade_from<7))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('import_id_remap','id_session','ID_TEXT');
+			$GLOBALS['SITE_DB']->alter_table_field('import_session','imp_session','ID_TEXT');
+			$GLOBALS['SITE_DB']->add_table_field('import_parts_done','id','*AUTO');
+			$GLOBALS['SITE_DB']->alter_table_field('import_parts_done','imp_session','ID_TEXT');
+		}
+
 		if ((!is_null($upgrade_from)) && ($upgrade_from<6))
 		{
 			$GLOBALS['SITE_DB']->add_table_field('import_session','imp_db_host','ID_TEXT');
@@ -72,11 +80,13 @@ class Module_admin_import
 		if ((is_null($upgrade_from)) || ($upgrade_from<4))
 		{
 			$GLOBALS['SITE_DB']->create_table('import_parts_done',array(
-				'imp_id'=>'*SHORT_TEXT',
-				'imp_session'=>'*INTEGER'
+				'id'=>'*AUTO',
+				'imp_id'=>'SHORT_TEXT',
+				'imp_session'=>'ID_TEXT',
 			));
 
 			$GLOBALS['SITE_DB']->create_table('import_session',array(
+				'imp_session'=>'*ID_TEXT',
 				'imp_old_base_dir'=>'SHORT_TEXT',
 				'imp_db_name'=>'ID_TEXT',
 				'imp_db_user'=>'ID_TEXT',
@@ -84,7 +94,6 @@ class Module_admin_import
 				'imp_db_table_prefix'=>'ID_TEXT',
 				'imp_db_host'=>'ID_TEXT',
 				'imp_refresh_time'=>'INTEGER',
-				'imp_session'=>'*INTEGER'
 			));
 
 			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
@@ -97,7 +106,7 @@ class Module_admin_import
 				'id_old'=>'*ID_TEXT',
 				'id_new'=>'AUTO_LINK',
 				'id_type'=>'*ID_TEXT',
-				'id_session'=>'*INTEGER'
+				'id_session'=>'*ID_TEXT'
 			));
 		}
 	}
@@ -260,7 +269,7 @@ class Module_admin_import
 			{
 				$text=do_lang_tempcode('IMPORT_SESSION_EXISTING_REMAP',escape_html($session['imp_db_name']));
 			}
-			$sessions->attach(form_input_list_entry(strval($session['imp_session']),false,$text));
+			$sessions->attach(form_input_list_entry($session['imp_session'],false,$text));
 		}
 		$text=do_lang_tempcode((count($_sessions)==0)?'IMPORT_SESSION_NEW':'IMPORT_SESSION_NEW_DELETE');
 		$sessions->attach(form_input_list_entry(strval(-1),false,$text));
@@ -299,12 +308,12 @@ class Module_admin_import
 		  3) We are starting afresh (therefore delete all previous import sessions)
 		  4) As per '3', except OCF imports are maintained as we're now importing a satellite site
 		*/
-		$session=either_param_integer('session',get_session_id());
-		if (($session==-1) || ($session==-2))
+		$session=either_param('session',get_session_id());
+		if (($session=='-1') || ($session=='-2'))
 		{
 			// Delete all others
 			$GLOBALS['SITE_DB']->query_delete('import_session');
-			if ($session==-1)
+			if ($session=='-1')
 			{
 				$GLOBALS['SITE_DB']->query_delete('import_parts_done');
 				$GLOBALS['SITE_DB']->query_delete('import_id_remap');
@@ -384,7 +393,7 @@ class Module_admin_import
 	 */
 	function choose_actions($extra='')
 	{
-		$session=either_param_integer('session',get_session_id());
+		$session=either_param('session',get_session_id());
 		$importer=filter_naughty(get_param('importer'));
 
 		require_code('hooks/modules/admin_import/'.filter_naughty_harsh($importer));

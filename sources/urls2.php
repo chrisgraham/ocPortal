@@ -69,7 +69,7 @@ function remove_url_mistakes($url)
 	if (substr($url,0,4)=='www.') $url='http://'.$url;
 	$url=@html_entity_decode($url,ENT_NOQUOTES);
 	$url=str_replace(' ','%20',$url);
-	$url=preg_replace('#keep_session=\d*#','filtered=1',$url);
+	$url=preg_replace('#keep_session=\w*#','filtered=1',$url);
 	return $url;
 }
 

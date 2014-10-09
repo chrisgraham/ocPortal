@@ -73,7 +73,7 @@ function init__users()
 			$where='';
 		} else
 		{
-			$where=' WHERE the_session='.strval(get_session_id()).' OR '.db_string_equal_to('ip',get_ip_address(3));
+			$where=' WHERE '.db_string_equal_to('the_session',get_session_id()).' OR '.db_string_equal_to('ip',get_ip_address(3));
 		}
 		$SESSION_CACHE=array();
 		if ((get_forum_type()=='ocf') && (get_db_site()==get_db_forums()) && (get_db_site_host()==get_db_forums_host()))
@@ -204,7 +204,7 @@ function get_member($quick_only=false)
 
 	// Try by session
 	$session=get_session_id();
-	if (($session!=-1) && (get_param_integer('keep_force_htaccess',0)==0))
+	if (($session!='') && (get_param_integer('keep_force_htaccess',0)==0))
 	{
 		$ip=get_ip_address(3); // I hope AOL can cope with this
 		$allow_unbound_guest=true; // Note: Guest sessions are not IP bound
@@ -251,11 +251,11 @@ function get_member($quick_only=false)
 		} else
 		{
 			require_code('users_inactive_occasionals');
-			set_session_id(-1);
+			set_session_id('');
 		}
 	}
 
-	if (($member===NULL) && (get_session_id()==-1) && (get_param_integer('keep_force_htaccess',0)==0))
+	if (($member===NULL) && (get_session_id()=='') && (get_param_integer('keep_force_htaccess',0)==0))
 	{
 		// Try by cookie (will defer to forum driver to authorise against detected cookie)
 		require_code('users_inactive_occasionals');
@@ -309,7 +309,7 @@ function get_member($quick_only=false)
 
 	// If one of the try_* functions hasn't actually created the session, call it here
 	$session=get_session_id();
-	if ($session==-1)
+	if ($session=='')
 	{
 		require_code('users_inactive_occasionals');
 		create_session($member);
@@ -407,16 +407,18 @@ function apply_forum_driver_md5_variant($data,$key)
 /**
  * Get the current session ID.
  *
- * @return integer		The current session ID
+ * @return ID_TEXT		The current session ID (blank: none)
  */
 function get_session_id()
 {
-	if ((!isset($_COOKIE[get_session_cookie()])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEV_MODE'] && running_script('occle')))
+	$cookie_var=get_session_cookie();
+
+	if ((!isset($_COOKIE[$cookie_var])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEV_MODE'] && running_script('occle')))
 	{
-		if (array_key_exists('keep_session',$_GET)) return get_param_integer('keep_session');
-		return (-1);
+		if (array_key_exists('keep_session',$_GET)) return get_param('keep_session');
+		return '';
 	}
-	return intval($_COOKIE[get_session_cookie()]); // No need to stripslashes as it's numeric
+	return isset($_COOKIE[$cookie_var])?$_COOKIE[$cookie_var]:'';
 }
 
 /**

@@ -71,7 +71,7 @@ class auth_test_set extends ocp_test_case
 
 	function testCannotStealSession()
 	{
-		$fake_session_id=1234543;
+		$fake_session_id='1234543';
 
 		$ips=array();
 		$server_addr=get_ip_address(3,ocp_srv('SERVER_ADDR'));

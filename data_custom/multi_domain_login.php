@@ -5,12 +5,12 @@ global $SITE_INFO;
 require_once(dirname(dirname(__FILE__)).'/_config.php');
 
 $session_expiry_time=floatval($_GET['session_expiry_time']);
-$session_id=intval($_GET['session_id']);
+$session_id=$_GET['session_id'];
 $guest_session=($_GET['guest_session']=='1');
 
 $timeout=$guest_session?(time()+intval(60.0*60.0*max(0.017,$session_expiry_time))):NULL;
 
-$test=setcookie(get_session_cookie(),strval($session_id),$timeout,get_cookie_path());
+$test=setcookie(get_session_cookie(),$session_id,$timeout,get_cookie_path());
 
 /*$expires=60*60*1;		Caching won't work well
 header('Pragma: public');

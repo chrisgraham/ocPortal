@@ -1251,7 +1251,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 								$auto_link=substr($comcode,$pos-1,$link_end_pos-$pos+1);
 
 								// Strip down the link, for security reasons
-								$auto_link=preg_replace('#([?&])(keep|for)_session=[\d\w]*#','${1}',$auto_link);
+								$auto_link=preg_replace('#([?&])(keep|for)_session=\w*#','${1}',$auto_link);
 
 								if (substr($auto_link,-3)!='://') // If it's not just a hanging protocol
 								{

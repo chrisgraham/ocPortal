@@ -462,7 +462,7 @@ function do_work()
 					);
 		$GLOBALS['SITE_DB']->query_insert('shopping_cart',
 				array(
-					'session_id'		=>	mt_rand(0,1000000),
+					'session_id'		=>	get_rand_password(),
 					'ordered_by'		=>	mt_rand(db_get_first_id()+1,$num_wanted-1),
 					'product_id'		=>	$product_det['product_id'],
 					'product_name'		=>	$product_det['product_name'],
@@ -481,7 +481,7 @@ function do_work()
 	{
 		$order_id=$GLOBALS['SITE_DB']->query_insert('shopping_order',array(
 					'c_member'		=>	mt_rand(db_get_first_id()+1,$num_wanted-1),
-					'session_id'	=>	mt_rand(0,1000000),
+					'session_id'	=>	get_rand_password(),
 					'add_date'		=>	time(),
 					'tot_price'		=>	'123.00',
 					'order_status'	=>	'ORDER_STATUS_awaiting_payment',

@@ -75,7 +75,7 @@ class Module_shopping
 		{
 			$GLOBALS['SITE_DB']->create_table('shopping_cart',array(
 				'id'=>'*AUTO',
-				'session_id'=>'INTEGER',
+				'session_id'=>'ID_TEXT',
 				'ordered_by'=>'MEMBER',
 				'product_id'=>'AUTO_LINK',
 				'product_name'=>'SHORT_TEXT',
@@ -97,7 +97,7 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_table('shopping_order',array(
 				'id'=>'*AUTO',
 				'c_member'=>'INTEGER',
-				'session_id'=>'INTEGER',
+				'session_id'=>'ID_TEXT',
 				'add_date'=>'TIME',
 				'tot_price'=>'REAL',
 				'order_status'=>'ID_TEXT',
@@ -129,7 +129,7 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->create_table('shopping_logging',array(
 				'id'=>'*AUTO',
 				'e_member_id'=>'*MEMBER',
-				'session_id'=>'INTEGER',
+				'session_id'=>'ID_TEXT',
 				'ip'=>'IP',
 				'last_action'=>'SHORT_TEXT',
 				'date_and_time'=>'TIME'
@@ -178,6 +178,10 @@ class Module_shopping
 			$GLOBALS['SITE_DB']->add_table_field('shopping_order_addresses','address_state','SHORT_TEXT');
 			$GLOBALS['SITE_DB']->add_table_field('shopping_order_addresses','first_name','SHORT_TEXT');
 			$GLOBALS['SITE_DB']->add_table_field('shopping_order_addresses','last_name','SHORT_TEXT');
+
+			$GLOBALS['SITE_DB']->alter_table_field('shopping_order','session_id','ID_TEXT');
+			$GLOBALS['SITE_DB']->alter_table_field('shopping_cart','session_id','ID_TEXT');
+			$GLOBALS['SITE_DB']->alter_table_field('shopping_logging','session_id','ID_TEXT');
 		}
 	}
 

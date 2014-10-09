@@ -130,7 +130,7 @@ class Module_users_online
 				{
 					if (addon_installed('stats'))
 					{
-						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','ip',array('member_id'=>-$row['the_session']));
+						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('stats','ip',array('session_id'=>$row['the_session']));
 						if ((!is_null($test)) && ($test!=''))
 						{
 							$ip=$test;

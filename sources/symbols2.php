@@ -2344,7 +2344,7 @@ function ecv2_SECONDS_PERIOD($lang,$escaped,$param)
  */
 function ecv2_SESSION($lang,$escaped,$param)
 {
-	$value=strval(get_session_id());
+	$value=get_session_id();
 
 	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
 	return $value;
@@ -2360,7 +2360,7 @@ function ecv2_SESSION($lang,$escaped,$param)
  */
 function ecv2_SESSION_HASHED($lang,$escaped,$param)
 {
-	$value=md5(strval(get_session_id()));
+	$value=md5(get_session_id());
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
@@ -2548,6 +2548,38 @@ function ecv2_TIMEZONE($lang,$escaped,$param)
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 	return $value;
+}
+
+/**
+ * Evaluate a particular Tempcode symbol.
+ *
+ * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array				Array of escaping operations.
+ * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ * @return string				The result.
+ */
+function ecv2_MATURITY_FILTER_REQUESTED($lang,$escaped,$param)
+{
+	$safe='';
+	if (function_exists('apache_request_headers'))
+	{
+		$headers=apache_request_headers();
+		if (array_key_exists('prefer',$headers))
+		{
+			$safe=$headers['prefer'];
+		}
+	} elseif (isset($_SERVER['HTTP_PREFER']))
+	{
+		$safe=$_SERVER['HTTP_PREFER'];
+	} elseif (isset($_ENV['HTTP_PREFER']))
+	{
+		$safe=$_ENV['HTTP_PREFER'];
+	}
+	if (strtolower($safe)=='safe')
+	{
+		return '1';
+	}
+	return '0';
 }
 
 /**
@@ -3187,36 +3219,4 @@ function ecv2_LOOP(&$value,$lang,$escaped,$param)
 			$value.=$row_terminator;
 		}
 	}
-}
-
-/**
- * Evaluate a particular Tempcode directive.
- *
- * @param  string				Value to write into.
- * @param  LANGUAGE_NAME	The language to evaluate this symbol in (some symbols refer to language elements).
- * @param  array				Array of escaping operations.
- * @param  array				Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
- */
-function ecv2_MATURITY_FILTER_REQUESTED(&$value,$lang,$escaped,$param)
-{
-	$safe='';
-	if (function_exists('apache_request_headers'))
-	{
-		$headers=apache_request_headers();
-		if (array_key_exists('prefer',$headers))
-		{
-			$safe=$headers['prefer'];
-		}
-	} elseif (isset($_SERVER['HTTP_PREFER']))
-	{
-		$safe=$_SERVER['HTTP_PREFER'];
-	} elseif (isset($_ENV['HTTP_PREFER']))
-	{
-		$safe=$_ENV['HTTP_PREFER'];
-	}
-	if (strtolower($safe)=='safe')
-	{
-		return '1';
-	}
-	return '0';
 }

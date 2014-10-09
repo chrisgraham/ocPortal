@@ -1544,7 +1544,7 @@ function step_5_write_config()
 	}
 
 	// Derive a random session cookie name, to stop conflicts between sites
-	fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\']=\'ocp_session__'.preg_replace('#[^\w\d]#','',uniqid('',true))."';\n");
+	fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\']=\'ocp_session__'.preg_replace('#[^\w]#','',uniqid('',true))."';\n");
 
 	// On the live GAE, we need to switch in different settings to the local dev server
 	if (GOOGLE_APPENGINE)
@@ -1880,7 +1880,7 @@ function step_5_core_2()
 
 	$GLOBALS['SITE_DB']->drop_table_if_exists('sessions');
 	$GLOBALS['SITE_DB']->create_table('sessions',array(
-		'the_session'=>'*INTEGER',
+		'the_session'=>'*ID_TEXT',
 		'last_activity'=>'TIME',
 		'member_id'=>'MEMBER',
 		'ip'=>'IP',

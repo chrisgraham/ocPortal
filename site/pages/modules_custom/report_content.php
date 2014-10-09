@@ -29,7 +29,8 @@ class Module_report_content
 		$info['organisation']='ocProducts';
 		$info['hacked_by']=NULL;
 		$info['hack_version']=NULL;
-		$info['version']=2;
+		$info['version']=3;
+		$info['update_require_upgrade']=1;
 		$info['locked']=false;
 		return $info;
 	}
@@ -50,15 +51,21 @@ class Module_report_content
 	 */
 	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
 	{
-		require_lang('report_content');
+		if (is_null($upgrade_from))
+		{
+			$GLOBALS['SITE_DB']->create_table('reported_content',array(
+				'r_session_id'=>'*ID_TEXT',
+				'r_content_type'=>'*ID_TEXT',
+				'r_content_id'=>'*ID_TEXT',
+				'r_counts'=>'BINARY', // If the content is marked unvalidated, r_counts is set to 0 for each row for it, so if it's revalidated the counts apply elsewhere
+			));
+			$GLOBALS['SITE_DB']->create_index('reported_content','reported_already',array('r_content_type','r_content_id'));
+		}
 
-		$GLOBALS['SITE_DB']->create_table('reported_content',array(
-			'r_session_id'=>'*AUTO_LINK',
-			'r_content_type'=>'*ID_TEXT',
-			'r_content_id'=>'*ID_TEXT',
-			'r_counts'=>'BINARY', // If the content is marked unvalidated, r_counts is set to 0 for each row for it, so if it's revalidated the counts apply elsewhere
-		));
-		$GLOBALS['SITE_DB']->create_index('reported_content','reported_already',array('r_content_type','r_content_id'));
+		if ((!is_null($upgrade_from)) && ($upgrade_from<3))
+		{
+			$GLOBALS['SITE_DB']->alter_table_field('reported_content','r_session_id','ID_TEXT');
+		}
 	}
 
 	var $title;

@@ -294,7 +294,7 @@ if (get_param_integer('save__mailer',1)==1)
 	@mkdir(dirname($mailer_path),0777);
 	file_put_contents($mailer_path,$mailer_script);
 	$session_cookie_id=get_session_cookie();
-	$data=http_download_file(static_evaluate_tempcode(build_url(array('page'=>'mailer_temp','keep_lang'=>(count($langs)!=1)?$lang:NULL),'',NULL,false,false,true)),NULL,false,false,'ocPortal',NULL,array($session_cookie_id=>12345));
+	$data=http_download_file(static_evaluate_tempcode(build_url(array('page'=>'mailer_temp','keep_lang'=>(count($langs)!=1)?$lang:NULL),'',NULL,false,false,true)),NULL,false,false,'ocPortal',NULL,array($session_cookie_id=>get_rand_password()));
 	unlink($mailer_path);
 	$data=preg_replace('#<title>.*</title>#','<title>'.escape_html(get_site_name()).'</title>',$data);
 	$relative_root=(count($langs)!=1)?'../':'';

@@ -45,14 +45,14 @@ function init__crypt()
 		 * @param  string		The password to hash
 		 * @param  integer	The algorithm to use (Defined by PASSWORD_* constants)
 		 * @param  array		The options for the algorithm to use
-		 * @return ~string	The hashed password, or false on error.
+		 * @return ~string	The hashed password (false: error)
 		 */
 		function password_hash($password,$algo,$options)
 		{
 			if (!is_integer($algo))
 			{
 				trigger_error("password_hash() expects parameter 2 to be long, ".gettype($algo)." given",E_USER_WARNING);
-				return NULL;
+				return false;
 			}
 			$result_length=0;
 			switch ($algo)
@@ -66,7 +66,7 @@ function init__crypt()
 						if ($cost<4 || $cost>31)
 						{
 							trigger_error(sprintf("password_hash(): Invalid bcrypt cost parameter specified: %d",$cost),E_USER_WARNING);
-							return NULL;
+							return false;
 						}
 					}
 					// The length of salt to generate
@@ -85,7 +85,7 @@ function init__crypt()
 					break;
 				default:
 					trigger_error(sprintf("password_hash(): Unknown password hashing algorithm: %s",$algo),E_USER_WARNING);
-					return NULL;
+					return false;
 			}
 			$salt_requires_encoding=false;
 			if (isset($options['salt']))
@@ -94,7 +94,7 @@ function init__crypt()
 				if (_crypt_strlen($salt)<$required_salt_len)
 				{
 					trigger_error(sprintf("password_hash(): Provided salt is too short: %d expecting %d",_crypt_strlen($salt),$required_salt_len),E_USER_WARNING);
-					return NULL;
+					return false;
 				} elseif (0==preg_match('#^[a-zA-Z0-9./]+$#D',$salt))
 				{
 					$salt_requires_encoding=true;
@@ -184,7 +184,7 @@ function init__crypt()
 		function password_verify($password,$hash)
 		{
 			$ret=crypt($password,$hash);
-			if (!is_string($ret) || _crypt_strlen($ret)!=_crypt_strlen($hash) || _crypt_strlen($ret)<=13)
+			if (!is_string($ret) || _crypt_strlen($ret)!=_crypt_strlen($hash) || _crypt_strlen($ret)==0/* || _crypt_strlen($ret)<=13  causes problem on mac with old PHP version*/)
 			{
 				return false;
 			}
@@ -321,36 +321,6 @@ function get_site_salt()
 }
 
 /**
- * Check the given master password is valid.
- *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
- */
-function check_master_password($password_given)
-{
-	if (isset($GLOBALS['SITE_INFO']['admin_password'])) // LEGACY
-	{
-		$GLOBALS['SITE_INFO']['master_password']=$GLOBALS['SITE_INFO']['admin_password'];
-		unset($GLOBALS['SITE_INFO']['admin_password']);
-	}
-
-	global $SITE_INFO;
-	if (!array_key_exists('master_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
-	$actual_password_hashed=$SITE_INFO['master_password'];
-	if ((function_exists('password_verify')) && (strpos($actual_password_hashed,'$')!==false))
-	{
-		return password_verify($password_given,$actual_password_hashed);
-	}
-	$salt='';
-	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
-	{
-		$actual_password_hashed=substr($actual_password_hashed,1);
-		$salt='ocp';
-	}
-	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
-}
-
-/**
  * Get a randomised password.
  *
  * @return string			The randomised password
@@ -382,4 +352,34 @@ function get_secure_random_number()
 		$code=mt_rand(0,min(2147483647,mt_getrandmax()));
 	}
 	return $code;
+}
+
+/**
+ * Check the given master password is valid.
+ *
+ * @param  SHORT_TEXT	Given master password
+ * @return boolean		Whether it is valid
+ */
+function check_master_password($password_given)
+{
+	if (isset($GLOBALS['SITE_INFO']['admin_password'])) // LEGACY
+	{
+		$GLOBALS['SITE_INFO']['master_password']=$GLOBALS['SITE_INFO']['admin_password'];
+		unset($GLOBALS['SITE_INFO']['admin_password']);
+	}
+
+	global $SITE_INFO;
+	if (!array_key_exists('master_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
+	$actual_password_hashed=$SITE_INFO['master_password'];
+	if ((function_exists('password_verify')) && (strpos($actual_password_hashed,'$')!==false))
+	{
+		return password_verify($password_given,$actual_password_hashed);
+	}
+	$salt='';
+	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
+	{
+		$actual_password_hashed=substr($actual_password_hashed,1);
+		$salt='ocp';
+	}
+	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
 }

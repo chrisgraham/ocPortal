@@ -75,7 +75,7 @@ class Module_purchase
 				'e_member_id'=>'MEMBER',
 				'e_amount'=>'SHORT_TEXT',
 				'e_ip_address'=>'IP',
-				'e_session_id'=>'INTEGER',
+				'e_session_id'=>'ID_TEXT',
 				'e_time'=>'TIME',
 				'e_length'=>'?INTEGER',
 				'e_length_units'=>'ID_TEXT',
@@ -114,6 +114,8 @@ class Module_purchase
 			$GLOBALS['SITE_DB']->alter_table_field('transactions','linked','ID_TEXT','t_parent_txn_id');
 			$GLOBALS['SITE_DB']->alter_table_field('transactions','item','SHORT_TEXT','t_type_code');
 			$GLOBALS['SITE_DB']->alter_table_field('transactions','pending_reason','SHORT_TEXT','t_pending_reason');
+
+			$GLOBALS['SITE_DB']->alter_table_field('trans_expecting','e_session_id','ID_TEXT');
 		}
 	}
 
@@ -449,10 +451,10 @@ class Module_purchase
 			$text=new ocp_tempcode();
 			if (method_exists($object,'product_info'))
 			{
-				$text->attach($object->product_info(get_param_integer('product'),$title));
+				$text->attach($object->product_info(get_param_integer('product'),$this->title));
 			} elseif (method_exists($object,'get_message'))
 			{
-				$text->attach($object->get_message($product));
+				$text->attach($object->get_message($type_code));
 			}
 		}
 
