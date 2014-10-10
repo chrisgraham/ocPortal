@@ -439,11 +439,18 @@ function payment_form()
 
 		$price=$GLOBALS['SITE_DB']->query_select_value('shopping_order','tot_price',array('id'=>$order_id));
 		$item_name=do_lang('CART_ORDER',strval($order_id));
-		$fields=is_null($order_id)?new ocp_tempcode():get_transaction_form_fields(NULL,strval($order_id),$item_name,float_to_raw_string($price),NULL,'');
+		if (is_null($order_id))
+		{
+			$fields=new ocp_tempcode();
+			$hidden=new ocp_tempcode();
+		} else
+		{
+			list($fields,$hidden)=get_transaction_form_fields(NULL,strval($order_id),$item_name,float_to_raw_string($price),NULL,'');
+		}
 
 		$finish_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
 
-		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'a70d6995baabb7e41e1af68409361f3c','FIELDS'=>$fields));
+		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'a70d6995baabb7e41e1af68409361f3c','FIELDS'=>$fields,'HIDDEN'=>$hidden));
 
 		require_javascript('javascript_validation');
 

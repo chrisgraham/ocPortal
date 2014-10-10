@@ -209,11 +209,11 @@ class Module_invoices
 		$products=$object->get_products(false,$type_code);
 		$invoice_title=$products[$type_code][4];
 
-		$fields=get_transaction_form_fields(NULL,strval($id),$invoice_title,float_to_raw_string($row['i_amount']),NULL,'');
+		list($fields,$hidden)=get_transaction_form_fields(NULL,strval($id),$invoice_title,float_to_raw_string($row['i_amount']),NULL,'');
 
 		$text=do_lang_tempcode('TRANSACT_INFO');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$this->title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>'','SUBMIT_ICON'=>'menu__rich_content__ecommerce__purchase','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
+		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$this->title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'menu__rich_content__ecommerce__purchase','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
 	}
 }
 

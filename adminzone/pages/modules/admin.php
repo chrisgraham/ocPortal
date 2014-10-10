@@ -238,7 +238,7 @@ class Module_admin
 			array('subscribe','track','notification','alert','monitor','watch'),
 			array('bbcode','wikicode','comcode','shortcode'),
 			array('html','xhtml'),
-			array('addon','add-on','mod','hack','extension','plugin','app','core_addon_management'),
+			array('addon','add-on','mod','hack','extension','plugin','app','core_addon_management','module','system'),
 			array('name','title'),
 			array('analytics','statistics','hits','stats'),
 			array('newsletter','mass-mail','mass-mailing','bulletin','mail-merge'),
@@ -265,7 +265,6 @@ class Module_admin
 			array('logout','log-out','sign-out','sign-off'),
 			array('login','log-in','sign-in','sign-on'),
 			array('shopping','ecommerce','payment','purchase','products'),
-			array('module','addon','system'),
 			array('cache','decache','cleanup'),
 			array('ssl','https'),
 			array('seed','theme wizard'),
@@ -842,6 +841,43 @@ class Module_admin
 					$url='';
 					$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID'=>'1368be933d0ccbcd65939f29dd6d7003','NAME'=>$p,'URL'=>$url,'TITLE'=>'','DESCRIPTION'=>escape_html($t))));
 				}
+			}
+		}
+
+		// Non-installed addons
+		$current_results_type=do_lang('ADDONS');
+		if ($this->_section_match($section_limitations,$current_results_type))
+		{
+			$content[$current_results_type]=new ocp_tempcode();
+			$map=array();
+			$dh=@opendir(get_custom_file_base().'/imports/addons');
+			if ($dh!==false)
+			{
+				while (($f=readdir($dh))!==false)
+				{
+					if (substr($f,-4)=='.tar')
+					{
+						$p=basename($f,'.tar');
+						if ($this->_keyword_match($p))
+						{
+							require_code('tar');
+							$tar=tar_open(get_custom_file_base().'/imports/addons/'.$f,'rb');
+							$directory=tar_get_directory($tar);
+							$info_file=tar_get_file($tar,'mod.inf'); // TODO: Change in v10
+							if (!is_null($info_file))
+							{
+								$info=better_parse_ini_file(NULL,$info_file['data']);
+
+								$title=isset($info['title'])?$info['title']:'';
+								$description=isset($info['description'])?$info['description']:'';
+								$_url=build_url(array('page'=>'admin_addons'),'adminzone');
+								$url=$_url->evaluate();
+								$content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('NAME'=>$p,'URL'=>$url,'TITLE'=>$title,'DESCRIPTION'=>$description)));
+							}
+						}
+					}
+				}
+				closedir($dh);
 			}
 		}
 

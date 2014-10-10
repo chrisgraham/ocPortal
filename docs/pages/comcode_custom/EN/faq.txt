@@ -378,6 +378,10 @@ In order to change the ocPortal header text that is shown in page titles, you mu
 
 Catalogues holds structured records of data. The system is extremely powerful, as the staff can create new catalogues with any structure of their choosing. The default FAQ page on an ocPortal install is a catalogue.
 
+[title="3"]How do I prevent users from modifying CMS content?[/title]
+
+Often webmasters are surprised that by default users allowed into the CMS zone. This is because the default privileges allow submission of content, but subject to validation -- a good feature on community sites. To deny access to the whole CMS zone use the Permission Tree Editor (under Admin Zone > Security).
+
 [title="3"]Why are Comcode pages stored as files?[/title]
 
 This is because a number of them need to be provided by default, so that they may easily be created and edited in a text editor, and so that they may easily be transferred between CMSs.

@@ -1371,7 +1371,10 @@ function _access_denied($class,$param,$force_login)
 
 	if (($GLOBALS['IS_ACTUALLY_ADMIN']) && (get_param_integer('keep_fatalistic',0)==1)) fatal_exit($message);
 
-	if (((is_guest()) && (running_script('index'))) || ($force_login)) // Show login screen if appropriate
+	if (((is_guest()) && ((running_script('attachment')) || (running_script('dload')) || ($GLOBALS['NON_PAGE_SCRIPT']==0))) || ($force_login)) // Show login screen if appropriate
+	// We do want to supply a nice login screen for attachment/dload scripts because they are sometimes externally linked to (e.g. in emails or hotlinks)
+	// Otherwise we want flat access denied due to a flat request/response model
+	// NB: Also see similar running_script lines in globalise function
 	{
 		if (get_param_integer('save_and_stay',0)==1)
 		{

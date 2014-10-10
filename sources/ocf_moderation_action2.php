@@ -179,7 +179,14 @@ function warnings_script()
 	foreach ($rows as $myrow)
 	{
 		$delete_link=hyperlink($url,do_lang_tempcode('DELETE'),false,false,'',NULL,form_input_hidden('title',$myrow['s_title']));
-		$content->attach(do_template('OCF_SAVED_WARNING',array('_GUID'=>'537a5e28bfdc3f2d2cb6c06b0a939b51','MESSAGE'=>$myrow['s_message'],'EXPLANATION'=>$myrow['s_explanation'],'TITLE'=>$myrow['s_title'],'DELETE_LINK'=>$delete_link)));
+		$content->attach(do_template('OCF_SAVED_WARNING',array(
+			'_GUID'=>'537a5e28bfdc3f2d2cb6c06b0a939b51',
+			'MESSAGE'=>$myrow['s_message'],
+			'MESSAGE_HTML'=>comcode_to_tempcode($myrow['s_message'],$GLOBALS['FORUM_DRIVER']->get_guest_id()),
+			'EXPLANATION'=>$myrow['s_explanation'],
+			'TITLE'=>$myrow['s_title'],
+			'DELETE_LINK'=>$delete_link,
+		)));
 	}
 	if ($content->is_empty()) $content=paragraph(do_lang_tempcode('NO_ENTRIES'),'rfdsfsdf3t45');
 
@@ -266,9 +273,10 @@ function ocf_delete_warning($warning_id)
 	$member_id=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_warnings','w_member_id',array('id'=>$warning_id));
 	if (is_null($member_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 
-	$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_cache_warnings=(m_cache_warnings-1) WHERE id='.strval($member_id),1);
-
 	$GLOBALS['FORUM_DB']->query_delete('f_warnings',array('id'=>$warning_id),'',1);
+
+	$num_warnings=$GLOBALS['FORUM_DB']->query_value('f_warnings','COUNT(*)',array('w_is_warning'=>1,'w_member_id'=>$member_id));
+	$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member_id),'',1);
 }
 
 

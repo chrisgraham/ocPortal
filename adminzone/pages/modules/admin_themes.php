@@ -2091,6 +2091,7 @@ class Module_admin_themes
 
 		$unmodified=(strpos($path,'themes/default/images/')!==false);
 
+		disable_php_memory_limit();
 		$from_file=@file_get_contents(($unmodified?get_file_base():get_custom_file_base()).'/'.rawurldecode($path));
 		$width=do_lang_tempcode('UNKNOWN_EM');
 		$height=do_lang_tempcode('UNKNOWN_EM');

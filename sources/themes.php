@@ -202,7 +202,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 		if ($db->connection_write==$GLOBALS['SITE_DB']->connection_write) // If guard is here because a MSN site can't make assumptions about the file system of the central site
 		{
-			if ((($path!==NULL) && ($path!='')) || (($silent_fail) && ($GLOBALS['SEMI_DEV_MODE'])))
+			if ((($path!==NULL) && ($path!='')) || (($silent_fail) && (!$GLOBALS['SEMI_DEV_MODE'])))
 			{
 				$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 				$GLOBALS['NO_QUERY_LIMIT']=true;
@@ -337,7 +337,7 @@ function cdn_filter($path)
  */
 function _search_img_file($theme,$lang,$id,$dir='images')
 {
-	$extensions=array('png','jpg','jpeg','gif','ico');
+	$extensions=array('png','jpg','jpeg','gif','ico','svg');
 	$url_base='themes/';
 	foreach (array(get_custom_file_base(),get_file_base()) as $_base)
 	{

@@ -488,11 +488,11 @@ class Module_purchase
 				warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 			}
 
-			$fields=get_transaction_form_fields(NULL,$purchase_id,$item_name,float_to_raw_string($price),($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?intval($length):NULL,($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?$length_units:'',$via);
+			list($fields,$hidden)=get_transaction_form_fields(NULL,$purchase_id,$item_name,float_to_raw_string($price),($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?intval($length):NULL,($temp[$type_code][0]==PRODUCT_SUBSCRIPTION)?$length_units:'',$via);
 
 			$finish_url=build_url(array('page'=>'_SELF','type'=>'finish'),'_SELF');
 
-			$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'15cbba9733f6ff8610968418d8ab527e','FIELDS'=>$fields));
+			$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('_GUID'=>'15cbba9733f6ff8610968418d8ab527e','FIELDS'=>$fields,'HIDDEN'=>$hidden));
 			return $this->_wrap($result,$this->title,$finish_url);
 		}
 		return $this->_wrap($result,$this->title,NULL);

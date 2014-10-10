@@ -98,7 +98,7 @@ function ecommerce_get_currency_symbol()
  * @param  ?integer		The length (NULL: not a subscription)
  * @param  ID_TEXT		The length units
  * @param  ?ID_TEXT		The service the payment will go via via (NULL: autodetect).
- * @return tempcode		The form fields
+ * @return array			A pair: The form fields, Hidden fields
  */
 function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$length,$length_units,$via=NULL)
 {
@@ -126,8 +126,10 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	));
 
 	require_code('form_templates');
+
 	$fields=new ocp_tempcode();
-	$fields->attach(form_input_hidden('trans_id',$trans_id));
+	$hidden=new ocp_tempcode();
+
 	$fields->attach(form_input_line(do_lang_tempcode('CARDHOLDER_NAME'),do_lang_tempcode('DESCRIPTION_CARDHOLDER_NAME'),'name',ecommerce_test_mode()?$GLOBALS['FORUM_DRIVER']->get_username(get_member()):get_ocp_cpf('payment_cardholder_name'),true));
 	$fields->attach(form_input_list(do_lang_tempcode('CARD_TYPE'),'','card_type',$object->create_selection_list_card_types(ecommerce_test_mode()?'Visa':get_ocp_cpf('payment_type'))));
 	$fields->attach(form_input_line(do_lang_tempcode('CARD_NUMBER'),do_lang_tempcode('DESCRIPTION_CARD_NUMBER'),'card_number',ecommerce_test_mode()?'4444333322221111':get_ocp_cpf('payment_card_number'),true));
@@ -145,10 +147,12 @@ function get_transaction_form_fields($trans_id,$purchase_id,$item_name,$amount,$
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_post_code'),'','zip',get_ocp_cpf('post_code'),true));
 	$fields->attach(form_input_line(do_lang_tempcode('SPECIAL_CPF__ocp_country'),'','country',get_ocp_cpf('country'),true));
 
+	$hidden->attach(form_input_hidden('trans_id',$trans_id));
+
 	// Set purchase ID as hidden form field to get back after transaction
 	$fields->attach(form_input_hidden('customfld1',$purchase_id));
 
-	return $fields;
+	return array($fields,$hidden);
 }
 
 /**
@@ -409,7 +413,7 @@ function handle_transaction_script()
 
 	if (method_exists($object,'show_payment_response'))
 	{
-		echo $object->show_payment_response($product,$purchase_id);
+		echo $object->show_payment_response($type_code,$purchase_id);
 	}
 
 	return $purchase_id;

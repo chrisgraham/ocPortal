@@ -73,7 +73,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 		$test=ocf_is_on_ldap($username);
 		if (!$test)
 		{
-			$out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
+			$out['error']=is_null($username)?do_lang_tempcode('MEMBER_NO_EXISTS'):do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
 			return $out;
 		}
 

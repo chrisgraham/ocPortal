@@ -40,7 +40,7 @@ class Hook_task_ocf_members_recache
 			foreach ($members as $member)
 			{
 				ocf_force_update_member_post_count($member['id']);
-				$num_warnings=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id'=>$member['id']));
+				$num_warnings=$GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id'=>$member['id'],'w_is_warning'=>1));
 				$GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings'=>$num_warnings),array('id'=>$member['id']),'',1);
 			}
 			$start+=500;
