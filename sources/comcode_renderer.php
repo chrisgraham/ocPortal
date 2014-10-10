@@ -1933,6 +1933,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			if ($attributes['target']=='blank') $attributes['target']='_blank';
 			$rel=(($as_admin) || has_specific_permission($source_member,'search_engine_links'))?'':'nofollow';
 			if (array_key_exists('rel',$attributes)) $rel=trim($rel.' '.$attributes['rel']);
+			$rel=str_replace('nofollow nofollow','nofollow',$rel);
 			if ($attributes['target']=='_blank')
 			{
 				$title=do_lang_tempcode('LINK_NEW_WINDOW');

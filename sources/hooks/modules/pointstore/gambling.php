@@ -116,7 +116,7 @@ class Hook_pointstore_gambling
 			$number=intval(round($average_gamble_multiplier*$amount+mt_rand(0,intval(round($maximum_gamble_multiplier*$amount-$average_gamble_multiplier*$amount)))));
 			for ($x=1;$x<intval($peak);$x++) // Perform some discrete calculus: we need to find when we've reached the proportional probability area equivalent to our number
 			{
-				$p=$peak*(1.0/floatval(pow(floatval($x)+0.4,2.0))-(1.0/pow($maximum_gamble_multiplier*floatval($amount),2.0))); // Using a 1/x^2 curve. 0.4 is a bit of a magic number to get the averaging right
+				$p=$peak*(1.0/pow(floatval($x)+0.4,2.0)-(1.0/pow($maximum_gamble_multiplier*floatval($amount),2.0))); // Using a 1/x^2 curve. 0.4 is a bit of a magic number to get the averaging right
 				$under+=$p;
 				if ($under>floatval($number)) break;
 			}
