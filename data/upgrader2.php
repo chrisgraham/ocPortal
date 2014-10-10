@@ -65,7 +65,7 @@ if (!file_exists($tmp_path))
 	header('Content-type: text/plain');
 	exit('Temp file has disappeared ('.$tmp_path.')');
 }
-$tmp_path=dirname(dirname(__FILE__)).'/data_custom/upgrader.tar.tmp'; // Actually for security, we will not allow it to be configurable (in case someone managed to steal the hash we can't let them extract arbitrary archives)
+$tmp_path=dirname(dirname(__FILE__)).'/data_custom/upgrader.ocp.tmp'; // Actually for security, we will not allow it to be configurable (in case someone managed to steal the hash we can't let them extract arbitrary archives)
 $myfile=fopen($tmp_path,'rb');
 
 $file_offset=intval($_GET['file_offset']);

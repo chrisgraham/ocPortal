@@ -383,12 +383,12 @@ function upgrade_script()
 					tar_close($upgrade_resource);
 					if ($popup_simple_extract)
 					{
-						@unlink(get_custom_file_base().'/data_custom/upgrader.tar.tmp');
+						@unlink(get_custom_file_base().'/data_custom/upgrader.ocp.tmp');
 						@unlink(get_custom_file_base().'/data_custom/upgrader.tmp');
-						$test=@copy($temp_path,get_custom_file_base().'/data_custom/upgrader.tar.tmp');
+						$test=@copy($temp_path,get_custom_file_base().'/data_custom/upgrader.ocp.tmp');
 						if ($test===false) fatal_exit(do_lang_tempcode('FU_FTP_NEEDED'));
 						@unlink($temp_path);
-						$temp_path=get_custom_file_base().'/data_custom/upgrader.tar.tmp';
+						$temp_path=get_custom_file_base().'/data_custom/upgrader.ocp.tmp';
 						$tmp_data_path=get_custom_file_base().'/data_custom/upgrader.tmp';
 						$tmp_data_file=fopen($tmp_data_path,'wb');
 						fwrite($tmp_data_file,serialize($data));

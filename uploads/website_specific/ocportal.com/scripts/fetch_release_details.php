@@ -47,7 +47,7 @@ if ((array_key_exists(0,$news_rows)) && (has_category_access($GLOBALS['FORUM_DRI
 	$news=get_translated_text($news_rows[0]['news_article']);
 
 	$matches=array();
-	preg_match('#"(http://ocportal.com/upgrades/[^"]*.tar)"#',$news_html,$matches);
+	preg_match('#"(http://ocportal.com/upgrades/[^"]*.ocp)"#',$news_html,$matches);
 	$tar_url=array_key_exists(1,$matches)?$matches[1]:'';
 	$changes='';
 	if (preg_match('#<br />([^>]*the following.*:<br /><ul>)#U',$news_html,$matches)!=0)

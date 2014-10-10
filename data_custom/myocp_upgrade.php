@@ -16,9 +16,9 @@ You must have already run an untar:
  - Generate as normal, on the news release for the version you're upgrading
  - Run something like:
   - cd /home/ocp/public_html/servers/myocp.com
-  - wget -O upgrade.tar http://ocportal.com/upgrades/7.1.2-9%20beta3.tar
-  - tar xvf upgrade.tar
-  - rm upgrade.tar
+  - wget -O upgrade.ocp http://ocportal.com/upgrades/7.1.2-9%20beta3.ocp
+  - tar xvf upgrade.ocp
+  - rm upgrade.ocp
 Then run this script, http://shareddemo.myocp.com/data_custom/myocp_upgrade.php
 You may need to call it multiple times, with ?from=<number>, if it is timing out
 After running the main upgrade this script will tell you files to delete.

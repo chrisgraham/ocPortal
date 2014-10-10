@@ -39,7 +39,7 @@ function make_upgrade_get_path($from_version,$to_version)
 	require_code('m_zip');
 
 	// Find out path/filenames for the upgrade file we're making
-	$filename=$from_version.'-'.$to_version.'.tar';
+	$filename=$from_version.'-'.$to_version.'.ocp';
 	$tar_path=dirname(__FILE__).'/tars/'.$filename;
 	$wip_path=dirname(__FILE__).'/tar_build/'.$filename;
 
