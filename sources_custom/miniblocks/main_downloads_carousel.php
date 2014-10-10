@@ -1,5 +1,7 @@
 <?php
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 if (!isset($map['id'])) $map['id']=strval(db_get_first_id());
 $id=intval($map['id']);
 

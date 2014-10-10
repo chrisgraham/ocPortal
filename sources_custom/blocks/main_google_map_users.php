@@ -62,6 +62,8 @@ class Block_main_google_map_users
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_javascript('javascript_ajax');
 		require_lang('google_map_users');
 

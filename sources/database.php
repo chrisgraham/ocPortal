@@ -212,7 +212,7 @@ function db_string_not_equal_to($attribute,$compare)
  */
 function db_encode_like($pattern)
 {
-	if ($GLOBALS['DEV_MODE'])
+	if (($GLOBALS['DEV_MODE']) || (!has_solemnly_declared(I_UNDERSTAND_SQL_INJECTION)))
 	{
 		require_code('database_security_filter');
 		$GLOBALS['DB_ESCAPE_STRING_LIST'][$GLOBALS['DB_STATIC_OBJECT']->db_encode_like($pattern)]=true;
@@ -290,7 +290,7 @@ function db_escape_string($string)
 		_general_db_init();
 	}
 
-	if ($GLOBALS['DEV_MODE'])
+	if (($GLOBALS['DEV_MODE']) || (!has_solemnly_declared(I_UNDERSTAND_SQL_INJECTION)))
 	{
 		require_code('database_security_filter');
 		$GLOBALS['DB_ESCAPE_STRING_LIST'][trim($GLOBALS['DB_STATIC_OBJECT']->db_escape_string($string),' %')]=true;
@@ -777,7 +777,7 @@ class database_driver
 	{
 		global $DEV_MODE;
 
-		if ($DEV_MODE)
+		if (($DEV_MODE) || (!has_solemnly_declared(I_UNDERSTAND_SQL_INJECTION)))
 		{
 			if (!is_bool($fail_ok)) fatal_exit('You probably wanted to use query_select_value_if_there');
 
@@ -932,7 +932,7 @@ class database_driver
 			$queries=1;//substr_count($_query,'insert into ')+substr_count($_query,'replace into ')+substr_count($_query,'update ')+substr_count($_query,'select ')+substr_count($_query,'delete from '); Not reliable
 			if ((strpos(preg_replace('#\'[^\']*\'#','\'\'',str_replace('\\\'','',$_query)),' union ')!==false) || ($queries>1)) log_hack_attack_and_exit('SQL_INJECTION_HACK',$query);
 
-			if ($DEV_MODE)
+			if (($DEV_MODE) || (!has_solemnly_declared(I_UNDERSTAND_SQL_INJECTION)))
 			{
 				require_code('database_security_filter');
 

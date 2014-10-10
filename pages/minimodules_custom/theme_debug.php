@@ -1,5 +1,7 @@
 <?php
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 echo '<p>Pick a theme&hellip;</p><ul class="spaced_list">';
 
 $GLOBALS['NO_QUERY_LIMIT']=true;

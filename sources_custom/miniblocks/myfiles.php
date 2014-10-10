@@ -1,5 +1,7 @@
 <?php
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 require_code('files2');
 
 $basedir=get_custom_file_base().'/uploads/filedump/'.$GLOBALS['FORUM_DRIVER']->get_username(get_member());

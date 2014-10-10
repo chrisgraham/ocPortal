@@ -7,6 +7,8 @@
 
 */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 require_css('crossword');
 require_code('php-crossword/php_crossword.class');
 

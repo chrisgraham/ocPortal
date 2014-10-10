@@ -99,6 +99,92 @@ function init__zones()
 	global $BLOCKS_AT_CACHE;
 	$BLOCKS_AT_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('BLOCKS_AT'):array();
 	if ($BLOCKS_AT_CACHE===NULL) $BLOCKS_AT_CACHE=array();
+
+	define('I_UNDERSTAND_SQL_INJECTION',1);
+	define('I_UNDERSTAND_XSS',2);
+	define('I_UNDERSTAND_PATH_INJECTION',4);
+	global $DECLARATIONS_STACK,$DECLARATIONS_STATE,$DECLARATIONS_STATE_DEFAULT;
+	$DECLARATIONS_STACK=array();
+	$DECLARATIONS_STATE_DEFAULT=array(
+		I_UNDERSTAND_SQL_INJECTION=>true,
+		I_UNDERSTAND_XSS=>true,
+		I_UNDERSTAND_PATH_INJECTION=>true,
+	);
+	$DECLARATIONS_STATE=$DECLARATIONS_STATE_DEFAULT;
+}
+
+/**
+ * Declare what security properties the programmer understands. i.e. Self-certification.
+ * A good programmer will understand the correct data conversions to undergo in order to write secure/correct/reliable code.
+ * A newbie programmer likely will not, sloppiness or a lack of understanding could lead to critical mistakes.
+ * If declarations aren't made then extra security precautions are taken, which may interfere with normal processing in limited cases.
+ * Declarations should be made whenever entering a custom block or module.
+ *
+ * @param  integer			Bitmask of declarations (I_UNDERSTAND_* constants).
+ */
+function i_solemnly_declare($declarations)
+{
+	global $DECLARATIONS_STACK,$DECLARATIONS_STATE_DEFAULT,$DECLARATIONS_STATE;
+	array_pop($DECLARATIONS_STACK);
+	$new_state=array();
+	foreach (array_keys($DECLARATIONS_STATE_DEFAULT) as $property)
+	{
+		$new_state[$property]=(($declarations & $property) !=0);
+	}
+	$DECLARATIONS_STACK[]=$new_state;
+	$DECLARATIONS_STATE=$new_state;
+}
+
+/**
+ * Enter a new security scope (i.e. a custom block or module).
+ */
+function _solemnly_enter()
+{
+	i_solemnly_declare(0);
+}
+
+/**
+ * Leave the most recent security scope (i.e. a custom block or module).
+ *
+ * @param  ?string		Output to filter, if I_UNDERSTAND_XSS is not set.
+ */
+function _solemnly_leave(&$out=NULL)
+{
+	if ((!has_solemnly_declared(I_UNDERSTAND_XSS)) && ($out!==NULL))
+	{
+		foreach (array_merge(array_values($_POST),array_values($_GET)) as $before)
+		{
+			$after=$before;
+			kid_gloves_html_escaping_singular($after);
+			if ($after!==$before)
+			{
+				$out=str_replace($before,$after,$out);
+			}
+		}
+	}
+
+	if (!has_solemnly_declared(I_UNDERSTAND_PATH_INJECTION))
+	{
+		foreach ($_GET as $param)
+		{
+			filter_naughty($param);
+		}
+	}
+
+	global $DECLARATIONS_STACK;
+	array_pop($DECLARATIONS_STACK);
+}
+
+/**
+ * Find if a security property has been declared as being understood.
+ *
+ * @param  integer		The property.
+ * @return boolean		Whether it is understood.
+ */
+function has_solemnly_declared($declaration)
+{
+	global $DECLARATIONS_STATE;
+	return $DECLARATIONS_STATE[$declaration];
 }
 
 /**
@@ -379,6 +465,11 @@ function _load_mini_code($string,$map=NULL)
 	require_code('developer_tools');
 	destrictify();
 
+	if (strpos($string,'_custom/')!==false)
+	{
+		_solemnly_enter();
+	}
+
 	ob_start();
 	$test1=require(get_file_base().'/'.$string);
 	$test2=ob_get_contents();
@@ -386,15 +477,39 @@ function _load_mini_code($string,$map=NULL)
 	{
 		if (is_object($test1))
 		{
+			if (strpos($string,'_custom/')!==false)
+			{
+				$_test1=$test1->evaluate();
+				_solemnly_leave($_test1);
+				if (!has_solemnly_declared(I_UNDERSTAND_XSS))
+				{
+					$test1=make_string_tempcode($_test1);
+				}
+			}
+
 			$out=$test1;
 		} else
 		{
 			$out=new ocp_tempcode();
 			if ((!is_bool($test1)) && (!is_integer($test1))) // Not an automatic return code
-				$out->attach(is_string($test1)?$test1:strval($test1));
+			{
+				$_test1=is_string($test1)?$test1:strval($test1);
+
+				if (strpos($string,'_custom/')!==false)
+				{
+					_solemnly_leave($_test1);
+				}
+
+				$out->attach($_test1);
+			}
 		}
 	} else
 	{
+		if (strpos($string,'_custom/')!==false)
+		{
+			_solemnly_leave($test2);
+		}
+
 		$out=new ocp_tempcode();
 		$out->attach($test2);
 	}
@@ -418,6 +533,11 @@ function load_module_page($string,$codename,&$out=NULL)
 {
 	global $PAGE_STRING;
 	if (is_null($PAGE_STRING)) $PAGE_STRING=$string;
+
+	if (strpos($string,'_custom/')!==false)
+	{
+		_solemnly_enter();
+	}
 
 	require_code(filter_naughty($string));
 	if (class_exists('Mx_'.filter_naughty_harsh($codename)))
@@ -487,11 +607,32 @@ function load_module_page($string,$codename,&$out=NULL)
 
 		if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
 		{
+			if (strpos($string,'_custom/')!==false)
+			{
+				$_out=$out->evaluate();
+				_solemnly_leave($_out);
+				if (!has_solemnly_declared(I_UNDERSTAND_XSS))
+				{
+					$out=make_string_tempcode($_out);
+				}
+			}
+
 			$out->evaluate_echo(NULL,true);
 		}
 	}
 
 	$ret=$object->run();
+
+	if (strpos($string,'_custom/')!==false)
+	{
+		$_ret=$ret->evaluate();
+		_solemnly_leave($_ret);
+		if (!has_solemnly_declared(I_UNDERSTAND_XSS))
+		{
+			$ret=make_string_tempcode($_ret);
+		}
+	}
+
 	return $ret;
 }
 
@@ -762,7 +903,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 			$row=find_cache_on($codename);
 			if ($row===NULL)
 			{
-				$object=do_block_hunt_file($codename,$map);
+				list($object,$new_security_scope)=do_block_hunt_file($codename,$map);
 				if ((is_object($object)) && (method_exists($object,'cacheing_environment')))
 				{
 					$info=$object->cacheing_environment($map);
@@ -789,7 +930,10 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 					$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 					$GLOBALS['NO_QUERY_LIMIT']=true;
 
-					if ($object!==NULL) $object=do_block_hunt_file($codename,$map);
+					if ($object!==NULL)
+					{
+						list($object,$new_security_scope)=do_block_hunt_file($codename,$map);
+					}
 					if (!is_object($object))
 					{
 						// This probably happened as we uninstalled a block, and now we're getting a "missing block" message back.
@@ -802,6 +946,7 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 						$out->attach($object);
 						if (!$GLOBALS['OUTPUT_STREAMING'])
 							restore_output_state(false,true);
+
 						return $out;
 					}
 					$backup_langs_requested=$LANGS_REQUESTED;
@@ -813,7 +958,17 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 						disable_php_memory_limit();
 						if (function_exists('set_time_limit')) @set_time_limit(200);
 					}
+					if ($new_security_scope) _solemnly_enter();
 					$cache=$object->run($map);
+					if ($new_security_scope)
+					{
+						$_cache=$cache->evaluate();
+						_solemnly_leave($_cache);
+						if (!has_solemnly_declared(I_UNDERSTAND_XSS))
+						{
+							$cache=make_string_tempcode($_cache);
+						}
+					}
 					$cache->evaluate(); // To force lang files to load, etc
 					if (!$DO_NOT_CACHE_THIS)
 					{
@@ -841,14 +996,27 @@ function do_block($codename,$map=NULL,$ttl=NULL)
 	// NB: If we've got this far cache="2" is ignored. But later on (for normal expiries, different contexts, etc) cache_on will be known so not an issue.
 
 	// We will need to load the actual file
-	if ($object===NULL) $object=do_block_hunt_file($codename,$map);
+	if ($object===NULL)
+	{
+		list($object,$new_security_scope)=do_block_hunt_file($codename,$map);
+	}
 	if (is_object($object))
 	{
 		$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 		$GLOBALS['NO_QUERY_LIMIT']=true;
 		$backup_langs_requested=$LANGS_REQUESTED;
 		$LANGS_REQUESTED=array();
+		if ($new_security_scope) _solemnly_enter();
 		$cache=$object->run($map);
+		if ($new_security_scope)
+		{
+			$_cache=$cache->evaluate();
+			_solemnly_leave($_cache);
+			if (!has_solemnly_declared(I_UNDERSTAND_XSS))
+			{
+				$cache=make_string_tempcode($_cache);
+			}
+		}
 
 		$GLOBALS['NO_QUERY_LIMIT']=$nql_backup;
 	} else
@@ -949,7 +1117,7 @@ function block_params_str_to_arr($_map,$block_symbol_style=false)
  *
  * @param  ID_TEXT		The block name
  * @param  ?array			The block parameter map (NULL: no parameters)
- * @return mixed			Either the block object, or the string output of a miniblock
+ * @return array			A pair: Either the block object, or the string output of a miniblock ; and whether we entered a new security scope
  */
 function do_block_hunt_file($codename,$map=NULL)
 {
@@ -958,6 +1126,8 @@ function do_block_hunt_file($codename,$map=NULL)
 	$codename=filter_naughty_harsh($codename);
 
 	$file_base=get_file_base();
+
+	$new_security_scope=false;
 
 	global $REQUIRED_CODE;
 	if ((!in_safe_mode()) && (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources_custom/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources_custom/blocks/'.$codename.'.php')))))
@@ -970,6 +1140,8 @@ function do_block_hunt_file($codename,$map=NULL)
 			$BLOCKS_AT_CACHE[$codename]='sources_custom/blocks';
 			if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 		}
+
+		$new_security_scope=true;
 	}
 	elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/blocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/blocks/'.$codename.'.php'))))
 	{
@@ -993,6 +1165,8 @@ function do_block_hunt_file($codename,$map=NULL)
 				$BLOCKS_AT_CACHE[$codename]='sources_custom/miniblocks';
 				if (function_exists('persistent_cache_set')) persistent_cache_set('BLOCKS_AT',$BLOCKS_AT_CACHE,true);
 			}
+
+			$new_security_scope=true;
 		}
 		elseif (((isset($BLOCKS_AT_CACHE[$codename])) && ($BLOCKS_AT_CACHE[$codename]=='sources/miniblocks')) || ((!isset($BLOCKS_AT_CACHE[$codename])) && (is_file($file_base.'/sources/miniblocks/'.$codename.'.php'))))
 		{
@@ -1008,11 +1182,11 @@ function do_block_hunt_file($codename,$map=NULL)
 			$temp=do_template('WARNING_BOX',array('_GUID'=>'09f1bd6e117693a85fb69bfb52ea1799','WARNING'=>do_lang_tempcode('MISSING_BLOCK_FILE',escape_html($codename))));
 			return $temp->evaluate();
 		} else $object='';
-		return $object;
+		return array($object,$new_security_scope);
 	}
 
 	$_object=object_factory('Block_'.$codename);
-	return $_object;
+	return array($_object,$new_security_scope);
 }
 
 /**

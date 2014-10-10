@@ -54,6 +54,8 @@ class Block_main_iotd
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('iotds');
 		require_css('iotds');
 		$mode=array_key_exists('param',$map)?$map['param']:'current';

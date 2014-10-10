@@ -53,6 +53,8 @@ class Block_side_google_search
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('google_search');
 
 		$page_name=!empty($map['page_name'])?$map['page_name']:'_google_search';

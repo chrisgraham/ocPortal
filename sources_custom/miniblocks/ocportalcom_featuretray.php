@@ -13,6 +13,8 @@
  * @package		ocportalcom
  */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 $sites_url=build_url(array('page'=>'sites'),'site');
 if (is_object($sites_url)) $sites_url=$sites_url->evaluate();
 

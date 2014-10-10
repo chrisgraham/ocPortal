@@ -53,6 +53,8 @@ class Block_side_justgiving_donate
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('justgiving_donate');
 
 		if (!array_key_exists('eggid',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','eggid');

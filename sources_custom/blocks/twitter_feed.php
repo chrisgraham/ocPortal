@@ -53,6 +53,8 @@ class Block_twitter_feed
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		// Set up variables from parameters
 		$api_key=array_key_exists('consumer_key',$map)?$map['consumer_key']:'';
 		$api_secret=array_key_exists('consumer_secret',$map)?$map['consumer_secret']:'';

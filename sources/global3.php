@@ -133,6 +133,9 @@ function init__global3()
 	// And...
 	define('A__STATISTICAL',-0x1); // This is magic, it will choose whatever the user probably wants, based on their existing settings
 	define('A__CHOICE',-0x2); // Never stored in DB, used as a flag inside admin_notifications module
+
+	global $ESCAPE_HTML_OUTPUT; // Used to track what is already escaped in kid-gloves modes
+	$ESCAPE_HTML_OUTPUT=array();
 }
 
 /**
@@ -1967,9 +1970,14 @@ function escape_html($string)
 		}
 	}*/
 
-	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$XSS_DETECT;
+	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$XSS_DETECT,$ESCAPE_HTML_OUTPUT,$DECLARATIONS_STATE;
 
 	$ret=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$string);
+
+	if (!$DECLARATIONS_STATE[I_UNDERSTAND_XSS])
+	{
+		$ESCAPE_HTML_OUTPUT[$ret]=true;
+	}
 
 	if ($XSS_DETECT)
 	{

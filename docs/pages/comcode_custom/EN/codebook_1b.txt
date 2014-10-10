@@ -363,6 +363,23 @@ If ocPortal is running out of a git repository, or with our own custom version o
 
 You can turn off most of development mode by putting "[tt]&keep_no_dev_mode=1[/tt]" into the URL, but this is not promoted as development mode was intentionally written to help us do on-the-fly testing of things that might otherwise go unnoticed.
 
+[title="3"]Kid-gloves modes (security)[/title]
+
+It's a fact of life that newbie coders don't know how to write secure code, and it's also a fact of life newbie developers will be expected to write real-world production code. ocPortal contains many security features and abstractions to protect common types of vulnerability, however there are also additional protections included for newbie developers.
+The additional protections may slow performance slightly, or cause some slight weird processing issues in rare events, but generally won't cause any problems. The protections automatically enable for any block or module in a [tt]*_custom[/tt] directory.
+The protections may be turned off by a code call like:
+[code="PHP"]
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+[/code]
+This call serves philosophically as a self-certification, and practically turns off the kid-glove mode features related to what the developer is certifying against.
+This way ocPortal has the best of both worlds:
+ - Experienced developers who write logical and correct code will not have to fight the system for rare corner case bugs that look like they could possibly be security-related.
+ - Newbie developers will be protected for the vast majority of cases.
+
+Saying [tt]I_UNDERSTAND_SQL_INJECTION[/tt] disables extra scanning of queries to ensure they are always made in the most secure way and that custom data within the queries is correctly escaped. The scanning slightly impacts performance.
+Saying [tt]I_UNDERSTAND_XSS[/tt] disables automatic escaping of template parameters and language string parameters (which can result in accidental double-escaping in output) and any input parameters that make it into the output of a minimodule/miniblock.
+Saying [tt]I_UNDERSTAND_PATH_INJECTION[/tt] disables hack-attack errors from being generated if any URL parameter has ".." or null bytes in it.
+
 [title="3"]Custom version of PHP[/title]
 
 Our custom version of PHP (linked to under "Programming/progmattic-interface standards") performs 2 main functions:

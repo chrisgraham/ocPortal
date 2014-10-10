@@ -40,6 +40,8 @@ class Block_main_facebook_like
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_code('facebook_connect');
 
 		$appid=get_option('facebook_appid');

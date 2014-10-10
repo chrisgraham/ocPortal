@@ -13,6 +13,8 @@
  * @package		ocportalcom
  */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 require_javascript('javascript_thumbnails');
 
 $mill=3000; // milliseconds between animations

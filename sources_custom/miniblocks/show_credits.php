@@ -13,6 +13,8 @@
  * @package		ocportalcom_support_credits
  */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 $existing_customer=!is_guest() && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases','num_credits',array('member_id'=>get_member())));
 
 require_lang('customers');

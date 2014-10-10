@@ -2,6 +2,8 @@
 
 /*EXTRA FUNCTIONS: json_encode*/
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 require_code('nested_csv');
 $csv_structure=get_nested_csv_structure();
 

@@ -53,6 +53,8 @@ class Block_side_amazon_affiliate_sales
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('amazon');
 
 		if (!array_key_exists('associates_id',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','associates_id');

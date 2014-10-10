@@ -457,10 +457,16 @@ function make_string_tempcode($string)
  */
 function apply_tempcode_escaping($escaped,&$value)
 {
-	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
+	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$ESCAPE_HTML_OUTPUT;
 	foreach ($escaped as $escape)
 	{
-		if ($escape==ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+		if ($escape==ENTITY_ESCAPED)
+		{
+			if ((has_solemnly_declared(I_UNDERSTAND_XSS)) || (!isset($ESCAPE_HTML_OUTPUT[$value])/*not already auto-escaped once*/))
+			{
+				$value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+			}
+		}
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
 		elseif ($escape==DQ_ESCAPED) $value=str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
@@ -489,10 +495,16 @@ function apply_tempcode_escaping($escaped,&$value)
  */
 function apply_tempcode_escaping_inline($escaped,$value)
 {
-	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
+	global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$ESCAPE_HTML_OUTPUT;
 	foreach ($escaped as $escape)
 	{
-		if ($escape==ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+		if ($escape==ENTITY_ESCAPED)
+		{
+			if ((has_solemnly_declared(I_UNDERSTAND_XSS)) || (!isset($ESCAPE_HTML_OUTPUT[$value])/*not already auto-escaped once*/))
+			{
+				$value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+			}
+		}
 		elseif ($escape==FORCIBLY_ENTITY_ESCAPED) $value=str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
 		elseif ($escape==SQ_ESCAPED) $value=str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
 		elseif ($escape==DQ_ESCAPED) $value=str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
@@ -541,6 +553,42 @@ function do_lang_tempcode($lang_string,$token1=NULL,$token2=NULL,$token3=NULL)
 }
 
 /**
+ * Provide automatic escaping for a template call.
+ *
+ * @param  array				Template parameters
+ */
+function kid_gloves_html_escaping(&$parameters)
+{
+	foreach ($parameters as &$param)
+	{
+		if (is_string($param))
+		{
+			if ((strpos($param,"'")!==false) || (strpos($param,'"')!==false) || (strpos($param,'<')!==false) || (strpos($param,'>')!==false))
+			{
+				$param=escape_html($param);
+			}
+		}
+		elseif (is_array($param))
+		{
+			kid_gloves_html_escaping($param);
+		}
+	}
+}
+
+/**
+ * Provide automatic escaping for a particular parameter.
+ *
+ * @param  string				Parameter
+ */
+function kid_gloves_html_escaping_singular(&$param)
+{
+	if ((strpos($param,"'")!==false) || (strpos($param,'"')!==false) || (strpos($param,'<')!==false) || (strpos($param,'>')!==false))
+	{
+		$param=escape_html($param);
+	}
+}
+
+/**
  * Get a Tempcoded version of an ocPortal template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the Tempcode attach method.
  *
  * @param  ID_TEXT			The codename of the template being loaded
@@ -573,6 +621,11 @@ function do_template($codename,$parameters=NULL,$lang=NULL,$light_error=false,$f
 		{
 			$GLOBALS['SCREEN_TEMPLATE_CALLED']=$codename;
 		}
+	}
+
+	if (($parameters!==NULL) && (!has_solemnly_declared(I_UNDERSTAND_XSS)))
+	{
+		kid_gloves_html_escaping($parameters);
 	}
 
 	global $IS_TEMPLATE_PREVIEW_OP_CACHE,$RECORD_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$RECORDED_TEMPLATES_USED,$FILE_ARRAY,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$CACHE_TEMPLATES,$FORUM_DRIVER,$POSSIBLY_IN_SAFE_MODE_CACHE,$USER_THEME_CACHE,$TEMPLATE_DISK_ORIGIN_CACHE,$LOADED_TPL_CACHE;

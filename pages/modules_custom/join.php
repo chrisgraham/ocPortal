@@ -27,6 +27,8 @@ class Mx_join extends Module_join
 	 */
 	function pre_run()
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		$GLOBALS['OUTPUT_STREAMING']=false;
 		parent::pre_run();
 	}

@@ -33,6 +33,8 @@ class Mx_chat extends Module_chat
 	 */
 	function run()
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		if (!has_js()) warn_exit(do_lang_tempcode('MSG_JS_NEEDED'));
 
 		// What action are we going to do?

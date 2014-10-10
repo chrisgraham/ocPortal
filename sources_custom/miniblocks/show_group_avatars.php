@@ -8,6 +8,8 @@
 	limit
 */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 $order='m_join_time DESC';
 if (isset($map['order']))
 {

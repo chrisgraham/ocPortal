@@ -248,6 +248,9 @@ if (!function_exists('_do_lang'))
 				return $ret;
 			} elseif ($token1!==NULL)
 			{
+				$kg=!has_solemnly_declared(I_UNDERSTAND_XSS);
+				if ($kg) kid_gloves_html_escaping_singular($token1);
+
 				$out=str_replace('{1}',$token1,$out);
 				if ($plural_or_vowel_check)
 				{
@@ -259,6 +262,8 @@ if (!function_exists('_do_lang'))
 
 			if ($token2!==NULL)
 			{
+				if ($kg) kid_gloves_html_escaping_singular($token2);
+
 				if ($XSS_DETECT) $escaped=ocp_is_escaped($out);
 				$out=str_replace('{2}',$token2,$out);
 				if ($plural_or_vowel_check)
@@ -274,6 +279,8 @@ if (!function_exists('_do_lang'))
 					if (!is_array($token3)) $token3=array($token3);
 					foreach ($token3 as $token)
 					{
+						if ($kg) kid_gloves_html_escaping_singular($token);
+
 						if ($XSS_DETECT) $escaped=ocp_is_escaped($out);
 						$out=str_replace('{'.strval($i).'}',$token,$out);
 						if ($plural_or_vowel_check)

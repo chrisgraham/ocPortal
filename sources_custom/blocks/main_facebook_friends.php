@@ -53,6 +53,8 @@ class Block_main_facebook_friends
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('facebook_friends');
 		require_code('facebook_connect');
 

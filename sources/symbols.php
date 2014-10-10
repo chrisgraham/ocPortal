@@ -628,6 +628,11 @@ function ecv_GET($lang,$escaped,$param)
 					$value=$TEMPCODE_SETGET[$param[0]]->evaluate();
 					$TEMPCODE_SETGET[$param[0]]->decache();
 
+					if ((!has_solemnly_declared(I_UNDERSTAND_XSS)) && ($escaped===array()))
+					{
+						$escaped=array(ENTITY_ESCAPED);
+					}
+
 					if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
 					return $value;
 				}
@@ -3237,6 +3242,11 @@ function ecv__POST($lang,$escaped,$param)
 	if (isset($param[0]))
 	{
 		$value=post_param($param[0],isset($param[1])?$param[1]:'');
+	}
+
+	if ((!has_solemnly_declared(I_UNDERSTAND_XSS)) && ($escaped===array()))
+	{
+		$escaped=array(ENTITY_ESCAPED);
 	}
 
 	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);

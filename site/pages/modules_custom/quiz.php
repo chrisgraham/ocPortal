@@ -9,6 +9,8 @@
 
 function init__site__pages__modules_custom__quiz($in=NULL)
 {
+	i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 	$before='if ($minimum_percentage>=$quiz[\'q_percentage\'])';
 	$after='if ((addon_installed(\'points\')) && ($quiz[\'q_points_for_passing\']!=0)) { require_code(\'points2\'); $cost=$quiz[\'q_points_for_passing\']/2; $points_difference-=$cost; } if ($minimum_percentage>=$quiz[\'q_percentage\'])';
 	$in=str_replace($before,$after,$in);

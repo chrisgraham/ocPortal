@@ -35,6 +35,13 @@
 
 class Mx_wiki extends Module_wiki
 {
+	function run_start()
+	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
+		return parent::run_start();
+	}
+
 	function changes()
 	{
 		$url=get_option('wiki_alt_changes_link_stub');

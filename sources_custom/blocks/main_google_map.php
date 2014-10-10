@@ -40,6 +40,8 @@ class Block_main_google_map
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_code('catalogues');
 		require_lang('google_map');
 

@@ -53,6 +53,8 @@ class Block_main_google_results
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('google_search');
 
 		return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS',array('_GUID'=>'e2bd264817a6ad7852918583986bd373'));

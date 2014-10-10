@@ -51,6 +51,8 @@ class Block_youtube_channel
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		//set up variables from parameters
 		$channel_name=array_key_exists('name',$map)?$map['name']:'holleywoodstudio';
 		$channel_title=array_key_exists('title',$map)?$map['title']:'';

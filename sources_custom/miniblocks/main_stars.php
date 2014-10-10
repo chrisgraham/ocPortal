@@ -7,6 +7,8 @@
 
 */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 require_code('ocf_groups');
 require_code('ocf_members');
 require_lang('ocf');

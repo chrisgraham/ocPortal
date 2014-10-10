@@ -55,6 +55,8 @@ class Block_side_amazon_wishlist
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('amazon');
 
 		global $SECRET_KEY;

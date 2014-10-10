@@ -13,6 +13,8 @@
  * @package		ocportalcom
  */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 $text=file_get_contents(get_file_base().'/text/EN/licence.txt');
 
 $text=preg_replace('#(^|\n)(.*)\n=+\n#','${1}[title]${2}[/title]'."\n",$text);

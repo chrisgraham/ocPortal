@@ -65,7 +65,10 @@ class Hook_cron_block_caching
 			$codename=$request['c_codename'];
 			$map=unserialize($request['c_map']);
 
-			$object=do_block_hunt_file($codename,$map);
+			list($object,$new_security_scope)=do_block_hunt_file($codename,$map);
+
+			if ($new_security_scope) _solemnly_enter();
+
 			if (is_object($object))
 			{
 				global $LANGS_REQUESTED,$LANGS_REQUESTED,$DO_NOT_CACHE_THIS,$TIMEZONE_MEMBER_CACHE,$JAVASCRIPTS,$CSSS;
@@ -119,6 +122,8 @@ class Hook_cron_block_caching
 				$LANGS_REQUESTED+=$backup_langs_requested;
 				restore_output_state(false,true);
 			}
+
+			if ($new_security_scope) _solemnly_leave();
 
 			$GLOBALS['SITE_DB']->query_delete('cron_caching_requests',$request);
 		}

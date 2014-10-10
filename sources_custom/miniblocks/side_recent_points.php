@@ -7,6 +7,8 @@
 
 */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 $max=array_key_exists('max',$map)?intval($map['max']):10;
 $truncate_to=array_key_exists('truncate_to',$map)?intval($map['truncate_to']):5;
 

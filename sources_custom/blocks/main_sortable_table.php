@@ -42,6 +42,8 @@ class Block_main_sortable_table
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_javascript('javascript_sortable_tables');
 		require_css('sortable_tables');
 

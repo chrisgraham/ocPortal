@@ -53,6 +53,8 @@ class Block_main_ebay
 	 */
 	function run($map)
 	{
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 		require_lang('ebay');
 
 		if (!array_key_exists('seller',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','seller');

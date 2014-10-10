@@ -13,6 +13,8 @@
  * @package		ocportalcom_support_credits
  */
 
+i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+
 $budget_minutes=integer_format(intval(get_option('support_budget_priority')));
 $normal_minutes=integer_format(intval(get_option('support_normal_priority')));
 $day_minutes=integer_format(intval(get_option('support_day_priority')));

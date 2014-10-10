@@ -40,7 +40,7 @@ class Block_side_facebook_activity
 	 */
 	function run($map)
 	{
-		unset($map);
+		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
 		return do_template('BLOCK_SIDE_FACEBOOK_ACTIVITY',array());
 	}
