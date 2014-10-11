@@ -111,6 +111,7 @@ function init__zones()
 		I_UNDERSTAND_PATH_INJECTION=>true,
 	);
 	$DECLARATIONS_STATE=$DECLARATIONS_STATE_DEFAULT;
+	array_push($DECLARATIONS_STACK,$DECLARATIONS_STATE);
 }
 
 /**
@@ -140,7 +141,14 @@ function i_solemnly_declare($declarations)
  */
 function _solemnly_enter()
 {
-	i_solemnly_declare(0);
+	global $DECLARATIONS_STACK,$DECLARATIONS_STATE_DEFAULT,$DECLARATIONS_STATE;
+	$new_state=array();
+	foreach (array_keys($DECLARATIONS_STATE_DEFAULT) as $property)
+	{
+		$new_state[$property]=false;
+	}
+	$DECLARATIONS_STACK[]=$new_state;
+	$DECLARATIONS_STATE=$new_state;
 }
 
 /**
@@ -171,8 +179,10 @@ function _solemnly_leave(&$out=NULL)
 		}
 	}
 
-	global $DECLARATIONS_STACK;
+	global $DECLARATIONS_STACK,$DECLARATIONS_STATE;
 	array_pop($DECLARATIONS_STACK);
+	$DECLARATIONS_STATE=array_pop($DECLARATIONS_STACK);
+	array_push($DECLARATIONS_STACK,$DECLARATIONS_STATE);
 }
 
 /**
@@ -501,6 +511,12 @@ function _load_mini_code($string,$map=NULL)
 				}
 
 				$out->attach($_test1);
+			} else
+			{
+				if (strpos($string,'_custom/')!==false)
+				{
+					_solemnly_leave();
+				}
 			}
 		}
 	} else
