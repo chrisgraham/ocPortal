@@ -1061,6 +1061,7 @@ class Hook_addon_registry_core
 			'sources/input_filter.php',
 			'sources/input_filter_2.php',
 			'sources/hooks/systems/checks/.htaccess',
+			'sources/hooks/systems/checks/base_url.php',
 			'sources/hooks/systems/checks/disk_space.php',
 			'sources/hooks/systems/checks/file_uploads.php',
 			'sources/hooks/systems/checks/functions_needed.php',

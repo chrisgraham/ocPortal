@@ -216,7 +216,6 @@ function upgrade_script()
 					appengine_live_guard();
 
 					if (get_param('tar_url','')=='') echo do_lang('FU_FILE_UPGRADE_INFO');
-					echo do_lang('FU_FILE_UPGRADE_INFO_MANUAL');
 					echo '<form title="'.do_lang('PROCEED').'" enctype="multipart/form-data" action="upgrader.php?type=_file_upgrade" method="post">'.post_fields_relay();
 					echo '<label for="url">'.do_lang('URL').'</label> <input type="text" id="url" name="url" value="'.escape_html(base64_decode(get_param('tar_url',''))).'" /> ';
 					if ((ocp_srv('HTTP_HOST')=='ocportal.com') || ($GLOBALS['DEV_MODE'])) // for ocProducts to use on own site, for testing
@@ -257,7 +256,7 @@ function upgrade_script()
 					// Find addons
 					foreach ($directory as $upgrade_file2)
 					{
-						// See if we can find an addon registry file in our upgrade TAR
+						// See if we can find an addon registry file in our upgrade file
 						if ((strpos($upgrade_file2['path'],'/addon_registry/')!==false) && (substr($upgrade_file2['path'],-4)=='.php'))
 						{
 							$file_data=tar_get_file($upgrade_resource,$upgrade_file2['path']);

@@ -279,7 +279,7 @@ function phase_2()
 				<li>Go to the Translations tab and click the "manually upload" link, and import the earlier-generated <kbd>tar.gz</kbd> file (by default it was placed on your desktop)</li>
 				<li>Also set as the new active branch and the old branch as \'supported\' and the prior one as \'defunct\'</li>
 			</ul></li>
-			<li><strong>Personal demos</strong>: Update MyOCP by generating an upgrade tar, extracting using wget&amp;tar, then calling <a target="_blank" href="http://shareddemo.myocp.com/data_custom/myocp_upgrade.php">the upgrade script</a> (<kbd>myocp_upgrade.php</kbd> contains some usage documentation)</li>
+			<li><strong>Personal demos</strong>: Update MyOCP by generating an upgrade file, extracting using wget&amp;tar, then calling <a target="_blank" href="http://shareddemo.myocp.com/data_custom/myocp_upgrade.php">the upgrade script</a> (<kbd>myocp_upgrade.php</kbd> contains some usage documentation)</li>
 		';
 	}
 

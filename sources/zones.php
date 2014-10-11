@@ -483,6 +483,7 @@ function _load_mini_code($string,$map=NULL)
 	ob_start();
 	$test1=require(get_file_base().'/'.$string);
 	$test2=ob_get_contents();
+	ob_end_clean();
 	if ($test2=='')
 	{
 		if (is_object($test1))
@@ -529,7 +530,6 @@ function _load_mini_code($string,$map=NULL)
 		$out=new ocp_tempcode();
 		$out->attach($test2);
 	}
-	ob_end_clean();
 
 	restrictify();
 

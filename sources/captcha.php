@@ -33,33 +33,23 @@ function captcha_script()
 {
 	if (!function_exists('imagecreatefromstring')) warn_exit(do_lang_tempcode('GD_NEEDED'));
 
-	$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
+	$code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 	if (is_null($_code_needed))
 	{
 		generate_captcha();
-		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
+		$code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 
 		/*set_http_status_code('500');		This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
 
 		warn_exit(do_lang_tempcode('CAPTCHA_NO_SESSION'));*/
-	}
-	if (strlen(strval($_code_needed))>6) // Encoded in ASCII (we did it like this to avoid breaking DB compatibility)
-	{
-		$__code_needed=str_pad(strval($_code_needed),12,'0',STR_PAD_LEFT);
-		$code_needed='';
-		for ($i=0;$i<strlen($__code_needed);$i+=2)
-		{
-			$code_needed.=chr(intval(substr($__code_needed,$i,2)));
-		}
-	} else
-	{
-		$code_needed=str_pad(strval($_code_needed),6,'0',STR_PAD_LEFT);
 	}
 	mt_srand($_code_needed); // Important: to stop averaging out of different attempts. This makes the distortion consistent for that particular code.
 
 	@ini_set('ocproducts.xss_detect','0');
 
 	$mode=get_param('mode','');
+
+	// Audio version
 	if ($mode=='audio')
 	{
 		header('Content-Type: audio/x-wav');
@@ -110,7 +100,7 @@ function captcha_script()
 		return;
 	}
 
-	// Write basic
+	// Write basic, using multiple fonts with random Y-position offsets
 	$characters=strlen($code_needed);
 	$fonts=array();
 	$width=20;
@@ -125,16 +115,6 @@ function captcha_script()
 	$black=imagecolorallocate($img,0,0,0);
 	$off_black=imagecolorallocate($img,mt_rand(1,45),mt_rand(1,45),mt_rand(1,45));
 	$white=imagecolorallocate($img,255,255,255);
-	$tricky_remap=array();
-	$tricky_remap[$black]=array();
-	$tricky_remap[$off_black]=array();
-	$tricky_remap[$white]=array();
-	for ($i=0;$i<=5;$i++)
-	{
-		$tricky_remap['!'.strval($black)][]=imagecolorallocate($img,0+mt_rand(0,15),0+mt_rand(0,15),0+mt_rand(0,15));
-		$tricky_remap['!'.strval($off_black)][]=$off_black;
-		$tricky_remap['!'.strval($white)][]=imagecolorallocate($img,255-mt_rand(0,145),255-mt_rand(0,145),255-mt_rand(0,145));
-	}
 	imagefill($img,0,0,$black);
 	$x=10;
 	foreach ($fonts as $i=>$font)
@@ -155,6 +135,16 @@ function captcha_script()
 	// Add some noise
 	if (get_option('captcha_noise')=='1')
 	{
+		$tricky_remap=array();
+		$tricky_remap[$black]=array();
+		$tricky_remap[$off_black]=array();
+		$tricky_remap[$white]=array();
+		for ($i=0;$i<=5;$i++)
+		{
+			$tricky_remap['!'.strval($black)][]=imagecolorallocate($img,0+mt_rand(0,15),0+mt_rand(0,15),0+mt_rand(0,15));
+			$tricky_remap['!'.strval($off_black)][]=$off_black;
+			$tricky_remap['!'.strval($white)][]=imagecolorallocate($img,255-mt_rand(0,145),255-mt_rand(0,145),255-mt_rand(0,145));
+		}
 		$noise_amount=0.02;//0.04;
 		for ($i=0;$i<intval($width*$height*$noise_amount);$i++)
 		{
@@ -173,6 +163,7 @@ function captcha_script()
 		}
 	}
 
+	// Output using CSS
 	if (get_option('css_captcha')==='1')
 	{
 		echo '
@@ -197,13 +188,13 @@ function captcha_script()
 		</body>
 		</html>
 		';
+		imagedestroy($img);
 		exit();
 	}
 
+	// Output as a PNG
 	header('Content-Type: image/png');
-
 	imagepng($img);
-
 	imagedestroy($img);
 }
 
@@ -241,40 +232,19 @@ function generate_captcha()
 {
 	$session=get_session_id();
 
-	// FUDGE Run a test to see if large numbers are supported
-	$insert_map=array('si_time'=>time(),'si_session_id'=>$session);
-	$GLOBALS['SITE_DB']->query_insert('captchas',$insert_map+array('si_code'=>333333333333),false,true);
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',$insert_map);
-
 	// Clear out old codes
 	$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'captchas WHERE si_time<'.strval(time()-60*30).' OR '.db_string_equal_to('si_session_id',$session));
 
 	// Create code
-	$numbers_only=($test!==333333333333);
-	$code=mixed();
-	if ($numbers_only)
+	$choices=array('3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','J','K','M','N','P','R','S','T','W','X','Y');
+	$si_code='';
+	for ($i=0;$i<6;$i++)
 	{
-		$code=mt_rand(0,999999);
-	} else
-	{
-		$code='';
-		$choices=array('3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','J','K','M','N','P','R','S','T','W','X','Y');
-		for ($i=0;$i<6;$i++)
-		{
-			$choice=mt_rand(0,count($choices)-1);
-			$code.=strval(ord($choices[$choice])); // NB: In ASCII code all the chars in $choices are 10-99 (i.e. 2 digit)
-		}
+		$choice=mt_rand(0,count($choices)-1);
+		$si_code.=$choices[$choice]; // NB: In ASCII code all the chars in $choices are 10-99 (i.e. 2 digit)
 	}
 
 	// Store code
-	$si_code=mixed();
-	if ($numbers_only)
-	{
-		$si_code=intval($code);
-	} else
-	{
-		$si_code=floatval($code);
-	}
 	$GLOBALS['SITE_DB']->query_insert('captchas',$insert_map+array('si_code'=>$si_code),false,true);
 
 	require_javascript('javascript_ajax');
@@ -310,7 +280,7 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 {
 	if (use_captcha())
 	{
-		$_code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
+		$code_needed=$GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id'=>get_session_id()));
 		if (get_option('captcha_single_guess')=='1')
 		{
 			$GLOBALS['SITE_DB']->query_delete('captchas',array('si_session_id'=>get_session_id())); // Only allowed to check once
@@ -324,27 +294,15 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 			set_http_status_code('500');
 			warn_exit(do_lang_tempcode('NO_SESSION_SECURITY_CODE'));
 		}
-		if (strlen(strval($_code_needed))>6) // Encoded in ASCII (we did it like this to avoid breaking DB compatibility)
-		{
-			$__code_needed=str_pad(strval($_code_needed),12,'0',STR_PAD_LEFT);
-			$code_needed='';
-			for ($i=0;$i<strlen($__code_needed);$i+=2)
-			{
-				$code_needed.=chr(intval(substr($__code_needed,$i,2)));
-			}
-		} else
-		{
-			$code_needed=str_pad(strval($_code_needed),6,'0',STR_PAD_LEFT);
-		}
-		$ret=(strtolower($code_needed)==strtolower($code_entered));
+		$passes=(strtolower($code_needed)==strtolower($code_entered));
 		if ($regenerate_on_error)
 		{
 			if (get_option('captcha_single_guess')=='1')
 			{
-				if (!$ret) generate_captcha();
+				if (!$passes) generate_captcha();
 			}
 		}
-		if (!$ret)
+		if (!$passes)
 		{
 			$data=serialize($_POST);
 
@@ -357,7 +315,7 @@ function check_captcha($code_entered,$regenerate_on_error=true)
 				log_hack_attack_and_exit('CAPTCHAFAIL_HACK','','',true); // This is done to stop spammers hogging server resources via repeatedly re-trying CAPTCHAs
 			}
 		}
-		return $ret;
+		return $passes;
 	}
 	return true;
 }

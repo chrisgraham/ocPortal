@@ -55,5 +55,5 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['FORUM_DB']->create_index('f_topics','topic_order_4',array('t_forum_id','t_cache_last_time')); // Total index for simple forum topic listing
+	$GLOBALS['SITE_DB']->alter_table_field('captchas','si_code','ID_TEXT');
 }

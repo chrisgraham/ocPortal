@@ -571,7 +571,7 @@ function _helper_alter_table_field($this_ref,$table_name,$name,$_type,$new_name=
 	{
 		$query.=$name;
 	}
-	$query.=$name.' '.$extra.' '.$type_remap[$type].' '.$tag;
+	$query.=$extra.' '.$type_remap[$type].' '.$tag;
 	if (substr($_type,0,1)=='*') $query.=', ADD PRIMARY KEY ('.((!is_null($new_name))?$new_name:$name).')';
 	$this_ref->_query($query);
 

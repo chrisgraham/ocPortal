@@ -152,7 +152,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_table('captchas',array(
 				'si_session_id'=>'*ID_TEXT',
 				'si_time'=>'TIME',
-				'si_code'=>'INTEGER'
+				'si_code'=>'ID_TEXT'
 			));
 			$GLOBALS['SITE_DB']->create_index('captchas','si_time',array('si_time'));
 
@@ -792,6 +792,7 @@ class Module_admin_version
 			$GLOBALS['SITE_DB']->create_index('url_id_monikers','uim_monrev',array('m_moniker_reversed'));
 
 			$GLOBALS['SITE_DB']->alter_table_field('captchas','si_session_id','*ID_TEXT');
+			$GLOBALS['SITE_DB']->alter_table_field('captchas','si_code','ID_TEXT');
 			$GLOBALS['SITE_DB']->alter_table_field('messages_to_render','r_session_id','ID_TEXT');
 			$GLOBALS['SITE_DB']->alter_table_field('temp_block_permissions','p_session_id','ID_TEXT');
 		}
