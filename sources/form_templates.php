@@ -710,7 +710,6 @@ function form_input_page_link($pretty_name,$description,$name,$default,$required
 
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_tree_list');
-	require_javascript('javascript_more');
 
 	// Display
 	$input=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'aabbd8e80df919afe08ca70bd24578dc','AS_FIELD'=>true,'GET_TITLE_TOO'=>$get_title_too,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type,'CONTENT_CENTRIC'=>$content_centric));
@@ -1341,7 +1340,6 @@ function form_input_list($pretty_name,$description,$name,$content,$tabindex=NULL
 function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default=NULL,$use_server_id=false,$tabindex=NULL,$multi_select=false,$nice_label=NULL)
 {
 	require_javascript('javascript_tree_list');
-	require_javascript('javascript_more');
 
 	require_code('hooks/systems/ajax_tree/'.$hook);
 	$object=object_factory('Hook_'.$hook);

@@ -138,7 +138,6 @@ class Hook_addon_registry_page_management
 	function tpl_preview__administrative__sitemap_editor_screen()
 	{
 		require_javascript('javascript_ajax');
-		require_javascript('javascript_more');
 		require_javascript('javascript_tree_list');
 		require_javascript('javascript_dragdrop');
 		require_javascript('javascript_sitemap_editor');

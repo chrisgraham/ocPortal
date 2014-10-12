@@ -250,7 +250,6 @@ class Module_admin_zones
 
 		require_javascript('javascript_zone_editor');
 		require_javascript('javascript_ajax');
-		require_javascript('javascript_more');
 		require_javascript('javascript_posting');
 		require_javascript('javascript_editing');
 		require_javascript('javascript_validation');

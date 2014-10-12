@@ -56,6 +56,7 @@ function script_load_stuff()
 		}
 	}
 
+	// General HTML initialisation
 	for (i=0;i<document.forms.length;i++)
 	{
 		new_html__initialise(document.forms[i]);
@@ -1520,6 +1521,7 @@ function smooth_scroll(dest_y,expected_scroll_y,dir,event_after)
 /* Get what an elements current style is for a particular CSS property */
 function abstract_get_computed_style(obj,property)
 {
+	// LEGACY: IE8
 	if (obj.currentStyle)
 	{
 		var index=property.indexOf('-');
@@ -1620,31 +1622,20 @@ function get_window_scroll_height(win,dont_allow_iframe_size)
 	if (typeof win=='undefined') var win=window;
 	if (typeof dont_allow_iframe_size=='undefined') var dont_allow_iframe_size=false;
 
-	if (typeof win.document.body.parentNode.getBoundingClientRect!='undefined')
-	{
-		var rect;
-		rect=win.document.body.parentNode.getBoundingClientRect();
-		var a=rect.bottom-rect.top;
-		rect=win.document.body.getBoundingClientRect();
-		var b=rect.bottom-rect.top;
-		if (a>b) return a;
-		return b;
-	}
-
-	var best=0;
-	if (((win.document.body.offsetHeight>best) && (win.document.body.offsetHeight!=150)) || (best==150)) best=win.document.body.offsetHeight;
-	if (((win.document.body.scrollHeight>best) && (best<150) && (win.document.body.scrollHeight!=150)) || (best==150)) best=win.document.body.scrollHeight;
-	if (!dont_allow_iframe_size) // This will consider the iframe height if larger than the contents
-	{
-		if (((win.document.body.parentNode.offsetHeight>best) && (win.document.body.parentNode.offsetHeight!=150)) || (best==150)) best=win.document.body.parentNode.offsetHeight;
-		if (((win.document.body.parentNode.scrollHeight/*>best*/ /*on IE the offsetHeight is 4px too much*/) && (win.document.body.parentNode.scrollHeight!=150)) || (best==150)) best=win.document.body.parentNode.scrollHeight;
-	}
-	return best;
+	var rect;
+	rect=win.document.body.parentNode.getBoundingClientRect();
+	var a=rect.bottom-rect.top;
+	rect=win.document.body.getBoundingClientRect();
+	var b=rect.bottom-rect.top;
+	if (a>b) return a;
+	return b;
 }
 function get_window_scroll_x(win)
 {
  	if (typeof win=='undefined') var win=window;
  	if (typeof win.pageXOffset!='undefined') return win.pageXOffset;
+
+	// LEGACY: IE8
   	if ((win.document.documentElement) && (win.document.documentElement.scrollLeft)) return win.document.documentElement.scrollLeft;
   	if ((win.document.body) && (win.document.body.scrollLeft)) return win.document.body.scrollLeft;
   	if (typeof win.scrollX!='undefined') return win.scrollX;
@@ -1654,6 +1645,8 @@ function get_window_scroll_y(win)
 {
 	if (typeof win=='undefined') var win=window;
   	if (typeof win.pageYOffset!='undefined') return win.pageYOffset;
+
+	// LEGACY: IE8
   	if ((win.document.documentElement) && (win.document.documentElement.scrollTop)) return win.document.documentElement.scrollTop;
   	if ((win.document.body) && (win.document.body.scrollTop)) return win.document.body.scrollTop;
   	if (typeof win.scrollTop!='undefined') return win.scrollTop;
@@ -1661,55 +1654,11 @@ function get_window_scroll_y(win)
 }
 function find_pos_x(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
-	if ((typeof not_relative!='undefined') && (not_relative) && (typeof obj.getBoundingClientRect!='undefined'))
-	{
-		return obj.getBoundingClientRect().left+get_window_scroll_x();
-	}
-
-	var call_obj=obj;
-
-	var curleft=0;
-	if (obj.offsetParent)
-	{
-		while (obj.offsetParent)
-		{
-			if (((abstract_get_computed_style(obj,'position')=='absolute') || (abstract_get_computed_style(obj,'position')=='relative')) && (!not_relative))
-			{
-				if (obj==call_obj) curleft+=obj.offsetLeft;
-				break;
-			}
-			curleft+=obj.offsetLeft;
-			obj=obj.offsetParent;
-		}
-	}
-	else if (typeof obj.x!='undefined') curleft+=obj.x;
-	return curleft;
+	return obj.getBoundingClientRect().left+get_window_scroll_x();
 }
 function find_pos_y(obj,not_relative) /* Courtesy of quirksmode */	/* if not_relative is true it gets the position relative to the browser window, else it will be relative to the most recent position:absolute/relative going up the element tree */
 {
-	if ((typeof not_relative!='undefined') && (not_relative) && (typeof obj.getBoundingClientRect!='undefined'))
-	{
-		return obj.getBoundingClientRect().top+get_window_scroll_y();
-	}
-
-	var call_obj=obj;
-
-	var curtop=0;
-	if (obj.offsetParent)
-	{
-		while (obj.offsetParent)
-		{
-			if (((abstract_get_computed_style(obj,'position')=='absolute') || (abstract_get_computed_style(obj,'position')=='relative')) && (!not_relative))
-			{
-				if (obj==call_obj) curtop+=obj.offsetTop;
-				break;
-			}
-			curtop+=obj.offsetTop;
-			obj=obj.offsetParent;
-		}
-	}
-	else if (typeof obj.y!='undefined') curtop+=obj.y;
-	return curtop;
+	return obj.getBoundingClientRect().top+get_window_scroll_y();
 }
 function find_width(obj,take_padding,take_margin,take_border)
 {
@@ -2300,7 +2249,7 @@ function add_event_listener_abstract(element,the_event,func,capture)
 			}
 			return element.addEventListener(the_event,func,capture);
 		}
-		else if (typeof element.attachEvent!='undefined')
+		else if (typeof element.attachEvent!='undefined') // LEGACY: IE8
 		{
 			// Microsoft - no capturing :(
 			if ((the_event=='load') || (the_event=='real_load'))
@@ -3130,7 +3079,7 @@ function replace_comments_form_with_ajax(options,hash,comments_form_id,comments_
 					var known_posts=get_elements_by_class_name(comments_wrapper,'post');
 					for (var i=0;i<known_posts.length;i++)
 					{
-						if (!known_times.inArray(known_posts[i].className.replace(/^post /,'')))
+						if (known_times.indexOf(known_posts[i].className.replace(/^post /,''))==-1)
 						{
 							set_opacity(known_posts[i],0.0);
 							fade_transition(known_posts[i],100,20,5);
@@ -3355,3 +3304,70 @@ function confirm_delete(form,multi,callback)
 	return false;
 }
 
+// LEGACY: IE8
+// Production steps of ECMA-262, Edition 5, 15.4.4.14
+// Reference: http://es5.github.io/#x15.4.4.14
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function(searchElement, fromIndex) {
+
+    var k;
+
+    // 1. Let O be the result of calling ToObject passing
+    //    the this value as the argument.
+    if (this == null) {
+      throw new TypeError('"this" is null or not defined');
+    }
+
+    var O = Object(this);
+
+    // 2. Let lenValue be the result of calling the Get
+    //    internal method of O with the argument "length".
+    // 3. Let len be ToUint32(lenValue).
+    var len = O.length >>> 0;
+
+    // 4. If len is 0, return -1.
+    if (len === 0) {
+      return -1;
+    }
+
+    // 5. If argument fromIndex was passed let n be
+    //    ToInteger(fromIndex); else let n be 0.
+    var n = +fromIndex || 0;
+
+    if (Math.abs(n) === Infinity) {
+      n = 0;
+    }
+
+    // 6. If n >= len, return -1.
+    if (n >= len) {
+      return -1;
+    }
+
+    // 7. If n >= 0, then Let k be n.
+    // 8. Else, n<0, Let k be len - abs(n).
+    //    If k is less than 0, then let k be 0.
+    k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+    // 9. Repeat, while k < len
+    while (k < len) {
+      var kValue;
+      // a. Let Pk be ToString(k).
+      //   This is implicit for LHS operands of the in operator
+      // b. Let kPresent be the result of calling the
+      //    HasProperty internal method of O with argument Pk.
+      //   This step can be combined with c
+      // c. If kPresent is true, then
+      //    i.  Let elementK be the result of calling the Get
+      //        internal method of O with the argument ToString(k).
+      //   ii.  Let same be the result of applying the
+      //        Strict Equality Comparison Algorithm to
+      //        searchElement and elementK.
+      //  iii.  If same is true, return k.
+      if (k in O && O[k] === searchElement) {
+        return k;
+      }
+      k++;
+    }
+    return -1;
+  };
+}

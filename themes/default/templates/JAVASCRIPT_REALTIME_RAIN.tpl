@@ -308,7 +308,7 @@ function draw_line(group_id,bubble_id)
 		window.bubble_groups[group_id]=[];
 	} else
 	{
-		if (window.bubble_groups[group_id].inArray(bubble_id)) return;
+		if (window.bubble_groups[group_id].indexOf(bubble_id)!=-1) return;
 		if (window.total_lines>20) return; // Performance
 
 		var others=window.bubble_groups[group_id];

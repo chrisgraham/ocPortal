@@ -24,7 +24,6 @@ class installer_test_set extends ocp_test_case
 		$_GET['skip_manual']='0';
 		$_GET['skip_bundled']='0';
 		$_GET['skip_mszip']='0';
-		$_GET['skip_debian']='0';
 
 		require_code('version2');
 		require_code('make_release');

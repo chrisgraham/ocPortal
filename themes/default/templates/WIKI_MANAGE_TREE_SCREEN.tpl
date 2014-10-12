@@ -40,7 +40,6 @@
 			<script>// <![CDATA[
 				{$REQUIRE_JAVASCRIPT,javascript_ajax}
 				{$REQUIRE_JAVASCRIPT,javascript_tree_list}
-				{$REQUIRE_JAVASCRIPT,javascript_more}
 				new tree_list('mtp_tree','data/ajax_tree.php?hook=choose_wiki_page{$KEEP;}','','');
 			//]]></script>
 		{+END}

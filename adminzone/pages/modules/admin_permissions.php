@@ -387,7 +387,6 @@ class Module_admin_permissions
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_tree_list');
-		require_javascript('javascript_more');
 		require_code('form_templates');
 
 		require_css('sitemap_editor');

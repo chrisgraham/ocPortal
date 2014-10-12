@@ -238,7 +238,6 @@ class Module_search
 			if (method_exists($ob,'ajax_tree'))
 			{
 				require_javascript('javascript_tree_list');
-				require_javascript('javascript_more');
 				$ajax=true;
 				$under=get_param('search_under','',true);
 				$ajax_tree=$ob->ajax_tree();

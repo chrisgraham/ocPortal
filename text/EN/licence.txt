@@ -125,7 +125,6 @@ This product includes:
   - jQuery (MIT license)
   - modalwindow.js (PHP-like licence)
   - Diff (LGPL licence, ocProducts modifications also therefore are also licenced under the LGPL)
-  - JavaScript library (JAVASCRIPT_MORE) (LGPL licence, ocProducts modifications also therefore are also licenced under the LGPL)
   - FirePHP (BSD-like licence)
   - SoundManager (BSD-like licence)
   - SabreDAV (BSD-like licence)
@@ -149,4 +148,4 @@ This product includes:
   - Stemmer (BSD-like licence)
   - Sew (BSD-like licence / public domain)
   - PHP5.5 hashing compatibility library (MIT licence)
-Some of our ocPortal packages remove or replace those elements used under non-free commercial licenses.
+  - entities_to_unicode implementation (public domain)

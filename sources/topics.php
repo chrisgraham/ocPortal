@@ -473,7 +473,6 @@ class OCP_Topic
 		}
 
 		require_javascript('javascript_ajax');
-		require_javascript('javascript_more');
 		require_javascript('javascript_transitions');
 
 		// Precache member/group details in one fell swoop

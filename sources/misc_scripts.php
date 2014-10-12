@@ -318,7 +318,6 @@ function page_link_chooser_script()
 
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_tree_list');
-	require_javascript('javascript_more');
 
 	require_code('site');
 	attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML

@@ -51,9 +51,9 @@ function update_details_box(element)
 				case 'modules':
 				case 'modules_custom':
 					action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!permissions:PERMISSIONS_TREE;^}').replace(/\[2\]/,window.permission_tree_editor_url.replace(/%21/,page_link.replace(/:/,'%3A',page_link)));
-					if (node.getAttribute('author')) info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!AUTHOR;^}').replace(/\[2\]/,node.getAttribute('author').htmlEntities());
-					if (node.getAttribute('organisation')) info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!ORGANISATION;^}').replace(/\[2\]/,node.getAttribute('organisation').htmlEntities());
-					if (node.getAttribute('version')) info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!VERSION;^}').replace(/\[2\]/,node.getAttribute('version').htmlEntities());
+					if (node.getAttribute('author')) info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!AUTHOR;^}').replace(/\[2\]/,escape_html(node.getAttribute('author')));
+					if (node.getAttribute('organisation')) info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!ORGANISATION;^}').replace(/\[2\]/,escape_html(node.getAttribute('organisation')));
+					if (node.getAttribute('version')) info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!VERSION;^}').replace(/\[2\]/,escape_html(node.getAttribute('version')));
 					break;
 				case 'minimodule':
 				case 'minimodule_custom':
@@ -79,7 +79,7 @@ function update_details_box(element)
 	}
 
 	// Pages
-	if (Array('modules','modules_custom','comcode','comcode_custom','html','html_custom').inArray(full_type))
+	if (['modules','modules_custom','comcode','comcode_custom','html','html_custom'].indexOf(full_type)!=-1)
 	{
 		action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!DELETE;^}').replace(/\[2\]/,window.delete_url.replace(/%5B1%5D/,page_link_bits[0]).replace(/\[2\]/,page_link_bits[1]));
 		{+START,IF,{$ADDON_INSTALLED,stats}}
@@ -90,8 +90,8 @@ function update_details_box(element)
 	// All
 	if (full_type!='root')
 	{
-		action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!VIEW;^}').replace(/\[2\]/,('{$BASE_URL;,0}/data/page_link_redirect.php?id='+window.encodeURIComponent(page_link)+keep_stub()).htmlEntities());
-		info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!PAGE_LINK;^}').replace(/\[2\]/,'<kbd>'+page_link.htmlEntities()+'</kbd>');
+		action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!VIEW;^}').replace(/\[2\]/,escape_html(('{$BASE_URL;,0}/data/page_link_redirect.php?id='+window.encodeURIComponent(page_link)+keep_stub())));
+		info_buildup+=window.info_tpl_item.replace(/\[1\]/,'{!PAGE_LINK;^}').replace(/\[2\]/,'<kbd>'+escape_html(page_link)+'</kbd>');
 		if (element.selected_editlink)
 			action_buildup+=window.actions_tpl_item.replace(/\[1\]/,'{!EDIT;^}').replace(/\[2\]/,escape_html('{$FIND_SCRIPT_NOHTTP;,page_link_redirect}?id='+element.selected_editlink+keep_stub()));
 	}

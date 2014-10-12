@@ -177,23 +177,3 @@ function s_update_remove_show(data,stat)
 		}
 	}
 }
-
-/*String.trim() is not native in all browsers*/
-if (typeof String.prototype.trim!=='function')
-{
-	String.prototype.trim=function() {
-		return this.replace(/^\s\s*/,'').replace(/\s\s*$/,'');
-	}
-}
-/*Array.indexOf() is not native in all browsers*/
-if (typeof Array.prototype.indexOf!=='function')
-{
-	Array.prototype.indexOf=function(obj) {
-		for (var i=0;i<this.length;i++)
-		{
-			if(this[i]==obj)
-				return i;
-		}
-		return -1;
-	}
-}

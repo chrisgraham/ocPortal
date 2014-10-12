@@ -162,7 +162,6 @@ class Hook_addon_registry_core_permission_management
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_tree_list');
-		require_javascript('javascript_more');
 		require_lang('permissions');
 
 		require_css('forms');

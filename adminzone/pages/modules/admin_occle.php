@@ -123,7 +123,6 @@ class Module_admin_occle
 	{
 		require_code('occle');
 		require_javascript('javascript_ajax');
-		require_javascript('javascript_more');
 		require_javascript('javascript_occle');
 		require_css('occle');
 

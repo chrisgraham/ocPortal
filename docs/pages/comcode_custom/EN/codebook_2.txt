@@ -112,18 +112,18 @@ JavaScript is separate from Java, and built into web browsers directly. It is us
 ocPortal has an inbuilt set of JavaScript libraries, which are split across a number of JavaScript template files that each begin with the name 'JAVASCRIPT'. The core library that is loaded onto every screen is named just [tt]JAVASCRIPT.tpl[/tt]. This core library is very general and doesn't know about ocPortal's individual modules- it is a general-purpose library to provide functionality usable anywhere. Most of the other JavaScript libraries are specific to individual modules (e.g. the chat module uses [tt]JAVASCRIPT_CHAT.tpl[/tt]) or to specific aspects of ocPortal (e.g. the Comcode editing interface uses [tt]JAVASCRIPT_EDITING.tpl[/tt]). There are a few additional general purpose JavaScript libraries:
 1) [tt]JAVASCRIPT_AJAX[/tt] -- AJAX call functionality, which should be used for all AJAX code.
 2) [tt]JAVASCRIPT_DRAGDROP[/tt] -- A drag and drop library (do not use this unless drag & drop really is the best way to build an interface, which is very rare)
-3) [tt]JAVASCRIPT_MORE[/tt] -- A supplementary library of useful functions that are not important enough to be loaded up for every screen. Consider making use of this if you are making a JavaScript-intensive screen.
+3) [tt]JAVASCRIPT_JQUERY[/tt] -- Bundled jQuery library, used on some screens (but not usually included as a cross-site dependency).
 4) [tt]JAVASCRIPT_TRANSITIONS[/tt] -- Provide various transition/animation effects.
 
-To flag a javascript file to be loaded up, use the 'require_javascript' API command in the PHP code. For example, if you wanted to load up the JavaScript defined in the 'JAVASCRIPT_MORE' template, use:
-require_javascript('javascript_more');
+To flag a javascript file to be loaded up, use the 'require_javascript' API command in the PHP code. For example, if you wanted to load up the JavaScript defined in an 'JAVASCRIPT_EXAMPLE' template, use:
+require_javascript('javascript_example');
 This command is usually best placed:
 1) in screen functions if it is not used by all screens in your module
 2) or, in the [tt]run[/tt] function if it is used by all/most screens in your module
 
 Alternatively, you can load JavaScript from a template with a command like:
 [code="HTML"]
-{$REQUIRE_JAVASCRIPT,javascript_more}
+{$REQUIRE_JAVASCRIPT,javascript_example}
 [/code]
 
 You may add new JavaScript templates as needed. Just make sure to follow the naming convention.
@@ -142,7 +142,7 @@ In ocPortal, JavaScript libraries are automatically minified to save on bandwidt
  - Viewport: get_window_width, get_window_height, get_window_scroll_width, get_window_scroll_height, get_window_scroll_x, get_window_scroll_y
  - Element positioning: find_pos_x, find_pos_y, find_width, find_height
  - Tooltips: activate_tooltip
- - Misc: set_opacity, add_event_listener_abstract, cancel_bubbling, keep_stub, JAVASCRIPT_MORE: many useful string and array functions
+ - Misc: set_opacity, add_event_listener_abstract, cancel_bubbling, keep_stub
  - HTML manipulation: get_inner_html, set_inner_html
  - AJAX: JAVASCRIPT_AJAX: do_ajax_request
  - Animation: toggleable_tray, smooth_scroll, JAVASCRIPT_TRANSITIONS: fade_transition

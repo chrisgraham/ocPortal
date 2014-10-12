@@ -673,7 +673,6 @@ class Hook_addon_registry_core
 			'themes/default/templates/JAVASCRIPT_STAFF.tpl',
 			'themes/default/templates/JAVASCRIPT_TRANSITIONS.tpl',
 			'themes/default/templates/JAVASCRIPT_DRAGDROP.tpl',
-			'themes/default/templates/JAVASCRIPT_MORE.tpl',
 			'themes/default/templates/JAVASCRIPT_TREE_LIST.tpl',
 			'themes/default/templates/JAVASCRIPT_XSL_MOPUP.tpl',
 			'themes/default/templates/JAVASCRIPT_YAHOO.tpl', // Used only for date chooser

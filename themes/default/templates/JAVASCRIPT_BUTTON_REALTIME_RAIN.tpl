@@ -22,7 +22,6 @@ function load_realtime_rain()
 
 		require_javascript('javascript_ajax');
 		require_javascript('javascript_realtime_rain');
-		require_javascript('javascript_more');
 		require_css('realtime_rain');
 		window.setTimeout(load_realtime_rain,200);
 		return false;

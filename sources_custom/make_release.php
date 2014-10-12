@@ -83,7 +83,6 @@ function make_installers($skip_file_grab=false)
 	$bundled=$builds_path.'/builds/'.$version_dotted.'/ocportal-'.$version_dotted.'.tar';
 	$quick_zip=$builds_path.'/builds/'.$version_dotted.'/ocportal_quick_installer-'.$version_dotted.'.zip';
 	$manual_zip=$builds_path.'/builds/'.$version_dotted.'/ocportal_manualextraction_installer-'.$version_dotted.'.zip';
-	$debian=$builds_path.'/builds/'.$version_dotted.'/debian-'.$version_dotted.'.tar';
 	$mszip=$builds_path.'/builds/'.$version_dotted.'/ocportal-'.$version_dotted.'-webpi.zip'; // Aka msappgallery, related to webmatrix
 
 	// Flags
@@ -91,7 +90,6 @@ function make_installers($skip_file_grab=false)
 	$make_manual=(get_param_integer('skip_manual',0)==0);
 	$make_bundled=(get_param_integer('skip_bundled',0)==0);
 	$make_mszip=(get_param_integer('skip_mszip',0)==0);
-	$make_debian=false;//(get_param_integer('skip_debian',0)==0);
 
 	if (function_exists('set_time_limit')) @set_time_limit(0);
 	disable_php_memory_limit();
@@ -226,7 +224,7 @@ function make_installers($skip_file_grab=false)
 	}
 
 	// Build bundled version (Installatron, Bitnami, ...)
-	if ($make_bundled || $make_debian)
+	if ($make_bundled)
 	{
 		@unlink($bundled);
 		@unlink($bundled.'.gz');
@@ -257,56 +255,6 @@ function make_installers($skip_file_grab=false)
 		// Remove those files we copied
 		unlink($builds_path.'/builds/build/'.$version_branch.'/install.sql');
 		unlink($builds_path.'/builds/build/'.$version_branch.'/_config.php.template');
-
-		chdir(get_file_base());
-	}
-
-	// Build debian version (built on top of bundled version)
-	if ($make_debian)
-	{
-		// To our correct versioned builds directory
-		if (file_exists($builds_path.'/builds/debian-build')) deldir_contents($builds_path.'/builds/debian-build');
-		@mkdir($builds_path.'/builds/debian-build',0777);
-		fix_permissions($builds_path.'/builds/debian-build',0777);
-
-		// Take existing .tar.gz package, gunzip the tar
-		chdir($builds_path.'/builds/debian-build');
-		@mkdir($builds_path.'/builds/debian-build/ocportal-'.$version_dotted,0777);
-		fix_permissions($builds_path.'/builds/debian-build/ocportal-'.$version_dotted,0777);
-		copy($bundled.'.gz',$builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar.gz');
-		fix_permissions($builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar.gz');
-		$cmd='gunzip '.escapeshellarg($builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar.gz');
-		shell_exec($cmd);
-
-		// Extract the tar to to "ocportal-<version>"
-		chdir($builds_path.'/builds/debian-build/ocportal-'.$version_dotted);
-		@mkdir($builds_path.'/builds/debian-build/ocportal-'.$version_dotted,0777);
-		fix_permissions($builds_path.'/builds/debian-build/ocportal-'.$version_dotted,0777);
-		$cmd='tar xvf '.escapeshellarg($builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar');
-		echo shell_exec($cmd);
-
-		// Filter out non-free stuff from "ocportal-<version>"
-		$prefix=$builds_path.'/builds/debian-build/ocportal-'.$version_dotted;
-		unlink($prefix.'/data/jwplayer.flash.swf');
-		unlink($prefix.'/themes/default/templates/JAVASCRIPT_JWPLAYER.tpl');
-		unlink($prefix.'/sources/jsmin.php');
-
-		// Create "ocportal-<version>.tar.gz" package from "ocportal-<version>"
-		chdir($builds_path.'/builds/debian-build');
-		$cmd='tar -cvf '.escapeshellarg($builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar').' ocportal-'.$version_dotted.'/* --mode=a+X';
-		$output2=shell_exec($cmd);
-		$cmd='gzip -n '.escapeshellarg($builds_path.'/builds/debian-build/ocportal-'.$version_dotted.'.tar');
-		shell_exec($cmd);
-
-		// Copy "debian" directory into "ocportal-<version>"
-		copy_r(get_file_base().'data_custom/builds/debian',$prefix.'/debian');
-
-		// Tar up "ocportal-<version>" and "ocportal-<version>.tar.gz" together into "debian-<version>.tar"
-		chdir($builds_path.'/builds/debian-build');
-		$cmd='tar -cvf '.escapeshellarg($debian).' ocportal-'.$version_dotted.'/* ocportal-'.$version_dotted.'.tar.gz --mode=a+X';
-		$output2.=shell_exec($cmd);
-
-		$out.=do_build_zip_output($debian,$output2);
 
 		chdir(get_file_base());
 	}
@@ -368,7 +316,6 @@ function make_installers($skip_file_grab=false)
 	require_code('files');
 	if ($make_quick) $details.='<li>'.$quick_zip.' file size: '.clean_file_size(filesize($quick_zip)).'</li>';
 	if ($make_manual) $details.='<li>'.$manual_zip.' file size: '.clean_file_size(filesize($manual_zip)).'</li>';
-	if ($make_debian) $details.='<li>'.$debian.' file size: '.clean_file_size(filesize($debian)).'</li>';
 	if ($make_mszip) $details.='<li>'.$mszip.' file size: '.clean_file_size(filesize($mszip)).'</li>';
 	if ($make_bundled) $details.='<li>'.$bundled.'.gz file size: '.clean_file_size(filesize($bundled.'.gz')).'</li>';
 

@@ -253,7 +253,7 @@ tree_list.prototype.render_tree=function(xml,html,element)
 			expand_button.onkeypress=a.onkeypress=a.childNodes[0].onkeypress=function(expand_button) {
 				return function(event) {
 					if (typeof event=='undefined') var event=window.event;
-					if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-','='].inArray(String.fromCharCode(event.keyCode?event.keyCode:event.charCode)))
+					if (((event.keyCode?event.keyCode:event.charCode)==13) || ['+','-','='].indexOf(String.fromCharCode(event.keyCode?event.keyCode:event.charCode))!=-1)
 						expand_button.onclick(event);
 				}
 			} (expand_button);
@@ -347,9 +347,6 @@ tree_list.prototype.render_tree=function(xml,html,element)
 
 		if ((node.getAttribute('draggable')) && (node.getAttribute('draggable')!='false') && (window.Drag))
 		{
-/*			if ((!initially_expanded) || (!node.getAttribute('has_children')) || (node.getAttribute('has_children')=='false'))
-				node_self.style.position='absolute';
-			node_self_wrap.style.height=find_height(node_self)+'px';*/
 			master_html=document.getElementById('tree_list__root_'+this.name);
 			fix_up_node_position(node_self);
 			node_self.ocp_draggable=node.getAttribute('draggable');
@@ -552,7 +549,7 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 	var element=document.getElementById(this.object.name);
 	if (element.disabled) return;
 	var i;
-	var selected_start=(element.value=='')?[]:(this.object.multi_selection?element.value.split(','):[element.value]);
+	var selected_before=(element.value=='')?[]:(this.object.multi_selection?element.value.split(','):[element.value]);
 
 	cancel_bubbling(event);
 	if (typeof event.preventDefault!='undefined') event.preventDefault();
@@ -590,11 +587,11 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 				{
 					if ((i>=pos_last) && (i<=pos_us))
 					{
-						if (!selected_start.inArray(that_selected_id))
+						if (selected_before.indexOf(that_selected_id)==-1)
 							all_a[i].handle_selection(event,true);
 					} else
 					{
-						if (selected_start.inArray(that_selected_id))
+						if (selected_before.indexOf(that_selected_id)!=-1)
 							all_a[i].handle_selection(event,true);
 					}
 				}
@@ -612,22 +609,26 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 
 	if (xml_node.getAttribute('selectable')=='true' || this.object.all_nodes_selectable)
 	{
-		var selected_end=selected_start;
-		for (i=0;i<selected_start.length;i++)
+		var selected_after=selected_before;
+		for (i=0;i<selected_before.length;i++)
 		{
-			this.object.make_element_look_selected(document.getElementById(this.object.name+'tsel_'+type+'_'+selected_start[i]),false);
+			this.object.make_element_look_selected(document.getElementById(this.object.name+'tsel_'+type+'_'+selected_before[i]),false);
 		}
 		if ((!this.object.multi_selection) || (((!event.ctrlKey) && (!event.metaKey) && (!event.altKey)) && (!assume_ctrl)))
 		{
-			selected_end=[];
+			selected_after=[];
 		}
-		if ((selected_start.inArray(selected_id)) && (((selected_start.length==1) && (selected_start[0]!=selected_id)) || ((event.ctrlKey) || (event.metaKey) || (event.altKey)) || (assume_ctrl)))
+		if ((selected_before.indexOf(selected_id)!=-1) && (((selected_before.length==1) && (selected_before[0]!=selected_id)) || ((event.ctrlKey) || (event.metaKey) || (event.altKey)) || (assume_ctrl)))
 		{
-			selected_end.arrayDelete(selected_id);
+			for (var key in selected_after)
+			{
+				if (selected_after[key]==selected_id)
+					selected_after.splice(key,1);
+			}
 		} else
-		if (!selected_end.inArray(selected_id))
+		if (selected_after.indexOf(selected_id)==-1)
 		{
-			selected_end.push(selected_id);
+			selected_after.push(selected_id);
 			if (!this.object.multi_selection) // This is a bit of a hack to make selection look nice, even though we aren't storing natural IDs of what is selected
 			{
 				var anchors=document.getElementById('tree_list__root_'+this.object.name).getElementsByTagName('label');
@@ -638,13 +639,13 @@ tree_list.prototype.handle_selection=function(event,assume_ctrl) // Not called a
 				this.object.make_element_look_selected(document.getElementById(this.object.name+'tsel_'+type+'_'+real_selected_id),true);
 			}
 		}
-		for (i=0;i<selected_end.length;i++)
+		for (i=0;i<selected_after.length;i++)
 		{
-			this.object.make_element_look_selected(document.getElementById(this.object.name+'tsel_'+type+'_'+selected_end[i]),true);
+			this.object.make_element_look_selected(document.getElementById(this.object.name+'tsel_'+type+'_'+selected_after[i]),true);
 		}
 
-		element.value=selected_end.join(',');
-		element.selected_title=(selected_end.length==1)?xml_node.getAttribute('title'):element.value;
+		element.value=selected_after.join(',');
+		element.selected_title=(selected_after.length==1)?xml_node.getAttribute('title'):element.value;
 		element.selected_editlink=xml_node.getAttribute('edit');
 		if (element.value=='') element.selected_title='';
 		if (element.onchange) element.onchange();
