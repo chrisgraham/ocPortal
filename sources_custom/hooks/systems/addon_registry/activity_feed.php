@@ -163,7 +163,6 @@ The blocks provided are [tt]main_activities[/tt] and the status entry box is cal
 			'sources_custom/activities_submission.php',
 			'sources_custom/hooks/systems/activities/activities.php',
 			'themes/default/templates_custom/JAVASCRIPT_BASE64.tpl',
-			'themes/default/templates_custom/JAVASCRIPT_JQUERY.tpl',
 			'themes/default/templates_custom/JAVASCRIPT_ACTIVITIES_STATE.tpl',
 			'themes/default/templates_custom/BLOCK_MAIN_ACTIVITIES_STATE.tpl',
 			'themes/default/templates_custom/BLOCK_MAIN_ACTIVITIES.tpl',
