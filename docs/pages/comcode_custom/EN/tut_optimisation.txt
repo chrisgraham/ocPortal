@@ -54,6 +54,7 @@ ocPortal is not designed to "cache everything as it will be displayed" because t
  - Even though ocPortal supports various database vendors it is optimised for MySQL.
  - Even though ocPortal supports various third party forums it is optimised for OCF.
  - Servers may have incorrectly firewalled DNS resolution, in which case the ocPortal "Spammer checking level" setting must be set to "Never" to avoid a 28 second timeout happening on each anti-spammer check.
+ - If your website doesn't need to be able to run without a wider Internet connection (i.e. isn't an Intranet), then you could blank out any of the unmodified JavaScript libraries ocPortal includes (e.g. jQuery) and instead include references to a JavaScript CDN via direct includes in the [tt]HTML_HEAD[/tt] template.
 
 [title="2"]Persistent cache[/title]
 
@@ -247,7 +248,7 @@ ocPortal has been tested up to a million of the following:
 (where we have tested the million resources 'under a single' something this is to place additional pressure on the testing process)
 
 If there is a lot of data then ocPortal will do a number of things to workaround the problem:
-1) Choose-to-select lists will either become non-active or be restricted just to a selection of the most recent entries.
+1) Choose-to-select lists will either become non-active or be restricted just to a selection of the most recent entries (instead the user can follow in-situe edit links to get to edit something).
 2) A very small number of features, like A-Z indexes, will become non-functional.
 3) Pagination features will become more obvious.
 4) In some cases, subcategories may not be shown. For example, if there are hundreds of personal galleries, those galleries will need to be accessed via member profiles rather than gallery browsing. This is because pagination is not usually implemented for subcategory browsing.
@@ -255,11 +256,11 @@ If there is a lot of data then ocPortal will do a number of things to workaround
 6) Some ocPortal requests will average become very slightly slower (more database queries) as optimised algorithms that load all content from database tables at once have to be replaced with ones that do multiple queries instead.
 7) Entry/Category counts for subtrees will only show the number of immediate entries rather than the recursive number
 8) Birthdays or users-online won't show (for example)
-9) The IS_IN_GROUP symbol and if_in_group Comcode tags will no longer fully consider clubs, only regular usergroups
+9) The [tt]IS_IN_GROUP[/tt] symbol and [tt]if_in_group[/tt] Comcode tags will no longer fully consider clubs, only regular usergroups
 10) Usergroup selection lists won't include clubs except sometimes the ones you're in
 11) With very large numbers of catalogue entries, only in-database (indexed) sorting methods will work, so you can't have the full range of normal ordering control
 12) ocFilter will not work thoroughly when using category tree filters if there are more than 1000 subcategories
-All normal foreground processes are designed to be fast even with huge amounts of data, but some admin screens or backend processes may take a long time to complete if this is necessarily the case (for example, CSV export). ocPortal has been programmed to not use excessive memory even if a task will take a long time to complete, and to not time-out.
+All normal foreground processes are designed to be fast even with huge amounts of data, but some admin screens or backend processes may take a long time to complete if this is necessarily the case (for example, CSV export). ocPortal has been programmed (wherever possible) to not use excessive memory even if a task will take a long time to complete, and to not time-out. ocPortal implements an ocPortal task queue to be able to perform expensive tasks in a managed way.
 
 There is a risk that people could perform a [acronym="Distributed Denial Of Service"]DDOS[/acronym] attack. For example, someone might submit huge numbers of blog items, and then override default RSS query settings to download them all, from lots of computers simultaneously. ocPortal cannot protect against this (we don't put in limits that would break expected behaviour for cases when people explicitly ask for complex requests, and if we did it would just shift the hackers focus to a different target), but if you have this much exposure that hackers would attempt this you should be budgetting for a proper network security team to detect and prevent such attacks.
 
@@ -267,7 +268,7 @@ Be aware of these reasonable limits (unless you have dedicated programming resou
 1) Don't create more than 60 Custom Profile Fields, as MySQL will run out of index room and things may get slow!
 2) ocPortal will stop you putting more than 300 children under a single Wiki+ page. You shouldn't want to though!
 3) ocPortal will stop you putting more than 300 posts under a single Wiki+ page. You shouldn't want to though!
-4) Don't create more than about 1000 zones (anything after the 50th shouldn't contain any modules either).
+4) Don't create more than about 1000 zones (anything after the 50th shouldn't contain any modules either). Use customised page monikers to build a 'directory structure' instead.
 5) LDAP support won't run smoothly with 1000's of LDAP users in scope (without changes anyway).
 6) Just generally don't do anything unusually silly, like make hundreds of usergroups available for selection when members join.
 
@@ -335,7 +336,7 @@ There are many commercial CDN services available that can be configured in via t
 
 [title="2"]Facebook's HipHop PHP (HHVM / hphp)[/title]
 
-[i]Note that we now support HHVM, which has replaced the original HipHop PHP compiler. The names are used interchangeably, but we are referring to HHVM.
+[i]Note that we now support HHVM, which has replaced the original HipHop PHP compiler. The names are used interchangeably, but we are referring to HHVM.[/i]
 
 [i]HHVM is not officially supported, as it is fast evolving and sometimes has bugs. Support can be provided individually upon commercial demand.[/i]
 
@@ -360,11 +361,12 @@ In order to support hphp (which imposes some language restrictions) we made some
 We expect Facebook will improve HHVM performance will increase over time. They are working on improvements to the PHP language, which ocPortal could benefit from with further development. Type hinting is particularly interesting, as it has great performance potential and mirrors our code quality efforts that have already made ocPortal type-strict. We have preliminary support for this already, but it is not consistently maintained production-ready.
 
 We have tried in the past to support:
- - Roadsend
- - Phalanger
- - Quercus
- - Project Zero
+ - Roadsend (commercial software)
+ - Phalanger (Microsoft-sponsored)
+ - Quercus (Caucho-sponsored)
+ - Project Zero (IBM-sponsored)
 But after quite a lot of work we have concluded these projects are too buggy to be realistic, not well maintained, or don't actually offer any performance improvement. Never-the-less, making ocPortal work on these platforms in the past has led to improvements in the ocPortal code quality, as these PHP replacements have a tendency to float different kinds of subtle coding errors to the surface.
+There are also newer PHP alternatives such as HippyVM, or approaches that limit the PHP language significantly, but nowadays HHVM is a leading the others by a long way.
 
 [title="2"]mod_pagespeed[/title]
 

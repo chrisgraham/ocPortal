@@ -163,6 +163,7 @@
 
 {$,JavaScript includes from ocPortal page}
 {$JS_TEMPCODE,header}
+{$,LEGACY: IE8}
 <!--[if lt IE 9]>
 <script src="{$BASE_URL*}/data/html5.js"></script>
 <![endif]-->

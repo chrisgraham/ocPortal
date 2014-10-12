@@ -847,6 +847,7 @@ function read_cookie(cookie_name)
 }
 
 /* Filtering class names */
+// LEGACY: IE8/IE9; https://developer.mozilla.org/en-US/docs/Web/API/Element.classList
 function first_class_name(class_name)
 {
 	var p=class_name.indexOf(' ');
@@ -862,10 +863,11 @@ function element_has_class(element,class_name)
 	return (element.className.match(new RegExp('(^|\\s)'+class_name+'($|\\s)')));
 }
 
+// LEGACY: IE8
 /* Finding elements by class name */
 function get_elements_by_class_name(node,class_name)
 {
-//	if (typeof node.getElementsByClassName!='undefined') return node.getElementsByClassName(class_name);
+	//	if (typeof node.getElementsByClassName!='undefined') return node.getElementsByClassName(class_name);
 
 	if (node)
 	{

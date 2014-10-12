@@ -4369,7 +4369,7 @@ a[title="{!VIRTUAL_ROOT}"]:hover {
 .overlay .previous_button, .overlay .next_button {
 	position: absolute;
 	cursor: pointer;
-	top: 43%;
+	top: 43%; /*fallback, IE8/IE9*/
 	top: calc(50% - {$DIV,74,2}px);
 	max-width: 20%;
 }

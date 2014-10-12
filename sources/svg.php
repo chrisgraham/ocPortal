@@ -18,8 +18,6 @@
  * @package		stats
  */
 
-// http://www.adobe.com/svg/viewer/install/beta.html
-
 /**
  * Standard code module initialisation function.
  */
