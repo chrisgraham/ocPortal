@@ -33,7 +33,7 @@
 		<div id="{NAME_STUB*}_syndication_options" class="syndication_options"></div>
 	{+END}
 
-	{+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
+	{+START,IF,{PLUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 		<script>// <![CDATA[
 			add_event_listener_abstract(window,'load',function () {
 				preinit_file_input('upload_multi','{NAME_STUB;/}_{I}',null,null,'{FILTER;/}');

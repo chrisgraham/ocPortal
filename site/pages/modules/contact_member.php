@@ -249,10 +249,10 @@ class Module_contact_member
 		$attachments=array();
 		$size_so_far=0;
 		require_code('uploads');
-		is_swf_upload(true);
+		is_plupload(true);
 		foreach ($_FILES as $file)
 		{
-			if ((is_swf_upload()) || (is_uploaded_file($file['tmp_name'])))
+			if ((is_plupload()) || (is_uploaded_file($file['tmp_name'])))
 			{
 				$attachments[$file['tmp_name']]=$file['name'];
 				$size_so_far+=$file['size'];

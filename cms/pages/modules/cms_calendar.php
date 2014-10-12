@@ -1252,7 +1252,7 @@ class Module_cms_calendar extends standard_crud_module
 		$ical_url=post_param('ical_feed_url',NULL);
 
 		require_code('uploads');
-		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
+		if (((is_plupload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
 			$ical_url=$_FILES['file_novalidate']['tmp_name'];
 
 		if (is_null($ical_url))

@@ -204,7 +204,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
 
 		require_code('uploads');
 		require_code('images');
-		is_swf_upload(true);
+		is_plupload(true);
 
 		set_mass_import_mode();
 

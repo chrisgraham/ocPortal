@@ -145,7 +145,7 @@ function upload_will_syndicate($name)
 			if (($ob->is_enabled()) && ($ob->is_authorised()))
 			{
 				require_code('uploads');
-				is_swf_upload(true);
+				is_plupload(true);
 
 				$hook_file_handling_types=$ob->get_file_handling_types();
 				$filename=isset($_FILES[$name]['name'])?$_FILES[$name]['name']:'';

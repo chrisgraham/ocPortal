@@ -105,8 +105,8 @@ class Hook_fields_posting_field
 		require_javascript('javascript_posting');
 		require_javascript('javascript_editing');
 		require_javascript('javascript_ajax');
-		require_javascript('javascript_swfupload');
-		require_css('swfupload');
+		require_javascript('javascript_plupload');
+		require_css('plupload');
 
 		require_lang('comcode');
 

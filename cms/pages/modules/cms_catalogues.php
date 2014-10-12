@@ -1056,7 +1056,7 @@ class Module_cms_catalogues extends standard_crud_module
 		// Grab the CSV file
 		require_code('uploads');
 		$csv_name=mixed();
-		if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
+		if (((is_plupload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
 			$csv_name=$_FILES['file_novalidate']['tmp_name'];
 		if (is_null($csv_name))
 		{

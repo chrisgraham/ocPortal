@@ -1171,7 +1171,7 @@ function form_to_email($subject=NULL,$intro='',$fields=NULL,$to_email=NULL,$outr
 
 	$attachments=array();
 	require_code('uploads');
-	is_swf_upload(true);
+	is_plupload(true);
 	foreach ($_FILES as $file)
 	{
 		$attachments[$file['tmp_name']]=$file['name'];

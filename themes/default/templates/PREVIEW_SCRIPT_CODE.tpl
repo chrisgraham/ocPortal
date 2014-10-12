@@ -14,7 +14,7 @@
 	{
 		if (((inputs[i].type=='file') || ((inputs[i].type=='text') && (inputs[i].disabled))) && (inputs[i].value!='') && (inputs[i].name.match(/file\d+/)))
 		{
-			if (typeof inputs[i].swfob!='undefined')
+			if (typeof inputs[i].plupload_object!='undefined')
 			{
 				if ((inputs[i].value!='-1') && (inputs[i].value!=''))
 				{
@@ -32,9 +32,9 @@
 					done_one=true;
 				}
 
-				if (typeof inputs[i].swfob.setButtonDisabled!='undefined')
+				if (typeof inputs[i].plupload_object.setButtonDisabled!='undefined')
 				{
-					inputs[i].swfob.setButtonDisabled(false);
+					inputs[i].plupload_object.setButtonDisabled(false);
 				} else
 				{
 					main_window.document.getElementById('uploadButton_'+inputs[i].name).disabled=true;

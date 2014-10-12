@@ -173,7 +173,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 	function _import()
 	{
 		require_code('uploads');
-		is_swf_upload(true);
+		is_plupload(true);
 
 		set_mass_import_mode();
 

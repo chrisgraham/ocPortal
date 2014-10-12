@@ -66,7 +66,7 @@ class Hook_Preview_download
 		$map=array();
 
 		require_code('uploads');
-		is_swf_upload(true);
+		is_plupload(true);
 		$id=post_param_integer('id',NULL);
 
 		$views=0;

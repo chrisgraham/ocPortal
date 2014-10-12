@@ -41,7 +41,7 @@ function check_comcode($comcode,$source_member=NULL,$as_admin=false,$connection=
 			if (preg_match('#^hidFileID\_#i',$key)!=0)
 			{
 				require_code('uploads');
-				$has_one=is_swf_upload();
+				$has_one=is_plupload();
 			}
 		}
 		foreach ($_FILES as $key=>$file)

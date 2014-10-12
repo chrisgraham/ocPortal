@@ -1927,7 +1927,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$size_uploaded_today=ceil(((float)$_size_uploaded_today[0]['the_answer'])/1024.0/1024.0);
 					$attach_size=0;
 					require_code('uploads');
-					is_swf_upload(true);
+					is_plupload(true);
 					foreach ($_FILES as $_file)
 						$attach_size+=floatval($_file['size'])/1024.0/1024.0;
 					if (($size_uploaded_today+$attach_size)>floatval($daily_quota))
@@ -2031,7 +2031,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 					// Grab actual file
 					require_code('uploads');
-					is_swf_upload(true);
+					is_plupload(true);
 					$urls=get_url('','file'.$_id,'uploads/attachments',2,OCP_UPLOAD_ANYTHING,((!array_key_exists('thumb',$attributes)) || ($attributes['thumb']!='0')) && ($attributes['thumb_url']==''),'','',true,true,true,true,$source_member);
 					if ($urls[0]=='') return new ocp_tempcode();//warn_exit(do_lang_tempcode('ERROR_UPLOADING'));  Can't do this, because this might not be post-calculated if something went wrong once
 					$_size=$_FILES['file'.$_id]['size'];

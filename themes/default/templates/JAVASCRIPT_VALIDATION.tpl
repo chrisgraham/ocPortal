@@ -859,9 +859,9 @@ function set_required(field_name,is_required)
 	{
 		element.className=element.className.replace(/(input\_[a-z\_]+)_required/g,'$1');
 
-		if (typeof element.swfob!='undefined')
+		if (typeof element.plupload_object!='undefined')
 		{
-			element.swfob.settings.required=is_required;
+			element.plupload_object.settings.required=is_required;
 		}
 
 		if (is_required) element.className=element.className.replace(/(input\_[a-z\_]+)/g,'$1_required');

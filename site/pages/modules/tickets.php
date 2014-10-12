@@ -523,8 +523,8 @@ class Module_tickets
 				require_javascript('javascript_editing');
 				require_javascript('javascript_validation');
 				require_javascript('javascript_posting');
-				require_javascript('javascript_swfupload');
-				require_css('swfupload');
+				require_javascript('javascript_plupload');
+				require_css('plupload');
 				require_code('form_templates');
 				list($attachments,$attach_size_field)=(get_forum_type()=='ocf')?get_attachments('post'):array(NULL,NULL);
 				if (addon_installed('captcha'))

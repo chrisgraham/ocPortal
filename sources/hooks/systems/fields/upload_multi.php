@@ -170,7 +170,7 @@ class Hook_fields_upload_multi
 			$_old_value=((is_null($old_value)) || ($old_value['cv_value']==''))?array():explode("\n",$old_value['cv_value']);
 
 			require_code('uploads');
-			is_swf_upload(true);
+			is_plupload(true);
 
 			if ($editing)
 			{

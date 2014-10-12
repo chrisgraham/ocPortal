@@ -1,10 +1,3 @@
-{+START,IF,{$CONFIG_OPTION,java_upload}}
-	{+START,IF,{$NOT,{$GET,included_java_upload}}}
-		{+START,INCLUDE,JAVA_DETECT}{+END}
-	{+END}
-	{$SET,included_java_upload,1}
-{+END}
-
 <div class="wide_table_wrap"><table class="map_table form_table wide_table">
 	{+START,IF,{$NOT,{$MOBILE}}}
 		<colgroup>

@@ -432,11 +432,15 @@ function wysiwyg_editor_init_for(element,id)
 		}
 	} );
 
-	/*editor.on('instanceReady',function(ev) Does not work
-	{
-		var editor=ev.editor;
-		if (typeof window.initialise_dragdrop_upload!='undefined') initialise_dragdrop_upload(element.id,element.id,editor.element.$.document);
-	});*/
+	editor.on('contentDom',function() {
+		editor.document.on('dragover',function(e) {
+			html5_upload_event_drag_over(e.data.$,element,element.id);
+		});
+
+		editor.document.on('drop',function(e) {
+			html5_upload_event_drop(e.data.$,element,element.id);
+		});
+	});
 
 	return editor;
 }

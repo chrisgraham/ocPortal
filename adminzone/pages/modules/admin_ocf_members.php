@@ -583,7 +583,7 @@ class Module_admin_ocf_members
 		$use_temporary_passwords=(post_param_integer('temporary_password',0)==1);
 
 		require_code('uploads');
-		if ((is_swf_upload(true)) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
+		if ((is_plupload(true)) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 		{
 			if (filesize($_FILES['file']['tmp_name'])<1024*1024*3) // Cleanup possible line ending problems, but only if file not too big
 			{

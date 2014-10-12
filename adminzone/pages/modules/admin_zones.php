@@ -898,7 +898,7 @@ class Module_admin_zones
 				foreach (array_keys($themes) as $theme)
 				{
 					$iurl='';
-					if ((is_swf_upload()) || (((array_key_exists('logo_upload_'.$theme,$_FILES)) && (is_uploaded_file($_FILES['logo_upload_'.$theme]['tmp_name'])))))
+					if ((is_plupload()) || (((array_key_exists('logo_upload_'.$theme,$_FILES)) && (is_uploaded_file($_FILES['logo_upload_'.$theme]['tmp_name'])))))
 					{
 						$urls=get_url('','logo_upload_'.$theme,'themes/'.$theme.'/images_custom',0,OCP_UPLOAD_IMAGE);
 						$iurl=$urls[0];

@@ -1700,7 +1700,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 
 	require_code('uploads');
 
-	if ((!is_swf_upload()) && ((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
+	if ((!is_plupload()) && ((!array_key_exists($upload_name,$_FILES)) || (!is_uploaded_file($_FILES[$upload_name]['tmp_name']))))
 	{
 		$x=post_param($param_name,'');
 		if (($x!='') && (url_is_local($x)))
@@ -1717,7 +1717,7 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id=NULL)
 	//  If we don't have GD, we need them to have uploaded a thumbnail too.
 	if (!function_exists('imagetypes'))
 	{
-		if ((!is_swf_upload()) && ((!array_key_exists($upload_name.'2',$_FILES)) || (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))
+		if ((!is_plupload()) && ((!array_key_exists($upload_name.'2',$_FILES)) || (!is_uploaded_file($_FILES[$upload_name.'2']['tmp_name']))))
 		{
 			$field=post_param('thumb_'.$param_name,'');
 			if ($field=='') warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));

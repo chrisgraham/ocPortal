@@ -296,7 +296,7 @@ function get_theme_img_code($type,$allow_skip=false,$field_file='file',$field_ch
 	}
 
 	require_code('uploads');
-	if ((is_swf_upload()) || (((array_key_exists($field_file,$_FILES)) && (is_uploaded_file($_FILES[$field_file]['tmp_name'])))))
+	if ((is_plupload()) || (((array_key_exists($field_file,$_FILES)) && (is_uploaded_file($_FILES[$field_file]['tmp_name'])))))
 	{
 		$urls=get_url('',$field_file,'themes/default/images_custom',0,OCP_UPLOAD_IMAGE,false);
 

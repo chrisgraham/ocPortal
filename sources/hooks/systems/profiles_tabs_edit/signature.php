@@ -95,8 +95,8 @@ class Hook_Profiles_Tabs_Edit_signature
 		require_javascript('javascript_posting');
 		require_javascript('javascript_editing');
 		require_javascript('javascript_ajax');
-		require_javascript('javascript_swfupload');
-		require_css('swfupload');
+		require_javascript('javascript_plupload');
+		require_css('plupload');
 
 		require_lang('comcode');
 

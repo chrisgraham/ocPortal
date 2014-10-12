@@ -374,7 +374,6 @@ The 'keep' parameters available are:
  - [tt]keep_su_online[/tt] -- set this to '1' if you want the user '[tt]keep_su[/tt]' is used with to also show as online, and for their last online/submit statuses to be updated
  - [tt]keep_no_minify[/tt] -- set this to '1' if you want to use a JavaScript debugger and hence do not want the JS to be minified (unreadable)
  - [tt]keep_show_loading[/tt] -- set this to '1' if you want comments inside the HTML source showing memory usage taken up as server-side scripts load
- - [tt]keep_no_swfupload[/tt] -- set this to '1' if you don't want the flash uploader to be used
  - [tt]keep_avoid_memory_limit[/tt] -- do not put on a memory limit; using this will also add in the option to remove paginations, for those with the remove_page_split privilege
  - [tt]keep_no_query_limit[/tt] -- do not place a query limit during development mode
  - [tt]keep_on_same_msn[/tt] -- set this to '0' if you are doing an ocPortal site merge import and want to force OCF content to import even if the importer thinks that you are on the same MSN as the other site

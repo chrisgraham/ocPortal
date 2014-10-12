@@ -5,7 +5,7 @@
 {+END}
 
 {+START,IF_PASSED_AND_TRUE,FRAMED}
-	<figure class="attachment"{+START,IF_NON_EMPTY,{WIDTH}} style="width: {WIDTH*}px"{+END}>
+	<figure class="attachment">
 		<figcaption>{!IMAGE}</figcaption>
 		<div>
 			{$PARAGRAPH,{DESCRIPTION}}

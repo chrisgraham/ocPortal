@@ -302,7 +302,7 @@ class Module_admin_newsletter extends standard_crud_module
 		// Read data
 		$ok=false;
 		require_code('uploads');
-		if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
+		if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 		{
 			if (filesize($_FILES['file']['tmp_name'])<1024*1024*3) // Cleanup possible line ending problems, but only if file not too big
 			{
@@ -1506,7 +1506,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$extra_post_data['csv_data']=$_csv_data;
 		} else
 		{
-			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
+			if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
 				$__csv_data=array();
 				@ini_set('auto_detect_line_endings','1');

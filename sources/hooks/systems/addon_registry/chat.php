@@ -684,7 +684,7 @@ class Hook_addon_registry_chat
 	function tpl_preview__chat_set_effects_screen()
 	{
 		require_javascript('javascript_validation');
-		require_javascript('javascript_swfupload');
+		require_javascript('javascript_plupload');
 
 		require_css('forms');
 

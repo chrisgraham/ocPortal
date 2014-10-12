@@ -173,22 +173,9 @@ function set_attachment(field_name,number,filename,multi)
 						}
 
 						// Do insta-preview
-						if (comcode_added.indexOf('[attachment_safe')!=-1)
+						if ((comcode_added.indexOf('[attachment_safe')!=-1) && (is_wysiwyg_field(post)))
 						{
-							var form_post='';
-							var form=post.form;
-							for (var i=0;i<form.elements.length;i++)
-							{
-								if (!form.elements[i].disabled)
-								{
-									var name=form.elements[i].name;
-									var value=clever_find_value(form,form.elements[i]);
-									if (name=='title' && value=='') value='x'; // Fudge, title must be filled in on many forms
-									form_post+='&'+name+'='+window.encodeURIComponent(value);
-								}
-							}
-							var preview_ret=do_ajax_request(form_preview_url+'&js_only=1',null,form_post);
-							eval(preview_ret.responseText.replace('<script>','').replace('</script>',''));
+							generate_background_preview(post);
 						}
 					} else // Cancelled
 					{
@@ -208,6 +195,24 @@ function set_attachment(field_name,number,filename,multi)
 		if (add_another_field)
 			add_attachment(window.num_attachments+1,field_name);
 	}
+}
+
+function generate_background_preview(post)
+{
+	var form_post='';
+	var form=post.form;
+	for (var i=0;i<form.elements.length;i++)
+	{
+		if ((!form.elements[i].disabled) && (typeof form.elements[i].name!='undefined') && (form.elements[i].name!=''))
+		{
+			var name=form.elements[i].name;
+			var value=clever_find_value(form,form.elements[i]);
+			if (name=='title' && value=='') value='x'; // Fudge, title must be filled in on many forms
+			form_post+='&'+name+'='+window.encodeURIComponent(value);
+		}
+	}
+	var preview_ret=do_ajax_request(form_preview_url+'&js_only=1',null,form_post.substr(1));
+	eval(preview_ret.responseText.replace('<script>','').replace('</script>',''));
 }
 
 // ====================
@@ -694,9 +699,10 @@ function init_form_saving(form_id)
 	if ((fields_to_do_counter!=0) && (biggest_length_data!=''))
 	{
 		var key;
+		biggest_length_data=biggest_length_data.replace(/<[^>]*>/g,'');
 		if (biggest_length_data.length>100) biggest_length_data=biggest_length_data.substr(0,100)+'...';
 		window.fauxmodal_confirm(
-			'{!RESTORE_SAVED_FORM_DATA;^}\n\n'+biggest_length_data.replace(/<[^>]*>/g,''),
+			'{!javascript:RESTORE_SAVED_FORM_DATA;^}\n\n'+biggest_length_data,
 			function(result)
 			{
 				if (result)

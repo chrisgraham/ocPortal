@@ -287,7 +287,7 @@ class Hook_addon_registry_core_feedback_features
 	function tpl_preview__comments()
 	{
 		require_lang('comcode');
-		require_javascript('javascript_swfupload');
+		require_javascript('javascript_plupload');
 		require_javascript('javascript_posting');
 
 		require_css('forms');

@@ -707,7 +707,7 @@ class Module_cms_blogs extends standard_crud_module
 
 			$rss_url=post_param('rss_feed_url',NULL);
 			require_code('uploads');
-			if (((is_swf_upload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
+			if (((is_plupload(true)) && (array_key_exists('file_novalidate',$_FILES))) || ((array_key_exists('file_novalidate',$_FILES)) && (is_uploaded_file($_FILES['file_novalidate']['tmp_name']))))
 			{
 				$rss_url=$_FILES['file_novalidate']['tmp_name'];
 			}

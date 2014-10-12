@@ -76,13 +76,13 @@ function do_comcode_attachments($comcode,$type,$id,$previewing_only=false,$conne
 		if (preg_match('#^hidFileID\_#i',$key)!=0)
 		{
 			require_code('uploads');
-			$may_have_one=is_swf_upload();
+			$may_have_one=is_plupload();
 		}
 	}
 	if ($may_have_one)
 	{
 		require_code('uploads');
-		is_swf_upload(true);
+		is_plupload(true);
 
 		require_code('comcode_from_html');
 		$comcode=preg_replace_callback('#<input [^>]*class="ocp_keep_ui_controlled" [^>]*title="([^"]*)" [^>]*type="text" [^>]*value="[^"]*"[^>]*/?'.'>#siU','debuttonise',$comcode);
@@ -92,7 +92,7 @@ function do_comcode_attachments($comcode,$type,$id,$previewing_only=false,$conne
 	foreach ($_FILES as $key=>$file)
 	{
 		$matches=array();
-		if ((($may_have_one) && (is_swf_upload()) || (is_uploaded_file($file['tmp_name']))) && (preg_match('#file(\d+)#',$key,$matches)!=0))
+		if ((($may_have_one) && (is_plupload()) || (is_uploaded_file($file['tmp_name']))) && (preg_match('#file(\d+)#',$key,$matches)!=0))
 		{
 			$has_one=true;
 
@@ -443,13 +443,13 @@ function _check_attachment_count()
 			if (preg_match('#^hidFileID\_#i',$key)!=0)
 			{
 				require_code('uploads');
-				$may_have_one=is_swf_upload();
+				$may_have_one=is_plupload();
 			}
 		}
 		if ($may_have_one)
 		{
 			require_code('uploads');
-			is_swf_upload(true);
+			is_plupload(true);
 		}
 		foreach (array_keys($_FILES) as $name)
 		{

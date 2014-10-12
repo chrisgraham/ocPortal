@@ -36,17 +36,16 @@ function init__uploads()
 }
 
 /**
- * Find whether an swfupload upload has just happened, and optionally simulate as if it were a normal upload (although 'is_uploaded_file'/'move_uploaded_file' would not work).
+ * Find whether an plupload upload has just happened, and optionally simulate as if it were a normal upload (although 'is_uploaded_file'/'move_uploaded_file' would not work).
  *
  * @param  boolean		Simulate population of the $_FILES array.
- * @return boolean		Whether an swfupload upload has just happened.
+ * @return boolean		Whether an plupload upload has just happened.
  */
-function is_swf_upload($fake_prepopulation=false)
+function is_plupload($fake_prepopulation=false)
 {
 	static $done_fake_prepopulation=false;
 
-	//check whatever is used the swfuploader
-	$swfupload=false;
+	$plupload=false;
 	$rolling_offset=0;
 	foreach ($_POST as $key=>$value)
 	{
@@ -66,11 +65,11 @@ function is_swf_upload($fake_prepopulation=false)
 				$path='uploads/incoming/'.filter_naughty($value);
 				if (file_exists(get_custom_file_base().'/'.$path))
 				{
-					$swfupload=true;
+					$plupload=true;
 					if ($fake_prepopulation)
 					{
 						$_FILES[substr($key,10)]=array(
-							'type'=>'swfupload',
+							'type'=>'plupload',
 							'name'=>$filename,
 							'tmp_name'=>get_custom_file_base().'/'.$path,
 							'size'=>filesize(get_custom_file_base().'/'.$path)
@@ -80,14 +79,14 @@ function is_swf_upload($fake_prepopulation=false)
 			} else // By incoming upload ID
 			{
 				$rolling_offset=0; // We do assume that if we have multiple multi-file fields in the same space that they are spaced with a large enough gap; so we don't maintain a rolling offset between fields
-				foreach (array_map('intval',explode(':',$value)) as $i=>$incoming_uploads_id) // Some uploaders may delimite with ":" within a single POST field (plupload); others may give multiple POST fields (swfupload, native)
+				foreach (array_map('intval',explode(':',$value)) as $i=>$incoming_uploads_id) // Some uploaders may delimite with ":" within a single POST field (plupload); others may give multiple POST fields (plupload, native)
 				{
 					$incoming_uploads_row=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'incoming_uploads WHERE (i_submitter='.strval(get_member()).' OR i_submitter='.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).') AND id='.strval($incoming_uploads_id),1);
 					if (array_key_exists(0,$incoming_uploads_row))
 					{
 						if (file_exists(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']))
 						{
-							$swfupload=true;
+							$plupload=true;
 							if ($fake_prepopulation)
 							{
 								if (!$done_fake_prepopulation)
@@ -99,7 +98,7 @@ function is_swf_upload($fake_prepopulation=false)
 										$new_key=$matches[1].strval(intval($matches[2])+$rolling_offset);
 									} else $new_key=substr($key,10);
 									$_FILES[$new_key]=array(
-										'type'=>'swfupload',
+										'type'=>'plupload',
 										'name'=>$incoming_uploads_row[0]['i_orig_filename'],
 										'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],
 										'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'])
@@ -116,7 +115,7 @@ function is_swf_upload($fake_prepopulation=false)
 		}
 	}
 
-	if ($swfupload)
+	if ($plupload)
 	{
 		// Filter out vestigial files (been reported as an issue)
 		foreach (array_keys($_FILES) as $attach_name)
@@ -133,7 +132,7 @@ function is_swf_upload($fake_prepopulation=false)
 
 	if ($fake_prepopulation) $done_fake_prepopulation=true;
 
-	return $swfupload;
+	return $plupload;
 }
 
 /**
@@ -174,8 +173,8 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	$out=array();
 	$thumb=NULL;
 
-	$swf_uploaded=false;
-	$swf_uploaded_thumb=false;
+	$plupload_uploaded=false;
+	$plupload_uploaded_thumb=false;
 	foreach (array($attach_name,$thumb_attach_name) as $i=>$_attach_name)
 	{
 		if ($_attach_name=='') continue;
@@ -186,7 +185,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 		if ($row_id_file_value=='-1') $row_id_file_value=NULL;
 
 		// ID of the upload from the incoming uploads database table
-		if (!is_null($row_id_file_value)) // SwfUploader was used
+		if (!is_null($row_id_file_value)) // plupload was used
 		{
 			// Get the incoming upload's appropiate DB table row
 			if ((substr($row_id_file_value,-4)=='.dat') && (strpos($row_id_file_value,':')===false))
@@ -194,13 +193,13 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				$path='uploads/incoming/'.filter_naughty($row_id_file_value);
 				if (file_exists(get_custom_file_base().'/'.$path))
 				{
-					$_FILES[$_attach_name]=array('type'=>'swfupload','name'=>post_param(str_replace('hidFileID','hidFileName',$row_id_file)),'tmp_name'=>get_custom_file_base().'/'.$path,'size'=>filesize(get_custom_file_base().'/'.$path));
+					$_FILES[$_attach_name]=array('type'=>'plupload','name'=>post_param(str_replace('hidFileID','hidFileName',$row_id_file)),'tmp_name'=>get_custom_file_base().'/'.$path,'size'=>filesize(get_custom_file_base().'/'.$path));
 					if ($i==0)
 					{
-						$swf_uploaded=true;
+						$plupload_uploaded=true;
 					} else
 					{
-						$swf_uploaded_thumb=true;
+						$plupload_uploaded_thumb=true;
 					}
 				}
 			} else
@@ -212,13 +211,13 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 				{
 					if (file_exists(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']))
 					{
-						$_FILES[$_attach_name]=array('type'=>'swfupload','name'=>$incoming_uploads_row[0]['i_orig_filename'],'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']));
+						$_FILES[$_attach_name]=array('type'=>'plupload','name'=>$incoming_uploads_row[0]['i_orig_filename'],'tmp_name'=>get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url'],'size'=>filesize(get_custom_file_base().'/'.$incoming_uploads_row[0]['i_save_url']));
 						if ($i==0)
 						{
-							$swf_uploaded=true;
+							$plupload_uploaded=true;
 						} else
 						{
-							$swf_uploaded_thumb=true;
+							$plupload_uploaded_thumb=true;
 						}
 					}
 				}
@@ -253,7 +252,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	{
 		$max_size=get_max_image_size();
 	}
-	if (($attach_name!='') && (array_key_exists($attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$attach_name]['tmp_name'])) || ($swf_uploaded))) // If we uploaded
+	if (($attach_name!='') && (array_key_exists($attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$attach_name]['tmp_name'])) || ($plupload_uploaded))) // If we uploaded
 	{
 		if (!has_privilege($member_id,'exceed_filesize_limit'))
 		{
@@ -438,7 +437,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	// Generate thumbnail if needed
 	if (($make_thumbnail) && ($url[0]!='') && ($is_image))
 	{
-		if ((array_key_exists($thumb_attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$thumb_attach_name]['tmp_name'])) || ($swf_uploaded_thumb))) // If we uploaded
+		if ((array_key_exists($thumb_attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$thumb_attach_name]['tmp_name'])) || ($plupload_uploaded_thumb))) // If we uploaded
 		{
 			if ($_FILES[$thumb_attach_name]['size']>get_max_image_size())
 			{
@@ -496,7 +495,7 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate=0,$enforce
 	}
 	elseif ($make_thumbnail)
 	{
-		if ((array_key_exists($thumb_attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$thumb_attach_name]['tmp_name'])) || ($swf_uploaded_thumb))) // If we uploaded
+		if ((array_key_exists($thumb_attach_name,$_FILES)) && ((is_uploaded_file($_FILES[$thumb_attach_name]['tmp_name'])) || ($plupload_uploaded_thumb))) // If we uploaded
 		{
 			if ($_FILES[$thumb_attach_name]['size']>get_max_image_size())
 			{
@@ -800,7 +799,7 @@ function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_f
 	check_shared_space_usage($_FILES[$attach_name]['size']);
 
 	// Copy there, and return our URL
-	if ($_FILES[$attach_name]['type']!='swfupload')
+	if ($_FILES[$attach_name]['type']!='plupload')
 	{
 		$test=@move_uploaded_file($_FILES[$attach_name]['tmp_name'],$place);
 	} else

@@ -213,8 +213,8 @@ function get_attachments($posting_field_name)
 	$image_types=str_replace(',',', ',get_option('valid_images'));
 
 	require_lang('javascript');
-	require_javascript('javascript_swfupload');
-	require_css('swfupload');
+	require_javascript('javascript_plupload');
+	require_css('plupload');
 
 	require_code('upload_syndication');
 	list($syndication_json,$filter)=get_upload_syndication_json(OCP_UPLOAD_ANYTHING);
@@ -306,8 +306,8 @@ function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fiel
 	require_lang('javascript');
 	require_javascript('javascript_posting');
 	require_javascript('javascript_ajax');
-	require_javascript('javascript_swfupload');
-	require_css('swfupload');
+	require_javascript('javascript_plupload');
+	require_css('plupload');
 
 	require_lang('comcode');
 
@@ -1194,18 +1194,18 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
  * @param  boolean		Whether this is a required input field. Set this to false if you are using this field on an edit form and already have an uploaded file -- therefore you'd know no new file would mean not to replace the existing file
  * @param  ?string		The default value for the field (NULL: none) (blank: none). Should only be passed if $required is false, because it creates a delete button for the existing file, implying that leaving it with no file is valid
  * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether swf-upload-style is preferred
+ * @param  boolean		Whether plupload-style is preferred
  * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
  * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_upload($pretty_name,$description,$name,$required,$default=NULL,$tabindex=NULL,$swfupload=true,$filter='',$syndication_json=NULL)
+function form_input_upload($pretty_name,$description,$name,$required,$default=NULL,$tabindex=NULL,$plupload=true,$filter='',$syndication_json=NULL)
 {
 	require_lang('javascript');
-	if ($swfupload)
+	if ($plupload)
 	{
-		require_javascript('javascript_swfupload');
-		require_css('swfupload');
+		require_javascript('javascript_plupload');
+		require_css('plupload');
 	}
 
 	if ($default==='') $default=NULL;
@@ -1238,7 +1238,7 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 		'PRETTY_NAME'=>$pretty_name,
 		'EXISTING_URL'=>$existing_url,
 		'IS_IMAGE'=>$is_image,
-		'SWFUPLOAD'=>$swfupload,
+		'PLUPLOAD'=>$plupload,
 		'EDIT'=>((!is_null($default)) && (!$required)),
 		'TABINDEX'=>strval($tabindex),
 		'REQUIRED'=>$_required,
@@ -1257,18 +1257,18 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
  * @param  boolean		Whether this is a required input field
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @param  ?array			The default value for the field (NULL: none)
- * @param  boolean		Whether swf-upload-style is preferred
+ * @param  boolean		Whether plupload-style is preferred
  * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
  * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL,$swfupload=true,$filter='',$syndication_json=NULL)
+function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL,$plupload=true,$filter='',$syndication_json=NULL)
 {
 	require_lang('javascript');
-	if ($swfupload)
+	if ($plupload)
 	{
-		require_javascript('javascript_swfupload');
-		require_css('swfupload');
+		require_javascript('javascript_plupload');
+		require_css('plupload');
 	}
 	require_javascript('javascript_multi');
 
@@ -1291,7 +1291,7 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 		'EDIT'=>$edit,
 		'FILTER'=>$filter,
 		'REQUIRED'=>$_required,
-		'SWFUPLOAD'=>$swfupload,
+		'PLUPLOAD'=>$plupload,
 		'NAME'=>$name,
 		'I'=>'1',
 		'NAME_STUB'=>$name,

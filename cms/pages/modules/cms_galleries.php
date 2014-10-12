@@ -434,7 +434,7 @@ class Module_cms_galleries extends standard_crud_module
 		make_member_gallery_if_needed($cat);
 
 		require_code('uploads');
-		if ((!is_swf_upload(true)) && ((!array_key_exists('file_1',$_FILES)) || (!is_uploaded_file($_FILES['file_1']['tmp_name']))))
+		if ((!is_plupload(true)) && ((!array_key_exists('file_1',$_FILES)) || (!is_uploaded_file($_FILES['file_1']['tmp_name']))))
 			warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','file'));
 
 		$media_imported=array();
@@ -544,7 +544,7 @@ class Module_cms_galleries extends standard_crud_module
 					{
 						$tmp_name_2=ocp_tempnam('bi');
 
-						if ($__file['type']!='swfupload')
+						if ($__file['type']!='plupload')
 						{
 							$test=@move_uploaded_file($tmp_name,$tmp_name_2);
 						} else
@@ -975,7 +975,7 @@ class Module_cms_galleries extends standard_crud_module
 	 */
 	function handle_resizing_and_watermarking()
 	{
-		if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (array_key_exists('tmp_name',$_FILES['file'])) && (function_exists('imagetypes'))))
+		if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (array_key_exists('tmp_name',$_FILES['file'])) && (function_exists('imagetypes'))))
 		{
 			// See if we need to resize the image
 			constrain_gallery_image_to_max_size($_FILES['file']['tmp_name'],$_FILES['file']['name'],intval(get_option('maximum_image_size')));
@@ -1557,7 +1557,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 		if (($video_width==0) || ($video_height==0) || ($video_length==0))
 		{
 			require_code('uploads');
-			if (((is_swf_upload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
+			if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
 			{
 				$filename=$_FILES['file']['name'];
 				list($_video_width,$_video_height,$_video_length)=get_video_details($_FILES['file']['tmp_name'],$filename);

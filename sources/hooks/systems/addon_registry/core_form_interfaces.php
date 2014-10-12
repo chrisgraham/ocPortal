@@ -1230,7 +1230,7 @@ class Hook_addon_registry_core_form_interfaces
 			'FILTER'=>'',
 			'EXISTING_URL'=>placeholder_url(),
 			'IS_IMAGE'=>'',
-			'SWFUPLOAD'=>false,
+			'PLUPLOAD'=>false,
 			'EDIT'=>'',
 			'TABINDEX'=>placeholder_number(),
 			'REQUIRED'=>'',
@@ -1251,7 +1251,7 @@ class Hook_addon_registry_core_form_interfaces
 		$input=do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array(
 			'TABINDEX'=>placeholder_number(),
 			'FILTER'=>'',
-			'SWFUPLOAD'=>false,
+			'PLUPLOAD'=>false,
 			'REQUIRED'=>'',
 			'NAME'=>$name,
 			'I'=>$name,

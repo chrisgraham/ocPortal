@@ -1256,14 +1256,14 @@ class Module_filedump
 		$place=filter_naughty(post_param('place'));
 
 		require_code('uploads');
-		is_swf_upload(true);
+		is_plupload(true);
 
 		$new_files=array();
 
 		foreach ($_FILES as $file)
 		{
 			// Error?
-			if ((!is_swf_upload()) && (!is_uploaded_file($file['tmp_name'])))
+			if ((!is_plupload()) && (!is_uploaded_file($file['tmp_name'])))
 			{
 				$max_size=get_max_file_size();
 				if (($file['error']==1) || ($file['error']==2))
@@ -1299,7 +1299,7 @@ class Module_filedump
 
 			// Save in file
 			$full=get_custom_file_base().'/uploads/filedump'.$place.$filename;
-			if (is_swf_upload())
+			if (is_plupload())
 			{
 				@rename($file['tmp_name'],$full) OR warn_exit(do_lang_tempcode('FILE_MOVE_ERROR',escape_html($filename),escape_html('uploads/filedump'.$place)));
 			} else

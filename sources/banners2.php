@@ -137,7 +137,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 function check_banner($title_text='',$direct_code='',$b_type='',$url_param_name='image_url',$file_param_name='file')
 {
 	require_code('uploads');
-	$is_upload=(is_swf_upload()) || (array_key_exists($file_param_name,$_FILES)) && (array_key_exists('tmp_name',$_FILES[$file_param_name]) && (is_uploaded_file($_FILES[$file_param_name]['tmp_name'])));
+	$is_upload=(is_plupload()) || (array_key_exists($file_param_name,$_FILES)) && (array_key_exists('tmp_name',$_FILES[$file_param_name]) && (is_uploaded_file($_FILES[$file_param_name]['tmp_name'])));
 
 	require_code('uploads');
 

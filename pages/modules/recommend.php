@@ -430,7 +430,7 @@ class Module_recommend
 		// Start processing CSV file
 		if ((get_option('enable_csv_recommend')=='1') && (!is_guest()))
 		{
-			if (array_key_exists('upload',$_FILES)) // NB: We disabled SWFupload for this form so don't need to consider it
+			if (array_key_exists('upload',$_FILES)) // NB: We disabled plupload for this form so don't need to consider it
 			{
 				if (is_uploaded_file($_FILES['upload']['tmp_name']) && preg_match('#\.csv#',$_FILES['upload']['name'])!=0)
 				{

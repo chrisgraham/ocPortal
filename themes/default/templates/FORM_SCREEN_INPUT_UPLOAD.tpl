@@ -20,14 +20,7 @@
 		<div id="{NAME*}_syndication_options" class="syndication_options"></div>
 	{+END}
 
-	{+START,IF,{$CONFIG_OPTION,java_upload}}
-		{+START,IF,{$NOT,{$GET,included_java_upload}}}
-			{+START,INCLUDE,JAVA_DETECT}{+END}
-		{+END}
-		{$SET,included_java_upload,1}
-	{+END}
-
-	{+START,IF,{SWFUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
+	{+START,IF,{PLUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 		<script>// <![CDATA[
 			add_event_listener_abstract(window,'load',function () {
 				preinit_file_input('upload','{NAME;/}',null,null,'{FILTER;/}');

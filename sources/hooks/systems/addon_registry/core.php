@@ -1194,18 +1194,12 @@ class Hook_addon_registry_core
 			'uploads/incoming/index.html',
 			'uploads/incoming/.htaccess',
 			'uploads/.htaccess',
-			'themes/default/templates/JAVASCRIPT_SWFUPLOAD.tpl',
-			'data/swfupload/index.html',
-			'data/swfupload/blank.swf',
-			'data/swfupload/swfupload.swf',
-			'data/swfupload/swfuploadbutton.swf',
-			'data/javaupload/Checker.class',
-			'data/javaupload/index.html',
-			'data/javaupload/Net.jar',
-			'data/javaupload/Uploader.jar',
+			'data/plupload/index.html',
+			'data/plupload/plupload.flash.swf',
+			'data/plupload/plupload.silverlight.xap',
+			'themes/default/css/plupload.css',
+			'themes/default/templates/JAVASCRIPT_PLUPLOAD.tpl',
 			'themes/admin/templates/ADMIN_ZONE_SEARCH.tpl',
-			'themes/default/templates/JAVA_DETECT.tpl',
-			'themes/default/css/swfupload.css',
 			'themes/default/templates/NEWSLETTER_DEFAULT_FCOMCODE.tpl',
 			'themes/default/images/.htaccess',
 			'themes/default/images/favicon.ico',
@@ -1312,7 +1306,6 @@ class Hook_addon_registry_core
 			'FORUM_ATTACHMENT_LINK.tpl'=>'forum_attachment_link',
 			'tempcode_test.tpl'=>'administrative__tempcode_test',
 			'ADMIN_ZONE_SEARCH.tpl'=>'admin_zone_search',
-			'JAVA_DETECT.tpl'=>'java_detect',
 			'EMAIL_LOG_SCREEN.tpl'=>'email_log_screen',
 			'QUICK_JS_LOADER.tpl'=>'quick_js_loader',
 			'BLOCK_MAIN_CONTENT_FILTERING.tpl'=>'block_main_content_filtering',
@@ -1391,20 +1384,6 @@ class Hook_addon_registry_core
 	{
 		return array(
 			lorem_globalise(do_lorem_template('ADMIN_ZONE_SEARCH',array()),NULL,'',true)
-		);
-	}
-
-	/**
-	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
-	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
-	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
-	 *
-	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
-	 */
-	function tpl_preview__java_detect()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('JAVA_DETECT',array()),NULL,'',true)
 		);
 	}
 

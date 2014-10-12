@@ -565,7 +565,7 @@ class Hook_addon_registry_core_rich_media
 	function tpl_preview__attachments()
 	{
 		require_javascript('javascript_validation');
-		require_javascript('javascript_swfupload');
+		require_javascript('javascript_plupload');
 		require_javascript('javascript_posting');
 		require_javascript('javascript_editing');
 

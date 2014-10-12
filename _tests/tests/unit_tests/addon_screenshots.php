@@ -55,7 +55,6 @@ class addon_screenshots_test_set extends ocp_test_case
 					'gallery_syndication',
 					'group_points',
 					'image_syndication',
-					'plupload',
 					'pointstore_to_main',
 					'psds',
 					'simplified_emails',

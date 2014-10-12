@@ -1090,8 +1090,8 @@ class Module_chat
 		require_lang('javascript');
 		require_javascript('javascript_chat');
 		require_javascript('javascript_sound');
-		require_javascript('javascript_swfupload');
-		require_css('swfupload');
+		require_javascript('javascript_plupload');
+		require_css('plupload');
 
 		// Find all sounds available
 		$library=array();

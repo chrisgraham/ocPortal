@@ -1,4 +1,8 @@
-/* -- Form Styles ------------------------------- */
+.plupload {
+	vertical-align: top;
+}
+
+/* Form styles */
 
 div.fieldset {
 	border:  1px solid #afe14c;
@@ -21,7 +25,8 @@ div.flash {
 	{$BETA_CSS_PROPERTY,border-radius: 5px;}
 }
 
-/* -- Table Styles ------------------------------- */
+/* Progressbar styles */
+
 .progressWrapper {
 	overflow: hidden;
 }
@@ -116,9 +121,4 @@ a.progressCancel {
 
 a.progressCancel:hover {
 	background-position: 0 0;
-}
-
-/* -- SWFUpload Object Styles ------------------------------- */
-.swfupload {
-	vertical-align: top;
 }

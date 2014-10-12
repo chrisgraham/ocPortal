@@ -142,7 +142,7 @@
 
 			<script>// <![CDATA[
 				add_event_listener_abstract(window,'load',function () {
-					initialise_dragdrop_upload('container_for_{NAME;*}','{NAME;*}');
+					initialise_html5_dragdrop_upload('container_for_{NAME;*}','{NAME;*}');
 				} );
 			//]]></script>
 		</td>
