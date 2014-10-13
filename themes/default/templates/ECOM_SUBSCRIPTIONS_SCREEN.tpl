@@ -24,7 +24,7 @@
 					</th>
 
 					<th>
-						{!STATUS}
+						{!RENEWAL_STATUS}
 					</th>
 				{+END}
 

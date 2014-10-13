@@ -51,7 +51,6 @@ if (!function_exists('parse_translated_text'))
 
 			if ((is_null($result)) || ($result==''))
 			{
-				load_user_stuff();
 				require_code('comcode'); // might not have been loaded for a quick-boot
 				require_code('permissions');
 
@@ -90,7 +89,6 @@ if (!function_exists('parse_translated_text'))
 			return $connection->text_lookup_cache[$entry];
 		} else
 		{
-			load_user_stuff();
 			require_code('comcode'); // might not have been loaded for a quick-boot
 			require_code('permissions');
 

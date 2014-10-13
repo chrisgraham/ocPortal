@@ -45,7 +45,7 @@ class Hook_search_ocf_posts
 		$info['special_on']=array();
 		$info['special_off']=array('open'=>do_lang_tempcode('POST_SEARCH_OPEN'),'closed'=>do_lang_tempcode('POST_SEARCH_CLOSED'),'pinned'=>do_lang_tempcode('POST_SEARCH_PINNED'),'starter'=>do_lang_tempcode('POST_SEARCH_STARTER'));
 		if ((has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $info['special_off']['unvalidated']=do_lang_tempcode('POST_SEARCH_UNVALIDATED');
-		$info['category']='s.t_forum_id';
+		$info['category']='p_cache_forum_id';
 		$info['integer_category']=true;
 
 		$info['permissions']=array(
@@ -158,7 +158,7 @@ class Hook_search_ocf_posts
 			$where_clause.='s.t_cache_first_post_id=r.id';
 		}
 		$where_clause.=' AND ';
-		$where_clause.='t_forum_id IS NOT NULL AND (p_intended_solely_for IS NULL';
+		$where_clause.='p_cache_forum_id IS NOT NULL AND (p_intended_solely_for IS NULL';
 		if (!is_guest())
 			$where_clause.=' OR (p_intended_solely_for='.strval(get_member()).' OR p_poster='.strval(get_member()).')';
 		$where_clause.=')';

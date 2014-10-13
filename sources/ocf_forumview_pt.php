@@ -51,6 +51,14 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	$query.=' WHERE '.$where;
 	$max_rows=0;
 	$union='';
+	$select='SELECT top.*';
+	if (multi_lang_content())
+	{
+		$select.=',t_cache_first_post AS p_post';
+	} else
+	{
+		$select.=',p_post,p_post__text_parsed,p_post__source_user';
+	}
 	if ($filter==do_lang('INVITED_TO_PTS'))
 	{
 		$or_list='';
@@ -58,12 +66,17 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 		foreach ($s_rows as $s_row)
 		{
 			if ($or_list!='') $or_list.=' OR ';
-			$or_list.='id='.strval($s_row['s_topic_id']);
+			$or_list.='top.id='.strval($s_row['s_topic_id']);
 		}
 		if ($or_list!='')
 		{
-			$query2='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE '.$or_list;
-			$union=' UNION SELECT * '.$query2;
+			$query2='FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics top';
+			if (!multi_lang_content())
+			{
+				$query2.=' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts p ON p.id=top.t_cache_first_post_id';
+			}
+			$query2.=' WHERE '.$or_list;
+			$union=' UNION '.$select.' '.$query2;
 			$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query2,false,true);
 		}
 	}
@@ -73,14 +86,7 @@ function ocf_get_private_topics($start=0,$max=NULL,$member_id=NULL)
 	elseif ($sort=='title') $sort2='t_cache_first_title ASC';
 	if (get_option('enable_sunk')=='1')
 		$sort2='t_sunk ASC,'.$sort2;
-	$query_full='SELECT top.*';
-	if (multi_lang_content())
-	{
-		$query_full.=',t_cache_first_post AS p_post';
-	} else
-	{
-		$query_full.=',p_post,p_post__text_parsed,p_post__source_user';
-	}
+	$query_full=$select;
 	$query_full.=' '.$query.$union.' ORDER BY t_pinned DESC,'.$sort2;
 	$topic_rows=$GLOBALS['FORUM_DB']->query($query_full,$max,$start,false,true);
 	$max_rows+=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) '.$query);

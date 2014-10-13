@@ -16,14 +16,42 @@
 {+START,IF_NON_EMPTY,{$GET,bound_catalogue_entry}}{$CATALOGUE_ENTRY_ALL_FIELD_VALUES,{$GET,bound_catalogue_entry}}{+END}
 
 {+START,IF_NON_EMPTY,{TIMEOUT}}
-	<script>// <![CDATA[
-		setTimeout(function() { document.getElementById('quiz_form').submit(); }, {TIMEOUT%}*1000);
-		setInterval(function() { var st=document.getElementById('quiz_timer'); var new_value=window.parseInt(get_inner_html(st))-1; if (new_value>=0) set_inner_html(st,new_value); }, 1000);
-	//]]></script>
-
 	<p class="quiz_timer">
-		{!TIME_REMAINING,<strong><span id="quiz_timer">{TIMEOUT*}</span></strong>}
+		{!TIME_REMAINING,<strong><span id="quiz_timer" style="display: none">{TIMEOUT*}</span><span id="quiz_timer_minutes_and_seconds"></span></strong>}
 	</p>
+
+	<script>// <![CDATA[
+		setTimeout(function() {
+			document.getElementById('quiz_form').submit();
+		},{TIMEOUT%}*1000);
+
+		setInterval(function() { iterate_countdown(-1); },1000);
+
+		function iterate_countdown(dif)
+		{
+			var st=document.getElementById('quiz_timer');
+			var new_value=window.parseInt(get_inner_html(st))+dif;
+			if (new_value>=0)
+			{
+				set_inner_html(st,new_value);
+			}
+
+			st2=document.getElementById('quiz_timer_minutes_and_seconds');
+			if (st2)
+			{
+				if (new_value>=0)
+				{
+					var v='';
+					v+=Math.floor(new_value/60);
+					v+=':';
+					if (new_value%60<10) v+='0';
+					v+=new_value%60;
+					set_inner_html(st2,v);
+				}
+			}
+		}
+		iterate_countdown(0); // Because quiz_timer_minutes_and_seconds needs setting correctly
+	//]]></script>
 {+END}
 
 {$SET,no_required_stars,{ALL_REQUIRED}}

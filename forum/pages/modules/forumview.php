@@ -147,7 +147,7 @@ class Module_forumview
 			$this->forum_info=$forum_info;
 		}
 
-		if ($type=='pts')
+		if ($type=='pt')
 		{
 			$this->title=get_screen_title('PRIVATE_TOPICS');
 
@@ -218,16 +218,22 @@ class Module_forumview
 		}
 
 		// Members viewing this forum
-		require_code('users2');
-		list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('forumview','',strval($id),true);
+		if (is_null($id))
+		{
+			list($num_guests,$num_members,$members_viewing)=array(NULL,NULL,NULL);
+		} else
+		{
+			require_code('users2');
+			list($num_guests,$num_members,$members_viewing)=get_members_viewing_wrap('forumview','',strval($id),true);
+		}
 
 		$tpl=do_template('OCF_FORUM_SCREEN',array(
 			'_GUID'=>'9e9fd9110effd8a92b7a839a4fea60c5',
 			'TITLE'=>$this->title,
 			'CONTENT'=>$content,
-			'ID'=>strval($id),
-			'NUM_GUESTS'=>integer_format($num_guests),
-			'NUM_MEMBERS'=>integer_format($num_members),
+			'ID'=>is_null($id)?'':strval($id),
+			'NUM_GUESTS'=>is_null($num_guests)?'':integer_format($num_guests),
+			'NUM_MEMBERS'=>is_null($num_members)?'':integer_format($num_members),
 			'MEMBERS_VIEWING'=>$members_viewing,
 		));
 

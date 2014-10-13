@@ -112,7 +112,7 @@ function init__site()
 			{
 				if (!array_key_exists('ZONE_MAPPING_'.get_zone_name(),$SITE_INFO))
 				{
-					if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+					if ((!is_null($GLOBALS['FORUM_DRIVER'])) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())))
 					{
 						attach_message(do_lang_tempcode('BAD_ACCESS_DOMAIN',escape_html($parsed_base_url['host']),escape_html($access_host)),'warn');
 					}

@@ -505,7 +505,6 @@ function parse_translated_text($table,&$row,$field_name,$connection,$lang,$force
 
 		if ((is_null($result)) || ($result==''))
 		{
-			load_user_stuff();
 			require_code('comcode'); // might not have been loaded for a quick-boot
 			require_code('permissions');
 
@@ -536,7 +535,6 @@ function parse_translated_text($table,&$row,$field_name,$connection,$lang,$force
 		return $connection->text_lookup_cache[$entry];
 	} else // Missing parsed Comcode
 	{
-		load_user_stuff();
 		require_code('comcode'); // might not have been loaded for a quick-boot
 		require_code('permissions');
 

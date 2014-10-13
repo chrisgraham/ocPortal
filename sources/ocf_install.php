@@ -685,6 +685,7 @@ function install_ocf($upgrade_from=NULL)
 			't_cache_last_member_id'=>'?MEMBER',
 			't_cache_num_posts'=>'INTEGER',
 		));
+		$GLOBALS['FORUM_DB']->create_index('f_topics','t_cache_num_posts',array('t_cache_num_posts'));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','t_num_views',array('t_num_views'));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','t_pt_to',array('t_pt_to'));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','t_pt_from',array('t_pt_from'));
@@ -729,7 +730,9 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_posts','post_order_time',array('p_time','id'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_since',array('p_time','p_cache_forum_id')); // p_cache_forum_id is used to not count PT posts
 		$GLOBALS['FORUM_DB']->create_index('f_posts','p_last_edit_time',array('p_last_edit_time'));
-		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by',array('p_poster'));
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by',array('p_poster','p_time'));
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_in_1',array('p_poster','p_topic_id'));
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_in_2',array('p_poster','p_cache_forum_id'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','find_pp',array('p_intended_solely_for'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','search_join',array('p_post'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','postsinforum',array('p_cache_forum_id'));

@@ -159,6 +159,9 @@ function get_member($quick_only=false)
 		return $MEMBER_CACHED;
 	}
 
+	if (is_null($GLOBALS['FORUM_DRIVER']))
+		load_user_stuff();
+
 	// If lots of aging sessions, clean out
 	reset($SESSION_CACHE);
 	if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))))

@@ -55,5 +55,4 @@ if (!headers_sent())
  */
 function execute_temp()
 {
-	$GLOBALS['SITE_DB']->alter_table_field('captchas','si_code','ID_TEXT');
 }
