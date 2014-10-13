@@ -1205,7 +1205,7 @@ class Hook_addon_registry_core
 			'data/plupload/index.html',
 			'data/plupload/plupload.flash.swf',
 			'data/plupload/plupload.silverlight.xap',
-			'themes/default/css/plupload.css',
+			'themes/default/css/widget_plupload.css',
 			'themes/default/templates/JAVASCRIPT_PLUPLOAD.tpl',
 			'themes/admin/templates/ADMIN_ZONE_SEARCH.tpl',
 			'themes/default/templates/NEWSLETTER_DEFAULT_FCOMCODE.tpl',

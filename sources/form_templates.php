@@ -214,7 +214,7 @@ function get_attachments($posting_field_name)
 
 	require_lang('javascript');
 	require_javascript('javascript_plupload');
-	require_css('plupload');
+	require_css('widget_plupload');
 
 	require_code('upload_syndication');
 	list($syndication_json,$filter)=get_upload_syndication_json(OCP_UPLOAD_ANYTHING);
@@ -307,7 +307,7 @@ function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fiel
 	require_javascript('javascript_posting');
 	require_javascript('javascript_ajax');
 	require_javascript('javascript_plupload');
-	require_css('plupload');
+	require_css('widget_plupload');
 
 	require_lang('comcode');
 
@@ -1201,7 +1201,7 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
 	if ($plupload)
 	{
 		require_javascript('javascript_plupload');
-		require_css('plupload');
+		require_css('widget_plupload');
 	}
 
 	if ($default==='') $default=NULL;
@@ -1264,7 +1264,7 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 	if ($plupload)
 	{
 		require_javascript('javascript_plupload');
-		require_css('plupload');
+		require_css('widget_plupload');
 	}
 	require_javascript('javascript_multi');
 

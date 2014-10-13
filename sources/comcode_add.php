@@ -919,7 +919,7 @@ function comcode_helper_script_step3()
 
 	$prefix=get_param('prefix','',true);
 
-	require_css('plupload');
+	require_css('widget_plupload');
 
 	return do_template('BLOCK_HELPER_DONE',array(
 		'_GUID'=>'d5d5888d89b764f81769823ac71d0827',

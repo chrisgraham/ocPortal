@@ -1088,7 +1088,7 @@ class Module_chat
 		require_javascript('javascript_chat');
 		require_javascript('javascript_sound');
 		require_javascript('javascript_plupload');
-		require_css('plupload');
+		require_css('widget_plupload');
 
 		// Find all sounds available
 		$library=array();

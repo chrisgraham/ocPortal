@@ -1055,7 +1055,7 @@ class OCP_Topic
 		require_javascript('javascript_editing');
 		require_javascript('javascript_validation');
 		require_javascript('javascript_plupload');
-		require_css('plupload');
+		require_css('widget_plupload');
 
 		$em=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
 

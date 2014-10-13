@@ -1,3 +1,7 @@
+{$REQUIRE_CSS,widget_select2}
+{$REQUIRE_JAVASCRIPT,javascript_jquery}
+{$REQUIRE_JAVASCRIPT,javascript_select2}
+
 <tr>
 	{$SET,randomised_id,{$?,{$IS_EMPTY,{NAME*}},{$RAND},{NAME*}}}
 	<th id="form_table_field_name__{$GET,randomised_id}" {+START,IF,{$NOT,{$MOBILE}}}colspan="2" {+END}class="form_table_description_above_cell{+START,IF,{REQUIRED}} required{+END}">
@@ -26,6 +30,12 @@
 
 		<script>// <![CDATA[
 			set_up_change_monitor('form_table_field_input__{$GET,randomised_id}');
+
+			add_event_listener_abstract(window,'load',function() {
+				$("#{NAME#/}").select2({
+					containerCssClass: 'wide_field'
+				});
+			});
 		//]]></script>
 	</td>
 </tr>

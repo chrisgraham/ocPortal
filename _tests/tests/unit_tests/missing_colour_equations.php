@@ -25,12 +25,22 @@ class missing_colour_equations_test_set extends ocp_test_case
 
 	function testMissingColourEquations()
 	{
+		$dont_check=array(
+			'occle.css',
+			'install.css',
+			'widget_plupload.css',
+			'widget_color.css',
+			'widget_date.css',
+			'widget_select2',
+			'phpinfo.css',
+		);
+
 		$dh=opendir(get_file_base().'/themes/default/css');
 		while (($f=readdir($dh))!==false)
 		{
 			if (substr($f,-4)=='.css')
 			{
-				if (in_array($f,array('plupload.css','occle.css','install.css','widget_color.css','widget_date.css','phpinfo.css'))) continue;
+				if (in_array($f,$dont_check)) continue;
 
 				$contents=file_get_contents(get_file_base().'/themes/default/css/'.$f);
 				$matches=array();

@@ -37,8 +37,8 @@
         chooseText: "{$LCASE#,{!CHOOSE}}",
         togglePaletteMoreText: "{$LCASE#,{!MORE}}",
         togglePaletteLessText: "{$LCASE#,{!LESS}}",
-        clearText: "{!CLEAR_COLOR_SELECTION#}",
-        noColorSelectedText: "{!NO_COLOR_SELECTION#}",
+        clearText: "{!javascript:CLEAR_COLOR_SELECTION#}",
+        noColorSelectedText: "{!javascript:NO_COLOR_SELECTION#}",
         preferredFormat: 'hex', // Changed for ocP,
         className: "", // Deprecated - use containerClassName and replacerClassName instead.
         containerClassName: "",

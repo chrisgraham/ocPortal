@@ -100,6 +100,7 @@ function init__zones()
 	$BLOCKS_AT_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('BLOCKS_AT'):array();
 	if ($BLOCKS_AT_CACHE===NULL) $BLOCKS_AT_CACHE=array();
 
+	// "Kid Gloves Modes" tracking
 	define('I_UNDERSTAND_SQL_INJECTION',1);
 	define('I_UNDERSTAND_XSS',2);
 	define('I_UNDERSTAND_PATH_INJECTION',4);
@@ -619,11 +620,24 @@ function load_module_page($string,$codename,&$out=NULL)
 	if (method_exists($object,'pre_run'))
 	{
 		$exceptional_output=$object->pre_run();
-		if ($exceptional_output!==NULL) return $exceptional_output;
+		if ($exceptional_output!==NULL)
+		{
+			if (strpos($string,'_custom/')!==false)
+			{
+				$_exceptional_output=$exceptional_output->evaluate();
+				_solemnly_leave($_exceptional_output);
+				if (!has_solemnly_declared(I_UNDERSTAND_XSS))
+				{
+					$exceptional_output=make_string_tempcode($_exceptional_output);
+				}
+			}
+
+			return $exceptional_output;
+		}
 
 		if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))
 		{
-			if (strpos($string,'_custom/')!==false)
+			/*if (strpos($string,'_custom/')!==false)		Breaks output streaming
 			{
 				$_out=$out->evaluate();
 				_solemnly_leave($_out);
@@ -631,7 +645,8 @@ function load_module_page($string,$codename,&$out=NULL)
 				{
 					$out=make_string_tempcode($_out);
 				}
-			}
+				_solemnly_enter();
+			}*/
 
 			$out->evaluate_echo(NULL,true);
 		}
