@@ -1,6 +1,4 @@
 ; Similar to stuff defined in sources/files.php, but defined in terms of what we want never to be in git
-*.tmproj
-*.php.hh
 ._*
 test_a
 /sources_custom/user_sync__customise.php
@@ -19,16 +17,13 @@ data_custom/modules/chat/*.dat
 data_custom/modules/admin_stats/*.xml
 /ocp_sitemap.xml
 /*.clpprj
+/*.tmproj
+/.project
 data_custom/latest_activity.txt
-/subs.inc
 /hphp-static-cache
 /hphp.files.list
 /hphp
-/*.scm
-/*.heap
-/*.sch
 /*.dll
-/*.fcgi
 tmpfile__*
 *.tmp
 /_vti*
@@ -43,7 +38,6 @@ gibberish
 /bingsiteauth.xml
 php.ini
 /*.shtml
-/.project
 
 ; The matched files should be blocked for the main ocPortal dev repository but not for ocP projects
 .idea

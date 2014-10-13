@@ -197,6 +197,7 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'.gitattributes'=>'',
 		'.gitignore'=>'',
 		'phpdoc.dist.xml'=>'',
+		'composer.json'=>'',
 
 		// Web server extensions / leave-behinds
 		'web-inf'=>'.*',
@@ -242,9 +243,9 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'manifest.xml'=>'',
 
 		// IDE projects
-		'nbproject'=>'',
-		'.project'=>'',
-		'.idea'=>'',
+		'nbproject'=>'', // Netbeans
+		'.project'=>'', // Eclipse
+		'.idea'=>'', // JetBrains / PhpStorm
 		'.editorconfig'=>'',
 
 		// ocPortal control files
@@ -252,9 +253,9 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'closed.html.old'=>'',
 		'install_ok'=>'',
 		'install_locked'=>'',
-		'if_hosted_service.txt'=>'',
 
 		// MyOCP
+		'if_hosted_service.txt'=>'',
 		'sites'=>'',
 
 		// API docs
@@ -262,7 +263,6 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'ocportal-api-template'=>'docs',
 
 		// PHP compiler temporary files
-		'subs.inc'=>'',
 		'hphp-static-cache'=>'',
 		'hphp.files.list'=>'',
 		'hphp'=>'',
@@ -300,9 +300,8 @@ function should_ignore_file($filepath,$bitmask=0,$bitmask_defaults=0)
 		'hh'=>'.*',
 
 		// IDE projects
-		'clpprj'=>'',
-		'tmproj'=>'',
-		'zpj'=>'',
+		'clpprj'=>'', // Code Lobster
+		'tmproj'=>'', // TextMate
 
 		// CGI files
 		'fcgi'=>'',
