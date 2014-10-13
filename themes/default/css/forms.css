@@ -439,6 +439,10 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	margin: 0 0 0 10px;
 }
 
+.field_input .css_colour_chooser_from {
+	display: none;
+}
+
 .css_colour_chooser_to {
 	float: right;
 	margin-left: 0;
@@ -448,6 +452,10 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	width: 366px;
 	float: left;
 	margin-top: 3px; /* As the selection bars overflow a bit */
+}
+
+.field_input .css_colour_chooser_fixed {
+	width: 306px;
 }
 
 .css_colour_chooser_from, .css_colour_chooser_to {
@@ -465,6 +473,10 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 	height: 45px;
 	width: 256px;
 	display: inline;
+}
+
+.css_colour_chooser_colour>div {
+	overflow: hidden;
 }
 
 .css_colour_chooser_context {
