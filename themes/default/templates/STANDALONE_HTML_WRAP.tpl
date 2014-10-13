@@ -22,7 +22,7 @@
 		<script>// <![CDATA[
 			if (window.parent)
 			{
-				add_event_listener_abstract(window,'real_load',function () {
+				add_event_listener_abstract(window,'real_load',function() {
 					document.body.className+=' frame';
 
 					try
@@ -37,7 +37,7 @@
 						}
 						catch (e) {};
 					},1000);
-				} );
+				});
 			}
 
 			{$,The typeof bit is working around a document.write problem in the chat IM system for IE8}

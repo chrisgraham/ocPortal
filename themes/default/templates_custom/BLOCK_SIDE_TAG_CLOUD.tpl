@@ -12,8 +12,8 @@
 	{$REQUIRE_JAVASCRIPT,javascript_tag_cloud}
 
 	<script>// <![CDATA[
-		add_event_listener_abstract(window,'load',function () {
+		add_event_listener_abstract(window,'load',function() {
 			load_tag_cloud(document.getElementById('tag_sphere'));
-		} );
+		});
 	//]]></script>
 </div></section>

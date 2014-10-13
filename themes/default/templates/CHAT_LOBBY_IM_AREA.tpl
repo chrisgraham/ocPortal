@@ -29,7 +29,7 @@
 
 	<script>// <![CDATA[
 		window.setTimeout(function() { /* Needed for IE */
-			add_event_listener_abstract(window,'real_load',function () {
+			add_event_listener_abstract(window,'real_load',function() {
 				try
 				{
 					document.getElementById('post_{CHATROOM_ID;/}').focus();
@@ -37,7 +37,7 @@
 				{
 				}
 				document.getElementById('post_{CHATROOM_ID;/}').value=read_cookie('last_chat_msg_{CHATROOM_ID;/}');
-			} );
+			});
 		}, 1000);
 	// ]]></script>
 </div>

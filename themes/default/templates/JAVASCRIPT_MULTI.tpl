@@ -4,47 +4,6 @@
 // Multi-field
 // ===========
 
-function copy_dates(the_stub)
-{
-	if (the_stub!='end') return;
-
-	var i,j,the_form,the_element,v;
-	for (i=0;i<document.forms.length;i++)
-	{
-		the_form=document.forms[i];
-		for (j=0;j<the_form.elements.length;j++)
-		{
-			the_element=the_form.elements[j];
-			if (the_element.name.substring(0,6)=='start_')
-			{
-				v=the_element.value;
-				if (the_element.name=='start_hour')
-				{
-					if (v!=24) v++;
-				}
-				the_form.elements[the_element.name.replace(/start\_/gi,'end_')].value=v;
-			}
-		}
-	}
-}
-
-function change_stubbed(the_stub,value)
-{
-	var i,j,the_form,the_element;
-	for (i=0;i<document.forms.length;i++)
-	{
-		the_form=document.forms[i];
-		for (j=0;j<the_form.elements.length;j++)
-		{
-			the_element=the_form.elements[j];
-			if (the_element.name.substring(0,the_stub.length+1)==the_stub+'_')
-			{
-				the_element.disabled=!value;
-			}
-		}
-	}
-}
-
 function deselect_alt_url(form)
 {
 	if (typeof form.elements['alt_url']!='undefined')

@@ -5,7 +5,7 @@ function script_load_stuff_staff()
 	// Navigation loading screen
 	{+START,IF,{$CONFIG_OPTION,enable_animations}}
 		if ((window.parent==window) && ((window.location+'').indexOf('js_cache=1')==-1) && (((window.location+'').indexOf('/cms/')!=-1) || ((window.location+'').indexOf('/adminzone/')!=-1)))
-			add_event_listener_abstract(window,'beforeunload',function() { staff_unload_action(); } );
+			add_event_listener_abstract(window,'beforeunload',function() { staff_unload_action(); });
 	{+END}
 
 	// Theme image editing hovers
@@ -118,11 +118,11 @@ function script_load_stuff_staff()
 						add_event_listener_abstract(link,'mouseout',function(event) {
 							if (typeof event=='undefined') var event=window.event;
 							if (typeof window.deactivate_tooltip!='undefined') deactivate_tooltip(link,event);
-						} );
+						});
 						add_event_listener_abstract(link,'mousemove',function(event) {
 							if (typeof event=='undefined') var event=window.event;
 							if (typeof window.activate_tooltip!='undefined') reposition_tooltip(link,event,false,false,null,true);
-						} );
+						});
 						add_event_listener_abstract(link,'mouseover',function(event) {
 							if (typeof event=='undefined') var event=window.event;
 
@@ -151,7 +151,7 @@ function script_load_stuff_staff()
 									activate_tooltip(link,event,link.rendered_tooltip,'400px',null,null,false,false,false,true);
 								}
 							}
-						} );
+						});
 					};
 					myfunc(hook,id,links[i]);
 				}

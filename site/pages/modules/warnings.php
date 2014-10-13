@@ -420,8 +420,8 @@ class Module_warnings extends standard_crud_module
 						'category_name'=>strval($forum_id),
 					));
 					if (!is_null($active_until)) $silence_forum_time=$active_until;
-					$fields->attach(form_input_date(do_lang_tempcode('SILENCE_FROM_TOPIC'),do_lang_tempcode('DESCRIPTION_SILENCE_FROM_TOPIC'),'silence_from_topic',true,true,true,$silence_topic_time,2));
-					$fields->attach(form_input_date(do_lang_tempcode('SILENCE_FROM_FORUM'),do_lang_tempcode('DESCRIPTION_SILENCE_FROM_FORUM'),'silence_from_forum',true,true,true,$silence_forum_time,2));
+					$fields->attach(form_input_date(do_lang_tempcode('SILENCE_FROM_TOPIC'),do_lang_tempcode('DESCRIPTION_SILENCE_FROM_TOPIC'),'silence_from_topic',false,true,true,$silence_topic_time,2));
+					$fields->attach(form_input_date(do_lang_tempcode('SILENCE_FROM_FORUM'),do_lang_tempcode('DESCRIPTION_SILENCE_FROM_FORUM'),'silence_from_forum',false,true,true,$silence_forum_time,2));
 				}
 			}
 

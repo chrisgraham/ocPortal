@@ -45,9 +45,9 @@
 					<!-- List put in here -->
 				</div>
 				<script>// <![CDATA[
-					add_event_listener_abstract(window,'load',function () {
+					add_event_listener_abstract(window,'load',function() {
 						window.sitemap=new tree_list('tree_list','data/sitemap.php?start_links=1&get_perms=1{$KEEP;}','','',true);
-					} );
+					});
 					var column_color='{COLOR;*}';
 
 					window.usergroup_titles={};

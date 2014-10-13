@@ -23,7 +23,7 @@
 		if (newState==0) player_stopped();
 	}
 
-	add_event_listener_abstract(window,'real_load',function () {
+	add_event_listener_abstract(window,'real_load',function() {
 		if (document.getElementById('next_slide'))
 		{
 			stop_slideshow_timer();
@@ -32,5 +32,5 @@
 				document.getElementById('{$GET;,player_id}').playVideo();
 			}, 1000);
 		}
-	} );
+	});
 //]]></script>

@@ -22,17 +22,17 @@
 
 	{+START,IF,{PLUPLOAD}}{+START,IF,{$NOT,{$IS_HTTPAUTH_LOGIN}}}
 		<script>// <![CDATA[
-			add_event_listener_abstract(window,'load',function () {
+			add_event_listener_abstract(window,'load',function() {
 				preinit_file_input('upload','{NAME;/}',null,null,'{FILTER;/}');
-			} );
+			});
 		//]]></script>
 	{+END}{+END}
 
 	{+START,IF_PASSED,SYNDICATION_JSON}
 		<script>// <![CDATA[
-			add_event_listener_abstract(window,'load',function () {
+			add_event_listener_abstract(window,'load',function() {
 				show_upload_syndication_options('{NAME;/}','{SYNDICATION_JSON;/}');
-			} );
+			});
 		//]]></script>
 	{+END}
 </div>

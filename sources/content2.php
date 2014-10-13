@@ -79,7 +79,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 		if (!is_null($add_time_field))
 		{
 			$add_time=is_null($content_row)?time():$content_row[$add_time_field];
-			$fields->attach(form_input_date(do_lang_tempcode('ADD_TIME'),do_lang_tempcode('DESCRIPTION_META_ADD_TIME'),'meta_add_time',false,false,true,$add_time,40,intval(date('Y'))-20,NULL,true));
+			$fields->attach(form_input_date(do_lang_tempcode('ADD_TIME'),do_lang_tempcode('DESCRIPTION_META_ADD_TIME'),'meta_add_time',true,false,true,$add_time,40,intval(date('Y'))-20,NULL));
 		}
 
 		if (!is_null($content_id))
@@ -88,7 +88,7 @@ function meta_data_get_fields($content_type,$content_id,$allow_no_owner=false,$f
 			if (!is_null($edit_time_field))
 			{
 				$edit_time=is_null($content_row)?NULL:(is_null($content_row[$edit_time_field])?time():max(time(),$content_row[$edit_time_field]));
-				$fields->attach(form_input_date(do_lang_tempcode('EDIT_TIME'),do_lang_tempcode('DESCRIPTION_META_EDIT_TIME'),'meta_edit_time',true,is_null($edit_time),true,$edit_time,10,NULL,NULL,false));
+				$fields->attach(form_input_date(do_lang_tempcode('EDIT_TIME'),do_lang_tempcode('DESCRIPTION_META_EDIT_TIME'),'meta_edit_time',false,is_null($edit_time),true,$edit_time,10,NULL,NULL));
 			}
 		}
 

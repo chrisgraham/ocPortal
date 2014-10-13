@@ -23,7 +23,7 @@
 </noscript>
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		{$,Variables we will need}
 		var fp_animation=document.getElementById('image_fader_news_{$GET,RAND}');
 		var fp_animation_url=document.getElementById('image_fader_news_url_{$GET,RAND}');
@@ -146,5 +146,5 @@
 			return false;
 		};
 		window.main_image_fader_news_cycle_{$GET,RAND}(0);
-	} );
+	});
 //]]></script>

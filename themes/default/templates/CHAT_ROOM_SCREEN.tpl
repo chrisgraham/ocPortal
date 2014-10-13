@@ -1,5 +1,8 @@
 {TITLE}
 
+{$REQUIRE_JAVASCRIPT,javascript_widget_color}
+{$REQUIRE_CSS,widget_color}
+
 {+START,IF_NON_EMPTY,{INTRODUCTION}}<p>{INTRODUCTION}</p>{+END}
 
 {CHAT_SOUND}
@@ -12,7 +15,7 @@
 
 				<div style="display: inline;">
 					<p class="accessibility_hidden"><label for="post">{!MESSAGE}</label></p>
-					<textarea style="font-family: {FONT_NAME_DEFAULT;*}" class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,{CHATROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value); return true;" id="post" name="message" onfocus="if (typeof window.picker_node!='undefined') picker_node.style.visibility='hidden';" cols="{$?,{$MOBILE},37,39}" rows="1"></textarea>
+					<textarea style="font-family: {FONT_NAME_DEFAULT;*}" class="input_text_required"{+START,IF,{$NOT,{$MOBILE}}} onkeyup="manage_scroll_height(this);"{+END} onkeypress="if (enter_pressed(event)) return chat_post(event,{CHATROOM_ID*},'post',document.getElementById('font_name').options[document.getElementById('font_name').selectedIndex].value,document.getElementById('text_colour').value); return true;" id="post" name="message" cols="{$?,{$MOBILE},37,39}" rows="1"></textarea>
 					<input type="hidden" name="font" id="font" value="{FONT_NAME_DEFAULT*}" />
 					<input type="hidden" name="colour" id="colour" value="{TEXT_COLOUR_DEFAULT*}" />
 				</div>
@@ -75,7 +78,7 @@
 						<label for="text_colour">{!CHAT_OPTIONS_COLOUR_NAME}:</label>
 					</p>
 					<p>
-						<input size="10" maxlength="7" class="input_line_required" type="text" id="text_colour" name="text_colour" value="{+START,IF,{$NEQ,{TEXT_COLOUR_DEFAULT},inherit}}{TEXT_COLOUR_DEFAULT*}{+END}" onfocus="update_picker_colour(); if (picker_node.style.visibility=='visible') { picker_node.style.visibility='hidden'; this.blur(); } else picker_node.style.visibility='visible';" onkeyup="if (this.form.elements['text_colour'].value.match(/^#[0-9A-F][0-9A-F][0-9A-F]([0-9A-F][0-9A-F][0-9A-F])?$/)) { this.style.color=this.value; document.getElementById('colour').value=this.value; update_picker_colour(); }" />
+						<input size="10" maxlength="7" class="input_line_required" type="color" id="text_colour" name="text_colour" value="{+START,IF,{$NEQ,{TEXT_COLOUR_DEFAULT},inherit}}{TEXT_COLOUR_DEFAULT*}{+END}" onchange="if (this.form.elements['text_colour'].value.match(/^#[0-9A-F][0-9A-F][0-9A-F]([0-9A-F][0-9A-F][0-9A-F])?$/)) { this.style.color=this.value; document.getElementById('colour').value=this.value; update_picker_colour(); }" />
 					</p>
 				</div>
 
@@ -124,9 +127,9 @@
 </form>
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'real_load',function () {
+	add_event_listener_abstract(window,'real_load',function() {
 		chat_load({CHATROOM_ID%});
-	} );
+	});
 // ]]></script>
 
 {$REVIEW_STATUS,chat,{CHATROOM_ID}}

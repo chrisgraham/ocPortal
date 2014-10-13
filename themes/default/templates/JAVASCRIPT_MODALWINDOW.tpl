@@ -122,7 +122,7 @@ function open_link_as_overlay(ob,width,height,target)
 				set_inner_html(video,initial_img_url);
 				video.className='lightbox_image';
 				video.id='lightbox_image';
-				add_event_listener_abstract(video,'loadedmetadata',function() { _resize_lightbox_dimensions_img(modal,video,has_full_button,true); } );
+				add_event_listener_abstract(video,'loadedmetadata',function() { _resize_lightbox_dimensions_img(modal,video,has_full_button,true); });
 			} else
 			{
 				var img=modal.top_window.document.createElement('img');
@@ -150,7 +150,7 @@ function open_link_as_overlay(ob,width,height,target)
 				set_inner_html(video,imgs[position][0]);
 				video.className='lightbox_image';
 				video.id='lightbox_image';
-				add_event_listener_abstract(video,'loadedmetadata',function() { _resize_lightbox_dimensions_img(modal,video,true,true); } );
+				add_event_listener_abstract(video,'loadedmetadata',function() { _resize_lightbox_dimensions_img(modal,video,true,true); });
 			} else
 			{
 				var img=modal.top_window.document.createElement('img');
@@ -237,7 +237,7 @@ function open_link_as_overlay(ob,width,height,target)
 		sup.style.overflow='hidden';
 
 		dims_func();
-		modal.add_event( window, 'resize', function() { dims_func(); } );
+		modal.add_event( window, 'resize', function() { dims_func(); });
 	}
 
 	function _get_max_lightbox_img_dims(modal,has_full_button)

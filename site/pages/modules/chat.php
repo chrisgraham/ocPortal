@@ -573,10 +573,7 @@ class Module_chat
 	 */
 	function chat_room()
 	{
-		require_javascript('javascript_yahoo_2');
-		require_javascript('javascript_colour_picker');
 		require_javascript('javascript_posting');
-		require_css('colour_picker');
 
 		$prefs=@$_COOKIE['software_chat_prefs'];
 		$prefs=@explode(';',$prefs);
@@ -1018,7 +1015,7 @@ class Module_chat
 	 */
 	function chat_save_options()
 	{
-		$value=post_param('text_colour',get_option('chat_default_post_colour')).';'.post_param('font_name',get_option('chat_default_post_font')).';';
+		$value=preg_replace('#^\##','',post_param('text_colour',get_option('chat_default_post_colour'))).';'.post_param('font_name',get_option('chat_default_post_font')).';';
 		require_code('users_active_actions');
 		ocp_setcookie('software_chat_prefs',$value);
 
@@ -1044,8 +1041,8 @@ class Module_chat
 		$fields=new ocp_tempcode();
 		require_code('form_templates');
 		$fields->attach(form_input_list(do_lang_tempcode('CHATROOM_NAME'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_CHATROOM_NAME'),'room_name',$select));
-		$fields->attach(form_input_date(do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE_DESCRIPTION'),'start',false,false,true,time()-4*60*60,26));
-		$fields->attach(form_input_date(do_lang_tempcode('CHAT_DOWNLOAD_LOGS_FINISH_DATE'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_FINISH_DATE_DESCRIPTION'),'finish',false,false,true,time(),26));
+		$fields->attach(form_input_date(do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE_DESCRIPTION'),'start',true,false,true,time()-4*60*60,26));
+		$fields->attach(form_input_date(do_lang_tempcode('CHAT_DOWNLOAD_LOGS_FINISH_DATE'),do_lang_tempcode('CHAT_DOWNLOAD_LOGS_FINISH_DATE_DESCRIPTION'),'finish',true,false,true,time(),26));
 
 		$posting_name=do_lang_tempcode('CHAT_DOWNLOAD_LOGS');
 		$posting_url=build_url(array('page'=>'_SELF','type'=>'_download_logs'),'_SELF',NULL,false,true);

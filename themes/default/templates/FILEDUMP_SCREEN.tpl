@@ -114,9 +114,9 @@
 
 			{+START,IF_NON_EMPTY,{$_GET,filename}}
 				<script type="text/javascript">// <![CDATA[
-					add_event_listener_abstract(window,'load',function () {
+					add_event_listener_abstract(window,'load',function() {
 						faux_open('{$PAGE_LINK;,_SELF:_SELF:embed:place={$_GET&,place}:file={$_GET&,filename}:wide_high=1}',null,'width=950;height=700','_top');
-					} );
+					});
 				//]]></script>
 			{+END}
 
@@ -206,9 +206,9 @@
 </div>
 
 <script type="text/javascript">// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		find_url_tab();
-	} );
+	});
 
 	function check_filedump_selections(form)
 	{

@@ -145,7 +145,7 @@ class Module_admin_group_member_timeouts
 				'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']),
 				'MEMBER_ID'=>strval($row['member_id']),
 				'GROUP_ID'=>strval($row['group_id']),
-				'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_'.strval($i),false,false,true,$row['timeout'],10,NULL,NULL,true),
+				'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_'.strval($i),true,false,true,$row['timeout'],10,NULL,NULL),
 			);
 		}
 
@@ -160,7 +160,7 @@ class Module_admin_group_member_timeouts
 			'TITLE'=>$this->title,
 			'TIMEOUTS'=>$timeouts,
 			'GROUPS'=>$usergroups,
-			'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_new',false,false,true,NULL,10,NULL,NULL,true),
+			'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_new',true,false,true,NULL,10,NULL,NULL),
 			'URL'=>$url,
 			'PAGINATION'=>$pagination,
 			'PING_URL'=>$ping_url,

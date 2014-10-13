@@ -493,7 +493,7 @@ class Module_admin_config
 						break;
 
 					case 'date':
-						$out.=static_evaluate_tempcode(form_input_date($human_name,$explanation,$name,$required,false,false,intval(get_option($name)),40,intval(date('Y'))-20,NULL,false));
+						$out.=static_evaluate_tempcode(form_input_date($human_name,$explanation,$name,$required,false,false,intval(get_option($name)),40,intval(date('Y'))-20,NULL));
 						break;
 
 					case 'forum':

@@ -18,104 +18,64 @@ function hex_to_dec(number)
 if (typeof window.names_to_numbers=='undefined')
 {
 	window.names_to_numbers={};
+	window.names_to_numbers.length=0;
 	window.last_cc={};
 	window.last_cc_i={};
 }
-function do_color_change(e)
+
+function make_colour_chooser(name,color,context,tabindex,label,className)
 {
-	// Find our colour element we clicked on
-	if (typeof e=='undefined') var e=window.event;
-	var targ;
-	if (typeof e.target!='undefined') targ=e.target;
-	else if (typeof e.srcElement!='undefined') targ=e.srcElement;
-
-	// Find the colour chooser's ID of this element
-	var _id=targ.id.substring(targ.id.lastIndexOf('#')+1);
-
-	var finality=document.getElementById(_id);
-	if (finality.disabled) return;
-
-	// Get the ID of the element we clicked (format: cc_col_<0-2>_<0-255>#<chooser-id>)
-	var id=targ.id;
-
-	var b=id.substr(0,id.length-_id.length).lastIndexOf('_');
-
-	var d=parseInt(id.substring(7,b),10); // Get the colour row (0-2)
-	var i=parseInt(id.substring(b+1,id.indexOf('#')),10); // Get the colour (0-255)
-
-	var rgb=[];
-	rgb[0]=0; rgb[1]=0; rgb[2]=0;
-	rgb[d]=window.last_cc_i[d+window.names_to_numbers[_id]*3];
-	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+_id);
-	if (temp_last_cc!=targ)
+	if ((typeof label=='undefined') || (!label)) var label='&lt;color-'+name+'&gt;';
+	if (typeof className=='undefined')
 	{
-		temp_last_cc.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]);
-		temp_last_cc.style.cursor='pointer';
-		temp_last_cc.style.outline='none';
-		temp_last_cc.style.position='static';
-		window.last_cc_i[d+window.names_to_numbers[_id]*3]=i;
-
-		// Show a white line over the colour we clicked
-		targ.style.backgroundColor='#FFFFFF';
-		targ.style.cursor='';
-		targ.style.outline='3px solid gray';
-		targ.style.position='relative';
-
-		var element=document.getElementById('cc_target_'+_id);
-		var bgColor=element.style.backgroundColor;
-		if (bgColor.substr(0,1)=='#') bgColor='rgb('+hex_to_dec(bgColor.substr(1,2))+','+hex_to_dec(bgColor.substr(3,2))+','+hex_to_dec(bgColor.substr(5,2))+')';
-
-		var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
-		var _rgb=s_rgb.split(',');
-		_rgb[d]=i;
-		element.style.backgroundColor='#'+dec_to_hex(_rgb[0])+dec_to_hex(_rgb[1])+dec_to_hex(_rgb[2]);
-		element.style.color='#'+dec_to_hex(255-_rgb[0])+dec_to_hex(255-_rgb[1])+dec_to_hex(255-_rgb[2]);
-
-		finality.value=dec_to_hex(_rgb[0])+dec_to_hex(_rgb[1])+dec_to_hex(_rgb[2]);
+		var className='';
+	} else
+	{
+		className='class="'+className+'" ';
 	}
-}
 
-function update_chooser(chooser)
-{
-	var ob=document.getElementById(chooser);
-	if (ob.disabled) return false;
+	window.names_to_numbers[name]=window.names_to_numbers.length;
+	window.names_to_numbers.length++;
 
-	return update_choose(chooser,0,ob.value.substr(0,2))
-		 && update_choose(chooser,1,ob.value.substr(2,2))
-		 && update_choose(chooser,2,ob.value.substr(4,2));
-}
+	var p=document.getElementById('colours_go_here_'+name);
+	if (!p) p=document.getElementById('colours_go_here');
 
-function update_choose(id,d,i)
-{
-	i=hex_to_dec(i);
-	i=i-i%4;
+	if ((color!='') && (color.substr(0,1)!='#') && (color.substr(0,3)!='rgb'))
+	{
+		if (color.match(/[A-Fa-f\d]\{6\}/)) color='#'+color;
+		else color='#000000';
+	}
 
-	var tid='cc_col_'+d+'_'+i+'#'+id;
-	var targ=document.getElementById(tid);
-	if (!targ) return false;
-	var rgb=[];
-	rgb[0]=0; rgb[1]=0; rgb[2]=0;
-	rgb[d]=window.last_cc_i[d+window.names_to_numbers[id]*3];
-	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+id);
-	temp_last_cc.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]); // Reset old
-	temp_last_cc.style.outline='none';
-	temp_last_cc.style.position='static';
-	window.last_cc_i[d+window.names_to_numbers[id]*3]=i;
+	var t='';
+	t=t+'<div class="css_colour_chooser">';
+	t=t+'	<div class="css_colour_chooser_name">';
+	t=t+'		<label class="field_name" for="'+name+'"> '+label+'</label><br />';
+	t=t+    '<input '+className+'alt="{!themes:COLOUR;^}" type="color" value="#'+color.substr(1)+'" size="7" id="'+name+'" name="'+name+'" size="6" onchange="update_chooser(\''+name+'\'); return false;" />';
+	t=t+'	</div>';
+	t=t+'	<div class="css_colour_chooser_fixed">';
+	t=t+'	<div class="css_colour_chooser_from" style="background-color: '+((color=='')?'#000':color)+'" id="cc_source_'+name+'">';
+	t=t+"		{!themes:FROM_COLOUR^#}";
+	t=t+'	</div>';
+	t=t+'	<div class="css_colour_chooser_to" style="background-color: '+((color=='')?'#000':color)+'" id="cc_target_'+name+'">';
+	t=t+"		{!themes:TO_COLOUR^#}";
+	t=t+'	</div>';
+	t=t+'	<div class="css_colour_chooser_colour">';
+	t=t+'		<div id="cc_0_'+name+'"></div>';
+	t=t+'		<div id="cc_1_'+name+'"></div>';
+	t=t+'		<div id="cc_2_'+name+'"></div>';
+	t=t+'	</div>';
+	t=t+'	</div>';
+	t=t+'</div>';
+	if (context!='') t=t+'<div class="css_colour_chooser_context">'+context+'</div>';
 
-	var element=document.getElementById('cc_target_'+id);
-	var bgColor=element.style.backgroundColor;
-	if (bgColor.substr(0,1)=='#') bgColor='rgb('+hex_to_dec(bgColor.substr(1,2))+','+hex_to_dec(bgColor.substr(3,2))+','+hex_to_dec(bgColor.substr(5,2))+')';
-	var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
-	rgb=s_rgb.split(',');
-	rgb[d]=i;
-	element.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]);
-	element.style.color='#'+dec_to_hex(255-rgb[0])+dec_to_hex(255-rgb[1])+dec_to_hex(255-rgb[2]);
+	set_inner_html(p,t,p.id=='colours_go_here');
 
-	targ.style.backgroundColor='#FFFFFF';
-	targ.style.outline='3px solid gray';
-	targ.style.position='relative';
-
-	return true;
+	/*
+	Uncomment if you want to force spectrum widget even when there is native browser input support
+	$("#"+name).spectrum({
+	    color: color
+	});
+	*/
 }
 
 function do_color_chooser()
@@ -141,10 +101,10 @@ function do_color_chooser_element(element)
 	var id=element.id.substring(10);
 
 	var source=document.getElementById('cc_source_'+id);
-	var bgColor=source.style.backgroundColor;
-	if ((bgColor.substr(0,1)!='#') && (bgColor.substr(0,3)!='rgb')) bgColor='#000000';
-	if (bgColor.substr(0,1)=='#') bgColor='rgb('+hex_to_dec(bgColor.substr(1,2))+','+hex_to_dec(bgColor.substr(3,2))+','+hex_to_dec(bgColor.substr(5,2))+')';
-	var s_rgb=bgColor.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
+	var bg_color=source.style.backgroundColor;
+	if ((bg_color.substr(0,1)!='#') && (bg_color.substr(0,3)!='rgb')) bg_color='#000000';
+	if (bg_color.substr(0,1)=='#') bg_color='rgb('+hex_to_dec(bg_color.substr(1,2))+','+hex_to_dec(bg_color.substr(3,2))+','+hex_to_dec(bg_color.substr(5,2))+')';
+	var s_rgb=bg_color.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
 	var rgb=s_rgb.split(',');
 	rgb[0]=Math.round(rgb[0]/4)*4;
 	rgb[1]=Math.round(rgb[1]/4)*4;
@@ -166,7 +126,7 @@ function do_color_chooser_element(element)
 	{
 		window.last_cc_i[d+window.names_to_numbers[id]*3]=0;
 		innert='';
-//		for (i=0;i<256;i++)
+		//for (i=0;i<256;i++)
 		for (i=0;i<256;i+=4)
 		{
 			selected=(i==rgb[d]);
@@ -190,50 +150,99 @@ function do_color_chooser_element(element)
 	}
 }
 
-function make_colour_chooser(name,color,context,tabindex,label,className)
+function do_color_change(e)
 {
-	if ((typeof label=='undefined') || (!label)) var label='&lt;color-'+name+'&gt;';
-	if (typeof className=='undefined')
+	// Find our colour element we clicked on
+	if (typeof e=='undefined') var e=window.event;
+	var targ;
+	if (typeof e.target!='undefined') targ=e.target;
+	else if (typeof e.srcElement!='undefined') targ=e.srcElement;
+
+	// Find the colour chooser's ID of this element
+	var _id=targ.id.substring(targ.id.lastIndexOf('#')+1);
+
+	var finality=document.getElementById(_id);
+	if (finality.disabled) return;
+
+	// Get the ID of the element we clicked (format: cc_col_<0-2>_<0-255>#<chooser-id>)
+	var id=targ.id;
+
+	var b=id.substr(0,id.length-_id.length).lastIndexOf('_');
+
+	var d=parseInt(id.substring(7,b),10); // Get the colour row (0-2)
+	var i=parseInt(id.substring(b+1,id.lastIndexOf('#')),10); // Get the colour (0-255)
+
+	var rgb=[];
+	rgb[0]=0; rgb[1]=0; rgb[2]=0;
+	rgb[d]=window.last_cc_i[d+window.names_to_numbers[_id]*3];
+	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+_id);
+	if (temp_last_cc!=targ)
 	{
-		var className='';
-	} else
-	{
-		className='class="'+className+'" ';
+		temp_last_cc.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]);
+		temp_last_cc.style.cursor='pointer';
+		temp_last_cc.style.outline='none';
+		temp_last_cc.style.position='static';
+		window.last_cc_i[d+window.names_to_numbers[_id]*3]=i;
+
+		// Show a white line over the colour we clicked
+		targ.style.backgroundColor='#FFFFFF';
+		targ.style.cursor='';
+		targ.style.outline='3px solid gray';
+		targ.style.position='relative';
+
+		var element=document.getElementById('cc_target_'+_id);
+		var bg_color=element.style.backgroundColor;
+		if (bg_color.substr(0,1)=='#') bg_color='rgb('+hex_to_dec(bg_color.substr(1,2))+','+hex_to_dec(bg_color.substr(3,2))+','+hex_to_dec(bg_color.substr(5,2))+')';
+
+		var s_rgb=bg_color.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
+		var _rgb=s_rgb.split(',');
+		_rgb[d]=i;
+		element.style.backgroundColor='#'+dec_to_hex(_rgb[0])+dec_to_hex(_rgb[1])+dec_to_hex(_rgb[2]);
+		element.style.color='#'+dec_to_hex(255-_rgb[0])+dec_to_hex(255-_rgb[1])+dec_to_hex(255-_rgb[2]);
+
+		finality.value='#'+dec_to_hex(_rgb[0])+dec_to_hex(_rgb[1])+dec_to_hex(_rgb[2]);
 	}
-
-	window.names_to_numbers[name]=window.names_to_numbers.length;
-
-	var p=document.getElementById('colours_go_here');
-
-	if ((color!='') && (color.substr(0,1)!='#') && (color.substr(0,3)!='rgb'))
-	{
-		if (color.match(/[A-Fa-f\d]\{6\}/)) color='#'+color;
-		else color='#000000';
-	}
-
-	var t='';
-	t=t+'<div class="css_colour_chooser">';
-	t=t+'	<div class="css_colour_chooser_name">';
-	t=t+'		<label class="field_name" for="'+name+'"> '+label+'</label>';
-	t=t+'		<input type="button" '+(tabindex?('tabindex="'+tabindex+'" '):'')+'value="#" onclick="update_chooser(\''+name+'\'); return false;" />';
-	t=t+    '<input '+className+'alt="{!themes:COLOUR;^}" type="text" value="'+color.substr(1)+'" maxlength="6" id="'+name+'" name="'+name+'" size="6" />';
-	t=t+'	</div>';
-	t=t+'	<div class="css_colour_chooser_fixed">';
-	t=t+'	<div class="css_colour_chooser_from" style="background-color: '+((color=='')?'#000':color)+'" id="cc_source_'+name+'">';
-	t=t+"		{!themes:FROM_COLOUR^#}";
-	t=t+'	</div>';
-	t=t+'	<div class="css_colour_chooser_to" style="background-color: '+((color=='')?'#000':color)+'" id="cc_target_'+name+'">';
-	t=t+"		{!themes:TO_COLOUR^#}";
-	t=t+'	</div>';
-	t=t+'	<div class="css_colour_chooser_colour">';
-	t=t+'		<div id="cc_0_'+name+'"></div>';
-	t=t+'		<div id="cc_1_'+name+'"></div>';
-	t=t+'		<div id="cc_2_'+name+'"></div>';
-	t=t+'	</div>';
-	t=t+'	</div>';
-	t=t+'</div>';
-	if (context!='') t=t+'<div class="css_colour_chooser_context">'+context+'</div>';
-
-	set_inner_html(p,t,true);
 }
 
+function update_chooser(chooser)
+{
+	var ob=document.getElementById(chooser);
+	if (ob.disabled) return false;
+
+	return update_choose(chooser,0,ob.value.substr(1,2))
+		 && update_choose(chooser,1,ob.value.substr(3,2))
+		 && update_choose(chooser,2,ob.value.substr(5,2));
+}
+
+function update_choose(id,d,i)
+{
+	i=hex_to_dec(i);
+	i=i-i%4;
+
+	var tid='cc_col_'+d+'_'+i+'#'+id;
+	var targ=document.getElementById(tid);
+	if (!targ) return false;
+	var rgb=[];
+	rgb[0]=0; rgb[1]=0; rgb[2]=0;
+	rgb[d]=window.last_cc_i[d+window.names_to_numbers[id]*3];
+	var temp_last_cc=document.getElementById('cc_col_'+d+'_'+rgb[d]+'#'+id);
+	temp_last_cc.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]); // Reset old
+	temp_last_cc.style.outline='none';
+	temp_last_cc.style.position='static';
+	window.last_cc_i[d+window.names_to_numbers[id]*3]=i;
+
+	var element=document.getElementById('cc_target_'+id);
+	var bg_color=element.style.backgroundColor;
+	if (bg_color.substr(0,1)=='#') bg_color='rgb('+hex_to_dec(bg_color.substr(1,2))+','+hex_to_dec(bg_color.substr(3,2))+','+hex_to_dec(bg_color.substr(5,2))+')';
+	var s_rgb=bg_color.replace(new RegExp('(r|g|b|(\\()|(\\))|(\\s))*','gi'),'');
+	rgb=s_rgb.split(',');
+	rgb[d]=i;
+	element.style.backgroundColor='#'+dec_to_hex(rgb[0])+dec_to_hex(rgb[1])+dec_to_hex(rgb[2]);
+	element.style.color='#'+dec_to_hex(255-rgb[0])+dec_to_hex(255-rgb[1])+dec_to_hex(255-rgb[2]);
+
+	targ.style.backgroundColor='#FFFFFF';
+	targ.style.outline='3px solid gray';
+	targ.style.position='relative';
+
+	return true;
+}

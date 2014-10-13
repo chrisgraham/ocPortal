@@ -37,9 +37,9 @@
 	</div>
 
 	<script>// <![CDATA[
-		add_event_listener_abstract(window,'load',function () {
+		add_event_listener_abstract(window,'load',function() {
 			start_realtime_rain();
-		} );
+		});
 		window.min_time={MIN_TIME%};
 		window.paused=false;
 		window.bubble_groups={};

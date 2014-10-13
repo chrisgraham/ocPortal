@@ -180,7 +180,7 @@ function internalise_infinite_scrolling_go(url_stem,wrapper,more_links)
 
 				window.infinite_scroll_pending=true;
 
-				return call_block(url_stem+url_stub,'',wrapper_inner,true,function() { window.infinite_scroll_pending=false; internalise_infinite_scrolling(url_stem,wrapper); } );
+				return call_block(url_stem+url_stub,'',wrapper_inner,true,function() { window.infinite_scroll_pending=false; internalise_infinite_scrolling(url_stem,wrapper); });
 			}
 		}
 	}

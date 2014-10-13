@@ -136,7 +136,7 @@ function received_events(ajax_result_frame,ajax_result)
 							if (find_pos_y(icon_spot,true)>0) icon_spot=icon_spot.parentNode;
 							for (var x=0;x<num;x++)
 							{
-								window.setTimeout( function(main_icon,next_icon) { return function () {
+								window.setTimeout( function(main_icon,next_icon) { return function() {
 									next_icon=document.createElement('div');
 									next_icon.className=main_icon.className;
 									set_inner_html(next_icon,get_inner_html(main_icon));

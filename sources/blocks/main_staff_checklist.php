@@ -85,7 +85,6 @@ class Block_main_staff_checklist
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_GOOGLE').'"]http://www.google.com/addurl/[/url]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_DMOZ').'"]http://www.dmoz.org/add.html[/url]',
 				'[url="'.do_lang('CHECKLIST_INITIAL_TASK_BING').'"]http://www.bing.com/webmaster/SubmitSitePage.aspx[/url]',
-				//'[url="'.do_lang('CHECKLIST_INITIAL_TASK_YAHOO').'"]http://publisher.yahoo.com/rss_guide/submit.php[/url]',
 				'[html]<p style="margin: 0">Facebook user? Like ocPortal on Facebook:</p><iframe src="http://www.ocportal.com/facebook.html" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:430px; height:20px;" allowTransparency="true"></iframe>[/html]',
 				'[url="Consider helping out with the ocPortal project"]'.get_brand_page_url(array('page'=>'helping_out'),'site').'[/url]',
 			);

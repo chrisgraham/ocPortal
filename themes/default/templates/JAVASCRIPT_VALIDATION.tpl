@@ -554,7 +554,7 @@ function check_form(the_form,for_preview)
 			posy=find_pos_y(error_element.parentNode,true);
 		}
 		if (posy!=0)
-			smooth_scroll(posy-50,null,null,function() { try { error_element.focus(); } catch(e) {}; /* Can have exception giving focus on IE for invisible fields */ } );
+			smooth_scroll(posy-50,null,null,function() { try { error_element.focus(); } catch(e) {}; /* Can have exception giving focus on IE for invisible fields */ });
 	}
 
 	// Try and workaround max_input_vars problem if lots of usergroups
@@ -1028,7 +1028,7 @@ function _set_up_change_monitor(container,input,container2)
 	{
 		if (!elements[i]) continue;
 		if ((typeof elements[0]=='undefined') || (elements[0].id.indexOf('choose_')!=-1)) continue;
-		var func=function () {
+		var func=function() {
 			if (find_if_children_set(input?document.getElementById(input).parentNode:container))
 			{
 				if (container.className.indexOf(' filledin')==-1) container.className+=' filledin';

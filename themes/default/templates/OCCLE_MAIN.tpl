@@ -14,9 +14,9 @@
 	</div>
 	<script>
 	// <![CDATA[
-		add_event_listener_abstract(window,'load',function () {
+		add_event_listener_abstract(window,'load',function() {
 			try { document.getElementById("occle_command").focus(); } catch (e) { }
-		} );
+		});
 	// ]]>
 	</script>
 </div>

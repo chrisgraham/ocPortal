@@ -279,8 +279,8 @@ class Module_cms_booking extends standard_crud_module
 		if (!$_blacks->is_empty())
 			$fields->attach(form_input_multi_list(do_lang_tempcode('BLACKOUTS'),do_lang_tempcode('DESCRIPTION_BOOKABLE_BLACKS'),'blacks',$_blacks));
 
-		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_FROM'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_FROM'),'active_from',false,false,false,array(0,0,$details['active_from_month'],$details['active_from_day'],$details['active_from_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
-		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_TO'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_TO'),'active_to',true,true,false,is_null($details['active_to_month'])?NULL:array(0,0,$details['active_to_month'],$details['active_to_day'],$details['active_to_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_FROM'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_FROM'),'active_from',true,false,false,array(0,0,$details['active_from_month'],$details['active_from_day'],$details['active_from_year']),10,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BOOKABLE_ACTIVE_TO'),do_lang_tempcode('DESCRIPTION_BOOKABLE_ACTIVE_TO'),'active_to',false,true,false,is_null($details['active_to_month'])?NULL:array(0,0,$details['active_to_month'],$details['active_to_day'],$details['active_to_year']),10,NULL,NULL,true,get_server_timezone()));
 
 		$fields->attach(form_input_integer(do_lang_tempcode('SORT_ORDER'),do_lang_tempcode('DESCRIPTION_SORT_ORDER'),'sort_order',$details['sort_order'],true));
 
@@ -655,8 +655,8 @@ class Module_cms_booking_blacks extends standard_crud_module
 		$hidden->attach(form_input_hidden('timezone',get_server_timezone()));
 
 		$fields=new ocp_tempcode();
-		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_FROM'),do_lang_tempcode('DESCRIPTION_BLACKED_FROM'),'blacked_from',false,false,false,array(0,0,$details['blacked_from_month'],$details['blacked_from_day'],$details['blacked_from_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
-		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_TO'),do_lang_tempcode('DESCRIPTION_BLACKED_TO'),'blacked_to',false,false,false,array(0,0,$details['blacked_to_month'],$details['blacked_to_day'],$details['blacked_to_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_FROM'),do_lang_tempcode('DESCRIPTION_BLACKED_FROM'),'blacked_from',true,false,false,array(0,0,$details['blacked_from_month'],$details['blacked_from_day'],$details['blacked_from_year']),10,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('BLACKED_TO'),do_lang_tempcode('DESCRIPTION_BLACKED_TO'),'blacked_to',true,false,false,array(0,0,$details['blacked_to_month'],$details['blacked_to_day'],$details['blacked_to_year']),10,NULL,NULL,true,get_server_timezone()));
 		$fields->attach(form_input_text(do_lang_tempcode('BLACKED_EXPLANATION'),do_lang_tempcode('DESCRIPTION_BLACKED_EXPLANATION'),'blacked_explanation',is_null($details['blacked_explanation'])?'':get_translated_text($details['blacked_explanation']),true));
 
 		$_bookables=new ocp_tempcode();
@@ -988,9 +988,9 @@ class Module_cms_booking_bookings extends standard_crud_module
 		if (!array_key_exists(0,$_bookable)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
 		$bookable=$_bookable[0];
 
-		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','bookable_'.strval($details['bookable_id']).'_date_from',false,false,false,array(0,0,$details['start_month'],$details['start_day'],$details['start_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+		$fields->attach(form_input_date(do_lang_tempcode('FROM'),'','bookable_'.strval($details['bookable_id']).'_date_from',true,false,false,array(0,0,$details['start_month'],$details['start_day'],$details['start_year']),10,NULL,NULL,true,get_server_timezone()));
 		if ($bookable['dates_are_ranges']==1)
-			$fields->attach(form_input_date(do_lang_tempcode('TO'),'','bookable_'.strval($details['bookable_id']).'_date_to',false,false,false,array(0,0,$details['end_month'],$details['end_day'],$details['end_year']),10,NULL,NULL,NULL,true,get_server_timezone()));
+			$fields->attach(form_input_date(do_lang_tempcode('TO'),'','bookable_'.strval($details['bookable_id']).'_date_to',true,false,false,array(0,0,$details['end_month'],$details['end_day'],$details['end_year']),10,NULL,NULL,true,get_server_timezone()));
 		$fields->attach(form_input_integer(do_lang_tempcode('QUANTITY'),'','bookable_'.strval($details['bookable_id']).'_quantity',$details['quantity'],true));
 		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),'','bookable_'.strval($details['bookable_id']).'_notes',$details['notes'],false));
 

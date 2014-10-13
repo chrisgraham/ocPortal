@@ -76,10 +76,6 @@ function chat_load(room_id)
 	window.text_colour=document.getElementById('text_colour');
 	if (window.text_colour) window.text_colour.style.color=text_colour.value;
 
-	var event=window.YAHOO.util.Event;
-
-	event.onDOMReady(load_colour_picker);
-
 	manage_scroll_height(document.getElementById('post'));
 }
 
@@ -141,31 +137,6 @@ function on_font_change(o)
 	document.getElementById('font').value=value;
 	document.getElementById('post').style.fontFamily=value;
 	manage_scroll_height(document.getElementById('post'));
-}
-
-function load_colour_picker()
-{
-	window.picker_node=document.createElement('div');
-	window.picker_node.style.width='305px';
-	window.picker_node.style.height='192px';
-	window.picker_node.style.visibility='hidden';
-	window.picker_node.style.border='1px solid black';
-	window.picker_node.style.backgroundColor='white';
-	window.picker_node.style.position='absolute';
-	window.picker_node.id='colour_picker';
-	text_colour.form.appendChild(window.picker_node);
-	window.picker=new window.YAHOO.widget.ColorPicker("colour_picker", {
-		showhexsummary: false,
-		showrgbcontrols: false,
-		showwebsafe: false,
-		images: {
-	       PICKER_THUMB: "{$IMG#,colour_picker/picker_thumb}",
-	       HUE_THUMB: "{$IMG#,colour_picker/hue_thumb}"
-	   }
-	});
-	update_picker_colour();
-	window.picker.on("rgbChange",chat_on_rgb_change);
-	picker_node.ondblclick=function() { window.picker_node.style.visibility='hidden'; };
 }
 
 function get_ticked_people(form)
@@ -532,7 +503,7 @@ function process_chat_xml_messages(ajax_result,skip_incoming_sound)
 						alert_box_wrap.style.display='block';
 						var alert_box=document.getElementById('alert_box');
 						set_inner_html(alert_box,'{!NOW_ONLINE;^}'.replace('{'+'1}',username));
-						window.setTimeout(function () {
+						window.setTimeout(function() {
 							if (document.getElementById('alert_box')) // If the alert box is still there, remove it
 								alert_box_wrap.style.display='none';
 						} , window.TRANSITORY_ALERT_TIME);
@@ -865,7 +836,7 @@ function create_overlay_event(skip_incoming_sound,member_id,message,click_event,
 	// Contact ones disappear after a time
 	if (room_id===null)
 	{
-		window.setTimeout(function () {
+		window.setTimeout(function() {
 			close_popup();
 		} , window.TRANSITORY_ALERT_TIME);
 	}

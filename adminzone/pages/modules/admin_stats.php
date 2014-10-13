@@ -379,8 +379,8 @@ class Module_admin_stats
 			$prior_month_start=$first_stat;
 			$month_start=time();
 		}
-		$fields->attach(form_input_date(do_lang_tempcode('FROM'),do_lang_tempcode('TIME_RANGE_START'),'time_start',true,false,false,$prior_month_start,$years_ahead,$year_start));
-		$fields->attach(form_input_date(do_lang_tempcode('TO'),do_lang_tempcode('TIME_RANGE_END'),'time_end',true,false,false,$month_start,$years_ahead,$year_start));
+		$fields->attach(form_input_date(do_lang_tempcode('FROM'),do_lang_tempcode('TIME_RANGE_START'),'time_start',false,false,false,$prior_month_start,$years_ahead,$year_start));
+		$fields->attach(form_input_date(do_lang_tempcode('TO'),do_lang_tempcode('TIME_RANGE_END'),'time_end',false,false,false,$month_start,$years_ahead,$year_start));
 		if (!is_null($extra_fields)) $fields->attach($extra_fields);
 
 		$post_url=get_self_url(false,false,array('dated'=>1),false,true);

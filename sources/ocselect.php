@@ -337,11 +337,11 @@ function form_for_ocselect($filter,$labels=NULL,$content_type=NULL,$types=NULL)
 		switch ($field_type) // NB: These type codes also vaguelly correspond to field hooks, just for convention (we don't use them)
 		{
 			case 'time':
-				$form_fields->attach(form_input_date($field_label,'',$field_name,true,$default_value=='',true,($default_value=='')?NULL:intval($default_value)));
+				$form_fields->attach(form_input_date($field_label,'',$field_name,false,$default_value=='',true,($default_value=='')?NULL:intval($default_value)));
 				break;
 
 			case 'date':
-				$form_fields->attach(form_input_date($field_label,'',$field_name,true,$default_value=='',false,($default_value=='')?NULL:intval($default_value)));
+				$form_fields->attach(form_input_date($field_label,'',$field_name,false,$default_value=='',false,($default_value=='')?NULL:intval($default_value)));
 				break;
 
 			case 'days':

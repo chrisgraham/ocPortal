@@ -11,7 +11,7 @@
 {FORM}
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		var submit_button=document.getElementById('submit_button');
 		submit_button.old_onclick=submit_button.onclick;
 		submit_button.onclick=function(event) {
@@ -33,5 +33,5 @@
 			button.parentNode.removeChild(progress_ticker);
 		};
 		max_size_field.parentNode.appendChild(button,max_size_field);
-	} );
+	});
 //]]></script>

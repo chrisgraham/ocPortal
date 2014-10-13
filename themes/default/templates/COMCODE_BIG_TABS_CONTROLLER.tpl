@@ -27,7 +27,7 @@
 		}
 	{+END}
 
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		big_tabs_init();
 
 		window.a{$FIX_ID,{PASS_ID|}}_big_tab=[];
@@ -39,5 +39,5 @@
 			window.big_tabs_switch_time_{$FIX_ID,{PASS_ID|}}={SWITCH_TIME%};
 			flip_page(0,'{$FIX_ID,{PASS_ID|;}}',a{$FIX_ID,{PASS_ID|}}_big_tab);
 		{+END}
-	} );
+	});
 //]]></script>

@@ -21,7 +21,7 @@
 {TRACE}
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		if ((typeof window.trigger_resize!='undefined') && (window.top!=window)) trigger_resize();
-	} );
+	});
 //]]></script>

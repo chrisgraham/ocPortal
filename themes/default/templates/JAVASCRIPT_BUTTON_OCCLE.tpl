@@ -72,7 +72,7 @@ function load_occle()
 						img.className='';
 					}
 
-					smooth_scroll(0,null,null,function() { document.getElementById('occle_command').focus(); } );
+					smooth_scroll(0,null,null,function() { document.getElementById('occle_command').focus(); });
 					if (typeof window.fade_transition!='undefined')
 					{
 						set_opacity(document.getElementById('command_line'),0.0);

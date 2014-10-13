@@ -114,7 +114,7 @@ class Hook_fields_color
 	{
 		$id=$field['id'];
 		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+		return preg_replace('#^\##','',post_param($tmp_name,$editing?STRING_MAGIC_NULL:''));
 	}
 }
 

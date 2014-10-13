@@ -98,7 +98,7 @@ function script_load_stuff()
 	var stuck_navs=get_elements_by_class_name(document,'stuck_nav');
 	if (stuck_navs.length>0)
 	{
-		add_event_listener_abstract(window,'scroll',function () {
+		add_event_listener_abstract(window,'scroll',function() {
 			for (var i=0;i<stuck_navs.length;i++)
 			{
 				var stuck_nav=stuck_navs[i];
@@ -138,7 +138,7 @@ function script_load_stuff()
 					stuck_nav.style.width='';
 				}
 			}
-		} );
+		});
 	}
 
 	// Font size
@@ -164,10 +164,10 @@ function script_load_stuff()
 
 	page_loaded=true;
 
-	add_event_listener_abstract(window,'real_load',function () { // When images etc have loaded
+	add_event_listener_abstract(window,'real_load',function() { // When images etc have loaded
 		script_page_rendered();
 		page_fully_loaded=true;
-	} );
+	});
 
 	if ((typeof window.ocp_is_staff!='undefined') && (window.ocp_is_staff) && (typeof window.script_load_stuff_staff!='undefined')) script_load_stuff_staff();
 }
@@ -238,7 +238,7 @@ function new_html__initialise(element)
 
 			// Remove tooltips from forms for mouse users as they are for screenreader accessibility only
 			if (element.getAttribute('target')!='_blank')
-				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ } );
+				add_event_listener_abstract(element,'mouseover',function() { try {element.setAttribute('title','');element.title='';}catch(e){};/*IE6 does not like*/ });
 
 			// Convert a/img title attributes into ocPortal tooltips
 			{+START,IF,{$CONFIG_OPTION,js_overlays}}
@@ -311,14 +311,14 @@ function initialise_error_mechanism()
 			}
 			return false;
 		};
-	add_event_listener_abstract(window,'beforeunload',function() { window.onerror=null; } );
+	add_event_listener_abstract(window,'beforeunload',function() { window.onerror=null; });
 }
 if ((typeof window.take_errors!='undefined') && (window.take_errors)) initialise_error_mechanism();
 if (typeof window.unloaded=='undefined')
 {
 	window.unloaded=false; // Serves as a flag to indicate any new errors are probably due to us transitioning
 }
-add_event_listener_abstract(window,'beforeunload',function() { window.unloaded=true; } );
+add_event_listener_abstract(window,'beforeunload',function() { window.unloaded=true; });
 
 /* Screen transition, for staff */
 function staff_unload_action()
@@ -1319,7 +1319,7 @@ function begin_toggleable_tray_animation(element,animate_dif,animate_ticks,final
 
 	var orig_overflow=element.style.overflow;
 	element.style.overflow='hidden';
-	window.setTimeout(function () { toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,animate_ticks,pic); } ,animate_ticks);
+	window.setTimeout(function() { toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,animate_ticks,pic); } ,animate_ticks);
 }
 function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,animate_ticks,pic)
 {
@@ -1334,7 +1334,7 @@ function toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,
 		var num=Math.max(current_height+animate_dif,0);
 		if (animate_dif>0) num=Math.min(num,final_height);
 		element.style.height=num+'px';
-		window.setTimeout(function () { toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,animate_ticks,pic); } ,animate_ticks);
+		window.setTimeout(function() { toggleable_tray_animate(element,final_height,animate_dif,orig_overflow,animate_ticks,pic); } ,animate_ticks);
 	} else
 	{
 		element.style.height='auto';
@@ -3104,7 +3104,7 @@ function replace_comments_form_with_ajax(options,hash,comments_form_id,comments_
 function force_reload_on_back()
 {
 	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
-	var func=function () {
+	var func=function() {
 		window.location.reload();
 	};
 
@@ -3245,21 +3245,21 @@ function add_captcha_validation(form)
 			return true;
 		};
 	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
-	add_event_listener_abstract(window,showevent,function () {
+	add_event_listener_abstract(window,showevent,function() {
 		form.elements['captcha'].src+='&'; // Force it to reload latest captcha
-	} );
+	});
 }
 
 /* Set it up so a form field is known and can be monitored for changes */
 function set_up_change_monitor(id)
 {
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		if (typeof window._set_up_change_monitor!='undefined')
 		{
 			var ch=(typeof id=='string')?document.getElementById(id):id;
 			if (ch) _set_up_change_monitor(ch.parentNode);
 		}
-	} );
+	});
 }
 
 /* Used by MASS_SELECT_MARKER.tpl */

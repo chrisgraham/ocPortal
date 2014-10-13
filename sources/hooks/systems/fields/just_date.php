@@ -139,7 +139,7 @@ class Hook_fields_just_date
 		*/
 		$min_year=NULL;
 		$years_to_show=NULL;
-		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),false,$time,$years_to_show,$min_year);
+		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==1,($field['cf_required']==0) && ($actual_value==''),false,$time,$years_to_show,$min_year);
 	}
 
 	/**
@@ -156,11 +156,10 @@ class Hook_fields_just_date
 		$id=$field['id'];
 		$stub='field_'.strval($id);
 
-		$year=post_param_integer($stub.'_year',NULL);
+		require_code('temporal2');
+		list($year,$month,$day)=get_input_date_components($stub);
 		if (is_null($year)) return $editing?STRING_MAGIC_NULL:'';
-		$month=post_param_integer($stub.'_month',NULL);
 		if (is_null($month)) return $editing?STRING_MAGIC_NULL:'';
-		$day=post_param_integer($stub.'_day',NULL);
 		if (is_null($day)) return $editing?STRING_MAGIC_NULL:'';
 
 		return str_pad(strval($year),4,'0',STR_PAD_LEFT).'-'.str_pad(strval($month),2,'0',STR_PAD_LEFT).'-'.str_pad(strval($day),2,'0',STR_PAD_LEFT);

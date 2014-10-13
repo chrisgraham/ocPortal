@@ -20,9 +20,9 @@
 	{$,If is for deletion}
 	{+START,IF,{$EQ,{NAME},delete}}
 		<script>// <![CDATA[
-			add_event_listener_abstract(window,'load',function () {
+			add_event_listener_abstract(window,'load',function() {
 				assign_radio_deletion_confirm('{NAME;/}');
-			} );
+			});
 		//]]></script>
 	{+END}
 {+END}

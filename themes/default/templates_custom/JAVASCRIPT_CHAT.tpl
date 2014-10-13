@@ -101,9 +101,9 @@ function xmpp_connect(username,password,onLoginCompleted)
 			endpoint: "http://{$DOMAIN#}:5280/http-bind/" // Same origin policy support
 		},
 		stanzaProvider: sp
-	} );
-	window.con.on("connect", function() { onConnectForLogin(username,password,onLoginCompleted) }, this, {single: true} );
-	window.con.on("error", onConnectError, this, {single: true} );
+	});
+	window.con.on("connect", function() { onConnectForLogin(username,password,onLoginCompleted) }, this, {single: true});
+	window.con.on("error", onConnectError, this, {single: true});
 	window.con.connect( "{$DOMAIN;}" );
 }
 
@@ -126,13 +126,13 @@ function onConnectForLogin(username,password,onLoginCompleted)
 
 	window.mucMan = window.Xmpp4Js.Muc.MucManager.getInstanceFor( window.con, "conference.{$DOMAIN;}", window.extProvider );
 
-	add_event_listener_abstract(window,'unload',function () {
+	add_event_listener_abstract(window,'unload',function() {
 		if (window.con.isConnected()) // Clean shutdown
 		{
 			if (window.room) window.room.part();
 			window.con.close();
 		}
-	} );
+	});
 
 	window.setInterval( function() {
 		if (!window.con.isConnected()) // Auto reconnect on errors

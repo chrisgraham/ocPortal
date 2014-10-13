@@ -197,7 +197,7 @@ function permission_repeating(button,name)
 		window.permission_copying=null;
 		for (var i=0;i<trs.length;i++)
 		{
-			trs[i].onclick=function () {};
+			trs[i].onclick=function() {};
 		}
 	}
 

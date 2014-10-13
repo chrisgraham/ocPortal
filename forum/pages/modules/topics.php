@@ -1525,7 +1525,7 @@ class Module_topics
 				$moderation_options[]=array(do_lang_tempcode('SUNK'),'sunk',false,do_lang_tempcode('DESCRIPTION_SUNK'));
 			if (!$private_topic) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));
 			if (addon_installed('calendar'))
-				$specialisation2->attach(form_input_date__scheduler(do_lang_tempcode('OCF_PUBLICATION_TIME'),do_lang_tempcode('OCF_DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true));
+				$specialisation2->attach(form_input_date__scheduler(do_lang_tempcode('OCF_PUBLICATION_TIME'),do_lang_tempcode('OCF_DESCRIPTION_PUBLICATION_TIME'),'schedule',false,true,true));
 		} else
 		{
 			$hidden_fields->attach(form_input_hidden('open','1'));
@@ -1882,7 +1882,7 @@ class Module_topics
 			if (!is_null($forum_id)) $options[]=array(do_lang_tempcode('CASCADING'),'cascading',$topic_info[0]['t_cascading']==1,do_lang_tempcode('DESCRIPTION_CASCADING'));
 			$specialisation2->attach(form_input_various_ticks($options,''));
 			if (addon_installed('calendar'))
-				$specialisation2->attach(form_input_date__scheduler(do_lang_tempcode('OCF_PUBLICATION_TIME'),do_lang_tempcode('OCF_DESCRIPTION_PUBLICATION_TIME'),'schedule',true,true,true));
+				$specialisation2->attach(form_input_date__scheduler(do_lang_tempcode('OCF_PUBLICATION_TIME'),do_lang_tempcode('OCF_DESCRIPTION_PUBLICATION_TIME'),'schedule',false,true,true));
 		}
 
 		require_code('content2');

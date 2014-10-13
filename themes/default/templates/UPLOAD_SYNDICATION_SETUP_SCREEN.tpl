@@ -3,7 +3,7 @@
 </p>
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		var win_parent=window.parent;
 		if (!win_parent) win_parent=window.opener;
 
@@ -17,5 +17,5 @@
 			else
 				win.close();
 		}, 4000);
-	} );
+	});
 //]]></script>

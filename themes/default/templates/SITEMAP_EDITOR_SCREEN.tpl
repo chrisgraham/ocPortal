@@ -23,9 +23,9 @@
 				</div>
 			</form>
 			<script>// <![CDATA[
-				add_event_listener_abstract(window,'load',function () {
+				add_event_listener_abstract(window,'load',function() {
 					window.sitemap=new tree_list('tree_list','data/sitemap.php?start_links=1&get_perms=0{$KEEP;}','','',false,null,true);
-				} );
+				});
 
 				var actions_tpl='{!ACTIONS;}:<ul role="navigation" class="actions_list">[1]<\/ul>';
 				var actions_tpl_item='<li><a href="[2]">[1]<\/a><\/li>';

@@ -78,7 +78,7 @@ function fetch_more_fields()
 		}
 		edit_field_store.appendChild(store);
 	}
-//	window.setTimeout(function () { form.submit(); } , 1000);
+//	window.setTimeout(function() { form.submit(); } , 1000);
 }
 
 function select_ze_tab(id,tab)
@@ -162,7 +162,7 @@ function ze_animate_to(ob,amount,towards_expanded,now)
 		{
 			ob.style.width=(w_now-0.5)+'em';
 		}
-		window.ze_timer[ob.id]=window.setTimeout(function () { ze_animate_to(ob,amount,towards_expanded,now); } , 10 );
+		window.ze_timer[ob.id]=window.setTimeout(function() { ze_animate_to(ob,amount,towards_expanded,now); } , 10 );
 	} else
 	{
 		window.ze_timer[ob.id]=null;

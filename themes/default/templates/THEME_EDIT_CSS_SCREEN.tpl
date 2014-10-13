@@ -432,14 +432,14 @@
 
 		{+START,IF_NON_EMPTY,{ENTRIES}}
 			<div id="colours_go_here">
-				<script>// <![CDATA[
-					if (typeof window.do_color_chooser!='undefined')
-					{
-						{ENTRIES}
-						do_color_chooser();
-					}
-				//]]></script>
 			</div>
+			<script>// <![CDATA[
+				if (typeof window.do_color_chooser!='undefined')
+				{
+					{ENTRIES}
+					do_color_chooser();
+				}
+			//]]></script>
 		{+END}
 
 		<input type="hidden" name="theme" value="{THEME*}" />
@@ -488,7 +488,7 @@
 {+END}
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		if (window.location.hash) window.setTimeout(function() {
 			document.getElementById('frame_css').contentWindow.editArea.execCommand('show_search');
 			document.getElementById('frame_css').contentWindow.document.getElementById('area_search').value=window.location.hash.substr(1,window.location.hash.length-1);
@@ -504,7 +504,7 @@
 			{+END}
 			if (document.getElementById('switch_button')) document.getElementById('switch_button').style.display='none';
 		}
-	} );
+	});
 //]]></script>
 
 {+START,IF,{$JS_ON}}

@@ -8,9 +8,9 @@ RIGHT=1
 	<!-- List put in here -->
 </div>
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		new tree_list('{NAME;*}','data/ajax_tree.php?hook={HOOK&;}{$KEEP;}','{ROOT_ID&;}','{OPTIONS&;}',{$?,{MULTI_SELECT},true,false},{TABINDEX%},false{+START,IF,{USE_SERVER_ID}},true{+END});
-	} );
+	});
 //]]></script>
 
 {+START,IF_NON_EMPTY,{DEFAULT}}

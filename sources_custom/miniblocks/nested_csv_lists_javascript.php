@@ -30,13 +30,13 @@ foreach ($csv_structure['csv_files'] as $csv_filename=>$csv_file)
 echo "
 	window.nested_csv_structure=".json_encode($csv_structure).";
 
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		var forms=document.getElementsByTagName('form');
 		for (var i=0;i<forms.length;i++)
 		{
 			inject_form_select_chaining__form(forms[i]);
 		}
-	} );
+	});
 
 	function inject_form_select_chaining__form(form)
 	{

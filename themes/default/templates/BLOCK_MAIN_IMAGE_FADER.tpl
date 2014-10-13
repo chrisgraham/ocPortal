@@ -36,7 +36,7 @@
 </noscript>
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		var fp_animation=document.getElementById('image_fader_{$GET,RAND}');
 		var fp_animation_fader=document.createElement('img');
 		var tease_title=document.getElementById('image_fader_title_{$GET,RAND}');
@@ -86,5 +86,5 @@
 				window.setInterval(func{_loop_key%},{MILL%}*{IMAGES});
 			},{_loop_key%}*{MILL%});
 		{+END}
-	} );
+	});
 //]]></script>

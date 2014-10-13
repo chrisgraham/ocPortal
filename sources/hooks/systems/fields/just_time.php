@@ -132,7 +132,7 @@ class Hook_fields_just_time
 
 			$time=array(intval($time_bits[1]),intval($time_bits[0]),intval(date('m')),intval(date('d')),intval(date('Y')));
 		}
-		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==0,($field['cf_required']==0) && ($actual_value==''),true,$time,1,1900,NULL,$field['cf_required']==1,false,NULL,false);
+		return form_input_date($_cf_name,$_cf_description,'field_'.strval($field['id']),$field['cf_required']==1,($field['cf_required']==0) && ($actual_value==''),true,$time,1,1900,NULL,false,NULL,false);
 	}
 
 	/**
@@ -149,8 +149,24 @@ class Hook_fields_just_time
 		$id=$field['id'];
 		$stub='field_'.strval($id);
 
-		$hour=post_param_integer($stub.'_hour',0);
-		$minute=post_param_integer($stub.'_minute',0);
+		$time=post_param($stub,NULL);
+		if (!is_null($time))
+		{
+			$matches=array();
+			if (preg_match('#^(\d\d):(\d\d)$#',$time,$matches)!=0)
+			{
+				$hour=intval($matches[1]);
+				$minute=intval($matches[2]);
+			} else
+			{
+				$hour=NULL;
+				$minute=NULL;
+			}
+		} else
+		{
+			$hour=post_param_integer($stub.'_hour',0);
+			$minute=post_param_integer($stub.'_minute',0);
+		}
 
 		return strval($hour).':'.strval($minute);
 	}

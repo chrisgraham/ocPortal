@@ -28,16 +28,16 @@
 	{$,Tie into callback event to see when finished, for our slideshows}
 	{$,API: http://developer.apple.com/library/safari/#documentation/QuickTime/Conceptual/QTScripting_JavaScript/bQTScripting_JavaScri_Document/QuickTimeandJavaScri.html}
 	<script>// <![CDATA[
-		add_event_listener_abstract(window,'real_load',function () {
+		add_event_listener_abstract(window,'real_load',function() {
 			if (document.getElementById('next_slide'))
 			{
 				stop_slideshow_timer();
 				window.setTimeout(function() {
-					add_event_listener_abstract(document.getElementById('{$GET;,player_id}'),'qt_ended',function() { player_stopped(); } );
+					add_event_listener_abstract(document.getElementById('{$GET;,player_id}'),'qt_ended',function() { player_stopped(); });
 					document.getElementById('{$GET;,player_id}').Play();
 				}, 1000);
 			}
-		} );
+		});
 	//]]></script>
 
 	{+START,IF_NON_EMPTY,{DESCRIPTION}}

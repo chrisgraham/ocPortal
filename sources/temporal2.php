@@ -270,43 +270,89 @@ function _get_timezone_list()
 }
 
 /**
- * Check a POST inputted date for validity, and get the Unix timestamp for the inputted date.
+ * Check a POST inputted date for validity, and get the dat/time components.
  *
  * @param  ID_TEXT		The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
+ * @param  ?integer		Default year (NULL: none)
+ * @param  ?integer		Default month (NULL: none)
+ * @param  ?integer		Default day (NULL: none)
  * @param  boolean		Whether to allow over get parameters also
- * @param  boolean		Whether to do timezone conversion
- * @return ?TIME			The timestamp of the date (NULL: no input date was chosen)
+ * @return array			The date/time components
  */
-function _get_input_date($stub,$get_also=false,$do_timezone_conversion=true)
+function get_input_date_components($stub,$year=NULL,$month=NULL,$day=NULL,$get_also=false)
 {
+	$default_ret=array($year,$month,$day,0,0);
+
 	$timezone=post_param('timezone',get_users_timezone());
 	if ($get_also)
 	{
-//		if (either_param_integer($stub,0)==0) return NULL; // NULL was chosen		Doesn't work like this now
+		$date=either_param($stub,NULL);
+		if (!is_null($date)) // HTML5 input style
+		{
+			$matches=array();
+			if (preg_match('#^(\d\d\d\d)-(\d\d)-(\d\d)$#',$date,$matches)==0) return $default_ret;
 
-		$year=either_param_integer($stub.'_year',NULL);
-		if (is_null($year)) return NULL;
-		$month=either_param_integer($stub.'_month',NULL);
-		if (is_null($month)) return NULL;
-		$day=either_param_integer($stub.'_day',NULL);
-		if (is_null($day)) return NULL;
-		$hour=either_param_integer($stub.'_hour',NULL);
-		$minute=either_param_integer($stub.'_minute',NULL);
+			$year=intval($matches[1]);
+			$month=intval($matches[2]);
+			$day=intval($matches[3]);
+
+			$time=either_param($stub.'_time',NULL);
+			if ((!is_null($time)) && (preg_match('#^(\d\d):(\d\d)$#',$time,$matches)!=0))
+			{
+				$hour=intval($matches[1]);
+				$minute=intval($matches[2]);
+			} else
+			{
+				$hour=NULL;
+				$minute=NULL;
+			}
+		} else // Legacy input style
+		{
+			$year=either_param_integer($stub.'_year',NULL);
+			if (is_null($year)) return $default_ret;
+			$month=either_param_integer($stub.'_month',NULL);
+			if (is_null($month)) return $default_ret;
+			$day=either_param_integer($stub.'_day',NULL);
+			if (is_null($day)) return $default_ret;
+
+			$hour=either_param_integer($stub.'_hour',NULL);
+			$minute=either_param_integer($stub.'_minute',NULL);
+		}
 	} else
 	{
-//		if (post_param_integer($stub,0)==0) return NULL; // NULL was chosen		Doesn't work like this now
+		$date=post_param($stub,NULL);
+		if (!is_null($date)) // HTML5 input style
+		{
+			$matches=array();
+			if (preg_match('#^(\d\d\d\d)-(\d\d)-(\d\d)$#',$date,$matches)==0) return $default_ret;
 
-		$year=post_param_integer($stub.'_year',NULL);
-		if (is_null($year)) return NULL;
-		$month=post_param_integer($stub.'_month',NULL);
-		if (is_null($month)) return NULL;
-		$day=post_param_integer($stub.'_day',NULL);
-		if (is_null($day)) return NULL;
-		$hour=post_param_integer($stub.'_hour',NULL);
-		$minute=post_param_integer($stub.'_minute',NULL);
+			$year=intval($matches[1]);
+			$month=intval($matches[2]);
+			$day=intval($matches[3]);
+
+			$time=post_param($stub.'_time',NULL);
+			if ((!is_null($time)) && (preg_match('#^(\d\d):(\d\d)$#',$time,$matches)!=0))
+			{
+				$hour=intval($matches[1]);
+				$minute=intval($matches[2]);
+			} else
+			{
+				$hour=NULL;
+				$minute=NULL;
+			}
+		} else // Legacy input style
+		{
+			$year=post_param_integer($stub.'_year',NULL);
+			if (is_null($year)) return $default_ret;
+			$month=post_param_integer($stub.'_month',NULL);
+			if (is_null($month)) return $default_ret;
+			$day=post_param_integer($stub.'_day',NULL);
+			if (is_null($day)) return $default_ret;
+
+			$hour=post_param_integer($stub.'_hour',NULL);
+			$minute=post_param_integer($stub.'_minute',NULL);
+		}
 	}	
-
-	if (!checkdate($month,$day,$year)) warn_exit(do_lang_tempcode('INVALID_DATE_GIVEN'));
 
 	if (is_null($hour))
 	{
@@ -321,13 +367,32 @@ function _get_input_date($stub,$get_also=false,$do_timezone_conversion=true)
 		}
 	}
 
+	if (!checkdate($month,$day,$year)) warn_exit(do_lang_tempcode('INVALID_DATE_GIVEN'));
+
+	return array($year,$month,$day,$hour,$minute);
+}
+
+/**
+ * Check a POST inputted date for validity, and get the Unix timestamp for the inputted date.
+ *
+ * @param  ID_TEXT		The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
+ * @param  boolean		Whether to allow over get parameters also
+ * @param  boolean		Whether to do timezone conversion
+ * @return ?TIME			The timestamp of the date (NULL: no input date was chosen)
+ */
+function _get_input_date($stub,$get_also=false,$do_timezone_conversion=true)
+{
+	$timezone=post_param('timezone',get_users_timezone());
+
+	list($year,$month,$day,$hour,$minute)=get_input_date_components($stub,NULL,NULL,NULL,$get_also);
+	if (is_null($year)) return NULL;
+
 	$time=mktime($hour,$minute,0,$month,$day,$year);
 	if ($do_timezone_conversion)
 	{
 		if (($year>=1970) || (@strftime('%Y',@mktime(0,0,0,1,1,1963))=='1963')) // Only try and do timezone conversion if we can do proper maths this far back
 		{
-			$amount_forward=tz_time($time,$timezone)-$time;
-			$time=$time-$amount_forward;
+			$time=$time*2-tz_time($time,$timezone);
 		}
 	}
 

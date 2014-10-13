@@ -13,7 +13,7 @@
 <script>// <![CDATA[
 	var showevent=(typeof window.onpageshow!='undefined')?'pageshow':'load';
 
-	var func=function () {
+	var func=function() {
 		document.getElementById('captcha_readable').src+='&'; // Force it to reload latest captcha
 	};
 

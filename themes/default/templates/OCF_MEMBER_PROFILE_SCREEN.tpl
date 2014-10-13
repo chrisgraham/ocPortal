@@ -28,7 +28,7 @@
 
 								load_snippet('profile_tab&tab={TAB_CODE%}&member_id={MEMBER_ID%}'+window.location.search.replace('?','&'),null,function(result) {
 									set_inner_html(document.getElementById('g_{TAB_CODE*}'),result.responseText);
-								} );
+								});
 
 								// Self destruct loader after this first run
 								try { delete window['load_tab__{TAB_CODE*}']; } catch (e) {};
@@ -55,10 +55,10 @@
 		var old_hash=window.location.hash;
 		window.location.hash='#';
 
-		add_event_listener_abstract(window,'load',function () {
+		add_event_listener_abstract(window,'load',function() {
 			window.location.hash='#';
 
 			find_url_tab(old_hash);
-		} );
+		});
 	//]]></script>
 {+END}

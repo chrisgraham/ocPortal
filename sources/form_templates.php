@@ -672,8 +672,6 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
 		return form_input_line($pretty_name,$description,$name,$default,$required,$tabindex);
 	}
 
-	require_javascript('javascript_theme_colours');
-
 	if (is_null($default)) $default='';
 
 	$default=filter_form_field_default($name,$default);
@@ -681,8 +679,7 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
 	$tabindex=get_form_field_tabindex($tabindex);
 
 	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_COLOUR',array('_GUID'=>'9a1a8061cebd717ea98522984d9465af','RAW_FIELD'=>false,'REQUIRED'=>$required,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'TABINDEX'=>strval($tabindex),'_REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
+	return do_template('FORM_SCREEN_INPUT_COLOUR',array('_GUID'=>'9a1a8061cebd717ea98522984d9465af','RAW_FIELD'=>false,'REQUIRED'=>$required,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'TABINDEX'=>strval($tabindex),'_REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
 }
 
 /**
@@ -1654,7 +1651,7 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
  *
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field
- * @param  ID_TEXT		The parameter name stub for this input field (it's actually a composite field, read in by passing this stub to post_param_date)
+ * @param  ID_TEXT		The parameter name for this input field
  * @param  boolean		Whether this is a required field
  * @param  boolean		Whether this field is empty by default
  * @param  boolean		Whether to input time for this field also
@@ -1664,11 +1661,11 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL)
+function form_input_date__scheduler($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL)
 {
 	if (cron_installed())
 	{
-		return form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex);
+		return form_input_date($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex);
 	}
 	return new ocp_tempcode();
 }
@@ -1678,7 +1675,7 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  *
  * @param  mixed			A human intelligible name for this input field
  * @param  mixed			A description for this input field
- * @param  ID_TEXT		The parameter name stub for this input field (it's actually a composite field, read in by passing this stub to post_param_date)
+ * @param  ID_TEXT		The parameter name for this input field
  * @param  boolean		Whether this is not a required field
  * @param  boolean		Whether this field is empty by default
  * @param  boolean		Whether to input time for this field also
@@ -1686,24 +1683,21 @@ function form_input_date__scheduler($pretty_name,$description,$stub,$null_ok,$nu
  * @param  ?integer		The number of years to allow selection from (pass a negative number for selection of past years instead of future years) (NULL: no limit)
  * @param  ?integer		The year to start from (NULL: this year)
  * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ?boolean		Whether this is rendered in pink as a required field (NULL: depend on $null_ok)
  * @param  boolean		Whether to input date for this field (if false, will just do time)
  * @param  ?ID_TEXT		Timezone to input in (NULL: current user's timezone)
  * @param  boolean		Convert $default_time to $timezone
  * @return tempcode		The input field
  */
-function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
+function form_input_date($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
 {
-	if (is_null($required)) $required=!$null_ok;
-
-	$input=_form_input_date($stub,$null_ok,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex,$required,$do_date,$timezone,$handle_timezone);
-	return _form_input($stub,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
+	$input=_form_input_date($name,$required,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex,$do_date,$timezone,$handle_timezone);
+	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
  * Get the tempcode for a date input, raw.
  *
- * @param  ID_TEXT		The parameter name stub for this input field (it's actually a composite field, read in by passing this stub to post_param_date)
+ * @param  ID_TEXT		The parameter name for this input field
  * @param  boolean		Whether this is a required field
  * @param  boolean		Whether this field is empty by default
  * @param  boolean		Whether to input time for this field also
@@ -1711,27 +1705,14 @@ function form_input_date($pretty_name,$description,$stub,$null_ok,$null_default,
  * @param  ?integer		The number of years to allow selection from (pass a negative number for selection of past years instead of future years) (NULL: no limit)
  * @param  ?integer		The year to start from (NULL: this year)
  * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ?boolean		Whether this is rendered in pink as a required field (NULL: depend on $null_ok)
  * @param  boolean		Whether to input date for this field (if false, will just do time)
  * @param  ?ID_TEXT		Timezone to input in (NULL: current user's timezone)
  * @param  boolean		Convert $default_time to $timezone
  * @return tempcode		The input field
  */
-function _form_input_date($stub,$null_ok,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$required=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
+function _form_input_date($name,$required,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
 {
 	$tabindex=get_form_field_tabindex($tabindex);
-
-	require_lang('dates');
-
-	require_javascript('javascript_multi');
-	require_javascript('javascript_yahoo');
-	require_javascript('javascript_yahoo_events');
-	require_javascript('javascript_date_chooser');
-	require_css('date_chooser');
-
-	if (is_null($year_start)) $year_start=intval(date('Y'));
-
-	$untuned_year_start=$year_start; // The $year_start may go down if our default date requires it, but we need to know what our $total_years_to_show should really be relative to
 
 	$default_minute=mixed();
 	$default_hour=mixed();
@@ -1758,7 +1739,7 @@ function _form_input_date($stub,$null_ok,$null_default,$do_time,$default_time=NU
 			}
 		}
 
-		$_default_time=filter_form_field_default($stub,is_null($default_time)?'':strval($default_time));
+		$_default_time=filter_form_field_default($name,is_null($default_time)?'':strval($default_time));
 		$default_time=($_default_time=='')?NULL:intval($_default_time);
 
 		if ((!is_null($default_time)) && ($handle_timezone))
@@ -1769,131 +1750,59 @@ function _form_input_date($stub,$null_ok,$null_default,$do_time,$default_time=NU
 
 		$default_minute=is_null($default_time)?NULL:intval(date('i',$default_time));
 		$default_hour=is_null($default_time)?NULL:intval(date('H',$default_time));
-		$default_month=is_null($default_time)?NULL:intval(date('n',$default_time));
 		$default_day=is_null($default_time)?NULL:intval(date('j',$default_time));
+		$default_month=is_null($default_time)?NULL:intval(date('n',$default_time));
 		$default_year=is_null($default_time)?NULL:intval(date('Y',$default_time));
 	}
 
-	if ((is_integer($default_year)) && ($default_year<$year_start)) $year_start=$default_year;
+	if ((!is_null($year_start)) && (!is_null($default_year)))
+	{
+		if ($default_year<$year_start) $year_start=$default_year;
+	}
 
-	ob_start();
-	for ($minute=0;$minute<60;$minute++)
+	$year_end=mixed();
+	if ((!is_null($total_years_to_show)) && (!is_null($default_year)))
 	{
-		$_minute=strval($minute);
-		//$temp=form_input_list_entry($_minute,$minute===$default_minute,($minute<10)?str_pad($_minute,2,'0',STR_PAD_LEFT):$_minute);
-		//$temp->evaluate_echo();
-		echo '<option '.(($minute===$default_minute)?'selected="selected" ':'').'value="'.escape_html($_minute).'">'.escape_html(($minute<10)?str_pad($_minute,2,'0',STR_PAD_LEFT):$_minute).'</option>'; // XHTMLXHTML
+		$year_end=$year_start+$total_years_to_show;
+		if ($default_year>$year_end) $year_end=$default_year;
 	}
-	$minutes=ob_get_clean();
-	ob_start();
-	for ($hour=0;$hour<24;$hour++)
-	{
-		$text_hour=locale_filter(gmdate(do_lang('time_hour'),intval($hour*60*60)));
-		//$temp=form_input_list_entry(strval($hour),$hour===$default_hour,$text_hour);
-		//$temp->evaluate_echo();
-		echo '<option '.(($hour===$default_hour)?'selected="selected" ':'').'value="'.escape_html(strval($hour)).'">'.escape_html($text_hour).'</option>'; // XHTMLXHTML
-	}
-	$hours=ob_get_clean();
 
-	$time=($do_time)?do_template('FORM_SCREEN_INPUT_TIME',array('_GUID'=>'2d5886e54c7a14e69a8f84bbe62ec84a','NULL_OK'=>$null_ok,'DISABLED'=>$null_default && has_js(),'TABINDEX'=>strval($tabindex),'MINUTES'=>$minutes,'HOURS'=>$hours,'STUB'=>$stub)):new ocp_tempcode();
-	if (!$do_date)
-		return $time;
-	$null=($null_ok)?do_template('FORM_SCREEN_INPUT_DATE_NULL',array('_GUID'=>'22859d15f1b295b08036e1d0308d371a','TICKED'=>!$null_default,'TABINDEX'=>strval($tabindex),'STUB'=>$stub)):new ocp_tempcode();
-	ob_start();
-	for ($i=1;$i<=31;$i++)
+	if ($null_default)
 	{
-		//$temp=form_input_list_entry(strval($i),($i===$default_day));
-		//$temp->evaluate_echo();
-		echo '<option '.(($i===$default_day)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.escape_html(strval($i)).'</option>'; // XHTMLXHTML
+		$default_minute=NULL;
+		$default_hour=NULL;
+		$default_day=NULL;
+		$default_month=NULL;
+		$default_year=NULL;
 	}
-	$days=ob_get_clean();
-	ob_start();
-	for ($i=1;$i<=12;$i++)
-	{
-		switch ($i)
-		{
-			case 1:
-				$month_text=do_lang_tempcode('JANUARY');
-				break;
-			case 2:
-				$month_text=do_lang_tempcode('FEBRUARY');
-				break;
-			case 3:
-				$month_text=do_lang_tempcode('MARCH');
-				break;
-			case 4:
-				$month_text=do_lang_tempcode('APRIL');
-				break;
-			case 5:
-				$month_text=do_lang_tempcode('MAY');
-				break;
-			case 6:
-				$month_text=do_lang_tempcode('JUNE');
-				break;
-			case 7:
-				$month_text=do_lang_tempcode('JULY');
-				break;
-			case 8:
-				$month_text=do_lang_tempcode('AUGUST');
-				break;
-			case 9:
-				$month_text=do_lang_tempcode('SEPTEMBER');
-				break;
-			case 10:
-				$month_text=do_lang_tempcode('OCTOBER');
-				break;
-			case 11:
-				$month_text=do_lang_tempcode('NOVEMBER');
-				break;
-			case 12:
-				$month_text=do_lang_tempcode('DECEMBER');
-				break;
-		}
 
-		//$temp=form_input_list_entry(strval($i),($i===$default_month),$month_text);
-		//$temp->evaluate_echo();
-		echo '<option '.(($i===$default_month)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.$month_text->evaluate().'</option>'; // XHTMLXHTML
-	}
-	$months=ob_get_clean();
-	ob_start();
-	if ((!is_null($total_years_to_show)) && ($total_years_to_show<0))
+	if ($do_date)
 	{
-		$yt=$year_start+$total_years_to_show/*remember $total_years_to_show is negative so this is a subtraction in effect*/;
-		for ($i=max($untuned_year_start,$year_start);$i>=$yt;$i--)
-		{
-			//$temp=form_input_list_entry(strval($i),$i===$default_year);
-			//$temp->evaluate_echo();
-			echo '<option '.(($i===$default_year)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.escape_html(strval($i)).'</option>'; // XHTMLXHTML
-		}
+		$type=$do_time?'datetime':'date';
 	} else
 	{
-		if (is_null($total_years_to_show))
-		{
-			$yt=max($untuned_year_start,$year_start)+5;
-		} else
-		{
-			$yt=max($untuned_year_start,$year_start)+$total_years_to_show;
-		}
-		for ($i=$year_start;$i<=$yt;$i++)
-		{
-			//$temp=form_input_list_entry(strval($i),$i===$default_year);
-			//$temp->evaluate_echo();
-			echo '<option '.(($i===$default_year)?'selected="selected" ':'').'value="'.escape_html(strval($i)).'">'.escape_html(strval($i)).'</option>'; // XHTMLXHTML
-		}
+		$type='time';
 	}
-	$years=ob_get_clean();
-	return do_template('FORM_SCREEN_INPUT_DATE',array(
+
+	return do_template($do_date?'FORM_SCREEN_INPUT_DATE':'FORM_SCREEN_INPUT_TIME',array(
 		'_GUID'=>'5ace58dd0f540f70fb3bd440fb02a430',
-		'NULL_OK'=>$null_ok,
-		'DISABLED'=>$null_default,
+		'REQUIRED'=>$required,
 		'TABINDEX'=>strval($tabindex),
-		'YEARS'=>$years,
-		'MONTHS'=>$months,
-		'DAYS'=>$days,
-		'STUB'=>$stub,
-		'NULL'=>$null,
-		'TIME'=>$time,
-		'UNLIMITED'=>is_null($total_years_to_show),
+		'NAME'=>$name,
+		'TYPE'=>$type,
+
+		'YEAR'=>is_null($default_year)?'':strval($default_year),
+		'MONTH'=>is_null($default_month)?'':strval($default_month),
+		'DAY'=>is_null($default_day)?'':strval($default_day),
+		'HOUR'=>is_null($default_hour)?'':strval($default_hour),
+		'MINUTE'=>is_null($default_minute)?'':strval($default_minute),
+
+		'MIN_DATE_DAY'=>'1',
+		'MIN_DATE_MONTH'=>'1',
+		'MIN_DATE_YEAR'=>is_null($year_start)?'':strval($year_start),
+		'MAX_DATE_DAY'=>'1',
+		'MAX_DATE_MONTH'=>'1',
+		'MAX_DATE_YEAR'=>is_null($year_end)?'':strval($year_end),
 	));
 }
 

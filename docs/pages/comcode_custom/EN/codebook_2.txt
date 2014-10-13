@@ -189,7 +189,7 @@ It is important that:
 [*]You should not put it all on one line, because then the JavaScript line-comment will end up commenting all the code out and nothing will happen.
 [*]Don't use any ocPortal JavaScript except for JavaScript in the main '[tt]JAVASCRIPT.tpl[/tt]' library, unless you have put it inside an '[tt]onload[/tt]' event handler, like:
 [code="HTML"]
-add_event_listener_abstract(window,'load',function () { ... } );
+add_event_listener_abstract(window,'load',function() { ... });
 [/code]
 [*]This is because ocPortal does not want to pre-load any more JavaScript library code than is necessary via loading it in <head> (it stops the page rendering at all until the files have been downloaded), and we can't assume the order JavaScript will be loaded in compared to the order in which inline code is executed (it changes randomly, and between browsers). By putting our code inside an onload handler we force it to only run after all our dependent JavaScript files have loaded.
 [/list]

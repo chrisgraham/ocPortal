@@ -40,9 +40,9 @@
 			</div>
 
 			<script>// <![CDATA[
-				add_event_listener_abstract(window,'load',function () {
+				add_event_listener_abstract(window,'load',function() {
 					initialise_carousel({$GET,carousel_id});
-				} );
+				});
 			//]]></script>
 
 			<hr />

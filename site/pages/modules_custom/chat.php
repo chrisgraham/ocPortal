@@ -135,10 +135,7 @@ class Mx_chat extends Module_chat
 	 */
 	function chat_room()
 	{
-		require_javascript('javascript_yahoo_2');
-		require_javascript('javascript_colour_picker');
 		require_javascript('javascript_posting');
-		require_css('colour_picker');
 
 		$prefs=@$_COOKIE['software_chat_prefs'];
 		$prefs=@explode(';',$prefs);
@@ -186,7 +183,7 @@ class Mx_chat extends Module_chat
 	 */
 	function chat_options()
 	{
-		$value=post_param('text_colour',get_option('chat_default_post_colour')).';'.post_param('font_name',get_option('chat_default_post_font')).';';
+		$value=preg_replace('#^\##','',post_param('text_colour',get_option('chat_default_post_colour'))).';'.post_param('font_name',get_option('chat_default_post_font')).';';
 		require_code('users_active_actions');
 		ocp_setcookie('software_chat_prefs',$value);
 

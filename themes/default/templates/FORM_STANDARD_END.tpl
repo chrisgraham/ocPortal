@@ -57,7 +57,7 @@
 		{+START,IF_NON_PASSED_OR_FALSE,SECONDARY_FORM}
 			if (typeof window.fix_form_enter_key!='undefined') fix_form_enter_key(document.getElementById('submit_button').form);
 		{+END}
-	} );
+	});
 //]]></script>
 
 {+START,IF_PASSED_AND_TRUE,PREVIEW}{+START,IF,{$JS_ON}}{+START,IF,{$CONFIG_OPTION,enable_previews}}

@@ -147,7 +147,6 @@ This is based on the work of Martin Conte Mac Donell (OpenID-realselector) and M
 			'themes/default/images_custom/openid/openid-icons.png',
 			'themes/default/templates_custom/JAVASCRIPT_OPENID.tpl',
 			'themes/default/templates_custom/LOGIN_SCREEN.tpl',
-			'themes/default/templates_custom/JAVASCRIPT_JQUERY.tpl',
 		);
 	}
 }

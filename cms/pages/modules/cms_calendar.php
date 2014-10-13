@@ -463,9 +463,9 @@ class Module_cms_calendar extends standard_crud_module
 		// Dates
 		$fields->attach(form_input_tick(do_lang_tempcode('ALL_DAY_EVENT'),do_lang_tempcode('DESCRIPTION_ALL_DAY_EVENT'),'all_day_event',is_null($start_hour)));
 		$start_day_of_month=find_concrete_day_of_month($start_year,$start_month,$start_day,$start_monthly_spec_type,is_null($start_hour)?find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_hour,is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,$timezone,$do_timezone_conv==1);
-		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',false,false,true,array(is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,is_null($start_hour)?(find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type)+9):$start_hour,$start_month,$start_day_of_month,$start_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone,get_param('date','')==''));
+		$fields->attach(form_input_date(do_lang_tempcode('DATE_TIME'),'','start',true,false,true,array(is_null($start_minute)?find_timezone_start_minute_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type):$start_minute,is_null($start_hour)?(find_timezone_start_hour_in_utc($timezone,$start_year,$start_month,$start_day,$start_monthly_spec_type)+9):$start_hour,$start_month,$start_day_of_month,$start_year),120,intval(date('Y'))-100,NULL,true,$timezone,get_param('date','')==''));
 		$end_day_of_month=find_concrete_day_of_month($end_year,$end_month,$end_day,$end_monthly_spec_type,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,$timezone,$do_timezone_conv==1);
-		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',true,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,$end_month,$end_day_of_month,$end_year),120,intval(date('Y'))-100,NULL,NULL,true,$timezone));
+		$fields->attach(form_input_date(do_lang_tempcode('END_DATE_AND_TIME'),do_lang_tempcode('DESCRIPTION_END_DATE_AND_TIME'),'end',false,is_null($end_year),true,array(is_null($end_minute)?find_timezone_end_minute_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_minute,is_null($end_hour)?find_timezone_end_hour_in_utc($timezone,$end_year,$end_month,$end_day,$end_monthly_spec_type):$end_hour,$end_month,$end_day_of_month,$end_year),120,intval(date('Y'))-100,NULL,true,$timezone));
 
 		// Type
 		$type_list=create_selection_list_event_types($type);
@@ -663,9 +663,8 @@ class Module_cms_calendar extends standard_crud_module
 				$start_day=intval(date('d',$start));
 			} else // Has to be encoded in timezone, no conversion
 			{
-				$start_year=post_param_integer('start_year');
-				$start_month=post_param_integer('start_month');
-				$start_day=post_param_integer('start_day');
+				require_code('temporal2');
+				list($start_year,$start_month,$start_day)=get_input_date_components('start');
 			}
 			if (post_param_integer('all_day_event',0)==1)
 			{
@@ -678,7 +677,10 @@ class Module_cms_calendar extends standard_crud_module
 			}
 			if ($start_monthly_spec_type!='day_of_month')
 			{
-				$start_day=find_abstract_day(post_param_integer('start_year'),post_param_integer('start_month'),post_param_integer('start_day'),$start_monthly_spec_type);
+				require_code('temporal2');
+				list($_start_year,$_start_month,$_start_day)=get_input_date_components('start');
+
+				$start_day=find_abstract_day($_start_year,$_start_month,$_start_day,$start_monthly_spec_type);
 			}
 		}
 		if (fractional_edit())
@@ -702,9 +704,8 @@ class Module_cms_calendar extends standard_crud_module
 					$end_day=intval(date('d',$end));
 				} else // Has to be encoded in timezone, no conversion
 				{
-					$end_year=post_param_integer('end_year');
-					$end_month=post_param_integer('end_month');
-					$end_day=post_param_integer('end_day');
+					require_code('temporal2');
+					list($end_year,$end_month,$end_day)=get_input_date_components('end');
 				}
 				if (post_param_integer('all_day_event',0)==1)
 				{
@@ -718,7 +719,10 @@ class Module_cms_calendar extends standard_crud_module
 
 				if ($end_monthly_spec_type!='day_of_month')
 				{
-					$end_day=find_abstract_day(post_param_integer('end_year'),post_param_integer('end_month'),post_param_integer('end_day'),$end_monthly_spec_type);
+					require_code('temporal2');
+					list($_end_year,$_end_month,$_end_day)=get_input_date_components('end');
+
+					$end_day=find_abstract_day($_end_year,$_end_month,$_end_day,$end_monthly_spec_type);
 				} else
 				{
 					// Error if wrong way around

@@ -410,13 +410,13 @@ function wysiwyg_editor_init_for(element,id)
 			element.value=editor.getData();
 			element.externalonKeyPress(event,element);
 		}
-	} );
+	});
 
 	editor.on('instanceReady', function (event) {
 		set_up_comcode_autocomplete(id);
 
 		find_tags_in_editor(editor,element);
-	} );
+	});
 	window.setInterval(function() {
 		if (is_wysiwyg_field(element))
 			find_tags_in_editor(editor,element);
@@ -430,7 +430,7 @@ function wysiwyg_editor_init_for(element,id)
 			event.data.html=event.data.html.replace(/<br class="Apple-interchange-newline">/g,'<br>');
 			event.data.html=event.data.html.replace(/<div style="text-align: center;"><font class="Apple-style-span" face="'Lucida Grande'"><span class="Apple-style-span" style="font-size: 11px; white-space: pre;"><br><\/span><\/font><\/div>$/,'<br><br>');
 		}
-	} );
+	});
 
 	editor.on('contentDom',function() {
 		editor.document.on('dragover',function(e) {

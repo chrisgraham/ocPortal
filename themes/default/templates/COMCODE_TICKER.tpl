@@ -5,7 +5,7 @@
 <div class="ticker_wrap" role="marquee" id="ticktickticker{$GET,RAND_ID_TICKER}"></div>
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		var ticktickticker=document.getElementById('ticktickticker{$GET,RAND_ID_TICKER}');
 		if ((browser_matches('opera')) || (browser_matches('chrome'))) // Slower, but chrome does not support marquee's
 		{
@@ -20,7 +20,7 @@
 		{
 			set_inner_html(ticktickticker,'<marquee style="display: block" class="ticker" onmouseover="this.setAttribute(\'scrolldelay\',\'10000\');" onmouseout="this.setAttribute(\'scrolldelay\',(100/{SPEED%}));" scrollamount="2" scrolldelay="'+(100/{SPEED%})+'" width="{WIDTH|}">{TEXT;~/}<\/marquee>');
 		}
-	} );
+	});
 //]]></script>
 
 <noscript>

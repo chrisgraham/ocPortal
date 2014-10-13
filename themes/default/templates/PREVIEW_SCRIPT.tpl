@@ -38,7 +38,7 @@
 		{+START,IF,{$MOBILE}}
 			<script>// <![CDATA[
 				var inner=document.getElementById('preview_box_inner');
-				add_event_listener_abstract(inner,browser_matches('gecko')?'DOMMouseScroll':'mousewheel',function(event) { inner.scrollTop-=event.wheelDelta?event.wheelDelta:event.detail; cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); return false; } );
+				add_event_listener_abstract(inner,browser_matches('gecko')?'DOMMouseScroll':'mousewheel',function(event) { inner.scrollTop-=event.wheelDelta?event.wheelDelta:event.detail; cancel_bubbling(event); if (typeof event.preventDefault!='undefined') event.preventDefault(); return false; });
 			//]]></script>
 		{+END}
 

@@ -51,9 +51,9 @@ function on_login_completed_lobby()
 	{+END}
 }
 
-add_event_listener_abstract(window,'load',function () {
+add_event_listener_abstract(window,'load',function() {
 	xmpp_connect("{$REPLACE*, ,.,{$USERNAME}}","{PASSWORD_HASH*}",on_login_completed_lobby);
-} );
+});
 // ]]>
 </script>
 

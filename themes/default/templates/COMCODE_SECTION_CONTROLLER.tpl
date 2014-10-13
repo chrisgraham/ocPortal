@@ -5,11 +5,11 @@
 
 <script>// <![CDATA[
 	var a{$FIX_ID,{PASS_ID|}}_sections=[];
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		{+START,LOOP,SECTIONS}
 			a{$FIX_ID,{PASS_ID|}}_sections.push('{_loop_var|;}');
 		{+END}
 		flip_page(0,'{$FIX_ID,{PASS_ID|;}}',a{$FIX_ID,{PASS_ID|}}_sections);
-	} );
+	});
 //]]></script>
 

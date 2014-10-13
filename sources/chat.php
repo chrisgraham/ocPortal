@@ -101,7 +101,7 @@ function messages_script()
 	{
 		// Posting a message
 		$message=either_param('message');
-		_chat_post_message_ajax(either_param_integer('room_id'),$message,post_param('font',''),post_param('colour',''),post_param_integer('first_message',0));
+		_chat_post_message_ajax(either_param_integer('room_id'),$message,post_param('font',''),preg_replace('#^\##','',post_param('colour','')),post_param_integer('first_message',0));
 	}
 	elseif ($action=='start_im')
 	{

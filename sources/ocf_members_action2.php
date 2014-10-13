@@ -202,9 +202,8 @@ function ocf_member_external_linker($username,$password,$type,$email_check=true,
 {
 	// Read in data
 	$email_address=trim(post_param('email_address',$email_address));
-	$dob_day=post_param_integer('dob_day',$dob_day);
-	$dob_month=post_param_integer('dob_month',$dob_month);
-	$dob_year=post_param_integer('dob_year',$dob_year);
+	require_code('temporal2');
+	list($dob_year,$dob_month,$dob_day)=get_input_date_components('dob',$dob_year,$dob_month,$dob_day);
 	$reveal_age=post_param_integer('reveal_age',0); // For default privacy, default off
 	require_code('temporal');
 	if (is_null($timezone)) $timezone=get_site_timezone();
@@ -465,7 +464,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 		$default_time=is_null($dob_month)?NULL:usertime_to_utctime(mktime(0,0,0,$dob_month,$dob_day,$dob_year));
 		if (get_option('no_dob_ask')!='1')
 		{
-			$fields->attach(form_input_date(do_lang_tempcode((get_option('no_dob_ask')=='2')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',$dob_optional,false,false,$default_time,-130));
+			$fields->attach(form_input_date(do_lang_tempcode((get_option('no_dob_ask')=='2')?'BIRTHDAY':'DATE_OF_BIRTH'),'','dob',!$dob_optional,false,false,$default_time,-130));
 			if (addon_installed('ocf_forum'))
 			{
 				$fields->attach(form_input_tick(do_lang_tempcode('RELATED_FIELD',do_lang_tempcode('REVEAL_AGE')),do_lang_tempcode('DESCRIPTION_REVEAL_AGE'),'reveal_age',$reveal_age==1));
@@ -589,7 +588,7 @@ function ocf_get_member_fields_settings($mini_mode=true,$member_id=NULL,$groups=
 			// Probation
    		if (has_privilege(get_member(),'probate_members'))
    		{
-   			$fields->attach(form_input_date(do_lang_tempcode('ON_PROBATION_UNTIL'),do_lang_tempcode('DESCRIPTION_ON_PROBATION_UNTIL'),'on_probation_until',true,is_null($on_probation_until) || $on_probation_until<=time(),true,$on_probation_until,2));
+   			$fields->attach(form_input_date(do_lang_tempcode('ON_PROBATION_UNTIL'),do_lang_tempcode('DESCRIPTION_ON_PROBATION_UNTIL'),'on_probation_until',false,is_null($on_probation_until) || $on_probation_until<=time(),true,$on_probation_until,2));
    		}
 
 			// Primary usergroup

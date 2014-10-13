@@ -1,6 +1,5 @@
 {$REQUIRE_JAVASCRIPT,javascript_jquery}
 {$REQUIRE_JAVASCRIPT,javascript_jquery_ui_core}
-{$REQUIRE_JAVASCRIPT,javascript_jquery_effects_core}
 {$REQUIRE_JAVASCRIPT,javascript_jquery_flip}
 {$REQUIRE_CSS,flip}
 
@@ -11,7 +10,7 @@
 </div>
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		var _e=document.getElementById("flipbox_{$GET,RAND}");
 		_e.onclick=function() {
 			var e=$("#flipbox_{$GET,RAND}");
@@ -30,5 +29,5 @@
 			};
 			_e.flipped=!_e.flipped;
 		}
-	} );
+	});
 //]]></script>

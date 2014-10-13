@@ -299,7 +299,6 @@ class Hook_addon_registry_core_rich_media
 			'uploads/attachments_thumbs/.htaccess',
 			'themes/default/templates/COMCODE_MEMBER_LINK.tpl',
 			'themes/default/templates/JAVASCRIPT_JQUERY_AUTOCOMPLETE.tpl',
-			'themes/default/templates/JAVASCRIPT_JQUERY.tpl',
 			'themes/default/css/autocomplete.css',
 			'themes/default/templates/AUTOCOMPLETE_LOAD.tpl',
 			'themes/default/images/mediaset_next.png',

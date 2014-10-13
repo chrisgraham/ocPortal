@@ -154,7 +154,7 @@ function _solemnly_enter()
 /**
  * Leave the most recent security scope (i.e. a custom block or module).
  *
- * @param  ?string		Output to filter, if I_UNDERSTAND_XSS is not set.
+ * @param  ?string		Output to filter, if I_UNDERSTAND_XSS is not set (NULL: nothing to filter).
  */
 function _solemnly_leave(&$out=NULL)
 {

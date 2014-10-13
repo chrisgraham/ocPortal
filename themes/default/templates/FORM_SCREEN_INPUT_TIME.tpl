@@ -1,12 +1,18 @@
-<div class="accessibility_hidden"><label for="{STUB*}_hour">{!HOUR}</label></div>
-<div class="accessibility_hidden"><label for="{STUB*}_minute">{!MINUTE}</label></div>
+{$REQUIRE_JAVASCRIPT,javascript_modernizr}
+{$REQUIRE_JAVASCRIPT,javascript_jquery}
+{$REQUIRE_JAVASCRIPT,javascript_jquery_ui_core}
+{$REQUIRE_JAVASCRIPT,javascript_widget_date}
+{$REQUIRE_CSS,jquery_ui}
+{$REQUIRE_CSS,widget_date}
 
-<select tabindex="{TABINDEX*}" id="{STUB*}_hour" name="{STUB*}_hour"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required"{+END}>
-	<option value="">-</option>
-	{HOURS}
-</select>
-:
-<select tabindex="{TABINDEX*}" id="{STUB*}_minute" name="{STUB*}_minute"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required"{+END}>
-	<option value="">-</option>
-	{MINUTES}
-</select>
+{$SET,time_value,{$PAD_LEFT,{HOUR},2,0}:{$PAD_LEFT,{MINUTE},2,0}}
+<input name="{NAME*}" id="{NAME*}" type="time" size="5" tabindex="{TABINDEX*}" value="{+START,IF_NON_EMPTY,{HOUR}}{$GET*,time_value}{+END}" />
+
+{+START,SET,comment}
+	Uncomment if you want to force jQuery-UI inputs even when there is native browser input support
+	<script>// <![CDATA[
+		add_event_listener_abstract(window,'load',function() {
+			$("#{NAME*}").inputTime({});
+		});
+	//]]></script>
+{+END}

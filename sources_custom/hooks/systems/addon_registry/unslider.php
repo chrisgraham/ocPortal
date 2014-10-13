@@ -145,7 +145,6 @@ If the [tt]delay[/tt] is set to blank or 0, it will disable automatic (timed) tr
 	{
 		return array(
 			'sources_custom/hooks/systems/addon_registry/unslider.php',
-			'themes/default/templates_custom/JAVASCRIPT_JQUERY.tpl',
 			'sources_custom/blocks/main_unslider.php',
 			'themes/default/css_custom/unslider.css',
 			'themes/default/templates_custom/BLOCK_MAIN_UNSLIDER.tpl',

@@ -36,7 +36,7 @@ class Module_cms_quiz extends standard_crud_module
 	var $content_type='quiz';
 	var $view_entry_point='_SEARCH:quiz:do:_ID';
 	var $archive_entry_point='_SEARCH:quiz:misc';
-	var $javascript='var hide_func=function () { var ob=document.getElementById(\'type\'); if (ob.value==\'TEST\') { document.getElementById(\'percentage\').disabled=false; document.getElementById(\'num_winners\').disabled=true; }  if (ob.value==\'COMPETITION\') { document.getElementById(\'num_winners\').disabled=false; document.getElementById(\'percentage\').disabled=true; }  if (ob.value==\'SURVEY\') { document.getElementById(\'text\').value=document.getElementById(\'text\').value.replace(/ \[\*\]/g,\'\'); document.getElementById(\'num_winners\').disabled=true; document.getElementById(\'percentage\').disabled=true; } }; document.getElementById(\'type\').onchange=hide_func; hide_func();';
+	var $javascript='var hide_func=function() { var ob=document.getElementById(\'type\'); if (ob.value==\'TEST\') { document.getElementById(\'percentage\').disabled=false; document.getElementById(\'num_winners\').disabled=true; }  if (ob.value==\'COMPETITION\') { document.getElementById(\'num_winners\').disabled=false; document.getElementById(\'percentage\').disabled=true; }  if (ob.value==\'SURVEY\') { document.getElementById(\'text\').value=document.getElementById(\'text\').value.replace(/ \[\*\]/g,\'\'); document.getElementById(\'num_winners\').disabled=true; document.getElementById(\'percentage\').disabled=true; } }; document.getElementById(\'type\').onchange=hide_func; hide_func();';
 	var $menu_label='QUIZZES';
 	var $table='quizzes';
 	var $orderer='q_add_date';
@@ -305,8 +305,8 @@ class Module_cms_quiz extends standard_crud_module
 		$fields->attach(form_input_tick(do_lang_tempcode('SHUFFLE_ANSWERS'),do_lang_tempcode('DESCRIPTION_SHUFFLE_ANSWERS'),'shuffle_answers',$shuffle_answers==1));
 		$fields->attach(form_input_integer(do_lang_tempcode('REDO_TIME'),do_lang_tempcode('DESCRIPTION_REDO_TIME'),'redo_time',$redo_time,false));
 		$fields->attach(form_input_integer(do_lang_tempcode('TIMEOUT'),do_lang_tempcode('DESCRIPTION_QUIZ_TIMEOUT'),'timeout',$timeout,false));
-		$fields->attach(form_input_date(do_lang_tempcode('OPEN_TIME'),do_lang_tempcode('DESCRIPTION_OPEN_TIME'),'open_time',false,false,true,$open_time,2));
-		$fields->attach(form_input_date(do_lang_tempcode('CLOSE_TIME'),do_lang_tempcode('DESCRIPTION_CLOSE_TIME'),'close_time',true,is_null($close_time),true,is_null($close_time)?(NULL/*time()+60*60*24*30*/):$close_time,2));
+		$fields->attach(form_input_date(do_lang_tempcode('OPEN_TIME'),do_lang_tempcode('DESCRIPTION_OPEN_TIME'),'open_time',true,false,true,$open_time,2));
+		$fields->attach(form_input_date(do_lang_tempcode('CLOSE_TIME'),do_lang_tempcode('DESCRIPTION_CLOSE_TIME'),'close_time',false,is_null($close_time),true,is_null($close_time)?(NULL/*time()+60*60*24*30*/):$close_time,2));
 		if (addon_installed('points'))
 		{
 			$fields->attach(form_input_integer(do_lang_tempcode('POINTS_FOR_COMPLETING'),do_lang_tempcode('DESCRIPTION_POINTS_FOR_COMPLETING'),'points_for_passing',$points_for_passing,true));

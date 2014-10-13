@@ -157,7 +157,7 @@ function display_alert(notification)
 			var notification_wrapper=window.notify.createNotification(title,{'icon': icon,'body': body,'tag': '{$SITE_NAME;}__'+id});
 			if (notification_wrapper)
 			{
-				add_event_listener_abstract(window,'focus',function() { notification_wrapper.close(); } );
+				add_event_listener_abstract(window,'focus',function() { notification_wrapper.close(); });
 
 				notification_wrapper.notification.onclick=function() {
 					try

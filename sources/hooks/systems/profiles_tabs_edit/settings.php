@@ -164,16 +164,13 @@ class Hook_Profiles_Tabs_Edit_settings
 				$timezone=post_param('timezone',get_site_timezone());
 			}
 
-			if (post_param('dob_day',NULL)==='' || post_param('dob_month',NULL)==='' || post_param('dob_year',NULL)==='')
+			require_code('temporal2');
+			list($dob_year,$dob_month,$dob_day)=get_input_date_components('dob');
+			if ((is_null($dob_year)) || (is_null($dob_month)) || (is_null($dob_day)))
 			{
 				$dob_day=-1;
 				$dob_month=-1;
 				$dob_year=-1;
-			} else
-			{
-				$dob_day=post_param_integer('dob_day',NULL);
-				$dob_month=post_param_integer('dob_month',NULL);
-				$dob_year=post_param_integer('dob_year',NULL);
 			}
 
 			ocf_edit_member($member_id_of,$email,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$actual_custom_fields,$theme,post_param_integer('reveal_age',0),$views_signatures,$auto_monitor_contrib_content,post_param('language',NULL),post_param_integer('allow_emails',0),post_param_integer('allow_emails_from_staff',0),$validated,$username,$password,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);

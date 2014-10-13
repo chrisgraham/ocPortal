@@ -124,7 +124,7 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors=fal
 {
 	if (strpos($data,'{$,Parser hint: pure}')!==false)
 	{
-		return array(array('"'.php_addslashes(preg_replace('#\{\$,.*\}#U','/*no minify*/',$data)).'"'),array());
+		return array(array('"'.php_addslashes(preg_replace('#\{\$,.*\}#U','',str_replace('{$,Parser hint: pure}','/*no minify*/',$data))).'"'),array());
 	}
 
 	$data=preg_replace('#<\?php(.*)\?'.'>#sU','{+START,PHP}${1}{+END}',$data);

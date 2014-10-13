@@ -84,7 +84,7 @@ function initialise_carousel(id)
 
 		_create_faders(main);
 		_update_faders(main);
-	} );
+	});
 }
 
 function carousel_move(id,amount)

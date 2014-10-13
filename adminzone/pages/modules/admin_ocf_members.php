@@ -262,9 +262,8 @@ class Module_admin_ocf_members
 		$username=trim(post_param('username'));
 		$password=trim(post_param('password'));
 		$email_address=trim(post_param('email_address',''));
-		$dob_day=post_param_integer('dob_day',NULL);
-		$dob_month=post_param_integer('dob_month',NULL);
-		$dob_year=post_param_integer('dob_year',NULL);
+		require_code('temporal2');
+		list($dob_year,$dob_month,$dob_day)=get_input_date_components('dob');
 		$reveal_age=post_param_integer('reveal_age',0);
 		$timezone=post_param('timezone',get_site_timezone());
 		$language=post_param('language',get_site_default_lang());

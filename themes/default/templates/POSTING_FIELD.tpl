@@ -78,9 +78,9 @@
 						if ((window.wysiwyg_on) && (wysiwyg_on())) document.getElementById('{NAME;/}').readOnly=true; /* Stop typing while it loads */
 
 						{+START,IF_PASSED,WORD_COUNTER}
-							add_event_listener_abstract(window,'load',function () {
+							add_event_listener_abstract(window,'load',function() {
 								setup_word_counter(document.getElementById('post'),document.getElementById('word_count_{$GET;,word_count_id}'));
-							} );
+							});
 						{+END}
 					//]]></script>
 				{+END}
@@ -141,9 +141,9 @@
 			<input type="hidden" name="posting_ref_id" value="{$RAND,1,2147483646}" />
 
 			<script>// <![CDATA[
-				add_event_listener_abstract(window,'load',function () {
+				add_event_listener_abstract(window,'load',function() {
 					initialise_html5_dragdrop_upload('container_for_{NAME;*}','{NAME;*}');
-				} );
+				});
 			//]]></script>
 		</td>
 	</tr>

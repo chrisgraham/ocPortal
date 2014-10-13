@@ -64,9 +64,9 @@
 	{+START,IF,{$IS_A_COOKIE_LOGIN}}
 		{$REQUIRE_JAVASCRIPT,javascript_posting}
 		<script type="text/javascript">// <![CDATA[
-			add_event_listener_abstract(window,'load',function () {
+			add_event_listener_abstract(window,'load',function() {
 				if (typeof init_form_saving!='undefined') init_form_saving('main_form');
-			} );
+			});
 		//]]></script>
 	{+END}
 {+END}

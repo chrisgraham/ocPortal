@@ -709,8 +709,8 @@ function init__validation2()
 		'input.width'=>$enforce_inumber,
 		'input.step'=>'any|(-?[0-9]+(\.[0-9]+)?)',
 		'input.required'=>'(required)',
-		'input.placeholder'=>'.+',
-		'input.pattern'=>'.+',
+		'input.placeholder'=>'.+', // We will allow use of this because it is progressive enhancement. Don't rely on it for core communications within ocPortal until we can drop IE8/IE9 support (LEGACY note)
+		'input.pattern'=>'.+', // Don't rely on this being supported, we have our own validation API anyway
 		'input.multiple'=>'(multiple)',
 		'input.min'=>'.+',
 		'input.max'=>'.+',

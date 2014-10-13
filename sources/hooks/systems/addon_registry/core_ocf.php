@@ -589,47 +589,6 @@ class Hook_addon_registry_core_ocf
 			'COMCODE'=>'',
 		)));
 
-		$name=lorem_word().placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
-			'UNLIMITED'=>false,
-			'NULL_OK'=>'',
-			'DISABLED'=>'',
-			'TABINDEX'=>placeholder_number(),
-			'YEARS'=>placeholder_options(),
-			'MONTHS'=>placeholder_options(),
-			'DAYS'=>placeholder_options(),
-			'STUB'=>$name,
-			'NULL'=>'',
-			'TIME'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_phrase(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
-
-		$name=lorem_word().placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
-			'CHECKED'=>'true',
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_phrase(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
-
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER',array(
 			'TITLE'=>lorem_phrase(),
 			'THEME_ALSO_INCLUDE_PAGES'=>false,
@@ -654,23 +613,6 @@ class Hook_addon_registry_core_ocf
 			'NAME'=>$name,
 			'CONTENT'=>$timezone_list,
 			'INLINE_LIST'=>false,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_phrase(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
-
-		$name=lorem_word().placeholder_random();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
-			'CHECKED'=>'true',
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,

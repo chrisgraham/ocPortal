@@ -1,5 +1,6 @@
-{$,Parser hint: pure}
 {$,Parser hint: .innerHTML okay}
+
+{$,NB: 1.8.3 is the latest before jQuery was heavily refactored, breaking support for common jQuery plugins}
 
 /*!
  * jQuery JavaScript Library v1.8.3
@@ -67,7 +68,7 @@ var
 	// JSON RegExp
 	rvalidchars = /^[\],:{}\s]*$/,
 	rvalidbraces = /(?:^|:|,)(?:\s*\[)+/g,
-	rvalidescape = /\\(?:["\\\/bfnrt]|u[\da-fA-F]{4})/g,
+	rvalidescape = /\\(?:["\\\/bfnrt]|u[\da-fA-F]\{4})/g,
 	rvalidtokens = /"[^"\\\r\n]*"|true|false|null|-?(?:\d\d*\.|)\d+(?:[eE][\-+]?\d+|)/g,
 
 	// Matches dashed string for camelizing
@@ -3985,7 +3986,7 @@ function createPositionalPseudo( fn ) {
 
 /**
  * Utility function for retrieving the text value of an array of DOM nodes
- * @param {Array|Element} elem
+ * @param \{Array|Element} elem
  */
 getText = Sizzle.getText = function( elem ) {
 	var node,
@@ -5678,7 +5679,7 @@ var nodeNames = "abbr|article|aside|audio|bdi|canvas|data|datalist|details|figca
 	// checked="checked" or checked
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
 	rscriptType = /\/(java|ecma)script/i,
-	rcleanScript = /^\s*<!(?:\[CDATA\[|\-\-)|[\]\-]{2}>\s*$/g,
+	rcleanScript = /^\s*<!(?:\[CDATA\[|\-\-)|[\]\-]\{2}>\s*$/g,
 	wrapMap = {
 		option: [ 1, "<select multiple='multiple'>", "</select>" ],
 		legend: [ 1, "<fieldset>", "</fieldset>" ],

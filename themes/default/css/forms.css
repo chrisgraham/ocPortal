@@ -430,6 +430,8 @@ th.form_table_field_name a, /* Extra specificity to take precedence over th.de_t
 
 .css_colour_chooser_name input {
 	color: {$GET,unfilled_input_text};
+	margin-top: 0.5em;
+	display: block;
 }
 
 .css_colour_chooser_from {

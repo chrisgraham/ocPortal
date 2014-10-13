@@ -712,7 +712,7 @@ class Module_admin_setupwizard
 		$list->attach(form_input_list_entry('liberal',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='liberal'):false,do_lang_tempcode('SETUPWIZARD_RULES_liberal')));
 		$list->attach(form_input_list_entry('corporate',array_key_exists('rules',$field_defaults)?($field_defaults['rules']=='corporate'):false,do_lang_tempcode('SETUPWIZARD_RULES_corporate')));
 		$fields=form_input_list(do_lang_tempcode('RULES'),do_lang_tempcode('DESCRIPTION_RULES'),'rules',$list,NULL,true);
-		$javascript="document.getElementById('rules').onchange=function () { var items=['preview_box_balanced','preview_box_liberal','preview_box_corporate']; var i; for (i=0;i<items.length;i++) document.getElementById(items[i]).style.display=(this.selectedIndex!=i)?'none':'block'; }";
+		$javascript="document.getElementById('rules').onchange=function() { var items=['preview_box_balanced','preview_box_liberal','preview_box_corporate']; var i; for (i=0;i<items.length;i++) document.getElementById(items[i]).style.display=(this.selectedIndex!=i)?'none':'block'; }";
 		$form=do_template('FORM',array('_GUID'=>'bf01a2b90967e86213ae0672c36a4b4e','SKIPPABLE'=>'skip_7','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'HIDDEN'=>static_evaluate_tempcode(build_keep_post_fields()),'JAVASCRIPT'=>$javascript));
 
 		$balanced=comcode_to_tempcode($this->get_rules_file('balanced'),NULL,true);

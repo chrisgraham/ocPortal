@@ -6,9 +6,9 @@
 	{$REQUIRE_JAVASCRIPT,javascript_validation}
 
 	<script>// <![CDATA[
-		add_event_listener_abstract(window,'load',function () {
+		add_event_listener_abstract(window,'load',function() {
 			internalise_ajax_block_wrapper_links('{URL;/}',document.getElementById('{$GET;,wrapper_id}'),['.*'],{ },false,true);
-		} );
+		});
 	//]]></script>
 </div>
 

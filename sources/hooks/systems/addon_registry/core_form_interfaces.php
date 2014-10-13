@@ -131,7 +131,6 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/templates/FORM_SCREEN_FIELDS_SET.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_ALL_AND_NOT.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_DATE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_DATE_NULL.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_FLOAT.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_HIDDEN.tpl',
 			'themes/default/templates/FORM_SCREEN_INPUT_HIDDEN_2.tpl',
@@ -183,7 +182,6 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/templates/FORM_SCREEN_ARE_REQUIRED.tpl',
 			'data/block_helper.php',
 			'themes/default/templates/JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl',
-			'themes/default/templates/JAVASCRIPT_DATE_CHOOSER.tpl',
 			'themes/default/templates/PREVIEW_SCRIPT.tpl',
 			'themes/default/templates/PREVIEW_SCRIPT_CODE.tpl',
 			'themes/default/templates/PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl',
@@ -429,12 +427,15 @@ class Hook_addon_registry_core_form_interfaces
 			'data_custom/spelling/index.html',
 			'data_custom/spelling/personal_dicts/.htaccess',
 			'data_custom/spelling/personal_dicts/index.html',
+			'themes/default/css/widget_color.css',
+			'themes/default/css/widget_date.css',
+			'themes/default/templates/JAVASCRIPT_WIDGET_COLOR.tpl',
+			'themes/default/templates/JAVASCRIPT_WIDGET_DATE.tpl',
 			'themes/default/css/forms.css',
 			'data/spelling/aspell/.htaccess',
 			'data/spelling/aspell/index.html',
 			'data/spelling/index.html',
 			'data/spelling/spell-check-logic.php',
-			'themes/default/css/date_chooser.css',
 			'themes/default/images/EN/comcodeeditor/apply_changes.png',
 			'themes/default/images/EN/comcodeeditor/b.png',
 			'themes/default/images/EN/comcodeeditor/quote.png',
@@ -455,11 +456,6 @@ class Hook_addon_registry_core_form_interfaces
 			'themes/default/images/EN/comcodeeditor/u.png',
 			'themes/default/images/EN/comcodeeditor/url.png',
 			'sources/form_templates.php',
-			'themes/default/images/date_chooser/callt.gif',
-			'themes/default/images/date_chooser/calrt.gif',
-			'themes/default/images/date_chooser/calx.gif',
-			'themes/default/images/date_chooser/index.html',
-			'themes/default/images/date_chooser/pdate.gif',
 			'data/namelike.php',
 			'data/username_exists.php',
 		);
@@ -529,7 +525,6 @@ class Hook_addon_registry_core_form_interfaces
 			'FORM_SCREEN_ARE_REQUIRED.tpl'=>'form_screen',
 			'POSTING_FIELD.tpl'=>'form_screen',
 			'FORM_SCREEN_INPUT_TIME.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_DATE_NULL.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_DATE.tpl'=>'form_screen_1',
 			'FORM_SCREEN_INPUT_INTEGER.tpl'=>'form_screen_2',
 			'FORM_SCREEN_INPUT_DIMENSIONS.tpl'=>'form_screen_2',
@@ -627,7 +622,6 @@ class Hook_addon_registry_core_form_interfaces
 	{
 		require_lang('comcode');
 		require_lang('dates');
-		require_javascript('javascript_colour_picker');
 		require_javascript('javascript_theme_colours');
 
 		$fields=new ocp_tempcode();
@@ -858,22 +852,42 @@ class Hook_addon_registry_core_form_interfaces
 
 		$name=placeholder_random_id();
 		$time=do_lorem_template('FORM_SCREEN_INPUT_TIME',array(
-			'NULL_OK'=>'',
-			'DISABLED'=>'',
+			'REQUIRED'=>true,
 			'TABINDEX'=>placeholder_number(),
-			'MINUTES'=>placeholder_options(),
-			'HOURS'=>placeholder_options(),
-			'STUB'=>placeholder_random_id(),
+			'NAME'=>placeholder_random_id(),
+
+			'MINUTE'=>placeholder_number(),
+			'HOUR'=>placeholder_number(),
 		));
+		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+			'REQUIRED'=>true,
+			'SKIP_LABEL'=>true,
+			'NAME'=>$name,
+			'PRETTY_NAME'=>lorem_word(),
+			'DESCRIPTION'=>lorem_sentence_html(),
+			'DESCRIPTION_SIDE'=>'',
+			'INPUT'=>$input,
+			'COMCODE'=>'',
+		)));
+
 		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
-			'UNLIMITED'=>false,
-			'NULL_OK'=>'',
+			'REQUIRED'=>true,
 			'TABINDEX'=>placeholder_number(),
-			'YEARS'=>placeholder_options(),
-			'MONTHS'=>placeholder_options(),
-			'DAYS'=>placeholder_options(),
-			'STUB'=>$name,
-			'TIME'=>$time,
+			'NAME'=>$name,
+			'TYPE'=>'date',
+
+			'YEAR'=>placeholder_number(),
+			'MONTH'=>placeholder_number(),
+			'DAY'=>placeholder_number(),
+			'MINUTE'=>placeholder_number(),
+			'HOUR'=>placeholder_number(),
+
+			'MIN_DATE_DAY'=>'',
+			'MIN_DATE_MONTH'=>'',
+			'MIN_DATE_YEAR'=>'',
+			'MAX_DATE_DAY'=>'',
+			'MAX_DATE_MONTH'=>'',
+			'MAX_DATE_YEAR'=>'',
 		));
 		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
 			'REQUIRED'=>true,
@@ -956,15 +970,11 @@ class Hook_addon_registry_core_form_interfaces
 			'ROWS'=>'20',
 		)));
 
-		$hidden=do_lorem_template('FORM_SCREEN_INPUT_DATE_NULL',array(
-			'STUB'=>placeholder_random_id(),
-		));
-
 		return array(
 			lorem_globalise(do_lorem_template('FORM',array(
 				'GET'=>NULL,
 				'SKIP_VALIDATION'=>true,
-				'HIDDEN'=>$hidden,
+				'HIDDEN'=>'',
 				'TITLE'=>lorem_title(),
 				'URL'=>placeholder_url(),
 				'FIELDS'=>$fields,

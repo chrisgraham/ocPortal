@@ -12,7 +12,7 @@
 
 {$,Tie into callback event to see when finished, for our slideshows}
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'real_load',function () {
+	add_event_listener_abstract(window,'real_load',function() {
 		if (document.getElementById('next_slide'))
 		{
 			stop_slideshow_timer();
@@ -29,5 +29,5 @@
 				player.contentWindow.postMessage(JSON.stringify({ method: 'addEventListener', value: 'finish' }),'http://player.vimeo.com/video/{REMOTE_ID;/}');
 			}, 1000);
 		}
-	} );
+	});
 //]]></script>

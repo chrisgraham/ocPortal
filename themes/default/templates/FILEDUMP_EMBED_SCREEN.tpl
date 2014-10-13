@@ -22,7 +22,7 @@
 	</div>
 
 	<script type="text/javascript">// <![CDATA[
-		add_event_listener_abstract(window,'load',function () {
+		add_event_listener_abstract(window,'load',function() {
 			var e=document.getElementById('generated_comcode');
 			try
 			{
@@ -30,7 +30,7 @@
 			}
 			catch (e) {};
 			e.select();
-		} );
+		});
 	//]]></script>
 {+END}
 

@@ -8,7 +8,7 @@
 					<script>// <![CDATA[
 						add_event_listener_abstract(window,'load',function (event) {
 							document.getElementById('fes{TITLE|}').onclick(event);
-						} );
+						});
 					//]]></script>
 				{+END}
 			{+END}{+END}

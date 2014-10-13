@@ -1,7 +1,7 @@
 {$SET,RAND_ID_OVERLAY,overlay_{$RAND}}
 
 <script>// <![CDATA[
-	add_event_listener_abstract(window,'load',function () {
+	add_event_listener_abstract(window,'load',function() {
 		{+START,IF_NON_EMPTY,{ID}}
 		if (read_cookie('og_{ID;/}')!='1')
 		{
@@ -10,7 +10,7 @@
 		{+START,IF_NON_EMPTY,{ID}}
 		}
 		{+END}
-	} );
+	});
 //]]></script>
 
 <div role="dialog" class="comcode_overlay box" id="{$GET,RAND_ID_OVERLAY}" style="display: none; position: absolute; left: {X*}px; top: {Y*}px; width: {WIDTH*}px; height: {HEIGHT*}px"><div class="comcode_overlay_inner box_inner">

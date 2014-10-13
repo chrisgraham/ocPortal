@@ -57,13 +57,13 @@ function copy_fields_into_bottom(i,changed)
 	var form=document.getElementById('edit_form');
 
 	form.elements['caption_long'].value=document.getElementById('caption_long_'+i).value;
-	form.elements['caption_long'].onchange=function () { document.getElementById('caption_long_'+i).value=this.value; };
+	form.elements['caption_long'].onchange=function() { document.getElementById('caption_long_'+i).value=this.value; };
 
 	form.elements['url'].value=document.getElementById('url_'+i).value;
-	form.elements['url'].onchange=function () { document.getElementById('url_'+i).value=this.value; };
+	form.elements['url'].onchange=function() { document.getElementById('url_'+i).value=this.value; };
 
 	form.elements['match_tags'].value=document.getElementById('match_tags_'+i).value;
-	form.elements['match_tags'].onchange=function () { document.getElementById('match_tags_'+i).value=this.value; };
+	form.elements['match_tags'].onchange=function() { document.getElementById('match_tags_'+i).value=this.value; };
 
 	var s;
 	for (s=0;s<form.elements['theme_img_code'].options.length;s++)
@@ -74,13 +74,13 @@ function copy_fields_into_bottom(i,changed)
 		fauxmodal_alert('{!menus:MISSING_THEME_IMAGE_FOR_MENU;}'.replace(/\\{1\\}/,document.getElementById('theme_img_code_'+i).value));
 	}
 	form.elements['theme_img_code'].selectedIndex=s;
-	form.elements['theme_img_code'].onchange=function () { document.getElementById('theme_img_code_'+i).value=this.options[this.selectedIndex].value; };
+	form.elements['theme_img_code'].onchange=function() { document.getElementById('theme_img_code_'+i).value=this.options[this.selectedIndex].value; };
 
 	form.elements['new_window'].checked=document.getElementById('new_window_'+i).value=='1';
-	form.elements['new_window'].onclick=function () { document.getElementById('new_window_'+i).value=this.checked?'1':'0'; };
+	form.elements['new_window'].onclick=function() { document.getElementById('new_window_'+i).value=this.checked?'1':'0'; };
 
 	form.elements['check_perms'].checked=document.getElementById('check_perms_'+i).value=='1';
-	form.elements['check_perms'].onclick=function () { document.getElementById('check_perms_'+i).value=this.checked?'1':'0'; };
+	form.elements['check_perms'].onclick=function() { document.getElementById('check_perms_'+i).value=this.checked?'1':'0'; };
 
 	//set_inner_html(form.elements['branch_type'],get_inner_html(document.getElementById('branch_type_'+i))); Breaks in IE due to strict container rules
 	form.elements['branch_type'].selectedIndex=document.getElementById('branch_type_'+i).selectedIndex;

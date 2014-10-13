@@ -1,85 +1,26 @@
-<div class="accessibility_hidden"><label for="{STUB%}_day">{!DAY}</label></div>
-<div class="accessibility_hidden"><label for="{STUB%}_month">{!MONTH}</label></div>
-<div class="accessibility_hidden"><label for="{STUB%}_year">{!YEAR}</label></div>
-{+START,IF,{$NOT,{NULL_OK}}}
-	<input type="hidden" name="{STUB%}" value="1" />
+{$REQUIRE_JAVASCRIPT,javascript_modernizr}
+{$REQUIRE_JAVASCRIPT,javascript_jquery}
+{$REQUIRE_JAVASCRIPT,javascript_jquery_ui_core}
+{$REQUIRE_JAVASCRIPT,javascript_widget_date}
+{$REQUIRE_CSS,jquery_ui}
+{$REQUIRE_CSS,widget_date}
+
+{$SET,date_value,{$PAD_LEFT,{YEAR},4,0}-{$PAD_LEFT,{MONTH},2,0}-{$PAD_LEFT,{DAY},2,0}}
+{$SET,date_value_min,{$?,{$IS_NON_EMPTY,{MIN_DATE_YEAR}},{$PAD_LEFT,{MIN_DATE_YEAR},4,0}-{$PAD_LEFT,{MIN_DATE_MONTH},2,0}-{$PAD_LEFT,{MIN_DATE_DAY},2,0}}}
+{$SET,date_value_max,{$?,{$IS_NON_EMPTY,{MAX_DATE_YEAR}},{$PAD_LEFT,{MAX_DATE_YEAR},4,0}-{$PAD_LEFT,{MAX_DATE_MONTH},2,0}-{$PAD_LEFT,{MAX_DATE_DAY},2,0}}}
+<input name="{NAME*}" id="{NAME*}" type="date" size="10" tabindex="{TABINDEX*}" value="{+START,IF_NON_EMPTY,{YEAR}}{$GET*,date_value}{+END}"{+START,IF_NON_EMPTY,{$GET,date_value_min}} min="{$GET*,date_value_min}"{+END}{+START,IF_NON_EMPTY,{$GET,date_value_max}} max="{$GET*,date_value_max}"{+END} />
+
+{+START,IF,{$EQ,{TYPE},datetime}}
+	{$SET,time_value,{$PAD_LEFT,{HOUR},2,0}:{$PAD_LEFT,{MINUTE},2,0}}
+	<input name="{NAME*}_time" id="{NAME*}_time" type="time" size="5" tabindex="{TABINDEX*}" value="{+START,IF_NON_EMPTY,{HOUR}}{$GET*,time_value}{+END}" />
 {+END}
 
-<div class="vertical_alignment inline_block">
-	<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_day" name="{STUB%}_day"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-		<option value="">-</option>
-		{DAYS}
-	</select>
-	<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_month" name="{STUB%}_month"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-		<option value="">-</option>
-		{MONTHS}
-	</select>
-	<select onchange="if (typeof window.match_calendar_from_to!='undefined') match_calendar_from_to('{STUB%}');" {+START,IF_PASSED,TABINDEX}tabindex="{TABINDEX*}" {+END}id="{STUB%}_year" name="{STUB%}_year"{+START,IF,{$NOT,{NULL_OK}}} class="input_list_required date"{+END}>
-		<option value="">-</option>
-		{YEARS}
-	</select>
-
-	{TIME}
-
-	{+START,IF,{$JS_ON}}
-		<img id="cal{STUB#}Button" title="{!SHOW_DATE_CHOOSER}" alt="{!SHOW_DATE_CHOOSER}" src="{$IMG*,date_chooser/pdate}" />
-	{+END}
-</div>
-
-<div id="cal{STUB#}Container" class="inline"></div>
-
-<script>// <![CDATA[
-	var mindate=null,maxdate=null;
-
-	{+START,IF_PASSED,MIN_DATE_DAY}{+START,IF_PASSED,MIN_DATE_MONTH}{+START,IF_PASSED,MIN_DATE_YEAR}
-		minDate=new Date();
-		minDate.setDate({MIN_DATE_DAY%});
-		minDate.setMonth({MIN_DATE_MONTH%}-1);
-		minDate.setFullYear({MIN_DATE_YEAR%});
-	{+END}{+END}{+END}
-
-	{+START,IF_PASSED,MAX_DATE_DAY}{+START,IF_PASSED,MAX_DATE_MONTH}{+START,IF_PASSED,MAX_DATE_YEAR}
-		maxDate=new Date();
-		maxDate.setDate({MAX_DATE_DAY%});
-		maxDate.setMonth({MAX_DATE_MONTH%}-1);
-		maxDate.setFullYear({MAX_DATE_YEAR%});
-	{+END}{+END}{+END}
-
-	var cal{STUB%}=null;
-	var link{STUB%}=document.getElementById('cal{STUB;/}Button');
-	if (link{STUB%}) link{STUB%}.onclick=function() { initialise_date_field('{STUB%}','cal{STUB%}','link{STUB%}', {$?,{UNLIMITED},true,false}, mindate, maxdate); };
-
-	{+START,IF,{UNLIMITED}}
-		var year_field=document.getElementById('{STUB%}_year');
-		var special_option=document.createElement('option');
-		special_option.value='-';
-		set_inner_html(special_option,'&hellip;');
-		year_field.onchange=function() {
-			if (this.options[this.selectedIndex].value=='-')
-			{
-				var _this=this;
-				window.fauxmodal_prompt(
-					'{!CHOOSE_YEAR;}',
-					'',
-					function(year)
-					{
-						if ((!year) || (!year.match(/\-?\d+/)))
-						{
-							_this.selectedIndex=0;
-						} else
-						{
-							year=year.replace(/^0+/,'');
-							var custom_option=document.createElement('option');
-							custom_option.value=year;
-							set_inner_html(custom_option,year);
-							_this.appendChild(custom_option);
-							_this.selectedIndex=_this.options.length-1;
-						}
-					}
-				);
-			}
-		}
-		year_field.appendChild(special_option);
-	{+END}
-//]]></script>
-
+{+START,SET,comment}
+	Uncomment if you want to force jQuery-UI inputs even when there is native browser input support
+	<script>// <![CDATA[
+		add_event_listener_abstract(window,'load',function() {
+			$("#{NAME*}").inputDate({});
+			$("#{NAME*}_time").inputTime({});
+		});
+	//]]></script>
+{+END}

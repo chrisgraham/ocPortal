@@ -30,9 +30,9 @@
 			confirm_delete(ob.form,true,callback);
 		}
 
-		add_event_listener_abstract(window,'load',function () {
+		add_event_listener_abstract(window,'load',function() {
 			document.getElementById('id').fakeonchange=initialise_button_visibility;
 			initialise_button_visibility();
-		} );
+		});
 	//]]></script>
 {+END}

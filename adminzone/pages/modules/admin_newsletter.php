@@ -892,7 +892,7 @@ class Module_admin_newsletter extends standard_crud_module
 			$_cutoff_time=get_value('newsletter_whatsnew');
 			$cutoff_time=is_null($_cutoff_time)?NULL:intval($_cutoff_time);
 			if (is_null($cutoff_time)) $cutoff_time=time()-60*60*24*365*3;
-			$fields->attach(form_input_date(do_lang_tempcode('CUTOFF_DATE'),do_lang_tempcode('DESCRIPTION_CUTOFF_DATE'),'cutoff',false,false,true,$cutoff_time,3,intval(date('Y'))-3,NULL,true));
+			$fields->attach(form_input_date(do_lang_tempcode('CUTOFF_DATE'),do_lang_tempcode('DESCRIPTION_CUTOFF_DATE'),'cutoff',true,false,true,$cutoff_time,3,intval(date('Y'))-3,NULL));
 
 			$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',post_param_integer('in_full',0)==1));
 
@@ -1260,11 +1260,18 @@ class Module_admin_newsletter extends standard_crud_module
 				$hidden->attach(form_input_hidden('chosen_categories',$chosen_categories));
 				$hidden->attach(form_input_hidden('in_full',strval($in_full)));
 			}
-			$hidden->attach(form_input_hidden('cutoff_day',post_param('cutoff_day')));
-			$hidden->attach(form_input_hidden('cutoff_month',post_param('cutoff_month')));
-			$hidden->attach(form_input_hidden('cutoff_year',post_param('cutoff_year')));
-			$hidden->attach(form_input_hidden('cutoff_hour',post_param('cutoff_hour')));
-			$hidden->attach(form_input_hidden('cutoff_minute',post_param('cutoff_minute')));
+			if (!is_null(post_param('cutoff',NULL)))
+			{
+				$hidden->attach(form_input_hidden('cutoff',post_param('cutoff')));
+				$hidden->attach(form_input_hidden('cutoff_time',post_param('cutoff_time')));
+			} else
+			{
+				$hidden->attach(form_input_hidden('cutoff_day',post_param('cutoff_day')));
+				$hidden->attach(form_input_hidden('cutoff_month',post_param('cutoff_month')));
+				$hidden->attach(form_input_hidden('cutoff_year',post_param('cutoff_year')));
+				$hidden->attach(form_input_hidden('cutoff_hour',post_param('cutoff_hour')));
+				$hidden->attach(form_input_hidden('cutoff_minute',post_param('cutoff_minute')));
+			}
 
 			$hidden->attach(form_input_hidden('message',$existing->evaluate()));
 		} else
@@ -1282,7 +1289,7 @@ class Module_admin_newsletter extends standard_crud_module
 
 		// Some general details of how to send
 		if ((addon_installed('calendar')) && ($periodic_action=='none') && (cron_installed()))
-			$fields->attach(form_input_date__scheduler(do_lang_tempcode('DEFER_TIME'),do_lang_tempcode('DESCRIPTION_DEFER_TIME'),'schedule',true,true,true));
+			$fields->attach(form_input_date__scheduler(do_lang_tempcode('DEFER_TIME'),do_lang_tempcode('DESCRIPTION_DEFER_TIME'),'schedule',false,true,true));
 		$from_email=post_param('from_email',get_option('staff_address'));
 		if (!is_null($defaults)) $from_email=post_param('from_email',$defaults['np_from_email']);
 		$fields->attach(form_input_email(do_lang_tempcode('FROM_EMAIL'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_FROM_EMAIL'),'from_email',$from_email,true));

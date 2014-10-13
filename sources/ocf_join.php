@@ -251,9 +251,8 @@ function ocf_join_actual($captcha_if_enabled=true,$intro_message_if_enabled=true
 
 		$GLOBALS['FORUM_DB']->query_update('f_invites',array('i_taken'=>1),array('i_email_address'=>$email_address,'i_taken'=>0),'',1);
 	}
-	$dob_day=post_param_integer('dob_day',NULL);
-	$dob_month=post_param_integer('dob_month',NULL);
-	$dob_year=post_param_integer('dob_year',NULL);
+	require_code('temporal2');
+	list($dob_year,$dob_month,$dob_day)=get_input_date_components('dob');
 	$reveal_age=post_param_integer('reveal_age',0);
 	$timezone=post_param('timezone',get_users_timezone());
 	$language=post_param('language',get_site_default_lang());

@@ -591,7 +591,6 @@ class Hook_addon_registry_chat
 	{
 		require_lang('comcode');
 		require_javascript('javascript_chat');
-		require_javascript('javascript_yahoo_2');
 
 		$chat_sound=do_lorem_template('CHAT_SOUND',array(
 			'SOUND_EFFECTS'=>placeholder_array(),

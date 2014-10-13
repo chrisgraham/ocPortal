@@ -105,7 +105,7 @@ function get_banner_form_fields($simplified=false,$name='',$image_url='',$site_u
 		if (is_null($total_importance)) $total_importance=0;
 		$fields->attach(form_input_integer(do_lang_tempcode('IMPORTANCE_MODULUS'),do_lang_tempcode('DESCRIPTION_IMPORTANCE_MODULUS',strval($total_importance),strval($importancemodulus)),'importancemodulus',$importancemodulus,true));
 	}
-	$fields->attach(form_input_date(do_lang_tempcode('EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_EXPIRY_DATE'),'expiry_date',true,is_null($expiry_date),true,$expiry_date,2));
+	$fields->attach(form_input_date(do_lang_tempcode('EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_EXPIRY_DATE'),'expiry_date',false,is_null($expiry_date),true,$expiry_date,2));
 
 	$javascript='
 		if (document.getElementById(\'campaignremaining\'))
