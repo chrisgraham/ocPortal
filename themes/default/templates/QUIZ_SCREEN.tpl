@@ -49,7 +49,7 @@
 		</table></div>
 
 		<p class="proceed_button">
-			<input accesskey="u" class="buttons__save button_screen" type="submit" value="{!SUBMIT}" />
+			<input accesskey="u" class="buttons__proceed button_screen" type="submit" value="{!SUBMIT}" />
 		</p>
 	</div>
 </form>

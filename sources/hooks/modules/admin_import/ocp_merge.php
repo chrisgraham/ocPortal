@@ -379,8 +379,8 @@ class Hook_ocp_merge
 				'q_quiz'=>$quiz,
 				'q_required'=>array_key_exists('q_required',$row)?$row['q_required']:0,
 			);
-			$map+=insert_lang('q_question_text',$this->get_lang_string($db,$row['q_question_text']),2);
-			$map+=insert_lang('q_question_extra_text',$this->get_lang_string($db,$row['q_question_extra_text']),2);
+			$map+=insert_lang_comcode('q_question_text',$this->get_lang_string($db,$row['q_question_text']),2);
+			$map+=insert_lang_comcode('q_question_extra_text',$this->get_lang_string($db,$row['q_question_extra_text']),2);
 			$id_new=$GLOBALS['SITE_DB']->query_insert('quiz_questions',$map,true);
 
 			import_id_remap_put('quiz_question',strval($row['id']),$id_new);

@@ -206,8 +206,8 @@ function _save_available_quiz_answers($id,$text,$type)
 				'q_required'=>$required,
 				'q_marked'=>$marked,
 			);
-			$map+=insert_lang('q_question_text',$question,2);
-			$map+=insert_lang('q_question_extra_text',$question_extra_text,2);
+			$map+=insert_lang_comcode('q_question_text',$question,2);
+			$map+=insert_lang_comcode('q_question_extra_text',$question_extra_text,2);
 			$q_id=$GLOBALS['SITE_DB']->query_insert('quiz_questions',$map,true);
 
 			// Now we add the answers
