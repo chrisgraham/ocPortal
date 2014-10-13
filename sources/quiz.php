@@ -144,7 +144,7 @@ function render_quiz($questions)
 	{
 		$name='q_'.strval($q['id']);
 		$question=protect_from_escaping((!is_string($q['q_question_text']) && !isset($q['q_question_text__text_parsed']))?comcode_to_tempcode($q['q_question_text']):get_translated_tempcode('quiz_questions',$q,'q_question_text'));
-		$description=protect_from_escaping((!is_string($q['q_question_text']) && !isset($q['q_question_text__text_parsed']))?comcode_to_tempcode($q['q_question_extra_text']):get_translated_tempcode('quiz_questions',$q,'q_question_extra_text'));
+		$description=protect_from_escaping((!is_string($q['q_question_extra_text']) && !isset($q['q_question_extra_text__text_parsed']))?comcode_to_tempcode($q['q_question_extra_text']):get_translated_tempcode('quiz_questions',$q,'q_question_extra_text'));
 
 		switch ($q['q_type'])
 		{

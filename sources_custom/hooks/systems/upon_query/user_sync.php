@@ -17,6 +17,8 @@ class Hook_upon_query_user_sync
 {
 	function run_post($ob,$query,$max,$start,$fail_ok,$get_insert_id,$ret)
 	{
+		if (!function_exists('get_value')) return; // Installer?
+
 		if (get_value('user_sync_enabled')==='1')
 		{
 			$prefix=preg_quote(get_table_prefix(),'#');

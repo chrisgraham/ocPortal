@@ -110,12 +110,9 @@ require_code('tempcode');
 require_code('templates');
 require_code('version');
 require_code('urls');
-if ((!array_key_exists('step',$_GET)) || (intval($_GET['step'])!=5))
-{
-	require_code('zones');
-	require_code('comcode');
-	require_code('themes');
-}
+require_code('zones');
+require_code('comcode');
+require_code('themes');
 
 global $CACHE_TEMPLATES;
 if (is_writable(get_file_base().'/themes/default/templates_cached/'.user_lang())) $CACHE_TEMPLATES=true;
@@ -673,7 +670,7 @@ function step_4()
 	$cookie_days='120';
 	$use_persistent=false;
 	require_code('version');
-	$table_prefix='ocp_';
+	$table_prefix=get_default_table_prefix();
 	if (strpos(strtoupper(PHP_OS),'WIN')!==false)
 	{
 		$db_site_host='127.0.0.1';
@@ -972,7 +969,7 @@ function step_5()
 		$_POST['db_forums_host']=$_POST['db_site_host'];
 		$_POST['db_forums_user']=$_POST['db_site_user'];
 		$_POST['db_forums_password']=$_POST['db_site_password'];
-		$_POST['ocf_table_prefix']=array_key_exists('table_prefix',$_POST)?$_POST['table_prefix']:'ocp_';
+		$_POST['ocf_table_prefix']=array_key_exists('table_prefix',$_POST)?$_POST['table_prefix']:get_default_table_prefix();
 	}
 
 	// Checkbox fields that need to be explicitly saved, as the default is not 0
@@ -1121,7 +1118,7 @@ function include_ocf()
 	$SITE_INFO['db_forums_host']=$SITE_INFO['db_site_host'];
 	$SITE_INFO['db_forums_user']=$SITE_INFO['db_site_user'];
 	$SITE_INFO['db_forums_password']=$SITE_INFO['db_site_password'];
-	$SITE_INFO['ocf_table_prefix']=array_key_exists('table_prefix',$SITE_INFO)?$SITE_INFO['table_prefix']:'ocp_';
+	$SITE_INFO['ocf_table_prefix']=array_key_exists('table_prefix',$SITE_INFO)?$SITE_INFO['table_prefix']:get_default_table_prefix();
 	$GLOBALS['FORUM_DRIVER']=object_factory('forum_driver_ocf');
 	$GLOBALS['FORUM_DB']=$GLOBALS['SITE_DB'];
 	$GLOBALS['FORUM_DRIVER']->connection=$GLOBALS['SITE_DB'];
@@ -2649,6 +2646,17 @@ function get_dir_contents($dir,$php=false)
 	}
 
 	return $out;
+}
+
+/**
+ * Get default table prefix.
+ *
+ * @return string			Default ocPortal table prefix
+ */
+function get_default_table_prefix()
+{
+	// If we're running out of the main git repository (approximation: test framework exists), then sandbox with a version-specific table prefix
+	return file_exists(get_file_base().'/_tests')?('ocp'.strval(intval(ocp_version_number())).'_'):'ocp_';
 }
 
 /**
