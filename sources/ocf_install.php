@@ -279,6 +279,8 @@ function install_ocf($upgrade_from=NULL)
 	}
 	if ((!is_null($upgrade_from)) && ($upgrade_from<10.0))
 	{
+		$GLOBALS['FORUM_DB']->delete_index_if_exists('f_posts','posts_by');
+
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_profile_views','UINTEGER');
 		$GLOBALS['FORUM_DB']->add_table_field('f_members','m_total_sessions','UINTEGER');
 
@@ -685,7 +687,6 @@ function install_ocf($upgrade_from=NULL)
 			't_cache_last_member_id'=>'?MEMBER',
 			't_cache_num_posts'=>'INTEGER',
 		));
-		$GLOBALS['FORUM_DB']->create_index('f_topics','t_cache_num_posts',array('t_cache_num_posts'));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','t_num_views',array('t_num_views'));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','t_pt_to',array('t_pt_to'));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','t_pt_from',array('t_pt_from'));
@@ -730,9 +731,6 @@ function install_ocf($upgrade_from=NULL)
 		$GLOBALS['FORUM_DB']->create_index('f_posts','post_order_time',array('p_time','id'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_since',array('p_time','p_cache_forum_id')); // p_cache_forum_id is used to not count PT posts
 		$GLOBALS['FORUM_DB']->create_index('f_posts','p_last_edit_time',array('p_last_edit_time'));
-		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by',array('p_poster','p_time'));
-		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_in_1',array('p_poster','p_topic_id'));
-		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_in_2',array('p_poster','p_cache_forum_id'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','find_pp',array('p_intended_solely_for'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','search_join',array('p_post'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','postsinforum',array('p_cache_forum_id'));
@@ -889,8 +887,11 @@ function install_ocf($upgrade_from=NULL)
 	if ((is_null($upgrade_from)) || ($upgrade_from<10.0))
 	{
 		$GLOBALS['FORUM_DB']->create_index('f_members','last_visit_time',array('m_dob_month','m_dob_day','m_last_visit_time'));
-		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by_in_forum',array('p_poster','p_cache_forum_id'));
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by_in_forum',array('p_poster','p_cache_forum_id')); // Used for searching by member, filtered by forum access
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by_in_topic',array('p_poster','p_topic_id')); // Used to help on some joins / complex queries
+		$GLOBALS['FORUM_DB']->create_index('f_posts','posts_by',array('p_poster','p_time'));
 		$GLOBALS['FORUM_DB']->create_index('f_topics','topic_order_4',array('t_forum_id','t_cache_last_time')); // Total index for simple forum topic listing
+		$GLOBALS['FORUM_DB']->create_index('f_topics','t_cache_num_posts',array('t_cache_num_posts'));
 
 		$GLOBALS['FORUM_DB']->create_index('f_groups','#groups_search__combined',array('g_name','g_title'));
 		$GLOBALS['FORUM_DB']->create_index('f_posts','#posts_search__combined',array('p_post','p_title'));
