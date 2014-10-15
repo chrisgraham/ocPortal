@@ -515,7 +515,7 @@ class Module_search
 
 		$author=get_param('author','');
 		$author_id=($author!='')?$GLOBALS['FORUM_DRIVER']->get_member_from_username($author):NULL;
-		$days=get_param_integer('days',($id=='ocf_members')?NULL:60);
+		$days=get_param_integer('days',($id=='ocf_members')?-1:60);
 		$sort=get_param('sort','relevance');
 		$direction=get_param('direction','DESC');
 		if (!in_array(strtoupper($direction),array('ASC','DESC'))) log_hack_attack_and_exit('ORDERBY_HACK');
