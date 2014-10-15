@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		quizzes
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    quizzes
  */
 
 class Hook_members_quiz
 {
     /**
-	 * Find member-related links to inject.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
-	 */
+     * Find member-related links to inject.
+     *
+     * @param  MEMBER                   The ID of the member we are getting link hooks for
+     * @return array                    List of lists of tuples for results (by link section). Each tuple is: type,title,url
+     */
     public function run($member_id)
     {
         if (!addon_installed('quizzes')) {
@@ -42,11 +42,11 @@ class Hook_members_quiz
     }
 
     /**
-	 * Get sections to inject to about tab of the member profile.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting sections for
-	 * @return array		List of sections. Each tuple is Tempcode.
-	 */
+     * Get sections to inject to about tab of the member profile.
+     *
+     * @param  MEMBER                   The ID of the member we are getting sections for
+     * @return array                    List of sections. Each tuple is Tempcode.
+     */
     public function get_sections($member_id)
     {
         if (!addon_installed('quizzes')) {
@@ -144,9 +144,9 @@ class Hook_members_quiz
                 );
             }
             /*if (!$has_points)
-			{
-				$entry['q_points_for_passing']=$out_of;
-			}*/
+            {
+                    $entry['q_points_for_passing']=$out_of;
+            }*/
             $categories[$category_title]['QUIZZES'][$entry['id']] = array(
                 'QUIZ_NAME' => $quiz_name,
                 'QUIZ_START_TEXT' => get_translated_tempcode('quizzes',$entry,'q_start_text'),

@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_addon_management
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_addon_management
  */
 
 /**
  * Find detail addon details.
  *
- * @return array		Map of default addon details
+ * @return array                        Map of default addon details
  */
 function get_default_addon_details()
 {
@@ -43,11 +43,11 @@ function get_default_addon_details()
 /**
  * Get info about an addon, simulating an extended version of the traditional ocPortal-addon database row.
  *
- * @param  string		The name of the addon
- * @param  boolean	Whether to search for dependencies on this
- * @param  ?array		Database row (NULL: lookup via a new query)
- * @param  ?array		.ini-format info (needs processing) (NULL: unknown / N/A)
- * @return array		The map of details
+ * @param  string                       The name of the addon
+ * @param  boolean                      Whether to search for dependencies on this
+ * @param  ?array                       Database row (NULL: lookup via a new query)
+ * @param  ?array                       .ini-format info (needs processing) (NULL: unknown / N/A)
+ * @return array                        The map of details
  */
 function read_addon_info($addon,$get_dependencies_on_this = false,$row = null,$ini_info = null)
 {
@@ -203,10 +203,10 @@ function read_addon_info($addon,$get_dependencies_on_this = false,$row = null,$i
 /**
  * Find the icon for an addon.
  *
- * @param  ID_TEXT	Addon name
- * @param  boolean	Whether to use a default icon
- * @param  ?PATH		Path to tar file (NULL: don't look inside a TAR / it's installed already)
- * @return string		Theme image URL (may be a "data:" URL rather than a normal URLPATH)
+ * @param  ID_TEXT                      Addon name
+ * @param  boolean                      Whether to use a default icon
+ * @param  ?PATH                        Path to tar file (NULL: don't look inside a TAR / it's installed already)
+ * @return string                       Theme image URL (may be a "data:" URL rather than a normal URLPATH)
  */
 function find_addon_icon($addon_name,$pick_default = true,$tar_path = null)
 {

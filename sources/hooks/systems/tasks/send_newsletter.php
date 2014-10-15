@@ -13,29 +13,29 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		newsletter
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    newsletter
  */
 
 class Hook_task_send_newsletter
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @param  LONG_TEXT			The newsletter message
-	 * @param  SHORT_TEXT		The newsletter subject
-	 * @param  LANGUAGE_NAME	The language
-	 * @param  array				A map describing what newsletters and newsletter levels the newsletter is being sent to
-	 * @param  BINARY				Whether to only send in HTML format
-	 * @param  string				Override the email address the mail is sent from (blank: staff address)
-	 * @param  string				Override the name the mail is sent from (blank: site name)
-	 * @param  integer			The message priority (1=urgent, 3=normal, 5=low)
-	 * @range  1 5
-	 * @param  string				CSV data of extra subscribers (blank: none). This is in the same ocPortal newsletter CSV format that we export elsewhere.
-	 * @param  ID_TEXT			The template used to show the email
-	 * @return ?array				A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @param  LONG_TEXT                The newsletter message
+     * @param  SHORT_TEXT               The newsletter subject
+     * @param  LANGUAGE_NAME            The language
+     * @param  array                    A map describing what newsletters and newsletter levels the newsletter is being sent to
+     * @param  BINARY                   Whether to only send in HTML format
+     * @param  string                   Override the email address the mail is sent from (blank: staff address)
+     * @param  string                   Override the name the mail is sent from (blank: site name)
+     * @param  integer                  The message priority (1=urgent, 3=normal, 5=low)
+     * @range  1 5
+     * @param  string                   CSV data of extra subscribers (blank: none). This is in the same ocPortal newsletter CSV format that we export elsewhere.
+     * @param  ID_TEXT                  The template used to show the email
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$mail_template)
     {
         require_code('newsletter');

@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Special code to render Admin Zone Comcode pages with special significances.
  *
- * @param  ID_TEXT		The page being loaded
+ * @param  ID_TEXT                      The page being loaded
  */
 function adminzone_special_cases($codename)
 {
     /*
-	The current design does not require these, but this code may be useful in the future.
-	If we put it back, we should do it with hooks, for proper modularity.
+    The current design does not require these, but this code may be useful in the future.
+    If we put it back, we should do it with hooks, for proper modularity.
 
-	if (($codename=='start') && (get_page_name()=='start') && (get_option('show_docs')!=='0'))
-	{
-		require_lang('menus');
-		set_helper_panel_text(comcode_lang_string('menus:DOC_ADMIN_ZONE'));
-		set_helper_panel_tutorial('tut_adminzone');
-	}
-	elseif (($codename=='netlink') && (get_page_name()=='netlink'))
-	{
-		set_helper_panel_text(comcode_lang_string('menus:DOC_NETLINK'));
-		set_helper_panel_tutorial('tut_msn');
-	}
+    if (($codename=='start') && (get_page_name()=='start') && (get_option('show_docs')!=='0'))
+    {
+        require_lang('menus');
+        set_helper_panel_text(comcode_lang_string('menus:DOC_ADMIN_ZONE'));
+        set_helper_panel_tutorial('tut_adminzone');
+    }
+    elseif (($codename=='netlink') && (get_page_name()=='netlink'))
+    {
+        set_helper_panel_text(comcode_lang_string('menus:DOC_NETLINK'));
+        set_helper_panel_tutorial('tut_msn');
+    }
 */
 
     if ($codename == 'start') {
@@ -60,7 +60,7 @@ function adminzone_special_cases($codename)
 /**
  * Extend breadcrumbs for the Admin Zone (called by breadcrumbs_get_default_stub).
  *
- * @param  tempcode		Reference to the breadcrumbs stub we're assembling
+ * @param  tempcode                     Reference to the breadcrumbs stub we're assembling
  */
 function adminzone_extend_breadcrumbs(&$stub)
 {

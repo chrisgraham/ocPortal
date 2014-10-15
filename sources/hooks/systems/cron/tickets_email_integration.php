@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tickets
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tickets
  */
 
 class Hook_cron_tickets_email_integration
 {
     /**
-	 * Run function for CRON hooks. Searches for tasks to perform.
-	 */
+     * Run function for CRON hooks. Searches for tasks to perform.
+     */
     public function run()
     {
         if (!addon_installed('tickets')) {

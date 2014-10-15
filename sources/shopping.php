@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		shopping
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    shopping
  */
 
 /**
  * Get product details array, according to the hook specified in the 'hook' GET parameter
  *
- * @return array	Product details
+ * @return array                        Product details
  */
 function get_product_details()
 {
@@ -39,7 +39,7 @@ function get_product_details()
 /**
  * Function to add new item to cart.
  *
- * @param  array	Product details
+ * @param  array                        Product details
  */
 function add_to_cart($product_det)
 {
@@ -55,7 +55,7 @@ function add_to_cart($product_det)
 /**
  * Update cart
  *
- * @param  array	Product details
+ * @param  array                        Product details
  */
 function update_cart($product_det)
 {
@@ -92,7 +92,7 @@ function update_cart($product_det)
 /**
  * Remove from cart.
  *
- * @param  array	Products to remove
+ * @param  array                        Products to remove
  */
 function remove_from_cart($product_to_remove)
 {
@@ -115,7 +115,7 @@ function remove_from_cart($product_to_remove)
 /**
  * Log cart actions
  *
- * @param  ID_TEXT	The data
+ * @param  ID_TEXT                      The data
  */
 function log_cart_actions($action)
 {
@@ -162,8 +162,7 @@ function delete_incomplete_orders()
 /**
  * Show cart link
  *
- * @return tempcode
- */
+ * @return tempcode                      */
 function show_cart_link()
 {
     $cart_url = build_url(array('page' => 'shopping','type' => 'misc'),get_module_zone('shopping'));
@@ -188,7 +187,7 @@ function show_cart_link()
 /**
  * Tell the staff the shopping order was placed
  *
- * @param  AUTO_LINK		Order ID
+ * @param  AUTO_LINK                    Order ID
  */
 function purchase_done_staff_mail($order_id)
 {
@@ -204,7 +203,7 @@ function purchase_done_staff_mail($order_id)
 /**
  * Find products in cart
  *
- * @return array	Product details in cart
+ * @return array                        Product details in cart
  */
 function find_products_in_cart()
 {
@@ -226,8 +225,8 @@ function find_products_in_cart()
 /**
  * Stock maintain warning mail
  *
- * @param  SHORT_TEXT	Product name
- * @param  AUTO_LINK		Product ID
+ * @param  SHORT_TEXT                   Product name
+ * @param  AUTO_LINK                    Product ID
  */
 function stock_maintain_warn_mail($product_name,$product_id)
 {
@@ -243,7 +242,7 @@ function stock_maintain_warn_mail($product_name,$product_id)
 /**
  * Stock reduction
  *
- * @param  AUTO_LINK		The ID
+ * @param  AUTO_LINK                    The ID
  */
 function update_stock($order_id)
 {
@@ -268,7 +267,7 @@ function update_stock($order_id)
 /**
  * Delete cart contents for the current user.
  *
- * @param  boolean		Whether to just do a soft delete, i.e. mark as deleted.
+ * @param  boolean                      Whether to just do a soft delete, i.e. mark as deleted.
  */
 function empty_cart($soft_delete = false)
 {
@@ -306,7 +305,7 @@ function delete_pending_orders_for_current_user()
 /**
  * Payment step.
  *
- * @return tempcode	The result of execution.
+ * @return tempcode                     The result of execution.
  */
 function payment_form()
 {
@@ -441,7 +440,7 @@ function payment_form()
 /**
  * Find current order tax opt out status
  *
- * @return  BINARY		Tax opt out status of current order
+ * @return  BINARY      Tax opt out status of current order
  */
 function get_order_tax_opt_out_status()
 {
@@ -467,7 +466,7 @@ function get_order_tax_opt_out_status()
 /**
  * Find current order ID
  *
- * @return  AUTO_LINK		Order ID
+ * @return  AUTO_LINK      Order ID
  */
 function get_current_order_id()
 {
@@ -489,7 +488,7 @@ function get_current_order_id()
 /**
  * Return list entry of common order statuses of orders
  *
- * @return  tempcode		Order status list entries
+ * @return  tempcode    Order status list entries
  */
 function get_order_status_list()
 {
@@ -514,8 +513,8 @@ function get_order_status_list()
 /**
  * Return a string of order products to export as csv
  *
- * @param  AUTO_LINK		Order ID
- * @return LONG_TEXT		Products names and quantity
+ * @param  AUTO_LINK                    Order ID
+ * @return LONG_TEXT                    Products names and quantity
  */
 function get_ordered_product_list_string($order_id)
 {

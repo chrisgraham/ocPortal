@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_cleanup_tools
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_cleanup_tools
  */
 
 class Hook_task_find_broken_urls
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run()
     {
         require_lang('cleanup');
@@ -155,17 +155,17 @@ class Hook_task_find_broken_urls
     }
 
     /**
-	 * Check to see if a URL is broken.
-	 *
-	 * @param  URLPATH		URL to check
-	 * @param  ID_TEXT		Table name
-	 * @param  ID_TEXT		Field name
-	 * @param  ID_TEXT		ID
-	 * @param  array			Place to record what we've already checked
-	 * @param  array			Place to put 404 errors
-	 * @param  array			Place to put file-not-found errors
-	 * @param  string			A textual identifier to where the content can be seen
-	 */
+     * Check to see if a URL is broken.
+     *
+     * @param  URLPATH                  URL to check
+     * @param  ID_TEXT                  Table name
+     * @param  ID_TEXT                  Field name
+     * @param  ID_TEXT                  ID
+     * @param  array                    Place to record what we've already checked
+     * @param  array                    Place to put 404 errors
+     * @param  array                    Place to put file-not-found errors
+     * @param  string                   A textual identifier to where the content can be seen
+     */
     public function check_url($url,$table,$field,$id,&$checked_already,&$found_404,&$found,$spot = '')
     {
         if (trim($url) == '') {

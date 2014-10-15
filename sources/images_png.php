@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Try to further compress a PNG file, via palette tricks and maximum gzip compression.
  *
- * @param  PATH		File path.
- * @param  boolean	Whether to do a lossy convert.
+ * @param  PATH                         File path.
+ * @param  boolean                      Whether to do a lossy convert.
  */
 function png_compress($path,$lossy = false)
 {

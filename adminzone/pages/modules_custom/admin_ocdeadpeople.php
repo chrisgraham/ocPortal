@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		oc_dead_people
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    oc_dead_people
  */
 
 require_code('crud_module');
@@ -30,10 +30,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     public $view_entry_point = '_SEARCH:admin_ocdeadpeople:view:_ID';
 
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -48,11 +48,11 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
@@ -94,8 +94,8 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('diseases');
@@ -106,14 +106,14 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -124,12 +124,12 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -147,11 +147,11 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         if (get_forum_type() != 'ocf') {
@@ -175,10 +175,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -259,10 +259,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $fields = new ocp_tempcode();
@@ -277,11 +277,11 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('diseases',array('*'),array('id' => intval($id)));
@@ -306,10 +306,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $name = post_param('name','');
@@ -328,11 +328,11 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return ?tempcode		Confirm message (NULL: continue)
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return ?tempcode                Confirm message (NULL: continue)
+     */
     public function edit_actualisation($id)
     {
         $id = intval($id);
@@ -365,10 +365,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         $id = intval($id);

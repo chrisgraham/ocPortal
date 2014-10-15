@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		polls
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    polls
  */
 
 class Hook_checklist_polls
 {
     /**
-	 * Find items to include on the staff checklist.
-	 *
-	 * @return array		An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
-	 */
+     * Find items to include on the staff checklist.
+     *
+     * @return array                    An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
+     */
     public function run()
     {
         if (!addon_installed('polls')) {
@@ -62,10 +62,10 @@ class Hook_checklist_polls
     }
 
     /**
-	 * Get the number of polls in the queue.
-	 *
-	 * @return integer		Number in queue
-	 */
+     * Get the number of polls in the queue.
+     *
+     * @return integer                  Number in queue
+     */
     public function get_num_poll_queue()
     {
         $c = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'poll WHERE votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10=0 AND is_current=0');

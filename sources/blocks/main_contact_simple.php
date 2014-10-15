@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		staff_messaging
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    staff_messaging
  */
 
 class Block_main_contact_simple
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -39,11 +39,11 @@ class Block_main_contact_simple
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         require_lang('messaging');

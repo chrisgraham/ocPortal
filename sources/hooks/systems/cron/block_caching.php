@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 class Hook_cron_block_caching
 {
     /**
-	 * Run function for CRON hooks. Searches for tasks to perform.
-	 */
+     * Run function for CRON hooks. Searches for tasks to perform.
+     */
     public function run()
     {
         if ((get_param('keep_lang',null) === NULL) || (get_param('keep_theme',null) === NULL)) {

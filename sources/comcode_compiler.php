@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 /**
@@ -109,20 +109,20 @@ function init__comcode_compiler()
 /**
  * Convert the specified Comcode (text format) into a tempcode tree. You shouldn't output the tempcode tree to the browser, as it looks really horrible. If you are in a rare case where you need to output directly (not through templates), you should call the evaluate method on the tempcode object, to convert it into a string.
  *
- * @param  LONG_TEXT		The Comcode to convert
- * @param  MEMBER			The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
- * @param  boolean		Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
- * @param  ?integer		The position to conduct wordwrapping at (NULL: do not conduct word-wrapping)
- * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between JavaScript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
- * @param  object			The database connection to use
- * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
- * @param  boolean		Whether this is being pre-parsed, to pick up errors before row insertion.
- * @param  boolean		Whether to treat this whole thing as being wrapped in semihtml, but apply normal security otherwise.
- * @param  boolean		Whether we are only doing this parse to find the title structure
- * @param  boolean		Whether to only check the Comcode. It's best to use the check_comcode function which will in turn use this parameter.
- * @param  ?array			A list of words to highlight (NULL: none)
- * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
- * @return tempcode		The tempcode generated
+ * @param  LONG_TEXT                    The Comcode to convert
+ * @param  MEMBER                       The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
+ * @param  boolean                      Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
+ * @param  ?integer                     The position to conduct wordwrapping at (NULL: do not conduct word-wrapping)
+ * @param  ?string                      A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between JavaScript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
+ * @param  object                       The database connection to use
+ * @param  boolean                      Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
+ * @param  boolean                      Whether this is being pre-parsed, to pick up errors before row insertion.
+ * @param  boolean                      Whether to treat this whole thing as being wrapped in semihtml, but apply normal security otherwise.
+ * @param  boolean                      Whether we are only doing this parse to find the title structure
+ * @param  boolean                      Whether to only check the Comcode. It's best to use the check_comcode function which will in turn use this parameter.
+ * @param  ?array                       A list of words to highlight (NULL: none)
+ * @param  ?MEMBER                      The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
+ * @return tempcode                     The tempcode generated
  */
 function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits = null,$on_behalf_of_member = null)
 {
@@ -1777,9 +1777,9 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
 /**
  * Find if any of some tags are in the stack.
  *
- * @param  array			The tag stack
- * @param  array			The tags
- * @return boolean		Whether one is present
+ * @param  array                        The tag stack
+ * @param  array                        The tags
+ * @return boolean                      Whether one is present
  */
 function in_tag_stack($tag_stack,$tags)
 {
@@ -1794,21 +1794,21 @@ function in_tag_stack($tag_stack,$tags)
 /**
  * Helper function for setting up and juggling variables after reaching a new Comcode tag.
  *
- * @param  boolean		Whether we are not considering parsing properly.
- * @param  boolean		Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
- * @param  MEMBER			The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
- * @param  array			The attribute map of the tag
- * @param  string			The identifier for the tag
- * @param  integer		The offset of the tag in the Comcode
- * @param  boolean		Whether the parser allows dangerous Comcode
- * @param  boolean		Whether the parser allows dangerous HTML
- * @param  boolean		Whether the parser is/was in a separate parse section (e.g. a 'code' tag)
- * @param  boolean		Whether the parser is/was in an HTML region
- * @param  boolean		Whether the parser is/was in a Semi-HTML region
- * @param  boolean		Whether the tag is a closing tag
- * @param  integer		The length of the Comcode
- * @param  LONG_TEXT		The Comcode being parsed
- * @return array			A tuple of new parser settings.
+ * @param  boolean                      Whether we are not considering parsing properly.
+ * @param  boolean                      Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
+ * @param  MEMBER                       The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
+ * @param  array                        The attribute map of the tag
+ * @param  string                       The identifier for the tag
+ * @param  integer                      The offset of the tag in the Comcode
+ * @param  boolean                      Whether the parser allows dangerous Comcode
+ * @param  boolean                      Whether the parser allows dangerous HTML
+ * @param  boolean                      Whether the parser is/was in a separate parse section (e.g. a 'code' tag)
+ * @param  boolean                      Whether the parser is/was in an HTML region
+ * @param  boolean                      Whether the parser is/was in a Semi-HTML region
+ * @param  boolean                      Whether the tag is a closing tag
+ * @param  integer                      The length of the Comcode
+ * @param  LONG_TEXT                    The Comcode being parsed
+ * @return array                        A tuple of new parser settings.
  */
 function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,&$len,&$comcode)
 {
@@ -1870,13 +1870,13 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
 /**
  * Filter HTML for safety.
  *
- * @param  boolean		Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
- * @param  MEMBER			The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
- * @param  integer		The offset of the tag in the Comcode
- * @param  integer		The length of the Comcode
- * @param  LONG_TEXT		The Comcode being parsed
- * @param  boolean		Whether the parser is/was in an HTML region
- * @param  boolean		Whether the parser is/was in a Semi-HTML region
+ * @param  boolean                      Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one.
+ * @param  MEMBER                       The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully
+ * @param  integer                      The offset of the tag in the Comcode
+ * @param  integer                      The length of the Comcode
+ * @param  LONG_TEXT                    The Comcode being parsed
+ * @param  boolean                      Whether the parser is/was in an HTML region
+ * @param  boolean                      Whether the parser is/was in a Semi-HTML region
  */
 function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_semihtml)
 {
@@ -1981,10 +1981,10 @@ function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_
 /**
  * Get HTML to close any open lists.
  *
- * @param  integer		The depth level of lists that we need to close
- * @param  string			List-type code
+ * @param  integer                      The depth level of lists that we need to close
+ * @param  string                       List-type code
  * @set    ul a 1
- * @return array			The output needed to close the lists, and the new list indentation (always zero). Done like this so we can use 'list' to set both at once in the main parser.
+ * @return array                        The output needed to close the lists, and the new list indentation (always zero). Done like this so we can use 'list' to set both at once in the main parser.
  */
 function _close_open_lists($list_indent,$list_type)
 {
@@ -2001,9 +2001,9 @@ function _close_open_lists($list_indent,$list_type)
 /**
  * Parse a single tag. For use separately, not used by main parser.
  *
- * @param  string			The data being parsed
- * @param  string			The tag we're expecting to see here / a regexp
- * @return array			A map of parsed attributes
+ * @param  string                       The data being parsed
+ * @param  string                       The tag we're expecting to see here / a regexp
+ * @return array                        A map of parsed attributes
  */
 function parse_single_comcode_tag($data,$tag = '\w+')
 {

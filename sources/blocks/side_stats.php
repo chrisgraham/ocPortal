@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		stats_block
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    stats_block
  */
 
 class Block_side_stats
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -40,10 +40,10 @@ class Block_side_stats
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -53,11 +53,11 @@ class Block_side_stats
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         $full_tpl = new ocp_tempcode();

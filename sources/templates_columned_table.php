@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_abstract_interfaces
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_abstract_interfaces
  */
 
 /**
  * Get the tempcode for a table header row.
  *
- * @param  array			The array of field titles that define the entries in the table table
- * @return tempcode		The generated header
+ * @param  array                        The array of field titles that define the entries in the table table
+ * @return tempcode                     The generated header
  */
 function columned_table_header_row($values)
 {
@@ -37,9 +37,9 @@ function columned_table_header_row($values)
 /**
  * Get the tempcode for a table row.
  *
- * @param  array			The array of values that make up this row
- * @param  boolean		Whether to add escaping
- * @return tempcode		The generated row
+ * @param  array                        The array of values that make up this row
+ * @param  boolean                      Whether to add escaping
+ * @return tempcode                     The generated row
  */
 function columned_table_row($values,$escape = false)
 {

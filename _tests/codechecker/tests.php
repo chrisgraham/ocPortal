@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		code_quality
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    code_quality
  */
 
 function get_tests()
@@ -19,20 +19,20 @@ function get_tests()
 
     // This is a good lexer test
     $tests[0] = <<<EOF
-		function blah()  // test
-		{
-			\$testing="my \"lexer\"\t".'forever '.0.'!'.0.3.'!'.010.'!'.0xa3;	/* woo */
-			\$a=<<<END
+        function blah()  // test
+        {
+            \$testing="my \"lexer\"\t".'forever '.0.'!'.0.3.'!'.010.'!'.0xa3; /* woo */
+            \$a=<<<END
 Hi \$a
 END;
-		}
+        }
 EOF;
 
     // This is a good parser test for functions
     $tests[1] = <<<END
 function test(\$a,\$b)
 {
-	return 4;
+    return 4;
 }
 
 test(1,2);
@@ -45,21 +45,21 @@ END;
     $tests[2] = <<<END
 foreach (array(1,2) as \$a=>\$b)
 {
-	while (true)
-	{
-		break;
-	}
+    while (true)
+    {
+        break;
+    }
 
-	for (\$i=0;\$i<10;\$i++)
-	{
-		continue;
-	}
+    for (\$i=0;\$i<10;\$i++)
+    {
+        continue;
+    }
 
-	do
-	{
-		// Pointless and unnecessary comment
-	}
-	while (false);
+    do
+    {
+        // Pointless and unnecessary comment
+    }
+    while (false);
 }
 
 END;
@@ -68,22 +68,22 @@ END;
     $tests[3] = <<<END
 class foobar
 {
-	var \$i;
+    var \$i;
 
-	function foobar(\$a)
-	{
-		echo \$a;
-	}
+    function foobar(\$a)
+    {
+        echo \$a;
+    }
 }
 
 abstract class baz
 {
-	public \$x;
-	private \$y;
-	protected \$z;
-	abstract public function p();
-	abstract private function q();
-	abstract protected function r();
+    public \$x;
+    private \$y;
+    protected \$z;
+    abstract public function p();
+    abstract private function q();
+    abstract protected function r();
 }
 
 \$a=new foobar(3);
@@ -96,10 +96,10 @@ if (true) \$a=1; elseif (true) \$a=1; else \$a=2;
 
 switch (1)
 {
-	case 1:
-		break;
+    case 1:
+        break;
 
-	default:
+    default:
 }
 END;
 
@@ -119,18 +119,18 @@ END;
     $tests[6] = <<<END
 class foo
 {
-	function bar(\$meh,\$foo23bar,&\$var) { /*woo!*/
+    function bar(\$meh,\$foo23bar,&\$var) { /*woo!*/
 
-		if (((23-4)*5) && (\$meh==="\"'bootstrap&bill'\""))
-		{
-			return \$var;
-		}
-		elseif (true) {
-			echo "/"."\\\\"."'\'\'\"".5.134.M_PI;
-		}
-	}
+        if (((23-4)*5) && (\$meh==="\"'bootstrap&bill'\""))
+        {
+            return \$var;
+        }
+        elseif (true) {
+            echo "/"."\\\\"."'\'\'\"".5.134.M_PI;
+        }
+    }
 
-	var \$zipedeedoodaa;
+    var \$zipedeedoodaa;
 }
 END;
 
@@ -143,14 +143,14 @@ END;
 
 function foo()
 {
-	global \$A;
-	\$A=1;
+    global \$A;
+    \$A=1;
 }
 
 function bar()
 {
-	global \$A;
-	\$A='1';
+    global \$A;
+    \$A='1';
 }
 END;
 
@@ -159,8 +159,8 @@ END;
 
 function foo()
 {
-	\$a=1;
-	\$a='1';
+    \$a=1;
+    \$a='1';
 }
 END;
 
@@ -169,7 +169,7 @@ END;
 
 function intval(\$a)
 {
-	return '';
+    return '';
 }
 END;
 
@@ -186,7 +186,7 @@ END;
 
 function foo()
 {
-	chmod('3');
+    chmod('3');
 }
 END;
 
@@ -195,7 +195,7 @@ END;
 
 function foo()
 {
-	chmod('3','3','3');
+    chmod('3','3','3');
 }
 END;
 
@@ -204,7 +204,7 @@ END;
 
 function foo()
 {
-	chmod(3,3);
+    chmod(3,3);
 }
 END;
 
@@ -226,8 +226,8 @@ END;
 
 switch(3)
 {
-	case '4':
-		break;
+    case '4':
+        break;
 }
 END;
 
@@ -236,7 +236,7 @@ END;
 
 if ('a')
 {
-	echo 'doh';
+    echo 'doh';
 }
 END;
 
@@ -245,7 +245,7 @@ END;
 
 foreach (3 as \$a)
 {
-	echo 'doh';
+    echo 'doh';
 }
 END;
 
@@ -254,22 +254,22 @@ END;
 
 if (true)
 {
-	while (true)
-	{
-		foreach (array() as \$a)
-		{
-			do
-			{
-				if (true)
-				{
-				} else
-				{
-					echo 3;
-				}
-			}
-			while (true);
-		}
-	}
+    while (true)
+    {
+        foreach (array() as \$a)
+        {
+            do
+            {
+                    if (true)
+                    {
+                    } else
+                    {
+                            echo 3;
+                    }
+            }
+            while (true);
+        }
+    }
 }
 END;
 
@@ -337,7 +337,7 @@ END;
 
 if (\$a='x' && true)
 {
-	echo 'whatever';
+    echo 'whatever';
 }
 END;
 
@@ -352,8 +352,8 @@ END;
 
 function foo()
 {
-	return;
-	echo 'unreachable';
+    return;
+    echo 'unreachable';
 }
 END;
 
@@ -429,7 +429,7 @@ END;
 
 function x(\$a)
 {
-	\$a[1]=1;
+    \$a[1]=1;
 }
 END;
 
@@ -469,10 +469,10 @@ END;
 // <nice error offsets>
 function fpassthru(\$a)
 {
-	unset(\$a);
+    unset(\$a);
 
-	return false;
-	return true;
+    return false;
+    return true;
 }
 END;
 
@@ -515,11 +515,11 @@ END;
     $tests[59] = <<<END
 class A
 {
-	public \$a;
-	public function b()
-	{
-		return \$this;
-	}
+    public \$a;
+    public function b()
+    {
+        return \$this;
+    }
 }
 \$irrelevant_variable_name=new A();
 \$irrelevant_variable_name->intermediate_function()->critical_type_part();
@@ -531,29 +531,29 @@ END;
     $tests[60] = <<<END
 interface A
 {
-	public \$a=10;
-	public function foo(\$bar);
+    public \$a=10;
+    public function foo(\$bar);
 }
 interface B extends A
 {
-	public \$b="abc";
-	public function bar(\$foo);
+    public \$b="abc";
+    public function bar(\$foo);
 }
 interface C
 {
-	public \$c=array();
-	public function baz();
+    public \$c=array();
+    public function baz();
 }
 interface D extends A, C
 {
-	public function foobar();
+    public function foobar();
 }
 class Foo implements A
 {
-	public function foo(\$bar)
-	{
-		// Do nothing
-	}
+    public function foo(\$bar)
+    {
+        // Do nothing
+    }
 }
 END;
 
@@ -561,20 +561,20 @@ END;
     $tests[61] = <<<END
 class A
 {
-	public function foo(A \$a, A \$b=NULL, A &\$c, array \$d, array \$e=NULL, array &\$f, array &\$g, \$h, \$i=5)
-	{
-	}
+    public function foo(A \$a, A \$b=NULL, A &\$c, array \$d, array \$e=NULL, array &\$f, array &\$g, \$h, \$i=5)
+    {
+    }
 }
 END;
 
     $tests[62] = <<<END
 try
 {
-	\$ocportal->controller('site_pageload')->do_page_script();
+    \$ocportal->controller('site_pageload')->do_page_script();
 }
 catch (OCP_Exception \$e)
 {
-	\$e->terminate_with_exception();
+    \$e->terminate_with_exception();
 }
 END;
 
@@ -586,20 +586,20 @@ END;
     $tests[64] = <<<END
 if (false)
 {
-	class A
-	{
-		function test()
-		{
-			\$a=\$b;
-			if (false)
-			{
-				function bar()
-				{
-					\$c=\$d;
-				}
-			}
-		}
-	}
+    class A
+    {
+        function test()
+        {
+            \$a=\$b;
+            if (false)
+            {
+                    function bar()
+                    {
+                            \$c=\$d;
+                    }
+            }
+        }
+    }
 }
 END;
 
@@ -614,9 +614,9 @@ END;
     $tests[67] = <<<END
 foreach (array() as \$a)
 {
-	foreach (array() as \$a)
-	{
-	}
+    foreach (array() as \$a)
+    {
+    }
 }
 END;
 

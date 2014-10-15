@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_signatures
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_signatures
  */
 
 class Hook_Profiles_Tabs_Edit_signature
 {
     /**
-	 * Find whether this hook is active.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return boolean		Whether this hook is active
-	 */
+     * Find whether this hook is active.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @return boolean                  Whether this hook is active
+     */
     public function is_active($member_id_of,$member_id_viewing)
     {
         return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
     }
 
     /**
-	 * Render function for profile tabs edit hooks.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
-	 */
+     * Render function for profile tabs edit hooks.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @return ?array                   A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
+     */
     public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
     {
         $title = do_lang_tempcode('SIGNATURE');
@@ -71,21 +71,21 @@ class Hook_Profiles_Tabs_Edit_signature
         $size = ocf_get_member_best_group_property($member_id_of,'max_sig_length_comcode');
 
         $javascript = "
-			var form=document.getElementById('signature').form;
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					var post=form.elements['signature'];
-					if ((!post.value) && (post[1])) post=post[1];
-					if (post.value.length>" . strval($size) . ")
-					{
-						window.fauxmodal_alert('" . php_addslashes(do_lang('SIGNATURE_TOO_BIG')) . "');
-						return false;
-					}
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-					return true;
-				};
-		";
+            var form=document.getElementById('signature').form;
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            var post=form.elements['signature'];
+                            if ((!post.value) && (post[1])) post=post[1];
+                            if (post.value.length>" . strval($size) . ")
+                            {
+                                        window.fauxmodal_alert('" . php_addslashes(do_lang('SIGNATURE_TOO_BIG')) . "');
+                                        return false;
+                            }
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            return true;
+                    };
+        ";
 
         require_code('form_templates');
 

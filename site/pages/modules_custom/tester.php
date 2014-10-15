@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tester
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tester
  */
 
 /*
@@ -30,10 +30,10 @@ UPDATE ocp_test_sections SET s_assigned_to=4 WHERE id IN (2,18,19,20,21,22,34,35
 class Module_tester
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -47,8 +47,8 @@ class Module_tester
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('test_sections');
@@ -60,11 +60,11 @@ class Module_tester
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         $GLOBALS['SITE_DB']->create_table('test_sections',array(
@@ -91,24 +91,24 @@ class Module_tester
     }
 
     /**
-	 * Find icon for this module, specifically to find an icon for the module's main sitemap node. Defined when there is no entry-point for a default page call.
-	 *
-	 * @return string		Icon.
-	 */
+     * Find icon for this module, specifically to find an icon for the module's main sitemap node. Defined when there is no entry-point for a default page call.
+     *
+     * @return string                   Icon.
+     */
     public function get_wrapper_icon()
     {
         return 'menu/_generic_admin/tool';
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -126,10 +126,10 @@ class Module_tester
     public $test;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -205,10 +205,10 @@ class Module_tester
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_css('tester');
@@ -256,10 +256,10 @@ class Module_tester
     }
 
     /**
-	 * Show statistics on test progress.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show statistics on test progress.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function stats()
     {
         $num_tests_successful = $GLOBALS['SITE_DB']->query_select_value('tests','COUNT(*)',array('t_status' => 1,'t_enabled' => 1));
@@ -305,10 +305,10 @@ class Module_tester
     }
 
     /**
-	 * Run through tests.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Run through tests.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function go()
     {
         require_code('comcode_renderer');
@@ -397,10 +397,10 @@ class Module_tester
     }
 
     /**
-	 * A bug report for a test.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * A bug report for a test.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function report()
     {
         $id = $this->id;
@@ -420,10 +420,10 @@ class Module_tester
     }
 
     /**
-	 * Save test run through results.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Save test run through results.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function _go()
     {
         foreach ($_POST as $key => $val) {
@@ -441,12 +441,12 @@ class Module_tester
     }
 
     /**
-	 * Get a list to choose a section.
-	 *
-	 * @param  ?AUTO_LINK	The section to select by default (NULL: no specific default)
-	 * @param  boolean		Whether to only select inheritable sections
-	 * @return tempcode		The list
-	 */
+     * Get a list to choose a section.
+     *
+     * @param  ?AUTO_LINK               The section to select by default (NULL: no specific default)
+     * @param  boolean                  Whether to only select inheritable sections
+     * @return tempcode                 The list
+     */
     public function get_section_list($it = null,$unassigned = false)
     {
         $list2 = new ocp_tempcode();
@@ -475,11 +475,11 @@ class Module_tester
     }
 
     /**
-	 * Get a list to choose a tester.
-	 *
-	 * @param  ?MEMBER		The member to select by default (NULL: Select N/A)
-	 * @return tempcode		The list
-	 */
+     * Get a list to choose a tester.
+     *
+     * @param  ?MEMBER                  The member to select by default (NULL: Select N/A)
+     * @return tempcode                 The list
+     */
     public function get_tester_list($it)
     {
         $tester_groups = collapse_1d_complexity('group_id',$GLOBALS['SITE_DB']->query_select('group_privileges',array('group_id'),array('privilege' => 'perform_tests')));
@@ -500,15 +500,15 @@ class Module_tester
     }
 
     /**
-	 * Get tempcode for a test adding/editing form.
-	 *
-	 * @param  string			A short stub to prefix the field name
-	 * @param  SHORT_TEXT	The text of the test
-	 * @param  ?MEMBER		The member the test is assigned to (NULL: test section member)
-	 * @param  BINARY			Whether the test is enabled
-	 * @param  string			The section this test inherits from (blank: none)
-	 * @return tempcode		The tempcode for the visible fields
-	 */
+     * Get tempcode for a test adding/editing form.
+     *
+     * @param  string                   A short stub to prefix the field name
+     * @param  SHORT_TEXT               The text of the test
+     * @param  ?MEMBER                  The member the test is assigned to (NULL: test section member)
+     * @param  BINARY                   Whether the test is enabled
+     * @param  string                   The section this test inherits from (blank: none)
+     * @return tempcode                 The tempcode for the visible fields
+     */
     public function get_test_form_fields($stub,$test = '',$assigned_to = null,$enabled = 1,$inherit_from = '')
     {
         require_code('form_templates');
@@ -526,14 +526,14 @@ class Module_tester
     }
 
     /**
-	 * Get tempcode for a test section adding/editing form.
-	 *
-	 * @param  SHORT_TEXT	The name of the section
-	 * @param  LONG_TEXT		Notes for the section
-	 * @param  ?MEMBER		The member the tests are assigned to (NULL: not a normal section, one that gets inherited into tests)
-	 * @param  BINARY			Whether this test section is intended to be inherited, not used by itself
-	 * @return tempcode		The tempcode for the visible fields
-	 */
+     * Get tempcode for a test section adding/editing form.
+     *
+     * @param  SHORT_TEXT               The name of the section
+     * @param  LONG_TEXT                Notes for the section
+     * @param  ?MEMBER                  The member the tests are assigned to (NULL: not a normal section, one that gets inherited into tests)
+     * @param  BINARY                   Whether this test section is intended to be inherited, not used by itself
+     * @return tempcode                 The tempcode for the visible fields
+     */
     public function get_test_section_form_fields($section = '',$notes = '',$assigned_to = null,$inheritable = 0)
     {
         require_code('form_templates');
@@ -550,10 +550,10 @@ class Module_tester
     }
 
     /**
-	 * Inteface to add a test.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Inteface to add a test.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function add_test()
     {
         check_privilege('add_tests');
@@ -573,10 +573,10 @@ class Module_tester
     }
 
     /**
-	 * Actualiser to add a test.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Actualiser to add a test.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function _add_test()
     {
         check_privilege('add_tests');
@@ -590,10 +590,10 @@ class Module_tester
     }
 
     /**
-	 * Inteface to add a test section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Inteface to add a test section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function ad()
     {
         check_privilege('add_tests');
@@ -615,10 +615,10 @@ class Module_tester
     }
 
     /**
-	 * Add in any new tests added in the form.
-	 *
-	 * @param  AUTO_LINK	The section to put the tests in.
-	 */
+     * Add in any new tests added in the form.
+     *
+     * @param  AUTO_LINK                The section to put the tests in.
+     */
     public function _add_new_tests($section_id)
     {
         foreach (array_keys($_POST) as $key) {
@@ -649,10 +649,10 @@ class Module_tester
     }
 
     /**
-	 * Actualiser to add a test section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Actualiser to add a test section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function _ad()
     {
         check_privilege('add_tests');
@@ -677,10 +677,10 @@ class Module_tester
     }
 
     /**
-	 * Choose a test section to edit.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Choose a test section to edit.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function ed()
     {
         check_privilege('edit_own_tests');
@@ -703,10 +703,10 @@ class Module_tester
     }
 
     /**
-	 * Interface to edit a test section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Interface to edit a test section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function _ed()
     {
         check_privilege('edit_own_tests');
@@ -744,11 +744,11 @@ class Module_tester
     }
 
     /**
-	 * Turn keys of a map to upper case, and return modified map.
-	 *
-	 * @param  array			Input map
-	 * @return array			Adjusted map
-	 */
+     * Turn keys of a map to upper case, and return modified map.
+     *
+     * @param  array                    Input map
+     * @return array                    Adjusted map
+     */
     public function map_keys_to_upper($array)
     {
         $out = array();
@@ -759,10 +759,10 @@ class Module_tester
     }
 
     /**
-	 * Actualiser to edit a test section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Actualiser to edit a test section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function __ed()
     {
         check_privilege('edit_own_tests');

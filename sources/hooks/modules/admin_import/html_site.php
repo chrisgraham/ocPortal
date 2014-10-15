@@ -17,9 +17,9 @@
 /**
  * Calculate Levenshtein distance between two strings, but work past the PHP function's character limit.
  *
- * @param  string		First string.
- * @param  string		Second string.
- * @return integer	Distance.
+ * @param  string                       First string.
+ * @param  string                       Second string.
+ * @return integer                      Distance.
  */
 function fake_levenshtein($a,$b)
 {
@@ -37,18 +37,18 @@ function fake_levenshtein($a,$b)
 }
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		import
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    import
  */
 
 class Hook_html_site
 {
     /**
-	 * Standard importer hook info function.
-	 *
-	 * @return ?array	Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
-	 */
+     * Standard importer hook info function.
+     *
+     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -61,21 +61,21 @@ class Hook_html_site
     }
 
     /**
-	 * Probe a file path for DB access details.
-	 *
-	 * @param  string			The probe path
-	 * @return array			A quartet of the details (db_name, db_user, db_pass, table_prefix)
-	 */
+     * Probe a file path for DB access details.
+     *
+     * @param  string                   The probe path
+     * @return array                    A quartet of the details (db_name, db_user, db_pass, table_prefix)
+     */
     public function probe_db_access($file_base)
     {
         return array(null,null,null,null); // No DB connection needed
     }
 
     /**
-	 * Standard import function to get extra fields to ask for when starting the import.
-	 *
-	 * @return tempcode		Extra fields
-	 */
+     * Standard import function to get extra fields to ask for when starting the import.
+     *
+     * @return tempcode                 Extra fields
+     */
     public function get_extra_fields()
     {
         // Give user options
@@ -106,12 +106,12 @@ class Hook_html_site
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_pages($db,$table_prefix,$file_base)
     {
         appengine_live_guard();
@@ -503,15 +503,15 @@ class Hook_html_site
     }
 
     /**
-	 * Filter HTML that has been read, to make it more compatible with ocPortal.
-	 *
-	 * @param  string			The HTML
-	 * @param  BINARY			Whether to fix XHTML errors
-	 * @param  PATH			The base URL of the old site
-	 * @param  array			A list of all files on the site
-	 * @param  PATH			The base directory we are importing from
-	 * @return string			Filtered HTML
-	 */
+     * Filter HTML that has been read, to make it more compatible with ocPortal.
+     *
+     * @param  string                   The HTML
+     * @param  BINARY                   Whether to fix XHTML errors
+     * @param  PATH                     The base URL of the old site
+     * @param  array                    A list of all files on the site
+     * @param  PATH                     The base directory we are importing from
+     * @return string                   Filtered HTML
+     */
     public function _html_filter($file_contents,$fix_html,$base_url,$files,$file_base)
     {
         // If selected, clean up all the HTML
@@ -571,13 +571,13 @@ class Hook_html_site
                         @copy($file_base . '/' . $decoded_url,$target);
 
                         /*if (substr($decoded_url,-4)=='.css') Not needed, as relative paths maintained
-						{
-							$css_file=file_get_contents($target);
-							$css_file=preg_replace('#(url\([\'"]?)(\.*'.'/)?#','${1}{$BASE_URL;}/uploads/website_specific/',$css_file);
-							$my_css_file=fopen($target,GOOGLE_APPENGINE?'wb':'wt');
-							fwrite($my_css_file,$css_file);
-							fclose($my_css_file);
-						}*/
+                                        {
+                                                        $css_file=file_get_contents($target);
+                                                        $css_file=preg_replace('#(url\([\'"]?)(\.*'.'/)?#','${1}{$BASE_URL;}/uploads/website_specific/',$css_file);
+                                                        $my_css_file=fopen($target,GOOGLE_APPENGINE?'wb':'wt');
+                                                        fwrite($my_css_file,$css_file);
+                                                        fclose($my_css_file);
+                                        }*/
 
                         fix_permissions($target);
                         sync_file($target);
@@ -594,13 +594,13 @@ class Hook_html_site
     }
 
     /* Try and strip out a bit of HTML from the start/end of another bit of HTML, but with rough levenshtein matching.
-	 *
-	 * @param  string		What we are stripping.
-	 * @param  string		What we are stripping from.
-	 * @param  boolean	Whether we are removing from the end.
-	 * @param  integer	The position to start at (if $backwards=true, then this is relative to the end).
-	 * @return string		The altered string.
-	 */
+     *
+     * @param  string                   What we are stripping.
+     * @param  string                   What we are stripping from.
+     * @param  boolean                  Whether we are removing from the end.
+     * @param  integer                  The position to start at (if $backwards=true, then this is relative to the end).
+     * @return string                   The altered string.
+     */
     public function levenshtein_strip_search($to_strip,$subject,$backwards,$i)
     {
         $best = mixed();
@@ -629,7 +629,7 @@ class Hook_html_site
                 }
             }
             $lev = null;
-            //$lev=fake_levenshtein($backwards?substr($subject,-$i):substr($subject,0,$i),$to_strip);		For efficiency the next loop has a more intelligent searching algorithm, to narrow down on the peak
+            //$lev=fake_levenshtein($backwards?substr($subject,-$i):substr($subject,0,$i),$to_strip);    For efficiency the next loop has a more intelligent searching algorithm, to narrow down on the peak
             $positions[] = array($i,$lev);
         }
 

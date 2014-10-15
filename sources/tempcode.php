@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -64,12 +64,12 @@ function init__tempcode()
     $RECORDED_TEMPLATES_USED = array();
     $RECORD_TEMPLATES_TREE = false;
     /** The name of a template that was called to render the current screen (NULL: not rendering a screen), auto-populated within the template system. This is tracked during dev mode to confirm that each screen really does wrap itself in a proper screen template.
-	 * @global ?ID_TEXT $SCREEN_TEMPLATE_CALLED
-	 */
+     * @global ?ID_TEXT $SCREEN_TEMPLATE_CALLED
+     */
     $SCREEN_TEMPLATE_CALLED = null;
     /** Whether a title has been called.
-	 * @global boolean $TITLE_CALLED
-	 */
+     * @global boolean $TITLE_CALLED
+     */
     $TITLE_CALLED = false;
     $POSSIBLY_IN_SAFE_MODE_CACHE = (get_param_integer('keep_safe_mode',0) == 1);
 
@@ -89,8 +89,8 @@ function init__tempcode()
     $IS_TEMPLATE_PREVIEW_OP_CACHE = array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op'] == '1') && ((get_page_name() != 'admin_themes') || (get_param('type','') == 'view'));
 
     /** Whether output streaming mode is active.
-	 * @global boolean $OUTPUT_STREAMING
-	 */
+     * @global boolean $OUTPUT_STREAMING
+     */
     global $OUTPUT_STREAMING;
     $OUTPUT_STREAMING = (function_exists('get_option')) && (get_option('output_streaming') == '1') && (get_param_integer('keep_no_output_streaming',0) == 0);
     if (get_param('special_page_type','view') != 'view') {
@@ -113,8 +113,8 @@ function init__tempcode()
 /**
  * Simple function to evaluate some Tempcode. Very rarely to be used, only if you can't call a method (e.g. you are copying direct into an array, such as in block cacheing).
  *
- * @param  tempcode		Tempcode object
- * @return string			Evaluated string
+ * @param  tempcode                     Tempcode object
+ * @return string                       Evaluated string
  */
 function static_evaluate_tempcode($ob)
 {
@@ -124,8 +124,8 @@ function static_evaluate_tempcode($ob)
 /**
  * Escape a string to fit within PHP double quotes TWICE. Needed sometimes when generating code. This function exists for performance reasons.
  *
- * @param  string			String in
- * @return string			Resultant string
+ * @param  string                       String in
+ * @return string                       Resultant string
  */
 function php_addslashes_twice($in)
 {
@@ -135,14 +135,14 @@ function php_addslashes_twice($in)
     // This code does not work, provides awfully confusing Tempcode errors...
 
     /*global $PHP_REP_FROM,$PHP_REP_TO_TWICE;
-	return str_replace($PHP_REP_FROM,$PHP_REP_TO_TWICE,$in);
-	//return str_replace("\n",'\n',str_replace('$','\$',str_replace('\\\'','\'',addslashes($in))));*/
+    return str_replace($PHP_REP_FROM,$PHP_REP_TO_TWICE,$in);
+    //return str_replace("\n",'\n',str_replace('$','\$',str_replace('\\\'','\'',addslashes($in))));*/
 }
 
 /**
  * Create a unique identifer.
  *
- * @return string				Unique Identifier
+ * @return string                       Unique Identifier
  */
 function fast_uniqid()
 {
@@ -152,9 +152,9 @@ function fast_uniqid()
 /**
  * Get a string (natural for Tempcode's stream-based processing-model) representation of a bound Tempcode variable
  *
- * @param  mixed				Variable (or NULL if not set)
- * @param  ID_TEXT			Where this parameter is referenced, in a compressed reference form
- * @return string				Value
+ * @param  mixed                        Variable (or NULL if not set)
+ * @param  ID_TEXT                      Where this parameter is referenced, in a compressed reference form
+ * @return string                       Value
  */
 function otp($var,$origin = '')
 {
@@ -180,8 +180,8 @@ function otp($var,$origin = '')
 /**
  * Give an error about a missing template parameter
  *
- * @param  ID_TEXT			Where this parameter is referenced, in a slash-combined reference form
- * @return string				Always ""
+ * @param  ID_TEXT                      Where this parameter is referenced, in a slash-combined reference form
+ * @return string                       Always ""
  */
 function missing_template_parameter($origin)
 {
@@ -196,12 +196,12 @@ function missing_template_parameter($origin)
 /**
  * Build a conventional Tempcode object
  *
- * @param  integer			The type of symbol this is (TC_SYMBOL, TC_LANGUAGE_REFERENCE)
+ * @param  integer                      The type of symbol this is (TC_SYMBOL, TC_LANGUAGE_REFERENCE)
  * @set    0 2
- * @param  ID_TEXT			The name of the symbol
- * @param  ?array				Parameters to the symbol (NULL: none). In same format as expected by ecv.
- * @param  ?array				Escaping for the symbol (NULL: none)
- * @return tempcode			Tempcode object.
+ * @param  ID_TEXT                      The name of the symbol
+ * @param  ?array                       Parameters to the symbol (NULL: none). In same format as expected by ecv.
+ * @param  ?array                       Escaping for the symbol (NULL: none)
+ * @return tempcode                     Tempcode object.
  */
 function build_closure_tempcode($type,$name,$parameters,$escaping = null)
 {
@@ -279,10 +279,10 @@ function build_closure_tempcode($type,$name,$parameters,$escaping = null)
 /**
  * This will create a new Tempcode object that is containing a single specifed symbol
  *
- * @param  ID_TEXT		The ID of the symbol to use
- * @param  ?array			Symbol parameters (NULL: none)
- * @param  ?array			Escaping (NULL: none)
- * @return tempcode		A symbol Tempcode object
+ * @param  ID_TEXT                      The ID of the symbol to use
+ * @param  ?array                       Symbol parameters (NULL: none)
+ * @param  ?array                       Escaping (NULL: none)
+ * @return tempcode                     A symbol Tempcode object
  */
 function symbol_tempcode($symbol,$parameters = null,$escape = null)
 {
@@ -296,10 +296,10 @@ function symbol_tempcode($symbol,$parameters = null,$escape = null)
 /**
  * This will create a new Tempcode object that is containing a single specifed directive
  *
- * @param  ID_TEXT		The ID of the directive to use
- * @param  mixed			The contents (Tempcode or string)
- * @param  ?array			Directive parameters (NULL: none)
- * @return tempcode		A directive Tempcode object
+ * @param  ID_TEXT                      The ID of the directive to use
+ * @param  mixed                        The contents (Tempcode or string)
+ * @param  ?array                       Directive parameters (NULL: none)
+ * @return tempcode                     A directive Tempcode object
  */
 function directive_tempcode($directive,$content,$parameters = null)
 {
@@ -314,10 +314,10 @@ function directive_tempcode($directive,$content,$parameters = null)
 /**
  * Perform a simple loop, that can be inlined in an expression.
  *
- * @param  array			The template bound parameters
- * @param  array			The loop control function
- * @param  array			The loop execution function
- * @return string			Result
+ * @param  array                        The template bound parameters
+ * @param  array                        The loop control function
+ * @param  array                        The loop execution function
+ * @return string                       Result
  */
 function closure_while_loop($args,$control_function,$main_function)
 {
@@ -331,9 +331,9 @@ function closure_while_loop($args,$control_function,$main_function)
 /**
  * Evaluate some PHP code to put the result into an expression (code is allowed to have side effects).
  *
- * @param  string			The code
- * @param  array			Template parameters
- * @return string			Result
+ * @param  string                       The code
+ * @param  array                        Template parameters
+ * @return string                       Result
  */
 function closure_eval($code,$parameters)
 {
@@ -351,10 +351,10 @@ function closure_eval($code,$parameters)
 /**
  * Perform a simple loop, that can be inlined in an expression.
  *
- * @param  array			The template bound parameters
- * @param  array			The loop directive parameters
- * @param  string			The loop execution function
- * @return string			Result
+ * @param  array                        The template bound parameters
+ * @param  array                        The loop directive parameters
+ * @param  string                       The loop execution function
+ * @return string                       Result
  */
 function closure_loop($param,$args,$main_function)
 {
@@ -448,8 +448,8 @@ function closure_loop($param,$args,$main_function)
 /**
  * Convert a string to Tempcode.
  *
- * @param  string			String
- * @return tempcode		Tempcode
+ * @param  string                       String
+ * @return tempcode                     Tempcode
  */
 function make_string_tempcode($string)
 {
@@ -469,9 +469,9 @@ function make_string_tempcode($string)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array			A list of escaping to do
- * @param  string			The string to apply the escapings to
- * @return string			Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
+ * @param  array                        A list of escaping to do
+ * @param  string                       The string to apply the escapings to
+ * @return string                       Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
  */
 function apply_tempcode_escaping($escaped,&$value)
 {
@@ -519,9 +519,9 @@ function apply_tempcode_escaping($escaped,&$value)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array			A list of escaping to do
- * @param  string			The string to apply the escapings to
- * @return string			Output string
+ * @param  array                        A list of escaping to do
+ * @param  string                       The string to apply the escapings to
+ * @return string                       Output string
  */
 function apply_tempcode_escaping_inline($escaped,$value)
 {
@@ -569,11 +569,11 @@ function apply_tempcode_escaping_inline($escaped,$value)
 /**
  * This will create a new Tempcode object that is containing a single specifed language code
  *
- * @param  ID_TEXT		The ID of the language string to use
- * @param  ?mixed			The first token [string or Tempcode] (replaces {1}) (NULL: none)
- * @param  ?mixed			The second token [string or Tempcode] (replaces {2}) (NULL: none)
- * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
- * @return tempcode		A language Tempcode object
+ * @param  ID_TEXT                      The ID of the language string to use
+ * @param  ?mixed                       The first token [string or Tempcode] (replaces {1}) (NULL: none)
+ * @param  ?mixed                       The second token [string or Tempcode] (replaces {2}) (NULL: none)
+ * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+ * @return tempcode                     A language Tempcode object
  */
 function do_lang_tempcode($lang_string,$token1 = null,$token2 = null,$token3 = null)
 {
@@ -598,7 +598,7 @@ function do_lang_tempcode($lang_string,$token1 = null,$token2 = null,$token3 = n
 /**
  * Provide automatic escaping for a template call.
  *
- * @param  array				Template parameters
+ * @param  array                        Template parameters
  */
 function kid_gloves_html_escaping(&$parameters)
 {
@@ -616,7 +616,7 @@ function kid_gloves_html_escaping(&$parameters)
 /**
  * Provide automatic escaping for a particular parameter.
  *
- * @param  string				Parameter
+ * @param  string                       Parameter
  */
 function kid_gloves_html_escaping_singular(&$param)
 {
@@ -628,16 +628,16 @@ function kid_gloves_html_escaping_singular(&$param)
 /**
  * Get a Tempcoded version of an ocPortal template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the Tempcode attach method.
  *
- * @param  ID_TEXT			The codename of the template being loaded
- * @param  ?array				A map of parameters for the template (key to value) (NULL: no parameters)
- * @param  ?LANGUAGE_NAME 	The language to load the template in (templates can embed language references) (NULL: users own language)
- * @param  boolean			Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT			Alternate template to use if the primary one does not exist (NULL: none)
- * @param  string				File type suffix of template file (e.g. .tpl)
- * @param  string				Subdirectory type to look in
+ * @param  ID_TEXT                      The codename of the template being loaded
+ * @param  ?array                       A map of parameters for the template (key to value) (NULL: no parameters)
+ * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (NULL: users own language)
+ * @param  boolean                      Whether to not produce a stack dump if the template is missing
+ * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (NULL: none)
+ * @param  string                       File type suffix of template file (e.g. .tpl)
+ * @param  string                       Subdirectory type to look in
  * @set    templates css
- * @param  ?ID_TEXT			Theme to use (NULL: current theme)
- * @return tempcode			The Tempcode for this template
+ * @param  ?ID_TEXT                     Theme to use (NULL: current theme)
+ * @return tempcode                     The Tempcode for this template
  */
 function do_template($codename,$parameters = null,$lang = null,$light_error = false,$fallback = null,$suffix = '.tpl',$type = 'templates',$theme = null)
 {
@@ -827,8 +827,8 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
 /**
  * Certain symbols need preprocessing, before the output stream is made.
  *
- * @param  array			Symbol details
- * @param  array			Where we store children stuff
+ * @param  array                        Symbol details
+ * @param  array                        Where we store children stuff
  */
 function handle_symbol_preprocessing($seq_part,&$children)
 {
@@ -1147,12 +1147,12 @@ function handle_symbol_preprocessing($seq_part,&$children)
 
 /**
  * Tempcode (compiled implementation).
- * @package		core
+ * @package    core
  */
 class ocp_tempcode
 {
     public $code_to_preexecute;
-    public $seq_parts; // List of list of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name			We use a 2D list to make attach ops very fast
+    public $seq_parts; // List of list of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name         We use a 2D list to make attach ops very fast
     public $preprocessable_bits; // List of tuples: escape (ignored), type (e.g. TC_SYMBOL), name, parameters
     public $pure_lang;
     public $evaluate_echo_offset_group = 0;
@@ -1166,10 +1166,10 @@ class ocp_tempcode
     var $children = null,$fresh = null;
 
     /**
-	 * Constructor of Tempcode
-	 *
-	 * @param  ?array			Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
-	 */
+     * Constructor of Tempcode
+     *
+     * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
+     */
     public function ocp_tempcode($details = null)
     {
         $this->cached_output = null;
@@ -1233,18 +1233,18 @@ class ocp_tempcode
     }
 
     /**
-	 * PHP magic function to handle serialisation.
-	 *
-	 * @return array				What is to be serialised
-	 */
+     * PHP magic function to handle serialisation.
+     *
+     * @return array                    What is to be serialised
+     */
     public function __sleep()
     {
         return array('code_to_preexecute','seq_parts','preprocessable_bits','pure_lang','codename');
     }
 
     /**
-	 * Remove any internal evaluation cachings within the object.
-	 */
+     * Remove any internal evaluation cachings within the object.
+     */
     public function decache()
     {
         foreach ($this->seq_parts as &$seq_parts_group) {
@@ -1260,12 +1260,12 @@ class ocp_tempcode
     }
 
     /**
-	 * Parse a single symbol from an input stream and append it.
-	 *
-	 * @param  string				Code string (input stream)
-	 * @param  integer			Start position of input string
-	 * @param  integer			End position of input string
-	 */
+     * Parse a single symbol from an input stream and append it.
+     *
+     * @param  string                   Code string (input stream)
+     * @param  integer                  Start position of input string
+     * @param  integer                  End position of input string
+     */
     public function parse_from(&$code,&$pos,&$len)
     {
         $this->cached_output = null;
@@ -1277,11 +1277,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Attach the specified Tempcode to the right of the current Tempcode object.
-	 *
-	 * @param  mixed				The Tempcode/string to attach
-	 * @param  boolean			If we've already merged the children from what we're attaching into the child tree (at bind stage)
-	 */
+     * Attach the specified Tempcode to the right of the current Tempcode object.
+     *
+     * @param  mixed                    The Tempcode/string to attach
+     * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
+     */
     public function attach($attach,$avoid_child_merge = false)
     {
         if ($attach === '') {
@@ -1348,10 +1348,10 @@ class ocp_tempcode
     }
 
     /**
-	 * Assemble the current Tempcode object into a single serialised (compiled) Tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
-	 *
-	 * @return string			The assembly result
-	 */
+     * Assemble the current Tempcode object into a single serialised (compiled) Tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
+     *
+     * @return string                   The assembly result
+     */
     public function to_assembly()
     {
         require_code('tempcode_optimiser');
@@ -1361,12 +1361,12 @@ class ocp_tempcode
     }
 
     /**
-	 * The opposite of to_assembly - it decodes a Tempcode storage representation and turns it into a proper Tempcode object. This version handles the result of evaled code.
-	 *
-	 * @param  PATH			The file to load
-	 * @param  array			List of parameters for a forced reload if required
-	 * @return boolean		Success status (it can fail, if the compiled cache file is corrupt)
-	 */
+     * The opposite of to_assembly - it decodes a Tempcode storage representation and turns it into a proper Tempcode object. This version handles the result of evaled code.
+     *
+     * @param  PATH                     The file to load
+     * @param  array                    List of parameters for a forced reload if required
+     * @return boolean                  Success status (it can fail, if the compiled cache file is corrupt)
+     */
     public function from_assembly_executed($file,$forced_reload_details)
     {
         if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
@@ -1392,7 +1392,7 @@ class ocp_tempcode
             // We don't actually use $code_to_preexecute, because it uses too much RAM and DB space throwing full templates into the cacheing. Instead we rewrite to custom load it whenever it's needed. This isn't inefficient due to normal opcode cacheing and optimizer opcode cacheing, and because we cache Tempcode object's evaluations at runtime so it can only happen once per screen view.
             $_file = (strpos($file,'\'') === false)?$file:php_addslashes($file);
             $this->code_to_preexecute[] = 'if (($result=tempcode_include(\'' . $_file . '\'))===false) { $tmp=do_template(\'' . php_addslashes($forced_reload_details[0]) . '\',NULL,\'' . ((strpos($forced_reload_details[2],'\'') === false)?$forced_reload_details[2]:php_addslashes($forced_reload_details[2])) . '\',false,\'' . (($forced_reload_details[6] == '')?'':((strpos($forced_reload_details[6],'\'') === false)?$forced_reload_details[6]:php_addslashes($forced_reload_details[6]))) . '\',\'' . ($forced_reload_details[4]) . '\',\'' . ($forced_reload_details[5]) . '\'); clearstatcache(); if (!@is_file(\'' . $_file . '\')) { $GLOBALS[\'CACHE_TEMPLATES\']=false; } /*$GLOBALS[\'DEV_MODE\']?debug_eval($tmp->code_to_preexecute):*/eval($tmp->code_to_preexecute); unset($tmp); }
-			else { debug_eval($result[4]); unset($result); }';
+            else { debug_eval($result[4]); unset($result); }';
             // NB: $GLOBALS[\'CACHE_TEMPLATES\']=false; is in case the template cache has been detected as broken, it prevents this branch running as it would fail again
         }
 
@@ -1404,10 +1404,10 @@ class ocp_tempcode
     }
 
     /**
-	 * Recursively mark all parameters in this Tempcode as escaped. This is needed when loading from cache, as escape tainting data would have been lost.
-	 *
-	 * @param  boolean		Whether this is the top-level call
-	 */
+     * Recursively mark all parameters in this Tempcode as escaped. This is needed when loading from cache, as escape tainting data would have been lost.
+     *
+     * @param  boolean                  Whether this is the top-level call
+     */
     public function _mark_all_as_escaped($top_level = true)
     {
         static $done = array();
@@ -1440,12 +1440,12 @@ class ocp_tempcode
     }
 
     /**
-	 * The opposite of to_assembly - it decodes a Tempcode storage representation and turns it into a proper Tempcode object.
-	 *
-	 * @param  string			The assembled Tempcode
-	 * @param  boolean		Return error code on failure, rather than exiting
-	 * @return boolean		Success status (it can fail, if the compiled cache file is corrupt)
-	 */
+     * The opposite of to_assembly - it decodes a Tempcode storage representation and turns it into a proper Tempcode object.
+     *
+     * @param  string                   The assembled Tempcode
+     * @param  boolean                  Return error code on failure, rather than exiting
+     * @return boolean                  Success status (it can fail, if the compiled cache file is corrupt)
+     */
     public function from_assembly(&$raw_data,$allow_failure = false)
     {
         if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
@@ -1475,11 +1475,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Find whether a variable within this Tempcode is parameterless.
-	 *
-	 * @param  integer			Offset to the variable
-	 * @return boolean			Whether it is parameterless
-	 */
+     * Find whether a variable within this Tempcode is parameterless.
+     *
+     * @param  integer                  Offset to the variable
+     * @return boolean                  Whether it is parameterless
+     */
     public function parameterless($at)
     {
         $i = 0;
@@ -1495,12 +1495,12 @@ class ocp_tempcode
     }
 
     /**
-	 * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound Tempcode object)
-	 *
-	 * @param  array			Map of parameters to bind parameter bits to
-	 * @param  ID_TEXT		The codename of the template this Tempcode is from
-	 * @return tempcode		The new bound Tempcode object
-	 */
+     * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound Tempcode object)
+     *
+     * @param  array                    Map of parameters to bind parameter bits to
+     * @param  ID_TEXT                  The codename of the template this Tempcode is from
+     * @return tempcode                 The new bound Tempcode object
+     */
     public function bind(&$parameters,$codename)
     {
         if (!isset($parameters['_GUID'])) {
@@ -1573,11 +1573,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Replace the named parameter with a specific value. Hardly used, but still important. Note that this will bind to all kinds of things that might not normally take named parameters, like symbols; this should not cause problems though.
-	 *
-	 * @param  string			Named parameter
-	 * @param  tempcode		Specific value
-	 */
+     * Replace the named parameter with a specific value. Hardly used, but still important. Note that this will bind to all kinds of things that might not normally take named parameters, like symbols; this should not cause problems though.
+     *
+     * @param  string                   Named parameter
+     * @param  tempcode                 Specific value
+     */
     public function singular_bind($parameter,$value)
     {
         $this->cached_output = null;
@@ -1604,8 +1604,8 @@ class ocp_tempcode
     }
 
     /**
-	 * Scan this Tempcode for anything that needs to be symbol-preprocessed
-	 */
+     * Scan this Tempcode for anything that needs to be symbol-preprocessed
+     */
     public function handle_symbol_preprocessing()
     {
         if ($GLOBALS['OUTPUT_STREAMING']) {
@@ -1623,11 +1623,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Find whether the Tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty. This is also useful if you want to avoid early evaluation, which will mess up GET/SET flow.
-	 * Does not perform an evaluation, so will not trigger any early pre-processing or out-of-order evaluation.
-	 *
-	 * @return boolean		Whether it is entirely empty
-	 */
+     * Find whether the Tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty. This is also useful if you want to avoid early evaluation, which will mess up GET/SET flow.
+     * Does not perform an evaluation, so will not trigger any early pre-processing or out-of-order evaluation.
+     *
+     * @return boolean                  Whether it is entirely empty
+     */
     public function is_empty_shell()
     {
         foreach ($this->seq_parts as $seq_parts_group) {
@@ -1639,10 +1639,10 @@ class ocp_tempcode
     }
 
     /**
-	 * Find whether the Tempcode object is blank or not.
-	 *
-	 * @return boolean		Whether the Tempcode object is empty
-	 */
+     * Find whether the Tempcode object is blank or not.
+     *
+     * @return boolean                  Whether the Tempcode object is empty
+     */
     public function is_empty()
     {
         if ($this->cached_output !== NULL) {
@@ -1685,20 +1685,20 @@ class ocp_tempcode
             foreach ($seq_parts_group as $seq_part) {
                 $seq_part_0 = $seq_part[0];
                 /*if ($DEV_MODE)
-				{
-					if (!isset($tpl_funcs[$seq_part_0]))
-					{
-						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
-					}
-					if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
-					{
-						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
-					} else
-					{
-						$parameters=$seq_part[1];
-						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
-					}
-				} else*/
+                    {
+                            if (!isset($tpl_funcs[$seq_part_0]))
+                            {
+                                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
+                            }
+                            if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
+                            {
+                                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+                            } else
+                            {
+                                        $parameters=$seq_part[1];
+                                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+                            }
+                    } else*/
                 {
                     if (!isset($tpl_funcs[$seq_part_0])) {
                         eval($this->code_to_preexecute[$seq_part_0]);
@@ -1743,21 +1743,21 @@ class ocp_tempcode
     }
 
     /**
-	 * Parses the current Tempcode object, then return the parsed string
-	 *
-	 * @return string				The evaluated thing.
-	 */
+     * Parses the current Tempcode object, then return the parsed string
+     *
+     * @return string                   The evaluated thing.
+     */
     public function __toString()
     {
         return $this->evaluate();
     }
 
     /**
-	 * Parses the current Tempcode object, then return the parsed string
-	 *
-	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current user's language)
-	 * @return string				The evaluated thing. Voila, it's all over!
-	 */
+     * Parses the current Tempcode object, then return the parsed string
+     *
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current user's language)
+     * @return string                   The evaluated thing. Voila, it's all over!
+     */
     public function evaluate($current_lang = null)
     {
         if (isset($this->cached_output)) {
@@ -1795,20 +1795,20 @@ class ocp_tempcode
             foreach ($seq_parts_group as $seq_part) {
                 $seq_part_0 = $seq_part[0];
                 /*if ($DEV_MODE)
-				{
-					if (!isset($tpl_funcs[$seq_part_0]))
-					{
-						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
-					}
-					if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
-					{
-						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
-					} else
-					{
-						$parameters=$seq_part[1];
-						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
-					}
-				} else*/
+                    {
+                            if (!isset($tpl_funcs[$seq_part_0]))
+                            {
+                                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
+                            }
+                            if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
+                            {
+                                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+                            } else
+                            {
+                                        $parameters=$seq_part[1];
+                                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+                            }
+                    } else*/
                 {
                     if (!isset($tpl_funcs[$seq_part_0])) {
                         eval($this->code_to_preexecute[$seq_part_0]);
@@ -1841,12 +1841,12 @@ class ocp_tempcode
     }
 
     /**
-	 * Parse the current Tempcode object, then echo it to the browser.
-	 *
-	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
-	 * @param  boolean			Whether to stop if we are stuck of a seq_part with parameters yet-unbound, and to continue from last resume point
-	 * @return string				Blank string. Allows chaining within echo statements
-	 */
+     * Parse the current Tempcode object, then echo it to the browser.
+     *
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current users language)
+     * @param  boolean                  Whether to stop if we are stuck of a seq_part with parameters yet-unbound, and to continue from last resume point
+     * @return string                   Blank string. Allows chaining within echo statements
+     */
     public function evaluate_echo($current_lang = null,$stop_if_stuck = false)
     {
         if (ocp_srv('REQUEST_METHOD') == 'HEAD') {
@@ -1894,20 +1894,20 @@ class ocp_tempcode
 
                 $seq_part_0 = $seq_part[0];
                 /*if ($DEV_MODE)
-				{
-					if (!isset($tpl_funcs[$seq_part_0]))
-					{
-						debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
-					}
-					if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
-					{
-						debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
-					} else
-					{
-						$parameters=$seq_part[1];
-						debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
-					}
-				} else*/
+                    {
+                            if (!isset($tpl_funcs[$seq_part_0]))
+                            {
+                                        debug_eval($this->code_to_preexecute[$seq_part_0],$tpl_funcs);
+                            }
+                            if (($tpl_funcs[$seq_part_0][0]!='e') && (function_exists($tpl_funcs[$seq_part_0])))
+                            {
+                                        debug_call_user_func($tpl_funcs[$seq_part_0],$seq_part[1],$current_lang,$seq_part[4]);
+                            } else
+                            {
+                                        $parameters=$seq_part[1];
+                                        debug_eval($tpl_funcs[$seq_part_0],$tpl_funcs,$parameters,$cl);
+                            }
+                    } else*/
                 {
                     if (!isset($tpl_funcs[$seq_part_0])) {
                         eval($this->code_to_preexecute[$seq_part_0]);
@@ -1946,10 +1946,10 @@ class ocp_tempcode
 /**
  * A template has not been structurally cached, so compile it and store in the cache.
  *
- * @param  string				A randomised unique ID
- * @param  string				Parameters
- * @param  string				Function code
- * @return string				The function reference
+ * @param  string                       A randomised unique ID
+ * @param  string                       Parameters
+ * @param  string                       Function code
+ * @return string                       The function reference
  */
 function recall_named_function($id,$parameters,$code)
 {
@@ -1963,8 +1963,8 @@ function recall_named_function($id,$parameters,$code)
 /**
  * Include and evaluate the specified Tempcode file.
  *
- * @param  PATH		The filename of the file to include.
- * @return mixed		Success status or returned value.
+ * @param  PATH                         The filename of the file to include.
+ * @return mixed                        Success status or returned value.
  */
 function tempcode_include($filepath)
 {
@@ -1983,11 +1983,11 @@ function tempcode_include($filepath)
  * Evaluate some PHP, with ability to better debug.
  * In a way this can also quash problems, so only use when debugging. The "@" before eval turns off attach_message.
  *
- * @param  ?string			Code to evaluate (NULL: code not found)
- * @param  ?array				Evaluation code context (NULL: N/A)
- * @param  ?array				Evaluation parameters (NULL: N/A)
- * @param  ?ID_TEXT			Language (NULL: N/A)
- * @return string				Result
+ * @param  ?string                      Code to evaluate (NULL: code not found)
+ * @param  ?array                       Evaluation code context (NULL: N/A)
+ * @param  ?array                       Evaluation parameters (NULL: N/A)
+ * @param  ?ID_TEXT                     Language (NULL: N/A)
+ * @return string                       Result
  */
 function debug_eval($code,&$tpl_funcs = null,$parameters = null,$cl = null)
 {
@@ -2014,11 +2014,11 @@ function debug_eval($code,&$tpl_funcs = null,$parameters = null,$cl = null)
 /**
  * Call a PHP function, with ability to better debug.
  *
- * @param  string				Function to call
- * @param  mixed				First parameter
- * @param  ?mixed				Second parameter (NULL: null/none)
- * @param  ?mixed				Third parameter (NULL: null/none)
- * @return string				Result
+ * @param  string                       Function to call
+ * @param  mixed                        First parameter
+ * @param  ?mixed                       Second parameter (NULL: null/none)
+ * @param  ?mixed                       Third parameter (NULL: null/none)
+ * @return string                       Result
  */
 function debug_call_user_func($function,$a,$b = null,$c = null)
 {

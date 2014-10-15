@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		custom_comcode
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    custom_comcode
  */
 
 class Hook_Preview_custom_comcode
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
+     */
     public function applies()
     {
         $applies = get_param('page','') == 'admin_custom_comcode';
@@ -32,10 +32,10 @@ class Hook_Preview_custom_comcode
     }
 
     /**
-	 * Run function for preview hooks.
-	 *
-	 * @return array			A pair: The preview, the updated post Comcode
-	 */
+     * Run function for preview hooks.
+     *
+     * @return array                    A pair: The preview, the updated post Comcode
+     */
     public function run()
     {
         require_code('comcode_compiler');

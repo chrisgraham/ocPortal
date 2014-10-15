@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		shopping
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    shopping
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_orders
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_orders
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if ($be_deferential) {
@@ -68,10 +68,10 @@ class Module_admin_orders
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -153,10 +153,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('ecommerce');
@@ -208,10 +208,10 @@ class Module_admin_orders
     }
 
     /**
-	 * The do-next manager for order module.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for order module.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -225,10 +225,10 @@ class Module_admin_orders
     }
 
     /**
-	 * UI to show all orders.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * UI to show all orders.
+     *
+     * @return tempcode                 The interface.
+     */
     public function show_orders()
     {
         require_code('shopping');
@@ -373,10 +373,10 @@ class Module_admin_orders
     }
 
     /**
-	 * UI to show details of an order.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * UI to show details of an order.
+     *
+     * @return tempcode                 The interface.
+     */
     public function order_details()
     {
         $id = get_param_integer('id');
@@ -500,10 +500,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Method to dispatch an order.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Method to dispatch an order.
+     *
+     * @return tempcode                 The interface.
+     */
     public function dispatch()
     {
         $id = get_param_integer('id');
@@ -520,10 +520,10 @@ class Module_admin_orders
     }
 
     /**
-	 * UI to add note to an order.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * UI to add note to an order.
+     *
+     * @return tempcode                 The interface.
+     */
     public function add_note()
     {
         $id = get_param_integer('id');
@@ -572,10 +572,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Actualiser to add a note to an order.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Actualiser to add a note to an order.
+     *
+     * @return tempcode                 The interface.
+     */
     public function _add_note()
     {
         $id = post_param_integer('order_id');
@@ -596,10 +596,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Method to dispatch a notification for an order.
-	 *
-	 * @param	AUTO_LINK	Order ID
-	 */
+     * Method to dispatch a notification for an order.
+     *
+     * @param  AUTO_LINK                Order ID
+     */
     public function send_dispatch_notification($order_id)
     {
         $message = post_param('dispatch_mail_content',null);
@@ -620,10 +620,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Method to delete order.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Method to delete order.
+     *
+     * @return tempcode                 The interface.
+     */
     public function delete_order()
     {
         $id = get_param_integer('id');
@@ -637,10 +637,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Method to return order items.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Method to return order items.
+     *
+     * @return tempcode                 The interface.
+     */
     public function return_order()
     {
         $id = get_param_integer('id');
@@ -654,10 +654,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Method to hold an order.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Method to hold an order.
+     *
+     * @return tempcode                 The interface.
+     */
     public function hold_order()
     {
         $id = get_param_integer('id');
@@ -671,10 +671,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Method to display export order list filters.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Method to display export order list filters.
+     *
+     * @return tempcode                 The interface.
+     */
     public function order_export()
     {
         require_code('shopping');
@@ -718,10 +718,10 @@ class Module_admin_orders
     }
 
     /**
-	 * Actualiser to build CSV from the selected filters.
-	 *
-	 * @param  boolean	Whether to avoid exit (useful for unit test).
-	 */
+     * Actualiser to build CSV from the selected filters.
+     *
+     * @param  boolean                  Whether to avoid exit (useful for unit test).
+     */
     public function _order_export($inline = false)
     {
         require_code('shopping');
@@ -741,10 +741,10 @@ class Module_admin_orders
         }
 
         $qry = 'SELECT t1.*,(t2.included_tax*t2.p_quantity) AS tax_amt,t3.*
-			FROM ' . get_table_prefix() . 'shopping_order t1
-			LEFT JOIN ' . get_table_prefix() . 'shopping_order_details t2 ON t1.id=t2.order_id
-			LEFT JOIN ' . get_table_prefix() . 'shopping_order_addresses t3 ON t1.id=t3.order_id
-			WHERE ' . $cond;
+            FROM ' . get_table_prefix() . 'shopping_order t1
+            LEFT JOIN ' . get_table_prefix() . 'shopping_order_details t2 ON t1.id=t2.order_id
+            LEFT JOIN ' . get_table_prefix() . 'shopping_order_addresses t3 ON t1.id=t3.order_id
+            WHERE ' . $cond;
         $row = $GLOBALS['SITE_DB']->query($qry);
         remove_duplicate_rows($row);
 

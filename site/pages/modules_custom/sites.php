@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 /*
@@ -30,10 +30,10 @@ You also need:
 class Module_sites
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -47,8 +47,8 @@ class Module_sites
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('sites');
@@ -58,11 +58,11 @@ class Module_sites
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	 What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         $GLOBALS['SITE_DB']->create_table('sites',array(
@@ -106,14 +106,14 @@ class Module_sites
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -125,10 +125,10 @@ class Module_sites
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -155,10 +155,10 @@ class Module_sites
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	 The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('ocportalcom');
@@ -197,10 +197,10 @@ class Module_sites
     }
 
     /**
-	 * Main download screen.
-	 *
-	 * @return tempcode	 The interface.
-	 */
+     * Main download screen.
+     *
+     * @return tempcode                 The interface.
+     */
     public function download_screen()
     {
         // Put together hosting-copy form
@@ -246,13 +246,13 @@ class Module_sites
     }
 
     /**
-	 * Get template variables for a release.
-	 *
-	 * @param  SHORT_TEXT	A substring of the title of the download.
-	 * @param  string			Prefix to put on the template params.
-	 * @param  ?string		The version this must be newer than (NULL: no check).
-	 * @return ?array			Map of template variables (NULL: could not find).
-	 */
+     * Get template variables for a release.
+     *
+     * @param  SHORT_TEXT               A substring of the title of the download.
+     * @param  string                   Prefix to put on the template params.
+     * @param  ?string                  The version this must be newer than (NULL: no check).
+     * @return ?array                   Map of template variables (NULL: could not find).
+     */
     public function do_release($name,$prefix,$version_must_be_newer_than = null)
     {
         $rows = $GLOBALS['SITE_DB']->query('SELECT d.*,d.id AS d_id FROM ' . get_table_prefix() . 'download_downloads d USE INDEX(downloadauthor) WHERE ' . db_string_equal_to('author','ocProducts') . ' AND validated=1 AND ' . $GLOBALS['SITE_DB']->translate_field_ref('name') . ' LIKE \'' . db_encode_like('%' . $name) . '\' ORDER BY add_date DESC',1,null,false,false,array('name' => 'SHORT_TRANS'));
@@ -293,13 +293,13 @@ class Module_sites
     }
 
     /**
-	 * Worker function to do an FTP import.
-	 *
-	 * @param  resource			The FTP connection
-	 * @param  PATH				The directory we are scanning
-	 * @param  integer			The depth of the current scan level
-	 * @return tempcode			The list of directories
-	 */
+     * Worker function to do an FTP import.
+     *
+     * @param  resource                 The FTP connection
+     * @param  PATH                     The directory we are scanning
+     * @param  integer                  The depth of the current scan level
+     * @return tempcode                 The list of directories
+     */
     public function _hostingcopy_do_dir($conn_id,$directory = '/',$depth = 0)
     {
         if ($directory == '') {
@@ -346,10 +346,10 @@ class Module_sites
     }
 
     /**
-	 * Try to make an FTP connection as specified by POST details. Dies if it can't.
-	 *
-	 * @return resource	  The connection.
-	 */
+     * Try to make an FTP connection as specified by POST details. Dies if it can't.
+     *
+     * @return resource                 The connection.
+     */
     public function _hostingcopy_ftp_connect()
     {
         $domain = trim(post_param('ftp_domain'));
@@ -374,10 +374,10 @@ class Module_sites
     }
 
     /**
-	 * The UI to choose a path.
-	 *
-	 * @return tempcode	 The UI.
-	 */
+     * The UI to choose a path.
+     *
+     * @return tempcode                 The UI.
+     */
     public function hostingcopy_step2()
     {
         if (function_exists('set_time_limit')) {
@@ -410,10 +410,10 @@ class Module_sites
     }
 
     /**
-	 * The actualiser.
-	 *
-	 * @return tempcode	 The result of execution.
-	 */
+     * The actualiser.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function hostingcopy_step3()
     {
         if (function_exists('set_time_limit')) {
@@ -472,10 +472,10 @@ class Module_sites
     }
 
     /**
-	 * Get wizard step.
-	 *
-	 * @return tempcode	 The interface.
-	 */
+     * Get wizard step.
+     *
+     * @return tempcode                 The interface.
+     */
     public function myocp()
     {
         $fields = new ocp_tempcode();
@@ -491,10 +491,10 @@ class Module_sites
     }
 
     /**
-	 * Get wizard step.
-	 *
-	 * @return tempcode	 The interface.
-	 */
+     * Get wizard step.
+     *
+     * @return tempcode                 The interface.
+     */
     public function _myocp()
     {
         $codename = strtolower(post_param('codename'));

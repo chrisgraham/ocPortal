@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 class Hook_symbol_GALLERY_VIDEO_FOR_URL
 {
     /**
-	 * Run function for symbol hooks. Searches for tasks to perform.
+     * Run function for symbol hooks. Searches for tasks to perform.
     *
-    * @param  array		Symbol parameters
-    * @return string		Result
-	 */
+    * @param  array                     Symbol parameters
+    * @return string                    Result
+     */
     public function run($param)
     {
         $value = '';

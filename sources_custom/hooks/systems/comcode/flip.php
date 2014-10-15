@@ -8,17 +8,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 class Hook_comcode_flip
 {
     /**
-	 * Run function for Comcode hooks. They find the custom-comcode-row-like attributes of the tag.
-	 *
-	 * @return array			Fake Custom Comcode row
-	 */
+     * Run function for Comcode hooks. They find the custom-comcode-row-like attributes of the tag.
+     *
+     * @return array                    Fake Custom Comcode row
+     */
     public function get_tag()
     {
         return array(

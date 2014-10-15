@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_admin_themewizard_ocf_forum
 {
     /**
-	 * Find details of images to include/exclude in the Theme Wizard.
-	 *
-	 * @return array	A pair: List of theme image patterns to include, List of theme image patterns to exclude
-	 */
+     * Find details of images to include/exclude in the Theme Wizard.
+     *
+     * @return array                    A pair: List of theme image patterns to include, List of theme image patterns to exclude
+     */
     public function run()
     {
         return array(array('ocf_general/no_new_posts_redirect','ocf_general/new_posts_redirect','ocf_general/no_new_posts','ocf_general/new_posts','icons/14x14/ocf_topic_modifiers/involved','icons/28x28/ocf_topic_modifiers/involved',),array('pageitem/warn',));

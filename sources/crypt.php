@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -27,25 +27,25 @@ function init__crypt()
     define('PASSWORD_SALT',1);
 
     /**
-	 * A Compatibility library with PHP 5.5's simplified password hashing API.
-	 *
-	 * @author Anthony Ferrara <ircmaxell@php.net>
-	 * @license http://www.opensource.org/licenses/mit-license.html MIT License
-	 * @copyright 2012 The Authors
-	 */
+     * A Compatibility library with PHP 5.5's simplified password hashing API.
+     *
+     * @author Anthony Ferrara <ircmaxell@php.net>
+     * @license http://www.opensource.org/licenses/mit-license.html MIT License
+     * @copyright 2012 The Authors
+     */
 
     if ((!defined('PASSWORD_DEFAULT')) && (function_exists('crypt'))) {
         define('PASSWORD_BCRYPT',1);
         define('PASSWORD_DEFAULT',PASSWORD_BCRYPT);
 
         /**
-		 * Hash the password using the specified algorithm
-		 *
-		 * @param  string		The password to hash
-		 * @param  integer	The algorithm to use (Defined by PASSWORD_* constants)
-		 * @param  array		The options for the algorithm to use
-		 * @return ~string	The hashed password (false: error)
-		 */
+         * Hash the password using the specified algorithm
+         *
+         * @param  string               The password to hash
+         * @param  integer              The algorithm to use (Defined by PASSWORD_* constants)
+         * @param  array                The options for the algorithm to use
+         * @return ~string              The hashed password (false: error)
+         */
         function password_hash($password,$algo,$options)
         {
             if (!is_integer($algo)) {
@@ -151,12 +151,12 @@ function init__crypt()
         }
 
         /**
-		 * Verify a password against a hash using a timing attack resistant approach
-		 *
-		 * @param  string		The password to verify
-		 * @param  string		The hash to verify against
-		 * @return boolean	If the password matches the hash
-		 */
+         * Verify a password against a hash using a timing attack resistant approach
+         *
+         * @param  string               The password to verify
+         * @param  string               The hash to verify against
+         * @return boolean              If the password matches the hash
+         */
         function password_verify($password,$hash)
         {
             $ret = crypt($password,$hash);
@@ -173,15 +173,15 @@ function init__crypt()
         }
 
         /**
-		 * Count the number of bytes in a string
-		 *
-		 * We cannot simply use strlen() for this, because it might be overwritten by the mbstring extension.
-		 * In this case, strlen() will count the number of *characters* based on the internal encoding. A
-		 * sequence of bytes might be regarded as a single multibyte character.
-		 *
-		 * @param  string		The input string
-		 * @return integer	The number of bytes
-		 */
+         * Count the number of bytes in a string
+         *
+         * We cannot simply use strlen() for this, because it might be overwritten by the mbstring extension.
+         * In this case, strlen() will count the number of *characters* based on the internal encoding. A
+         * sequence of bytes might be regarded as a single multibyte character.
+         *
+         * @param  string               The input string
+         * @return integer              The number of bytes
+         */
         function _crypt_strlen($binary_string)
         {
             if (function_exists('mb_strlen')) {
@@ -191,15 +191,15 @@ function init__crypt()
         }
 
         /**
-		 * Get a substring based on byte limits
-		 *
-		 * @see _strlen()
-		 *
-		 * @param string		The input string
-		 * @param integer		Start
-		 * @param integer		Length
-		 * @return string		The substring
-		 */
+         * Get a substring based on byte limits
+         *
+         * @see _strlen()
+         *
+         * @param string      The input string
+         * @param integer     Start
+         * @param integer     Length
+         * @return string               The substring
+         */
         function _crypt_substr($binary_string,$start,$length)
         {
             if (function_exists('mb_substr')) {
@@ -213,10 +213,10 @@ function init__crypt()
 /**
  * Do a hashing, with support for our "ratcheting up" algorithm (i.e. lets the admin increase the complexity over the time, as CPU speeds get faster).
  *
- * @param  SHORT_TEXT	The password in plain text
- * @param  SHORT_TEXT	The salt
- * @param  integer		Legacy hashing style to fallback to
- * @return SHORT_TEXT	The salted&hashed password
+ * @param  SHORT_TEXT                   The password in plain text
+ * @param  SHORT_TEXT                   The salt
+ * @param  integer                      Legacy hashing style to fallback to
+ * @return SHORT_TEXT                   The salted&hashed password
  */
 function ratchet_hash($password,$salt,$legacy_style = 0)
 {
@@ -234,11 +234,11 @@ function ratchet_hash($password,$salt,$legacy_style = 0)
 /**
  * Verify a password is correct by comparison of the hashed version.
  *
- * @param  SHORT_TEXT	The password in plain text
- * @param  SHORT_TEXT	The salt
- * @param  SHORT_TEXT	The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
- * @param  integer		Legacy hashing style to fallback to
- * @return boolean		Whether the password if verified
+ * @param  SHORT_TEXT                   The password in plain text
+ * @param  SHORT_TEXT                   The salt
+ * @param  SHORT_TEXT                   The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
+ * @param  integer                      Legacy hashing style to fallback to
+ * @return boolean                      Whether the password if verified
  */
 function ratchet_hash_verify($password,$salt,$pass_hash_salted,$legacy_style = 0)
 {
@@ -256,7 +256,7 @@ function ratchet_hash_verify($password,$salt,$pass_hash_salted,$legacy_style = 0
 /**
  * Get a decent randomised salt.
  *
- * @return ID_TEXT		The salt
+ * @return ID_TEXT                      The salt
  */
 function produce_salt()
 {
@@ -275,7 +275,7 @@ function produce_salt()
 /**
  * Get the site-wide salt. It should be something hard for a hacker to get, so we depend on data gathered both from the database and file-system.
  *
- * @return ID_TEXT		The salt
+ * @return ID_TEXT                      The salt
  */
 function get_site_salt()
 {
@@ -292,7 +292,7 @@ function get_site_salt()
 /**
  * Get a randomised password.
  *
- * @return string			The randomised password
+ * @return string                       The randomised password
  */
 function get_rand_password()
 {
@@ -302,7 +302,7 @@ function get_rand_password()
 /**
  * Get a secure random number, the best this PHP version can do.
  *
- * @return integer		The randomised number
+ * @return integer                      The randomised number
  */
 function get_secure_random_number()
 {
@@ -324,8 +324,8 @@ function get_secure_random_number()
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
+ * @param  SHORT_TEXT                   Given master password
+ * @return boolean                      Whether it is valid
  */
 function check_master_password($password_given)
 {

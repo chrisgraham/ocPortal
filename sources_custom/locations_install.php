@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		locations
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    locations
  */
 
 function init__locations_install()
@@ -138,7 +138,7 @@ function install_location_data()
  * If there are no accent characters, then the string given is just returned.
  *
  * @param string $string Text that might have accent characters
- * @return string Filtered string with replaced "nice" characters.
+ * @return string                       Filtered string with replaced "nice" characters.
  */
 function remove_accents($string)
 {

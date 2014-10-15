@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		random_quotes
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    random_quotes
  */
 
 class Hook_notes_quotes
 {
     /**
-	 * Decacheing trigger for main_notes saves. See if we have to decache based on the passed filename.
-	 *
-	 * @param PATH		Filename.
-	 */
+     * Decacheing trigger for main_notes saves. See if we have to decache based on the passed filename.
+     *
+     * @param PATH      Filename.
+     */
     public function run($file)
     {
         if ((strpos($file,'/quotes') !== false) || ($file == 'quotes')) {

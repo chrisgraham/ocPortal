@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		setupwizard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    setupwizard
  */
 
 class Hook_admin_setupwizard_installprofiles_minimalistic
 {
     /**
-	 * Get info about the installprofile
-	 *
-	 * @return array			Map of installprofile details
-	 */
+     * Get info about the installprofile
+     *
+     * @return array                    Map of installprofile details
+     */
     public function info()
     {
         return array(
@@ -33,10 +33,10 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
     }
 
     /**
-	 * Get a list of addons that are kept with this installation profile (added to the list of addons always kept)
-	 *
-	 * @return array			Triple: List of addons in the profile, Separated list of ones to show under advanced, Ones we really are shunning
-	 */
+     * Get a list of addons that are kept with this installation profile (added to the list of addons always kept)
+     *
+     * @return array                    Triple: List of addons in the profile, Separated list of ones to show under advanced, Ones we really are shunning
+     */
     public function get_addon_list()
     {
         return array(
@@ -69,10 +69,10 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
     }
 
     /**
-	 * Get a map of default settings associated with this installation profile
-	 *
-	 * @return array			Map of default settings
-	 */
+     * Get a map of default settings associated with this installation profile
+     *
+     * @return array                    Map of default settings
+     */
     public function field_defaults()
     {
         return array(
@@ -98,10 +98,10 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
     }
 
     /**
-	 * Find details of desired blocks
-	 *
-	 * @return array			Details of what blocks are wanted
-	 */
+     * Find details of desired blocks
+     *
+     * @return array                    Details of what blocks are wanted
+     */
     public function default_blocks()
     {
         // Usually these won't be here (except side_personal_stats), because the addons won't have been installed -- but if they were, we do want to represent those block-driven addons
@@ -121,10 +121,10 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
     }
 
     /**
-	 * Get options for blocks in this profile
-	 *
-	 * @return array			Details of what block options are wanted
-	 */
+     * Get options for blocks in this profile
+     *
+     * @return array                    Details of what block options are wanted
+     */
     public function block_options()
     {
         return array(
@@ -132,8 +132,8 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
     }
 
     /**
-	 * Execute any special code needed to put this install profile into play
-	 */
+     * Execute any special code needed to put this install profile into play
+     */
     public function install_code()
     {
     }

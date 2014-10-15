@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_feedback_features
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_feedback_features
  */
 
 class Hook_Preview_comments
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
+     */
     public function applies()
     {
         $applies = ((addon_installed('ocf_forum')) && (get_param('page') != 'topicview') && (post_param_integer('_comment_form_post',0) == 1) && (is_null(post_param('hidFileID_file0',null))) && (is_null(post_param('file0',null))));
@@ -32,10 +32,10 @@ class Hook_Preview_comments
     }
 
     /**
-	 * Run function for preview hooks.
-	 *
-	 * @return array			A pair: The preview, the updated post Comcode
-	 */
+     * Run function for preview hooks.
+     *
+     * @return array                    A pair: The preview, the updated post Comcode
+     */
     public function run()
     {
         // Find review, if there is one

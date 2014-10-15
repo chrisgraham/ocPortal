@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_zone_editor
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_zone_editor
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_zones
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_zones
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -65,26 +65,26 @@ class Module_admin_zones
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
-        /*		$zones=find_all_zones(true);		We don't really want to throw away on-disk data on reinstalls
-		require_code('files');
-		foreach ($zones as $zone)
-		{
-			//if (!in_array($zone,array('','docs','adminzone','collaboration','forum','cms','site'))) deldir_contents(get_file_base().'/'.$zone,true);
-			$langs=find_all_langs(true);
-			foreach (array_keys($langs) as $lang)
-			{
-				$path=get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/comcode_custom/'.$lang;
-				if (file_exists($path)) deldir_contents($path,true);
-				$path=get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/html_custom/'.$lang;
-				if (file_exists($path)) deldir_contents($path,true);
-			}
-			//deldir_contents(get_file_base().(($zone=='')?'':'/').$zone.'/pages/minimodules_custom',true);
-			// modules_custom purposely left
-		}*/
+        /*     $zones=find_all_zones(true);     We don't really want to throw away on-disk data on reinstalls
+        require_code('files');
+        foreach ($zones as $zone)
+        {
+            //if (!in_array($zone,array('','docs','adminzone','collaboration','forum','cms','site'))) deldir_contents(get_file_base().'/'.$zone,true);
+            $langs=find_all_langs(true);
+            foreach (array_keys($langs) as $lang)
+            {
+                    $path=get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/comcode_custom/'.$lang;
+                    if (file_exists($path)) deldir_contents($path,true);
+                    $path=get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/html_custom/'.$lang;
+                    if (file_exists($path)) deldir_contents($path,true);
+            }
+            //deldir_contents(get_file_base().(($zone=='')?'':'/').$zone.'/pages/minimodules_custom',true);
+            // modules_custom purposely left
+        }*/
     }
 
     public $title;
@@ -92,10 +92,10 @@ class Module_admin_zones
     public $nice_zone_name;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -171,10 +171,10 @@ class Module_admin_zones
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('zones2');
@@ -216,10 +216,10 @@ class Module_admin_zones
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -233,20 +233,20 @@ class Module_admin_zones
     }
 
     /**
-	 * The UI to choose a zone to edit using the zone editor.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a zone to edit using the zone editor.
+     *
+     * @return tempcode                 The UI
+     */
     public function editor()
     {
         return $this->edit_zone('_editor',get_screen_title('ZONE_EDITOR'));
     }
 
     /**
-	 * The UI for the zone editor.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for the zone editor.
+     *
+     * @return tempcode                 The UI
+     */
     public function _editor()
     {
         $id = $this->id;
@@ -444,10 +444,10 @@ class Module_admin_zones
     }
 
     /**
-	 * The actualiser to edit a zone (via zone editor).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a zone (via zone editor).
+     *
+     * @return tempcode                 The UI
+     */
     public function __editor()
     {
         $lang = choose_language($this->title,true);
@@ -544,28 +544,28 @@ class Module_admin_zones
     }
 
     /**
-	 * Get tempcode for a zone adding/editing form.
-	 *
-	 * @param  boolean		Whether the zone editor will be used
-	 * @param  SHORT_TEXT	The zone title
-	 * @param  ID_TEXT		The zones default page
-	 * @param  SHORT_TEXT	The header text
-	 * @param  ?ID_TEXT		The theme (NULL: no override)
-	 * @param  BINARY			Whether the zone requires a session for pages to be used
-	 * @param  ?ID_TEXT		Name of the zone (NULL: unknown)
-	 * @return array			A tuple: The tempcode for the fields, hidden fields, and extra JavaScript
-	 */
+     * Get tempcode for a zone adding/editing form.
+     *
+     * @param  boolean                  Whether the zone editor will be used
+     * @param  SHORT_TEXT               The zone title
+     * @param  ID_TEXT                  The zones default page
+     * @param  SHORT_TEXT               The header text
+     * @param  ?ID_TEXT                 The theme (NULL: no override)
+     * @param  BINARY                   Whether the zone requires a session for pages to be used
+     * @param  ?ID_TEXT                 Name of the zone (NULL: unknown)
+     * @return array                    A tuple: The tempcode for the fields, hidden fields, and extra JavaScript
+     */
     public function get_form_fields($in_zone_editor = false,$title = '',$default_page = 'start',$header_text = '',$theme = null,$require_session = 0,$zone = null)
     {
         require_lang('permissions');
 
         $javascript = "
-			var zone=document.getElementById('zone');
-			zone.onblur=function() {
-				var title=document.getElementById('title');
-				if (title.value=='') title.value=zone.value.substr(0,1).toUpperCase()+zone.value.substring(1,zone.value.length).replace(/\_/g,' ');
-			}
-		";
+            var zone=document.getElementById('zone');
+            zone.onblur=function() {
+                    var title=document.getElementById('title');
+                    if (title.value=='') title.value=zone.value.substr(0,1).toUpperCase()+zone.value.substring(1,zone.value.length).replace(/\_/g,' ');
+            }
+        ";
 
         $fields = '';
         $hidden = new ocp_tempcode();
@@ -651,10 +651,10 @@ class Module_admin_zones
     }
 
     /**
-	 * The UI to add a zone.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to add a zone.
+     *
+     * @return tempcode                 The UI
+     */
     public function add_zone()
     {
         appengine_live_guard();
@@ -688,31 +688,31 @@ class Module_admin_zones
         require_javascript('javascript_ajax');
         $script = find_script('snippet');
         $javascript .= "
-			var form=document.getElementById('main_form');
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					document.getElementById('submit_button').disabled=true;
-					var url='" . addslashes($script) . "?snippet=exists_zone&name='+window.encodeURIComponent(form.elements['zone'].value);
-					if (!do_ajax_field_test(url))
-					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
-					}
-					document.getElementById('submit_button').disabled=false;
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-					return true;
-				};
-		";
+            var form=document.getElementById('main_form');
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            document.getElementById('submit_button').disabled=true;
+                            var url='" . addslashes($script) . "?snippet=exists_zone&name='+window.encodeURIComponent(form.elements['zone'].value);
+                            if (!do_ajax_field_test(url))
+                            {
+                                        document.getElementById('submit_button').disabled=false;
+                                        return false;
+                            }
+                            document.getElementById('submit_button').disabled=false;
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            return true;
+                    };
+        ";
 
         return do_template('FORM_SCREEN',array('_GUID' => 'd8f08884cc370672c2e5604aefe78c6c','JAVASCRIPT' => $javascript,'HIDDEN' => $hidden,'SUBMIT_ICON' => 'menu___generic_admin__add_one','SUBMIT_NAME' => $submit_name,'TITLE' => $this->title,'FIELDS' => $fields,'URL' => $post_url,'TEXT' => $text));
     }
 
     /**
-	 * The actualiser to add a zone.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to add a zone.
+     *
+     * @return tempcode                 The UI
+     */
     public function _add_zone()
     {
         appengine_live_guard();
@@ -747,12 +747,12 @@ class Module_admin_zones
     }
 
     /**
-	 * The UI to choose a zone to edit.
-	 *
-	 * @param  string			The follow-on type
-	 * @param  ?tempcode		The title to use (NULL: the EDIT_ZONE title)
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a zone to edit.
+     *
+     * @param  string                   The follow-on type
+     * @param  ?tempcode                The title to use (NULL: the EDIT_ZONE title)
+     * @return tempcode                 The UI
+     */
     public function edit_zone($type = '_edit',$title = null)
     {
         if (is_null($title)) {
@@ -816,10 +816,10 @@ class Module_admin_zones
     }
 
     /**
-	 * The UI to edit a zone.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a zone.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_zone()
     {
         require_lang('themes');
@@ -870,10 +870,10 @@ class Module_admin_zones
     }
 
     /**
-	 * The actualiser to edit a zone.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a zone.
+     *
+     * @return tempcode                 The UI
+     */
     public function __edit_zone()
     {
         $zone = post_param('zone');
@@ -945,10 +945,10 @@ class Module_admin_zones
     }
 
     /**
-	 * Set zone access permissions from info in the POST request.
-	 *
-	 * @param  ID_TEXT		The zone that we're setting permissions for
-	 */
+     * Set zone access permissions from info in the POST request.
+     *
+     * @param  ID_TEXT                  The zone that we're setting permissions for
+     */
     public function set_permissions($zone)
     {
         $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);

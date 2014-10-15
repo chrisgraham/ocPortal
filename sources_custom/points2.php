@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 if (!function_exists('system_gift_transfer')) {
     /**
-	 * Transfer gift-points into the specified member's account, courtesy of the system.
-	 *
-	 * @param  SHORT_TEXT	The reason for the transfer
-	 * @param  integer		The size of the transfer
-	 * @param  MEMBER			The member the transfer is to
-	 */
+     * Transfer gift-points into the specified member's account, courtesy of the system.
+     *
+     * @param  SHORT_TEXT               The reason for the transfer
+     * @param  integer                  The size of the transfer
+     * @param  MEMBER                   The member the transfer is to
+     */
     function system_gift_transfer($reason,$amount,$member_id)
     {
         require_lang('points');

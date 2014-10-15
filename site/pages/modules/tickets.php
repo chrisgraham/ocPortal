@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tickets
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tickets
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_tickets
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_tickets
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('ticket_types');
@@ -58,11 +58,11 @@ class Module_tickets
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         require_lang('tickets');
@@ -129,14 +129,14 @@ class Module_tickets
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -148,10 +148,10 @@ class Module_tickets
     public $ticket_type_id;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -197,10 +197,10 @@ class Module_tickets
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (has_no_forum()) {
@@ -237,10 +237,10 @@ class Module_tickets
     }
 
     /**
-	 * The UI to show support tickets we may view.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show support tickets we may view.
+     *
+     * @return tempcode                 The UI
+     */
     public function do_choose_ticket()
     {
         require_code('feedback');
@@ -306,11 +306,11 @@ class Module_tickets
     }
 
     /**
-	 * Render a ticket link row.
-	 *
-	 * @param  array			Ticket details (from forum API)
-	 * @return array			A tuple: Ticket row (Tempcode), Ticket type (ID), Ticket type (String)
-	 */
+     * Render a ticket link row.
+     *
+     * @param  array                    Ticket details (from forum API)
+     * @return array                    A tuple: Ticket row (Tempcode), Ticket type (ID), Ticket type (String)
+     */
     public function _render_ticket_row($topic)
     {
         $ticket_id = extract_topic_identifier($topic['description']);
@@ -369,10 +369,10 @@ class Module_tickets
     }
 
     /**
-	 * The UI to either show an existing ticket and allow a reply, or to start a new ticket.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to either show an existing ticket and allow a reply, or to start a new ticket.
+     *
+     * @return tempcode                 The UI
+     */
     public function do_ticket()
     {
         require_lang('comcode');
@@ -682,10 +682,10 @@ class Module_tickets
     }
 
     /**
-	 * Actualise to toggle the closed state of a ticket.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Actualise to toggle the closed state of a ticket.
+     *
+     * @return tempcode                 The UI
+     */
     public function toggle_ticket_closed()
     {
         $id = get_param('id');
@@ -716,10 +716,10 @@ class Module_tickets
     }
 
     /**
-	 * Actualise ticket creation/reply, then show the ticket again.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Actualise ticket creation/reply, then show the ticket again.
+     *
+     * @return tempcode                 The UI
+     */
     public function do_update_ticket()
     {
         @ignore_user_abort(true); // Must keep going till completion
@@ -820,13 +820,13 @@ class Module_tickets
     }
 
     /**
-	 * Check for existing FAQs matching a ticket to be submitted, via searching.
-	 *
-	 * @param  tempcode		Page title
-	 * @param  string			Ticket ID we'd be creating
-	 * @param  string			What is being searched for
-	 * @return ?tempcode		The search results (NULL: could not search)
-	 */
+     * Check for existing FAQs matching a ticket to be submitted, via searching.
+     *
+     * @param  tempcode                 Page title
+     * @param  string                   Ticket ID we'd be creating
+     * @param  string                   What is being searched for
+     * @return ?tempcode                The search results (NULL: could not search)
+     */
     public function do_search($title,$ticket_id,$content)
     {
         require_code('database_search');
@@ -871,10 +871,10 @@ class Module_tickets
     }
 
     /**
-	 * UI for setting ticket access.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for setting ticket access.
+     *
+     * @return tempcode                 The UI
+     */
     public function set_ticket_extra_access()
     {
         require_code('form_templates');
@@ -906,10 +906,10 @@ class Module_tickets
     }
 
     /**
-	 * Actualiser for setting ticket access.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Actualiser for setting ticket access.
+     *
+     * @return tempcode                 The UI
+     */
     public function _set_ticket_extra_access()
     {
         $id = get_param('id');

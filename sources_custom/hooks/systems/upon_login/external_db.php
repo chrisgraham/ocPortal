@@ -8,20 +8,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		external_db_login
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    external_db_login
  */
 
 class Hook_upon_login_external_db
 {
     /**
-	 * Standard upon login hook.
-	 *
-	 * @param  boolean		Whether it is a new login attempt.
-	 * @param  string			Username.
-	 * @param  ?MEMBER		Member ID of already-confirmed login.
-	 */
+     * Standard upon login hook.
+     *
+     * @param  boolean                  Whether it is a new login attempt.
+     * @param  string                   Username.
+     * @param  ?MEMBER                  Member ID of already-confirmed login.
+     */
     public function run($new_attempt,$username,$member)
     {
         if (!$new_attempt) {

@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocworld
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocworld
  */
 
 /**
@@ -27,8 +27,8 @@ function init__ocworld()
 /**
  * Helper function. From a given GET/POST parameter name, tries to identify a member ID. Parameter may be given as a direct member ID or via a username.
  *
- * @param  string		The given parameter name.
- * @return ?MEMBER	Member ID (NULL: blank requested)
+ * @param  string                       The given parameter name.
+ * @return ?MEMBER                      Member ID (NULL: blank requested)
  */
 function grab_new_owner($param_name)
 {
@@ -42,8 +42,8 @@ function grab_new_owner($param_name)
 /**
  * Show the current user a message. Function does not return.
  *
- * @param  tempcode	The message to show
- * @param  ID_TEXT	Code of message type to show
+ * @param  tempcode                     The message to show
+ * @param  ID_TEXT                      Code of message type to show
  * @set    warn inform fatal
  */
 function ocw_refresh_with_message($message,$msg_type = 'inform')
@@ -61,7 +61,7 @@ function ocw_refresh_with_message($message,$msg_type = 'inform')
 /**
  * Get default ocWorld prices.
  *
- * @return array	Map of items=>prices.
+ * @return array                        Map of items=>prices.
  */
 function get_ocworld_prices_default()
 {
@@ -77,9 +77,9 @@ function get_ocworld_prices_default()
 /**
  * Get a member's position.
  *
- * @param  MEMBER		The member
- * @param  boolean	Whether it's excusable if the member does not exist (i.e. doesn't exit with error)
- * @return ?array		Tuple: Realm, X ordinate, Y ordinate (NULL: no such member)
+ * @param  MEMBER                       The member
+ * @param  boolean                      Whether it's excusable if the member does not exist (i.e. doesn't exit with error)
+ * @return ?array                       Tuple: Realm, X ordinate, Y ordinate (NULL: no such member)
  */
 function get_loc_details($member_id,$null_ok = false)
 {
@@ -96,8 +96,8 @@ function get_loc_details($member_id,$null_ok = false)
 /**
  * Merge two items (i.e. merge within inventories, update tallies to reflect new singularity, etc). Function does not return.
  *
- * @param  string		The first item. The one being deleted.
- * @param  string		The second item. The one the first is being merged into.
+ * @param  string                       The first item. The one being deleted.
+ * @param  string                       The second item. The one the first is being merged into.
  */
 function merge_items($from,$to)
 {
@@ -131,7 +131,7 @@ function merge_items($from,$to)
 /**
  * See if a member is stuck (in some place which is not a room, and if so move them to the realm origin).
  *
- * @param  MEMBER		The member who may be stuck
+ * @param  MEMBER                       The member who may be stuck
  */
 function destick($member_id)
 {
@@ -147,9 +147,9 @@ function destick($member_id)
 /**
  * Delete all messages in room by a person.
  *
- * @param  MEMBER		The member who's message is being deleted.
- * @param  MEMBER		The member who's the message was addressed to.
- * @param  string		The message.
+ * @param  MEMBER                       The member who's message is being deleted.
+ * @param  MEMBER                       The member who's the message was addressed to.
+ * @param  string                       The message.
  */
 function delete_message($member_id,$dest_member_id,$message)
 {
@@ -162,8 +162,8 @@ function delete_message($member_id,$dest_member_id,$message)
 /**
  * Go through a portal. Function does not return.
  *
- * @param  MEMBER		The member going through
- * @param  AUTO_LINK	The chosen destination realm
+ * @param  MEMBER                       The member going through
+ * @param  AUTO_LINK                    The chosen destination realm
  */
 function portal($member_id,$dest_realm)
 {
@@ -193,7 +193,7 @@ function portal($member_id,$dest_realm)
 /**
  * Take all a members items and give it to the realm's troll.
  *
- * @param  MEMBER		The member
+ * @param  MEMBER                       The member
  */
 function take_items($member_id)
 {
@@ -211,9 +211,9 @@ function take_items($member_id)
 /**
  * Post a message in the current room, addressed to a certain member.
  *
- * @param  MEMBER		The member sending the message
- * @param  string		The message
- * @param  MEMBER		Who the message is being sent to
+ * @param  MEMBER                       The member sending the message
+ * @param  string                       The message
+ * @param  MEMBER                       Who the message is being sent to
  */
 function message($member_id,$message,$destination)
 {
@@ -237,10 +237,10 @@ function message($member_id,$message,$destination)
 /**
  * See if a room exists at a coordinate.
  *
- * @param  integer	X ordinate
- * @param  integer	Y ordinate
- * @param  AUTO_LINK	Realm
- * @return boolean	Whether there is a room there
+ * @param  integer                      X ordinate
+ * @param  integer                      Y ordinate
+ * @param  AUTO_LINK                    Realm
+ * @return boolean                      Whether there is a room there
  */
 function room_exists($x,$y,$realm)
 {
@@ -251,11 +251,11 @@ function room_exists($x,$y,$realm)
 /**
  * Someone is trying to move around in the environment: we need to put all the rules in place accordingly.
  *
- * @param  MEMBER		The member moving
- * @param  integer	X distance
- * @param  integer	Y distance
- * @param  string		The access password they have given
- * @return ?tempcode	Error message (NULL: no error)
+ * @param  MEMBER                       The member moving
+ * @param  integer                      X distance
+ * @param  integer                      Y distance
+ * @param  string                       The access password they have given
+ * @return ?tempcode                    Error message (NULL: no error)
  */
 function try_to_enter_room($member_id,$dx,$dy,$given_password)
 {
@@ -395,7 +395,7 @@ function try_to_enter_room($member_id,$dx,$dy,$given_password)
 /**
  * Knock one of the health of this member.
  *
- * @param  MEMBER		The member
+ * @param  MEMBER                       The member
  */
 function hurt($member_id)
 {
@@ -406,7 +406,7 @@ function hurt($member_id)
 /**
  * Give one health to this member.
  *
- * @param  MEMBER		The member
+ * @param  MEMBER                       The member
  */
 function dehurt($member_id)
 {
@@ -417,9 +417,9 @@ function dehurt($member_id)
 /**
  * See if members are in same room and realm.
  *
- * @param  MEMBER		A member
- * @param  MEMBER		Another member
- * @return boolean	Whether they are in the same room
+ * @param  MEMBER                       A member
+ * @param  MEMBER                       Another member
+ * @return boolean                      Whether they are in the same room
  */
 function check_coexist($member_id,$dest_member_id)
 {
@@ -434,8 +434,8 @@ function check_coexist($member_id,$dest_member_id)
 /**
  * You can try and pickpocket people in your room, but you have a chance of being imprisoned. Does not return.
  *
- * @param  MEMBER		The member who is doing the pickpocketing.
- * @param  MEMBER		The victim.
+ * @param  MEMBER                       The member who is doing the pickpocketing.
+ * @param  MEMBER                       The victim.
  */
 function pickpocket($member_id,$dest_member_id)
 {
@@ -475,7 +475,7 @@ function pickpocket($member_id,$dest_member_id)
 /**
  * Send a member to prison.
  *
- * @param  MEMBER		Member to imprison
+ * @param  MEMBER                       Member to imprison
  */
 function imprison($member_id)
 {
@@ -487,7 +487,7 @@ function imprison($member_id)
 /**
  * Find a members coordinates/named-position by their username. Does not return (shows info on an output screen).
  *
- * @param  string		The username of the member
+ * @param  string                       The username of the member
  */
 function findperson($dest_member_name)
 {
@@ -533,9 +533,9 @@ function findperson($dest_member_name)
 /**
  * Have a member steal a random item from somebody else. If there are no items to steal, an error message is triggered (no return).
  *
- * @param  MEMBER		The member doing the stealing.
- * @param  MEMBER		The victim.
- * @return string		The item stolen.
+ * @param  MEMBER                       The member doing the stealing.
+ * @param  MEMBER                       The victim.
+ * @return string                       The item stolen.
  */
 function steal($member_id,$target)
 {
@@ -560,7 +560,7 @@ function steal($member_id,$target)
 /**
  * Ban a member from ocWorld. Does not return.
  *
- * @param  MEMBER		Member to ban
+ * @param  MEMBER                       Member to ban
  */
 function ban_member($member_id)
 {
@@ -571,7 +571,7 @@ function ban_member($member_id)
 /**
  * Unban a member from ocWorld. Does not return.
  *
- * @param  MEMBER		Member to unban
+ * @param  MEMBER                       Member to unban
  */
 function unban_member($member_id)
 {
@@ -582,8 +582,8 @@ function unban_member($member_id)
 /**
  * Have a member use an item they hold. Does not return.
  *
- * @param  MEMBER		The member
- * @param  string		The item
+ * @param  MEMBER                       The member
+ * @param  string                       The item
  */
 function useitem($member_id,$item_name)
 {
@@ -606,10 +606,10 @@ function useitem($member_id,$item_name)
 /**
  * Move a member into a room.
  *
- * @param  MEMBER		The member
- * @param  AUTO_LINK	The realm
- * @param  integer	The X ordinate
- * @param  integer	The Y ordinate
+ * @param  MEMBER                       The member
+ * @param  AUTO_LINK                    The realm
+ * @param  integer                      The X ordinate
+ * @param  integer                      The Y ordinate
  */
 function basic_enter_room($member_id,$realm,$x,$y)
 {
@@ -629,9 +629,9 @@ function basic_enter_room($member_id,$realm,$x,$y)
 /**
  * Does a member hold an item?
  *
- * @param  MEMBER		The member
- * @param  string		The item
- * @return boolean	The answer
+ * @param  MEMBER                       The member
+ * @param  string                       The item
+ * @return boolean                      The answer
  */
 function item_held($member_id,$item_name)
 {
@@ -643,9 +643,9 @@ function item_held($member_id,$item_name)
 /**
  * Interface for a member to give an item to another member. Does not return.
  *
- * @param  MEMBER		The member giving the item
- * @param  MEMBER		The member receiving the item
- * @param  string		The name of the item
+ * @param  MEMBER                       The member giving the item
+ * @param  MEMBER                       The member receiving the item
+ * @param  string                       The name of the item
  */
 function give($member_id,$dest_member_id,$item_name)
 {
@@ -672,8 +672,8 @@ function give($member_id,$dest_member_id,$item_name)
 /**
  * Interface for a member to drop an item in the room they are in. Does not return.
  *
- * @param  MEMBER		The member dropping the item
- * @param  string		The name of the item
+ * @param  MEMBER                       The member dropping the item
+ * @param  string                       The name of the item
  */
 function drop_wrap($member_id,$item)
 {
@@ -684,8 +684,8 @@ function drop_wrap($member_id,$item)
 /**
  * The actualiser for a member to drop an item in the room they are in.
  *
- * @param  MEMBER		The member dropping the item
- * @param  string		The name of the item
+ * @param  MEMBER                       The member dropping the item
+ * @param  string                       The name of the item
  */
 function drop($member_id,$item_name)
 {
@@ -704,9 +704,9 @@ function drop($member_id,$item_name)
 /**
  * The actualiser for a member to buy an item from the room they are in. Does not return.
  *
- * @param  MEMBER		The member buying the item
- * @param  string		The name of the item
- * @param  MEMBER		The owner of the item copy
+ * @param  MEMBER                       The member buying the item
+ * @param  string                       The name of the item
+ * @param  MEMBER                       The owner of the item copy
  */
 function buy($member_id,$item_name,$copy_owner)
 {
@@ -745,9 +745,9 @@ function buy($member_id,$item_name,$copy_owner)
 /**
  * The actualiser for a member to take an item from the room they are in. Does not return.
  *
- * @param  MEMBER		The member taking the item
- * @param  string		The name of the item
- * @param  MEMBER		The owner of the item copy
+ * @param  MEMBER                       The member taking the item
+ * @param  string                       The name of the item
+ * @param  MEMBER                       The owner of the item copy
  */
 function take($member_id,$item_name,$copy_owner)
 {
@@ -776,9 +776,9 @@ function take($member_id,$item_name,$copy_owner)
 /**
  * Wrapper actualiser for a member to pick up an item from the room they are in.
  *
- * @param  MEMBER		The member picking up the item
- * @param  string		The name of the item
- * @param  MEMBER		The owner of the item copy
+ * @param  MEMBER                       The member picking up the item
+ * @param  string                       The name of the item
+ * @param  MEMBER                       The owner of the item copy
  */
 function basic_pickup($member_id,$item_name,$copy_owner)
 {
@@ -792,11 +792,11 @@ function basic_pickup($member_id,$item_name,$copy_owner)
 /**
  * Actualiser to remove an item to a room.
  *
- * @param  AUTO_LINK	The realm
- * @param  integer	The X ordinate
- * @param  integer	The Y ordinate
- * @param  string		The name of the item
- * @param  MEMBER		The owner of the item copy
+ * @param  AUTO_LINK                    The realm
+ * @param  integer                      The X ordinate
+ * @param  integer                      The Y ordinate
+ * @param  string                       The name of the item
+ * @param  MEMBER                       The owner of the item copy
  */
 function take_an_item_from_room($realm,$x,$y,$item_name,$copy_owner)
 {
@@ -821,13 +821,13 @@ function take_an_item_from_room($realm,$x,$y,$item_name,$copy_owner)
 /**
  * Actualiser to add an item to a room.
  *
- * @param  AUTO_LINK	The realm
- * @param  integer	The X ordinate
- * @param  integer	The Y ordinate
- * @param  string		The name of the item
- * @param  BINARY		Whether the item source is finite in quantity
- * @param  integer	The cost of the item
- * @param  MEMBER		The owner of the item copy
+ * @param  AUTO_LINK                    The realm
+ * @param  integer                      The X ordinate
+ * @param  integer                      The Y ordinate
+ * @param  string                       The name of the item
+ * @param  BINARY                       Whether the item source is finite in quantity
+ * @param  integer                      The cost of the item
+ * @param  MEMBER                       The owner of the item copy
  */
 function add_item_to_room($realm,$x,$y,$item_name,$not_infinite,$cost,$copy_owner)
 {
@@ -861,8 +861,8 @@ function add_item_to_room($realm,$x,$y,$item_name,$not_infinite,$cost,$copy_owne
 /**
  * Actualiser to remove an item to somebodies inventory.
  *
- * @param  MEMBER		The member who loses the item
- * @param  string		The item to be taken from the members inventory
+ * @param  MEMBER                       The member who loses the item
+ * @param  string                       The item to be taken from the members inventory
  */
 function remove_item_person($member_id,$item_name)
 {
@@ -878,8 +878,8 @@ function remove_item_person($member_id,$item_name)
 /**
  * Actualiser to add an item to somebodies inventory.
  *
- * @param  MEMBER		The member who gets the item
- * @param  string		The item to be added to the members inventory
+ * @param  MEMBER                       The member who gets the item
+ * @param  string                       The item to be added to the members inventory
  */
 function add_item_person($member_id,$item_name)
 {

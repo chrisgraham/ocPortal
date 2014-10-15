@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_cleanup_tools
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_cleanup_tools
  */
 
 /**
  * Take a list of maps, and make one of the values of each array the index of a map to an array of corresponding maps
  *
- * @param  string			The key key of our maps that reside in our map
- * @param  array			The list of maps
- * @return array			The collapsed map
+ * @param  string                       The key key of our maps that reside in our map
+ * @param  array                        The list of maps
+ * @return array                        The collapsed map
  */
 function list_to_map_2($map_value,$list)
 {
@@ -53,10 +53,10 @@ function list_to_map_2($map_value,$list)
 class Hook_criticise_mysql_fields
 {
     /**
-	 * Find details about this cleanup hook.
-	 *
-	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
-	 */
+     * Find details about this cleanup hook.
+     *
+     * @return ?array                   Map of cleanup hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         if (get_db_type() != 'mysql') {
@@ -72,10 +72,10 @@ class Hook_criticise_mysql_fields
     }
 
     /**
-	 * Run the cleanup hook action.
-	 *
-	 * @return tempcode	Results
-	 */
+     * Run the cleanup hook action.
+     *
+     * @return tempcode                 Results
+     */
     public function run()
     {
         // Script to fix db_meta registration for adhoc created tables
@@ -146,11 +146,11 @@ class Hook_criticise_mysql_fields
                 $type = (strpos($_type,'int') !== false)?'INTEGER':'SHORT_TEXT';
                 switch ($_type) {
                     case 'varchar(5)':
-                        //$type='LANGUAGE_NAME';	Ideally, but we cannot assume
+                        //$type='LANGUAGE_NAME';   Ideally, but we cannot assume
                         $type = 'ID_TEXT';
                         break;
                     case 'varchar(33)':
-                        //$type='MD5';	Ideally, but we cannot assume
+                        //$type='MD5'; Ideally, but we cannot assume
                         $type = 'ID_TEXT';
                         break;
                     case 'varchar(40)':

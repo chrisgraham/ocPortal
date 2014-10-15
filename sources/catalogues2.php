@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    catalogues
  */
 
 /**
@@ -30,7 +30,7 @@ function init__catalogues2()
 /**
  * Converts a non-tree catalogue to a tree catalogue.
  *
- * @param  ID_TEXT	Catalogue name
+ * @param  ID_TEXT                      Catalogue name
  */
 function catalogue_to_tree($catalogue_name)
 {
@@ -42,7 +42,7 @@ function catalogue_to_tree($catalogue_name)
 /**
  * Converts a non-tree catalogue from a tree catalogue.
  *
- * @param  ID_TEXT	Catalogue name
+ * @param  ID_TEXT                      Catalogue name
  */
 function catalogue_from_tree($catalogue_name)
 {
@@ -171,10 +171,10 @@ function catalogue_file_script()
     // Send actual data
     $myfile = fopen($_full,'rb');
     fseek($myfile,$from);
-    /*if ($size==$new_length)		Uses a lot of memory :S
-	{
-		fpassthru($myfile);
-	} else*/
+    /*if ($size==$new_length)    Uses a lot of memory :S
+    {
+        fpassthru($myfile);
+    } else*/
     {
         $i = 0;
         flush(); // Works around weird PHP bug that sends data before headers, on some PHP versions
@@ -194,20 +194,20 @@ function catalogue_file_script()
 /**
  * Add a catalogue using all the specified values.
  *
- * @param  ID_TEXT			The codename of the catalogue
- * @param  mixed				The title of the catalogue (either language string map or string)
- * @param  mixed				A description (either language string map or string)
- * @param  SHORT_INTEGER	The display type
- * @param  BINARY				Whether the catalogue uses a tree system (as opposed to mere categories in an index)
- * @param  LONG_TEXT			Hidden notes pertaining to this catalogue
- * @param  integer			How many points a member gets by submitting to this catalogue
- * @param  BINARY				Whether the catalogue is an eCommerce catalogue
- * @param  ID_TEXT			How to send view reports
+ * @param  ID_TEXT                      The codename of the catalogue
+ * @param  mixed                        The title of the catalogue (either language string map or string)
+ * @param  mixed                        A description (either language string map or string)
+ * @param  SHORT_INTEGER                The display type
+ * @param  BINARY                       Whether the catalogue uses a tree system (as opposed to mere categories in an index)
+ * @param  LONG_TEXT                    Hidden notes pertaining to this catalogue
+ * @param  integer                      How many points a member gets by submitting to this catalogue
+ * @param  BINARY                       Whether the catalogue is an eCommerce catalogue
+ * @param  ID_TEXT                      How to send view reports
  * @set    never daily weekly monthly quarterly
- * @param  ?integer			Default review frequency for catalogue entries (NULL: none)
- * @param  ?TIME				The add time (NULL: now)
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT			The name
+ * @param  ?integer                     Default review frequency for catalogue entries (NULL: none)
+ * @param  ?TIME                        The add time (NULL: now)
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$notes,$submit_points,$ecommerce = 0,$send_view_reports = 'never',$default_review_freq = null,$add_time = null,$uniqify = false)
 {
@@ -290,20 +290,20 @@ function actual_add_catalogue($name,$title,$description,$display_type,$is_tree,$
 /**
  * Add a field to the specified catalogue, without disturbing any other data in that catalogue.
  *
- * @param  ID_TEXT		The codename of the catalogue the field is for
- * @param  mixed			The name of the field (either language string map or string)
- * @param  mixed			A description (either language string map or string)
- * @param  ID_TEXT		The type of the field
- * @param  integer		The field order (the field order determines what order the fields are displayed within an entry)
- * @param  BINARY			Whether this field defines the catalogue order
- * @param  BINARY			Whether this is a visible field
- * @param  BINARY			Whether the field is usable as a search key
- * @param  LONG_TEXT		The default value for the field
- * @param  BINARY			Whether this field is required
- * @param  BINARY			Whether the field is to be shown in category views (not applicable for the list display type)
- * @param  BINARY			Whether the field is to be shown in search views (not applicable for the list display type)
- * @param  ?AUTO_LINK	Force this ID (NULL: auto-increment as normal)
- * @return AUTO_LINK		Field ID
+ * @param  ID_TEXT                      The codename of the catalogue the field is for
+ * @param  mixed                        The name of the field (either language string map or string)
+ * @param  mixed                        A description (either language string map or string)
+ * @param  ID_TEXT                      The type of the field
+ * @param  integer                      The field order (the field order determines what order the fields are displayed within an entry)
+ * @param  BINARY                       Whether this field defines the catalogue order
+ * @param  BINARY                       Whether this is a visible field
+ * @param  BINARY                       Whether the field is usable as a search key
+ * @param  LONG_TEXT                    The default value for the field
+ * @param  BINARY                       Whether this field is required
+ * @param  BINARY                       Whether the field is to be shown in category views (not applicable for the list display type)
+ * @param  BINARY                       Whether the field is to be shown in search views (not applicable for the list display type)
+ * @param  ?AUTO_LINK                   Force this ID (NULL: auto-increment as normal)
+ * @return AUTO_LINK                    Field ID
  */
 function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category = 1,$put_in_search = 1,$id = null)
 {
@@ -380,20 +380,20 @@ function actual_add_catalogue_field($c_name,$name,$description,$type,$order,$def
 /**
  * Edit a catalogue.
  *
- * @param  ID_TEXT			The current name of the catalogue
- * @param  ID_TEXT			The new name of the catalogue
- * @param  SHORT_TEXT		The human readable name/title of the catalogue
- * @param  LONG_TEXT			The description
- * @param  SHORT_INTEGER	The display type
- * @param  LONG_TEXT			Admin notes
- * @param  integer			How many points are given to a member that submits to the catalogue
- * @param  BINARY				Whether the catalogue is an eCommerce catalogue
- * @param  ID_TEXT			How to send view reports
+ * @param  ID_TEXT                      The current name of the catalogue
+ * @param  ID_TEXT                      The new name of the catalogue
+ * @param  SHORT_TEXT                   The human readable name/title of the catalogue
+ * @param  LONG_TEXT                    The description
+ * @param  SHORT_INTEGER                The display type
+ * @param  LONG_TEXT                    Admin notes
+ * @param  integer                      How many points are given to a member that submits to the catalogue
+ * @param  BINARY                       Whether the catalogue is an eCommerce catalogue
+ * @param  ID_TEXT                      How to send view reports
  * @set    never daily weekly monthly quarterly
- * @param  ?integer			Default review frequency for catalogue entries (NULL: none)
- * @param  ?TIME				Add time (NULL: do not change)
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT			The name
+ * @param  ?integer                     Default review frequency for catalogue entries (NULL: none)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function actual_edit_catalogue($old_name,$name,$title,$description,$display_type,$notes,$submit_points,$ecommerce,$send_view_reports,$default_review_freq,$add_time = null,$uniqify = false)
 {
@@ -476,7 +476,7 @@ function actual_edit_catalogue($old_name,$name,$title,$description,$display_type
 /**
  * Delete a catalogue.
  *
- * @param  ID_TEXT		The name of the catalogue
+ * @param  ID_TEXT                      The name of the catalogue
  */
 function actual_delete_catalogue($name)
 {
@@ -530,19 +530,19 @@ function actual_delete_catalogue($name)
 /**
  * Edit a catalogue field.
  *
- * @param  AUTO_LINK		The ID of the field
- * @param  ID_TEXT		The name of the catalogue
- * @param  ?SHORT_TEXT	The name of the field (NULL: do not change)
- * @param  ?LONG_TEXT	Description for the field (NULL: do not change)
- * @param  integer		The field order (the field order determines what order the fields are displayed within an entry)
- * @param  BINARY			Whether the field defines entry ordering
- * @param  BINARY			Whether the field is visible when an entry is viewed
- * @param  BINARY			Whether the field is usable as a search key
- * @param  LONG_TEXT		The default value for the field
- * @param  BINARY			Whether the field is required
- * @param  BINARY			Whether the field is to be shown in category views (not applicable for the list display type)
- * @param  BINARY			Whether the field is to be shown in search views (not applicable for the list display type)
- * @param  ?ID_TEXT		The field type (NULL: do not change)
+ * @param  AUTO_LINK                    The ID of the field
+ * @param  ID_TEXT                      The name of the catalogue
+ * @param  ?SHORT_TEXT                  The name of the field (NULL: do not change)
+ * @param  ?LONG_TEXT                   Description for the field (NULL: do not change)
+ * @param  integer                      The field order (the field order determines what order the fields are displayed within an entry)
+ * @param  BINARY                       Whether the field defines entry ordering
+ * @param  BINARY                       Whether the field is visible when an entry is viewed
+ * @param  BINARY                       Whether the field is usable as a search key
+ * @param  LONG_TEXT                    The default value for the field
+ * @param  BINARY                       Whether the field is required
+ * @param  BINARY                       Whether the field is to be shown in category views (not applicable for the list display type)
+ * @param  BINARY                       Whether the field is to be shown in search views (not applicable for the list display type)
+ * @param  ?ID_TEXT                     The field type (NULL: do not change)
  */
 function actual_edit_catalogue_field($id,$c_name,$name,$description,$order,$defines_order,$visible,$searchable,$default,$required,$put_in_category = 1,$put_in_search = 1,$type = null) // You cannot edit a field type
 {
@@ -581,7 +581,7 @@ function actual_edit_catalogue_field($id,$c_name,$name,$description,$order,$defi
 /**
  * Delete a catalogue field.
  *
- * @param  AUTO_LINK		The ID of the field
+ * @param  AUTO_LINK                    The ID of the field
  */
 function actual_delete_catalogue_field($id)
 {
@@ -599,20 +599,20 @@ function actual_delete_catalogue_field($id)
 /**
  * Add a catalogue category
  *
- * @param  ID_TEXT		The codename of the catalogue the category is in
- * @param  mixed			The title of this category (either language string map or string)
- * @param  mixed			A description (either language string map or string)
- * @param  LONG_TEXT		Hidden notes pertaining to this category
- * @param  ?AUTO_LINK	The ID of this categories parent (NULL: a root category, or not a tree catalogue)
- * @param  URLPATH		The representative image for the category (blank: none)
- * @param  integer		The number of days before expiry (lower limit)
- * @param  integer		The number of days before expiry (higher limit)
- * @param  ?AUTO_LINK	The expiry category (NULL: do not expire)
- * @param  ?TIME			The add time (NULL: now)
- * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
- * @return AUTO_LINK		The ID of the new category
+ * @param  ID_TEXT                      The codename of the catalogue the category is in
+ * @param  mixed                        The title of this category (either language string map or string)
+ * @param  mixed                        A description (either language string map or string)
+ * @param  LONG_TEXT                    Hidden notes pertaining to this category
+ * @param  ?AUTO_LINK                   The ID of this categories parent (NULL: a root category, or not a tree catalogue)
+ * @param  URLPATH                      The representative image for the category (blank: none)
+ * @param  integer                      The number of days before expiry (lower limit)
+ * @param  integer                      The number of days before expiry (higher limit)
+ * @param  ?AUTO_LINK                   The expiry category (NULL: do not expire)
+ * @param  ?TIME                        The add time (NULL: now)
+ * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @return AUTO_LINK                    The ID of the new category
  */
 function actual_add_catalogue_category($catalogue_name,$title,$description,$notes,$parent_id,$rep_image = '',$move_days_lower = 30,$move_days_higher = 60,$move_target = null,$add_date = null,$id = null,$meta_keywords = '',$meta_description = '')
 {
@@ -723,9 +723,9 @@ function rebuild_catalogue_cat_treecache()
 /**
  * Update the treecache for a catalogue category node.
  *
- * @param  AUTO_LINK		The ID of the category
- * @param  ?AUTO_LINK	The ID of the parent category (NULL: no parent)
- * @param  boolean		Whether to delete any possible pre-existing records for the category first
+ * @param  AUTO_LINK                    The ID of the category
+ * @param  ?AUTO_LINK                   The ID of the parent category (NULL: no parent)
+ * @param  boolean                      Whether to delete any possible pre-existing records for the category first
  */
 function store_in_catalogue_cat_treecache($id,$parent_id,$cleanup_first = true)
 {
@@ -752,8 +752,8 @@ function store_in_catalogue_cat_treecache($id,$parent_id,$cleanup_first = true)
 /**
  * Update cache for a categories child counts.
  *
- * @param  ?AUTO_LINK	The ID of the category (NULL: skip, called by some code that didn't realise it didn't impact a tree parent)
- * @param  boolean		Whether to recurse up the tree to force recalculations on other categories (recommended, unless you are doing a complete rebuild)
+ * @param  ?AUTO_LINK                   The ID of the category (NULL: skip, called by some code that didn't realise it didn't impact a tree parent)
+ * @param  boolean                      Whether to recurse up the tree to force recalculations on other categories (recommended, unless you are doing a complete rebuild)
  */
 function calculate_category_child_count_cache($cat_id,$recursive_updates = true)
 {
@@ -792,19 +792,19 @@ function calculate_category_child_count_cache($cat_id,$recursive_updates = true)
 /**
  * Edit a catalogue category.
  *
- * @param  AUTO_LINK		The ID of the category
- * @param  SHORT_TEXT	The title of the category
- * @param  LONG_TEXT		Description for the category
- * @param  LONG_TEXT		Admin notes
- * @param  ?AUTO_LINK	The ID of the parent category (NULL: no parent)
- * @param  SHORT_TEXT	Meta keywords for the category
- * @param  LONG_TEXT		Meta description for the category
- * @param  URLPATH		The representative image for the category (blank: none)
- * @param  integer		The number of days before expiry (lower limit)
- * @param  integer		The number of days before expiry (higher limit)
- * @param  ?AUTO_LINK	The expiry category (NULL: do not expire)
- * @param  ?TIME			Add time (NULL: do not change)
- * @param  ?ID_TEXT		The catalogue name (NULL: do not change)
+ * @param  AUTO_LINK                    The ID of the category
+ * @param  SHORT_TEXT                   The title of the category
+ * @param  LONG_TEXT                    Description for the category
+ * @param  LONG_TEXT                    Admin notes
+ * @param  ?AUTO_LINK                   The ID of the parent category (NULL: no parent)
+ * @param  SHORT_TEXT                   Meta keywords for the category
+ * @param  LONG_TEXT                    Meta description for the category
+ * @param  URLPATH                      The representative image for the category (blank: none)
+ * @param  integer                      The number of days before expiry (lower limit)
+ * @param  integer                      The number of days before expiry (higher limit)
+ * @param  ?AUTO_LINK                   The expiry category (NULL: do not expire)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?ID_TEXT                     The catalogue name (NULL: do not change)
  */
 function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_id,$meta_keywords,$meta_description,$rep_image,$move_days_lower,$move_days_higher,$move_target,$add_time = null,$c_name = null)
 {
@@ -882,8 +882,8 @@ function actual_edit_catalogue_category($id,$title,$description,$notes,$parent_i
 /**
  * Delete a catalogue category.
  *
- * @param  AUTO_LINK		The ID of the category
- * @param  boolean		Whether we're deleting everything under the category; if FALSE we will actively reassign child categories to be directly under the root
+ * @param  AUTO_LINK                    The ID of the category
+ * @param  boolean                      Whether we're deleting everything under the category; if FALSE we will actively reassign child categories to be directly under the root
  */
 function actual_delete_catalogue_category($id,$deleting_all = false)
 {
@@ -965,21 +965,21 @@ function actual_delete_catalogue_category($id,$deleting_all = false)
 /**
  * Adds an entry to the specified catalogue.
  *
- * @param  AUTO_LINK			The ID of the category that the entry is in
- * @param  BINARY				Whether the entry has been validated
- * @param  LONG_TEXT			Hidden notes pertaining to the entry
- * @param  BINARY				Whether the entry may be rated
- * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY				Whether the entry may be trackbacked
- * @param  array				A map of field IDs, to values, that defines the entries settings
- * @param  ?TIME				The time the entry was added (NULL: now)
- * @param  ?MEMBER			The entries submitter (NULL: current user)
- * @param  ?TIME				The edit time (NULL: never)
- * @param  integer			The number of views
- * @param  ?AUTO_LINK		Force an ID (NULL: don't force an ID)
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
- * @return AUTO_LINK			The ID of the newly added entry
+ * @param  AUTO_LINK                    The ID of the category that the entry is in
+ * @param  BINARY                       Whether the entry has been validated
+ * @param  LONG_TEXT                    Hidden notes pertaining to the entry
+ * @param  BINARY                       Whether the entry may be rated
+ * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       Whether the entry may be trackbacked
+ * @param  array                        A map of field IDs, to values, that defines the entries settings
+ * @param  ?TIME                        The time the entry was added (NULL: now)
+ * @param  ?MEMBER                      The entries submitter (NULL: current user)
+ * @param  ?TIME                        The edit time (NULL: never)
+ * @param  integer                      The number of views
+ * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @return AUTO_LINK                    The ID of the newly added entry
  */
 function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$time = null,$submitter = null,$edit_date = null,$views = 0,$id = null,$meta_keywords = '',$meta_description = '')
 {
@@ -1135,21 +1135,21 @@ function actual_add_catalogue_entry($category_id,$validated,$notes,$allow_rating
 /**
  * Edit the specified catalogue entry
  *
- * @param  AUTO_LINK			The ID of the entry being edited
- * @param  AUTO_LINK			The ID of the category that the entry is in
- * @param  BINARY				Whether the entry has been validated
- * @param  LONG_TEXT			Hidden notes pertaining to the entry
- * @param  BINARY				Whether the entry may be rated
- * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY				Whether the entry may be trackbacked
- * @param  array				A map of field IDs, to values, that defines the entries settings
- * @param  ?SHORT_TEXT		Meta keywords for this resource (NULL: do not edit)
- * @param  ?LONG_TEXT		Meta description for this resource (NULL: do not edit)
- * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME				Add time (NULL: do not change)
- * @param  ?integer			Number of views (NULL: do not change)
- * @param  ?MEMBER			Submitter (NULL: do not change)
- * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    The ID of the entry being edited
+ * @param  AUTO_LINK                    The ID of the category that the entry is in
+ * @param  BINARY                       Whether the entry has been validated
+ * @param  LONG_TEXT                    Hidden notes pertaining to the entry
+ * @param  BINARY                       Whether the entry may be rated
+ * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       Whether the entry may be trackbacked
+ * @param  array                        A map of field IDs, to values, that defines the entries settings
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit)
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?integer                     Number of views (NULL: do not change)
+ * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_rating,$allow_comments,$allow_trackbacks,$map,$meta_keywords = '',$meta_description = '',$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
@@ -1298,7 +1298,7 @@ function actual_edit_catalogue_entry($id,$category_id,$validated,$notes,$allow_r
 /**
  * Delete a catalogue entry.
  *
- * @param  AUTO_LINK		The ID of the entry to delete
+ * @param  AUTO_LINK                    The ID of the entry to delete
  */
 function actual_delete_catalogue_entry($id)
 {

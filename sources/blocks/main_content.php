@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 class Block_main_content
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -39,10 +39,10 @@ class Block_main_content
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -52,11 +52,11 @@ class Block_main_content
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         $guid = isset($map['guid'])?$map['guid']:'';
@@ -318,14 +318,14 @@ class Block_main_content
     }
 
     /**
-	 * Make a filter SQL fragment.
-	 *
-	 * @param  string		The filter string.
-	 * @param  array		Map of details of our content type.
-	 * @param  string		The field name of the category to filter against.
-	 * @param  boolean	Whether the category is a string.
-	 * @return string		SQL fragment.
-	 */
+     * Make a filter SQL fragment.
+     *
+     * @param  string                   The filter string.
+     * @param  array                    Map of details of our content type.
+     * @param  string                   The field name of the category to filter against.
+     * @param  boolean                  Whether the category is a string.
+     * @return string                   SQL fragment.
+     */
     public function build_filter($filter,$info,$category_field_filter,$category_is_string)
     {
         $parent_spec__table_name = array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];

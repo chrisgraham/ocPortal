@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -71,10 +71,10 @@ function clear_permissions_runtime_cache()
 /**
  * Log permission checks to the permission_checks.log file, if it exists.
  *
- * @param  MEMBER         The user checking against
- * @param  ID_TEXT        The function that was called to check a permission
- * @param  array          Parameters to this permission-checking function
- * @param  boolean        Whether the permission was held
+ * @param  MEMBER                       The user checking against
+ * @param  ID_TEXT                      The function that was called to check a permission
+ * @param  array                        Parameters to this permission-checking function
+ * @param  boolean                      Whether the permission was held
  */
 function handle_permission_check_logging($member,$op,$params,$result)
 {
@@ -118,9 +118,9 @@ function handle_permission_check_logging($member,$op,$params,$result)
 /**
  * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
  *
- * @param  ID_TEXT		The class of error (e.g. PRIVILEGE). This is a language string.
- * @param  string			The parameteter given to the error message
- * @param  boolean		Force the user to login (even if perhaps they are logged in already)
+ * @param  ID_TEXT                      The class of error (e.g. PRIVILEGE). This is a language string.
+ * @param  string                       The parameteter given to the error message
+ * @param  boolean                      Force the user to login (even if perhaps they are logged in already)
  */
 function access_denied($class = 'ACCESS_DENIED',$param = '',$force_login = false)
 {
@@ -131,9 +131,9 @@ function access_denied($class = 'ACCESS_DENIED',$param = '',$force_login = false
 /**
  * Find if a member has access to a specified zone
  *
- * @param  MEMBER			The member being checked whether to have the access
- * @param  ID_TEXT		The ID code for the zone being checked
- * @return boolean		Whether the member has zone access
+ * @param  MEMBER                       The member being checked whether to have the access
+ * @param  ID_TEXT                      The ID code for the zone being checked
+ * @return boolean                      Whether the member has zone access
  */
 function has_zone_access($member,$zone)
 {
@@ -183,12 +183,12 @@ function has_zone_access($member,$zone)
 /**
  * Find if a member has access to a specified page. Zone permissions are taken into account for wherever the page is found at. Also support for category access and privileges. No support for entry-point checks, which are only carried out as an extension of page permissions when actually at a page.
  *
- * @param  ?MEMBER		The member being checked whether to have the access (NULL: current member)
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?ID_TEXT		The ID code for the zone being checked (NULL: search)
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @param  ?mixed			Either the ID code of a privilege, an array of alternatives that are acceptable (NULL: none required)
- * @return boolean		Whether the member has zone and page access
+ * @param  ?MEMBER                      The member being checked whether to have the access (NULL: current member)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
+ * @param  ?ID_TEXT                     The ID code for the zone being checked (NULL: search)
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?mixed                       Either the ID code of a privilege, an array of alternatives that are acceptable (NULL: none required)
+ * @return boolean                      Whether the member has zone and page access
  */
 function has_actual_page_access($member = null,$page = null,$zone = null,$cats = null,$privilege = null)
 {
@@ -251,7 +251,7 @@ function has_actual_page_access($member = null,$page = null,$zone = null,$cats =
 /**
  * For efficiency reasons, load up loads of page permissions.
  *
- * @param  MEMBER			The member being checked whether to have the access
+ * @param  MEMBER                       The member being checked whether to have the access
  */
 function load_up_all_self_page_permissions($member)
 {
@@ -269,11 +269,11 @@ function load_up_all_self_page_permissions($member)
 /**
  * Find if a member has access to a specified page, in a specific zone. Note that page access does not imply zone access; you have access a page, but not the zone, so still couldn't see it.
  *
- * @param  MEMBER			The member being checked whether to have the access
- * @param  ID_TEXT		The ID code for the page being checked
- * @param  ID_TEXT		The ID code for the zone being checked
- * @param  boolean		Whether we want to check we have access to the CURRENT page, using any match-key permissions
- * @return boolean		Whether the member has page access
+ * @param  MEMBER                       The member being checked whether to have the access
+ * @param  ID_TEXT                      The ID code for the page being checked
+ * @param  ID_TEXT                      The ID code for the zone being checked
+ * @param  boolean                      Whether we want to check we have access to the CURRENT page, using any match-key permissions
+ * @return boolean                      Whether the member has page access
  */
 function has_page_access($member,$page,$zone,$at_now = false)
 {
@@ -366,8 +366,8 @@ function has_page_access($member,$page,$zone,$at_now = false)
 /**
  * For efficiency reasons, load up loads of category permissions.
  *
- * @param  MEMBER			The member being checked whether to have the access
- * @param  ?ID_TEXT		The ID code for the module being checked for category access (NULL: all categories)
+ * @param  MEMBER                       The member being checked whether to have the access
+ * @param  ?ID_TEXT                     The ID code for the module being checked for category access (NULL: all categories)
  */
 function load_up_all_module_category_permissions($member,$module = null)
 {
@@ -411,10 +411,10 @@ function load_up_all_module_category_permissions($member,$module = null)
 /**
  * Find if a member has access to a specified category
  *
- * @param  MEMBER			The member being checked whether to have the access
- * @param  ID_TEXT		The ID code for the module being checked for category access
- * @param  ID_TEXT		The ID code for the category being checked for access (often, a number cast to a string)
- * @return boolean		Whether the member has category access
+ * @param  MEMBER                       The member being checked whether to have the access
+ * @param  ID_TEXT                      The ID code for the module being checked for category access
+ * @param  ID_TEXT                      The ID code for the category being checked for access (often, a number cast to a string)
+ * @return boolean                      Whether the member has category access
  */
 function has_category_access($member,$module,$category)
 {
@@ -452,9 +452,9 @@ function has_category_access($member,$module,$category)
 /**
  * Get the SQL WHERE clause to select for any the given member is in (gets combined with some condition, to check against every).
  *
- * @param  MEMBER			The member who's usergroups will be OR'd
- * @param  boolean		Whether to consider clubs (pass this false if considering page permissions, which work via explicit-denys across all groups, which could not happen for clubs as those denys could not have been set in the UI)
- * @return ?string		The SQL query fragment (NULL: admin, so permission regardless)
+ * @param  MEMBER                       The member who's usergroups will be OR'd
+ * @param  boolean                      Whether to consider clubs (pass this false if considering page permissions, which work via explicit-denys across all groups, which could not happen for clubs as those denys could not have been set in the UI)
+ * @return ?string                      The SQL query fragment (NULL: admin, so permission regardless)
  */
 function _get_where_clause_groups($member,$consider_clubs = true)
 {
@@ -490,8 +490,8 @@ function _get_where_clause_groups($member,$consider_clubs = true)
 /**
  * Find which of a list of usergroups are permissive ones.
  *
- * @param  array			List of groups to filter
- * @return array			List of permissive groups, filtered from those given
+ * @param  array                        List of groups to filter
+ * @return array                        List of permissive groups, filtered from those given
  */
 function filter_group_permissivity($groups)
 {
@@ -515,10 +515,10 @@ function filter_group_permissivity($groups)
 /**
  * Only allow members here that are either the give member, admins, or have a privilege. All other members come up to an error message wall.
  *
- * @param  MEMBER		The member who typically (i.e. when it's not an administrative override) we want the current member to be.
- * @param  ?ID_TEXT  The override permission the current member must have (NULL: no general override).
- * @param  ?ID_TEXT  An alternative permission to the 'assume_any_member' permission (NULL: no override).
- * @param  ?MEMBER	The member who is doing the viewing (NULL: current member).
+ * @param  MEMBER                       The member who typically (i.e. when it's not an administrative override) we want the current member to be.
+ * @param  ?ID_TEXT                     The override permission the current member must have (NULL: no general override).
+ * @param  ?ID_TEXT                     An alternative permission to the 'assume_any_member' permission (NULL: no override).
+ * @param  ?MEMBER                      The member who is doing the viewing (NULL: current member).
  */
 function enforce_personal_access($member_id,$permission = null,$permission2 = null,$member_viewing = null)
 {
@@ -543,10 +543,10 @@ function enforce_personal_access($member_id,$permission = null,$permission2 = nu
 /**
  * Require presence of a permission for the current member; otherwise exit.
  *
- * @param  ID_TEXT		The permission to require
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @param  ?MEMBER		Member to check for (NULL: current user)
- * @param  ?ID_TEXT		Page name to check for (NULL: current page)
+ * @param  ID_TEXT                      The permission to require
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?MEMBER                      Member to check for (NULL: current user)
+ * @param  ?ID_TEXT                     Page name to check for (NULL: current page)
  */
 function check_privilege($permission,$cats = null,$member_id = null,$page_name = null)
 {
@@ -564,11 +564,11 @@ function check_privilege($permission,$cats = null,$member_id = null,$page_name =
 /**
  * Find if a member has a specified permission in any category
  *
- * @param  MEMBER			The member being checked whether to have the permission
- * @param  ID_TEXT		The ID code for the permission being checked for
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ID_TEXT		The ID code for the permission module being checked for
- * @return boolean		Whether the member has the permission
+ * @param  MEMBER                       The member being checked whether to have the permission
+ * @param  ID_TEXT                      The ID code for the permission being checked for
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
+ * @param  ID_TEXT                      The ID code for the permission module being checked for
+ * @return boolean                      Whether the member has the permission
  */
 function has_some_cat_privilege($member,$permission,$page,$permission_module)
 {
@@ -592,11 +592,11 @@ function has_some_cat_privilege($member,$permission,$page,$permission_module)
 /**
  * Find if a member has a specified permission
  *
- * @param  MEMBER			The member being checked whether to have the permission
- * @param  ID_TEXT		The ID code for the permission being checked for
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?mixed			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...), or a string of the cat type if you will accept overrides in any matching cat (NULL: N/A)
- * @return boolean		Whether the member has the permission
+ * @param  MEMBER                       The member being checked whether to have the permission
+ * @param  ID_TEXT                      The ID code for the permission being checked for
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
+ * @param  ?mixed                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...), or a string of the cat type if you will accept overrides in any matching cat (NULL: N/A)
+ * @return boolean                      Whether the member has the permission
  */
 function has_privilege($member,$permission,$page = null,$cats = null)
 {
@@ -700,10 +700,10 @@ function has_privilege($member,$permission,$page = null,$cats = null)
 /**
  * Check to see if a member has permission to submit an item. If it doesn't, an error message is outputted.
  *
- * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
- * @set	 low mid high cat_low cat_mid cat_high
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
+ * @param  string                       The range of permission we are checking to see if they have; these ranges are like trust levels
+ * @set   low mid high cat_low cat_mid cat_high
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
  */
 function check_submit_permission($range,$cats = null,$page = null)
 {
@@ -719,13 +719,13 @@ function check_submit_permission($range,$cats = null,$page = null)
 /**
  * Find if a member has permission to submit
  *
- * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
+ * @param  string                       The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
- * @param  MEMBER			The member being checked whether to have the access
- * @param  IP				The member's IP address
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @return boolean		Whether the member can submit in this range
+ * @param  MEMBER                       The member being checked whether to have the access
+ * @param  IP                           The member's IP address
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @return boolean                      Whether the member can submit in this range
  */
 function has_submit_permission($range,$member,$ip,$page,$cats = null)
 {
@@ -758,10 +758,10 @@ function has_submit_permission($range,$member,$ip,$page,$cats = null)
 /**
  * Check to see if a member has permission to edit an item. If it doesn't, an error message is outputted.
  *
- * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
+ * @param  string                       The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
  */
 function check_some_edit_permission($range,$cats = null,$page = null)
 {
@@ -789,11 +789,11 @@ function check_some_edit_permission($range,$cats = null,$page = null)
 /**
  * Check to see if a member has permission to edit an item. If it doesn't, an error message is outputted.
  *
- * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
+ * @param  string                       The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
- * @param  ?MEMBER		The member that owns this resource (NULL: no-one)
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
+ * @param  ?MEMBER                      The member that owns this resource (NULL: no-one)
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
  */
 function check_edit_permission($range,$resource_owner,$cats = null,$page = null)
 {
@@ -809,13 +809,13 @@ function check_edit_permission($range,$resource_owner,$cats = null,$page = null)
 /**
  * Find if a member has permission to edit
  *
- * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
+ * @param  string                       The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
- * @param  MEMBER			The member being checked for access
- * @param  ?MEMBER		The member that owns this resource (NULL: no-one)
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @return boolean		Whether the member may edit the resource
+ * @param  MEMBER                       The member being checked for access
+ * @param  ?MEMBER                      The member that owns this resource (NULL: no-one)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @return boolean                      Whether the member may edit the resource
  */
 function has_edit_permission($range,$member,$resource_owner,$page,$cats = null)
 {
@@ -834,11 +834,11 @@ function has_edit_permission($range,$member,$resource_owner,$page,$cats = null)
 /**
  * Check if a member has permission to delete a specific resource. If it doesn't, an error message is outputted.
  *
- * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
+ * @param  string                       The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
- * @param  ?MEMBER		The member that owns this resource (NULL: no-one)
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
+ * @param  ?MEMBER                      The member that owns this resource (NULL: no-one)
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
  */
 function check_delete_permission($range,$resource_owner,$cats = null,$page = null)
 {
@@ -854,13 +854,13 @@ function check_delete_permission($range,$resource_owner,$cats = null,$page = nul
 /**
  * Check to see if a member has permission to delete a specific resource
  *
- * @param  string			The range of permission we are checking to see if they have; these ranges are like trust levels
+ * @param  string                       The range of permission we are checking to see if they have; these ranges are like trust levels
  * @set    low mid high cat_low cat_mid cat_high
- * @param  MEMBER			The member being checked for access
- * @param  ?MEMBER		The member that owns this resource (NULL: no-one)
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?array			A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
- * @return boolean		Whether the member may delete the resource
+ * @param  MEMBER                       The member being checked for access
+ * @param  ?MEMBER                      The member that owns this resource (NULL: no-one)
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
+ * @param  ?array                       A list of cat details to require access to (c-type-1,c-id-1,c-type-2,c-d-2,...) (NULL: N/A)
+ * @return boolean                      Whether the member may delete the resource
  */
 function has_delete_permission($range,$member,$resource_owner,$page,$cats = null)
 {
@@ -879,9 +879,9 @@ function has_delete_permission($range,$member,$resource_owner,$page,$cats = null
 /**
  * Check to see if a member has add permission for Comcode pages
  *
- * @param  ?ID_TEXT		The zone of Comcode pages we need it in (NULL: ANY zone, we are doing a vague check if the user could possibly)
- * @param  ?MEMBER		The member being checked for access (NULL: current member)
- * @return boolean		If the permission is there
+ * @param  ?ID_TEXT                     The zone of Comcode pages we need it in (NULL: ANY zone, we are doing a vague check if the user could possibly)
+ * @param  ?MEMBER                      The member being checked for access (NULL: current member)
+ * @return boolean                      If the permission is there
  */
 function has_add_comcode_page_permission($zone = null,$member = null)
 {
@@ -909,9 +909,9 @@ function has_add_comcode_page_permission($zone = null,$member = null)
 /**
  * Check to see if a member has bypass-validation permission for Comcode pages
  *
- * @param  ?ID_TEXT		The zone of Comcode pages we need it in (NULL: ANY zone, we are doing a vague check if the user could possibly)
- * @param  ?MEMBER		The member being checked for access (NULL: current member)
- * @return boolean		If the permission is there
+ * @param  ?ID_TEXT                     The zone of Comcode pages we need it in (NULL: ANY zone, we are doing a vague check if the user could possibly)
+ * @param  ?MEMBER                      The member being checked for access (NULL: current member)
+ * @return boolean                      If the permission is there
  */
 function has_bypass_validation_comcode_page_permission($zone = null,$member = null)
 {
@@ -939,10 +939,10 @@ function has_bypass_validation_comcode_page_permission($zone = null,$member = nu
 /**
  * Check to see if a member has permission to edit a Comcode page
  *
- * @param  integer		A bitmask of COMCODE_EDIT_* constants, identifying what kind of editing permission we are looking for
- * @param  ?ID_TEXT		Zone to check for (NULL: check against global privileges, ignoring all per-zone overrides). Note how this is different to how a NULL zone works for checking add/bypass-validation permissions because if we get a false we have the get_comcode_page_editability_per_zone function to get more specific details, while for adding we either want a very specific or very vague answer.
- * @param  ?MEMBER		The member being checked for access (NULL: current member)
- * @return boolean		If the permission is there
+ * @param  integer                      A bitmask of COMCODE_EDIT_* constants, identifying what kind of editing permission we are looking for
+ * @param  ?ID_TEXT                     Zone to check for (NULL: check against global privileges, ignoring all per-zone overrides). Note how this is different to how a NULL zone works for checking add/bypass-validation permissions because if we get a false we have the get_comcode_page_editability_per_zone function to get more specific details, while for adding we either want a very specific or very vague answer.
+ * @param  ?MEMBER                      The member being checked for access (NULL: current member)
+ * @return boolean                      If the permission is there
  */
 function has_some_edit_comcode_page_permission($scope,$zone = null,$member = null)
 {
@@ -982,8 +982,8 @@ function has_some_edit_comcode_page_permission($scope,$zone = null,$member = nul
 /**
  * Find what zones a member may edit Comcode pages in.
  *
- * @param  ?MEMBER		The member being checked for access (NULL: current member)
- * @return array			A list of pairs: The zone name, and a bitmask of COMCODE_EDIT_* constants identifying the level of editing permission present
+ * @param  ?MEMBER                      The member being checked for access (NULL: current member)
+ * @return array                        A list of pairs: The zone name, and a bitmask of COMCODE_EDIT_* constants identifying the level of editing permission present
  */
 function get_comcode_page_editability_per_zone($member = null)
 {
@@ -1010,11 +1010,11 @@ function get_comcode_page_editability_per_zone($member = null)
 /**
  * Check to see if a member has permission to edit a specific Comcode page
  *
- * @param  ID_TEXT		The zone of the page
- * @param  ID_TEXT		The name of the page
- * @param  ?MEMBER		Owner of the page (NULL: look it up)
- * @param  ?MEMBER		The member being checked for access (NULL: current member)
- * @return boolean		If the permission is there
+ * @param  ID_TEXT                      The zone of the page
+ * @param  ID_TEXT                      The name of the page
+ * @param  ?MEMBER                      Owner of the page (NULL: look it up)
+ * @param  ?MEMBER                      The member being checked for access (NULL: current member)
+ * @return boolean                      If the permission is there
  */
 function has_edit_comcode_page_permission($zone,$page,$owner = null,$member = null)
 {

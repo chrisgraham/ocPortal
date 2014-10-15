@@ -16,7 +16,7 @@ function unused_other_func()
 /**
  * Find whether the current member is logged in via httpauth. For Facebook/OpenID we put in a bit of extra code to notify that the session must also be auto-marked as confirmed (which is why the function is called in some cases).
  *
- * @return boolean		Whether the current member is logged in via httpauth
+ * @return boolean                      Whether the current member is logged in via httpauth
  */
 function is_httpauth_login()
 {

@@ -15,20 +15,20 @@
 /*EXTRA FUNCTIONS: proc\_.+|stream_set_blocking|stream_get_contents|stream_set_timeout*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Send an e-mail.
  *
- * @param  string		The TO address.
- * @param  string		The subject.
- * @param  string		The message.
- * @param  string		Additional headers.
- * @param  string		Additional stuff to send to sendmail executable (if appropriate, only works when safe mode is off).
- * @return boolean	Success status.
+ * @param  string                       The TO address.
+ * @param  string                       The subject.
+ * @param  string                       The message.
+ * @param  string                       Additional headers.
+ * @param  string                       Additional stuff to send to sendmail executable (if appropriate, only works when safe mode is off).
+ * @return boolean                      Success status.
  */
 function manualproc_mail($to,$subject,$message,$additional_headers,$additional_flags = '')
 {
@@ -41,7 +41,7 @@ function manualproc_mail($to,$subject,$message,$additional_headers,$additional_f
     if (substr($additional_flags,0,1) != ' ') {
         $additional_flags = ' ' . $additional_flags;
     }
-    //$additional_flags.=' -v';		mini_sendmail puts everything onto stderr if using this https://github.com/mattrude/mini_sendmail/blob/master/mini_sendmail.c
+    //$additional_flags.=' -v';     mini_sendmail puts everything onto stderr if using this https://github.com/mattrude/mini_sendmail/blob/master/mini_sendmail.c
     $command = ini_get('sendmail_path') . $additional_flags;
     $handle = proc_open($command,$descriptorspec,$pipes);
     if ($handle !== false) {

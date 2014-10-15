@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_adminzone_dashboard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_adminzone_dashboard
  */
 
 class Hook_cron_staff_checklist_notify
 {
     /**
-	 * Run function for CRON hooks. Searches for tasks to perform.
-	 */
+     * Run function for CRON hooks. Searches for tasks to perform.
+     */
     public function run()
     {
         require_lang('staff_checklist');

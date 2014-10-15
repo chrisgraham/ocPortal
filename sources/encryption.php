@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Determine whether the necessary PHP extensions to support encryption are available. For normal use, you should probably use is_encryption_enabled() instead.
  *
- * @return boolean	Encryption available?
+ * @return boolean                      Encryption available?
  */
 function is_encryption_available()
 {
@@ -31,7 +31,7 @@ function is_encryption_available()
 /**
  * Determine whether encryption support is available and enabled in the site's preferences, and the keys are in place.
  *
- * @return boolean	Encryption enabled?
+ * @return boolean                      Encryption enabled?
  */
 function is_encryption_enabled()
 {
@@ -45,8 +45,8 @@ function is_encryption_enabled()
  * A fatal error will occur if the public key cannot be found, or if encryption fails for whatever reason.
  * Note that this will blindly re-encrypt data which has already been encrypted. You should check data with is_data_encrypted() first.
  *
- * @param  string		Data to be encrypted
- * @return string		Encrypted data, with magic marker
+ * @param  string                       Data to be encrypted
+ * @return string                       Encrypted data, with magic marker
  */
 function encrypt_data($data)
 {
@@ -95,8 +95,8 @@ function encrypt_data($data)
 /**
  * Determine if some data has already been encrypted: i.e. if it has a magic encryption marker.
  *
- * @param  string			Data to check
- * @return boolean		Encrypted?
+ * @param  string                       Data to check
+ * @return boolean                      Encrypted?
  */
 function is_data_encrypted($data)
 {
@@ -110,8 +110,8 @@ function is_data_encrypted($data)
  * Remove the magic encryption marker from some data. This should be used if the data is to be displayed or presented for editing, but not if it's to be put in the database.
  * If the data does not have a magic encryption marker, the original string will be returned.
  *
- * @param  string		Data
- * @return string		Data, without the magic marker
+ * @param  string                       Data
+ * @return string                       Data, without the magic marker
  */
 function remove_magic_encryption_marker($data)
 {
@@ -125,9 +125,9 @@ function remove_magic_encryption_marker($data)
  * Decrypt data using asymmetric encryption, and the site's private key (as unlocked by the given passphrase).
  * A fatal error will occur if the passphrase is empty, the key cannot be found, or if decryption fails for whatever reason.
  *
- * @param  string		Data to be decrypted
- * @param  string		Passphrase to unlock the site's private key
- * @return string		Decrypted data
+ * @param  string                       Data to be decrypted
+ * @param  string                       Passphrase to unlock the site's private key
+ * @return string                       Decrypted data
  */
 function decrypt_data($data,$passphrase)
 {

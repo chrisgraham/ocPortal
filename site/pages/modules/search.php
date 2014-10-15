@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		search
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    search
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_search
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_search
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('searches_saved');
@@ -51,11 +51,11 @@ class Module_search
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
@@ -84,14 +84,14 @@ class Module_search
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -104,10 +104,10 @@ class Module_search
     public $info;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -159,10 +159,10 @@ class Module_search
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_css('search');
@@ -182,10 +182,10 @@ class Module_search
     }
 
     /**
-	 * The UI to do a search.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to do a search.
+     *
+     * @return tempcode                 The UI
+     */
     public function form()
     {
         $id = get_param('id','');
@@ -426,10 +426,10 @@ class Module_search
     }
 
     /**
-	 * Find whether we are doing a boolean search.
-	 *
-	 * @return boolean		Whether we are
-	 */
+     * Find whether we are doing a boolean search.
+     *
+     * @return boolean                  Whether we are
+     */
     public function _is_boolean_search()
     {
         $content = get_param('content','',true);
@@ -445,19 +445,19 @@ class Module_search
     }
 
     /**
-	 * The actualiser of a search.
-	 *
-	 * @param  ID_TEXT		Codename for what's being searched (blank: mixed search)
-	 * @param  string			Author name
-	 * @param  ?AUTO_LINK	Author ID (NULL: none given)
-	 * @param  integer		Days to search
-	 * @param  ID_TEXT		Sort key
-	 * @param  ID_TEXT		Sort direction
-	 * @set    ASC DESC
-	 * @param  boolean		Whether to only search titles
-	 * @param  string			Comma-separated list of categories to search under
-	 * @return array			A triple: The results, results browser, the number of results
-	 */
+     * The actualiser of a search.
+     *
+     * @param  ID_TEXT                  Codename for what's being searched (blank: mixed search)
+     * @param  string                   Author name
+     * @param  ?AUTO_LINK               Author ID (NULL: none given)
+     * @param  integer                  Days to search
+     * @param  ID_TEXT                  Sort key
+     * @param  ID_TEXT                  Sort direction
+     * @set    ASC DESC
+     * @param  boolean                  Whether to only search titles
+     * @param  string                   Comma-separated list of categories to search under
+     * @return array                    A triple: The results, results browser, the number of results
+     */
     public function results($id,$author,$author_id,$days,$sort,$direction,$only_titles,$search_under)
     {
         cache_module_installed_status();

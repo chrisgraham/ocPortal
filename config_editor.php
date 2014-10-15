@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 // Find ocPortal base directory, and chdir into it
@@ -77,23 +77,23 @@ function ce_do_header()
 <!DOCTYPE html>
 <html lang="EN">
 <head>
-	<title>ocPortal Installation Options editor</title>
-	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-	<style>
+    <title>ocPortal Installation Options editor</title>
+    <link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
+    <style>
 ';
     @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
     echo '
-		.screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/icons/48x48/menu/_generic_admin/tool.png\') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
-		.button_screen { padding: 0.5em 0.3em !important; }
-		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-	</style>
+        .screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/icons/48x48/menu/_generic_admin/tool.png\') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
+        .button_screen { padding: 0.5em 0.3em !important; }
+        a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
+    </style>
 
-	<meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="noindex, nofollow" />
 </head>
 <body class="website_body" style="margin: 1em"><div class="global_middle">
-	<h1 class="screen_title">ocPortal Installation Options editor</h1>
-	<p>This is an editor kept as simple as possible, to allow fixing of configuration problems when ocPortal is not in a workable state. It is provided in English only, and only modifies the configuration file, not the database.</p>
-	<form action="config_editor.php" method="post">
+    <h1 class="screen_title">ocPortal Installation Options editor</h1>
+    <p>This is an editor kept as simple as possible, to allow fixing of configuration problems when ocPortal is not in a workable state. It is provided in English only, and only modifies the configuration file, not the database.</p>
+    <form action="config_editor.php" method="post">
 ';
 }
 
@@ -103,22 +103,22 @@ function ce_do_header()
 function ce_do_footer()
 {
     echo '
-		</form>
-	';
+        </form>
+    ';
 
     global $SITE_INFO;
     if (array_key_exists('base_url',$SITE_INFO)) {
         echo '
-			<hr />
-			<ul class="actions_list" role="navigation">
-				<li><a href="' . htmlentities($SITE_INFO['base_url']) . '/adminzone/index.php">Go to Admin Zone</a></li>
-			</ul>
-		';
+            <hr />
+            <ul class="actions_list" role="navigation">
+                    <li><a href="' . htmlentities($SITE_INFO['base_url']) . '/adminzone/index.php">Go to Admin Zone</a></li>
+            </ul>
+        ';
     }
     echo '
-		</div></body>
-	</html>
-	';
+        </div></body>
+    </html>
+    ';
 }
 
 /**
@@ -131,16 +131,16 @@ function ce_do_login()
     }
 
     echo '
-		<label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
+        <label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
 
-		<p><input class="button_screen menu__site_meta__user_actions__login" type="submit" value="Log in" /></p>
-	';
+        <p><input class="button_screen menu__site_meta__user_actions__login" type="submit" value="Log in" /></p>
+    ';
 }
 
 /**
  * Output the editing page.
  *
- * @param  string	The password given to get here (so we don't need to re-enter it each edit).
+ * @param  string                       The password given to get here (so we don't need to re-enter it each edit).
  */
 function do_access($given_password)
 {
@@ -198,9 +198,9 @@ function do_access($given_password)
 
         'backdoor_ip' => '<em>Security:</em> Always allow users accessing from this IP address in, automatically logged in as the oldest admin of the site.',
         'full_ips' => '<em>Security:</em> Whether to match sessions to the full IP addresses. Set this to 1 if you are sure users don\'t jump around IP addresses on the same 255.255.255.0 subnet (e.g. due to proxy server randomisation).',
-        /*	Don't want this in here, we want it autodetected unless explicitly overridden
-		'dev_mode'=>'<em>Development:</em> Whether development mode is enabled (<strong>intended only for core ocPortal programmers</strong>).',
-		*/
+        /*  Don't want this in here, we want it autodetected unless explicitly overridden
+        'dev_mode'=>'<em>Development:</em> Whether development mode is enabled (<strong>intended only for core ocPortal programmers</strong>).',
+        */
         'force_no_eval' => '<em>Development:</em> Whether to force extra strictness that is required for ocPortal to run on non-native PHP environments.',
         'no_keep_params' => '<em>Development:</em> Whether to disable support for \'keep_\' params in ocPortal. You probably don\'t want to disable them!',
         'safe_mode' => '<em>Development:</em> Whether ocPortal is to be forced into Safe Mode, meaning no custom files will load and most caching will be disabled.',
@@ -214,8 +214,8 @@ function do_access($given_password)
     global $SITE_INFO;
 
     echo '
-		<table class="results_table">
-	';
+        <table class="results_table">
+    ';
 
     // Display UI to set all settings
     foreach ($settings as $key => $notes) {
@@ -241,31 +241,31 @@ function do_access($given_password)
         $_val = htmlentities($val);
 
         echo '
-			<tr>
-				<th style="text-align: right">
-					' . $_key . '
-				</th>
-				<td>
-					<input type="' . $type . '" name="' . $_key . '" value="' . $_val . '" ' . (($type == 'checkbox')?($checked?'checked="checked"':''):'size="20"') . ' />
-				</td>
-				<td>
-					' . $notes . '
-				</td>
-			</tr>
-		';
+            <tr>
+                    <th style="text-align: right">
+                            ' . $_key . '
+                    </th>
+                    <td>
+                            <input type="' . $type . '" name="' . $_key . '" value="' . $_val . '" ' . (($type == 'checkbox')?($checked?'checked="checked"':''):'size="20"') . ' />
+                    </td>
+                    <td>
+                            ' . $notes . '
+                    </td>
+            </tr>
+        ';
         if ($key == 'master_password') {
             echo '
-				<tr>
-					<th style="text-align: right">
-						&raquo; Confirm password
-					</th>
-					<td>
-						<input type="' . $type . '" name="confirm_master_password" value="' . $_val . '" size="20" />
-					</td>
-					<td>
-					</td>
-				</tr>
-			';
+                    <tr>
+                            <th style="text-align: right">
+                                        &raquo; Confirm password
+                            </th>
+                            <td>
+                                        <input type="' . $type . '" name="confirm_master_password" value="' . $_val . '" size="20" />
+                            </td>
+                            <td>
+                            </td>
+                    </tr>
+            ';
         }
     }
 
@@ -283,14 +283,14 @@ function do_access($given_password)
     }
 
     echo '
-		</table>
+        </table>
 
-		<p class="proceed_button" style="text-align: center">
-			<input class="button_screen buttons__save" type="submit" value="Edit" />
-		</p>
+        <p class="proceed_button" style="text-align: center">
+            <input class="button_screen buttons__save" type="submit" value="Edit" />
+        </p>
 
-		<input type="hidden" name="given_password" value="' . htmlentities($given_password) . '" />
-	';
+        <input type="hidden" name="given_password" value="' . htmlentities($given_password) . '" />
+    ';
 }
 
 /**
@@ -417,7 +417,7 @@ function do_set()
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH				File/directory name to sync on (may be full or relative path)
+ * @param  PATH                         File/directory name to sync on (may be full or relative path)
  */
 function co_sync_file($filename)
 {
@@ -436,8 +436,8 @@ function co_sync_file($filename)
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH				File/directory name to move from (may be full or relative path)
- * @param  PATH				File/directory name to move to (may be full or relative path)
+ * @param  PATH                         File/directory name to move from (may be full or relative path)
+ * @param  PATH                         File/directory name to move to (may be full or relative path)
  */
 function co_sync_file_move($old,$new)
 {
@@ -459,8 +459,8 @@ function co_sync_file_move($old,$new)
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
+ * @param  SHORT_TEXT                   Given master password
+ * @return boolean                      Whether it is valid
  */
 function co_check_master_password($password_given)
 {

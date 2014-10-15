@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		content_reviews
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    content_reviews
  */
 
 /**
  * Get a form to control how some content should be reviewed.
  *
- * @param  ID_TEXT		The content type
- * @param  ?ID_TEXT		The content ID (NULL: not added yet)
- * @param  ?ID_TEXT		The catalogue name where to grab default settings from (NULL: content type has no bound catalogue / try and auto-detect)
- * @return tempcode		The fields
+ * @param  ID_TEXT                      The content type
+ * @param  ?ID_TEXT                     The content ID (NULL: not added yet)
+ * @param  ?ID_TEXT                     The catalogue name where to grab default settings from (NULL: content type has no bound catalogue / try and auto-detect)
+ * @return tempcode                     The fields
  */
 function content_review_get_fields($content_type,$content_id = null,$catalogue_name = null)
 {
@@ -151,9 +151,9 @@ function content_review_get_fields($content_type,$content_id = null,$catalogue_n
 /**
  * Save the results of a content review form.
  *
- * @param  ID_TEXT		The content type
- * @param  ID_TEXT		The content ID
- * @param  ?ID_TEXT		The old content ID (NULL: not being renamed)
+ * @param  ID_TEXT                      The content type
+ * @param  ID_TEXT                      The content ID
+ * @param  ?ID_TEXT                     The old content ID (NULL: not being renamed)
  */
 function content_review_set($content_type,$content_id,$old_content_id = null)
 {
@@ -198,13 +198,13 @@ function content_review_set($content_type,$content_id,$old_content_id = null)
 /**
  * Schedule that some content should be reviewed.
  *
- * @param  ID_TEXT		The content type
- * @param  ID_TEXT		The content ID
- * @param  ?integer		The review frequency in seconds (NULL: no repeat review pattern)
- * @param  ?TIME			Manual next review time (NULL: work out from review frequency)
- * @param  ID_TEXT		Automatic action to perform upon review time
+ * @param  ID_TEXT                      The content type
+ * @param  ID_TEXT                      The content ID
+ * @param  ?integer                     The review frequency in seconds (NULL: no repeat review pattern)
+ * @param  ?TIME                        Manual next review time (NULL: work out from review frequency)
+ * @param  ID_TEXT                      Automatic action to perform upon review time
  * @set leave unvalidate delete
- * @param  BINARY			Whether to display the review status publicly
+ * @param  BINARY                       Whether to display the review status publicly
  */
 function schedule_content_review($content_type,$content_id,$review_freq,$next_review_time = null,$auto_action = 'leave',$display_review_status = 0)
 {

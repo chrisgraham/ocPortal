@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Used to turn plain-text links into real links.
  *
- * @param  array			The matches
- * @return string			The replacement
+ * @param  array                        The matches
+ * @return string                       The replacement
  */
 function extract_plain_links($matches)
 {
@@ -31,7 +31,7 @@ function extract_plain_links($matches)
 
 /**
  * RSS loader.
- * @package		core
+ * @package    core
  */
 class rss
 {
@@ -45,11 +45,11 @@ class rss
     public $error;
 
     /**
-	 * Constructs the RSS reader: downloads the URL and parses it. Check $error after constructing.
-	 *
-	 * @param  URLPATH		The URL to the RSS we will be reading
-	 * @param  boolean		Whether the 'url' is actually a filesystem path
-	 */
+     * Constructs the RSS reader: downloads the URL and parses it. Check $error after constructing.
+     *
+     * @param  URLPATH                  The URL to the RSS we will be reading
+     * @param  boolean                  Whether the 'url' is actually a filesystem path
+     */
     public function rss($url,$is_filesystem_path = false)
     {
         require_lang('rss');
@@ -129,7 +129,7 @@ class rss
                 xml_set_end_namespace_decl_handler($xml_parser,'endNameSpace');
             }
 
-            //$data=convert_to_internal_encoding($data);		xml_parser does it for us, and we can't disable it- so run with it instead of our own. Shame as it's inferior.
+            //$data=convert_to_internal_encoding($data);    xml_parser does it for us, and we can't disable it- so run with it instead of our own. Shame as it's inferior.
 
             if (strpos($data,'<!ENTITY') === false) {
                 $extra_data = "<" . "?xml version=\"1.0\" encoding=\"" . $GLOBALS['HTTP_CHARSET'] . "\" ?" . ">
@@ -178,28 +178,28 @@ class rss
     }
 
     /* *
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			A reference to the XML parser calling the handler.
-	 * @param  string			A space-separated list of the names of the entities that are open for the parse of this entity (including the name of the referenced entity).
-	 * @param  string			The base for resolving the system identifier (system_id) of the external entity. Currently this parameter will always be set to an empty string.
-	 * @param  string			The system identifier as specified in the entity declaration.
-	 * @param  string			The public identifier as specified in the entity declaration, or an empty string if none was specified; the whitespace in the public identifier will have been normalized as required by the XML spec.
-	 * @param  integer		?
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   A reference to the XML parser calling the handler.
+     * @param  string                   A space-separated list of the names of the entities that are open for the parse of this entity (including the name of the referenced entity).
+     * @param  string                   The base for resolving the system identifier (system_id) of the external entity. Currently this parameter will always be set to an empty string.
+     * @param  string                   The system identifier as specified in the entity declaration.
+     * @param  string                   The public identifier as specified in the entity declaration, or an empty string if none was specified; the whitespace in the public identifier will have been normalized as required by the XML spec.
+     * @param  integer                  ?
+     */
     /*function extEntity($parser,$open_entity_names,$base,$system_id,$public_id)
-	{
-		$_open_entity_names=explode(',',$open_entity_names);
-		return 1; // Kludge to skip dodgy entities
-	}*/
+    {
+        $_open_entity_names=explode(',',$open_entity_names);
+        return 1; // Kludge to skip dodgy entities
+    }*/
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			N/A
-	 * @param  ?URLPATH		The URI of the name space we are entering (NULL: not given)
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   N/A
+     * @param  ?URLPATH                 The URI of the name space we are entering (NULL: not given)
+     */
     public function startNameSpace($parser,$prefix,$uri = null)
     {
         if ((($uri == 'http://purl.org/atom/ns#') || ($uri == 'http://www.w3.org/2005/Atom')) && ($this->type != 'RSS')) {
@@ -211,22 +211,22 @@ class rss
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     */
     public function endNameSpace($parser)
     {
         array_pop($this->namespace_stack);
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The name of the element found
-	 * @param  array			Array of attributes of the element
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The name of the element found
+     * @param  array                    Array of attributes of the element
+     */
     public function startElement($parser,$name,$attributes)
     {
         if ((strpos($name,'HTTP://PURL.ORG/RSS/1.0/:') !== false)) {
@@ -243,12 +243,12 @@ class rss
 
         if ($name == 'RSS') {
             $this->type = 'RSS';
-            /*		$version=explode('.',$attributes['VERSION']);		Actually we won't try and detect versions, RSS usage is too much of a mess
-			if ($version[0]=='0') && ($version[1]=='90') $this->version=0.9; // rdf
-			elseif ($version[0]=='0') && ($version[1][0]=='9') $this->version=0.91;
-			elseif ($version[0]=='1') $this->version=1; // rdf
-			elseif ($version[0]=='2') $this->version=2;
-			else fatal_exit(do_lang('RSS_UNKNOWN_VERSION',$version));*/
+            /*    $version=explode('.',$attributes['VERSION']);      Actually we won't try and detect versions, RSS usage is too much of a mess
+            if ($version[0]=='0') && ($version[1]=='90') $this->version=0.9; // rdf
+            elseif ($version[0]=='0') && ($version[1][0]=='9') $this->version=0.91;
+            elseif ($version[0]=='1') $this->version=1; // rdf
+            elseif ($version[0]=='2') $this->version=2;
+            else fatal_exit(do_lang('RSS_UNKNOWN_VERSION',$version));*/
             $this->version = $attributes['VERSION'];
         }
 
@@ -268,10 +268,10 @@ class rss
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     */
     public function endElement($parser)
     {
         $this->trueStartText($parser,$this->text_so_far);
@@ -281,22 +281,22 @@ class rss
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The text
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The text
+     */
     public function startText($parser,$data)
     {
         $this->text_so_far .= $data;
     }
 
     /**
-	 * Parse the complete text of the inside of the tag.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The text
-	 */
+     * Parse the complete text of the inside of the tag.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The text
+     */
     public function trueStartText($parser,$data)
     {
         $prelast_tag = array_peek($this->tag_stack,2);
@@ -711,8 +711,8 @@ class rss
 /**
  * Convert an ISO date into a timestamp.
  *
- * @param  string			The ISO date
- * @return array			If only one element, it contains the timestamp. Otherwise it is a pair: (string format, timestamp)
+ * @param  string                       The ISO date
+ * @return array                        If only one element, it contains the timestamp. Otherwise it is a pair: (string format, timestamp)
  */
 function cleanup_date($date)
 {

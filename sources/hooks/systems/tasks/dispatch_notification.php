@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_notifications
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_notifications
  */
 
 class Hook_task_dispatch_notification
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @param  object			The notification dispatch object (pre-filled with details of the notification to send)
-	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @param  object                   The notification dispatch object (pre-filled with details of the notification to send)
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run($dispatcher)
     {
         require_code('notifications');

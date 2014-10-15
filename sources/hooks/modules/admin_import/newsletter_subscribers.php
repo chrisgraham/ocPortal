@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		newsletter
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    newsletter
  */
 
 class Hook_newsletter_subscribers
 {
     /**
-	 * Standard importer hook info function.
-	 *
-	 * @return ?array	Importer handling details (NULL: importer is disabled).
-	 */
+     * Standard importer hook info function.
+     *
+     * @return ?array                   Importer handling details (NULL: importer is disabled).
+     */
     public function info()
     {
         $info = array();

@@ -13,23 +13,23 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Edit a multi moderation.
  *
- * @param  AUTO_LINK		The ID of the multi moderation we are editing.
- * @param  SHORT_TEXT	The name of the multi moderation.
- * @param  LONG_TEXT		The default post text to add when applying (may be blank).
- * @param  ?AUTO_LINK	The forum to move the topic when applying (NULL: do not move).
- * @param  ?BINARY		The pin state after applying (NULL: unchanged).
- * @param  ?BINARY		The sink state after applying (NULL: unchanged).
- * @param  ?BINARY		The open state after applying (NULL: unchanged).
- * @param  SHORT_TEXT 	The forum multi code for where this multi moderation may be applied.
- * @param  SHORT_TEXT 	The title suffix.
+ * @param  AUTO_LINK                    The ID of the multi moderation we are editing.
+ * @param  SHORT_TEXT                   The name of the multi moderation.
+ * @param  LONG_TEXT                    The default post text to add when applying (may be blank).
+ * @param  ?AUTO_LINK                   The forum to move the topic when applying (NULL: do not move).
+ * @param  ?BINARY                      The pin state after applying (NULL: unchanged).
+ * @param  ?BINARY                      The sink state after applying (NULL: unchanged).
+ * @param  ?BINARY                      The open state after applying (NULL: unchanged).
+ * @param  SHORT_TEXT                   The forum multi code for where this multi moderation may be applied.
+ * @param  SHORT_TEXT                   The title suffix.
  */
 function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code,$title_suffix)
 {
@@ -58,7 +58,7 @@ function ocf_edit_multi_moderation($id,$name,$post_text,$move_to,$pin_state,$sin
 /**
  * Delete a multi moderation.
  *
- * @param  AUTO_LINK  The ID of the multi moderation we are deleting.
+ * @param  AUTO_LINK                    The ID of the multi moderation we are deleting.
  */
 function ocf_delete_multi_moderation($id)
 {
@@ -78,12 +78,12 @@ function ocf_delete_multi_moderation($id)
 /**
  * Perform a multi moderation.
  *
- * @param  AUTO_LINK		The ID of the multi moderation we are performing.
- * @param  AUTO_LINK		The ID of the topic we are performing the multi moderation on.
- * @param  LONG_TEXT		The reason for performing the multi moderation (may be blank).
- * @param  LONG_TEXT		The post text for a post to be added to the topic (blank: do not add a post).
- * @param  BINARY			Whether the post is marked emphasised.
- * @param  BINARY			Whether to skip showing the posters signature in the post.
+ * @param  AUTO_LINK                    The ID of the multi moderation we are performing.
+ * @param  AUTO_LINK                    The ID of the topic we are performing the multi moderation on.
+ * @param  LONG_TEXT                    The reason for performing the multi moderation (may be blank).
+ * @param  LONG_TEXT                    The post text for a post to be added to the topic (blank: do not add a post).
+ * @param  BINARY                       Whether the post is marked emphasised.
+ * @param  BINARY                       Whether to skip showing the posters signature in the post.
  */
 function ocf_perform_multi_moderation($id,$topic_id,$reason,$post_text = '',$is_emphasised = 1,$skip_sig = 0)
 {
@@ -212,19 +212,19 @@ function warnings_script()
 /**
  * Add a formal warning.
  *
- * @param  MEMBER			The member being warned.
- * @param  LONG_TEXT		An explanation for why the member is being warned.
- * @param  ?MEMBER		The member doing the warning (NULL: current member).
- * @param  ?TIME			The time of the warning (NULL: now).
- * @param  BINARY			Whether this counts as a warning
- * @param  ?AUTO_LINK	The topic being silenced from (NULL: none)
- * @param  ?AUTO_LINK	The forum being silenced from (NULL: none)
- * @param  integer		Number of extra days for probation
- * @param  IP				The IP address being banned (blank: none)
- * @param  integer		The points being charged
- * @param  BINARY			Whether the member is being banned
- * @param  ?GROUP			The usergroup being changed from (NULL: no change)
- * @return AUTO_LINK		The ID of the newly created warning.
+ * @param  MEMBER                       The member being warned.
+ * @param  LONG_TEXT                    An explanation for why the member is being warned.
+ * @param  ?MEMBER                      The member doing the warning (NULL: current member).
+ * @param  ?TIME                        The time of the warning (NULL: now).
+ * @param  BINARY                       Whether this counts as a warning
+ * @param  ?AUTO_LINK                   The topic being silenced from (NULL: none)
+ * @param  ?AUTO_LINK                   The forum being silenced from (NULL: none)
+ * @param  integer                      Number of extra days for probation
+ * @param  IP                           The IP address being banned (blank: none)
+ * @param  integer                      The points being charged
+ * @param  BINARY                       Whether the member is being banned
+ * @param  ?GROUP                       The usergroup being changed from (NULL: no change)
+ * @return AUTO_LINK                    The ID of the newly created warning.
  */
 function ocf_make_warning($member_id,$explanation,$by = null,$time = null,$is_warning = 1,$silence_from_topic = null,$silence_from_forum = null,$probation = 0,$banned_ip = '',$charged_points = 0,$banned_member = 0,$changed_usergroup_from = null)
 {
@@ -262,9 +262,9 @@ function ocf_make_warning($member_id,$explanation,$by = null,$time = null,$is_wa
 /**
  * Edit a formal warning.
  *
- * @param  AUTO_LINK		The ID of the formal warning we are editing.
- * @param  LONG_TEXT		An explanation for why the member is being warned.
- * @param  BINARY			Whether this counts as a warning
+ * @param  AUTO_LINK                    The ID of the formal warning we are editing.
+ * @param  LONG_TEXT                    An explanation for why the member is being warned.
+ * @param  BINARY                       Whether this counts as a warning
  */
 function ocf_edit_warning($warning_id,$explanation,$is_warning = 1)
 {
@@ -288,7 +288,7 @@ function ocf_edit_warning($warning_id,$explanation,$is_warning = 1)
 /**
  * Delete a formal warning.
  *
- * @param  AUTO_LINK  The ID of the formal warning we are deleting.
+ * @param  AUTO_LINK                    The ID of the formal warning we are deleting.
  */
 function ocf_delete_warning($warning_id)
 {

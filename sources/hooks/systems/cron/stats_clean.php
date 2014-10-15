@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		stats
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    stats
  */
 
 class Hook_cron_stats_clean
 {
     /**
-	 * Run function for CRON hooks. Searches for tasks to perform.
-	 */
+     * Run function for CRON hooks. Searches for tasks to perform.
+     */
     public function run()
     {
         if (!addon_installed('stats')) {

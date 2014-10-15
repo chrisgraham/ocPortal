@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 class Hook_task_import_ftp_downloads
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @param  AUTO_LINK		The category to import to
-	 * @param  string			The import URL
-	 * @param  boolean		Whether to import subfolders
-	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @param  AUTO_LINK                The category to import to
+     * @param  string                   The import URL
+     * @param  boolean                  Whether to import subfolders
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run($destination,$server_url,$subfolders)
     {
         require_code('downloads2');
@@ -93,15 +93,15 @@ class Hook_task_import_ftp_downloads
     }
 
     /**
-	 * Worker function to do an FTP import.
-	 *
-	 * @param  resource			The FTP connection
-	 * @param  URLPATH			The URL that is equivalent to the base path on our FTP
-	 * @param  PATH				The directory we are scanning
-	 * @param  AUTO_LINK			The destination downloading category
-	 * @param  boolean			Whether we add hierarchically (as opposed to a flat category fill)
-	 * @return integer			Number of downloads added
-	 */
+     * Worker function to do an FTP import.
+     *
+     * @param  resource                 The FTP connection
+     * @param  URLPATH                  The URL that is equivalent to the base path on our FTP
+     * @param  PATH                     The directory we are scanning
+     * @param  AUTO_LINK                The destination downloading category
+     * @param  boolean                  Whether we add hierarchically (as opposed to a flat category fill)
+     * @return integer                  Number of downloads added
+     */
     public function ftp_recursive_downloads_scan($conn_id,$url,$directory,$dest_cat,$make_subfolders)
     {
         $num_added = 0;

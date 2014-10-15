@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Get information about new versions of ocPortal (or more accurately, what's wrong with this version).
  *
- * @return tempcode		Information about the installed ocPortal version
+ * @return tempcode                     Information about the installed ocPortal version
  */
 function get_future_version_information()
 {
@@ -56,8 +56,8 @@ function get_future_version_information()
 /**
  * Get branch version number for an ocPortal version.
  *
- * @param  ?float			General version number (NULL: on disk version)
- * @return string			Branch version number (NULL: on disk version)
+ * @param  ?float                       General version number (NULL: on disk version)
+ * @return string                       Branch version number (NULL: on disk version)
  */
 function get_version_branch($general = null)
 {
@@ -71,9 +71,9 @@ function get_version_branch($general = null)
 /**
  * Get dotted version from given ocPortal-version-registry (version.php) supplied components.
  *
- * @param  ?integer		Main version number (NULL: on disk version)
- * @param  ?string		Minor version number (NULL: on disk version)
- * @return string			Dotted version number
+ * @param  ?integer                     Main version number (NULL: on disk version)
+ * @param  ?string                      Minor version number (NULL: on disk version)
+ * @return string                       Dotted version number
  */
 function get_version_dotted($main = null,$minor = null)
 {
@@ -91,8 +91,8 @@ function get_version_dotted($main = null,$minor = null)
  * Gets any random way of writing a version number (in all of ocPortal's history) and makes it a dotted style like "3.2.beta2".
  * Note that the dotted format is compatible with PHP's version_compare function.
  *
- * @param  string			Any reasonable input
- * @return string			Pretty version number
+ * @param  string                       Any reasonable input
+ * @return string                       Pretty version number
  */
 function get_version_dotted__from_anything($any_format)
 {
@@ -119,8 +119,8 @@ function get_version_dotted__from_anything($any_format)
 /**
  * Analyse a dotted version number into components.
  *
- * @param  string			Dotted version number
- * @return array			Tuple of components: dotted basis version (i.e. with no alpha/beta/RC component and no trailing zeros), qualifier (blank, or alpha, or beta, or RC), qualifier number (NULL if not an alpha/beta/RC), dotted version number with trailing zeros to always cover 3 components
+ * @param  string                       Dotted version number
+ * @return array                        Tuple of components: dotted basis version (i.e. with no alpha/beta/RC component and no trailing zeros), qualifier (blank, or alpha, or beta, or RC), qualifier number (NULL if not an alpha/beta/RC), dotted version number with trailing zeros to always cover 3 components
  */
 function get_version_components__from_dotted($dotted)
 {
@@ -149,8 +149,8 @@ function get_version_components__from_dotted($dotted)
  * Get a pretty version number for an ocPortal version.
  * This pretty style is not used in ocPortal code per se, but is shown to users and hence ocPortal may need to recognise it when searching news posts, download databases, etc.
  *
- * @param  string			Pretty version number
- * @return string			Dotted version number
+ * @param  string                       Pretty version number
+ * @return string                       Dotted version number
  */
 function get_version_pretty__from_dotted($pretty)
 {

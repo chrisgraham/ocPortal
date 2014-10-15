@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_addon_management
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_addon_management
  */
 
 /**
@@ -30,8 +30,8 @@ function init__addons2()
 /**
  * Upgrade the specified addon.
  *
- * @param  ID_TEXT		The addon name
- * @return integer		0=No upgrade. -2=Not installed, 1=Upgrade
+ * @param  ID_TEXT                      The addon name
+ * @return integer                      0=No upgrade. -2=Not installed, 1=Upgrade
  */
 function upgrade_addon_soft($addon)
 {
@@ -67,8 +67,8 @@ function upgrade_addon_soft($addon)
 /**
  * Reinstall the specified addon.
  *
- * @param  ID_TEXT		The addon name
- * @param  ?array			.ini-format info (needs processing) (NULL: unknown / N/A)
+ * @param  ID_TEXT                      The addon name
+ * @param  ?array                       .ini-format info (needs processing) (NULL: unknown / N/A)
  */
 function reinstall_addon_soft($addon,$ini_info = null)
 {
@@ -133,7 +133,7 @@ function reinstall_addon_soft($addon,$ini_info = null)
 /**
  * Completely uninstall the specified addon from the system.
  *
- * @param  ID_TEXT		The addon name
+ * @param  ID_TEXT                      The addon name
  */
 function uninstall_addon_soft($addon)
 {
@@ -158,7 +158,7 @@ function uninstall_addon_soft($addon)
 /**
  * Find the non-bundled addons available on ocPortal.com.
  *
- * @return array		Map of addon ID to addon title
+ * @return array                        Map of addon ID to addon title
  */
 function find_remote_addons()
 {
@@ -185,7 +185,7 @@ function find_remote_addons()
 /**
  * Find updated addons via checking the ocPortal.com web service.
  *
- * @return array		List of addons updated
+ * @return array                        List of addons updated
  */
 function find_updated_addons()
 {
@@ -243,8 +243,8 @@ function find_updated_addons()
 /**
  * Find all the installed addons.
  *
- * @param  boolean	Whether to only return details on on-bundled addons
- * @return array		Map of maps describing the available addons (addon name => details)
+ * @param  boolean                      Whether to only return details on on-bundled addons
+ * @return array                        Map of maps describing the available addons (addon name => details)
  */
 function find_installed_addons($just_non_bundled = false)
 {
@@ -276,8 +276,8 @@ function find_installed_addons($just_non_bundled = false)
 /**
  * Find effective modification date of an addon.
  *
- * @param  string		The name of the addon
- * @return ?TIME		Modification time (NULL: could not find any files)
+ * @param  string                       The name of the addon
+ * @return ?TIME                        Modification time (NULL: could not find any files)
  */
 function find_addon_effective_mtime($addon_name)
 {
@@ -295,8 +295,8 @@ function find_addon_effective_mtime($addon_name)
 /**
  * Find all the available addons (addons in imports/addons that are not necessarily installed).
  *
- * @param  boolean	Whether to include addons that are installed already
- * @return array		Maps of maps describing the available addons (filename => details)
+ * @param  boolean                      Whether to include addons that are installed already
+ * @return array                        Maps of maps describing the available addons (filename => details)
  */
 function find_available_addons($installed_too = true)
 {
@@ -373,8 +373,8 @@ function find_available_addons($installed_too = true)
 /**
  * Find addon dependencies.
  *
- * @param  string		The name of the addon
- * @return array		List of dependencies
+ * @param  string                       The name of the addon
+ * @return array                        List of dependencies
  */
 function find_addon_dependencies_on($addon)
 {
@@ -411,19 +411,19 @@ function find_addon_dependencies_on($addon)
 /**
  * Create an addon to spec.
  *
- * @param  string			Filename to create in exports/addons directory (should end in .tar)
- * @param  array			List of files to include
- * @param  string			Addon name
- * @param  string			Addon incompatibilities (comma-separated)
- * @param  string			Addon dependencies (comma-separated)
- * @param  string			Addon author
- * @param  string			Addon organisation
- * @param  string			Addon version
- * @param  string			Addon category
- * @param  string			Addon copyright attribution
- * @param  string			Addon licence
- * @param  string			Addon description
- * @param  PATH			Directory to save to
+ * @param  string                       Filename to create in exports/addons directory (should end in .tar)
+ * @param  array                        List of files to include
+ * @param  string                       Addon name
+ * @param  string                       Addon incompatibilities (comma-separated)
+ * @param  string                       Addon dependencies (comma-separated)
+ * @param  string                       Addon author
+ * @param  string                       Addon organisation
+ * @param  string                       Addon version
+ * @param  string                       Addon category
+ * @param  string                       Addon copyright attribution
+ * @param  string                       Addon licence
+ * @param  string                       Addon description
+ * @param  PATH                         Directory to save to
  */
 function create_addon($file,$files,$addon,$incompatibilities,$dependencies,$author,$organisation,$version,$category,$copyright_attribution,$licence,$description,$dir = 'exports/addons')
 {
@@ -453,9 +453,9 @@ function create_addon($file,$files,$addon,$incompatibilities,$dependencies,$auth
             $mtime = 0;
             //if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($themed_version)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
             //{
-            //	$_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
-            //	$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$_themed_version));
-            //	if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
+            // $_themed_version=dirname($val).'/'.$themed_suffix.basename($val);
+            // $json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$_themed_version));
+            // if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
             //}
             if ($mtime == 0) {
                 $mtime = filemtime($themed_version);
@@ -469,8 +469,8 @@ function create_addon($file,$files,$addon,$incompatibilities,$dependencies,$auth
             $mtime = 0;
             //if ((file_exists(get_file_base().'/.git')) && (function_exists('json_decode')) && (filemtime($full)>60*60*24-31*4/*If newer than 4 months it is likely git has garbled the modification date during a checkout*/))
             //{
-            //	$json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$val));
-            //	if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
+            // $json_data=@json_decode(http_download_file('http://github.com/api/v2/json/commits/list/chrisgraham/ocPortal/master/'.$val));
+            // if (isset($json_data->commits[0]->committed_date)) $mtime=strtotime($json_data->commits[0]->committed_date);
             //}
             if ($mtime == 0) {
                 $mtime = filemtime($full);
@@ -532,8 +532,8 @@ function create_addon($file,$files,$addon,$incompatibilities,$dependencies,$auth
 /**
  * Uninstall an addon.
  *
- * @param  string			Name of the addon TAR file
- * @param  ?array			The files to install (NULL: all)
+ * @param  string                       Name of the addon TAR file
+ * @param  ?array                       The files to install (NULL: all)
  */
 function install_addon($file,$files = null)
 {
@@ -680,7 +680,7 @@ function install_addon($file,$files = null)
 /**
  * Uninstall an addon.
  *
- * @param  string			Name of the addon
+ * @param  string                       Name of the addon
  */
 function uninstall_addon($addon)
 {
@@ -746,11 +746,11 @@ function uninstall_addon($addon)
 /**
  * Get information for the user relating to an addon that they are intending to install.
  *
- * @param  string			Filename of the addon TAR file
- * @param  ?array			List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
- * @param  ?array			List of addons that we're currently installing (so dependencies to these are irrelevant). (NULL: none)
- * @param  boolean		Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
- * @return array			Triple: warnings, files, addon info array
+ * @param  string                       Filename of the addon TAR file
+ * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
+ * @param  ?array                       List of addons that we're currently installing (so dependencies to these are irrelevant). (NULL: none)
+ * @param  boolean                      Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
+ * @return array                        Triple: warnings, files, addon info array
  */
 function inform_about_addon_install($file,$also_uninstalling = null,$also_installing = null,$always_return = false)
 {
@@ -961,8 +961,8 @@ function inform_about_addon_install($file,$also_uninstalling = null,$also_instal
 /**
  * Find whether a particular feature is available to ocPortal (e.g. it's an addon).
  *
- * @param  ID_TEXT		Feature name
- * @return boolean		Whether it is
+ * @param  ID_TEXT                      Feature name
+ * @return boolean                      Whether it is
  */
 function has_feature($dependency)
 {
@@ -1022,11 +1022,11 @@ function has_feature($dependency)
 /**
  * Get information for the user relating to an addon that they are intending to uninstall.
  *
- * @param  string			Name of the addon
- * @param  ?array			List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
- * @param  ?array			Addon details. (NULL: load in function)
- * @param  boolean		Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
- * @return array			Pair: warnings, files
+ * @param  string                       Name of the addon
+ * @param  ?array                       List of addons that we're currently uninstalling (so dependencies from these are irrelevant). (NULL: none)
+ * @param  ?array                       Addon details. (NULL: load in function)
+ * @param  boolean                      Whether to make sure we always return, rather than possibly bombing out with a dependency management UI
+ * @return array                        Pair: warnings, files
  */
 function inform_about_addon_uninstall($addon,$also_uninstalling = null,$addon_info = null,$always_return = false)
 {

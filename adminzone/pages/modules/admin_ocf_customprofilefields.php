@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_cpfs
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_cpfs
  */
 
 require_code('crud_module');
@@ -33,14 +33,14 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     public $title_is_multi_lang = true;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -68,12 +68,12 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -103,11 +103,11 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -138,10 +138,10 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -155,26 +155,26 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for adding/editing form.
-	 *
-	 * @param  SHORT_TEXT	The name of the custom profile field
-	 * @param  LONG_TEXT		The description of the field
-	 * @param  LONG_TEXT		The default value of the field
-	 * @param  BINARY			Whether the field is publicly viewable
-	 * @param  BINARY			Whether the field may be viewed by the owner
-	 * @param  BINARY			Whether the owner may set the value of the field
-	 * @param  BINARY			Whether the field is encrypted
-	 * @param  ID_TEXT		The type of the field
-	 * @set    short_text long_text short_trans long_trans integer upload picture url list tick
-	 * @param  BINARY			Whether the field is required to be filled in
-	 * @param  BINARY			Whether the field is to be shown on the join form
-	 * @param  BINARY			Whether the field is shown in posts
-	 * @param  BINARY			Whether the field is shown in post previews
-	 * @param  ?integer		The order the field is given relative to the order of the other custom profile fields (NULL: last)
-	 * @param  LONG_TEXT  	The usergroups that this field is confined to (comma-separated list).
-	 * @param  BINARY			Whether the field is locked
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for adding/editing form.
+     *
+     * @param  SHORT_TEXT               The name of the custom profile field
+     * @param  LONG_TEXT                The description of the field
+     * @param  LONG_TEXT                The default value of the field
+     * @param  BINARY                   Whether the field is publicly viewable
+     * @param  BINARY                   Whether the field may be viewed by the owner
+     * @param  BINARY                   Whether the owner may set the value of the field
+     * @param  BINARY                   Whether the field is encrypted
+     * @param  ID_TEXT                  The type of the field
+     * @set    short_text long_text short_trans long_trans integer upload picture url list tick
+     * @param  BINARY                   Whether the field is required to be filled in
+     * @param  BINARY                   Whether the field is to be shown on the join form
+     * @param  BINARY                   Whether the field is shown in posts
+     * @param  BINARY                   Whether the field is shown in post previews
+     * @param  ?integer                 The order the field is given relative to the order of the other custom profile fields (NULL: last)
+     * @param  LONG_TEXT                The usergroups that this field is confined to (comma-separated list).
+     * @param  BINARY                   Whether the field is locked
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($name = '',$description = '',$default = '',$public_view = 1,$owner_view = 1,$owner_set = 1,$encrypted = 0,$type = 'long_text',$required = 0,$show_on_join_form = 0,$show_in_posts = 0,$show_in_post_previews = 0,$order = null,$only_group = '',$locked = 0)
     {
         $fields = new ocp_tempcode();
@@ -243,11 +243,11 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -277,7 +277,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
             do_lang_tempcode('REQUIRED'),
         );
         $fh[] = do_lang_tempcode('SHOW_ON_JOIN_FORM');
-        //$fh[]=do_lang_tempcode('SHOW_IN_POSTS');	Save space
+        //$fh[]=do_lang_tempcode('SHOW_IN_POSTS'); Save space
         //$fh[]=do_lang_tempcode('SHOW_IN_POST_PREVIEWS');
         $fh[] = do_lang_tempcode('ORDER');
         $fh[] = do_lang_tempcode('ACTIONS');
@@ -384,25 +384,25 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
             $fields->attach(results_entry($fr,true));
         }
         $this->javascript_for_choose = '
-			var select_elements=document.getElementById(\'' . $this->form_id . '\').getElementsByTagName(\'select\');
-			var select_submit=document.getElementById(\'selection_submit\');
-			var select_element_length=select_elements.length;
-			for (var counter=0;counter<select_element_length;counter++)
-			{
-				select_elements[counter].onchange=function() {
-					select_elements[0].form.submit();
-				};
-			}
-			select_submit.style.display=\'none\';
-		';
+            var select_elements=document.getElementById(\'' . $this->form_id . '\').getElementsByTagName(\'select\');
+            var select_submit=document.getElementById(\'selection_submit\');
+            var select_element_length=select_elements.length;
+            for (var counter=0;counter<select_element_length;counter++)
+            {
+                    select_elements[counter].onchange=function() {
+                            select_elements[0].form.submit();
+                    };
+            }
+            select_submit.style.display=\'none\';
+        ';
         return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order,'sort',null,null,null,8,'gdfg43tfdgdfgdrfgd',true),true);
     }
 
     /**
-	 * Change the order of custom profile fields.
-	 * @param  integer		Record start count.
-	 * @param  integer		Record end count.
-	 */
+     * Change the order of custom profile fields.
+     * @param  integer                  Record start count.
+     * @param  integer                  Record end count.
+     */
     public function change_order($start_order = 0,$end_order = 0)
     {
         $rows = null;
@@ -432,11 +432,11 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($_id)
     {
         $id = intval($_id);
@@ -445,11 +445,11 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('*'),array('id' => intval($id)));
@@ -484,10 +484,10 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $only_group = array_key_exists('only_group',$_POST)?(is_array($_POST['only_group'])?implode(',',$_POST['only_group']):post_param('only_group')):'';
@@ -498,10 +498,10 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $only_group = array_key_exists('only_group',$_POST)?(is_array($_POST['only_group'])?implode(',',$_POST['only_group']):post_param('only_group')):'';
@@ -509,20 +509,20 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         ocf_delete_custom_field(intval($id));
     }
 
     /**
-	 * Show value statistics for a custom profile field (choose).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Show value statistics for a custom profile field (choose).
+     *
+     * @return tempcode                 The UI
+     */
     public function stats()
     {
         $fields = new ocp_tempcode();
@@ -564,10 +564,10 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
     }
 
     /**
-	 * Show value statistics for a custom profile field (show).
-	 *
-	 * @return tempcode		The statistics
-	 */
+     * Show value statistics for a custom profile field (show).
+     *
+     * @return tempcode                 The statistics
+     */
     public function _stats()
     {
         $f_name = 'field_' . strval(get_param_integer('id'));

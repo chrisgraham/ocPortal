@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		occle
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    occle
  */
 
 /**
@@ -29,7 +29,7 @@ function init__occle_fs()
 
 /**
  * Virtual filesystems.
- * @package		occle
+ * @package    occle
  */
 class occle_fs
 {
@@ -39,31 +39,31 @@ class occle_fs
     public $current_meta_pwd = null;
 
     /**
-	 * Constructor function. Setup a virtual filesystem, but do nothing with it.
-	 */
+     * Constructor function. Setup a virtual filesystem, but do nothing with it.
+     */
     public function occle_fs()
     {
         // Initialise a new virtual filesystem; setup the vfs array, and fetch the pwd from a cookie
 
         /*
-		The pwd is stored in a flat array, each value holds the key for each level in the $this->occle_fs array that is in the pwd:
-			$this->pwd=array('blah2','foo3','bar');
+        The pwd is stored in a flat array, each value holds the key for each level in the $this->occle_fs array that is in the pwd:
+            $this->pwd=array('blah2','foo3','bar');
 
-		The virtual filesystem is a nested directory structure, where terminals mapping to strings represent OccLE-fs hooks
-			$this->occle_fs=array(
-				'blah'=>array(),
-		***	'blah2'=>array(
-					'foo'=>array(),
-					'foo2'=>array(),
-		***		'foo3'=>array(
-		***			'bar'=>'members', // 'members' hook is tied into 'bar', rather than an explicit array
-						'bar2'=>array(),
-					),
-					'foo4'=>array(),
-				),
-				'blah3'=>array(),
-			);
-		*/
+        The virtual filesystem is a nested directory structure, where terminals mapping to strings represent OccLE-fs hooks
+            $this->occle_fs=array(
+                    'blah'=>array(),
+        *** 'blah2'=>array(
+                            'foo'=>array(),
+                            'foo2'=>array(),
+        ***    'foo3'=>array(
+        ***       'bar'=>'members', // 'members' hook is tied into 'bar', rather than an explicit array
+                                        'bar2'=>array(),
+                            ),
+                            'foo4'=>array(),
+                    ),
+                    'blah3'=>array(),
+            );
+        */
 
         // Build up the filesystem structure
         $occlefs_hooks = find_all_hooks('systems','occle_fs');
@@ -91,10 +91,10 @@ class occle_fs
     }
 
     /**
-	 * Fetch the current directory from a cookie, or the default.
-	 *
-	 * @return array					Current directory
-	 */
+     * Fetch the current directory from a cookie, or the default.
+     *
+     * @return array                    Current directory
+     */
     public function _start_pwd()
     {
         // Fetch the pwd from a cookie, or generate a new one
@@ -112,12 +112,12 @@ class occle_fs
     }
 
     /**
-	 * Return the contents of the given directory in $this->occle_fs (i.e. ls without the fancy bits).
-	 *
-	 * @param  ?array				Directory (NULL: current directory is used)
-	 * @param  boolean			Whether to use full paths
-	 * @return ~array				Directory contents (false: failure)
-	 */
+     * Return the contents of the given directory in $this->occle_fs (i.e. ls without the fancy bits).
+     *
+     * @param  ?array                   Directory (NULL: current directory is used)
+     * @param  boolean                  Whether to use full paths
+     * @return ~array                   Directory contents (false: failure)
+     */
     public function _get_current_dir_contents($dir = null,$full_paths = false)
     {
         if (is_null($dir)) {
@@ -174,11 +174,11 @@ class occle_fs
     }
 
     /**
-	 * Convert a string-form path to an array.
-	 *
-	 * @param  string				Path
-	 * @return array				Array-form path
-	 */
+     * Convert a string-form path to an array.
+     *
+     * @param  string                   Path
+     * @return array                    Array-form path
+     */
     public function _pwd_to_array($pwd)
     {
         // Convert a string-form pwd to an array-form pwd, and sanitise it
@@ -196,12 +196,12 @@ class occle_fs
     }
 
     /**
-	 * Merge an absolute array-form path with a non-absolute array-form path, with support for "."/".." resolution.
-	 *
-	 * @param  array				Absolute path
-	 * @param  array				Non-absolute path
-	 * @return array				Merged path
-	 */
+     * Merge an absolute array-form path with a non-absolute array-form path, with support for "."/".." resolution.
+     *
+     * @param  array                    Absolute path
+     * @param  array                    Non-absolute path
+     * @return array                    Merged path
+     */
     public function _merge_pwds($pwd1,$pwd2)
     {
         // Merge two array-form pwds, assuming the former is absolute and the latter isn't
@@ -217,11 +217,11 @@ class occle_fs
     }
 
     /**
-	 * Convert an array-form path to a string.
-	 *
-	 * @param  ?array				Path (NULL: use $this->pwd)
-	 * @return string				String-form path
-	 */
+     * Convert an array-form path to a string.
+     *
+     * @param  ?array                   Path (NULL: use $this->pwd)
+     * @return string                   String-form path
+     */
     public function _pwd_to_string($pwd = null)
     {
         if (is_null($pwd)) {
@@ -238,11 +238,11 @@ class occle_fs
     }
 
     /**
-	 * Return filename from a path.
-	 *
-	 * @param  string			Path
-	 * @return string			Filename
-	 */
+     * Return filename from a path.
+     *
+     * @param  string                   Path
+     * @return string                   Filename
+     */
     public function _get_filename($filename)
     {
         // Make sure no directories are included with the filename
@@ -251,11 +251,11 @@ class occle_fs
     }
 
     /**
-	 * Is it a directory?
-	 *
-	 * @param  ?array				Path to check (NULL: current dir is used)
-	 * @return boolean			Directory?
-	 */
+     * Is it a directory?
+     *
+     * @param  ?array                   Path to check (NULL: current dir is used)
+     * @return boolean                  Directory?
+     */
     public function _is_dir($dir = null)
     {
         if (is_null($dir)) {
@@ -282,11 +282,11 @@ class occle_fs
     }
 
     /**
-	 * Is it a file?
-	 *
-	 * @param  array					Path (with filename) to use
-	 * @return boolean				Directory?
-	 */
+     * Is it a file?
+     *
+     * @param  array                    Path (with filename) to use
+     * @return boolean                  Directory?
+     */
     public function _is_file($dir)
     {
         $filename = array_pop($dir);
@@ -306,14 +306,14 @@ class occle_fs
     }
 
     /**
-	 * Get details of the current meta directory.
-	 *
-	 * @param  array				Meta directory result: returned by reference
-	 * @param  string				Meta root node result: returned by reference
-	 * @param  string				Meta root node type result: returned by reference
-	 * @param  ?array				Directory (NULL: current directory is used)
-	 * @return ~array				Current directory contents (false: error)
-	 */
+     * Get details of the current meta directory.
+     *
+     * @param  array                    Meta directory result: returned by reference
+     * @param  string                   Meta root node result: returned by reference
+     * @param  string                   Meta root node type result: returned by reference
+     * @param  ?array                   Directory (NULL: current directory is used)
+     * @return ~array                   Current directory contents (false: error)
+     */
     public function _discern_meta_dir(&$meta_dir,&$meta_root_node,&$meta_root_node_type,$target_dir = null)
     {
         // Get the details of the current meta dir (re: object creation) and where the pwd is in relation to it
@@ -348,11 +348,11 @@ class occle_fs
     }
 
     /**
-	 * Fill out a hardcoded meta-dir to use our more detailed internal format.
-	 *
-	 * @param  array				Simple list of directories under here
-	 * @return array				Full detailed directory contents
-	 */
+     * Fill out a hardcoded meta-dir to use our more detailed internal format.
+     *
+     * @param  array                    Simple list of directories under here
+     * @return array                    Full detailed directory contents
+     */
     public function _convert_meta_dir_to_detailed_dir($_inspected_dir)
     {
         $inspected_dir = array();
@@ -369,11 +369,11 @@ class occle_fs
     }
 
     /**
-	 * Convert a directory contents structure into a template parameter structure.
-	 *
-	 * @param  array				Structure
-	 * @return array				Template parameter structure
-	 */
+     * Convert a directory contents structure into a template parameter structure.
+     *
+     * @param  array                    Structure
+     * @return array                    Template parameter structure
+     */
     public function prepare_dir_contents_for_listing($entries)
     {
         $out = array();
@@ -391,11 +391,11 @@ class occle_fs
     }
 
     /**
-	 * Return the current working directory of the virtual filesystem. Equivalent to Unix "pwd".
-	 *
-	 * @param  boolean			Return the pwd in array form?
-	 * @return mixed				The current working directory (array or string)
-	 */
+     * Return the current working directory of the virtual filesystem. Equivalent to Unix "pwd".
+     *
+     * @param  boolean                  Return the pwd in array form?
+     * @return mixed                    The current working directory (array or string)
+     */
     public function print_working_directory($array_form = false)
     {
         // Return the current working directory
@@ -407,11 +407,11 @@ class occle_fs
     }
 
     /**
-	 * Return a directory and file listing of the current working directory. Equivalent to Unix "ls".
-	 *
-	 * @param  ?array				An alternate directory in which to perform the action (NULL: current directory is used)
-	 * @return array				Directories and files in the current working directory
-	 */
+     * Return a directory and file listing of the current working directory. Equivalent to Unix "ls".
+     *
+     * @param  ?array                   An alternate directory in which to perform the action (NULL: current directory is used)
+     * @return array                    Directories and files in the current working directory
+     */
     public function listing($dir = null)
     {
         // Return an array list of all the directories and files in the pwd
@@ -441,16 +441,16 @@ class occle_fs
     }
 
     /**
-	 * Return a listing of all the files/directories found matching the specified pattern. Equivalent to Unix "find".
-	 *
-	 * @param  string				The search pattern (PRCE regexp or plain)
-	 * @param  boolean			Is the search pattern a regexp?
-	 * @param  boolean			Should the search be recursive?
-	 * @param  boolean			Should files be included in the results?
-	 * @param  boolean			Should directories be included in the results?
-	 * @param  ?array				Directory (NULL: current directory is used)
-	 * @return array				The search results
-	 */
+     * Return a listing of all the files/directories found matching the specified pattern. Equivalent to Unix "find".
+     *
+     * @param  string                   The search pattern (PRCE regexp or plain)
+     * @param  boolean                  Is the search pattern a regexp?
+     * @param  boolean                  Should the search be recursive?
+     * @param  boolean                  Should files be included in the results?
+     * @param  boolean                  Should directories be included in the results?
+     * @param  ?array                   Directory (NULL: current directory is used)
+     * @return array                    The search results
+     */
     public function search($pattern,$regexp = false,$recursive = false,$files = true,$directories = false,$dir = null)
     {
         // Search!
@@ -500,11 +500,11 @@ class occle_fs
     }
 
     /**
-	 * Change the current working directory. Equivalent to Unix "cd".
-	 *
-	 * @param  array				The target directory path
-	 * @return boolean			Success?
-	 */
+     * Change the current working directory. Equivalent to Unix "cd".
+     *
+     * @param  array                    The target directory path
+     * @return boolean                  Success?
+     */
     public function change_directory($target_directory)
     {
         // Change the current directory
@@ -520,11 +520,11 @@ class occle_fs
     }
 
     /**
-	 * Create a directory under the current working directory. Equivalent to Unix "mkdir".
-	 *
-	 * @param  array			The new directory's path and name
-	 * @return boolean		Success?
-	 */
+     * Create a directory under the current working directory. Equivalent to Unix "mkdir".
+     *
+     * @param  array                    The new directory's path and name
+     * @return boolean                  Success?
+     */
     public function make_directory($directory)
     {
         $directory_name = array_pop($directory);
@@ -544,11 +544,11 @@ class occle_fs
     }
 
     /**
-	 * Remove a directory under the current working directory. Equivalent to Unix "rmdir".
-	 *
-	 * @param  array			The directory-to-remove's path and name
-	 * @return boolean		Success?
-	 */
+     * Remove a directory under the current working directory. Equivalent to Unix "rmdir".
+     *
+     * @param  array                    The directory-to-remove's path and name
+     * @return boolean                  Success?
+     */
     public function remove_directory($directory)
     {
         $directory_name = $directory[count($directory)-1];
@@ -585,12 +585,12 @@ class occle_fs
     }
 
     /**
-	 * Copy a directory. Equivalent to Unix "cp".
-	 *
-	 * @param  array				The directory to copy
-	 * @param  array				The destination path
-	 * @return boolean			Success?
-	 */
+     * Copy a directory. Equivalent to Unix "cp".
+     *
+     * @param  array                    The directory to copy
+     * @param  array                    The destination path
+     * @return boolean                  Success?
+     */
     public function copy_directory($to_copy,$destination)
     {
         $directory_contents = $this->_get_current_dir_contents($to_copy);
@@ -622,12 +622,12 @@ class occle_fs
     }
 
     /**
-	 * Move a directory. Equivalent to Unix "mv".
-	 *
-	 * @param  array				The directory to move
-	 * @param  array				The destination path
-	 * @return boolean			Success?
-	 */
+     * Move a directory. Equivalent to Unix "mv".
+     *
+     * @param  array                    The directory to move
+     * @param  array                    The destination path
+     * @return boolean                  Success?
+     */
     public function move_directory($to_move,$destination)
     {
         $to_move_meta_dir = array();
@@ -660,12 +660,12 @@ class occle_fs
     }
 
     /**
-	 * Copy a file. Equivalent to Unix "cp".
-	 *
-	 * @param  array				The file to copy
-	 * @param  array				The destination path
-	 * @return boolean			Success?
-	 */
+     * Copy a file. Equivalent to Unix "cp".
+     *
+     * @param  array                    The file to copy
+     * @param  array                    The destination path
+     * @return boolean                  Success?
+     */
     public function copy_file($to_copy,$destination)
     {
         $contents = $this->read_file($to_copy);
@@ -674,12 +674,12 @@ class occle_fs
     }
 
     /**
-	 * Move a file. Equivalent to Unix "mv".
-	 *
-	 * @param  array				The file to move
-	 * @param  array				The destination path
-	 * @return boolean			Success?
-	 */
+     * Move a file. Equivalent to Unix "mv".
+     *
+     * @param  array                    The file to move
+     * @param  array                    The destination path
+     * @return boolean                  Success?
+     */
     public function move_file($to_move,$destination)
     {
         $to_move_meta_dir = array();
@@ -711,11 +711,11 @@ class occle_fs
     }
 
     /**
-	 * Remove a file. Equivalent to Unix "rm".
-	 *
-	 * @param  array				The file to remove
-	 * @return boolean			Success?
-	 */
+     * Remove a file. Equivalent to Unix "rm".
+     *
+     * @param  array                    The file to remove
+     * @return boolean                  Success?
+     */
     public function remove_file($to_remove)
     {
         $filename = array_pop($to_remove);
@@ -735,11 +735,11 @@ class occle_fs
     }
 
     /**
-	 * Read a file and return the contents.
-	 *
-	 * @param  array				The file to read
-	 * @return ~string			The file contents (false: failure)
-	 */
+     * Read a file and return the contents.
+     *
+     * @param  array                    The file to read
+     * @return ~string                  The file contents (false: failure)
+     */
     public function read_file($to_read)
     {
         $filename = array_pop($to_read);
@@ -759,12 +759,12 @@ class occle_fs
     }
 
     /**
-	 * Write to a file; create the file if it doesn't exist.
-	 *
-	 * @param  array			The file to write
-	 * @param  string			The contents to write
-	 * @return boolean		Success?
-	 */
+     * Write to a file; create the file if it doesn't exist.
+     *
+     * @param  array                    The file to write
+     * @param  string                   The contents to write
+     * @return boolean                  Success?
+     */
     public function write_file($to_write,$contents)
     {
         $filename = array_pop($to_write);
@@ -784,12 +784,12 @@ class occle_fs
     }
 
     /**
-	 * Append to a file.
-	 *
-	 * @param  array			The file to which to append
-	 * @param  string			The contents to append
-	 * @return boolean		Success?
-	 */
+     * Append to a file.
+     *
+     * @param  array                    The file to which to append
+     * @param  string                   The contents to append
+     * @return boolean                  Success?
+     */
     public function append_file($to_append,$contents)
     {
         $filename = array_pop($to_append);

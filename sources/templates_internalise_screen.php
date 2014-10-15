@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_abstract_interfaces
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_abstract_interfaces
  */
 
 /**
  * Put the contents of a screen inside an AJAX updatable area. This is typically used when a page is being used to traverse a result-set that spans multiple screens.
  *
- * @param  tempcode		The screen content
- * @param  ?integer		The time between refreshes (NULL: do not refresh)
- * @param  ?mixed			Data. A refresh will only happen if an AJAX-check indicates this data has changed (NULL: no check)
- * @return tempcode		The screen output, wrapped with some AJAX code
+ * @param  tempcode                     The screen content
+ * @param  ?integer                     The time between refreshes (NULL: do not refresh)
+ * @param  ?mixed                       Data. A refresh will only happen if an AJAX-check indicates this data has changed (NULL: no check)
+ * @return tempcode                     The screen output, wrapped with some AJAX code
  */
 function internalise_own_screen($screen_content,$refresh_time = null,$refresh_if_changed = null)
 {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_version
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_admin_version
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('url_id_monikers');
@@ -84,16 +84,16 @@ class Module_admin_version
         $GLOBALS['SITE_DB']->drop_table_if_exists('comcode_pages');
         $GLOBALS['SITE_DB']->drop_table_if_exists('cached_comcode_pages');
 
-        /*$zones=find_all_zones(true);		We don't want to get rid of on-disk data when reinstalling
-		require_code('files');
-		$langs=find_all_langs(true);
-		foreach ($zones as $zone)
-		{
-			foreach (array_keys($langs) as $lang)
-			{
-				deldir_contents(zone_black_magic_filterer(get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/comcode_custom/'.$lang,true),true);
-			}
-		}*/
+        /*$zones=find_all_zones(true);    We don't want to get rid of on-disk data when reinstalling
+        require_code('files');
+        $langs=find_all_langs(true);
+        foreach ($zones as $zone)
+        {
+            foreach (array_keys($langs) as $lang)
+            {
+                    deldir_contents(zone_black_magic_filterer(get_custom_file_base().(($zone=='')?'':'/').$zone.'/pages/comcode_custom/'.$lang,true),true);
+            }
+        }*/
 
         delete_attachments('comcode_page');
 
@@ -102,11 +102,11 @@ class Module_admin_version
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         // A lot of "peripheral architectural" tables are defined here. Central ones are defined in the installer -- as they need to be installed before any module.
@@ -784,20 +784,20 @@ class Module_admin_version
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         return NULL;
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         // This used to be a real module, before ocPortal was free

@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Try and make an action log entry into a proper link.
  *
- * @param  ID_TEXT		Action type
- * @param  string			First parameter
- * @param  string			Second parameter
- * @param  tempcode		First parameter (cropped)
- * @param  tempcode		Second parameter (cropped)
- * @return ?array			Pair: first parameter as possible link, second parameter as possible link (NULL: could not construct a nice link)
+ * @param  ID_TEXT                      Action type
+ * @param  string                       First parameter
+ * @param  string                       Second parameter
+ * @param  tempcode                     First parameter (cropped)
+ * @param  tempcode                     Second parameter (cropped)
+ * @return ?array                       Pair: first parameter as possible link, second parameter as possible link (NULL: could not construct a nice link)
  */
 function actionlog_linkage($type,$a,$b,$_a,$_b)
 {
@@ -35,7 +35,7 @@ function actionlog_linkage($type,$a,$b,$_a,$_b)
         $type_str = $type;
     }
 
-    // TODO: This will be replaced later with a more thorough system	#115 on tracker
+    // TODO: This will be replaced later with a more thorough system #115 on tracker
     if (($type == 'EDIT_TEMPLATES') && (strpos($a,',') === false)) {
         if ($b == '') {
             $b = 'default';

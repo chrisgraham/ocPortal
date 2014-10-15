@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Turn a boring timezone name into the pretty shortened list of ones Microsoft uses and others now use too.
  *
- * @param  string			Boring name
- * @return string			Nice name
+ * @param  string                       Boring name
+ * @return string                       Nice name
  */
 function make_nice_timezone_name($in)
 {
@@ -36,7 +36,7 @@ function make_nice_timezone_name($in)
 /**
  * Get a list of timezones.
  *
- * @return array			Timezone (map between boring-style and human-readable name). Sorted in offset order then likelihood orde.
+ * @return array                        Timezone (map between boring-style and human-readable name). Sorted in offset order then likelihood orde.
  */
 function _get_timezone_list()
 {
@@ -273,12 +273,12 @@ function _get_timezone_list()
 /**
  * Check a POST inputted date for validity, and get the dat/time components.
  *
- * @param  ID_TEXT		The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
- * @param  ?integer		Default year (NULL: none)
- * @param  ?integer		Default month (NULL: none)
- * @param  ?integer		Default day (NULL: none)
- * @param  boolean		Whether to allow over get parameters also
- * @return array			The date/time components
+ * @param  ID_TEXT                      The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
+ * @param  ?integer                     Default year (NULL: none)
+ * @param  ?integer                     Default month (NULL: none)
+ * @param  ?integer                     Default day (NULL: none)
+ * @param  boolean                      Whether to allow over get parameters also
+ * @return array                        The date/time components
  */
 function get_input_date_components($stub,$year = null,$month = null,$day = null,$get_also = false)
 {
@@ -381,10 +381,10 @@ function get_input_date_components($stub,$year = null,$month = null,$day = null,
 /**
  * Check a POST inputted date for validity, and get the Unix timestamp for the inputted date.
  *
- * @param  ID_TEXT		The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
- * @param  boolean		Whether to allow over get parameters also
- * @param  boolean		Whether to do timezone conversion
- * @return ?TIME			The timestamp of the date (NULL: no input date was chosen)
+ * @param  ID_TEXT                      The stub of the parameter name (stub_year, stub_month, stub_day, stub_hour, stub_minute)
+ * @param  boolean                      Whether to allow over get parameters also
+ * @param  boolean                      Whether to do timezone conversion
+ * @return ?TIME                        The timestamp of the date (NULL: no input date was chosen)
  */
 function _get_input_date($stub,$get_also = false,$do_timezone_conversion = true)
 {

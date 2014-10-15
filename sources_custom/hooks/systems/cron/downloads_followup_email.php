@@ -6,16 +6,16 @@ This notification hook was created using the classifieds notification hook as a 
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	None asserted
- * @package		downloads_followup_email
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  None asserted
+ * @package    downloads_followup_email
  */
 
 class Hook_cron_downloads_followup_email
 {
     /**
-	 * Run function for CRON hooks. Searches for tasks to perform.
-	 */
+     * Run function for CRON hooks. Searches for tasks to perform.
+     */
     public function run()
     {
         if (!addon_installed('downloads')) {
@@ -58,10 +58,10 @@ class Hook_cron_downloads_followup_email
         }
         
         /*
-		If we just installed, reinstalled after uninstalling more than 2 days ago, or if cron stopped
-		working for more than 2 days we will not generate emails for downloads prior to the previous
-		48 hours to prevent sending stale notifications for download actions that are not recent.
-		*/
+        If we just installed, reinstalled after uninstalling more than 2 days ago, or if cron stopped
+        working for more than 2 days we will not generate emails for downloads prior to the previous
+        48 hours to prevent sending stale notifications for download actions that are not recent.
+        */
         if ((is_null($last)) || (intval($last)<$time-60*60*48)) {
             $last = strval($time-60*60*48);
         }

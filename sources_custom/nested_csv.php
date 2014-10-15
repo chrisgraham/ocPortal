@@ -11,7 +11,7 @@ function init__nested_csv()
 /**
  * Get the CSV/CPF structure for the site.
  *
- * @return array		Structured data about CSV files/CPFs
+ * @return array                        Structured data about CSV files/CPFs
  */
 function get_nested_csv_structure()
 {
@@ -170,11 +170,11 @@ function get_nested_csv_structure()
 /**
  * Query the CSV files.
  *
- * @param  ID_TEXT	Filename
- * @param  ?ID_TEXT	Name of field we know (NULL: we know nothing special - i.e. no filtering)
- * @param  ?ID_TEXT	Value of field we know (NULL: we know nothing special - i.e. no filtering)
- * @param  ?ID_TEXT	Name of field we want (NULL: all fields in an array)
- * @return array		List of possibilities
+ * @param  ID_TEXT                      Filename
+ * @param  ?ID_TEXT                     Name of field we know (NULL: we know nothing special - i.e. no filtering)
+ * @param  ?ID_TEXT                     Value of field we know (NULL: we know nothing special - i.e. no filtering)
+ * @param  ?ID_TEXT                     Name of field we want (NULL: all fields in an array)
+ * @return array                        List of possibilities
  */
 function get_csv_data_values($csv_file,$known_field_key = null,$known_field_value = null,$desired_field = null)
 {
@@ -188,10 +188,10 @@ function get_csv_data_values($csv_file,$known_field_key = null,$known_field_valu
 /**
  * Query the CSV files for multiple matching constraints at once.
  *
- * @param  ID_TEXT	Filename
- * @param  array		Map of ANDd constraints
- * @param  ?ID_TEXT	Name of field we want (NULL: all fields in an array)
- * @return array		List of possibilities
+ * @param  ID_TEXT                      Filename
+ * @param  array                        Map of ANDd constraints
+ * @param  ?ID_TEXT                     Name of field we want (NULL: all fields in an array)
+ * @return array                        List of possibilities
  */
 function get_csv_data_values__and($csv_file,$map,$desired_field = null)
 {
@@ -215,8 +215,8 @@ function get_csv_data_values__and($csv_file,$map,$desired_field = null)
 /**
  * Get member CPFs against CSV headings.
  *
- * @param  MEMBER		Member ID
- * @return array		Map of settings
+ * @param  MEMBER                       Member ID
+ * @return array                        Map of settings
  */
 function get_members_csv_data_values($member_id)
 {

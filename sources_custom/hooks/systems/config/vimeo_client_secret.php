@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		gallery_syndication
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    gallery_syndication
  */
 
 class Hook_config_vimeo_client_secret
 {
     /**
-	 * Gets the details relating to the config option.
-	 *
-	 * @return ?array		The details (NULL: disabled)
-	 */
+     * Gets the details relating to the config option.
+     *
+     * @return ?array                   The details (NULL: disabled)
+     */
     public function get_details()
     {
         return array(
@@ -36,10 +36,10 @@ class Hook_config_vimeo_client_secret
     }
 
     /**
-	 * Gets the default value for the config option.
-	 *
-	 * @return ?string		The default value (NULL: option is disabled)
-	 */
+     * Gets the default value for the config option.
+     *
+     * @return ?string                  The default value (NULL: option is disabled)
+     */
     public function get_default()
     {
         return '';

@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		facebook_support
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    facebook_support
  */
 
 class Hook_login_provider_facebook
 {
     /**
-	 * Standard login provider hook.
-	 *
-	 * @param  ?MEMBER		Member ID already detected as logged in (NULL: none). May be a guest ID.
-	 * @return ?MEMBER		Member ID now detected as logged in (NULL: none). May be a guest ID.
-	 */
+     * Standard login provider hook.
+     *
+     * @param  ?MEMBER                  Member ID already detected as logged in (NULL: none). May be a guest ID.
+     * @return ?MEMBER                  Member ID now detected as logged in (NULL: none). May be a guest ID.
+     */
     public function try_login($member) // NB: if $member is set (but not Guest), then it will bind to that account
     {
         require_code('facebook_connect');

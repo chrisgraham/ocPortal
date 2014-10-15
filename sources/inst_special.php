@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*
@@ -25,8 +25,8 @@ These are special functions used by the installer and upgrader.
 /**
  * Get the list of files that need CHmodding for write access.
  *
- * @param  ID_TEXT		Language to use
- * @return array			The list of files
+ * @param  ID_TEXT                      Language to use
+ * @return array                        The list of files
  */
 function get_chmod_array($lang)
 {

@@ -13,24 +13,24 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Edit a forum poll.
  *
- * @param  AUTO_LINK		The ID of the poll we're editing.
- * @param  SHORT_TEXT	The question.
- * @param  BINARY			Whether the result tallies are kept private until the poll is made non-private.
- * @param  BINARY			Whether the poll is open for voting.
- * @param  integer		The minimum number of selections that may be made.
- * @param  integer		The maximum number of selections that may be made.
- * @param  BINARY			Whether members must have a post in the topic before they made vote.
- * @param  array			A list of the potential voteable answers.
- * @param  LONG_TEXT		The reason for editing the poll.
- * @return AUTO_LINK		The ID of the topic the poll is on.
+ * @param  AUTO_LINK                    The ID of the poll we're editing.
+ * @param  SHORT_TEXT                   The question.
+ * @param  BINARY                       Whether the result tallies are kept private until the poll is made non-private.
+ * @param  BINARY                       Whether the poll is open for voting.
+ * @param  integer                      The minimum number of selections that may be made.
+ * @param  integer                      The maximum number of selections that may be made.
+ * @param  BINARY                       Whether members must have a post in the topic before they made vote.
+ * @param  array                        A list of the potential voteable answers.
+ * @param  LONG_TEXT                    The reason for editing the poll.
+ * @return AUTO_LINK                    The ID of the topic the poll is on.
  */
 function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$reason = '')
 {
@@ -91,10 +91,10 @@ function ocf_edit_poll($poll_id,$question,$is_private,$is_open,$minimum_selectio
 /**
  * Delete a forum poll.
  *
- * @param  AUTO_LINK 	The ID of the poll we're deleting.
- * @param  LONG_TEXT 	The reason for deleting the poll.
- * @param  boolean		Whether to check permissions.
- * @return AUTO_LINK		The ID of the topic the poll is on.
+ * @param  AUTO_LINK                    The ID of the poll we're deleting.
+ * @param  LONG_TEXT                    The reason for deleting the poll.
+ * @param  boolean                      Whether to check permissions.
+ * @return AUTO_LINK                    The ID of the topic the poll is on.
  */
 function ocf_delete_poll($poll_id,$reason = '',$check_perms = true)
 {
@@ -125,10 +125,10 @@ function ocf_delete_poll($poll_id,$reason = '',$check_perms = true)
 /**
  * Place a vote on a specified poll.
  *
- * @param  AUTO_LINK 	The ID of the poll we're voting in.
- * @param  array 			A list of poll answers that are being voted for.
- * @param  ?MEMBER		The member that's voting (NULL: current member).
- * @param  ?array			The row of the topic the poll is for (NULL: get it from the DB).
+ * @param  AUTO_LINK                    The ID of the poll we're voting in.
+ * @param  array                        A list of poll answers that are being voted for.
+ * @param  ?MEMBER                      The member that's voting (NULL: current member).
+ * @param  ?array                       The row of the topic the poll is for (NULL: get it from the DB).
  */
 function ocf_vote_in_poll($poll_id,$votes,$member_id = null,$topic_info = null)
 {

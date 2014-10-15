@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		stats
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    stats
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_stats
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_admin_stats
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('stats');
@@ -52,11 +52,11 @@ class Module_admin_stats
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
@@ -117,14 +117,14 @@ class Module_admin_stats
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         require_lang('stats');
@@ -159,10 +159,10 @@ class Module_admin_stats
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -239,10 +239,10 @@ class Module_admin_stats
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'stats WHERE date_and_time<' . strval(time()-60*60*24*intval(get_option('stats_store_time'))));
@@ -299,10 +299,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -339,14 +339,14 @@ class Module_admin_stats
     }
 
     /**
-	 * An interface for choosing between dates.
-	 *
-	 * @param  tempcode		The title to display.
-	 * @param  boolean		Whether display is dependent on what we kept in our stats table.
-	 * @param  ?tempcode		Extra fields to request (NULL: none).
-	 * @param  ?tempcode		The message to show for date selection (NULL: default).
-	 * @return tempcode		The result of execution.
-	 */
+     * An interface for choosing between dates.
+     *
+     * @param  tempcode                 The title to display.
+     * @param  boolean                  Whether display is dependent on what we kept in our stats table.
+     * @param  ?tempcode                Extra fields to request (NULL: none).
+     * @param  ?tempcode                The message to show for date selection (NULL: default).
+     * @return tempcode                 The result of execution.
+     */
     public function get_between($title,$stats_table = false,$extra_fields = null,$message = null)
     {
         require_code('form_templates');
@@ -389,10 +389,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show user online statistics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show user online statistics.
+     *
+     * @return tempcode                 The UI
+     */
     public function users_online()
     {
         // This needs to show a big scatter graph with the users online every day
@@ -474,10 +474,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show submission rates.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show submission rates.
+     *
+     * @return tempcode                 The UI
+     */
     public function submission_rates()
     {
         // Like the users online above, we need to use a nice scatter graph
@@ -505,7 +505,7 @@ class Module_admin_stats
         if (count($rows)<1) {
             return warn_screen($this->title,do_lang_tempcode('NO_DATA'));
         }
-        //$max_rows=$GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(DISTINCT date_and_time)');	Cannot do this as the DB does not do all the processing
+        //$max_rows=$GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(DISTINCT date_and_time)');   Cannot do this as the DB does not do all the processing
 
         $data = array();
         $base = $rows[0]['date_and_time'];
@@ -555,10 +555,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show page load times.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show page load times.
+     *
+     * @return tempcode                 The UI
+     */
     public function load_times()
     {
         // Handle time range
@@ -590,8 +590,8 @@ class Module_admin_stats
             }
             $start = 0;
             $max = 10000;
-            /*$time_start=0;		Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
-			$time_end=time();*/
+            /*$time_start=0;     Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
+            $time_end=time();*/
         }
 
         $this->title = get_screen_title('LOAD_TIMES_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
@@ -670,10 +670,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show referrers.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show referrers.
+     *
+     * @return tempcode                 The UI
+     */
     public function referrers()
     {
         // Handle time range
@@ -705,8 +705,8 @@ class Module_admin_stats
             }
             $start = 0;
             $max = 10000;
-            /*$time_start=0;		Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
-			$time_end=time();*/
+            /*$time_start=0;     Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
+            $time_end=time();*/
         }
 
         $this->title = get_screen_title('TOP_REFERRERS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
@@ -801,10 +801,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show top search keywords.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show top search keywords.
+     *
+     * @return tempcode                 The UI
+     */
     public function keywords()
     {
         // Handle time range
@@ -836,8 +836,8 @@ class Module_admin_stats
             }
             $start = 0;
             $max = 10000;
-            /*$time_start=0;		Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
-			$time_end=time();*/
+            /*$time_start=0;     Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
+            $time_end=time();*/
         }
 
         $this->title = get_screen_title('TOP_SEARCH_KEYWORDS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
@@ -943,10 +943,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show page view statistics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show page view statistics.
+     *
+     * @return tempcode                 The UI
+     */
     public function page_stats()
     {
         // This will show a plain bar chart with all the pages listed
@@ -980,8 +980,8 @@ class Module_admin_stats
             }
             $start = 0;
             $max = 10000;
-            /*$time_start=0;		Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
-			$time_end=time();*/
+            /*$time_start=0;     Actually, this is annoying. We have legitimate reason to filter, and cannot re-filter the data in Excel retro-actively
+            $time_end=time();*/
         }
 
         $this->title = get_screen_title('PAGES_STATISTICS_RANGE',true,array(escape_html(get_timezoned_date($time_start,false)),escape_html(get_timezoned_date($time_end,false))));
@@ -1081,10 +1081,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show page view statistics for the front page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show page view statistics for the front page.
+     *
+     * @return tempcode                 The UI
+     */
     public function overview()
     {
         $page = 'pages/comcode_custom/' . get_site_default_lang() . '/start.txt';
@@ -1155,10 +1155,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to show page view statistics for a single page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show page view statistics for a single page.
+     *
+     * @return tempcode                 The UI
+     */
     public function show_page()
     {
         $page = get_param('iscreen');
@@ -1443,10 +1443,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The UI to clear statistics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to clear statistics.
+     *
+     * @return tempcode                 The UI
+     */
     public function clear()
     {
         // Someone obviously wants to clear out all their statistics.
@@ -1474,10 +1474,10 @@ class Module_admin_stats
     }
 
     /**
-	 * The actualiser to clear statistics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to clear statistics.
+     *
+     * @return tempcode                 The UI
+     */
     public function _clear()
     {
         // Let's clear out the saved graphs
@@ -1507,10 +1507,10 @@ class Module_admin_stats
     }
 
     /**
-	 * Install geolocation data.
-	 *
-	 * @return tempcode		The UI, showing the result of the installation
-	 */
+     * Install geolocation data.
+     *
+     * @return tempcode                 The UI, showing the result of the installation
+     */
     public function install_geolocation_data()
     {
         $GLOBALS['NO_QUERY_LIMIT'] = true;
@@ -1577,16 +1577,16 @@ class Module_admin_stats
     }
 
     /**
-	 * Create a bar chart of the views the specified page has received in relation to the specified hours. The bar chart is stored in /data_custom/admin_stats/ as an SVG image, and the tempcode for display of the graph and results table is returned.
-	 *
-	 * @param  PATH		The page path
-	 * @param  string		The statistic type (for use in sort parameters and such)
-	 * @param  string		Language identifier for the graph title
-	 * @param  string		Language identifier for the graph description
-	 * @param  integer	The steps of hours to use
-	 * @param  integer	The total hours to plot
-	 * @return array		A linear array containing the graph and list tempcode objects, respectively
-	 */
+     * Create a bar chart of the views the specified page has received in relation to the specified hours. The bar chart is stored in /data_custom/admin_stats/ as an SVG image, and the tempcode for display of the graph and results table is returned.
+     *
+     * @param  PATH                     The page path
+     * @param  string                   The statistic type (for use in sort parameters and such)
+     * @param  string                   Language identifier for the graph title
+     * @param  string                   Language identifier for the graph description
+     * @param  integer                  The steps of hours to use
+     * @param  integer                  The total hours to plot
+     * @return array                    A linear array containing the graph and list tempcode objects, respectively
+     */
     public function views_per_x($page,$type,$graph_title,$graph_description,$hours = 1,$total = 24)
     {
         // Return a graph with the views per hour for a specified page
@@ -1661,15 +1661,15 @@ class Module_admin_stats
     }
 
     /**
-	 * Create a pie chart of the ratios of the specified statistic for the specified page. The chart is saved as an SVG image in /data_custom/admin_stats/, and the tempcode for display of the graph and results table is returned
-	 *
-	 * @param  PATH		The page path
-	 * @param  string		The statistic to use
-	 * @param  string		Language identifier for the graph title
-	 * @param  string		Language identifier for the graph description
-	 * @param  string		Language identifier for the list title
-	 * @return array		A linear array containing the graph and list tempcode objects, respectively
-	 */
+     * Create a pie chart of the ratios of the specified statistic for the specified page. The chart is saved as an SVG image in /data_custom/admin_stats/, and the tempcode for display of the graph and results table is returned
+     *
+     * @param  PATH                     The page path
+     * @param  string                   The statistic to use
+     * @param  string                   Language identifier for the graph title
+     * @param  string                   Language identifier for the graph description
+     * @param  string                   Language identifier for the list title
+     * @return array                    A linear array containing the graph and list tempcode objects, respectively
+     */
     public function page_x_share($page,$type,$graph_title,$graph_description,$list_title)
     {
         // Return a pie chart with the $type used to view this page
@@ -1743,11 +1743,11 @@ class Module_admin_stats
     }
 
     /**
-	 * Save a graph to the server so it can be viewed client-side.
-	 *
-	 * @param  string		Name of the graph (no path or extension)
-	 * @param  string		SVG markup
-	 */
+     * Save a graph to the server so it can be viewed client-side.
+     *
+     * @param  string                   Name of the graph (no path or extension)
+     * @param  string                   SVG markup
+     */
     public function save_graph($path,$graph)
     {
         $path = get_custom_file_base() . '/data_custom/modules/admin_stats/' . filter_naughty_harsh($path) . '.xml';

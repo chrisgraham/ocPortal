@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		points
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    points
  */
 
 /**
  * The UI for a points profile.
  *
- * @param  MEMBER			The ID of the member who is being viewed
- * @param  ?MEMBER		The ID of the member who is doing the viewing (NULL: current member)
- * @return tempcode		The UI
+ * @param  MEMBER                       The ID of the member who is being viewed
+ * @param  ?MEMBER                      The ID of the member who is doing the viewing (NULL: current member)
+ * @return tempcode                     The UI
  */
 function points_profile($member_id_of,$member_id_viewing)
 {
@@ -187,11 +187,11 @@ function points_profile($member_id_of,$member_id_viewing)
 /**
  * Show the point transactions a member has had.
  *
- * @param  ID_TEXT		The type of transactions we are looking for
+ * @param  ID_TEXT                      The type of transactions we are looking for
  * @set    from to
- * @param  MEMBER			Who we are looking at transactions for
- * @param  MEMBER			Who we are looking at transactions using the account of
- * @return tempcode		The UI
+ * @param  MEMBER                       Who we are looking at transactions for
+ * @param  MEMBER                       Who we are looking at transactions using the account of
+ * @return tempcode                     The UI
  */
 function points_get_transactions($type,$member_id_of,$member_id_viewing)
 {

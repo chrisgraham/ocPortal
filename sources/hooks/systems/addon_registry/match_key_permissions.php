@@ -13,48 +13,48 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		match_key_permissions
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    match_key_permissions
  */
 
 class Hook_addon_registry_match_key_permissions
 {
     /**
-	 * Get a list of file permissions to set
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a list of file permissions to set
+     *
+     * @return array                    File permissions to set
+     */
     public function get_chmod_array()
     {
         return array();
     }
 
     /**
-	 * Get the version of ocPortal this addon is for
-	 *
-	 * @return float			Version number
-	 */
+     * Get the version of ocPortal this addon is for
+     *
+     * @return float                    Version number
+     */
     public function get_version()
     {
         return ocp_version_number();
     }
 
     /**
-	 * Get the description of the addon
-	 *
-	 * @return string			Description of the addon
-	 */
+     * Get the description of the addon
+     *
+     * @return string                   Description of the addon
+     */
     public function get_description()
     {
         return 'Match-key-permissions allow advanced setting of permissions on a screen-by-screen basis.';
     }
 
     /**
-	 * Get a list of tutorials that apply to this addon
-	 *
-	 * @return array			List of tutorials
-	 */
+     * Get a list of tutorials that apply to this addon
+     *
+     * @return array                    List of tutorials
+     */
     public function get_applicable_tutorials()
     {
         return array(
@@ -63,10 +63,10 @@ class Hook_addon_registry_match_key_permissions
     }
 
     /**
-	 * Get a mapping of dependency types
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a mapping of dependency types
+     *
+     * @return array                    File permissions to set
+     */
     public function get_dependencies()
     {
         return array(
@@ -77,20 +77,20 @@ class Hook_addon_registry_match_key_permissions
     }
 
     /**
-	 * Explicitly say which icon should be used
-	 *
-	 * @return URLPATH		Icon
-	 */
+     * Explicitly say which icon should be used
+     *
+     * @return URLPATH                  Icon
+     */
     public function get_default_icon()
     {
         return 'themes/default/images/icons/48x48/menu/adminzone/security/permissions/match_keys.png';
     }
 
     /**
-	 * Get a list of files that belong to this addon
-	 *
-	 * @return array			List of files
-	 */
+     * Get a list of files that belong to this addon
+     *
+     * @return array                    List of files
+     */
     public function get_file_list()
     {
         return array(

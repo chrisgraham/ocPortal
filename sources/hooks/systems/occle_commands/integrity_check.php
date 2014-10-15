@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		occle
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    occle
  */
 
 class Hook_occle_command_integrity_check
 {
     /**
-	 * Run function for OcCLE hooks.
-	 *
-	 * @param  array	The options with which the command was called
-	 * @param  array	The parameters with which the command was called
-	 * @param  object	A reference to the OcCLE filesystem object
-	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
-	 */
+     * Run function for OcCLE hooks.
+     *
+     * @param  array                    The options with which the command was called
+     * @param  array                    The parameters with which the command was called
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
+     */
     public function run($options,$parameters,&$occle_fs)
     {
         if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {

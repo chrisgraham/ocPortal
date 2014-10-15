@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		news
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    news
  */
 
 /**
@@ -45,8 +45,8 @@ function build_news_sitemap()
     }
 
     fwrite($sitemap_file,'<' . '?xml version="1.0" encoding="' . get_charset() . '"?' . '>
-		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-	');
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+    ');
 
     $zone = get_module_zone('news');
 
@@ -80,23 +80,23 @@ function build_news_sitemap()
             $meta = seo_meta_get_for('news',strval($row['id']));
 
             fwrite($sitemap_file,'
-				<url>
-					<loc>' . xmlentities($url->evaluate()) . '</loc>
-					<news:news>
-						<news:publication>
-							<news:name>' . xmlentities(get_site_name()) . '</news:name>
-							<news:language>' . xmlentities(strtolower(get_site_default_lang())) . '</news:language>
-						</news:publication>
-			');
+                    <url>
+                            <loc>' . xmlentities($url->evaluate()) . '</loc>
+                            <news:news>
+                                        <news:publication>
+                                                        <news:name>' . xmlentities(get_site_name()) . '</news:name>
+                                                        <news:language>' . xmlentities(strtolower(get_site_default_lang())) . '</news:language>
+                                        </news:publication>
+            ');
             if (!$has_guest_category_access || !$has_guest_page_access) {
                 if (!$has_member_category_access || !$has_member_page_access) {
                     fwrite($sitemap_file,'
-						<news:access>Subscription</news:access>
-					');
+                                        <news:access>Subscription</news:access>
+                            ');
                 } else {
                     fwrite($sitemap_file,'
-						<news:access>Registration</news:access>
-					');
+                                        <news:access>Registration</news:access>
+                            ');
                 }
             }
             $genres = array();
@@ -114,28 +114,28 @@ function build_news_sitemap()
                 }
             }
             fwrite($sitemap_file,'
-						<news:genres>' . xmlentities(implode(', ',$genres)) . '</news:genres>
-						<news:publication_date>' . xmlentities(date('Y-m-d',$row['date_and_time']) . 'T' . date('H:i:s+00:00',$row['date_and_time'])) . '</news:publication_date>
-						<news:title>' . xmlentities(get_translated_text($row['title'])) . '</news:title>
-						<news:keywords>' . xmlentities(((trim($meta[0],' ,') == '')?'':preg_replace('#\s*,\s*#',', ',$meta[0]))) . '</news:keywords>
-			');
+                                        <news:genres>' . xmlentities(implode(', ',$genres)) . '</news:genres>
+                                        <news:publication_date>' . xmlentities(date('Y-m-d',$row['date_and_time']) . 'T' . date('H:i:s+00:00',$row['date_and_time'])) . '</news:publication_date>
+                                        <news:title>' . xmlentities(get_translated_text($row['title'])) . '</news:title>
+                                        <news:keywords>' . xmlentities(((trim($meta[0],' ,') == '')?'':preg_replace('#\s*,\s*#',', ',$meta[0]))) . '</news:keywords>
+            ');
             if (!is_null($site_location)) {
                 fwrite($sitemap_file,'
-						<news:geo_locations>' . xmlentities($site_location) . '</news:geo_locations>
-				');
+                                        <news:geo_locations>' . xmlentities($site_location) . '</news:geo_locations>
+                    ');
             }
             fwrite($sitemap_file,'
-					</news:news>
-			  </url>
-			');
+                            </news:news>
+              </url>
+            ');
         }
 
         $start += $max;
     } while ((count($rows) != 0) && ($start<500/*Let's not go nuts!*/));
 
     fwrite($sitemap_file,'
-		</urlset>
-	');
+        </urlset>
+    ');
 
     @flock($sitemap_file,LOCK_UN);
     fclose($sitemap_file);

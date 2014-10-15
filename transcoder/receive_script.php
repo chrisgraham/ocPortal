@@ -52,7 +52,7 @@ if ($get_url != '') {
     $fp = fopen($tmp_name, "wb");
 
     /* Read the data 1 KB at a time
-	and write to the file */
+    and write to the file */
     while (($data = fread($read, 1024)) !== false) {
         fwrite($fp, $data);
     }

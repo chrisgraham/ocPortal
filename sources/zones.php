@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -119,7 +119,7 @@ function init__zones()
  * If declarations aren't made then extra security precautions are taken, which may interfere with normal processing in limited cases.
  * Declarations should be made whenever entering a custom block or module.
  *
- * @param  integer			Bitmask of declarations (I_UNDERSTAND_* constants).
+ * @param  integer                      Bitmask of declarations (I_UNDERSTAND_* constants).
  */
 function i_solemnly_declare($declarations)
 {
@@ -150,7 +150,7 @@ function _solemnly_enter()
 /**
  * Leave the most recent security scope (i.e. a custom block or module).
  *
- * @param  ?string		Output to filter, if I_UNDERSTAND_XSS is not set (NULL: nothing to filter).
+ * @param  ?string                      Output to filter, if I_UNDERSTAND_XSS is not set (NULL: nothing to filter).
  */
 function _solemnly_leave(&$out = null)
 {
@@ -179,8 +179,8 @@ function _solemnly_leave(&$out = null)
 /**
  * Find if a security property has been declared as being understood.
  *
- * @param  integer		The property.
- * @return boolean		Whether it is understood.
+ * @param  integer                      The property.
+ * @return boolean                      Whether it is understood.
  */
 function has_solemnly_declared($declaration)
 {
@@ -191,9 +191,9 @@ function has_solemnly_declared($declaration)
 /**
  * Consider virtual zone merging, where paths are not necessarily where you'd expect for pages in zones.
  *
- * @param  PATH			The path, assuming in the obvious place.
- * @param  boolean		Where the passed path is relative.
- * @return PATH			The fixed path.
+ * @param  PATH                         The path, assuming in the obvious place.
+ * @param  boolean                      Where the passed path is relative.
+ * @return PATH                         The fixed path.
  */
 function zone_black_magic_filterer($path,$relative = false)
 {
@@ -261,7 +261,7 @@ function zone_black_magic_filterer($path,$relative = false)
 /**
  * Get the name of the zone the current page request is coming from.
  *
- * @return ID_TEXT		The current zone
+ * @return ID_TEXT                      The current zone
  */
 function get_zone_name()
 {
@@ -289,12 +289,12 @@ function get_zone_name()
 /**
  * Find the zone a page is in.
  *
- * @param  ID_TEXT		The page name to find
- * @param  ID_TEXT		The type of the page we are looking for
- * @param  ?string		The special subcategorisation of page we are looking for (e.g. 'EN' for a Comcode page) (NULL: none)
- * @param  string			The file extension for the page type
- * @param  boolean		Whether ocPortal should bomb out if the page was not found
- * @return ?ID_TEXT		The zone the page is in (NULL: not found)
+ * @param  ID_TEXT                      The page name to find
+ * @param  ID_TEXT                      The type of the page we are looking for
+ * @param  ?string                      The special subcategorisation of page we are looking for (e.g. 'EN' for a Comcode page) (NULL: none)
+ * @param  string                       The file extension for the page type
+ * @param  boolean                      Whether ocPortal should bomb out if the page was not found
+ * @return ?ID_TEXT                     The zone the page is in (NULL: not found)
  */
 function get_module_zone($module_name,$type = 'modules',$dir2 = null,$ftype = 'php',$error = true)
 {
@@ -399,9 +399,9 @@ function get_module_zone($module_name,$type = 'modules',$dir2 = null,$ftype = 'p
 /**
  * Find the zone a Comcode page is in.
  *
- * @param  ID_TEXT		The Comcode page name to find
- * @param  boolean		Whether ocPortal should bomb out if the page was not found
- * @return ?ID_TEXT		The zone the Comcode page is in (NULL: missing)
+ * @param  ID_TEXT                      The Comcode page name to find
+ * @param  boolean                      Whether ocPortal should bomb out if the page was not found
+ * @return ?ID_TEXT                     The zone the Comcode page is in (NULL: missing)
  */
 function get_comcode_zone($page_name,$error = true)
 {
@@ -426,9 +426,9 @@ function get_comcode_zone($page_name,$error = true)
 /**
  * Find the zone a page is in.
  *
- * @param  ID_TEXT		The page name to find
- * @param  boolean		Whether ocPortal should bomb out if the page was not found
- * @return ?ID_TEXT		The zone the page is in (NULL: missing)
+ * @param  ID_TEXT                      The page name to find
+ * @param  boolean                      Whether ocPortal should bomb out if the page was not found
+ * @return ?ID_TEXT                     The zone the page is in (NULL: missing)
  */
 function get_page_zone($page_name,$error = true)
 {
@@ -466,9 +466,9 @@ function get_page_zone($page_name,$error = true)
  * Runs the specified mini-module.
  * The module result is returned.
  *
- * @param  PATH			The relative path to the module file
- * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
- * @return tempcode		The result of executing the module
+ * @param  PATH                         The relative path to the module file
+ * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @return tempcode                     The result of executing the module
  */
 function load_minimodule_page($string,&$out = null)
 {
@@ -477,8 +477,8 @@ function load_minimodule_page($string,&$out = null)
         $PAGE_STRING = $string;
     }
 
-    /*if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))	Actually we cannot do this, as some minimodules don't return HTML and exit themselves (e.g. CSV downloads)
-		$out->evaluate_echo(NULL,true);*/
+    /*if (($GLOBALS['OUTPUT_STREAMING']) && ($out!==NULL))  Actually we cannot do this, as some minimodules don't return HTML and exit themselves (e.g. CSV downloads)
+        $out->evaluate_echo(NULL,true);*/
 
     return _load_mini_code($string);
 }
@@ -487,9 +487,9 @@ function load_minimodule_page($string,&$out = null)
  * Runs the specified mini-module/mini-block (actually, any simply-written PHP code).
  * The returned/output result is returned, in Tempcode form.
  *
- * @param  PATH			The relative path to the code file
- * @param  ?array			The block parameters (NULL: none)
- * @return tempcode		The result of executing the code
+ * @param  PATH                         The relative path to the code file
+ * @param  ?array                       The block parameters (NULL: none)
+ * @return tempcode                     The result of executing the code
  */
 function _load_mini_code($string,$map = null)
 {
@@ -549,10 +549,10 @@ function _load_mini_code($string,$map = null)
  * Runs the specified module, but also update any stats for the module, and check to see if it needs upgrading or reinstalling.
  * The module result is returned.
  *
- * @param  PATH			The relative path to the module file
- * @param  ID_TEXT		The page name to load
- * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
- * @return tempcode		The result of executing the module
+ * @param  PATH                         The relative path to the module file
+ * @param  ID_TEXT                      The page name to load
+ * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @return tempcode                     The result of executing the module
  */
 function load_module_page($string,$codename,&$out = null)
 {
@@ -602,9 +602,9 @@ function load_module_page($string,$codename,&$out = null)
                 require_code('config2');
                 require_code('menus2');
                 /*if (($installed_hacked_by!=$this_hacked_by) && (!is_null($installed_hacked_by)))
-				{
-					fatal_exit('Managed by different author');
-				} Probably better we leave the solution to this to modders rather than just block the potential for there even to be a solution	*/
+                    {
+                            fatal_exit('Managed by different author');
+                    } Probably better we leave the solution to this to modders rather than just block the potential for there even to be a solution   */
 
                 $GLOBALS['SITE_DB']->query_update('modules',array('module_version' => $this_version,'module_hack_version' => $this_hack_version,'module_hacked_by' => $this_hacked_by),array('module_the_name' => $codename),'',1);
                 $object->install($installed_version,$installed_hack_version,$installed_hacked_by);
@@ -638,16 +638,16 @@ function load_module_page($string,$codename,&$out = null)
         }
 
         if (($GLOBALS['OUTPUT_STREAMING']) && ($out !== NULL)) {
-            /*if (strpos($string,'_custom/')!==false)		Breaks output streaming
-			{
-				$_out=$out->evaluate();
-				_solemnly_leave($_out);
-				if (!has_solemnly_declared(I_UNDERSTAND_XSS))
-				{
-					$out=make_string_tempcode($_out);
-				}
-				_solemnly_enter();
-			}*/
+            /*if (strpos($string,'_custom/')!==false)    Breaks output streaming
+            {
+                    $_out=$out->evaluate();
+                    _solemnly_leave($_out);
+                    if (!has_solemnly_declared(I_UNDERSTAND_XSS))
+                    {
+                            $out=make_string_tempcode($_out);
+                    }
+                    _solemnly_enter();
+            }*/
 
             $out->evaluate_echo(null,true);
         }
@@ -669,12 +669,12 @@ function load_module_page($string,$codename,&$out = null)
 /**
  * Find the installed zones, up to the first $max installed
  *
- * @param  boolean		Whether to search the file system and return zones that might not be fully in the system (otherwise will just use the database)
- * @param  boolean		Whether to get titles for the zones as well. Only if !$search
- * @param  boolean		Whether to insist on getting all zones without $start/$max parameters (there could be thousands in theory...)
- * @param  integer		Start position to get results from (ignored if $force_all is on)
- * @param  integer		Maximum zones to get
- * @return array			A list of zone names / a list of quartets (name, title, default page, zone row)
+ * @param  boolean                      Whether to search the file system and return zones that might not be fully in the system (otherwise will just use the database)
+ * @param  boolean                      Whether to get titles for the zones as well. Only if !$search
+ * @param  boolean                      Whether to insist on getting all zones without $start/$max parameters (there could be thousands in theory...)
+ * @param  integer                      Start position to get results from (ignored if $force_all is on)
+ * @param  integer                      Maximum zones to get
+ * @return array                        A list of zone names / a list of quartets (name, title, default page, zone row)
  */
 function find_all_zones($search = false,$get_titles = false,$force_all = false,$start = 0,$max = 50)
 {
@@ -772,8 +772,8 @@ function cache_module_installed_status()
 /**
  * Check to see if a module is installed.
  *
- * @param  ID_TEXT		The module name
- * @return boolean		Whether it is
+ * @param  ID_TEXT                      The module name
+ * @return boolean                      Whether it is
  */
 function module_installed($module)
 {
@@ -790,9 +790,9 @@ function module_installed($module)
 /**
  * Get the path to a module known to be in a certain zone.
  *
- * @param  ID_TEXT		The zone name
- * @param  ID_TEXT		The module name
- * @return PATH			The module path
+ * @param  ID_TEXT                      The zone name
+ * @param  ID_TEXT                      The module name
+ * @return PATH                         The module path
  */
 function _get_module_path($zone,$module)
 {
@@ -806,10 +806,10 @@ function _get_module_path($zone,$module)
 /**
  * Get an array of all the hook implementations for a hook class.
  *
- * @param  ID_TEXT		The type of hook
+ * @param  ID_TEXT                      The type of hook
  * @set    blocks modules systems
- * @param  ID_TEXT		The hook class to find hook implementations for (e.g. the name of a module)
- * @return array			A map of hook implementation name to [sources|sources_custom]
+ * @param  ID_TEXT                      The hook class to find hook implementations for (e.g. the name of a module)
+ * @return array                        A map of hook implementation name to [sources|sources_custom]
  */
 function find_all_hooks($type,$entry)
 {
@@ -872,8 +872,8 @@ function find_all_hooks($type,$entry)
 /**
  * Find the default caching setting for a block.
  *
- * @param  ID_TEXT             The block name
- * @return ID_TEXT             The default caching setting
+ * @param  ID_TEXT                      The block name
+ * @return ID_TEXT                      The default caching setting
  */
 function block_cache_default($codename)
 {
@@ -888,8 +888,8 @@ function block_cache_default($codename)
 /**
  * Get a unique ID representing a block call.
  *
- * @param  array			The block parameter map
- * @return ID_TEXT		The block ID
+ * @param  array                        The block parameter map
+ * @return ID_TEXT                      The block ID
  */
 function get_block_id($map)
 {
@@ -907,10 +907,10 @@ function get_block_id($map)
 /**
  * Get the processed tempcode for the specified block. Please note that you pass multiple parameters in as an array, but single parameters go in as a string or other flat variable.
  *
- * @param  ID_TEXT		The block name
- * @param  ?array			The block parameter map (NULL: no parameters)
- * @param  ?integer		The TTL to use in minutes (NULL: block default)
- * @return tempcode		The generated tempcode
+ * @param  ID_TEXT                      The block name
+ * @param  ?array                       The block parameter map (NULL: no parameters)
+ * @param  ?integer                     The TTL to use in minutes (NULL: block default)
+ * @return tempcode                     The generated tempcode
  */
 function do_block($codename,$map = null,$ttl = null)
 {
@@ -1088,8 +1088,8 @@ function do_block($codename,$map = null,$ttl = null)
 /**
  * Convert a parameter set from a an array (for PHP code) to a string (for templates).
  *
- * @param  array			The parameters / acceptable parameter pattern
- * @return string			The parameters / acceptable parameter pattern, as template safe parameter
+ * @param  array                        The parameters / acceptable parameter pattern
+ * @return string                       The parameters / acceptable parameter pattern, as template safe parameter
  */
 function block_params_arr_to_str($map)
 {
@@ -1114,9 +1114,9 @@ function block_params_arr_to_str($map)
 /**
  * Convert a parameter set from a string (for templates) to an array (for PHP code).
  *
- * @param  string			The parameters / acceptable parameter pattern, as template safe parameter
- * @param  boolean		Whether to leave in block symbol style (i.e. like {$BLOCK} would take, a list not a map)
- * @return array			The parameters / acceptable parameter pattern
+ * @param  string                       The parameters / acceptable parameter pattern, as template safe parameter
+ * @param  boolean                      Whether to leave in block symbol style (i.e. like {$BLOCK} would take, a list not a map)
+ * @return array                        The parameters / acceptable parameter pattern
  */
 function block_params_str_to_arr($_map,$block_symbol_style = false)
 {
@@ -1142,9 +1142,9 @@ function block_params_str_to_arr($_map,$block_symbol_style = false)
 /**
  * Get the block object for a given block codename.
  *
- * @param  ID_TEXT		The block name
- * @param  ?array			The block parameter map (NULL: no parameters)
- * @return array			A pair: Either the block object, or the string output of a miniblock ; and whether we entered a new security scope
+ * @param  ID_TEXT                      The block name
+ * @param  ?array                       The block parameter map (NULL: no parameters)
+ * @return array                        A pair: Either the block object, or the string output of a miniblock ; and whether we entered a new security scope
  */
 function do_block_hunt_file($codename,$map = null)
 {
@@ -1221,9 +1221,9 @@ function do_block_hunt_file($codename,$map = null)
  * Takes a string which is a PHP expression over $map (parameter map), and returns a derived identifier.
  * We see if we have something cached by looking for a matching identifier.
  *
- * @param  mixed			PHP expression over $map (the parameter map of the block) OR a call_user_func specifier that will return a result (which will be used if cacheing is really very important, even for Hip Hop PHP)
- * @param  ?array			The block parameter map (NULL: no parameters)
- * @return ?LONG_TEXT	The derived cache identifier (NULL: the identifier is CURRENTLY null meaning cannot be cached)
+ * @param  mixed                        PHP expression over $map (the parameter map of the block) OR a call_user_func specifier that will return a result (which will be used if cacheing is really very important, even for Hip Hop PHP)
+ * @param  ?array                       The block parameter map (NULL: no parameters)
+ * @return ?LONG_TEXT                   The derived cache identifier (NULL: the identifier is CURRENTLY null meaning cannot be cached)
  */
 function do_block_get_cache_identifier($cache_on,$map)
 {
@@ -1260,8 +1260,8 @@ function do_block_get_cache_identifier($cache_on,$map)
 /**
  * Gets the path to a block code file for a block code name
  *
- * @param  ID_TEXT		The name of the block
- * @return PATH			The path to the block
+ * @param  ID_TEXT                      The name of the block
+ * @return PATH                         The path to the block
  */
 function _get_block_path($block)
 {
@@ -1278,8 +1278,8 @@ function _get_block_path($block)
 /**
  * Check to see if a block is installed.
  *
- * @param  ID_TEXT		The module name
- * @return boolean		Whether it is
+ * @param  ID_TEXT                      The module name
+ * @return boolean                      Whether it is
  */
 function block_installed($block)
 {
@@ -1290,14 +1290,14 @@ function block_installed($block)
 /**
  * Get an array of all the pages everywhere in the zone, limited by the selection algorithm (for small sites everything will be returned, for larger ones it depends on the show method).
  *
- * @param  ID_TEXT		The zone name
- * @param  boolean		Whether to leave file extensions on the page name
- * @param  boolean		Whether to take transparent redirects into account
- * @param  integer		Selection algorithm constant
+ * @param  ID_TEXT                      The zone name
+ * @param  boolean                      Whether to leave file extensions on the page name
+ * @param  boolean                      Whether to take transparent redirects into account
+ * @param  integer                      Selection algorithm constant
  * @set 0 1 2
- * @param  ?ID_TEXT		Page type to show (NULL: all)
+ * @param  ?ID_TEXT                     Page type to show (NULL: all)
  * @set    modules comcode html
- * @return array			A map of page name to type (modules_custom, etc)
+ * @return array                        A map of page name to type (modules_custom, etc)
  */
 function find_all_pages_wrap($zone,$keep_ext_on = false,$consider_redirects = false,$show_method = 0,$page_type = null)
 {
@@ -1308,15 +1308,15 @@ function find_all_pages_wrap($zone,$keep_ext_on = false,$consider_redirects = fa
 /**
  * Get an array of all the pages of the specified type (module, etc) and extension (for small sites everything will be returned, for larger ones it depends on the show method).
  *
- * @param  ID_TEXT		The zone name
- * @param  ID_TEXT		The page type
+ * @param  ID_TEXT                      The zone name
+ * @param  ID_TEXT                      The page type
  * @set    modules comcode html
- * @param  string			The file extension to limit us to (without a dot)
- * @param  boolean		Whether to leave file extensions on the page name
- * @param  ?TIME			Only show pages newer than (NULL: no restriction)
- * @param  integer		Selection algorithm constant
+ * @param  string                       The file extension to limit us to (without a dot)
+ * @param  boolean                      Whether to leave file extensions on the page name
+ * @param  ?TIME                        Only show pages newer than (NULL: no restriction)
+ * @param  integer                      Selection algorithm constant
  * @set 0 1 2
- * @return array			A map of page name to type (modules_custom, etc)
+ * @return array                        A map of page name to type (modules_custom, etc)
  */
 function find_all_pages($zone,$type,$ext = 'php',$keep_ext_on = false,$cutoff_time = null,$show_method = 0)
 {
@@ -1327,8 +1327,8 @@ function find_all_pages($zone,$type,$ext = 'php',$keep_ext_on = false,$cutoff_ti
 /**
  * Get an array of all the modules.
  *
- * @param  ID_TEXT		The zone name
- * @return array			A map of page name to type (modules_custom, etc)
+ * @param  ID_TEXT                      The zone name
+ * @return array                        A map of page name to type (modules_custom, etc)
  */
 function find_all_modules($zone)
 {
@@ -1340,12 +1340,12 @@ function find_all_modules($zone)
  * Extract code to execute the requested functions with the requested parameters from the module at the given path.
  * We used to actually load up the module, but it ate all our RAM when we did!
  *
- * @param  PATH			The path to the module (or any PHP file with a class)
- * @param  array			Array of functions to be executing
- * @param  ?array			A list of parameters to pass to our functions (NULL: none)
- * @param  boolean		Whether to do this "properly" (via proper OOP), which will consume more memory
- * @param  ?string		Class name to use (NULL: autodetect, which is a little slower)
- * @return array			A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
+ * @param  PATH                         The path to the module (or any PHP file with a class)
+ * @param  array                        Array of functions to be executing
+ * @param  ?array                       A list of parameters to pass to our functions (NULL: none)
+ * @param  boolean                      Whether to do this "properly" (via proper OOP), which will consume more memory
+ * @param  ?string                      Class name to use (NULL: autodetect, which is a little slower)
+ * @return array                        A list of pieces of code to do the equivalent of executing the requested functions with the requested parameters
  */
 function extract_module_functions($path,$functions,$params = null,$prefer_direct_code_call = false,$class_name = null)
 {

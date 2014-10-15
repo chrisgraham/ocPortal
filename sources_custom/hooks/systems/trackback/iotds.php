@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		iotds
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    iotds
  */
 
 class Hook_trackback_iotds
 {
     /**
-	 * Run function for trackback hooks. They see if content of an ID relating to this content has trackback enabled.
-	 *
-	 * @param  ID_TEXT		The ID
-	 * @return boolean		Whether trackback is enabled
-	 */
+     * Run function for trackback hooks. They see if content of an ID relating to this content has trackback enabled.
+     *
+     * @param  ID_TEXT                  The ID
+     * @return boolean                  Whether trackback is enabled
+     */
     public function run($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('iotd',array('allow_trackbacks'),array('id' => intval($id)),'',1);

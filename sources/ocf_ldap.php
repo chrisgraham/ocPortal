@@ -15,9 +15,9 @@
 /*EXTRA FUNCTIONS: (ldap\_.+)*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ldap
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ldap
  */
 
 /*
@@ -45,9 +45,9 @@ function init__ocf_ldap()
 /**
  * Escape, ready for an LDAP query.
  *
- * @param  string		The value.
- * @param  boolean	Whether this is for use in a DN string.
- * @return string		The escaped value.
+ * @param  string                       The value.
+ * @param  boolean                      Whether this is for use in a DN string.
+ * @return string                       The escaped value.
  */
 function ldap_escape($str,$for_dn = false)
 {
@@ -71,8 +71,8 @@ function ldap_escape($str,$for_dn = false)
 /**
  * Unescape data from LDAP. Technically this is not unescaping, it's just a character set conversion, but function is named to provide symmetry with ldap_escape which does both escaping and character set conversion.
  *
- * @param  string		The escaped value.
- * @return string		The value.
+ * @param  string                       The escaped value.
+ * @return string                       The value.
  */
 function ldap_unescape($str)
 {
@@ -87,8 +87,8 @@ function ocf_ldap_connect()
 {
     global $LDAP_CONNECTION;
     /** Our connection to the LDAP server.
-	 * @global ?array $LDAP_CONNECTION
-	 */
+     * @global ?array $LDAP_CONNECTION
+     */
     $LDAP_CONNECTION = ldap_connect(get_option('ldap_hostname'));
 
     if ((get_option('ldap_is_windows') == '1') && (function_exists('ldap_set_option'))) {
@@ -102,7 +102,7 @@ function ocf_ldap_connect()
 /**
  * Where in the LDAP hierarchy to search for groups.
  *
- * @return string		The property.
+ * @return string                       The property.
  */
 function member_search_qualifier()
 {
@@ -116,7 +116,7 @@ function member_search_qualifier()
 /**
  * The property in LDAP used for logins.
  *
- * @return string		The property.
+ * @return string                       The property.
  */
 function member_property()
 {
@@ -126,7 +126,7 @@ function member_property()
 /**
  * The LDAP class indicating an account.
  *
- * @return string		The property.
+ * @return string                       The property.
  */
 function get_member_class()
 {
@@ -136,7 +136,7 @@ function get_member_class()
 /**
  * Where in the LDAP hierarchy to search for members.
  *
- * @return string		The property.
+ * @return string                       The property.
  */
 function group_search_qualifier()
 {
@@ -150,7 +150,7 @@ function group_search_qualifier()
 /**
  * The group naming property LDAP will be using.
  *
- * @return string		The property.
+ * @return string                       The property.
  */
 function group_property()
 {
@@ -160,7 +160,7 @@ function group_property()
 /**
  * The LDAP class indicating a group.
  *
- * @return string		The property.
+ * @return string                       The property.
  */
 function get_group_class()
 {
@@ -170,7 +170,7 @@ function get_group_class()
 /**
  * The LDAP group that maps to the default ocPortal group.
  *
- * @return string		The group.
+ * @return string                       The group.
  */
 function get_mapped_users_group()
 {
@@ -180,7 +180,7 @@ function get_mapped_users_group()
 /**
  * The LDAP group that maps to the first administrative group in ocPortal (db_get_first_id()+1).
  *
- * @return string		The group.
+ * @return string                       The group.
  */
 function get_mapped_admin_group()
 {
@@ -194,8 +194,8 @@ function get_mapped_admin_group()
 /**
  * Find whether a member of a certain username WOULD be bound to LDAP authentication (an exceptional situation, only for sites that use it).
  *
- * @param  string			The username.
- * @return boolean		The answer.
+ * @param  string                       The username.
+ * @return boolean                      The answer.
  */
 function ocf_is_ldap_member_potential($cn)
 {
@@ -234,11 +234,11 @@ function ocf_ldap_bind()
         $login = ldap_get_login_string($cn);
 
         /*
-		Example for Active Directory, if domain is chris4.com
+        Example for Active Directory, if domain is chris4.com
 
-		$login='cn=Administrator,cn=Users,dc=chris4,dc=com'; // Log in using full name (cn) [in this case, same as username, but not always]
-		$login='Administrator@chris4.com'; // Log in using username (sAMAccountName)
-		*/
+        $login='cn=Administrator,cn=Users,dc=chris4,dc=com'; // Log in using full name (cn) [in this case, same as username, but not always]
+        $login='Administrator@chris4.com'; // Log in using username (sAMAccountName)
+        */
         $test = @ldap_bind($LDAP_CONNECTION,$login,get_option('ldap_bind_password')); // This sometimes causes errors, and isn't always needed. Hence error output is suppressed
         if ($test === false) {
             require_code('site');
@@ -259,8 +259,8 @@ function ocf_ldap_bind()
 /**
  * Find whether a member exists on the LDAP server.
  *
- * @param  SHORT_TEXT	The username.
- * @return boolean		The answer.
+ * @param  SHORT_TEXT                   The username.
+ * @return boolean                      The answer.
  */
 function ocf_is_on_ldap($cn)
 {
@@ -290,8 +290,8 @@ function ocf_is_on_ldap($cn)
 /**
  * Find the LDAP servers password for a certain member.
  *
- * @param  string			The username.
- * @return ?string		The password (NULL: no such user).
+ * @param  string                       The username.
+ * @return ?string                      The password (NULL: no such user).
  */
 function ocf_get_ldap_hash($cn)
 {
@@ -325,9 +325,9 @@ function ocf_get_ldap_hash($cn)
 /**
  * Convert a plain-text password into a hashed password.
  *
- * @param  string		The username (we use this to extract the hash algorithm being used by the member).
- * @param  string		The password.
- * @return string		The hashed password.
+ * @param  string                       The username (we use this to extract the hash algorithm being used by the member).
+ * @param  string                       The password.
+ * @return string                       The hashed password.
  */
 function ocf_ldap_hash($cn,$password)
 {
@@ -369,8 +369,8 @@ function ocf_ldap_hash($cn,$password)
 /**
  * Get an LDAP login string to do a bind against.
  *
- * @param  string			The username.
- * @return string			The login string.
+ * @param  string                       The username.
+ * @return string                       The login string.
  */
 function ldap_get_login_string($cn)
 {
@@ -394,9 +394,9 @@ function ldap_get_login_string($cn)
 /**
  * Authorise an LDAP login.
  *
- * @param  string			The username.
- * @param  ?string		The password (NULL: no such user).
- * @return array			Part of the member row to put back in and authorise normally (hackerish, but it works kind of like a filter / stage in a chain).
+ * @param  string                       The username.
+ * @param  ?string                      The password (NULL: no such user).
+ * @return array                        Part of the member row to put back in and authorise normally (hackerish, but it works kind of like a filter / stage in a chain).
  */
 function ocf_ldap_authorise_login($cn,$password)
 {
@@ -442,8 +442,8 @@ function ocf_ldap_authorise_login($cn,$password)
 /**
  * Find the ocPortal member-ID for an LDAP username.
  *
- * @param  string		The username.
- * @return ?integer  The ocPortal member-ID (NULL: none).
+ * @param  string                       The username.
+ * @return ?integer                     The ocPortal member-ID (NULL: none).
  */
 function ocf_member_ldapcn_to_ocfid($cn)
 {
@@ -457,8 +457,8 @@ function ocf_member_ldapcn_to_ocfid($cn)
 /**
  * Find the LDAP username for an ocPortal member-ID.
  *
- * @param  integer		The ocPortal member-ID.
- * @return ?SHORT_TEXT  The username (NULL: none).
+ * @param  integer                      The ocPortal member-ID.
+ * @return ?SHORT_TEXT                  The username (NULL: none).
  */
 function ocf_member_ocfid_to_ldapcn($id)
 {
@@ -472,7 +472,7 @@ function ocf_member_ocfid_to_ldapcn($id)
 /**
  * Get a list of usergroups on the LDAP server.
  *
- * @return array	The list of user-groups (string).
+ * @return array                        The list of user-groups (string).
  */
 function ocf_get_all_ldap_groups()
 {
@@ -514,8 +514,8 @@ function ocf_get_all_ldap_groups()
 /**
  * Find the ocPortal-ID for a named LDAP usergroup.
  *
- * @param  string	The usergroup.
- * @return ?GROUP	The ocPortal-ID (NULL: none).
+ * @param  string                       The usergroup.
+ * @return ?GROUP                       The ocPortal-ID (NULL: none).
  */
 function ocf_group_ldapcn_to_ocfid($cn)
 {
@@ -540,8 +540,8 @@ function ocf_group_ldapcn_to_ocfid($cn)
 /**
  * Find the named LDAP usergroup for an OCF ID. Note that the returned MAY NOT ACTUALLY EXIST!
  *
- * @param  GROUP			The OCF ID.
- * @return ?SHORT_TEXT	The named LDAP usergroup (NULL: none).
+ * @param  GROUP                        The OCF ID.
+ * @return ?SHORT_TEXT                  The named LDAP usergroup (NULL: none).
  */
 function ocf_group_ocfid_to_ldapcn($id)
 {
@@ -560,8 +560,8 @@ function ocf_group_ocfid_to_ldapcn($id)
 /**
  * Get the e-mail of a member in LDAP.
  *
- * @param  ID_TEXT		The CN of the member.
- * @return SHORT_TEXT	Guessed e-mail address (blank: couldn't find).
+ * @param  ID_TEXT                      The CN of the member.
+ * @return SHORT_TEXT                   Guessed e-mail address (blank: couldn't find).
  */
 function ocf_ldap_guess_email($cn)
 {
@@ -584,11 +584,11 @@ function ocf_ldap_guess_email($cn)
 /**
  * (LDAP helper for ocf_get_group_members_raw) Get a list of members in a group (or more full details if $non_validated is true).
  *
- * @param  array		The list is written into this.
- * @param  GROUP		The ID of the usergroup.
- * @param  boolean	Whether to include those in the usergroup as a primary member.
- * @param  boolean	Whether to include those applied to join the usergroup, but not validated in.
- * @param  boolean	Whether to include those in the usergroup as a secondary member.
+ * @param  array                        The list is written into this.
+ * @param  GROUP                        The ID of the usergroup.
+ * @param  boolean                      Whether to include those in the usergroup as a primary member.
+ * @param  boolean                      Whether to include those applied to join the usergroup, but not validated in.
+ * @param  boolean                      Whether to include those in the usergroup as a secondary member.
  */
 function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$non_validated,$include_secondaries)
 {
@@ -686,8 +686,8 @@ function ocf_get_group_members_raw_ldap(&$members,$group_id,$include_primaries,$
 /**
  * (LDAP helper for ocf_get_members_groups) Get a list of the usergroups a member is in (keys say the usergroups, values are irrelevant).
  *
- * @param  ?MEMBER	The member to find the usergroups of (NULL: current member).
- * @return array		The list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)). The keys are all that matters, values are arbitrary.
+ * @param  ?MEMBER                      The member to find the usergroups of (NULL: current member).
+ * @return array                        The list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)). The keys are all that matters, values are arbitrary.
  */
 function ocf_get_members_groups_ldap($member_id)
 {
@@ -775,8 +775,8 @@ function ocf_get_members_groups_ldap($member_id)
 /**
  * Get the primary usergroup of a member in LDAP.
  *
- * @param  MEMBER	The member.
- * @return GROUP	The.
+ * @param  MEMBER                       The member.
+ * @return GROUP                        The.
  */
 function ocf_ldap_get_member_primary_group($member_id)
 {
@@ -821,8 +821,8 @@ function ocf_ldap_get_member_primary_group($member_id)
 /**
  * Find the ocPortal-ID for an LDAP usergroup-ID. POSIX Only.
  *
- * @param  integer	The LDAP ID.
- * @return ?GROUP		The ocPortal-ID (NULL: could not find).
+ * @param  integer                      The LDAP ID.
+ * @return ?GROUP                       The ocPortal-ID (NULL: could not find).
  */
 function ocf_group_ldapgid_to_ocfid($gid)
 {
@@ -845,8 +845,8 @@ function ocf_group_ldapgid_to_ocfid($gid)
 /**
  * Find the LDAP ID for a named LDAP usergroup. POSIX Only.
  *
- * @param  string		The named LDAP usergroup.
- * @return ?integer 	The LDAP usergroup ID (NULL: none).
+ * @param  string                       The named LDAP usergroup.
+ * @return ?integer                     The LDAP usergroup ID (NULL: none).
  */
 function ocf_group_ldapcn_to_ldapgid($cn)
 {
@@ -864,9 +864,9 @@ function ocf_group_ldapcn_to_ldapgid($cn)
 /**
  * Converts an active directory style long-CN to a short one.
  *
- * @param  string		The long one.
- * @param  string		The type (e.g. CN, DN).
- * @return string		The short one.
+ * @param  string                       The long one.
+ * @param  string                       The type (e.g. CN, DN).
+ * @return string                       The short one.
  */
 function ocf_long_cn_to_short_cn($long,$type)
 {

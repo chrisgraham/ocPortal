@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 class Hook_Preview_comcode_tag
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
+     */
     public function applies()
     {
         $applies = !is_null(post_param('tag_contents',null)) || !is_null(post_param('tag_contents__a',null)) || !is_null(post_param('tag_contents__b',null)) || !is_null(post_param('tag_contents_0',null));
@@ -32,10 +32,10 @@ class Hook_Preview_comcode_tag
     }
 
     /**
-	 * Run function for preview hooks.
-	 *
-	 * @return array			A pair: The preview, the updated post Comcode
-	 */
+     * Run function for preview hooks.
+     *
+     * @return array                    A pair: The preview, the updated post Comcode
+     */
     public function run()
     {
         require_code('comcode_add');

@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Block_main_members
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -56,41 +56,41 @@ class Block_main_members
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
         $info['cache_on'] = 'array(
-			array_key_exists(\'display_mode\',$map)?$map[\'display_mode\']:\'avatars\',
-			array_key_exists(\'must_have_avatar\',$map)?($map[\'must_have_avatar\']==\'1\'):false,
-			array_key_exists(\'must_have_photo\',$map)?($map[\'must_have_photo\']==\'1\'):false,
-			array_key_exists(\'include_form\',$map)?($map[\'include_form\']==\'1\'):true,
-			array_key_exists(\'filter\',$map)?$map[\'filter\']:\'*\',
-			array_key_exists(\'filters_row_a\',$map)?$map[\'filters_row_a\']:\'\',
-			array_key_exists(\'filters_row_b\',$map)?$map[\'filters_row_b\']:\'\',
-			array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',
-			array_key_exists(\'usergroup\',$map)?$map[\'usergroup\']:\'\',
-			get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),
-			get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),
-			((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),
-			get_param($block_id.\'_sort\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'m_join_time DESC\'),
-			array_key_exists(\'parent_gallery\',$map)?$map[\'parent_gallery\']:\'\',
-			array_key_exists(\'per_row\',$map)?intval($map[\'per_row\']):0,
-			array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',
-		)';
+            array_key_exists(\'display_mode\',$map)?$map[\'display_mode\']:\'avatars\',
+            array_key_exists(\'must_have_avatar\',$map)?($map[\'must_have_avatar\']==\'1\'):false,
+            array_key_exists(\'must_have_photo\',$map)?($map[\'must_have_photo\']==\'1\'):false,
+            array_key_exists(\'include_form\',$map)?($map[\'include_form\']==\'1\'):true,
+            array_key_exists(\'filter\',$map)?$map[\'filter\']:\'*\',
+            array_key_exists(\'filters_row_a\',$map)?$map[\'filters_row_a\']:\'\',
+            array_key_exists(\'filters_row_b\',$map)?$map[\'filters_row_b\']:\'\',
+            array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',
+            array_key_exists(\'usergroup\',$map)?$map[\'usergroup\']:\'\',
+            get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),
+            get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),
+            ((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),
+            get_param($block_id.\'_sort\',array_key_exists(\'sort\',$map)?$map[\'sort\']:\'m_join_time DESC\'),
+            array_key_exists(\'parent_gallery\',$map)?$map[\'parent_gallery\']:\'\',
+            array_key_exists(\'per_row\',$map)?intval($map[\'per_row\']):0,
+            array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',
+        )';
         $info['ttl'] = 60;
         return $info;
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         if (get_forum_type() != 'ocf') {
@@ -315,16 +315,16 @@ class Block_main_members
         $rows = $GLOBALS['FORUM_DB']->query($sql,($display_mode == 'media')?($max+$start):$max,($display_mode == 'media')?null:$start);
         $rows = remove_duplicate_rows($rows,'id');
 
-        /*if (count($rows)==0)	We let our template control no-result output
-		{
-			return do_template('BLOCK_NO_ENTRIES',array(
-				'HIGH'=>false,
-				'TITLE'=>do_lang_tempcode('RECENT',make_string_tempcode(integer_format($max)),do_lang_tempcode('MEMBERS')),
-				'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
-				'ADD_NAME'=>'',
-				'SUBMIT_URL'=>'',
-			));
-		}*/
+        /*if (count($rows)==0)   We let our template control no-result output
+        {
+            return do_template('BLOCK_NO_ENTRIES',array(
+                    'HIGH'=>false,
+                    'TITLE'=>do_lang_tempcode('RECENT',make_string_tempcode(integer_format($max)),do_lang_tempcode('MEMBERS')),
+                    'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),
+                    'ADD_NAME'=>'',
+                    'SUBMIT_URL'=>'',
+            ));
+        }*/
 
         $hooks = null;
         if (is_null($hooks)) {

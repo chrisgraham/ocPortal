@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -30,7 +30,7 @@ function init__ocf_members_action2()
 /**
  * Get field mapping data for CSV import/export.
  *
- * @return array		A map of heading information (human name to field name/encoding details)
+ * @return array                        A map of heading information (human name to field name/encoding details)
  */
 function member_get_csv_headings()
 {
@@ -70,8 +70,8 @@ function member_get_csv_headings()
 /**
  * Get a list of timezones.
  *
- * @param  ?string		Current timezone to select (NULL: server default)
- * @return tempcode		List of timezones
+ * @param  ?string                      Current timezone to select (NULL: server default)
+ * @return tempcode                     List of timezones
  */
 function create_selection_list_timezone_list($timezone = null)
 {
@@ -127,8 +127,8 @@ function validate_ip_script()
 /**
  * If we are using human names for usernames, a conflict is likely. Store a suffixed variety. Maybe later ocP will strip these suffixes out in some contexts.
  *
- * @param  SHORT_TEXT	The desired human name for the member profile.
- * @return SHORT_TEXT	A unique username.
+ * @param  SHORT_TEXT                   The desired human name for the member profile.
+ * @return SHORT_TEXT                   A unique username.
  */
 function get_username_from_human_name($username)
 {
@@ -149,15 +149,15 @@ function get_username_from_human_name($username)
 /**
  * Get a form for finishing off a member profile (such as for LDAP or httpauth, where a partial profile is automatically made, but needs completion).
  *
- * @param  SHORT_TEXT	The username for the member profile.
- * @param  ID_TEXT		The type of member profile we are finishing off.
- * @param  string			Auto-detected e-mail address (blank: none)
- * @param  ?integer		Auto-detected DOB day (NULL: unknown)
- * @param  ?integer		Auto-detected DOB month (NULL: unknown)
- * @param  ?integer		Auto-detected DOB year (NULL: unknown)
- * @param  ?ID_TEXT		Auto-detected Timezone (NULL: unknown)
- * @param  ?ID_TEXT		Auto-detected Language (NULL: unknown)
- * @return tempcode		The form.
+ * @param  SHORT_TEXT                   The username for the member profile.
+ * @param  ID_TEXT                      The type of member profile we are finishing off.
+ * @param  string                       Auto-detected e-mail address (blank: none)
+ * @param  ?integer                     Auto-detected DOB day (NULL: unknown)
+ * @param  ?integer                     Auto-detected DOB month (NULL: unknown)
+ * @param  ?integer                     Auto-detected DOB year (NULL: unknown)
+ * @param  ?ID_TEXT                     Auto-detected Timezone (NULL: unknown)
+ * @param  ?ID_TEXT                     Auto-detected Language (NULL: unknown)
+ * @return tempcode                     The form.
  */
 function ocf_member_external_linker_ask($username,$type,$email_address = '',$dob_day = null,$dob_month = null,$dob_year = null,$timezone = null,$language = null)
 {
@@ -187,20 +187,20 @@ function ocf_member_external_linker_ask($username,$type,$email_address = '',$dob
 /**
  * Finishing off of a member profile (such as for LDAP or httpauth, where a partial profile is automatically made, but needs completion).
  *
- * @param  SHORT_TEXT 	The username for the member profile.
- * @param  SHORT_TEXT	The password for the member profile.
- * @param  ID_TEXT		The type of member profile we are finishing off.
- * @param  boolean		Whether to check for duplicated email addresses.
- * @param  string			Auto-detected e-mail address (blank: none)
- * @param  ?integer		Auto-detected DOB day (NULL: unknown)
- * @param  ?integer		Auto-detected DOB month (NULL: unknown)
- * @param  ?integer		Auto-detected DOB year (NULL: unknown)
- * @param  ?ID_TEXT		Auto-detected Timezone (NULL: unknown)
- * @param  ?ID_TEXT		Auto-detected Language (NULL: unknown)
- * @param  ?URLPATH		The URL to the member's avatar (blank: none) (NULL: choose one automatically).
- * @param  URLPATH		The URL to the member's photo (blank: none).
- * @param  URLPATH		The URL to the member's photo thumbnail (blank: none).
- * @return MEMBER			The member ID for the finished off profile.
+ * @param  SHORT_TEXT                   The username for the member profile.
+ * @param  SHORT_TEXT                   The password for the member profile.
+ * @param  ID_TEXT                      The type of member profile we are finishing off.
+ * @param  boolean                      Whether to check for duplicated email addresses.
+ * @param  string                       Auto-detected e-mail address (blank: none)
+ * @param  ?integer                     Auto-detected DOB day (NULL: unknown)
+ * @param  ?integer                     Auto-detected DOB month (NULL: unknown)
+ * @param  ?integer                     Auto-detected DOB year (NULL: unknown)
+ * @param  ?ID_TEXT                     Auto-detected Timezone (NULL: unknown)
+ * @param  ?ID_TEXT                     Auto-detected Language (NULL: unknown)
+ * @param  ?URLPATH                     The URL to the member's avatar (blank: none) (NULL: choose one automatically).
+ * @param  URLPATH                      The URL to the member's photo (blank: none).
+ * @param  URLPATH                      The URL to the member's photo thumbnail (blank: none).
+ * @return MEMBER                       The member ID for the finished off profile.
  */
 function ocf_member_external_linker($username,$password,$type,$email_check = true,$email_address = '',$dob_day = null,$dob_month = null,$dob_year = null,$timezone = null,$language = null,$avatar_url = null,$photo_url = '',$photo_thumb_url = '')
 {
@@ -270,9 +270,9 @@ function ocf_member_external_linker($username,$password,$type,$email_check = tru
 /**
  * Read in the custom profile field POST data.
  *
- * @param  array		The CPF field rows that we'll be reading in the member's values for.
- * @param  ?MEMBER	Member involved (NULL: new member)
- * @return array		The CPF data.
+ * @param  array                        The CPF field rows that we'll be reading in the member's values for.
+ * @param  ?MEMBER                      Member involved (NULL: new member)
+ * @return array                        The CPF data.
  */
 function ocf_read_in_custom_fields($custom_fields,$member_id = null)
 {
@@ -295,33 +295,33 @@ function ocf_read_in_custom_fields($custom_fields,$member_id = null)
 /**
  * Get form fields for adding/editing/finishing a member profile.
  *
- * @param  boolean			Whether we are only handling the essential details of a profile.
- * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
- * @param  ?array				A list of usergroups (NULL: default/current usergroups).
- * @param  SHORT_TEXT		The e-mail address.
- * @param  BINARY				Whether posts are previewed before they are made.
- * @param  ?integer			Day of date of birth (NULL: not known).
- * @param  ?integer			Month of date of birth (NULL: not known).
- * @param  ?integer			Year of date of birth (NULL: not known).
- * @param  ?ID_TEXT			The member timezone (NULL: site default).
- * @param  ?array				A map of custom fields values (field-id=>value) (NULL: not known).
- * @param  ?ID_TEXT			The members default theme (NULL: not known).
- * @param  BINARY				Whether the members age may be shown.
- * @param  BINARY				Whether the member sees signatures in posts.
- * @param  ?BINARY			Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
- * @param  ?LANGUAGE_NAME	The members language (NULL: auto detect).
- * @param  BINARY				Whether the member allows e-mails via the site.
- * @param  BINARY				Whether the member allows e-mails from staff via the site.
- * @param  BINARY				Whether the profile has been validated.
- * @param  ?GROUP				The members primary (NULL: not known).
- * @param  SHORT_TEXT		The username.
- * @param  BINARY				Whether the member is permanently banned.
- * @param  ID_TEXT			The special type of profile this is (blank: not a special type).
- * @param  BINARY				Whether the member username will be highlighted.
- * @param  SHORT_TEXT		Usergroups that may PT the member.
- * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
- * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
- * @return array				A pair: The form fields, Hidden fields (both Tempcode).
+ * @param  boolean                      Whether we are only handling the essential details of a profile.
+ * @param  ?MEMBER                      The ID of the member we are handling (NULL: new member).
+ * @param  ?array                       A list of usergroups (NULL: default/current usergroups).
+ * @param  SHORT_TEXT                   The e-mail address.
+ * @param  BINARY                       Whether posts are previewed before they are made.
+ * @param  ?integer                     Day of date of birth (NULL: not known).
+ * @param  ?integer                     Month of date of birth (NULL: not known).
+ * @param  ?integer                     Year of date of birth (NULL: not known).
+ * @param  ?ID_TEXT                     The member timezone (NULL: site default).
+ * @param  ?array                       A map of custom fields values (field-id=>value) (NULL: not known).
+ * @param  ?ID_TEXT                     The members default theme (NULL: not known).
+ * @param  BINARY                       Whether the members age may be shown.
+ * @param  BINARY                       Whether the member sees signatures in posts.
+ * @param  ?BINARY                      Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
+ * @param  ?LANGUAGE_NAME               The members language (NULL: auto detect).
+ * @param  BINARY                       Whether the member allows e-mails via the site.
+ * @param  BINARY                       Whether the member allows e-mails from staff via the site.
+ * @param  BINARY                       Whether the profile has been validated.
+ * @param  ?GROUP                       The members primary (NULL: not known).
+ * @param  SHORT_TEXT                   The username.
+ * @param  BINARY                       Whether the member is permanently banned.
+ * @param  ID_TEXT                      The special type of profile this is (blank: not a special type).
+ * @param  BINARY                       Whether the member username will be highlighted.
+ * @param  SHORT_TEXT                   Usergroups that may PT the member.
+ * @param  LONG_TEXT                    Rules that other members must agree to before they may start a PT with the member.
+ * @param  ?TIME                        When the member is on probation until (NULL: just finished probation / or effectively was never on it)
+ * @return array                        A pair: The form fields, Hidden fields (both Tempcode).
  */
 function ocf_get_member_fields($mini_mode = true,$member_id = null,$groups = null,$email_address = '',$preview_posts = 0,$dob_day = null,$dob_month = null,$dob_year = null,$timezone = null,$custom_fields = null,$theme = null,$reveal_age = 1,$views_signatures = 1,$auto_monitor_contrib_content = null,$language = null,$allow_emails = 1,$allow_emails_from_staff = 1,$validated = 1,$primary_group = null,$username = '',$is_perm_banned = 0,$special_type = '',$highlighted_name = 0,$pt_allow = '*',$pt_rules_text = '',$on_probation_until = null)
 {
@@ -343,32 +343,32 @@ function ocf_get_member_fields($mini_mode = true,$member_id = null,$groups = nul
 /**
  * Get form fields for adding/editing/finishing a member profile.
  *
- * @param  boolean			Whether we are only handling the essential details of a profile.
- * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
- * @param  ?array				A list of usergroups (NULL: default/current usergroups).
- * @param  SHORT_TEXT		The e-mail address.
- * @param  ?BINARY			Whether posts are previewed before they are made (NULL: calculate statistically).
- * @param  ?integer			Day of date of birth (NULL: not known).
- * @param  ?integer			Month of date of birth (NULL: not known).
- * @param  ?integer			Year of date of birth (NULL: not known).
- * @param  ?ID_TEXT			The member timezone (NULL: site default).
- * @param  ?ID_TEXT			The members default theme (NULL: not known).
- * @param  BINARY				Whether the members age may be shown.
- * @param  BINARY				Whether the member sees signatures in posts.
- * @param  ?BINARY			Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
- * @param  ?LANGUAGE_NAME	The members language (NULL: auto detect).
- * @param  BINARY				Whether the member allows e-mails via the site.
- * @param  BINARY				Whether the member allows e-mails from staff via the site.
- * @param  BINARY				Whether the profile has been validated.
- * @param  ?GROUP				The members primary (NULL: not known).
- * @param  SHORT_TEXT		The username.
- * @param  BINARY				Whether the member is permanently banned.
- * @param  ID_TEXT			The special type of profile this is (blank: not a special type).
- * @param  BINARY				Whether the member username will be highlighted.
- * @param  SHORT_TEXT		Usergroups that may PT the member.
- * @param  LONG_TEXT			Rules that other members must agree to before they may start a PT with the member.
- * @param  ?TIME				When the member is on probation until (NULL: just finished probation / or effectively was never on it)
- * @return array				A pair: The form fields, Hidden fields (both Tempcode).
+ * @param  boolean                      Whether we are only handling the essential details of a profile.
+ * @param  ?MEMBER                      The ID of the member we are handling (NULL: new member).
+ * @param  ?array                       A list of usergroups (NULL: default/current usergroups).
+ * @param  SHORT_TEXT                   The e-mail address.
+ * @param  ?BINARY                      Whether posts are previewed before they are made (NULL: calculate statistically).
+ * @param  ?integer                     Day of date of birth (NULL: not known).
+ * @param  ?integer                     Month of date of birth (NULL: not known).
+ * @param  ?integer                     Year of date of birth (NULL: not known).
+ * @param  ?ID_TEXT                     The member timezone (NULL: site default).
+ * @param  ?ID_TEXT                     The members default theme (NULL: not known).
+ * @param  BINARY                       Whether the members age may be shown.
+ * @param  BINARY                       Whether the member sees signatures in posts.
+ * @param  ?BINARY                      Whether the member automatically is enabled for notifications for content they contribute to (NULL: get default from config).
+ * @param  ?LANGUAGE_NAME               The members language (NULL: auto detect).
+ * @param  BINARY                       Whether the member allows e-mails via the site.
+ * @param  BINARY                       Whether the member allows e-mails from staff via the site.
+ * @param  BINARY                       Whether the profile has been validated.
+ * @param  ?GROUP                       The members primary (NULL: not known).
+ * @param  SHORT_TEXT                   The username.
+ * @param  BINARY                       Whether the member is permanently banned.
+ * @param  ID_TEXT                      The special type of profile this is (blank: not a special type).
+ * @param  BINARY                       Whether the member username will be highlighted.
+ * @param  SHORT_TEXT                   Usergroups that may PT the member.
+ * @param  LONG_TEXT                    Rules that other members must agree to before they may start a PT with the member.
+ * @param  ?TIME                        When the member is on probation until (NULL: just finished probation / or effectively was never on it)
+ * @return array                        A pair: The form fields, Hidden fields (both Tempcode).
  */
 function ocf_get_member_fields_settings($mini_mode = true,$member_id = null,$groups = null,$email_address = '',$preview_posts = null,$dob_day = null,$dob_month = null,$dob_year = null,$timezone = null,$theme = null,$reveal_age = 1,$views_signatures = 1,$auto_monitor_contrib_content = null,$language = null,$allow_emails = 1,$allow_emails_from_staff = 1,$validated = 1,$primary_group = null,$username = '',$is_perm_banned = 0,$special_type = '',$highlighted_name = 0,$pt_allow = '*',$pt_rules_text = '',$on_probation_until = null)
 {
@@ -482,12 +482,12 @@ function ocf_get_member_fields_settings($mini_mode = true,$member_id = null,$gro
     $doing_local_forum_options = (addon_installed('ocf_forum')) && (!$mini_mode);
 
     /*
-	if (!$mini_mode)
-	{
-		if (($doing_international) || ($doing_langs) || ($doing_email_option) || ($doing_wide_option) || ($doing_theme_option) || ($doing_local_forum_options))
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3cd79bbea084ec1fe148edddad7d52b4','FORCE_OPEN'=>is_null($member_id)?true:NULL,'TITLE'=>do_lang_tempcode('SETTINGS'))));
-	}
-	*/
+    if (!$mini_mode)
+    {
+        if (($doing_international) || ($doing_langs) || ($doing_email_option) || ($doing_wide_option) || ($doing_theme_option) || ($doing_local_forum_options))
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3cd79bbea084ec1fe148edddad7d52b4','FORCE_OPEN'=>is_null($member_id)?true:NULL,'TITLE'=>do_lang_tempcode('SETTINGS'))));
+    }
+    */
 
     require_lang('config');
 
@@ -542,7 +542,7 @@ function ocf_get_member_fields_settings($mini_mode = true,$member_id = null,$gro
                     $hidden->attach(form_input_hidden('views_signatures','1'));
                 }
             }
-            //$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));	Now on notifications tab, even though it is technically an account setting
+            //$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));  Now on notifications tab, even though it is technically an account setting
             $usergroup_list = new ocp_tempcode();
             $lgroups = $GLOBALS['OCF_DRIVER']->get_usergroup_list(true,true);
             foreach ($lgroups as $key => $val) {
@@ -643,11 +643,11 @@ function ocf_get_member_fields_settings($mini_mode = true,$member_id = null,$gro
 /**
  * Get form fields for adding/editing/finishing a member profile.
  *
- * @param  boolean			Whether we are only handling the essential details of a profile.
- * @param  ?MEMBER			The ID of the member we are handling (NULL: new member).
- * @param  ?array				A list of usergroups (NULL: default/current usergroups).
- * @param  ?array				A map of custom fields values (field-id=>value) (NULL: not known).
- * @return array				A pair: The form fields, Hidden fields (both Tempcode).
+ * @param  boolean                      Whether we are only handling the essential details of a profile.
+ * @param  ?MEMBER                      The ID of the member we are handling (NULL: new member).
+ * @param  ?array                       A list of usergroups (NULL: default/current usergroups).
+ * @param  ?array                       A map of custom fields values (field-id=>value) (NULL: not known).
+ * @return array                        A pair: The form fields, Hidden fields (both Tempcode).
  */
 function ocf_get_member_fields_profile($mini_mode = true,$member_id = null,$groups = null,$custom_fields = null)
 {
@@ -749,38 +749,38 @@ function ocf_get_member_fields_profile($mini_mode = true,$member_id = null,$grou
 /**
  * Edit a member.
  *
- * @param  AUTO_LINK			The ID of the member.
- * @param  ?SHORT_TEXT		The e-mail address. (NULL: don't change)
- * @param  ?BINARY			Whether posts are previewed before they are made. (NULL: don't change)
- * @param  ?integer			Day of date of birth. (NULL: don't change) (-1: deset)
- * @param  ?integer			Month of date of birth. (NULL: don't change) (-1: deset)
- * @param  ?integer			Year of date of birth. (NULL: don't change) (-1: deset)
- * @param  ?ID_TEXT			The member timezone. (NULL: don't change)
- * @param  ?GROUP				The members primary (NULL: don't change).
- * @param  array				A map of custom fields values (field-id=>value).
- * @param  ?ID_TEXT			The members default theme. (NULL: don't change)
- * @param  ?BINARY			Whether the members age may be shown. (NULL: don't change)
- * @param  ?BINARY			Whether the member sees signatures in posts. (NULL: don't change)
- * @param  ?BINARY			Whether the member automatically is enabled for notifications for content they contribute to. (NULL: don't change)
- * @param  ?LANGUAGE_NAME	The members language. (NULL: don't change)
- * @param  ?BINARY			Whether the member allows e-mails via the site. (NULL: don't change)
- * @param  ?BINARY			Whether the member allows e-mails from staff via the site. (NULL: don't change)
- * @param  ?BINARY			Whether the profile has been validated (NULL: do not change this). (NULL: don't change)
- * @param  ?string			The username. (NULL: don't change)
- * @param  ?string			The password. (NULL: don't change)
- * @param  ?BINARY			Whether the member username will be highlighted. (NULL: don't change)
- * @param  ?SHORT_TEXT		Usergroups that may PT the member. (NULL: don't change)
- * @param  ?LONG_TEXT		Rules that other members must agree to before they may start a PT with the member. (NULL: don't change)
- * @param  ?TIME				When the member is on probation until (NULL: don't change)
- * @param  ?TIME				When the member joined (NULL: don't change)
- * @param  ?URLPATH			Avatar (NULL: don't change)
- * @param  ?LONG_TEXT		Signature (NULL: don't change)
- * @param  ?BINARY			Banned status (NULL: don't change)
- * @param  ?URLPATH			Photo URL (NULL: don't change)
- * @param  ?URLPATH			URL of thumbnail of photo (NULL: don't change)
- * @param  ?SHORT_TEXT		Password salt (NULL: don't change)
- * @param  ?ID_TEXT			Password compatibility scheme (NULL: don't change)
- * @param  boolean			Whether to skip security checks and most of the change-triggered emails
+ * @param  AUTO_LINK                    The ID of the member.
+ * @param  ?SHORT_TEXT                  The e-mail address. (NULL: don't change)
+ * @param  ?BINARY                      Whether posts are previewed before they are made. (NULL: don't change)
+ * @param  ?integer                     Day of date of birth. (NULL: don't change) (-1: deset)
+ * @param  ?integer                     Month of date of birth. (NULL: don't change) (-1: deset)
+ * @param  ?integer                     Year of date of birth. (NULL: don't change) (-1: deset)
+ * @param  ?ID_TEXT                     The member timezone. (NULL: don't change)
+ * @param  ?GROUP                       The members primary (NULL: don't change).
+ * @param  array                        A map of custom fields values (field-id=>value).
+ * @param  ?ID_TEXT                     The members default theme. (NULL: don't change)
+ * @param  ?BINARY                      Whether the members age may be shown. (NULL: don't change)
+ * @param  ?BINARY                      Whether the member sees signatures in posts. (NULL: don't change)
+ * @param  ?BINARY                      Whether the member automatically is enabled for notifications for content they contribute to. (NULL: don't change)
+ * @param  ?LANGUAGE_NAME               The members language. (NULL: don't change)
+ * @param  ?BINARY                      Whether the member allows e-mails via the site. (NULL: don't change)
+ * @param  ?BINARY                      Whether the member allows e-mails from staff via the site. (NULL: don't change)
+ * @param  ?BINARY                      Whether the profile has been validated (NULL: do not change this). (NULL: don't change)
+ * @param  ?string                      The username. (NULL: don't change)
+ * @param  ?string                      The password. (NULL: don't change)
+ * @param  ?BINARY                      Whether the member username will be highlighted. (NULL: don't change)
+ * @param  ?SHORT_TEXT                  Usergroups that may PT the member. (NULL: don't change)
+ * @param  ?LONG_TEXT                   Rules that other members must agree to before they may start a PT with the member. (NULL: don't change)
+ * @param  ?TIME                        When the member is on probation until (NULL: don't change)
+ * @param  ?TIME                        When the member joined (NULL: don't change)
+ * @param  ?URLPATH                     Avatar (NULL: don't change)
+ * @param  ?LONG_TEXT                   Signature (NULL: don't change)
+ * @param  ?BINARY                      Banned status (NULL: don't change)
+ * @param  ?URLPATH                     Photo URL (NULL: don't change)
+ * @param  ?URLPATH                     URL of thumbnail of photo (NULL: don't change)
+ * @param  ?SHORT_TEXT                  Password salt (NULL: don't change)
+ * @param  ?ID_TEXT                     Password compatibility scheme (NULL: don't change)
+ * @param  boolean                      Whether to skip security checks and most of the change-triggered emails
  */
 function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$primary_group,$custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated = null,$username = null,$password = null,$highlighted_name = null,$pt_allow = '*',$pt_rules_text = '',$on_probation_until = null,$join_time = null,$avatar_url = null,$signature = null,$is_perm_banned = null,$photo_url = null,$photo_thumb_url = null,$salt = null,$password_compatibility_scheme = null,$skip_checks = false)
 {
@@ -1065,7 +1065,7 @@ function ocf_edit_member($member_id,$email_address,$preview_posts,$dob_day,$dob_
 /**
  * Delete a member.
  *
- * @param  AUTO_LINK The ID of the member.
+ * @param  AUTO_LINK                    The ID of the member.
  */
 function ocf_delete_member($member_id)
 {
@@ -1138,7 +1138,7 @@ function ocf_delete_member($member_id)
 /**
  * Ban a member.
  *
- * @param  AUTO_LINK The ID of the member.
+ * @param  AUTO_LINK                    The ID of the member.
  */
 function ocf_ban_member($member_id)
 {
@@ -1161,7 +1161,7 @@ function ocf_ban_member($member_id)
 /**
  * Unban a member.
  *
- * @param  AUTO_LINK The ID of the member.
+ * @param  AUTO_LINK                    The ID of the member.
  */
 function ocf_unban_member($member_id)
 {
@@ -1184,22 +1184,22 @@ function ocf_unban_member($member_id)
 /**
  * Edit a custom profile field.
  *
- * @param  AUTO_LINK  	The ID of the custom profile field.
- * @param  SHORT_TEXT 	Name of the field.
- * @param  SHORT_TEXT 	Description of the field.
- * @param  LONG_TEXT  	The default value for the field.
- * @param  BINARY			Whether the field is publicly viewable.
- * @param  BINARY			Whether the field is viewable by the owner.
- * @param  BINARY			Whether the field may be set by the owner.
- * @param  BINARY			Whether the field should be encrypted.
- * @param  BINARY			Whether the field is to be shown on the join form
- * @param  BINARY			Whether this field is shown in posts and places where member details are highlighted (such as an image in a member gallery).
- * @param  BINARY			Whether this field is shown in preview places, such as in the forum member tooltip.
- * @param  integer		The order of this field relative to other fields.
- * @param  LONG_TEXT		The usergroups that this field is confined to (comma-separated list).
- * @param  ID_TEXT		The type of the field.
+ * @param  AUTO_LINK                    The ID of the custom profile field.
+ * @param  SHORT_TEXT                   Name of the field.
+ * @param  SHORT_TEXT                   Description of the field.
+ * @param  LONG_TEXT                    The default value for the field.
+ * @param  BINARY                       Whether the field is publicly viewable.
+ * @param  BINARY                       Whether the field is viewable by the owner.
+ * @param  BINARY                       Whether the field may be set by the owner.
+ * @param  BINARY                       Whether the field should be encrypted.
+ * @param  BINARY                       Whether the field is to be shown on the join form
+ * @param  BINARY                       Whether this field is shown in posts and places where member details are highlighted (such as an image in a member gallery).
+ * @param  BINARY                       Whether this field is shown in preview places, such as in the forum member tooltip.
+ * @param  integer                      The order of this field relative to other fields.
+ * @param  LONG_TEXT                    The usergroups that this field is confined to (comma-separated list).
+ * @param  ID_TEXT                      The type of the field.
  * @set    short_text long_text short_trans long_trans integer upload picture url list tick float
- * @param  BINARY			Whether it is required that every member have this field filled in.
+ * @param  BINARY                       Whether it is required that every member have this field filled in.
  */
 function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$owner_view,$owner_set,$encrypted,$required,$show_in_posts,$show_in_post_previews,$order,$only_group,$type,$show_on_join_form)
 {
@@ -1266,7 +1266,7 @@ function ocf_edit_custom_field($id,$name,$description,$default,$public_view,$own
 /**
  * Delete a custom profile field.
  *
- * @param  AUTO_LINK The ID of the custom profile field.
+ * @param  AUTO_LINK                    The ID of the custom profile field.
  */
 function ocf_delete_custom_field($id)
 {
@@ -1307,12 +1307,12 @@ function ocf_delete_custom_field($id)
 /**
  * Set a custom profile field for a member.
  *
- * @param  MEMBER			The member.
- * @param  AUTO_LINK 	The field being set.
- * @param  mixed 			The value of the field. For a trans-type field, this can be either a lang-ID to be copied (from forum DB), or an actual string.
- * @param  ?ID_TEXT 		The field type (NULL: look it up).
- * @param  boolean 		Whether to defer the change, by returning a result change rather than doing it right away.
- * @return ?array			Mapping change (NULL: none / can't defer).
+ * @param  MEMBER                       The member.
+ * @param  AUTO_LINK                    The field being set.
+ * @param  mixed                        The value of the field. For a trans-type field, this can be either a lang-ID to be copied (from forum DB), or an actual string.
+ * @param  ?ID_TEXT                     The field type (NULL: look it up).
+ * @param  boolean                      Whether to defer the change, by returning a result change rather than doing it right away.
+ * @return ?array                       Mapping change (NULL: none / can't defer).
  */
 function ocf_set_custom_field($member_id,$field,$value,$type = null,$defer = false)
 {
@@ -1409,24 +1409,24 @@ function ocf_set_custom_field($member_id,$field,$value,$type = null,$defer = fal
 /**
  * Check a username is valid for adding, and possibly also the password.
  *
- * @param  ?SHORT_TEXT	The username (may get altered) (NULL: nothing to check).
- * @param  ?MEMBER		The member (NULL: member not actually added yet; this ID is only given for the duplication check, to make sure it doesn't think we are duplicating with ourself).
- * @param  ?SHORT_TEXT	The password (NULL: nothing to check).
- * @param  boolean		Whether to return errors instead of dieing on them.
- * @return ?tempcode		Error (NULL: none).
+ * @param  ?SHORT_TEXT                  The username (may get altered) (NULL: nothing to check).
+ * @param  ?MEMBER                      The member (NULL: member not actually added yet; this ID is only given for the duplication check, to make sure it doesn't think we are duplicating with ourself).
+ * @param  ?SHORT_TEXT                  The password (NULL: nothing to check).
+ * @param  boolean                      Whether to return errors instead of dieing on them.
+ * @return ?tempcode                    Error (NULL: none).
  */
 function ocf_check_name_valid(&$username,$member_id = null,$password = null,$return_errors = false)
 {
-    /*	$striped_username=$username;				This would be an internationalisation mistake
-	$allowed_characters=array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-									  'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-									  '0','1','2','3','4','5','6','7','8','9',' ',
-									  '#','@',':',';','/',"\\",'.',',','|','!','%','$','^','(','*',')','-','_','+','=','[',']','{','}','~');
-	foreach ($allowed_characters as $allowed_character)
-	{
-		$striped_username=str_replace($allowed_character,'',$striped_username);
-	}
-	if ($striped_username!='') warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));*/
+    /*   $striped_username=$username;           This would be an internationalisation mistake
+    $allowed_characters=array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+                                                                                                          'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+                                                                                                          '0','1','2','3','4','5','6','7','8','9',' ',
+                                                                                                          '#','@',':',';','/',"\\",'.',',','|','!','%','$','^','(','*',')','-','_','+','=','[',']','{','}','~');
+    foreach ($allowed_characters as $allowed_character)
+    {
+        $striped_username=str_replace($allowed_character,'',$striped_username);
+    }
+    if ($striped_username!='') warn_exit(do_lang_tempcode('USERNAME_BAD_SYMBOLS'));*/
 
     // Check it doesn't already exist
     if (!is_null($username)) {
@@ -1545,8 +1545,8 @@ function ocf_check_name_valid(&$username,$member_id = null,$password = null,$ret
 /**
  * Edit a member's personal title, and check validity.
  *
- * @param  SHORT_TEXT	The new title.
- * @param  ?MEMBER		The member (NULL: the current member).
+ * @param  SHORT_TEXT                   The new title.
+ * @param  ?MEMBER                      The member (NULL: the current member).
  */
 function ocf_member_choose_title($new_title,$member_id = null)
 {
@@ -1575,8 +1575,8 @@ function ocf_member_choose_title($new_title,$member_id = null)
 /**
  * Edit a member's signature, and check validity.
  *
- * @param  LONG_TEXT The new signature.
- * @param  ?MEMBER	The member (NULL: the current member).
+ * @param  LONG_TEXT                    The new signature.
+ * @param  ?MEMBER                      The member (NULL: the current member).
  */
 function ocf_member_choose_signature($new_signature,$member_id = null)
 {
@@ -1614,8 +1614,8 @@ function ocf_member_choose_signature($new_signature,$member_id = null)
 /**
  * Edit a member's avatar, and check validity.
  *
- * @param  URLPATH	The new avatar URL.
- * @param  ?MEMBER	The member (NULL: the current member).
+ * @param  URLPATH                      The new avatar URL.
+ * @param  ?MEMBER                      The member (NULL: the current member).
  */
 function ocf_member_choose_avatar($avatar_url,$member_id = null)
 {
@@ -1705,9 +1705,9 @@ function ocf_member_choose_avatar($avatar_url,$member_id = null)
 /**
  * Edit a member's photo, and check validity.
  *
- * @param  ID_TEXT	The identifier for the name of the posted URL field.
- * @param  ID_TEXT	The identifier for the name of the posted upload.
- * @param  ?MEMBER	The member (NULL: the current member).
+ * @param  ID_TEXT                      The identifier for the name of the posted URL field.
+ * @param  ID_TEXT                      The identifier for the name of the posted upload.
+ * @param  ?MEMBER                      The member (NULL: the current member).
  */
 function ocf_member_choose_photo($param_name,$upload_name,$member_id = null)
 {
@@ -1767,9 +1767,9 @@ function ocf_member_choose_photo($param_name,$upload_name,$member_id = null)
 /**
  * Edit a member's photo.
  *
- * @param  URLPATH	URL to photo.
- * @param  URLPATH	URL to thumbnail photo.
- * @param  ?MEMBER	The member (NULL: the current member).
+ * @param  URLPATH                      URL to photo.
+ * @param  URLPATH                      URL to thumbnail photo.
+ * @param  ?MEMBER                      The member (NULL: the current member).
  */
 function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id = null)
 {
@@ -1826,8 +1826,8 @@ function ocf_member_choose_photo_concrete($url,$thumb_url,$member_id = null)
 /**
  * Update cacheing against a member's username. This doesn't change the username in the actual member record -- it is assumed that this will be done elsewhere.
  *
- * @param  MEMBER		The member ID.
- * @param  ID_TEXT	The new username that is being set for them.
+ * @param  MEMBER                       The member ID.
+ * @param  ID_TEXT                      The new username that is being set for them.
  */
 function update_member_username_caching($member_id,$username)
 {

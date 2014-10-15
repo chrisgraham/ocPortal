@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 /**
  * Get the currently used download bandwidth.
  *
- * @return integer		The currently used download bandwidth (forever)
+ * @return integer                      The currently used download bandwidth (forever)
  */
 function get_download_bandwidth()
 {
@@ -55,7 +55,7 @@ function get_download_bandwidth()
 /**
  * Get the total size of all the currently available downloads in a formatted string.
  *
- * @return string			The total size of all the currently available downloads
+ * @return string                       The total size of all the currently available downloads
  */
 function get_download_archive_size()
 {
@@ -76,7 +76,7 @@ function get_download_archive_size()
 /**
  * Get the total number of downloads available.
  *
- * @return integer		The total number of downloads available
+ * @return integer                      The total number of downloads available
  */
 function get_num_archive_downloads()
 {
@@ -98,7 +98,7 @@ function get_num_archive_downloads()
 /**
  * Get the total number of files downloaded since installation.
  *
- * @return integer		The total number of files downloaded since installation
+ * @return integer                      The total number of files downloaded since installation
  */
 function get_num_downloads_downloaded()
 {

@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		filedump
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    filedump
  */
 
 class Hook_search_filedump
 {
     /**
-	 * Find details for this search hook.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @return ?array		Map of search hook details (NULL: hook is disabled).
-	 */
+     * Find details for this search hook.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @return ?array                   Map of search hook details (NULL: hook is disabled).
+     */
     public function info($check_permissions = true)
     {
         if (!module_installed('filedump')) {
@@ -66,38 +66,38 @@ class Hook_search_filedump
     }
 
     /**
-	 * Get details for an ajax-tree-list of entries for the content covered by this search hook.
-	 *
-	 * @return array			A pair: the hook, and the options
-	 */
+     * Get details for an ajax-tree-list of entries for the content covered by this search hook.
+     *
+     * @return array                    A pair: the hook, and the options
+     */
     public function ajax_tree()
     {
         return array('choose_filedump_file',array('compound_list' => false,'folder' => true));
     }
 
     /**
-	 * Run function for search results.
-	 *
-	 * @param  string			Search string
-	 * @param  boolean		Whether to only do a META (tags) search
-	 * @param  ID_TEXT		Order direction
-	 * @param  integer		Start position in total results
-	 * @param  integer		Maximum results to return in total
-	 * @param  boolean		Whether only to search titles (as opposed to both titles and content)
-	 * @param  string			Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
-	 * @param  SHORT_TEXT	Username/Author to match for
-	 * @param  ?MEMBER		Member-ID to match for (NULL: unknown)
-	 * @param  TIME			Cutoff date
-	 * @param  string			The sort type (gets remapped to a field in this function)
-	 * @set    title add_date
-	 * @param  integer		Limit to this number of results
-	 * @param  string			What kind of boolean search to do
-	 * @set    or and
-	 * @param  string			Where constraints known by the main search code (SQL query fragment)
-	 * @param  string			Comma-separated list of categories to search under
-	 * @param  boolean		Whether it is a boolean search
-	 * @return array			List of maps (template, orderer)
-	 */
+     * Run function for search results.
+     *
+     * @param  string                   Search string
+     * @param  boolean                  Whether to only do a META (tags) search
+     * @param  ID_TEXT                  Order direction
+     * @param  integer                  Start position in total results
+     * @param  integer                  Maximum results to return in total
+     * @param  boolean                  Whether only to search titles (as opposed to both titles and content)
+     * @param  string                   Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
+     * @param  SHORT_TEXT               Username/Author to match for
+     * @param  ?MEMBER                  Member-ID to match for (NULL: unknown)
+     * @param  TIME                     Cutoff date
+     * @param  string                   The sort type (gets remapped to a field in this function)
+     * @set    title add_date
+     * @param  integer                  Limit to this number of results
+     * @param  string                   What kind of boolean search to do
+     * @set    or and
+     * @param  string                   Where constraints known by the main search code (SQL query fragment)
+     * @param  string                   Comma-separated list of categories to search under
+     * @param  boolean                  Whether it is a boolean search
+     * @return array                    List of maps (template, orderer)
+     */
     public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
     {
         require_lang('zones');

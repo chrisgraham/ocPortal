@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_menus
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_menus
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_menus
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_menus
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -59,10 +59,10 @@ class Module_admin_menus
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -94,10 +94,10 @@ class Module_admin_menus
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_javascript('javascript_menu_editor');
@@ -124,10 +124,10 @@ class Module_admin_menus
     }
 
     /**
-	 * The UI to choose a menu to edit / create a new menu.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a menu to edit / create a new menu.
+     *
+     * @return tempcode                 The UI
+     */
     public function choose_menu_name()
     {
         require_code('form_templates');
@@ -177,10 +177,10 @@ class Module_admin_menus
     }
 
     /**
-	 * The UI to edit a menu.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a menu.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_menu()
     {
         if (!has_js()) {
@@ -332,15 +332,15 @@ class Module_admin_menus
     }
 
     /**
-	 * Show a branch-editor of the menu editor.
-	 *
-	 * @param  AUTO_LINK		The ID of the branch we are displaying items for
-	 * @param  integer		The parent branch holding the branch
-	 * @param  integer		The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
-	 * @param  boolean		Whether childed branches themselves can have URLs (etc)
-	 * @param  array			All rows on the menu
-	 * @return tempcode		The part of the UI
-	 */
+     * Show a branch-editor of the menu editor.
+     *
+     * @param  AUTO_LINK                The ID of the branch we are displaying items for
+     * @param  integer                  The parent branch holding the branch
+     * @param  integer                  The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
+     * @param  boolean                  Whether childed branches themselves can have URLs (etc)
+     * @param  array                    All rows on the menu
+     * @return tempcode                 The part of the UI
+     */
     public function menu_branch($id,$branch,&$order,$clickable_sections,$menu_items)
     {
         $child_branches = new ocp_tempcode();
@@ -395,10 +395,10 @@ class Module_admin_menus
     }
 
     /**
-	 * The actualiser to edit a menu.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a menu.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_menu()
     {
         post_param_integer('confirm'); // Just to make sure hackers don't try and get people to erase this form via a URL
@@ -457,15 +457,15 @@ class Module_admin_menus
     }
 
     /**
-	 * Add a menu item from details in POST.
-	 *
-	 * @param  ID_TEXT		The name of the menu the item is on
-	 * @param  integer		The ID of the menu item (i.e. what it is referenced as in POST)
-	 * @param  array			The map of IDs on the menu (ID=>parent)
-	 * @param  ?integer		The ID of the parent branch (NULL: no parent)
-	 * @param  array			The map of menu id=>string language IDs employed by items before the edit
-	 * @param  integer		The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
-	 */
+     * Add a menu item from details in POST.
+     *
+     * @param  ID_TEXT                  The name of the menu the item is on
+     * @param  integer                  The ID of the menu item (i.e. what it is referenced as in POST)
+     * @param  array                    The map of IDs on the menu (ID=>parent)
+     * @param  ?integer                 The ID of the parent branch (NULL: no parent)
+     * @param  array                    The map of menu id=>string language IDs employed by items before the edit
+     * @param  integer                  The order this branch has in the editor (and due to linearly moving through, the number of branches shown assembled ready)
+     */
     public function add_menu_item($menu,$id,&$ids,$parent,&$old_menu_bits,&$order)
     {
         // Load in details of menu item

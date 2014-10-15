@@ -13,22 +13,22 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		aggregate_types
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    aggregate_types
  */
 
 /**
  * Add an aggregate type instance.
  *
- * @param  SHORT_TEXT		Label for new instance
- * @param  ID_TEXT			What the instance is of
- * @param  array				Additional parameters
- * @param  ?TIME				Add time (NULL: now)
- * @param  ?TIME				Edit time (NULL: not edited yet)
- * @param  boolean			Whether to activate it
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return AUTO_LINK			ID of the new instance
+ * @param  SHORT_TEXT                   Label for new instance
+ * @param  ID_TEXT                      What the instance is of
+ * @param  array                        Additional parameters
+ * @param  ?TIME                        Add time (NULL: now)
+ * @param  ?TIME                        Edit time (NULL: not edited yet)
+ * @param  boolean                      Whether to activate it
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return AUTO_LINK                    ID of the new instance
  */
 function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_parameters,$add_time = null,$edit_time = null,$sync = true,$uniqify = false)
 {
@@ -79,11 +79,11 @@ function add_aggregate_type_instance($aggregate_label,$aggregate_type,$_other_pa
 /**
  * Edit an aggregate type instance.
  *
- * @param  AUTO_LINK			The ID
- * @param  SHORT_TEXT		Label for instance
- * @param  ID_TEXT			What the instance is of
- * @param  array				Additional parameters
- * @param  boolean			Whether to force the name as unique, if there's a conflict
+ * @param  AUTO_LINK                    The ID
+ * @param  SHORT_TEXT                   Label for instance
+ * @param  ID_TEXT                      What the instance is of
+ * @param  array                        Additional parameters
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
  */
 function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_other_parameters,$uniqify = false)
 {
@@ -128,8 +128,8 @@ function edit_aggregate_type_instance($id,$aggregate_label,$aggregate_type,$_oth
 /**
  * Delete an aggregate type instance.
  *
- * @param  AUTO_LINK			The ID
- * @param  boolean			Whether to delete all associated resources
+ * @param  AUTO_LINK                    The ID
+ * @param  boolean                      Whether to delete all associated resources
  */
 function delete_aggregate_type_instance($id,$delete_matches = false)
 {
@@ -185,8 +185,8 @@ function delete_aggregate_type_instance($id,$delete_matches = false)
 /**
  * Find the parameters an aggregate type needs for instances.
  *
- * @param  ID_TEXT			Aggregate type to find parameters for
- * @return array				The aggregate type parameters
+ * @param  ID_TEXT                      Aggregate type to find parameters for
+ * @return array                        The aggregate type parameters
  */
 function find_aggregate_type_parameters($aggregate_type)
 {
@@ -208,8 +208,8 @@ function find_aggregate_type_parameters($aggregate_type)
 /**
  * Scan some aggregate type XML text for referenced parameters.
  *
- * @param  string				Text
- * @param  array				Reference to our parameter list
+ * @param  string                       Text
+ * @param  array                        Reference to our parameter list
  */
 function _find_parameters_in($src_text,&$parameters)
 {
@@ -223,8 +223,8 @@ function _find_parameters_in($src_text,&$parameters)
 /**
  * Load the aggregate XML types structure.
  *
- * @param  boolean			Whether errors should be displayed
- * @return array				The aggregate types
+ * @param  boolean                      Whether errors should be displayed
+ * @return array                        The aggregate types
  */
 function parse_aggregate_xml($display_errors = false)
 {
@@ -407,7 +407,7 @@ function parse_aggregate_xml($display_errors = false)
 /**
  * Re-sync all aggregate type instances.
  *
- * @param  ?ID_TEXT			Restrict to this aggregate type (NULL: no restriction)
+ * @param  ?ID_TEXT                     Restrict to this aggregate type (NULL: no restriction)
  */
 function resync_all_aggregate_type_instances($type = null)
 {
@@ -430,12 +430,12 @@ function resync_all_aggregate_type_instances($type = null)
 /**
  * Sync an aggregate type instance.
  *
- * @param  AUTO_LINK			The ID
- * @param  ?SHORT_TEXT		Label for instance (NULL: lookup)
- * @param  ?SHORT_TEXT		Old label for instance (NULL: lookup)
- * @param  ?ID_TEXT			What the instance is of (NULL: lookup)
- * @param  ?array				Additional parameters (NULL: lookup)
- * @param  ?array				Old additional parameters (NULL: lookup)
+ * @param  AUTO_LINK                    The ID
+ * @param  ?SHORT_TEXT                  Label for instance (NULL: lookup)
+ * @param  ?SHORT_TEXT                  Old label for instance (NULL: lookup)
+ * @param  ?ID_TEXT                     What the instance is of (NULL: lookup)
+ * @param  ?array                       Additional parameters (NULL: lookup)
+ * @param  ?array                       Old additional parameters (NULL: lookup)
  */
 function sync_aggregate_type_instance($id,$aggregate_label = null,$old_aggregate_label = null,$aggregate_type = null,$other_parameters = null,$old_parameters = null)
 {

@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_symbol_CPF_LIST
 {
     /**
-	 * Run function for symbol hooks. Searches for tasks to perform.
+     * Run function for symbol hooks. Searches for tasks to perform.
     *
-    * @param  array		Symbol parameters
-    * @return string		Result
-	 */
+    * @param  array                     Symbol parameters
+    * @return string                    Result
+     */
     public function run($param)
     {
         $value = '';

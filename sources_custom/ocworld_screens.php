@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocworld
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocworld
  */
 
 /**
@@ -43,10 +43,10 @@ function realms()
 /**
  * Allow them to answer a room question.
  *
- * @param  MEMBER		The member answering
- * @param  integer	The X-offset of where they WISH to travel to
- * @param  integer	The Y-offset of where they WISH to travel to
- * @return tempcode	Interface
+ * @param  MEMBER                       The member answering
+ * @param  integer                      The X-offset of where they WISH to travel to
+ * @param  integer                      The Y-offset of where they WISH to travel to
+ * @return tempcode                     Interface
  */
 function output_question_screen($member_id,$dx,$dy)
 {
@@ -63,8 +63,8 @@ function output_question_screen($member_id,$dx,$dy)
 /**
  * Output an inventory screen.
  *
- * @param  MEMBER		The member the inventory is of
- * @return tempcode	Interface
+ * @param  MEMBER                       The member the inventory is of
+ * @return tempcode                     Interface
  */
 function output_inventory_screen($member_id)
 {
@@ -134,15 +134,15 @@ function output_inventory_screen($member_id)
 /**
  * Output a room screen.
  *
- * @param  MEMBER		The member who is in the room
- * @return tempcode	Interface
+ * @param  MEMBER                       The member who is in the room
+ * @return tempcode                     Interface
  */
 function output_room_screen($member_id)
 {
     $title = get_screen_title('OCWORLD');
 
     /*$test_tpl=internalise_own_screen($title); Would require lots of work to make sure all links point right
-	if (is_object($test_tpl)) return $test_tpl;*/
+    if (is_object($test_tpl)) return $test_tpl;*/
 
     destick($member_id);
 

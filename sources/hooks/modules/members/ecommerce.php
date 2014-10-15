@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 class Hook_members_ecommerce
 {
     /**
-	 * Find member-related links to inject.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
-	 */
+     * Find member-related links to inject.
+     *
+     * @param  MEMBER                   The ID of the member we are getting link hooks for
+     * @return array                    List of lists of tuples for results (by link section). Each tuple is: type,title,url
+     */
     public function run($member_id)
     {
         if (!addon_installed('ecommerce')) {
@@ -36,10 +36,10 @@ class Hook_members_ecommerce
 
         $modules = array();
 
-        /*	Now we provide this link under the embedded list of subscriptions
-		if ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)',array('s_member_id'=>$member_id))!=0)
-			$modules[]=array('views',do_lang_tempcode('MY_SUBSCRIPTIONS'),build_url(array('page'=>'subscriptions','type'=>'misc','id'=>$member_id),get_module_zone('subscriptions')),'menu/adminzone/audit/ecommerce/subscriptions');
-		*/
+        /*  Now we provide this link under the embedded list of subscriptions
+        if ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)',array('s_member_id'=>$member_id))!=0)
+            $modules[]=array('views',do_lang_tempcode('MY_SUBSCRIPTIONS'),build_url(array('page'=>'subscriptions','type'=>'misc','id'=>$member_id),get_module_zone('subscriptions')),'menu/adminzone/audit/ecommerce/subscriptions');
+        */
 
         if ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id' => $member_id)) != 0) {
             $modules[] = array('views',do_lang_tempcode('MY_INVOICES'),build_url(array('page' => 'invoices','type' => 'misc','id' => $member_id),get_module_zone('invoices')),'menu/adminzone/audit/ecommerce/invoices');
@@ -54,11 +54,11 @@ class Hook_members_ecommerce
     }
 
     /**
-	 * Get sections to inject to about tab of the member profile.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting sections for
-	 * @return array		List of sections. Each tuple is Tempcode.
-	 */
+     * Get sections to inject to about tab of the member profile.
+     *
+     * @param  MEMBER                   The ID of the member we are getting sections for
+     * @return array                    List of sections. Each tuple is Tempcode.
+     */
     public function get_sections($member_id)
     {
         if (($member_id != get_member()) && (!has_privilege(get_member(),'view_any_profile_field'))) {

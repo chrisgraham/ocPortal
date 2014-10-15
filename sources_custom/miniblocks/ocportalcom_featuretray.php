@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -44,7 +44,7 @@ $featuretree = array(
                 array('Make addons','If you know PHP, or are learning, [page="forum:topicview:misc:11688"]make and release some addons[/page] for the community. It takes a lot of knowledge, but anybody can learn and it\'s fun, fulfilling and makes you employable.'),
                 array('Theme','If you know [abbr="eXtensible HyperText Markup Language"]XHTML[/abbr]/[abbr="Cascading Style Sheets"]CSS[/abbr], or are learning, [page="docs:tut_releasing_themes"]make and release some themes[/page] for the community. With CSS you can start small and still achieve cool things.'),
                 array('Translate','If you know another language, [page="forum:topicview:misc:1981"]collaborate with others on LaunchPad[/page] to make a new language pack.'),
-//				array('Use ocPortal for your own clients','Are you a professional website developer? Try to start using ocPortal for your projects &ndash; it provides you [page="site:features"]lots of advantages[/page] to other software, it\'s free, and we want the community and install-base to grow!'),			Removed to save space
+//          array('Use ocPortal for your own clients','Are you a professional website developer? Try to start using ocPortal for your projects &ndash; it provides you [page="site:features"]lots of advantages[/page] to other software, it\'s free, and we want the community and install-base to grow!'),         Removed to save space
                 array('Google Summer of Code','If you\'re a student and want to work on ocPortal for the [url="http://code.google.com/soc/"]Google Summer of Code[/url], please [page="site:tickets:ticket:ticket_template=general_feedback:cost=free"]contact us[/page] and we will work to try and make it happen.'),
             ),null,true,
         ),

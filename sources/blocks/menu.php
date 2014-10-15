@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_menus
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_menus
  */
 
 class Block_menu
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -39,10 +39,10 @@ class Block_menu
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         /* Ideally we would not cache as we would need to cache for all screens due to context sensitive link display (either you're here or match key filtering). However in most cases that only happens per page, so we will cache per page -- and people can turn off cacheing via the standard block parameter for that if needed.*/
@@ -53,11 +53,11 @@ class Block_menu
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         if (!array_key_exists('param',$map)) {
@@ -100,20 +100,20 @@ class Block_menu
 /**
  * Find the cache signature for the block.
  *
- * @param  array	The block parameters.
- * @return array	The cache signature.
+ * @param  array                        The block parameters.
+ * @return array                        The cache signature.
  */
 function block_menu__cache_on($map)
 {
     /*
-	Menu caching is problematic. "Is active" caching theoretically would need doing against each URL.
-	 (or to use JavaScript, or Tempcode pre-processing, to implement that -- but that would be messy)
-	We therefore assume that menu links are maximally distinguished by zone&page&type parameters.
-	 (special case -- catalogue index screens are also distinguished by ID, as catalogues vary a lot)
+    Menu caching is problematic. "Is active" caching theoretically would need doing against each URL.
+     (or to use JavaScript, or Tempcode pre-processing, to implement that -- but that would be messy)
+    We therefore assume that menu links are maximally distinguished by zone&page&type parameters.
+     (special case -- catalogue index screens are also distinguished by ID, as catalogues vary a lot)
 
-	There is a simple workaround if our assumptions don't hold up. Just turn off cacheing for the
-	particular menu block instance. cache="0". It won't hurt very much, menus are relatively fast.
-	*/
+    There is a simple workaround if our assumptions don't hold up. Just turn off cacheing for the
+    particular menu block instance. cache="0". It won't hurt very much, menus are relatively fast.
+    */
 
     $menu = array_key_exists('param',$map)?$map['param']:'';
     $page = get_page_name();

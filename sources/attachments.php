@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 /*
@@ -25,18 +25,18 @@ Viewing attachments (but not direct rendering - that is in media_rendering.php).
 /**
  * Get tempcode for a Comcode rich-media attachment.
  *
- * @param  ID_TEXT		The attachment tag
+ * @param  ID_TEXT                      The attachment tag
  * @set attachment attachment_safe
- * @param  array			A map of the attributes (name=>val) for the tag
- * @param  array			A map of the attachment properties (name=>val) for the attachment
- * @param  string			A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
- * @param  MEMBER			The member who is responsible for this Comcode
- * @param  boolean		Whether to check as arbitrary admin
- * @param  object			The database connection to use
- * @param  ?array			A list of words to highlight (NULL: none)
- * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
- * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
- * @return tempcode		The tempcode for the attachment
+ * @param  array                        A map of the attributes (name=>val) for the tag
+ * @param  array                        A map of the attachment properties (name=>val) for the attachment
+ * @param  string                       A special identifier to mark where the resultant tempcode is going to end up (e.g. the ID of a post)
+ * @param  MEMBER                       The member who is responsible for this Comcode
+ * @param  boolean                      Whether to check as arbitrary admin
+ * @param  object                       The database connection to use
+ * @param  ?array                       A list of words to highlight (NULL: none)
+ * @param  ?MEMBER                      The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
+ * @param  boolean                      Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
+ * @return tempcode                     The tempcode for the attachment
  */
 function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_member,$as_admin,$connection,$highlight_bits = null,$on_behalf_of_member = null,$semiparse_mode = false)
 {
@@ -122,10 +122,10 @@ function render_attachment($tag,$attributes,$attachment_row,$pass_id,$source_mem
 /**
  * Find if the specified member has access to view the specified attachment.
  *
- * @param  MEMBER			The member being checked whether to have the access
- * @param  AUTO_LINK		The ID code for the attachment being checked
- * @param  ?object		The database connection to use (NULL: site DB)
- * @return boolean		Whether the member has attachment access
+ * @param  MEMBER                       The member being checked whether to have the access
+ * @param  AUTO_LINK                    The ID code for the attachment being checked
+ * @param  ?object                      The database connection to use (NULL: site DB)
+ * @return boolean                      Whether the member has attachment access
  */
 function has_attachment_access($member,$id,$connection = null)
 {
@@ -310,10 +310,10 @@ function attachments_script()
     // Send actual data
     $myfile = fopen($_full,'rb');
     fseek($myfile,$from);
-    /*if ($size==$new_length)		Uses a lot of memory :S
-	{
-		fpassthru($myfile);
-	} else*/
+    /*if ($size==$new_length)    Uses a lot of memory :S
+    {
+        fpassthru($myfile);
+    } else*/
     {
         $i = 0;
         flush(); // Works around weird PHP bug that sends data before headers, on some PHP versions

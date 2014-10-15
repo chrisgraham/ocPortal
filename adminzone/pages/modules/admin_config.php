@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_configuration
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_configuration
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_config
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,14 +42,14 @@ class Module_admin_config
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -87,10 +87,10 @@ class Module_admin_config
     public $category;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -104,7 +104,7 @@ class Module_admin_config
         }
 
         if ($type == 'category') {
-            /*Actually let's save the space	set_helper_panel_tutorial('tut_adv_configuration');*/
+            /*Actually let's save the space  set_helper_panel_tutorial('tut_adv_configuration');*/
 
             $category = get_param('id');
             breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONFIGURATION'))));
@@ -162,10 +162,10 @@ class Module_admin_config
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_all_lang();
@@ -223,10 +223,10 @@ class Module_admin_config
     }
 
     /**
-	 * The UI to choose what configuration page to edit.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose what configuration page to edit.
+     *
+     * @return tempcode                 The UI
+     */
     public function config_choose()
     {
         // Find all categories
@@ -313,10 +313,10 @@ class Module_admin_config
     }
 
     /**
-	 * The UI to edit a configuration page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a configuration page.
+     *
+     * @return tempcode                 The UI
+     */
     public function config_category()
     {
         require_javascript('javascript_validation');
@@ -592,10 +592,10 @@ class Module_admin_config
     }
 
     /**
-	 * The actualiser to edit a configuration page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a configuration page.
+     *
+     * @return tempcode                 The UI
+     */
     public function config_set()
     {
         require_code('input_filter_2');
@@ -737,10 +737,10 @@ class Module_admin_config
     }
 
     /**
-	 * Redirect to the config_editor script.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Redirect to the config_editor script.
+     *
+     * @return tempcode                 The UI
+     */
     public function base()
     {
         require_code('site2');
@@ -751,10 +751,10 @@ class Module_admin_config
     }
 
     /**
-	 * Redirect to the upgrader script.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Redirect to the upgrader script.
+     *
+     * @return tempcode                 The UI
+     */
     public function upgrader()
     {
         require_code('site2');
@@ -765,10 +765,10 @@ class Module_admin_config
     }
 
     /**
-	 * Redirect to the backend script.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Redirect to the backend script.
+     *
+     * @return tempcode                 The UI
+     */
     public function backend()
     {
         require_code('site2');
@@ -779,10 +779,10 @@ class Module_admin_config
     }
 
     /**
-	 * Redirect to the code_editor script.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Redirect to the code_editor script.
+     *
+     * @return tempcode                 The UI
+     */
     public function code_editor()
     {
         require_code('site2');
@@ -793,10 +793,10 @@ class Module_admin_config
     }
 
     /**
-	 * The UI to edit the fields XML file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit the fields XML file.
+     *
+     * @return tempcode                 The UI
+     */
     public function xml_fields()
     {
         $post_url = build_url(array('page' => '_SELF','type' => '_xml_fields'),'_SELF');
@@ -810,10 +810,10 @@ class Module_admin_config
     }
 
     /**
-	 * The UI actualiser edit the fields XML file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI actualiser edit the fields XML file.
+     *
+     * @return tempcode                 The UI
+     */
     public function _xml_fields()
     {
         if (!file_exists(get_custom_file_base() . '/data_custom')) {
@@ -844,10 +844,10 @@ class Module_admin_config
     }
 
     /**
-	 * The UI to edit the breadcrumbs XML file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit the breadcrumbs XML file.
+     *
+     * @return tempcode                 The UI
+     */
     public function xml_breadcrumbs()
     {
         $post_url = build_url(array('page' => '_SELF','type' => '_xml_breadcrumbs'),'_SELF');
@@ -861,10 +861,10 @@ class Module_admin_config
     }
 
     /**
-	 * The UI actualiser edit the breadcrumbs XML file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI actualiser edit the breadcrumbs XML file.
+     *
+     * @return tempcode                 The UI
+     */
     public function _xml_breadcrumbs()
     {
         if (!file_exists(get_custom_file_base() . '/data_custom')) {

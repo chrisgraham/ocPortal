@@ -13,23 +13,23 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 /**
  * Render the OCF forumview.
  *
- * @param  ?integer	Forum ID (NULL: private topics).
- * @param  ?array		The forum row (NULL: private topics).
- * @param  string		The filter category (blank if no filter)
- * @param  integer	Maximum results to show
- * @param  integer	Offset for result showing
- * @param  AUTO_LINK	Virtual root
- * @param  ?MEMBER	The member to show private topics of (NULL: not showing private topics)
- * @param  tempcode	The breadcrumbs
- * @return mixed		Either Tempcode (an interface that must be shown) or a pair: The main Tempcode, the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
+ * @param  ?integer                     Forum ID (NULL: private topics).
+ * @param  ?array                       The forum row (NULL: private topics).
+ * @param  string                       The filter category (blank if no filter)
+ * @param  integer                      Maximum results to show
+ * @param  integer                      Offset for result showing
+ * @param  AUTO_LINK                    Virtual root
+ * @param  ?MEMBER                      The member to show private topics of (NULL: not showing private topics)
+ * @param  tempcode                     The breadcrumbs
+ * @return mixed                        Either Tempcode (an interface that must be shown) or a pair: The main Tempcode, the forum name (string). For a PT view, it is always a tuple, never raw Tempcode (as it can go inside a tabset).
  */
 function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id,$breadcrumbs)
 {
@@ -302,7 +302,7 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
     }
     if (array_key_exists('may_post_topic',$details)) {
         if ($type == 'pt') {
-            //if ($of_member_id!==get_member())		Actually we'll leave the "send message" button in your inbox, as a way for being able to type in who to send it to
+            //if ($of_member_id!==get_member())    Actually we'll leave the "send message" button in your inbox, as a way for being able to type in who to send it to
             {
                 $button_array[] = array('immediate' => false,'rel' => 'add','title' => do_lang_tempcode('ADD_PRIVATE_TOPIC'),'url' => $new_topic_url,'img' => 'buttons__send');
             }
@@ -390,11 +390,11 @@ function ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$r
 /**
  * Get details of a topic (to show eventually as a row in a forum or results view). This is a helper function, and thus the interface is not very user friendly.
  *
- * @param  array		The DB row of the topic.
- * @param  MEMBER		The member the details are being prepared for.
- * @param  integer	The hot topic definition (taken from the config options).
- * @param  boolean	Whether the viewing member has a post in the topic.
- * @return array		The details.
+ * @param  array                        The DB row of the topic.
+ * @param  MEMBER                       The member the details are being prepared for.
+ * @param  integer                      The hot topic definition (taken from the config options).
+ * @param  boolean                      Whether the viewing member has a post in the topic.
+ * @return array                        The details.
  */
 function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involved)
 {
@@ -500,11 +500,11 @@ function ocf_get_topic_array($topic_row,$member_id,$hot_topic_definition,$involv
 /**
  * Render a topic row (i.e. a row in a forum or results view), from given details (from ocf_get_topic_array).
  *
- * @param  array		The details (array containing: last_post_id, id, modifiers, emoticon, first_member_id, first_username, first_post, num_posts, num_views).
- * @param  boolean	Whether the viewing member has the facility to mark off topics (send as false if there are no actions for them to perform).
- * @param  boolean	Whether the topic is a Private Topic.
- * @param  ?string	The forum name (NULL: do not show the forum name).
- * @return tempcode	The topic row.
+ * @param  array                        The details (array containing: last_post_id, id, modifiers, emoticon, first_member_id, first_username, first_post, num_posts, num_views).
+ * @param  boolean                      Whether the viewing member has the facility to mark off topics (send as false if there are no actions for them to perform).
+ * @param  boolean                      Whether the topic is a Private Topic.
+ * @param  ?string                      The forum name (NULL: do not show the forum name).
+ * @return tempcode                     The topic row.
  */
 function ocf_render_topic($topic,$has_topic_marking,$pt = false,$show_forum = null)
 {
@@ -640,11 +640,11 @@ function ocf_render_topic($topic,$has_topic_marking,$pt = false,$show_forum = nu
 /**
  * Get a map of details relating to the view of a certain forum of a certain member.
  *
- * @param  AUTO_LINK		The forum ID.
- * @param  array			The forum row.
- * @param  integer		The start row for getting details of topics in the forum (i.e. 0 is newest, higher is starting further back in time).
- * @param  ?integer		The maximum number of topics to get detail of (NULL: default).
- * @return array			The details.
+ * @param  AUTO_LINK                    The forum ID.
+ * @param  array                        The forum row.
+ * @param  integer                      The start row for getting details of topics in the forum (i.e. 0 is newest, higher is starting further back in time).
+ * @param  ?integer                     The maximum number of topics to get detail of (NULL: default).
+ * @return array                        The details.
  */
 function ocf_get_forum_view($forum_id,$forum_info,$start = 0,$max = null)
 {

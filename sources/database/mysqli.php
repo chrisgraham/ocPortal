@@ -15,16 +15,16 @@
 /*EXTRA FUNCTIONS: mysqli\_.+*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_database_drivers
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_database_drivers
  */
 
 require_code('database/shared/mysql');
 
 /**
  * Database Driver.
- * @package		core_database_drivers
+ * @package    core_database_drivers
  */
 class Database_Static_mysqli extends Database_super_mysql
 {
@@ -33,16 +33,16 @@ class Database_Static_mysqli extends Database_super_mysql
     public $reconnected_once = false;
 
     /**
-	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
-	 *
-	 * @param  boolean		Whether to create a persistent connection
-	 * @param  string			The database name
-	 * @param  string			The database host (the server)
-	 * @param  string			The database connection username
-	 * @param  string			The database connection password
-	 * @param  boolean		Whether to on error echo an error and return with a NULL, rather than giving a critical error
-	 * @return ?array			A database connection (note for mySQL, it's actually a pair, containing the database name too: because we need to select the name before each query on the connection) (NULL: error)
-	 */
+     * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
+     *
+     * @param  boolean                  Whether to create a persistent connection
+     * @param  string                   The database name
+     * @param  string                   The database host (the server)
+     * @param  string                   The database connection username
+     * @param  string                   The database connection password
+     * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
+     * @return ?array                   A database connection (note for mySQL, it's actually a pair, containing the database name too: because we need to select the name before each query on the connection) (NULL: error)
+     */
     public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
     {
         if (!function_exists('mysqli_connect')) {
@@ -112,11 +112,11 @@ class Database_Static_mysqli extends Database_super_mysql
     }
 
     /**
-	 * Find whether full-text-search is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
+     * Find whether full-text-search is present
+     *
+     * @param  array                    A DB connection
+     * @return boolean                  Whether it is
+     */
     public function db_has_full_text($db)
     {
         if ($this->using_innodb()) {
@@ -127,43 +127,43 @@ class Database_Static_mysqli extends Database_super_mysql
     }
 
     /**
-	 * Find whether subquery support is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
+     * Find whether subquery support is present
+     *
+     * @param  array                    A DB connection
+     * @return boolean                  Whether it is
+     */
     public function db_has_subqueries($db)
     {
         return true;
     }
 
     /**
-	 * Find whether collate support is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
+     * Find whether collate support is present
+     *
+     * @param  array                    A DB connection
+     * @return boolean                  Whether it is
+     */
     public function db_has_collate_settings($db)
     {
         return true;
     }
 
     /**
-	 * Find whether full-text-boolean-search is present
-	 *
-	 * @return boolean		Whether it is
-	 */
+     * Find whether full-text-boolean-search is present
+     *
+     * @return boolean                  Whether it is
+     */
     public function db_has_full_text_boolean()
     {
         return true;
     }
 
     /**
-	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
-	 *
-	 * @param  string			The string
-	 * @return string			The escaped string
-	 */
+     * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
+     *
+     * @param  string                   The string
+     * @return string                   The escaped string
+     */
     public function db_escape_string($string)
     {
         if (is_null($this->last_select_db)) {
@@ -173,16 +173,16 @@ class Database_Static_mysqli extends Database_super_mysql
     }
 
     /**
-	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
-	 *
-	 * @param  string			The complete SQL query
-	 * @param  array			A DB connection
-	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
-	 * @param  ?integer		The start row to affect (NULL: no specification)
-	 * @param  boolean		Whether to output an error on failure
-	 * @param  boolean		Whether to get the autoincrement ID created for an insert query
-	 * @return ?mixed			The results (NULL: no results), or the insert ID
-	 */
+     * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
+     *
+     * @param  string                   The complete SQL query
+     * @param  array                    A DB connection
+     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
+     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  boolean                  Whether to output an error on failure
+     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
+     * @return ?mixed                   The results (NULL: no results), or the insert ID
+     */
     public function db_query($query,$db_parts,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
     {
         list($db,$db_name) = $db_parts;
@@ -270,11 +270,11 @@ class Database_Static_mysqli extends Database_super_mysql
     }
 
     /**
-	 * Get the rows returned from a SELECT query.
-	 *
-	 * @param  resource		The query result pointer
-	 * @return array			A list of row maps
-	 */
+     * Get the rows returned from a SELECT query.
+     *
+     * @param  resource                 The query result pointer
+     * @return array                    A list of row maps
+     */
     public function db_get_query_rows($results)
     {
         $num_fields = mysqli_num_fields($results);

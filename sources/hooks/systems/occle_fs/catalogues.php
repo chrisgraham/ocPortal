@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    catalogues
  */
 
 require_code('resource_fs');
@@ -26,11 +26,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     public $file_resource_type = 'catalogue_entry';
 
     /**
-	 * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.
-	 *
-	 * @param  ID_TEXT		The resource type
-	 * @return integer		How many resources there are
-	 */
+     * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.
+     *
+     * @param  ID_TEXT                  The resource type
+     * @return integer                  How many resources there are
+     */
     public function get_resources_count($resource_type)
     {
         switch ($resource_type) {
@@ -47,12 +47,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs function for searching for a resource by label.
-	 *
-	 * @param  ID_TEXT		The resource type
-	 * @param  LONG_TEXT		The resource label
-	 * @return array			A list of resource IDs
-	 */
+     * Standard occle_fs function for searching for a resource by label.
+     *
+     * @param  ID_TEXT                  The resource type
+     * @param  LONG_TEXT                The resource label
+     * @return array                    A list of resource IDs
+     */
     public function find_resource_by_label($resource_type,$label)
     {
         switch ($resource_type) {
@@ -92,12 +92,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
-	 *
-	 * @param  ?ID_TEXT		Folder resource type (NULL: root)
-	 * @param  ID_TEXT		Resource type (may be file or folder)
-	 * @return ?array			A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
-	 */
+     * Find whether a kind of resource handled by this hook (folder or file) can be under a particular kind of folder.
+     *
+     * @param  ?ID_TEXT                 Folder resource type (NULL: root)
+     * @param  ID_TEXT                  Resource type (may be file or folder)
+     * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
+     */
     public function _has_parent_child_relationship($above,$under)
     {
         if (is_null($above)) {
@@ -146,11 +146,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs introspection function.
-	 *
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
-	 * @return array			The properties available for the resource type
-	 */
+     * Standard occle_fs introspection function.
+     *
+     * @param  ID_TEXT                  Parent category (blank: root / not applicable)
+     * @return array                    The properties available for the resource type
+     */
     public function _enumerate_folder_properties($category)
     {
         if (substr($category,0,10) != 'CATALOGUE-') { // Category
@@ -182,11 +182,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
-	 *
-	 * @param  array			Resource row (not full, but does contain the ID)
-	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
-	 */
+     * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
+     *
+     * @param  array                    Resource row (not full, but does contain the ID)
+     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     */
     public function _get_folder_edit_date($row)
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',$row['c_name']) . ' AND  (' . db_string_equal_to('the_type','ADD_CATALOGUE') . ' OR ' . db_string_equal_to('the_type','EDIT_CATALOGUE') . ')';
@@ -194,12 +194,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The resource type
-	 * @param  ID_TEXT	The resource ID
-	 * @return ?ID_TEXT	The filename (NULL: could not find)
-	 */
+     * Get the filename for a resource ID. Note that filenames are unique across all folders in a filesystem.
+     *
+     * @param  ID_TEXT                  The resource type
+     * @param  ID_TEXT                  The resource ID
+     * @return ?ID_TEXT                 The filename (NULL: could not find)
+     */
     public function folder_convert_id_to_filename($resource_type,$resource_id)
     {
         if ($resource_type == 'catalogue') {
@@ -214,12 +214,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
-	 *
-	 * @param  ID_TEXT	The filename, or filepath
-	 * @param  ?ID_TEXT	The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
-	 * @return array		A pair: The resource type, the resource ID
-	 */
+     * Get the resource ID for a filename. Note that filenames are unique across all folders in a filesystem.
+     *
+     * @param  ID_TEXT                  The filename, or filepath
+     * @param  ?ID_TEXT                 The resource type (NULL: assumption of only one folder resource type for this hook; only passed as non-NULL from overridden functions within hooks that are calling this as a helper function)
+     * @return array                    A pair: The resource type, the resource ID
+     */
     public function folder_convert_filename_to_id($filename,$resource_type = null)
     {
         $filename = preg_replace('#^.*/#','',$filename); // Paths not needed, as filenames are globally unique; paths would not be in alternative_ids table
@@ -236,12 +236,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Convert properties to variables for adding/editing catalogues.
-	 *
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return array			Properties
-	 */
+     * Convert properties to variables for adding/editing catalogues.
+     *
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return array                    Properties
+     */
     public function __folder_read_in_properties_catalogue($path,$properties)
     {
         $description = $this->_default_property_str($properties,'description');
@@ -258,12 +258,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Convert properties to variables for adding/editing catalogue categories.
-	 *
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~array			Properties (false: error)
-	 */
+     * Convert properties to variables for adding/editing catalogue categories.
+     *
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return ~array                   Properties (false: error)
+     */
     public function __folder_read_in_properties_category($path,$properties)
     {
         if (strpos($path,'/') === false) {
@@ -296,13 +296,13 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
-	 *
-	 * @param  LONG_TEXT		Filename OR Resource label
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The resource ID (false: error)
-	 */
+     * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
+     *
+     * @param  LONG_TEXT                Filename OR Resource label
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return ~ID_TEXT                 The resource ID (false: error)
+     */
     public function folder_add($filename,$path,$properties)
     {
         list($properties,$label) = $this->_folder_magic_filter($filename,$path,$properties);
@@ -365,12 +365,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
-	 *
-	 * @param  SHORT_TEXT	Filename
-	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
-	 * @return ~array			Details of the resource (false: error)
-	 */
+     * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
+     *
+     * @param  SHORT_TEXT               Filename
+     * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
+     * @return ~array                   Details of the resource (false: error)
+     */
     public function folder_load($filename,$path)
     {
         list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
@@ -443,13 +443,13 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
-	 *
-	 * @param  ID_TEXT		The filename
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
-	 */
+     * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
+     *
+     * @param  ID_TEXT                  The filename
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
+     */
     public function folder_edit($filename,$path,$properties)
     {
         list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
@@ -530,12 +530,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
-	 *
-	 * @param  ID_TEXT		The filename
-	 * @param  string			The path (blank: root / not applicable)
-	 * @return boolean		Success status
-	 */
+     * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
+     *
+     * @param  ID_TEXT                  The filename
+     * @param  string                   The path (blank: root / not applicable)
+     * @return boolean                  Success status
+     */
     public function folder_delete($filename,$path)
     {
         list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
@@ -552,11 +552,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs introspection function.
-	 *
-	 * @param  ID_TEXT		Parent category (blank: root / not applicable)
-	 * @return array			The properties available for the resource type
-	 */
+     * Standard occle_fs introspection function.
+     *
+     * @param  ID_TEXT                  Parent category (blank: root / not applicable)
+     * @return array                    The properties available for the resource type
+     */
     public function _enumerate_file_properties($category)
     {
         $props = array();
@@ -618,11 +618,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
-	 *
-	 * @param  array			Resource row (not full, but does contain the ID)
-	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
-	 */
+     * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
+     *
+     * @param  array                    Resource row (not full, but does contain the ID)
+     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     */
     public function _get_file_edit_date($row)
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_CATALOGUE_CATEGORY') . ' OR ' . db_string_equal_to('the_type','EDIT_CATALOGUE_CATEGORY') . ')';
@@ -630,11 +630,11 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Find the best unique key index for the catalogue.
-	 *
-	 * @param  array			The catalogue fields
-	 * @return integer		The key index
-	 */
+     * Find the best unique key index for the catalogue.
+     *
+     * @param  array                    The catalogue fields
+     * @return integer                  The key index
+     */
     public function _find_unique_key_num($fields)
     {
         foreach ($fields as $i => $f) {
@@ -646,14 +646,14 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Convert properties to variables for adding/editing catalogue entries.
-	 *
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @param  SHORT_TEXT	Category
-	 * @param  SHORT_TEXT	Label
-	 * @return array			Properties
-	 */
+     * Convert properties to variables for adding/editing catalogue entries.
+     *
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @param  SHORT_TEXT               Category
+     * @param  SHORT_TEXT               Label
+     * @return array                    Properties
+     */
     public function __file_read_in_properties($path,$properties,$category,$label)
     {
         $category_id = $this->_integer_category($category);
@@ -705,13 +705,13 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
-	 *
-	 * @param  LONG_TEXT		Filename OR Resource label
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
-	 */
+     * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
+     *
+     * @param  LONG_TEXT                Filename OR Resource label
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
+     */
     public function file_add($filename,$path,$properties)
     {
         list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path,'catalogue_category');
@@ -733,12 +733,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
-	 *
-	 * @param  SHORT_TEXT	Filename
-	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
-	 * @return ~array			Details of the resource (false: error)
-	 */
+     * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
+     *
+     * @param  SHORT_TEXT               Filename
+     * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
+     * @return ~array                   Details of the resource (false: error)
+     */
     public function file_load($filename,$path)
     {
         list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
@@ -798,13 +798,13 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
-	 *
-	 * @param  ID_TEXT		The filename
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
-	 */
+     * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
+     *
+     * @param  ID_TEXT                  The filename
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
+     */
     public function file_edit($filename,$path,$properties)
     {
         list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
@@ -829,12 +829,12 @@ class Hook_occle_fs_catalogues extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
-	 *
-	 * @param  ID_TEXT		The filename
-	 * @param  string			The path (blank: root / not applicable)
-	 * @return boolean		Success status
-	 */
+     * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
+     *
+     * @param  ID_TEXT                  The filename
+     * @param  string                   The path (blank: root / not applicable)
+     * @return boolean                  Success status
+     */
     public function file_delete($filename,$path)
     {
         list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);

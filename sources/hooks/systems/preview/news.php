@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		news
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    news
  */
 
 class Hook_Preview_news
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
+     */
     public function applies()
     {
         $applies = (get_param('page','') == 'cms_news') || (get_param('page','') == 'cms_blogs');
@@ -32,10 +32,10 @@ class Hook_Preview_news
     }
 
     /**
-	 * Run function for preview hooks.
-	 *
-	 * @return array			A pair: The preview, the updated post Comcode
-	 */
+     * Run function for preview hooks.
+     *
+     * @return array                    A pair: The preview, the updated post Comcode
+     */
     public function run()
     {
         $original_comcode = post_param('post');

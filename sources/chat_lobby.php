@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 /**
@@ -49,10 +49,10 @@ function enter_chat_lobby()
 /**
  * Show IM contacts, with online/offline status and clickability to initiate IM sessions.
  *
- * @param  ?MEMBER		The member ID (NULL: current user).
- * @param  boolean		Whether to show a simpler, more compact, UI.
- * @param  ?integer		Maximum to show (NULL: default).
- * @return tempcode		The contact UI.
+ * @param  ?MEMBER                      The member ID (NULL: current user).
+ * @param  boolean                      Whether to show a simpler, more compact, UI.
+ * @param  ?integer                     Maximum to show (NULL: default).
+ * @return tempcode                     The contact UI.
  */
 function show_im_contacts($member_id = null,$simpler = false,$max = null)
 {
@@ -91,7 +91,7 @@ function show_im_contacts($member_id = null,$simpler = false,$max = null)
 
             $friend = array(
                 /*'DATE_AND_TIME_RAW'=>strval($friend['date_and_time']),
-				'DATE_AND_TIME'=>get_timezoned_date($friend['date_and_time'],false),*/
+                    'DATE_AND_TIME'=>get_timezoned_date($friend['date_and_time'],false),*/
                 'MEMBER_PROFILE_URL' => $member_profile_url,
                 'MEMBER_ID' => strval($friend['member_liked']),
                 'USERNAME' => $username,
@@ -125,8 +125,8 @@ function show_im_contacts($member_id = null,$simpler = false,$max = null)
 /**
  * Prune timed-out private chatrooms.
  *
- * @param  array			The row of the chat room to possibly prune
- * @return boolean		Whether the room was pruned
+ * @param  array                        The row of the chat room to possibly prune
+ * @return boolean                      Whether the room was pruned
 */
 function handle_chatroom_pruning($row)
 {

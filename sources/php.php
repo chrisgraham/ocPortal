@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		devguide
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    devguide
  */
 
 /*
@@ -35,21 +35,21 @@ function init__php()
  * Get a complex API information structure from a PHP file. It assumes the file has reasonably properly layed out class and function whitespace
  * The return structure is...
  *  list of classes
- *	each entry is a map containing 'functions' (list of functions) and 'name'
- *	 each functions entry is a map containing 'parameters' and 'name' and 'return'
- *	  each parameters entry is a map containing...
- *		name
- *		description
- *		type
- *		default
- *		default_raw
- *		set
- *		range
- *		ref
+ * each entry is a map containing 'functions' (list of functions) and 'name'
+ *  each functions entry is a map containing 'parameters' and 'name' and 'return'
+ *   each parameters entry is a map containing...
+ *    name
+ *    description
+ *    type
+ *    default
+ *    default_raw
+ *    set
+ *    range
+ *    ref
  *
- * @param  PATH			The PHP code module to get API information for
- * @param  boolean		Whether to include function source code
- * @return array			The complex structure of API information
+ * @param  PATH                         The PHP code module to get API information for
+ * @param  boolean                      Whether to include function source code
+ * @return array                        The complex structure of API information
  */
 function get_php_file_api($filename,$include_code = true)
 {
@@ -319,8 +319,8 @@ function get_php_file_api($filename,$include_code = true)
 /**
  * Read a PHP function line and return parsed details.
  *
- * @param  string			The line
- * @return array			A pair: (function name, parameters), where parameters is a list of maps detailing each parameter
+ * @param  string                       The line
+ * @return array                        A pair: (function name, parameters), where parameters is a list of maps detailing each parameter
  */
 function _read_php_function_line($_line)
 {
@@ -435,8 +435,8 @@ function _read_php_function_line($_line)
 /**
  * Remove and blank strings from the given array.
  *
- * @param  array			List of strings
- * @return array			List of strings, with blank strings removed
+ * @param  array                        List of strings
+ * @return array                        List of strings, with blank strings removed
  */
 function _cleanup_array($in)
 {
@@ -452,13 +452,13 @@ function _cleanup_array($in)
 /**
  * Type-check the specified parameter (giving an error if the type checking fails) [all checks]
  *
- * @param  ID_TEXT		The parameter type
- * @param  string			The functions name (used in error message)
- * @param  string			The parameter name (used in error message)
- * @param  ?mixed			The parameters value (NULL: value actually is null)
- * @param  ?string		The string of value range of the parameter (NULL: no range constraint)
- * @param  ?string		The string of value set limitation for the parameter (NULL: no set constraint)
- * @param  boolean		Whether we just echo errors instead of exiting
+ * @param  ID_TEXT                      The parameter type
+ * @param  string                       The functions name (used in error message)
+ * @param  string                       The parameter name (used in error message)
+ * @param  ?mixed                       The parameters value (NULL: value actually is null)
+ * @param  ?string                      The string of value range of the parameter (NULL: no range constraint)
+ * @param  ?string                      The string of value set limitation for the parameter (NULL: no set constraint)
+ * @param  boolean                      Whether we just echo errors instead of exiting
  */
 function check_function_type($type,$function_name,$name,$value,$range,$set,$echo = false)
 {
@@ -566,11 +566,11 @@ function check_function_type($type,$function_name,$name,$value,$range,$set,$echo
 /**
  * Type-check the specified parameter (giving an error if the type checking fails) [just value against type]
  *
- * @param  ID_TEXT		The parameter type
- * @param  string			The functions name (used in error message)
- * @param  string			The parameter name (used in error message)
- * @param  mixed			The parameters value (cannot be null)
- * @param  boolean		Whether we just echo errors instead of exiting
+ * @param  ID_TEXT                      The parameter type
+ * @param  string                       The functions name (used in error message)
+ * @param  string                       The parameter name (used in error message)
+ * @param  mixed                        The parameters value (cannot be null)
+ * @param  boolean                      Whether we just echo errors instead of exiting
  */
 function test_fail_php_type_check($type,$function_name,$name,$value,$echo = false)
 {
@@ -732,11 +732,11 @@ function test_fail_php_type_check($type,$function_name,$name,$value,$echo = fals
 /**
  * Throw out a type checker error message.
  *
- * @param  string			The type involved
- * @param  string			The function involved
- * @param  string			The parameter name involved
- * @param  string			The value involved
- * @param  boolean		Whether we just echo errors instead of exiting
+ * @param  string                       The type involved
+ * @param  string                       The function involved
+ * @param  string                       The parameter name involved
+ * @param  string                       The value involved
+ * @param  boolean                      Whether we just echo errors instead of exiting
  */
 function _fail_php_type_check($type,$function_name,$name,$value,$echo = false)
 {
@@ -750,17 +750,17 @@ function _fail_php_type_check($type,$function_name,$name,$value,$echo = false)
 /**
  * Render a PHP function to display in a template.
  *
- * @param  array			The map of function information
- * @param  array			The map of class information
- * @param  boolean		Show filenames in the function description
- * @return array			A pair: The rendered function, The rendered summary (for a TOC)
+ * @param  array                        The map of function information
+ * @param  array                        The map of class information
+ * @param  boolean                      Show filenames in the function description
+ * @return array                        A pair: The rendered function, The rendered summary (for a TOC)
  */
 function render_php_function($function,$class,$show_filename = false)
 {
     $parameters = new ocp_tempcode();
     $full_parameters = new ocp_tempcode();
     foreach ($function['parameters'] as $parameter) {
-        //				if (!array_key_exists('type',$parameter)) exit($function['name']);
+        //           if (!array_key_exists('type',$parameter)) exit($function['name']);
 
         $parameters->attach(do_template('PHP_PARAMETER_LIST',array('_GUID' => '03e76c19ec2cf9cb7f283db72728fc13','TYPE' => $parameter['type'],'NAME' => $parameter['name'])));
 
@@ -818,8 +818,8 @@ function render_php_function($function,$class,$show_filename = false)
 /**
  * Get a PHP function parameter line.
  *
- * @param  array			A map containing: name, description, default, type, set, range
- * @return tempcode		The line
+ * @param  array                        A map containing: name, description, default, type, set, range
+ * @return tempcode                     The line
  */
 function render_php_function_do_bits($parameter)
 {
@@ -859,8 +859,8 @@ function render_php_function_do_bits($parameter)
 /**
  * Convert a code file to HHVM's hack language (i.e. strict typing).
  *
- * @param  PATH			The file path
- * @return string			The new code
+ * @param  PATH                         The file path
+ * @return string                       The new code
  */
 function convert_from_php_to_hhvm_hack($filename)
 {
@@ -917,8 +917,8 @@ function convert_from_php_to_hhvm_hack($filename)
 /**
  * Convert an ocPortal type to an HHVM hack type.
  *
- * @param  ID_TEXT		ocPortal type
- * @return ID_TEXT		HHVM type
+ * @param  ID_TEXT                      ocPortal type
+ * @return ID_TEXT                      HHVM type
  */
 function ocp_type_to_hhvm_type($t)
 {

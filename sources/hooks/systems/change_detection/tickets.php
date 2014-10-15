@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tickets
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tickets
  */
 
 class Hook_change_detection_tickets
 {
     /**
-	 * Run function for change_detection hooks. They see if their own something has changed in comparison to sample data.
-	 *
-	 * @param  string			The sample data, serialised and then MD5'd
-	 * @return boolean		Whether the something has changed
-	 */
+     * Run function for change_detection hooks. They see if their own something has changed in comparison to sample data.
+     *
+     * @param  string                   The sample data, serialised and then MD5'd
+     * @return boolean                  Whether the something has changed
+     */
     public function run($data)
     {
         if (get_param('type','misc') == 'misc') {

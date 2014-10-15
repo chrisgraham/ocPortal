@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_adminzone_dashboard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_adminzone_dashboard
  */
 
 class Block_main_staff_checklist
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,10 +41,10 @@ class Block_main_staff_checklist
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -54,11 +54,11 @@ class Block_main_staff_checklist
     }
 
     /**
-	 * Install the block.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the block.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if ((is_null($upgrade_from)) || ($upgrade_from < 4)) {
@@ -100,19 +100,19 @@ class Block_main_staff_checklist
     }
 
     /**
-	 * Uninstall the block.
-	 */
+     * Uninstall the block.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('customtasks');
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         require_javascript('javascript_ajax');
@@ -209,9 +209,9 @@ class Block_main_staff_checklist
 /**
  * Work out when an action should happen, and last happened.
  *
- * @param  ?integer	The number of seconds ago since it last happened (NULL: never happened) OR If $recur_hours is NULL then the number of seconds until it happens (NULL: won't happen)
- * @param  ?integer	It should be done every this many hours (NULL: never happened)
- * @return array		A pair: Tempcode to display, and the number of seconds to go until the action should happen
+ * @param  ?integer                     The number of seconds ago since it last happened (NULL: never happened) OR If $recur_hours is NULL then the number of seconds until it happens (NULL: won't happen)
+ * @param  ?integer                     It should be done every this many hours (NULL: never happened)
+ * @return array                        A pair: Tempcode to display, and the number of seconds to go until the action should happen
  */
 function staff_checklist_time_ago_and_due($seconds_ago,$recur_hours = null)
 {

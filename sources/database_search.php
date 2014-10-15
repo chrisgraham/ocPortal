@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -29,9 +29,9 @@ function init__database_search()
 /**
  * Highlight keywords in an extracted portion of a piece of text.
  *
- * @param  string			What was searched
- * @param  array			List of words searched
- * @return string			Highlighted portion
+ * @param  string                       What was searched
+ * @param  array                        List of words searched
+ * @return string                       Highlighted portion
  */
 function generate_text_summary($_temp_summary,$words_searched)
 {
@@ -266,11 +266,11 @@ function opensearch_script()
 /**
  * Build up a submitter search clause, taking into account members, authors, usernames, and usergroups.
  *
- * @param  ?ID_TEXT		The field name for member IDs (NULL: Cannot match against member IDs)
- * @param  ?MEMBER		Member ID (NULL: Unknown, so cannot search)
- * @param  ID_TEXT		Author
- * @param  ?ID_TEXT		The field name for authors (NULL: Cannot match against member IDs)
- * @return ?string		An SQL fragment (NULL: block query)
+ * @param  ?ID_TEXT                     The field name for member IDs (NULL: Cannot match against member IDs)
+ * @param  ?MEMBER                      Member ID (NULL: Unknown, so cannot search)
+ * @param  ID_TEXT                      Author
+ * @param  ?ID_TEXT                     The field name for authors (NULL: Cannot match against member IDs)
+ * @return ?string                      An SQL fragment (NULL: block query)
  */
 function build_search_submitter_clauses($member_field_name,$member_id,$author,$author_field_name = null)
 {
@@ -325,12 +325,12 @@ function build_search_submitter_clauses($member_field_name,$member_id,$author,$a
 /**
  * Get special SQL from POSTed parameters for a catalogue search field that is to be exact-matched.
  *
- * @param  array			The row for the field to input
- * @param  integer		We're processing for the ith row
- * @param  ID_TEXT		Table type
+ * @param  array                        The row for the field to input
+ * @param  integer                      We're processing for the ith row
+ * @param  ID_TEXT                      Table type
  * @set short long
- * @param  ?string		Search term (NULL: lookup from environment)
- * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
+ * @param  ?string                      Search term (NULL: lookup from environment)
+ * @return ?array                       Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
  */
 function exact_match_sql($row,$i,$type = 'short',$param = null)
 {
@@ -355,12 +355,12 @@ function exact_match_sql($row,$i,$type = 'short',$param = null)
 /**
  * Get special SQL from POSTed parameters for a catalogue search field for a multi-input field that is to be exact-matched.
  *
- * @param  array			The row for the field to input
- * @param  integer		We're processing for the ith row
- * @param  ID_TEXT		Table type
+ * @param  array                        The row for the field to input
+ * @param  integer                      We're processing for the ith row
+ * @param  ID_TEXT                      Table type
  * @set short long
- * @param  ?string		Search term (NULL: lookup from environment)
- * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
+ * @param  ?string                      Search term (NULL: lookup from environment)
+ * @return ?array                       Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
  */
 function nl_delim_match_sql($row,$i,$type = 'short',$param = null)
 {
@@ -379,28 +379,28 @@ function nl_delim_match_sql($row,$i,$type = 'short',$param = null)
 /**
  * Get some rows, queried from the database according to the search parameters.
  *
- * @param  ?ID_TEXT		The META type used by our content (NULL: Cannot support META search)
- * @param  ?ID_TEXT		The name of the field that retrieved META IDs will relate to (NULL: Cannot support META search)
- * @param  string			Search string
- * @param  boolean		Whether to do a boolean search.
- * @param  ID_TEXT		Boolean operator
+ * @param  ?ID_TEXT                     The META type used by our content (NULL: Cannot support META search)
+ * @param  ?ID_TEXT                     The name of the field that retrieved META IDs will relate to (NULL: Cannot support META search)
+ * @param  string                       Search string
+ * @param  boolean                      Whether to do a boolean search.
+ * @param  ID_TEXT                      Boolean operator
  * @set OR AND
- * @param  boolean		Whether to only do a META (tags) search
- * @param  ID_TEXT		Order direction
- * @param  integer		Start position in total results
- * @param  integer		Maximum results to return in total
- * @param  boolean		Whether to only search titles (as opposed to both titles and content)
- * @param  ID_TEXT		The table name
- * @param  array			The translateable fields to search over (or an ! which is skipped). The first of these must be the title field or an '!'; if it is '!' then the title field will be the first raw-field
- * @param  string			The WHERE clause
- * @param  string			The WHERE clause that applies specifically for content (this will be duplicated to check against multiple fields). ? refers to the yet-unknown field name
- * @param  ID_TEXT		What to order by
- * @param  string			What to select
- * @param  ?array			The non-translateable fields to search over (NULL: there are none)
- * @param  ?string		The permission module to check category access for (NULL: none)
- * @param  ?string		The field that specifies the permissions ID to check category access for (NULL: none)
- * @param  boolean		Whether the permissions field is a string
- * @return array			The rows found
+ * @param  boolean                      Whether to only do a META (tags) search
+ * @param  ID_TEXT                      Order direction
+ * @param  integer                      Start position in total results
+ * @param  integer                      Maximum results to return in total
+ * @param  boolean                      Whether to only search titles (as opposed to both titles and content)
+ * @param  ID_TEXT                      The table name
+ * @param  array                        The translateable fields to search over (or an ! which is skipped). The first of these must be the title field or an '!'; if it is '!' then the title field will be the first raw-field
+ * @param  string                       The WHERE clause
+ * @param  string                       The WHERE clause that applies specifically for content (this will be duplicated to check against multiple fields). ? refers to the yet-unknown field name
+ * @param  ID_TEXT                      What to order by
+ * @param  string                       What to select
+ * @param  ?array                       The non-translateable fields to search over (NULL: there are none)
+ * @param  ?string                      The permission module to check category access for (NULL: none)
+ * @param  ?string                      The field that specifies the permissions ID to check category access for (NULL: none)
+ * @param  boolean                      Whether the permissions field is a string
+ * @return array                        The rows found
  */
 function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,$fields,$where_clause,$content_where,$order,$select = '*',$raw_fields = null,$permissions_module = null,$permissions_field = null,$permissions_field_is_string = false)
 {
@@ -419,9 +419,9 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
         $g_or = _get_where_clause_groups(get_member());
 
         // this destroys mysqls query optimiser by forcing complexed OR's into the join, so we'll do this in PHP code
-        //		$table.=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name',$permissions_module).' AND z.category_name='.$permissions_field.(($g_or!='')?(' AND '.str_replace('group_id','z.group_id',$g_or)):'').')';
-        //		$where_clause.=' AND ';
-        //		$where_clause.='z.category_name IS NOT NULL';
+        //     $table.=' LEFT JOIN '.$GLOBALS['SITE_DB']->get_table_prefix().'group_category_access z ON ('.db_string_equal_to('z.module_the_name',$permissions_module).' AND z.category_name='.$permissions_field.(($g_or!='')?(' AND '.str_replace('group_id','z.group_id',$g_or)):'').')';
+        //     $where_clause.=' AND ';
+        //     $where_clause.='z.category_name IS NOT NULL';
 
         $cat_access = list_to_map('category_name',$GLOBALS['FORUM_DB']->query('SELECT DISTINCT category_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'group_category_access WHERE (' . $g_or . ') AND ' . db_string_equal_to('module_the_name',$permissions_module) . ' UNION ALL SELECT DISTINCT category_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'member_category_access WHERE (member_id=' . strval((integer)get_member()) . ' AND active_until>' . strval(time()) . ') AND ' . db_string_equal_to('module_the_name',$permissions_module),null,null,false,true));
     }
@@ -515,10 +515,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
                 }
             }
 
-            /*if ($group_by_ok) 	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
-			{
-				$_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
-			}*/
+            /*if ($group_by_ok)  This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
+            {
+                    $_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
+            }*/
 
             $db->dedupe_mode = true;
 
@@ -713,10 +713,10 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
                 }
             }
 
-            /*if ($group_by_ok)	This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
-			{
-				$_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
-			}*/
+            /*if ($group_by_ok)  This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
+            {
+                    $_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
+            }*/
 
             $db->dedupe_mode = true;
 
@@ -958,8 +958,8 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
 /**
  * Take a search string and find boolean search parameters from it.
  *
- * @param  string			The search string
- * @return array			Words to search under the boolean operator, words that must be included, words that must not be included.
+ * @param  string                       The search string
+ * @return array                        Words to search under the boolean operator, words that must be included, words that must not be included.
  */
 function _boolean_search_prepare($search_filter)
 {
@@ -1012,10 +1012,10 @@ function _boolean_search_prepare($search_filter)
 /**
  * Perform a database-style in-memory boolean search on single item.
  *
- * @param  array			A map of POST data in search-form style. May contain 'only_titles', 'content' (the critical one!) and 'conjunctive_operator'
- * @param  string			The title to try and match
- * @param  ?string		The post to try and match (NULL: not used)
- * @return boolean		Whether we have a match
+ * @param  array                        A map of POST data in search-form style. May contain 'only_titles', 'content' (the critical one!) and 'conjunctive_operator'
+ * @param  string                       The title to try and match
+ * @param  ?string                      The post to try and match (NULL: not used)
+ * @return boolean                      Whether we have a match
  */
 function in_memory_search_match($filter,$title,$post = null)
 {
@@ -1066,8 +1066,8 @@ function in_memory_search_match($filter,$title,$post = null)
 /**
  * Find whether a phrase is too small for fulltext search.
  *
- * @param  string		The phrase
- * @return boolean	Whether it is
+ * @param  string                       The phrase
+ * @return boolean                      Whether it is
  */
 function is_under_radar($test)
 {
@@ -1092,12 +1092,12 @@ function is_under_radar($test)
 /**
  * Build a fulltext query WHERE clause from given content.
  *
- * @param  string			The search content
- * @param  boolean		Whether it's a boolean search
- * @param  string			Boolean operation to use
+ * @param  string                       The search content
+ * @param  boolean                      Whether it's a boolean search
+ * @param  string                       Boolean operation to use
  * @set    AND OR
- * @param  boolean		Whether we can assume we require full coverage (i.e. not substring matches)
- * @return array			A tuple (any SQL component may be blank): The combined where clause SQL, the boolean operator, body where clause SQL, positive where clause SQL, negative where clause SQL
+ * @param  boolean                      Whether we can assume we require full coverage (i.e. not substring matches)
+ * @return array                        A tuple (any SQL component may be blank): The combined where clause SQL, the boolean operator, body where clause SQL, positive where clause SQL, negative where clause SQL
  */
 function build_content_where($content,$boolean_search,&$boolean_operator,$full_coverage = false)
 {
@@ -1153,11 +1153,11 @@ function build_content_where($content,$boolean_search,&$boolean_operator,$full_c
 /**
  * Generate SQL for a boolean search.
  *
- * @param  string			Boolean search string
- * @param  string			Boolean operator to use
+ * @param  string                       Boolean search string
+ * @param  string                       Boolean operator to use
  * @set    AND OR
- * @param  boolean		Whether we can assume we require full coverage
- * @return array			A tuple (any SQL component may be blank): The combined where clause SQL, the boolean operator, body where clause SQL, positive where clause SQL, negative where clause SQL
+ * @param  boolean                      Whether we can assume we require full coverage
+ * @return array                        A tuple (any SQL component may be blank): The combined where clause SQL, the boolean operator, body where clause SQL, positive where clause SQL, negative where clause SQL
  */
 function db_like_assemble($content,$boolean_operator = 'AND',$full_coverage = false)
 {
@@ -1221,10 +1221,10 @@ function db_like_assemble($content,$boolean_operator = 'AND',$full_coverage = fa
 /**
  * Sort search results as returned by the search hook.
  *
- * @param  array		Search results from the search hook, assumed already sorted
- * @param  array		Existing array of results (originally starts blank)
- * @return array		Sorted results
- * @param  string		Sort direction
+ * @param  array                        Search results from the search hook, assumed already sorted
+ * @param  array                        Existing array of results (originally starts blank)
+ * @return array                        Sorted results
+ * @param  string                       Sort direction
  * @set    ASC DESC
  */
 function sort_search_results($hook_results,$results,$direction)
@@ -1256,13 +1256,13 @@ function sort_search_results($hook_results,$results,$direction)
 /**
  * Build a templated list of the given search results, for viewing.
  *
- * @param  array			Search results
- * @param  integer		Start index
- * @param  integer		Maximum index
- * @param  string			Sort direction
+ * @param  array                        Search results
+ * @param  integer                      Start index
+ * @param  integer                      Maximum index
+ * @param  string                       Sort direction
  * @set    ASC DESC
- * @param  boolean		Whether this is a general search, rather than a search for a specific result-type (such as all members)
- * @return tempcode		Interface
+ * @param  boolean                      Whether this is a general search, rather than a search for a specific result-type (such as all members)
+ * @return tempcode                     Interface
  */
 function build_search_results_interface($results,$start,$max,$direction,$general_search = false)
 {

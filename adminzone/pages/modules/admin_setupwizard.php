@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		setupwizard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    setupwizard
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_setupwizard
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -59,10 +59,10 @@ class Module_admin_setupwizard
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -89,10 +89,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         appengine_live_guard();
@@ -139,10 +139,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (welcome).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (welcome).
+     *
+     * @return tempcode                 The UI
+     */
     public function step1()
     {
         require_code('form_templates');
@@ -182,10 +182,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (information).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (information).
+     *
+     * @return tempcode                 The UI
+     */
     public function step2()
     {
         require_code('form_templates');
@@ -198,10 +198,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (config).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (config).
+     *
+     * @return tempcode                 The UI
+     */
     public function step3()
     {
         $post_url = build_url(array('page' => '_SELF','type' => 'step4'),'_SELF');
@@ -277,10 +277,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (addons).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (addons).
+     *
+     * @return tempcode                 The UI
+     */
     public function step4()
     {
         $post_url = build_url(array('page' => '_SELF','type' => 'step5'),'_SELF');
@@ -313,45 +313,45 @@ class Module_admin_setupwizard
             $addon_list_advanced_on_by_default = array();
         }
 
-        /*$addon_list_on_by_default=array(	These will be put on in individual Setup Wizard profiles; we list them here just so our addon_setupwizard unit test can ensure we haven't forgotten to consider their status
-			'aggregate_types',
-			'authors',
-			'calendar',
-			'chat',
-			'content_privacy',
-			'content_reviews',
-			'debrand',
-			'downloads',
-			'forum_blocks',
-			'galleries',
-			'guestbook',
-			'match_key_permissions',
-			'news',
-			'newsletter',
-			'ocf_clubs',
-			'ocf_contact_member',
-			'ocf_forum',
-			'ocf_member_photos',
-			'ocf_member_titles',
-			'ocf_multi_moderations',
-			'ocf_post_templates',
-			'ocf_reported_posts',
-			'ocf_signatures',
-			'ocf_warnings',
-			'points',
-			'pointstore',
-			'polls',
-			'quizzes',
-			'random_quotes',
-			'realtime_rain',
-			'recommend',
-			'shopping',
-			'ssl',
-			'tickets',
-			'welcome_emails',
-			'wiki',
-			'zone_logos',
-		);*/
+        /*$addon_list_on_by_default=array(   These will be put on in individual Setup Wizard profiles; we list them here just so our addon_setupwizard unit test can ensure we haven't forgotten to consider their status
+            'aggregate_types',
+            'authors',
+            'calendar',
+            'chat',
+            'content_privacy',
+            'content_reviews',
+            'debrand',
+            'downloads',
+            'forum_blocks',
+            'galleries',
+            'guestbook',
+            'match_key_permissions',
+            'news',
+            'newsletter',
+            'ocf_clubs',
+            'ocf_contact_member',
+            'ocf_forum',
+            'ocf_member_photos',
+            'ocf_member_titles',
+            'ocf_multi_moderations',
+            'ocf_post_templates',
+            'ocf_reported_posts',
+            'ocf_signatures',
+            'ocf_warnings',
+            'points',
+            'pointstore',
+            'polls',
+            'quizzes',
+            'random_quotes',
+            'realtime_rain',
+            'recommend',
+            'shopping',
+            'ssl',
+            'tickets',
+            'welcome_emails',
+            'wiki',
+            'zone_logos',
+        );*/
 
         // These are on by default regardless of install profile. It's useful, because we don't want install profiles to have to be too prescriptive, and we want old ones to keep working well even if new addons have been introduced.
         if (!is_null($addon_list_on_by_default)) {
@@ -497,10 +497,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (the zone/feature configuration).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (the zone/feature configuration).
+     *
+     * @return tempcode                 The UI
+     */
     public function step5()
     {
         require_lang('menus');
@@ -571,10 +571,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (block choice).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (block choice).
+     *
+     * @return tempcode                 The UI
+     */
     public function step6()
     {
         require_all_lang();
@@ -695,11 +695,11 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * Get Comcode to save as the rules.
-	 *
-	 * @param  ID_TEXT		A code relating to which rules set to get
-	 * @return string			The Comcode
-	 */
+     * Get Comcode to save as the rules.
+     *
+     * @param  ID_TEXT                  A code relating to which rules set to get
+     * @return string                   The Comcode
+     */
     public function get_rules_file($code)
     {
         require_code('textfiles');
@@ -707,10 +707,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (rules).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (rules).
+     *
+     * @return tempcode                 The UI
+     */
     public function step7()
     {
         $post_url = build_url(array('page' => '_SELF','type' => (addon_installed('themewizard') && (function_exists('imagecreatefromstring')))?'step8':'step9'),'_SELF');
@@ -744,10 +744,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (theme).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (theme).
+     *
+     * @return tempcode                 The UI
+     */
     public function step8()
     {
         require_lang('themes');
@@ -778,10 +778,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (close-status).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (close-status).
+     *
+     * @return tempcode                 The UI
+     */
     public function step9()
     {
         $post_url = build_url(array('page' => '_SELF','type' => 'step10'),'_SELF');
@@ -811,10 +811,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (done).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (done).
+     *
+     * @return tempcode                 The UI
+     */
     public function step10()
     {
         $GLOBALS['NO_QUERY_LIMIT'] = true;
@@ -1141,10 +1141,10 @@ class Module_admin_setupwizard
     }
 
     /**
-	 * UI for a setup wizard step (done, message after cache emptied - need lower memory usage to rebuild them).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a setup wizard step (done, message after cache emptied - need lower memory usage to rebuild them).
+     *
+     * @return tempcode                 The UI
+     */
     public function step11()
     {
         require_code('templates_donext');

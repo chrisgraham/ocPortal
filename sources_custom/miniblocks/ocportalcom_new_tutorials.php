@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -974,37 +974,37 @@ foreach ($tutorials as $i => $tut) {
     if ($full_mode) {
         $side = ($i%2 == 0)?'l':'r';
         echo <<<END
-	<div class="{$side} {$colour}">
-		<div class="b">
-			<img src="{$_img}" alt="" />
+    <div class="{$side} {$colour}">
+        <div class="b">
+            <img src="{$_img}" alt="" />
 
-			<div class="wt"><h4>{$title}</h4></div>
+            <div class="wt"><h4>{$title}</h4></div>
 
-			<p class="s">{$summary}</p>
-		</div>
+            <p class="s">{$summary}</p>
+        </div>
 
-		<p class="author">
-			by {$_author}
-		</p>
-		<div class="wlink"><p class="link">&raquo; <a{$_javascript} title="{$title}" href="{$_link}">{$linktitle} Now</a></p></div>
-	</div>
+        <p class="author">
+            by {$_author}
+        </p>
+        <div class="wlink"><p class="link">&raquo; <a{$_javascript} title="{$title}" href="{$_link}">{$linktitle} Now</a></p></div>
+    </div>
 END;
     } else {
         echo <<<END
-	</div></div>
-	<div class="{$a}"><div class="{$b}">
-		<div class="tutorial"><div class="float_surrounder">
-			<div style="float: right; margin-left: 5px">
-				<p class="d">{$_date}</p>
+    </div></div>
+    <div class="{$a}"><div class="{$b}">
+        <div class="tutorial"><div class="float_surrounder">
+            <div style="float: right; margin-left: 5px">
+                    <p class="d">{$_date}</p>
 
-				<a href="{$_link}"{$_javascript}><img src="{$_img}" alt="" /></a>
-			</div>
+                    <a href="{$_link}"{$_javascript}><img src="{$_img}" alt="" /></a>
+            </div>
 
-			<p><strong>{$title}</strong></p>
-			<p class="s">{$summary}</p>
+            <p><strong>{$title}</strong></p>
+            <p class="s">{$summary}</p>
 
-			<p class="r">[ <a title="{$title}" href="{$_link}"{$_javascript}>{$linktitle}</a> ]</p>
-		</div></div>
+            <p class="r">[ <a title="{$title}" href="{$_link}"{$_javascript}>{$linktitle}</a> ]</p>
+        </div></div>
 END;
     }
 }
@@ -1022,8 +1022,8 @@ if (!$full_mode) {
     $_docs_link = escape_html(is_object($docs_link)?$docs_link->evaluate():$docs_link);
     $_seemore_img = escape_html(find_theme_image('start_button_seemore'));
     echo <<<END
-	</div></div>
-	<div class="{$a}"><div class="{$b}">
-		<div class="side_button"><a href="{$_docs_link}"><img alt="See more tutorials" src="{$_seemore_img}" /></a></div>
+    </div></div>
+    <div class="{$a}"><div class="{$b}">
+        <div class="side_button"><a href="{$_docs_link}"><img alt="See more tutorials" src="{$_seemore_img}" /></a></div>
 END;
 }

@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		backup
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    backup
  */
 
 /**
  * Write PHP code for the restoration of database data into file.
  *
- * @param  resource			The logfile to write to
- * @param  ID_TEXT			The meta tablename
- * @param  ID_TEXT			The index-meta tablename
- * @param  resource			File to write in to
+ * @param  resource                     The logfile to write to
+ * @param  ID_TEXT                      The meta tablename
+ * @param  ID_TEXT                      The index-meta tablename
+ * @param  resource                     File to write in to
  */
 function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 {
@@ -48,7 +48,7 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
             if ($array != '') {
                 $array .= ",\n";
             }
-            $array .= "		'" . $name . "'=>'" . $type . "'";
+            $array .= "    '" . $name . "'=>'" . $type . "'";
         }
         fwrite($install_php_file,preg_replace('#^#m','//',"   \$GLOBALS['SITE_DB']->create_table('$table',array(\n$array),true,true);\n"));
 
@@ -113,11 +113,11 @@ function get_table_backup($logfile,$db_meta,$db_meta_indices,&$install_php_file)
 /**
  * Backend function to do a backup (meant to be run as a shutdown function - essentially a background task).
  *
- * @param  string			The filename to backup to
- * @param  string			The type of backup to do
+ * @param  string                       The filename to backup to
+ * @param  string                       The type of backup to do
  * @set    full incremental
- * @param  integer		The maximum size of a file to include in the backup
- * @return tempcode		Success message
+ * @param  integer                      The maximum size of a file to include in the backup
+ * @return tempcode                     Success message
  */
 function make_backup_2($file,$b_type,$max_size) // This is called as a shutdown function and thus cannot script-timeout
 {
@@ -158,16 +158,16 @@ function make_backup_2($file,$b_type,$max_size) // This is called as a shutdown 
 //COMMANDS BEGIN
 //\$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta');
 //\$GLOBALS['SITE_DB']->create_table('db_meta',array(
-//	'm_table'=>'*ID_TEXT',
-//	'm_name'=>'*ID_TEXT',
-//	'm_type'=>'ID_TEXT'
+// 'm_table'=>'*ID_TEXT',
+// 'm_name'=>'*ID_TEXT',
+// 'm_type'=>'ID_TEXT'
 //));
 //
 //\$GLOBALS['SITE_DB']->drop_table_if_exists('db_meta_indices');
 //\$GLOBALS['SITE_DB']->create_table('db_meta_indices',array(
-//	'i_table'=>'*ID_TEXT',
-//	'i_name'=>'*ID_TEXT',
-//	'i_fields'=>'*ID_TEXT',
+// 'i_table'=>'*ID_TEXT',
+// 'i_name'=>'*ID_TEXT',
+// 'i_fields'=>'*ID_TEXT',
 //));
 ");
     get_table_backup($logfile,'db_meta','db_meta_indices',$install_data_php_file);

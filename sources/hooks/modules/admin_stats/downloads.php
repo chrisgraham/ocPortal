@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 class Hook_admin_stats_downloads
 {
     /**
-	 * Define stats screens implemented in this hook.
-	 *
-	 * @return ?array	List of screens, each being a map written as do-next icon specification style (NULL: hook is disabled).
-	 */
+     * Define stats screens implemented in this hook.
+     *
+     * @return ?array                   List of screens, each being a map written as do-next icon specification style (NULL: hook is disabled).
+     */
     public function info()
     {
         if (!addon_installed('downloads')) {
@@ -41,12 +41,12 @@ class Hook_admin_stats_downloads
 
 
     /**
-	 * The UI to show download statistics.
-	 *
-	 * @param  object			The stats module object
-	 * @param  string			The screen type
-	 * @return tempcode		The UI
-	 */
+     * The UI to show download statistics.
+     *
+     * @param  object                   The stats module object
+     * @param  string                   The screen type
+     * @return tempcode                 The UI
+     */
     public function downloads($ob,$type)
     {
         require_lang('downloads');

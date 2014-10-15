@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_upgrader
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_upgrader
  */
 
 /* Standalone script to extract a tar file */
@@ -171,7 +171,7 @@ foreach ($todo as $i => $target_file) {
 }
 echo '</ol>';
 echo '<script>// <![CDATA[
-	window.scrollTo(0,document.getElementById("file_' . strval($file_offset) . '").offsetTop-100);
+    window.scrollTo(0,document.getElementById("file_' . strval($file_offset) . '").offsetTop-100);
 //]]></script>';
 if ($next_offset_url == '') {
     echo '<p><strong>' . htmlentities($_GET['done']) . '!</strong></p>';
@@ -190,30 +190,30 @@ function up2_do_header($refresh_url = '')
     $_refresh_url = htmlentities($refresh_url);
     echo <<<END
 <!DOCTYPE html>
-	<html lang="EN">
-	<head>
-		<title>Extracting files</title>
-		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
+    <html lang="EN">
+    <head>
+        <title>Extracting files</title>
+        <link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 END;
     if ($refresh_url != '') {
         echo <<<END
-		<meta http-equiv="refresh" content="3;url={$_refresh_url}" />
+        <meta http-equiv="refresh" content="3;url={$_refresh_url}" />
 END;
     }
     echo <<<END
-		<style>/*<![CDATA[*/
+        <style>/*<![CDATA[*/
 END;
     global $FILE_BASE;
     @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
     echo <<<END
-			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/icons/48x48/menu/_generic_admin/tool.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
-			.button_screen { padding: 0.5em 0.3em !important; }
-			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		/*]]>*/</style>
+            .screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/icons/48x48/menu/_generic_admin/tool.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
+            .button_screen { padding: 0.5em 0.3em !important; }
+            a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
+        /*]]>*/</style>
 
-		<meta name="robots" content="noindex, nofollow" />
-	</head>
-	<body class="website_body"><div class="global_middle">
+        <meta name="robots" content="noindex, nofollow" />
+    </head>
+    <body class="website_body"><div class="global_middle">
 END;
 }
 
@@ -223,7 +223,7 @@ END;
 function up2_do_footer()
 {
     echo <<<END
-	</div></body>
+    </div></body>
 </html>
 END;
 }
@@ -231,8 +231,8 @@ END;
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
+ * @param  SHORT_TEXT                   Given master password
+ * @return boolean                      Whether it is valid
  */
 function upgrader2_check_master_password($password_given_hashed)
 {

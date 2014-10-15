@@ -8,26 +8,26 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		community_billboard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    community_billboard
  */
 
 class Hook_pointstore_community_billboard
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
         require_lang('community_billboard');
     }
 
     /**
-	 * Standard pointstore item "shop front" function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item "shop front" function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         if (get_option('is_on_community_billboard_buy') == '1') {
@@ -39,10 +39,10 @@ class Hook_pointstore_community_billboard
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {
@@ -62,10 +62,10 @@ class Hook_pointstore_community_billboard
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function _community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {
@@ -89,10 +89,10 @@ class Hook_pointstore_community_billboard
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function __community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {
@@ -141,10 +141,10 @@ class Hook_pointstore_community_billboard
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function ___community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {

@@ -26,12 +26,12 @@ if (count($files) == 0) {
 
         require_code('files');
         echo '
-			<tr>
-				<td><a target="_blank" href="' . escape_html($baseurl . '/' . $file) . '">' . escape_html($file) . '</a></td>
-				<td>' . $description->evaluate() . '</td>
-				<td>' . escape_html(clean_file_size(filesize($basedir . '/' . $file))) . '</td>
-			</tr>
-		';
+            <tr>
+                    <td><a target="_blank" href="' . escape_html($baseurl . '/' . $file) . '">' . escape_html($file) . '</a></td>
+                    <td>' . $description->evaluate() . '</td>
+                    <td>' . escape_html(clean_file_size(filesize($basedir . '/' . $file))) . '</td>
+            </tr>
+        ';
     }
     echo '</tbody>';
     echo '</table></div>';

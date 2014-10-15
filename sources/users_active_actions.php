@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Backdoor handler. Can only be activated by those with FTP write-access.
  *
- * @return MEMBER			The member to simulate
+ * @return MEMBER                       The member to simulate
  */
 function restricted_manually_enabled_backdoor()
 {
@@ -59,7 +59,7 @@ function restricted_manually_enabled_backdoor()
 /**
  * Get the first admin user.
  *
- * @return MEMBER			Admin user
+ * @return MEMBER                       Admin user
  */
 function get_first_admin_user()
 {
@@ -75,7 +75,7 @@ function get_first_admin_user()
 /**
  * Process a login.
  *
- * @param  ID_TEXT		Username
+ * @param  ID_TEXT                      Username
  */
 function handle_active_login($username)
 {
@@ -223,7 +223,7 @@ function handle_active_logout()
 /**
  * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
  *
- * @param  MEMBER			The current member
+ * @param  MEMBER                       The current member
  */
 function _enforce_temporary_passwords($member)
 {
@@ -286,7 +286,7 @@ function _enforce_temporary_passwords($member)
 /**
  * Delete a session.
  *
- * @param  ID_TEXT		The new session
+ * @param  ID_TEXT                      The new session
  */
 function delete_session($session)
 {
@@ -305,8 +305,8 @@ function delete_session($session)
 /**
  * Deletes a cookie (if it exists), from within ocPortal's cookie environment.
  *
- * @param  string			The name of the cookie
- * @return boolean		The result of the PHP setcookie command
+ * @param  string                       The name of the cookie
+ * @return boolean                      The result of the PHP setcookie command
  */
 function ocp_eatcookie($name)
 {
@@ -327,12 +327,12 @@ function ocp_eatcookie($name)
 /**
  * Create a cookie, inside ocPortal's cookie environment.
  *
- * @param  string			The name of the cookie
- * @param  string			The value to store in the cookie
- * @param  boolean		Whether it is a session cookie (gets removed once the browser window closes)
- * @param  boolean		Whether the cookie should not be readable by JavaScript
- * @param  ?integer		Days to store (NULL: default)
- * @return boolean		The result of the PHP setcookie command
+ * @param  string                       The name of the cookie
+ * @param  string                       The value to store in the cookie
+ * @param  boolean                      Whether it is a session cookie (gets removed once the browser window closes)
+ * @param  boolean                      Whether the cookie should not be readable by JavaScript
+ * @param  ?integer                     Days to store (NULL: default)
+ * @return boolean                      The result of the PHP setcookie command
  */
 function ocp_setcookie($name,$value,$session = false,$http_only = false,$days = null)
 {

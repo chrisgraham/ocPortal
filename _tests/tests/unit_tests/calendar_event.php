@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		testing_platform
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    testing_platform
  */
 
 /**
@@ -339,11 +339,11 @@ class calendar_event_test_set extends ocp_test_case
     public function testRecurrenceNthDayOfWeekTimezones()
     {
         /*
-		This is a really complex case. The dates are stored relative to the timezone. The times are not - they are UTC.
-		Times must be UTC for consistency with other code. Dates must be in the timezone due to non-regularity.
+        This is a really complex case. The dates are stored relative to the timezone. The times are not - they are UTC.
+        Times must be UTC for consistency with other code. Dates must be in the timezone due to non-regularity.
 
-		We will have a test event in America/New_York from 7:45pm until 9:45pm, which will result in an end time SEEMINGLY before it starts, due to the above strange rule.
-		*/
+        We will have a test event in America/New_York from 7:45pm until 9:45pm, which will result in an end time SEEMINGLY before it starts, due to the above strange rule.
+        */
 
         $timezone = 'America/New_York';
         $do_timezone_conv = 0;

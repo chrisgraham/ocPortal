@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 class Hook_gu_downloads
 {
     /**
-	 * Add in new icons to a worked-within gallery.
-	 *
-	 * @param  ID_TEXT	Gallery name
-	 * @return array		Results
-	 */
+     * Add in new icons to a worked-within gallery.
+     *
+     * @param  ID_TEXT                  Gallery name
+     * @return array                    Results
+     */
     public function new_donext_icons($cat)
     {
         if (!addon_installed('downloads')) {

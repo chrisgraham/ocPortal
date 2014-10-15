@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 require_code('crud_module');
@@ -40,14 +40,14 @@ class Module_admin_ocf_groups extends standard_crud_module
     public $title_is_multi_lang = true;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -68,12 +68,12 @@ class Module_admin_ocf_groups extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -87,11 +87,11 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         if (get_forum_type() != 'ocf') {
@@ -109,22 +109,22 @@ class Module_admin_ocf_groups extends standard_crud_module
             require_javascript('javascript_ajax');
             $script = find_script('snippet');
             $this->javascript .= "
-				var form=document.getElementById('main_form');
-				form.old_submit=form.onsubmit;
-				form.onsubmit=function()
-					{
-						document.getElementById('submit_button').disabled=true;
-						var url='" . addslashes($script) . "?snippet=exists_usergroup&name='+window.encodeURIComponent(form.elements['name'].value);
-						if (!do_ajax_field_test(url))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
-						document.getElementById('submit_button').disabled=false;
-						if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-						return true;
-					};
-			";
+                    var form=document.getElementById('main_form');
+                    form.old_submit=form.onsubmit;
+                    form.onsubmit=function()
+                            {
+                                        document.getElementById('submit_button').disabled=true;
+                                        var url='" . addslashes($script) . "?snippet=exists_usergroup&name='+window.encodeURIComponent(form.elements['name'].value);
+                                        if (!do_ajax_field_test(url))
+                                        {
+                                                        document.getElementById('submit_button').disabled=false;
+                                                        return false;
+                                        }
+                                        document.getElementById('submit_button').disabled=false;
+                                        if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                                        return true;
+                            };
+            ";
         }
 
         $this->add_one_label = do_lang_tempcode('ADD_GROUP');
@@ -138,10 +138,10 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -156,37 +156,37 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a adding/editing form.
-	 *
-	 * @param  ?GROUP			The usergroup being edited (NULL: adding, not editing)
-	 * @param  SHORT_TEXT	The usergroup name
-	 * @param  BINARY			Whether this is a default usergroup
-	 * @param  BINARY			Whether members of the usergroup are super-administrators
-	 * @param  BINARY			Whether members of the usergroup are super-moderators
-	 * @param  ID_TEXT		The username of the usergroup leader
-	 * @param  SHORT_TEXT	The default title for members with this as their primary usergroup
-	 * @param  URLPATH		The usergroup rank image
-	 * @param  ?GROUP			The target for promotion from this usergroup (NULL: no promotion prospects)
-	 * @param  ?integer		The point threshold upon which promotion occurs (NULL: no promotion prospects)
-	 * @param  ?integer		The number of seconds between submission flood controls (NULL: average for existing usergroups)
-	 * @param  ?integer		The number of seconds between access flood controls (NULL: average for existing usergroups)
-	 * @param  ?integer		The number of gift points members of this usergroup get when they start (NULL: average for existing usergroups)
-	 * @param  ?integer		The number of gift points members of this usergroup get per-day (NULL: average for existing usergroups)
-	 * @param  ?integer		The number of megabytes members can upload per day (NULL: average for existing usergroups)
-	 * @param  ?integer		The maximum number of attachments members of this usergroup may have per post (NULL: average for existing usergroups)
-	 * @param  ?integer		The maximum avatar width members of this usergroup may have (NULL: average for existing usergroups)
-	 * @param  ?integer		The maximum avatar height members of this usergroup may have (NULL: average for existing usergroups)
-	 * @param  ?integer		The maximum post length members of this usergroup may have (NULL: average for existing usergroups)
-	 * @param  ?integer		The maximum signature length members of this usergroup may have (NULL: average for existing usergroups)
-	 * @param  BINARY			Whether to lock out unverified IP addresses until e-mail confirmation
-	 * @param  BINARY			Whether the usergroup is presented for joining at joining (implies anyone may be in the usergroup, but only choosable at joining)
-	 * @param  BINARY			Whether the name and membership of the usergroup is hidden
-	 * @param  ?integer		The display order this usergroup will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (NULL: last).
-	 * @param  BINARY			Whether the rank image will not be shown for secondary membership
-	 * @param  BINARY			Whether members may join this usergroup without requiring any special permission
-	 * @param  BINARY			Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a adding/editing form.
+     *
+     * @param  ?GROUP                   The usergroup being edited (NULL: adding, not editing)
+     * @param  SHORT_TEXT               The usergroup name
+     * @param  BINARY                   Whether this is a default usergroup
+     * @param  BINARY                   Whether members of the usergroup are super-administrators
+     * @param  BINARY                   Whether members of the usergroup are super-moderators
+     * @param  ID_TEXT                  The username of the usergroup leader
+     * @param  SHORT_TEXT               The default title for members with this as their primary usergroup
+     * @param  URLPATH                  The usergroup rank image
+     * @param  ?GROUP                   The target for promotion from this usergroup (NULL: no promotion prospects)
+     * @param  ?integer                 The point threshold upon which promotion occurs (NULL: no promotion prospects)
+     * @param  ?integer                 The number of seconds between submission flood controls (NULL: average for existing usergroups)
+     * @param  ?integer                 The number of seconds between access flood controls (NULL: average for existing usergroups)
+     * @param  ?integer                 The number of gift points members of this usergroup get when they start (NULL: average for existing usergroups)
+     * @param  ?integer                 The number of gift points members of this usergroup get per-day (NULL: average for existing usergroups)
+     * @param  ?integer                 The number of megabytes members can upload per day (NULL: average for existing usergroups)
+     * @param  ?integer                 The maximum number of attachments members of this usergroup may have per post (NULL: average for existing usergroups)
+     * @param  ?integer                 The maximum avatar width members of this usergroup may have (NULL: average for existing usergroups)
+     * @param  ?integer                 The maximum avatar height members of this usergroup may have (NULL: average for existing usergroups)
+     * @param  ?integer                 The maximum post length members of this usergroup may have (NULL: average for existing usergroups)
+     * @param  ?integer                 The maximum signature length members of this usergroup may have (NULL: average for existing usergroups)
+     * @param  BINARY                   Whether to lock out unverified IP addresses until e-mail confirmation
+     * @param  BINARY                   Whether the usergroup is presented for joining at joining (implies anyone may be in the usergroup, but only choosable at joining)
+     * @param  BINARY                   Whether the name and membership of the usergroup is hidden
+     * @param  ?integer                 The display order this usergroup will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (NULL: last).
+     * @param  BINARY                   Whether the rank image will not be shown for secondary membership
+     * @param  BINARY                   Whether members may join this usergroup without requiring any special permission
+     * @param  BINARY                   Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($id = null,$name = '',$is_default = 0,$is_super_admin = 0,$is_super_moderator = 0,$group_leader = '',$title = '',$rank_image = '',$promotion_target = null,$promotion_threshold = null,$flood_control_submit_secs = null,$flood_control_access_secs = null,$gift_points_base = null,$gift_points_per_day = 1,$max_daily_upload_mb = null,$max_attachments_per_post = null,$max_avatar_width = null,$max_avatar_height = null,$max_post_length_comcode = null,$max_sig_length_comcode = null,$enquire_on_new_ips = 0,$is_presented_at_install = 0,$group_is_hidden = 0,$order = null,$rank_image_pri_only = 1,$open_membership = 0,$is_private_club = 0)
     {
         if ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['SITE_DB']->connection_write) {
@@ -345,11 +345,11 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -383,7 +383,7 @@ class Module_admin_ocf_groups extends standard_crud_module
             do_lang_tempcode('NAME'),
             do_lang_tempcode('IS_PRESENTED_AT_INSTALL'),
             do_lang_tempcode('DEFAULT_GROUP'),
-            //do_lang_tempcode('IS_PRIVATE_CLUB'),	Save space
+            //do_lang_tempcode('IS_PRIVATE_CLUB'), Save space
             //do_lang_tempcode('GROUP_LEADER'),
             do_lang_tempcode('OPEN_MEMBERSHIP'),
             do_lang_tempcode('PROMOTION_TARGET'),
@@ -456,10 +456,10 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $fields = new ocp_tempcode();
@@ -482,22 +482,22 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($id)
     {
         return ((intval($id) != db_get_first_id()+0) && (intval($id) != db_get_first_id()+1) && (intval($id) != db_get_first_id()+8));
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A triple: fields, hidden-fields, delete-fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A triple: fields, hidden-fields, delete-fields
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id' => intval($id)),'',1);
@@ -553,10 +553,10 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Handle the "copy members from" feature.
-	 *
-	 * @param  GROUP			The usergroup to copy members from
-	 */
+     * Handle the "copy members from" feature.
+     *
+     * @param  GROUP                    The usergroup to copy members from
+     */
     public function copy_members_into($g)
     {
         if (function_exists('set_time_limit')) {
@@ -578,10 +578,10 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Read in data posted by an add/edit form
-	 *
-	 * @return array		A triplet of integers: (group leader, promotion target, promotion threshold)
-	 */
+     * Read in data posted by an add/edit form
+     *
+     * @return array                    A triplet of integers: (group leader, promotion target, promotion threshold)
+     */
     public function read_in_data()
     {
         $_group_leader = post_param('group_leader','');
@@ -610,10 +610,10 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         require_code('themes2');
@@ -659,11 +659,11 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return ?tempcode		Confirm message (NULL: continue)
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return ?tempcode                Confirm message (NULL: continue)
+     */
     public function edit_actualisation($id)
     {
         require_code('themes2');
@@ -744,10 +744,10 @@ class Module_admin_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         ocf_delete_group(intval($id),post_param_integer('new_usergroup'));

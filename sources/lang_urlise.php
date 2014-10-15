@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * URL'ise specially encoded text-acceptance language strings.
  *
- * @param  string			The language string
- * @param  mixed			The URL (either tempcode or string)
- * @param  string			The title of the hyperlink
- * @param  boolean		Whether to use a new window
- * @return tempcode		The encoded version
+ * @param  string                       The language string
+ * @param  mixed                        The URL (either tempcode or string)
+ * @param  string                       The title of the hyperlink
+ * @param  boolean                      Whether to use a new window
+ * @return tempcode                     The encoded version
  */
 function _urlise_lang($string,$url,$title,$new_window)
 {

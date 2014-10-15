@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		banners
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    banners
  */
 
 /**
  * Get the tempcode for the form to add a banner, with the information passed along to it via the parameters already added in.
  *
- * @param  boolean			Whether to simplify the banner interface (for the Point Store buy process)
- * @param  ID_TEXT			The name of the banner
- * @param  URLPATH			The URL to the banner image
- * @param  URLPATH			The URL to the site the banner leads to
- * @param  SHORT_TEXT		The caption of the banner
- * @param  LONG_TEXT			Complete HTML/PHP for the banner
- * @param  LONG_TEXT			Any notes associated with the banner
- * @param  integer			The banners "importance modulus"
+ * @param  boolean                      Whether to simplify the banner interface (for the Point Store buy process)
+ * @param  ID_TEXT                      The name of the banner
+ * @param  URLPATH                      The URL to the banner image
+ * @param  URLPATH                      The URL to the site the banner leads to
+ * @param  SHORT_TEXT                   The caption of the banner
+ * @param  LONG_TEXT                    Complete HTML/PHP for the banner
+ * @param  LONG_TEXT                    Any notes associated with the banner
+ * @param  integer                      The banners "importance modulus"
  * @range  1 max
- * @param  ?integer			The number of hits the banner may have (NULL: not applicable for this banner type)
+ * @param  ?integer                     The number of hits the banner may have (NULL: not applicable for this banner type)
  * @range  0 max
- * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
+ * @param  SHORT_INTEGER                The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
- * @param  ?TIME				The banner expiry date (NULL: never expires)
- * @param  ?MEMBER			The banners submitter (NULL: current member)
- * @param  BINARY				Whether the banner has been validated
- * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
- * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
- * @return array				A pair: The input field tempcode, JavaScript code
+ * @param  ?TIME                        The banner expiry date (NULL: never expires)
+ * @param  ?MEMBER                      The banners submitter (NULL: current member)
+ * @param  BINARY                       Whether the banner has been validated
+ * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
+ * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
+ * @return array                        A pair: The input field tempcode, JavaScript code
  */
 function get_banner_form_fields($simplified = false,$name = '',$image_url = '',$site_url = '',$caption = '',$direct_code = '',$notes = '',$importancemodulus = 3,$campaignremaining = 50,$the_type = 1,$expiry_date = null,$submitter = null,$validated = 1,$b_type = '',$title_text = '')
 {
@@ -112,18 +112,18 @@ function get_banner_form_fields($simplified = false,$name = '',$image_url = '',$
     $fields->attach(form_input_date(do_lang_tempcode('EXPIRY_DATE'),do_lang_tempcode('DESCRIPTION_EXPIRY_DATE'),'expiry_date',false,is_null($expiry_date),true,$expiry_date,2));
 
     $javascript = '
-		if (document.getElementById(\'campaignremaining\'))
-		{
-			var form=document.getElementById(\'campaignremaining\').form;
-			var crf=function() {
-				form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked);
-			};
-			crf();
-			form.elements[\'the_type\'][0].onclick=crf;
-			form.elements[\'the_type\'][1].onclick=crf;
-			form.elements[\'the_type\'][2].onclick=crf;
-		}
-	';
+        if (document.getElementById(\'campaignremaining\'))
+        {
+            var form=document.getElementById(\'campaignremaining\').form;
+            var crf=function() {
+                    form.elements[\'campaignremaining\'].disabled=(!form.elements[\'the_type\'][1].checked);
+            };
+            crf();
+            form.elements[\'the_type\'][0].onclick=crf;
+            form.elements[\'the_type\'][1].onclick=crf;
+            form.elements[\'the_type\'][2].onclick=crf;
+        }
+    ';
 
     return array($fields,$javascript);
 }
@@ -131,12 +131,12 @@ function get_banner_form_fields($simplified = false,$name = '',$image_url = '',$
 /**
  * Check the uploaded banner is valid.
  *
- * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
- * @param  LONG_TEXT			Complete HTML/PHP for the banner
- * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
- * @return array				A pair: The URL, and the title text
- * @param  string				Param name for possible URL field
- * @param  string				Param name for possible upload field
+ * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
+ * @param  LONG_TEXT                    Complete HTML/PHP for the banner
+ * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
+ * @return array                        A pair: The URL, and the title text
+ * @param  string                       Param name for possible URL field
+ * @param  string                       Param name for possible upload field
  */
 function check_banner($title_text = '',$direct_code = '',$b_type = '',$url_param_name = 'image_url',$file_param_name = 'file')
 {
@@ -232,31 +232,31 @@ function check_banner($title_text = '',$direct_code = '',$b_type = '',$url_param
 /**
  * Add a banner to the database, and return the new ID of that banner in the database.
  *
- * @param  ID_TEXT			The name of the banner
- * @param  URLPATH			The URL to the banner image
- * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
- * @param  SHORT_TEXT		The caption of the banner
- * @param  LONG_TEXT			Complete HTML/PHP for the banner
- * @param  ?integer			The number of hits the banner may have (NULL: not applicable for this banner type)
+ * @param  ID_TEXT                      The name of the banner
+ * @param  URLPATH                      The URL to the banner image
+ * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
+ * @param  SHORT_TEXT                   The caption of the banner
+ * @param  LONG_TEXT                    Complete HTML/PHP for the banner
+ * @param  ?integer                     The number of hits the banner may have (NULL: not applicable for this banner type)
  * @range  0 max
- * @param  URLPATH			The URL to the site the banner leads to
- * @param  integer			The banners "importance modulus"
+ * @param  URLPATH                      The URL to the site the banner leads to
+ * @param  integer                      The banners "importance modulus"
  * @range  1 max
- * @param  LONG_TEXT			Any notes associated with the banner
- * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
+ * @param  LONG_TEXT                    Any notes associated with the banner
+ * @param  SHORT_INTEGER                The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
- * @param  ?TIME				The banner expiry date (NULL: never)
- * @param  ?MEMBER			The banners submitter (NULL: current member)
- * @param  BINARY				Whether the banner has been validated
- * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
- * @param  ?TIME				The time the banner was added (NULL: now)
- * @param  integer			The number of return hits from this banners site
- * @param  integer			The number of banner hits to this banners site
- * @param  integer			The number of return views from this banners site
- * @param  integer			The number of banner views to this banners site
- * @param  ?TIME				The banner edit date  (NULL: never)
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT			The name
+ * @param  ?TIME                        The banner expiry date (NULL: never)
+ * @param  ?MEMBER                      The banners submitter (NULL: current member)
+ * @param  BINARY                       Whether the banner has been validated
+ * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
+ * @param  ?TIME                        The time the banner was added (NULL: now)
+ * @param  integer                      The number of return hits from this banners site
+ * @param  integer                      The number of banner hits to this banners site
+ * @param  integer                      The number of return views from this banners site
+ * @param  integer                      The number of banner views to this banners site
+ * @param  ?TIME                        The banner edit date  (NULL: never)
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated = 0,$b_type = '',$time = null,$hits_from = 0,$hits_to = 0,$views_from = 0,$views_to = 0,$edit_date = null,$uniqify = false)
 {
@@ -326,29 +326,29 @@ function add_banner($name,$imgurl,$title_text,$caption,$direct_code,$campaignrem
 /**
  * Edit a banner.
  *
- * @param  ID_TEXT			The current name of the banner
- * @param  ID_TEXT			The new name of the banner
- * @param  URLPATH			The URL to the banner image
- * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
- * @param  SHORT_TEXT		The caption of the banner
- * @param  LONG_TEXT			Complete HTML/PHP for the banner
- * @param  ?integer			The number of hits the banner may have (NULL: not applicable for this banner type)
+ * @param  ID_TEXT                      The current name of the banner
+ * @param  ID_TEXT                      The new name of the banner
+ * @param  URLPATH                      The URL to the banner image
+ * @param  SHORT_TEXT                   The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
+ * @param  SHORT_TEXT                   The caption of the banner
+ * @param  LONG_TEXT                    Complete HTML/PHP for the banner
+ * @param  ?integer                     The number of hits the banner may have (NULL: not applicable for this banner type)
  * @range  0 max
- * @param  URLPATH			The URL to the site the banner leads to
- * @param  integer			The banners "importance modulus"
+ * @param  URLPATH                      The URL to the site the banner leads to
+ * @param  integer                      The banners "importance modulus"
  * @range  1 max
- * @param  LONG_TEXT			Any notes associated with the banner
- * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
+ * @param  LONG_TEXT                    Any notes associated with the banner
+ * @param  SHORT_INTEGER                The type of banner (0=permanent, 1=campaign, 2=default)
  * @set    0 1 2
- * @param  ?TIME				The banner expiry date (NULL: never)
- * @param  ?MEMBER			The banners submitter (NULL: leave unchanged)
- * @param  BINARY				Whether the banner has been validated
- * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
- * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME				Add time (NULL: do not change)
- * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT			The name
+ * @param  ?TIME                        The banner expiry date (NULL: never)
+ * @param  ?MEMBER                      The banners submitter (NULL: leave unchanged)
+ * @param  BINARY                       Whether the banner has been validated
+ * @param  ID_TEXT                      The banner type (can be anything, where blank means 'normal')
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$campaignremaining,$site_url,$importancemodulus,$notes,$the_type,$expiry_date,$submitter,$validated,$b_type,$edit_time = null,$add_time = null,$null_is_literal = false,$uniqify = false)
 {
@@ -428,7 +428,7 @@ function edit_banner($old_name,$name,$imgurl,$title_text,$caption,$direct_code,$
 /**
  * Delete a banner.
  *
- * @param  ID_TEXT		The name of the banner
+ * @param  ID_TEXT                      The name of the banner
  */
 function delete_banner($name)
 {
@@ -462,14 +462,14 @@ function delete_banner($name)
 /**
  * Add a banner type.
  *
- * @param  ID_TEXT			The ID of the banner type
- * @param  BINARY				Whether this is a textual banner
- * @param  integer			The image width (ignored for textual banners)
- * @param  integer			The image height (ignored for textual banners)
- * @param  integer			The maximum file size for the banners (this is a string length for textual banners)
- * @param  BINARY				Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT			The name
+ * @param  ID_TEXT                      The ID of the banner type
+ * @param  BINARY                       Whether this is a textual banner
+ * @param  integer                      The image width (ignored for textual banners)
+ * @param  integer                      The image height (ignored for textual banners)
+ * @param  integer                      The maximum file size for the banners (this is a string length for textual banners)
+ * @param  BINARY                       Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,$uniqify = false)
 {
@@ -507,15 +507,15 @@ function add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_si
 /**
  * Edit a banner type.
  *
- * @param  ID_TEXT			The original ID of the banner type
- * @param  ID_TEXT			The ID of the banner type
- * @param  BINARY				Whether this is a textual banner
- * @param  integer			The image width (ignored for textual banners)
- * @param  integer			The image height (ignored for textual banners)
- * @param  integer			The maximum file size for the banners (this is a string length for textual banners)
- * @param  BINARY				Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
- * @param  boolean			Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT			The name
+ * @param  ID_TEXT                      The original ID of the banner type
+ * @param  ID_TEXT                      The ID of the banner type
+ * @param  BINARY                       Whether this is a textual banner
+ * @param  integer                      The image width (ignored for textual banners)
+ * @param  integer                      The image height (ignored for textual banners)
+ * @param  integer                      The maximum file size for the banners (this is a string length for textual banners)
+ * @param  BINARY                       Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline,$uniqify = false)
 {
@@ -557,7 +557,7 @@ function edit_banner_type($old_id,$id,$is_textual,$image_width,$image_height,$ma
 /**
  * Delete a banner type.
  *
- * @param  ID_TEXT			The ID of the banner type
+ * @param  ID_TEXT                      The ID of the banner type
  */
 function delete_banner_type($id)
 {

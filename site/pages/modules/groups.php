@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_groups
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_groups
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -67,10 +67,10 @@ class Module_groups
     public $club;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -175,10 +175,10 @@ class Module_groups
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (get_forum_type() != 'ocf') {
@@ -222,10 +222,10 @@ class Module_groups
     }
 
     /**
-	 * The UI to show the usergroup directory.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show the usergroup directory.
+     *
+     * @return tempcode                 The UI
+     */
     public function directory()
     {
         $staff_groups = array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
@@ -393,10 +393,10 @@ class Module_groups
     }
 
     /**
-	 * The UI to show a usergroup.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a usergroup.
+     *
+     * @return tempcode                 The UI
+     */
     public function usergroup()
     {
         $id = $this->id;
@@ -560,12 +560,12 @@ class Module_groups
     }
 
     /**
-	 * The actualiser to add a member to a usergroup.
-	 *
-	 * @param  boolean		Whether to skip checking permission for usergroup control
-	 * @param  ?string		Username to add (NULL: read from environment)
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to add a member to a usergroup.
+     *
+     * @param  boolean                  Whether to skip checking permission for usergroup control
+     * @param  ?string                  Username to add (NULL: read from environment)
+     * @return tempcode                 The UI
+     */
     public function add_to($special_permission = false,$username = null)
     {
         $_id = get_param('id');
@@ -611,10 +611,10 @@ class Module_groups
     }
 
     /**
-	 * The actualiser to remove a member from a usergroup.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to remove a member from a usergroup.
+     *
+     * @return tempcode                 The UI
+     */
     public function remove_from()
     {
         $member_id = get_param_integer('member_id');
@@ -644,10 +644,10 @@ class Module_groups
     }
 
     /**
-	 * The actualiser to apply to join a usergroup.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to apply to join a usergroup.
+     *
+     * @return tempcode                 The UI
+     */
     public function apply()
     {
         $group_name = $this->group_name;
@@ -701,10 +701,10 @@ class Module_groups
     }
 
     /**
-	 * The actualiser to accept a member into a usergroup.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to accept a member into a usergroup.
+     *
+     * @return tempcode                 The UI
+     */
     public function accept()
     {
         $id = post_param_integer('id',null);
@@ -728,10 +728,10 @@ class Module_groups
     }
 
     /**
-	 * The actualiser to decline a members joining of a usergroup.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to decline a members joining of a usergroup.
+     *
+     * @return tempcode                 The UI
+     */
     public function decline()
     {
         $id = post_param_integer('id',null);
@@ -763,10 +763,10 @@ class Module_groups
     }
 
     /**
-	 * The actualiser to resign from a usergroup.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to resign from a usergroup.
+     *
+     * @return tempcode                 The UI
+     */
     public function resign()
     {
         $id = post_param_integer('id',null);

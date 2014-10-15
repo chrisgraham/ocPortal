@@ -15,18 +15,18 @@
 /*NO_API_CHECK*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_adminzone_dashboard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_adminzone_dashboard
  */
 
 class Block_main_staff_website_monitoring
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,10 +42,10 @@ class Block_main_staff_website_monitoring
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -55,19 +55,19 @@ class Block_main_staff_website_monitoring
     }
 
     /**
-	 * Uninstall the block.
-	 */
+     * Uninstall the block.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('sitewatchlist');
     }
 
     /**
-	 * Install the block.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the block.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if ((is_null($upgrade_from)) || ($upgrade_from < 2)) {
@@ -85,11 +85,11 @@ class Block_main_staff_website_monitoring
     }
 
     /**
-	 * Function to find Alexa details of the site.
-	 *
-	 * @param  string		The URL of the site which you want to find out information on.)
-	 * @return array		Returns a triple array with the rank, the amount of links, and the speed of the site.
-	 */
+     * Function to find Alexa details of the site.
+     *
+     * @param  string                   The URL of the site which you want to find out information on.)
+     * @return array                    Returns a triple array with the rank, the amount of links, and the speed of the site.
+     */
     public function getAlexaRank($url)
     {
         require_lang('staff_checklist');
@@ -115,11 +115,11 @@ class Block_main_staff_website_monitoring
 
         // we would like, but cannot get (without an API key)...
         /*
-			time on site
-			reach (as a percentage)
-			page views
-			audience (i.e. what country views the site most)
-		 */
+            time on site
+            reach (as a percentage)
+            page views
+            audience (i.e. what country views the site most)
+         */
 
         return array($rank,$links,$speed);
     }
@@ -238,11 +238,11 @@ class Block_main_staff_website_monitoring
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         define('GOOGLE_MAGIC',0xE6359A60);

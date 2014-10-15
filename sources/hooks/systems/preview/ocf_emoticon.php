@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_Preview_ocf_emoticon
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
+     */
     public function applies()
     {
         $applies = (get_param('page','') == 'admin_ocf_emoticons');
@@ -32,10 +32,10 @@ class Hook_Preview_ocf_emoticon
     }
 
     /**
-	 * Run function for preview hooks.
-	 *
-	 * @return array			A pair: The preview, the updated post Comcode
-	 */
+     * Run function for preview hooks.
+     *
+     * @return array                    A pair: The preview, the updated post Comcode
+     */
     public function run()
     {
         require_code('uploads');

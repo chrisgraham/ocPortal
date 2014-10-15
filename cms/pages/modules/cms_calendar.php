@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 require_code('crud_module');
@@ -49,14 +49,14 @@ class Module_cms_calendar extends standard_crud_module
     public $donext_date = null;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -71,10 +71,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('calendar');
@@ -105,12 +105,12 @@ class Module_cms_calendar extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $this->cat_crud_module = class_exists('Mx_cms_calendar_cat')?new Mx_cms_calendar_cat():new Module_cms_calendar_cat();
@@ -142,82 +142,82 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         $this->javascript = "
-			var form=document.getElementById('recurrence_pattern').form;
+            var form=document.getElementById('recurrence_pattern').form;
 
-			var start_day=document.getElementById('start_day');
-			var start_month=document.getElementById('start_month');
-			var start_year=document.getElementById('start_year');
-			var start_hour=document.getElementById('start_hour');
-			var start_minute=document.getElementById('start_minute');
-			var do_timezone_conv=document.getElementById('do_timezone_conv');
-			var all_day_event=document.getElementById('all_day_event');
+            var start_day=document.getElementById('start_day');
+            var start_month=document.getElementById('start_month');
+            var start_year=document.getElementById('start_year');
+            var start_hour=document.getElementById('start_hour');
+            var start_minute=document.getElementById('start_minute');
+            var do_timezone_conv=document.getElementById('do_timezone_conv');
+            var all_day_event=document.getElementById('all_day_event');
 
-			var crf=function(event) {
-				var s=(form.elements['recurrence'][0].checked);
-				if (form.elements['recurrence_pattern']) form.elements['recurrence_pattern'].disabled=s;
-				if (form.elements['recurrences']) form.elements['recurrences'].disabled=s;
-				if (form.elements['seg_recurrences']) form.elements['seg_recurrences'].disabled=s;
+            var crf=function(event) {
+                    var s=(form.elements['recurrence'][0].checked);
+                    if (form.elements['recurrence_pattern']) form.elements['recurrence_pattern'].disabled=s;
+                    if (form.elements['recurrences']) form.elements['recurrences'].disabled=s;
+                    if (form.elements['seg_recurrences']) form.elements['seg_recurrences'].disabled=s;
 
-				if ((typeof event!='undefined') && (start_day.selectedIndex!=0) && (start_month.selectedIndex!=0) && (start_year.selectedIndex!=0)) // Something changed
-				{
-					var new_data=load_snippet('calendar_recurrence_suggest&monthly_spec_type='+window.encodeURIComponent(radio_value(form.elements['monthly_spec_type']))+'&day='+window.encodeURIComponent(start_day.options[start_day.selectedIndex].value)+'&month='+window.encodeURIComponent(start_month.options[start_month.selectedIndex].value)+'&year='+window.encodeURIComponent(start_year.options[start_year.selectedIndex].value)+'&hour='+window.encodeURIComponent(start_hour.options[start_hour.selectedIndex].value)+'&minute='+window.encodeURIComponent(start_minute.options[start_minute.selectedIndex].value)+'&do_timezone_conv='+(do_timezone_conv.checked?'1':'0')+'&all_day_event='+(all_day_event.checked?'1':'0'));
-					var tr=form.elements['monthly_spec_type'][0];
-					while (tr.nodeName.toLowerCase()!='tr')
-					{
-						tr=tr.parentNode;
-					}
-					set_inner_html(tr,new_data.replace(/<tr [^>]*>/,'').replace(/<\/tr>/,''));
-				}
-				var monthly_recurrence=form.elements['recurrence'][3].checked;
-				for (var i=0;i<form.elements['monthly_spec_type'].length;i++)
-				{
-					form.elements['monthly_spec_type'][i].disabled=!monthly_recurrence;
-				}
-			};
-			crf();
-			for (var i=0;i<form.elements['recurrence'].length;i++) form.elements['recurrence'][i].onclick=crf;
-			start_day.onchange=crf;
-			start_month.onchange=crf;
-			start_year.onchange=crf;
-			start_hour.onchange=crf;
-			start_minute.onchange=crf;
+                    if ((typeof event!='undefined') && (start_day.selectedIndex!=0) && (start_month.selectedIndex!=0) && (start_year.selectedIndex!=0)) // Something changed
+                    {
+                            var new_data=load_snippet('calendar_recurrence_suggest&monthly_spec_type='+window.encodeURIComponent(radio_value(form.elements['monthly_spec_type']))+'&day='+window.encodeURIComponent(start_day.options[start_day.selectedIndex].value)+'&month='+window.encodeURIComponent(start_month.options[start_month.selectedIndex].value)+'&year='+window.encodeURIComponent(start_year.options[start_year.selectedIndex].value)+'&hour='+window.encodeURIComponent(start_hour.options[start_hour.selectedIndex].value)+'&minute='+window.encodeURIComponent(start_minute.options[start_minute.selectedIndex].value)+'&do_timezone_conv='+(do_timezone_conv.checked?'1':'0')+'&all_day_event='+(all_day_event.checked?'1':'0'));
+                            var tr=form.elements['monthly_spec_type'][0];
+                            while (tr.nodeName.toLowerCase()!='tr')
+                            {
+                                        tr=tr.parentNode;
+                            }
+                            set_inner_html(tr,new_data.replace(/<tr [^>]*>/,'').replace(/<\/tr>/,''));
+                    }
+                    var monthly_recurrence=form.elements['recurrence'][3].checked;
+                    for (var i=0;i<form.elements['monthly_spec_type'].length;i++)
+                    {
+                            form.elements['monthly_spec_type'][i].disabled=!monthly_recurrence;
+                    }
+            };
+            crf();
+            for (var i=0;i<form.elements['recurrence'].length;i++) form.elements['recurrence'][i].onclick=crf;
+            start_day.onchange=crf;
+            start_month.onchange=crf;
+            start_year.onchange=crf;
+            start_hour.onchange=crf;
+            start_minute.onchange=crf;
 
-			var crf2=function() {
-				var s=document.getElementById('all_day_event').checked;
-				document.getElementById('start_hour').disabled=s;
-				document.getElementById('start_minute').disabled=s;
-				document.getElementById('end_hour').disabled=s;
-				document.getElementById('end_minute').disabled=s;
-			}
-			crf2();
-			document.getElementById('all_day_event').onclick=crf2;
+            var crf2=function() {
+                    var s=document.getElementById('all_day_event').checked;
+                    document.getElementById('start_hour').disabled=s;
+                    document.getElementById('start_minute').disabled=s;
+                    document.getElementById('end_hour').disabled=s;
+                    document.getElementById('end_minute').disabled=s;
+            }
+            crf2();
+            document.getElementById('all_day_event').onclick=crf2;
 
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					if (form.elements['end_day'].selectedIndex!=0)
-					{
-						var start=new Date(window.parseInt(form.elements['start_year'].value),window.parseInt(form.elements['start_month'].value)-1,window.parseInt(form.elements['start_day'].value),window.parseInt(form.elements['start_hour'].value),window.parseInt(form.elements['start_minute'].value));
-						var end=new Date(window.parseInt(form.elements['end_year'].value),window.parseInt(form.elements['end_month'].value)-1,window.parseInt(form.elements['end_day'].value),window.parseInt(form.elements['end_hour'].value),window.parseInt(form.elements['end_minute'].value));
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            if (form.elements['end_day'].selectedIndex!=0)
+                            {
+                                        var start=new Date(window.parseInt(form.elements['start_year'].value),window.parseInt(form.elements['start_month'].value)-1,window.parseInt(form.elements['start_day'].value),window.parseInt(form.elements['start_hour'].value),window.parseInt(form.elements['start_minute'].value));
+                                        var end=new Date(window.parseInt(form.elements['end_year'].value),window.parseInt(form.elements['end_month'].value)-1,window.parseInt(form.elements['end_day'].value),window.parseInt(form.elements['end_hour'].value),window.parseInt(form.elements['end_minute'].value));
 
-						if (start>end)
-						{
-							window.fauxmodal_alert('" . php_addslashes(do_lang('EVENT_CANNOT_AROUND')) . "');
-							return false;
-						}
-					}
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-					return true;
-				};
-		";
+                                        if (start>end)
+                                        {
+                                                        window.fauxmodal_alert('" . php_addslashes(do_lang('EVENT_CANNOT_AROUND')) . "');
+                                                        return false;
+                                        }
+                            }
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            return true;
+                    };
+        ";
 
         $this->posting_form_title = do_lang_tempcode('EVENT_TEXT');
 
@@ -251,10 +251,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -274,11 +274,11 @@ class Module_cms_calendar extends standard_crud_module
 
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -340,10 +340,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $only_owned = has_privilege(get_member(),'edit_lowrange_content','cms_calendar')?null:get_member();
@@ -351,41 +351,41 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Get the form fields for an event input form.
-	 *
-	 * @param  ?AUTO_LINK		The event ID (NULL: new)
-	 * @param  ?AUTO_LINK		The event type (NULL: default)
-	 * @param  ?integer			The year the event starts at (NULL: default)
-	 * @param  ?integer			The month the event starts at (NULL: default)
-	 * @param  ?integer			The day the event starts at (NULL: default)
-	 * @param  ID_TEXT			In-month specification type for start date
-	 * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
-	 * @param  ?integer			The hour the event starts at (NULL: default)
-	 * @param  ?integer			The minute the event starts at (NULL: default)
-	 * @param  SHORT_TEXT		The title of the event
-	 * @param  LONG_TEXT			The full text describing the event
-	 * @param  SHORT_TEXT		The recurrence code
-	 * @param  ?integer			The number of recurrences (NULL: none/infinite)
-	 * @param  BINARY				Whether to segregate the comment-topics/rating/trackbacks per-recurrence
-	 * @param  integer			The priority
-	 * @range  1 5
-	 * @param  ?integer			The year the event ends at (NULL: not a multi day event)
-	 * @param  ?integer			The month the event ends at (NULL: not a multi day event)
-	 * @param  ?integer			The day the event ends at (NULL: not a multi day event)
-	 * @param  ID_TEXT			In-month specification type for end date
-	 * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
-	 * @param  ?integer			The hour the event ends at (NULL: not a multi day event)
-	 * @param  ?integer			The minute the event ends at (NULL: not a multi day event)
-	 * @param  ?ID_TEXT			The timezone for the event (NULL: current user's timezone)
-	 * @param  BINARY				Whether the time should be presented in the viewer's own timezone
-	 * @param  ?MEMBER			The member's calendar it will be on (NULL: not on a specific member's calendar)
-	 * @param  BINARY				Whether the event is validated
- 	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
- 	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
- 	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @param  LONG_TEXT			Notes
-	 * @return array				A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
-	 */
+     * Get the form fields for an event input form.
+     *
+     * @param  ?AUTO_LINK               The event ID (NULL: new)
+     * @param  ?AUTO_LINK               The event type (NULL: default)
+     * @param  ?integer                 The year the event starts at (NULL: default)
+     * @param  ?integer                 The month the event starts at (NULL: default)
+     * @param  ?integer                 The day the event starts at (NULL: default)
+     * @param  ID_TEXT                  In-month specification type for start date
+     * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+     * @param  ?integer                 The hour the event starts at (NULL: default)
+     * @param  ?integer                 The minute the event starts at (NULL: default)
+     * @param  SHORT_TEXT               The title of the event
+     * @param  LONG_TEXT                The full text describing the event
+     * @param  SHORT_TEXT               The recurrence code
+     * @param  ?integer                 The number of recurrences (NULL: none/infinite)
+     * @param  BINARY                   Whether to segregate the comment-topics/rating/trackbacks per-recurrence
+     * @param  integer                  The priority
+     * @range  1 5
+     * @param  ?integer                 The year the event ends at (NULL: not a multi day event)
+     * @param  ?integer                 The month the event ends at (NULL: not a multi day event)
+     * @param  ?integer                 The day the event ends at (NULL: not a multi day event)
+     * @param  ID_TEXT                  In-month specification type for end date
+     * @set day_of_month day_of_month_backwards dow_of_month dow_of_month_backwards
+     * @param  ?integer                 The hour the event ends at (NULL: not a multi day event)
+     * @param  ?integer                 The minute the event ends at (NULL: not a multi day event)
+     * @param  ?ID_TEXT                 The timezone for the event (NULL: current user's timezone)
+     * @param  BINARY                   Whether the time should be presented in the viewer's own timezone
+     * @param  ?MEMBER                  The member's calendar it will be on (NULL: not on a specific member's calendar)
+     * @param  BINARY                   Whether the event is validated
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  LONG_TEXT                Notes
+     * @return array                    A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields)
+     */
     public function get_form_fields($id = null,$type = null,$start_year = null,$start_month = null,$start_day = null,$start_monthly_spec_type = 'day_of_month',$start_hour = null,$start_minute = null,$title = '',$content = '',$recurrence = 'none',$recurrences = null,$seg_recurrences = 0,$priority = 3,$end_year = null,$end_month = null,$end_day = null,$end_monthly_spec_type = 'day_of_month',$end_hour = null,$end_minute = null,$timezone = null,$do_timezone_conv = 0,$member_calendar = null,$validated = 1,$allow_rating = null,$allow_comments = null,$allow_trackbacks = null,$notes = '')
     {
         list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
@@ -600,10 +600,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Get the form posted parameters specifying an event.
-	 *
-	 * @return array			A list of parameters in a certain order (see the return command to see the order)
-	 */
+     * Get the form posted parameters specifying an event.
+     *
+     * @return array                    A list of parameters in a certain order (see the return command to see the order)
+     */
     public function get_event_parameters()
     {
         $type = post_param_integer('type',INTEGER_MAGIC_NULL);
@@ -730,11 +730,11 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('calendar_events',array('e_submitter','e_add_date'),array('id' => intval($id)),'',1);
@@ -745,11 +745,11 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module cat getter.
-	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
-	 * @return mixed			The cat
-	 */
+     * Standard crud_module cat getter.
+     *
+     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @return mixed                    The cat
+     */
     public function get_cat($id)
     {
         $temp = $GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events','e_type',array('id' => $id));
@@ -760,11 +760,11 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields, parsed WYSIWYG editable text)
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A tuple of: (fields, hidden-fields, delete-fields, edit-text, whether all delete fields are specified, posting form text, more fields, parsed WYSIWYG editable text)
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('calendar_events',array('*'),array('id' => intval($id)),'',1);
@@ -792,10 +792,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return array			A pair: the entry added, and a description
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return array                    A pair: the entry added, and a description
+     */
     public function add_actualisation()
     {
         list($type,$recurrence,$recurrences,$title,$content,$priority,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar) = $this->get_event_parameters();
@@ -813,17 +813,17 @@ class Module_cms_calendar extends standard_crud_module
         $_description = is_null($conflicts)?paragraph(do_lang_tempcode('SUBMIT_THANKYOU')):$conflicts;
 
         /*
-		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-		{
-			if (!is_null($conflicts))
-			{
-				$tpl=globalise(warn_screen(get_screen_title('CONFLICTS_DETECTED'),protect_from_escaping($conflicts)),NULL,'',true);
-				$tpl->evaluate_echo();
-				$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-				exit();
-			}
-		}
-		*/
+        if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+        {
+            if (!is_null($conflicts))
+            {
+                    $tpl=globalise(warn_screen(get_screen_title('CONFLICTS_DETECTED'),protect_from_escaping($conflicts)),NULL,'',true);
+                    $tpl->evaluate_echo();
+                    $GLOBALS['SCREEN_TEMPLATE_CALLED']='';
+                    exit();
+            }
+        }
+        */
 
         $id = add_calendar_event($type,$recurrence,$recurrences,$seg_recurrences,$title,$content,$priority,$start_year,$start_month,$start_day,$start_monthly_spec_type,$start_hour,$start_minute,$end_year,$end_month,$end_day,$end_monthly_spec_type,$end_hour,$end_minute,$timezone,$do_timezone_conv,$member_calendar,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['submitter'],$meta_data['views'],$meta_data['add_time'],$meta_data['edit_time']);
 
@@ -963,11 +963,11 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		Description shown after editing
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return tempcode                 Description shown after editing
+     */
     public function edit_actualisation($_id)
     {
         $id = intval($_id);
@@ -1097,17 +1097,17 @@ class Module_cms_calendar extends standard_crud_module
             $_description = is_null($conflicts)?paragraph(do_lang_tempcode('SUCCESS')):$conflicts;
 
             /*
-			if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
-			{
-				if (!is_null($conflicts))
-				{
-					$tpl=globalise(warn_screen(get_screen_title('CONFLICTS_DETECTED'),protect_from_escaping($conflicts)),NULL,'',true);
-					$tpl->evaluate_echo();
-					$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-					exit();
-				}
-			}
-			*/
+            if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))
+            {
+                    if (!is_null($conflicts))
+                    {
+                            $tpl=globalise(warn_screen(get_screen_title('CONFLICTS_DETECTED'),protect_from_escaping($conflicts)),NULL,'',true);
+                            $tpl->evaluate_echo();
+                            $GLOBALS['SCREEN_TEMPLATE_CALLED']='';
+                            exit();
+                    }
+            }
+            */
         } else {
             $_description = do_lang_tempcode('SUCCESS');
         }
@@ -1130,10 +1130,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($_id)
     {
         $id = intval($_id);
@@ -1154,23 +1154,23 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after calendar content management (events only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after calendar content management (events only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?null:intval($id),$this->donext_type,$this->donext_date);
     }
 
     /**
-	 * The UI to import ical for calendar
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to import ical for calendar
+     *
+     * @return tempcode                 The UI
+     */
     public function import_ical()
     {
         check_privilege('mass_import');
@@ -1196,10 +1196,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * The actualiser to import ical for calendar
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to import ical for calendar
+     *
+     * @return tempcode                 The UI
+     */
     public function _import_ical()
     {
         check_privilege('mass_import');
@@ -1225,10 +1225,10 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * UI to display export screen fields
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI to display export screen fields
+     *
+     * @return tempcode                 The UI
+     */
     public function export_ical()
     {
         $fields = new ocp_tempcode();
@@ -1245,8 +1245,8 @@ class Module_cms_calendar extends standard_crud_module
     }
 
     /**
-	 * The actualiser to export ical
-	 */
+     * The actualiser to export ical
+     */
     public function _export_ical()
     {
         require_code('calendar_ical');
@@ -1273,14 +1273,14 @@ class Module_cms_calendar_cat extends standard_crud_module
     public $menu_label = 'CALENDAR';
 
     /**
-	 * Get tempcode for a post template adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK	ID of category (NULL: new category)
-	 * @param  SHORT_TEXT	The title
-	 * @param  SHORT_TEXT	The theme image code
-	 * @param  URLPATH		URL to external feed to associate with this event type
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a post template adding/editing form.
+     *
+     * @param  ?AUTO_LINK               ID of category (NULL: new category)
+     * @param  SHORT_TEXT               The title
+     * @param  SHORT_TEXT               The theme image code
+     * @param  URLPATH                  URL to external feed to associate with this event type
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($id = null,$title = '',$logo = '',$external_feed = '')
     {
         $fields = new ocp_tempcode();
@@ -1325,11 +1325,11 @@ class Module_cms_calendar_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -1371,11 +1371,11 @@ class Module_cms_calendar_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $m = $GLOBALS['SITE_DB']->query_select('calendar_types',array('*'),array('id' => intval($id)),'',1);
@@ -1390,10 +1390,10 @@ class Module_cms_calendar_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         require_code('themes2');
@@ -1412,10 +1412,10 @@ class Module_cms_calendar_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         require_code('themes2');
@@ -1434,38 +1434,38 @@ class Module_cms_calendar_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         delete_event_type(intval($id));
     }
 
     /**
-	 * The do-next manager for after calendar content management (event types only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after calendar content management (event types only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->_do_next_manager($title,$description,null,is_null($id)?null:intval($id),'');
     }
 
     /**
-	 * The do-next manager for after calendar content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @param  ?AUTO_LINK	The category ID we were working in (NULL: N/A)
-	 * @param  string			The Y-m-d of the added/edited event (first occurence) (blank: whatever)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after calendar content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ?AUTO_LINK               The category ID we were working in (NULL: N/A)
+     * @param  string                   The Y-m-d of the added/edited event (first occurence) (blank: whatever)
+     * @return tempcode                 The UI
+     */
     public function _do_next_manager($title,$description,$id,$type,$date)
     {
         $archive_map = array('type' => 'misc','view' => 'day');
@@ -1489,7 +1489,7 @@ class Module_cms_calendar_cat extends standard_crud_module
             return do_next_manager($title,$description,
                 null,
                 null,
-                /* TYPED-ORDERED LIST OF 'LINKS'	 */
+                /* TYPED-ORDERED LIST OF 'LINKS'    */
                 array('_SELF',array('type' => 'ad'),'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')), // Add one
                 NULL, // Edit this
                 has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type' => 'ed')+$extra,'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):null, // Edit one
@@ -1513,7 +1513,7 @@ class Module_cms_calendar_cat extends standard_crud_module
         return do_next_manager($title,$description,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             array('_SELF',array('type' => 'ad','e_type' => $type)+$extra,'_SELF',do_lang_tempcode('ADD_CALENDAR_EVENT')), // Add one
             (is_null($id) || (!has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar',array('calendar','type')+$extra)))?null:array('_SELF',array('type' => '_ed','id' => $id)+$extra,'_SELF',do_lang_tempcode('EDIT_THIS_CALENDAR_EVENT')), // Edit this
             has_privilege(get_member(),'edit_own_lowrange_content','cms_calendar')?array('_SELF',array('type' => 'ed')+$extra,'_SELF',do_lang_tempcode('EDIT_CALENDAR_EVENT')):null, // Edit one

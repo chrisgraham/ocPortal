@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 require_code('crud_module');
@@ -42,14 +42,14 @@ class Module_cms_downloads extends standard_crud_module
     public $donext_type = null;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -82,10 +82,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('downloads');
@@ -95,12 +95,12 @@ class Module_cms_downloads extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $this->cat_crud_module = class_exists('Mx_cms_downloads_cat')?new Mx_cms_downloads_cat():new Module_cms_downloads_cat();
@@ -147,11 +147,11 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         require_code('downloads');
@@ -179,10 +179,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before download content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before download content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -203,10 +203,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * The UI for importing FTP downloads.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for importing FTP downloads.
+     *
+     * @return tempcode                 The UI
+     */
     public function import_interface()
     {
         if (!function_exists('ftp_connect')) {
@@ -227,10 +227,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * The actualiser for importing FTP downloads.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for importing FTP downloads.
+     *
+     * @return tempcode                 The UI
+     */
     public function _import()
     {
         $destination = post_param_integer('destination');
@@ -247,10 +247,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * The UI for importing filesystem downloads.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for importing filesystem downloads.
+     *
+     * @return tempcode                 The UI
+     */
     public function import_interface2()
     {
         check_privilege('mass_import');
@@ -267,10 +267,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * The actualiser for importing filesystem downloads.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for importing filesystem downloads.
+     *
+     * @return tempcode                 The UI
+     */
     public function _import2()
     {
         $destination = post_param_integer('destination');
@@ -288,10 +288,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
-	 */
+     * Standard crud_module list function.
+     *
+     * @return array                    A triple: The tree field (tempcode), Search URL, Archive URL
+     */
     public function create_selection_list_ajax_tree()
     {
         if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)') == 0) {
@@ -307,29 +307,29 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a download adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK		The ID of the download (NULL: new)
-	 * @param  SHORT_TEXT		The name of the download
-	 * @param  ?AUTO_LINK		The download category (NULL: first)
-	 * @param  URLPATH			The URL for the downloadable file
-	 * @param  SHORT_TEXT		The name of the author
-	 * @param  LONG_TEXT			Description for the download
-	 * @param  LONG_TEXT			Supplementary description for the download
-	 * @param  ?AUTO_LINK		The ID of the download this download is out-moding (NULL: none)
-	 * @param  BINARY				Whether the download is validated
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @param  LONG_TEXT			Notes
-	 * @param  ?integer			The file size (NULL: not added yet therefore unknown)
-	 * @param  integer			The point cost of the download
-	 * @param  BINARY				Whether the submitter gets the point cost
-	 * @param  ?SHORT_TEXT		The original file name for the file (we can't rely on the one on disk) (NULL: not added yet therefore unknown)
-	 * @param  ?AUTO_LINK		The licence to use (NULL: none)
-	 * @param  integer			Which image to use for the downloads representative image (counts from 1)
-	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for a download adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The ID of the download (NULL: new)
+     * @param  SHORT_TEXT               The name of the download
+     * @param  ?AUTO_LINK               The download category (NULL: first)
+     * @param  URLPATH                  The URL for the downloadable file
+     * @param  SHORT_TEXT               The name of the author
+     * @param  LONG_TEXT                Description for the download
+     * @param  LONG_TEXT                Supplementary description for the download
+     * @param  ?AUTO_LINK               The ID of the download this download is out-moding (NULL: none)
+     * @param  BINARY                   Whether the download is validated
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  LONG_TEXT                Notes
+     * @param  ?integer                 The file size (NULL: not added yet therefore unknown)
+     * @param  integer                  The point cost of the download
+     * @param  BINARY                   Whether the submitter gets the point cost
+     * @param  ?SHORT_TEXT              The original file name for the file (we can't rely on the one on disk) (NULL: not added yet therefore unknown)
+     * @param  ?AUTO_LINK               The licence to use (NULL: none)
+     * @param  integer                  Which image to use for the downloads representative image (counts from 1)
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($id = null,$name = '',$category_id = null,$url = '',$author = '',$description = '',$additional_details = '',$out_mode_id = null,$validated = 1,$allow_rating = null,$allow_comments = null,$allow_trackbacks = null,$notes = '',$file_size = null,$cost = 0,$submitter_gets_points = 1,$original_filename = null,$licence = null,$default_pic = 1)
     {
         list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
@@ -454,11 +454,11 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('submitter','add_date'),array('id' => intval($id)),'',1);
@@ -469,11 +469,11 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module cat getter.
-	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
-	 * @return mixed			The cat
-	 */
+     * Standard crud_module cat getter.
+     *
+     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @return mixed                    The cat
+     */
     public function get_cat($id)
     {
         $temp = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','category_id',array('id' => $id));
@@ -484,11 +484,11 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple of lots of info
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A tuple of lots of info
+     */
     public function fill_in_edit_form($_id)
     {
         $id = intval($_id);
@@ -519,10 +519,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT			The ID of the new entry
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The ID of the new entry
+     */
     public function add_actualisation()
     {
         $category_id = post_param_integer('category_id');
@@ -613,10 +613,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($_id)
     {
         $id = intval($_id);
@@ -705,10 +705,10 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($_id)
     {
         $id = intval($_id);
@@ -723,13 +723,13 @@ class Module_cms_downloads extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after download content management (events only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after download content management (events only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?null:intval($id),$this->donext_type);
@@ -750,22 +750,22 @@ class Module_cms_downloads_alt extends standard_crud_module
     public $donext_type = null;
 
     /**
-	 * Standard CRUD-module entry list fetcher.
-	 *
-	 * @return tempcode	The list
-	 */
+     * Standard CRUD-module entry list fetcher.
+     *
+     * @return tempcode                 The list
+     */
     public function create_selection_list_entries()
     {
         return create_selection_list_download_licences();
     }
 
     /**
-	 * Get tempcode for a download adding/editing form.
-	 *
-	 * @param  ID_TEXT		The title of the licence
-	 * @param  LONG_TEXT		The text of the licence
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a download adding/editing form.
+     *
+     * @param  ID_TEXT                  The title of the licence
+     * @param  LONG_TEXT                The text of the licence
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($title = '',$text = '')
     {
         $fields = new ocp_tempcode();
@@ -777,11 +777,11 @@ class Module_cms_downloads_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($_id)
     {
         $id = intval($_id);
@@ -796,10 +796,10 @@ class Module_cms_downloads_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT			The ID of the new entry
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The ID of the new entry
+     */
     public function add_actualisation()
     {
         $id = add_download_licence(post_param('title'),post_param('text'));
@@ -808,10 +808,10 @@ class Module_cms_downloads_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($_id)
     {
         $id = intval($_id);
@@ -820,10 +820,10 @@ class Module_cms_downloads_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($_id)
     {
         $id = intval($_id);
@@ -832,13 +832,13 @@ class Module_cms_downloads_alt extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after download content management (events only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after download content management (events only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $GLOBALS['MODULE_CMS_DOWNLOADS']->cat_crud_module->_do_next_manager($title,$description,null,null,$id);
@@ -861,10 +861,10 @@ class Module_cms_downloads_cat extends standard_crud_module
     public $menu_label = 'SECTION_DOWNLOADS';
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
-	 */
+     * Standard crud_module list function.
+     *
+     * @return array                    A triple: The tree field (tempcode), Search URL, Archive URL
+     */
     public function create_selection_list_ajax_tree()
     {
         $search_url = build_url(array('page' => 'search','id' => 'download_categories'),get_module_zone('search'));
@@ -875,17 +875,17 @@ class Module_cms_downloads_cat extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a download category adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK	The download ID (NULL: new)
-	 * @param  SHORT_TEXT	The name of the download category
-	 * @param  ?AUTO_LINK	The download category parent (NULL: use root)
-	 * @param  LONG_TEXT		Description
-	 * @param  LONG_TEXT		Notes
-	 * @param  ?AUTO_LINK	The ID of the download category (NULL: we're adding, not editing)
-	 * @param  URLPATH		The rep-image for the download category
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for a download category adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The download ID (NULL: new)
+     * @param  SHORT_TEXT               The name of the download category
+     * @param  ?AUTO_LINK               The download category parent (NULL: use root)
+     * @param  LONG_TEXT                Description
+     * @param  LONG_TEXT                Notes
+     * @param  ?AUTO_LINK               The ID of the download category (NULL: we're adding, not editing)
+     * @param  URLPATH                  The rep-image for the download category
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($id = null,$category = '',$parent_id = null,$description = '',$notes = '',$category_id = -1,$rep_image = '')
     {
         if ((is_null($parent_id)) && ($category_id == -1)) {
@@ -924,11 +924,11 @@ class Module_cms_downloads_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $category_id = intval($id);
@@ -943,10 +943,10 @@ class Module_cms_downloads_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $category = post_param('category');
@@ -969,10 +969,10 @@ class Module_cms_downloads_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $category_id = intval($id);
@@ -1007,10 +1007,10 @@ class Module_cms_downloads_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         $category_id = intval($id);
@@ -1021,28 +1021,28 @@ class Module_cms_downloads_cat extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after download content management (event types only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after download content management (event types only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->_do_next_manager($title,$description,null,is_null($id)?null:intval($id));
     }
 
     /**
-	 * The do-next manager for after download content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: delete/NA)
-	 * @param  ?AUTO_LINK	The category ID we were working in (NULL: deleted/NA)
-	 * @param  ?AUTO_LINK	The download licence ID we were working in (NULL: deleted/NA)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after download content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: delete/NA)
+     * @param  ?AUTO_LINK               The category ID we were working in (NULL: deleted/NA)
+     * @param  ?AUTO_LINK               The download licence ID we were working in (NULL: deleted/NA)
+     * @return tempcode                 The UI
+     */
     public function _do_next_manager($title,$description,$id = null,$category_id = null,$download_licence_id = null)
     {
         require_code('templates_donext');
@@ -1051,7 +1051,7 @@ class Module_cms_downloads_cat extends standard_crud_module
             return do_next_manager($title,$description,
                 null,
                 null,
-                /* TYPED-ORDERED LIST OF 'LINKS'	 */
+                /* TYPED-ORDERED LIST OF 'LINKS'    */
                 array('_SELF',array('type' => 'ad'),'_SELF'), // Add one
                 NULL, // Edit this
                 has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ed'),'_SELF'):null, // Edit one
@@ -1085,7 +1085,7 @@ class Module_cms_downloads_cat extends standard_crud_module
         return do_next_manager($title,$description,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             is_null($id)?null:array('_SELF',array('type' => 'ad','cat' => $category_id),'_SELF'), // Add one
             (is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_downloads',array('downloads',$category_id))))?null:array('_SELF',array('type' => '_ed','id' => $id),'_SELF'), // Edit this
             has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ed'),'_SELF'):null, // Edit one

@@ -46,8 +46,8 @@ class JabberAuth
     public $debug = true;                      /* Debug mode */
     public $debugfile = "../../errorlog.php";  /* Debug output */
     /*
-	 * For both debug and logging, ejabberd have to be able to write.
-	 */
+     * For both debug and logging, ejabberd have to be able to write.
+     */
 
     public $jabber_user;   /* This is the jabber user passed to the script. filled by $this->command() */
     public $jabber_pass;   /* This is the jabber user password passed to the script. filled by $this->command() */
@@ -193,10 +193,10 @@ class JabberAuth
     {
         global $SITE_INFO;
         /*if (isset($SITE_INFO['base_url']))
-		{
-			$p=parse_url($SITE_INFO['base_url']);
-			if ($this->jabber_server!=$p['host']) return false;
-		}*/
+        {
+            $p=parse_url($SITE_INFO['base_url']);
+            if ($this->jabber_server!=$p['host']) return false;
+        }*/
 
         $result = mysql_query('SELECT * FROM ' . $SITE_INFO['table_prefix'] . 'f_members WHERE m_username=\'' . mysql_real_escape_string($this->jabber_user) . '\'');
         $row = mysql_fetch_assoc($result);
@@ -232,13 +232,13 @@ class JabberAuth
     }
 
     /**
-	 * Verify a password is correct by comparison of the hashed version.
-	 *
-	 * @param  SHORT_TEXT	The password in plain text
-	 * @param  SHORT_TEXT	The salt
-	 * @param  SHORT_TEXT	The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
-	 * @return boolean		Whether the password if verified
-	 */
+     * Verify a password is correct by comparison of the hashed version.
+     *
+     * @param  SHORT_TEXT               The password in plain text
+     * @param  SHORT_TEXT               The salt
+     * @param  SHORT_TEXT               The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
+     * @return boolean                  Whether the password if verified
+     */
     public function ratchet_hash_verify($password,$salt,$pass_hash_salted)
     {
         if ((function_exists('password_verify')) && (preg_match('#^\w+$#',$pass_hash_salted) == 0)) {
@@ -253,10 +253,10 @@ class JabberAuth
     {
         global $SITE_INFO;
         /*if (isset($SITE_INFO['base_url']))
-		{
-			$p=parse_url($SITE_INFO['base_url']);
-			if ($this->jabber_server!=$p['host']) return false;
-		}*/
+        {
+            $p=parse_url($SITE_INFO['base_url']);
+            if ($this->jabber_server!=$p['host']) return false;
+        }*/
 
         $result = mysql_query('SELECT * FROM ' . $SITE_INFO['table_prefix'] . 'f_members WHERE m_username=\'' . mysql_real_escape_string($this->jabber_user) . '\'');
         $row = mysql_fetch_assoc($result);

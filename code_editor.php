@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		code_editor
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    code_editor
  */
 
 /*EXTRA FUNCTIONS: tempnam*/
@@ -43,8 +43,8 @@ $HTML_ESCAPE_2 = array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&
 /**
  * Escape HTML text. Heavily optimised! Ended up with preg_replace after trying lots of things.
  *
- * @param  LONG_TEXT		The text to escape.
- * @return LONG_TEXT		The escaped result.
+ * @param  LONG_TEXT                    The text to escape.
+ * @return LONG_TEXT                    The escaped result.
  */
 function code_editor_escape_html($string)
 {
@@ -80,8 +80,8 @@ code_editor_do_footer();
 /**
  * Output the code editors page header.
  *
- * @param  ID_TEXT		The type our form clicks are.
- * @param  ID_TEXT		The target our form clicks get sent to.
+ * @param  ID_TEXT                      The type our form clicks are.
+ * @param  ID_TEXT                      The target our form clicks get sent to.
  */
 function code_editor_do_header($type,$target = '_top')
 {
@@ -89,21 +89,21 @@ function code_editor_do_header($type,$target = '_top')
 <!DOCTYPE html>
 <html lang="EN">
 <head>
-	<title>ocPortal code editor</title>
-	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
-	<style>
+    <title>ocPortal code editor</title>
+    <link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
+    <style>
 ';
     @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
     echo '
-		.screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/icons/48x48/menu/_generic_admin/tool.png\') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
-		.button_screen { padding: 0.5em 0.3em !important; }
-		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-	</style>';
+        .screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/icons/48x48/menu/_generic_admin/tool.png\') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
+        .button_screen { padding: 0.5em 0.3em !important; }
+        a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
+    </style>';
     echo '
-		<script src="data/editarea/edit_area_full.js"></script>
+        <script src="data/editarea/edit_area_full.js"></script>
 
-		<meta name="robots" content="noindex, nofollow" />
-		';
+        <meta name="robots" content="noindex, nofollow" />
+        ';
     echo '
 </head>
 <body class="website_body" style="margin: 1em"><div class="global_middle">
@@ -122,13 +122,13 @@ function code_editor_do_footer()
 <script>// <![CDATA[
 if (document.getElementById('file'))
 {
-	editAreaLoader.init({
-		id : "file"
-		,syntax: "php"
-		,start_highlight: true
-		,allow_resize: true
-		,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
-	});
+    editAreaLoader.init({
+        id : "file"
+        ,syntax: "php"
+        ,start_highlight: true
+        ,allow_resize: true
+        ,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
+    });
 }
 //]]></script>
 
@@ -194,7 +194,7 @@ function code_editor_do_login()
         $ftp_folder = $SITE_INFO['ftp_folder'];
     }
     echo <<<END
-	<h1 class="screen_title">ocPortal Code Editor</h1>
+    <h1 class="screen_title">ocPortal Code Editor</h1>
 END;
     if (@$_POST['given_password']) {
         echo '<p><strong>Invalid password</strong></p>';
@@ -203,40 +203,40 @@ END;
     $_ftp_folder = code_editor_escape_html($ftp_folder);
     $_ftp_username = code_editor_escape_html($ftp_username);
     echo <<<END
-	<p>
-		<label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
-	</p>
-	<hr />
-	<p>If you need to edit original ocPortal files (rather than overriding or making custom ones), then you probably need to enter FTP details below. This will allow this editor to save via FTP, and if no username is given, it will try and save directly.</p>
-	<table>
-		<tr><th>FTP Host</th><td><input size="50" type="text" name="ftp_domain" value="{$_ftp_domain}" /></td></tr>
-		<tr><th>FTP Path</th><td><input size="50" type="text" name="ftp_folder" value="{$_ftp_folder}" /></td></tr>
-		<tr><th>FTP Username</th><td><input size="50" type="text" name="ftp_username" value="{$_ftp_username}" /></td></tr>
-		<tr><th>FTP Password</th><td><input size="50" type="password" name="ftp_password" /></td></tr>
-	</table>
-	<p>
-		<input class="button_screen menu__site_meta__user_actions__login" type="submit" value="Log in" />
-	</p>
-	<hr />
-	<ul class="actions_list" role="navigation">
-		<li><a title="ocProducts programming tutorial (this link will open in a new window)" target="_blank" href="http://ocportal.com/docs/tut_programming.htm">Read the ocProducts programming tutorial</a></li>
+    <p>
+        <label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
+    </p>
+    <hr />
+    <p>If you need to edit original ocPortal files (rather than overriding or making custom ones), then you probably need to enter FTP details below. This will allow this editor to save via FTP, and if no username is given, it will try and save directly.</p>
+    <table>
+        <tr><th>FTP Host</th><td><input size="50" type="text" name="ftp_domain" value="{$_ftp_domain}" /></td></tr>
+        <tr><th>FTP Path</th><td><input size="50" type="text" name="ftp_folder" value="{$_ftp_folder}" /></td></tr>
+        <tr><th>FTP Username</th><td><input size="50" type="text" name="ftp_username" value="{$_ftp_username}" /></td></tr>
+        <tr><th>FTP Password</th><td><input size="50" type="password" name="ftp_password" /></td></tr>
+    </table>
+    <p>
+        <input class="button_screen menu__site_meta__user_actions__login" type="submit" value="Log in" />
+    </p>
+    <hr />
+    <ul class="actions_list" role="navigation">
+        <li><a title="ocProducts programming tutorial (this link will open in a new window)" target="_blank" href="http://ocportal.com/docs/tut_programming.htm">Read the ocProducts programming tutorial</a></li>
 END;
     if (array_key_exists('base_url',$SITE_INFO)) {
         $_base_url = code_editor_escape_html($SITE_INFO['base_url']);
         echo <<<END
-		<li><a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a></li>
+        <li><a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a></li>
 END;
     }
     echo <<<END
-	</ul>
+    </ul>
 END;
 }
 
 /**
  * Search inside a directory for editable files, whilst favouring the overridden versions.
  *
- * @param  SHORT_TEXT	The directory path to search.
- * @return array			A list of the HTML elements for the list box selection.
+ * @param  SHORT_TEXT                   The directory path to search.
+ * @return array                        A list of the HTML elements for the list box selection.
  */
 function do_dir($dir)
 {
@@ -266,7 +266,7 @@ function do_dir($dir)
 /**
  * Output the file selection page.
  *
- * @param  SHORT_TEXT	The password previously given to authorise our editing.
+ * @param  SHORT_TEXT                   The password previously given to authorise our editing.
  */
 function do_get_path($given_password)
 {
@@ -290,24 +290,24 @@ function do_get_path($given_password)
 END;
     }
     echo <<<END
-	<h1 class="screen_title">ocPortal Code Editor</h1>
-	<p>
-		New File: <input type="text" name="path_new" />
-	</p>
-	<p>
-		OR, existing file: <select name="path">{$paths}</select>
-	</p>
-	<p class="proceed_button">
-		<input class="button_screen buttons__save" type="submit" value="Edit file" />
-	</p>
+    <h1 class="screen_title">ocPortal Code Editor</h1>
+    <p>
+        New File: <input type="text" name="path_new" />
+    </p>
+    <p>
+        OR, existing file: <select name="path">{$paths}</select>
+    </p>
+    <p class="proceed_button">
+        <input class="button_screen buttons__save" type="submit" value="Edit file" />
+    </p>
 END;
 }
 
 /**
  * Ensure that the specified file/folder is writeable for the FTP user (so that it can be deleted by the system), and should be called whenever a file is uploaded/created, or a folder is made. We call this function assuming we are giving world permissions
  *
- * @param  PATH			The full pathname to the file/directory
- * @param  integer		The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
+ * @param  PATH                         The full pathname to the file/directory
+ * @param  integer                      The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
  */
 function ce_fix_permissions($path,$perms = 0666) // We call this function assuming we are giving world permissions
 {
@@ -328,7 +328,7 @@ function ce_fix_permissions($path,$perms = 0666) // We call this function assumi
 /**
  * Open up an FTP connection from POSTed details.
  *
- * @return ?mixed		Either an error screen or a connection. (NULL: not using FTP)
+ * @return ?mixed                       Either an error screen or a connection. (NULL: not using FTP)
  */
 function open_up_ftp_connection()
 {
@@ -384,8 +384,8 @@ function open_up_ftp_connection()
 /**
  * Output the editing page and do the editing.
  *
- * @param  SHORT_TEXT	The password previously given to authorise our editing.
- * @param  SHORT_TEXT	The path of the file we are editing.
+ * @param  SHORT_TEXT                   The password previously given to authorise our editing.
+ * @param  SHORT_TEXT                   The path of the file we are editing.
  */
 function do_page($given_password,$path)
 {
@@ -425,11 +425,11 @@ END;
         echo code_editor_escape_html($contents) . '</textarea>';
         echo <<<END
 <script>// <![CDATA[
-	var file=document.getElementById('file');
-	file.scrollTop=Math.round((file.scrollHeight/{$lines})*{$line});
+    var file=document.getElementById('file');
+    file.scrollTop=Math.round((file.scrollHeight/{$lines})*{$line});
 //]]></script>
 <p>
-	Jump to (line number or search phrase): <input name="jmp" type="text" value="" /> <input onclick="var val=form.elements['jmp'].value; if (!(window.parseInt(val)>0)) val=file.value.substr(0,file.value.indexOf(val)).split('\\n').length-1; file.scrollTop=Math.round((file.scrollHeight/{$lines})*window.parseInt(val)); return false;" type="submit" value="Jump" />
+    Jump to (line number or search phrase): <input name="jmp" type="text" value="" /> <input onclick="var val=form.elements['jmp'].value; if (!(window.parseInt(val)>0)) val=file.value.substr(0,file.value.indexOf(val)).split('\\n').length-1; file.scrollTop=Math.round((file.scrollHeight/{$lines})*window.parseInt(val)); return false;" type="submit" value="Jump" />
 </p>
 END;
         if (strpos($path,'_custom/') !== false) {
@@ -480,10 +480,10 @@ END;
 var msg='Access denied. You probably should have specified FTP details.';
 if (window.alert!==null)
 {
-	window.alert(msg);
+    window.alert(msg);
 } else
 {
-	console.log(msg+' (popup blocker stopping alert)');
+    console.log(msg+' (popup blocker stopping alert)');
 }
 </script>
 END;
@@ -498,10 +498,10 @@ END;
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
 {
-	window.alert(msg);
+    window.alert(msg);
 } else
 {
-	console.log(msg+' (popup blocker stopping alert)');
+    console.log(msg+' (popup blocker stopping alert)');
 }
 </script>
 END;
@@ -523,10 +523,10 @@ END;
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
 {
-	window.alert(msg);
+    window.alert(msg);
 } else
 {
-	console.log(msg+' (popup blocker stopping alert)');
+    console.log(msg+' (popup blocker stopping alert)');
 }
 </script>
 END;
@@ -542,10 +542,10 @@ END;
 var msg='Could not save via FTP ['.@strval($php_errormsg).'].';
 if (window.alert!==null)
 {
-	window.alert(msg);
+    window.alert(msg);
 } else
 {
-	console.log(msg+' (popup blocker stopping alert)');
+    console.log(msg+' (popup blocker stopping alert)');
 }
 </script>
 END;
@@ -602,10 +602,10 @@ END;
 var msg='{$message}';
 if (window.alert!==null)
 {
-	window.alert(msg);
+    window.alert(msg);
 } else
 {
-	console.log(msg+' (popup blocker stopping alert)');
+    console.log(msg+' (popup blocker stopping alert)');
 }
 </script>
 END;
@@ -615,8 +615,8 @@ END;
 /**
  * Convert a normal path to an overriden save path.
  *
- * @param  string			The normal path
- * @return string			The overridden save path
+ * @param  string                       The normal path
+ * @return string                       The overridden save path
  */
 function convert_to_save_path($save_path)
 {
@@ -633,7 +633,7 @@ function convert_to_save_path($save_path)
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH				File/directory name to sync on (may be full or relative path)
+ * @param  PATH                         File/directory name to sync on (may be full or relative path)
  */
 function ce_sync_file($filename)
 {
@@ -652,8 +652,8 @@ function ce_sync_file($filename)
 /**
  * Provides a hook for file synchronisation between mirrored servers.
  *
- * @param  PATH				File/directory name to move from (may be full or relative path)
- * @param  PATH				File/directory name to move to (may be full or relative path)
+ * @param  PATH                         File/directory name to move from (may be full or relative path)
+ * @param  PATH                         File/directory name to move to (may be full or relative path)
  */
 function ce_sync_file_move($old,$new)
 {
@@ -675,8 +675,8 @@ function ce_sync_file_move($old,$new)
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
+ * @param  SHORT_TEXT                   Given master password
+ * @return boolean                      Whether it is valid
  */
 function ce_check_master_password($password_given)
 {
@@ -704,8 +704,8 @@ function ce_check_master_password($password_given)
 /**
  * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
  *
- * @param  string		The prefix of the temporary file name.
- * @return ~string	The name of the temporary file (false: error).
+ * @param  string                       The prefix of the temporary file name.
+ * @return ~string                      The name of the temporary file (false: error).
  */
 function ce_ocp_tempnam($prefix)
 {

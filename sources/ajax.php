@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*EXTRA FUNCTIONS: simplexml_load_string*/
@@ -473,12 +473,12 @@ function comcode_convert_script()
         $stripped_old = preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#','',$out));
         if ($stripped_new != $stripped_old) {
             /*$myfile=fopen(get_file_base().'/a','wb'); // Useful for debugging
-			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',"\n",$new)));
-			fclose($myfile);
+            fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',"\n",$new)));
+            fclose($myfile);
 
-			$myfile=fopen(get_file_base().'/b','wb');
-			fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',"\n",$out)));
-			fclose($myfile);*/
+            $myfile=fopen(get_file_base().'/b','wb');
+            fwrite($myfile,preg_replace('#<!--.*-->#Us','',preg_replace('#\s+#',"\n",$out)));
+            fclose($myfile);*/
 
             $out = $new . do_lang('BROKEN_XHTML_FIXED');
         }

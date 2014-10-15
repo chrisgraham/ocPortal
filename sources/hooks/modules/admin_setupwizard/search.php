@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		search
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    search
  */
 
 class Hook_sw_search
 {
     /**
-	 * Run function for blocks in the setup wizard.
-	 *
-	 * @return array		Map of block names, to display types.
-	 */
+     * Run function for blocks in the setup wizard.
+     *
+     * @return array                    Map of block names, to display types.
+     */
     public function get_blocks()
     {
         return array(array(),array('side_tag_cloud' => array('PANEL_NONE','PANEL_RIGHT'),'main_search' => array('PANEL_NONE','PANEL_RIGHT')));

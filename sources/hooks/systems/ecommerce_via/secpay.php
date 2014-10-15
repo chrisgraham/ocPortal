@@ -13,53 +13,53 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 class Hook_secpay
 {
     /**
-	 * Get the gateway username.
-	 *
-	 * @return string			The answer.
-	 */
+     * Get the gateway username.
+     *
+     * @return string                   The answer.
+     */
     public function _get_username()
     {
         return ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
     }
 
     /**
-	 * Get the remote form URL.
-	 *
-	 * @return URLPATH		The remote form URL.
-	 */
+     * Get the remote form URL.
+     *
+     * @return URLPATH                  The remote form URL.
+     */
     public function _get_remote_form_url()
     {
         return 'https://secure.worldpay.com/wcc/purchase';
     }
 
     /**
-	 * Generate a transaction ID.
-	 *
-	 * @return string			A transaction ID.
-	 */
+     * Generate a transaction ID.
+     *
+     * @return string                   A transaction ID.
+     */
     public function generate_trans_id()
     {
         return md5(uniqid(strval((mt_rand(0,32000))),true));
     }
 
     /**
-	 * Make a transaction (payment) button.
-	 *
-	 * @param  ID_TEXT		The product codename.
-	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  ID_TEXT		The purchase ID.
-	 * @param  float			A transaction amount.
-	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button.
-	 */
+     * Make a transaction (payment) button.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @param  SHORT_TEXT               The human-readable product title.
+     * @param  ID_TEXT                  The purchase ID.
+     * @param  float                    A transaction amount.
+     * @param  ID_TEXT                  The currency to use.
+     * @return tempcode                 The button.
+     */
     public function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
     {
         $username = $this->_get_username();
@@ -94,13 +94,13 @@ class Hook_secpay
     }
 
     /**
-	 * Find details for a subscription in secpay format.
-	 *
-	 * @param  integer	The subscription length in the units.
-	 * @param  ID_TEXT	The length units.
-	 * @set    d w m y
-	 * @return array		A tuple: the period in secpay units, the date of the first repeat.
-	 */
+     * Find details for a subscription in secpay format.
+     *
+     * @param  integer                  The subscription length in the units.
+     * @param  ID_TEXT                  The length units.
+     * @set    d w m y
+     * @return array                    A tuple: the period in secpay units, the date of the first repeat.
+     */
     public function _translate_subscription_details($length,$length_units)
     {
         switch ($length_units) {
@@ -131,18 +131,18 @@ class Hook_secpay
     }
 
     /**
-	 * Make a subscription (payment) button.
-	 *
-	 * @param  ID_TEXT		The product codename.
-	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  ID_TEXT		The purchase ID.
-	 * @param  float			A transaction amount.
-	 * @param  integer		The subscription length in the units.
-	 * @param  ID_TEXT		The length units.
-	 * @set    d w m y
-	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button.
-	 */
+     * Make a subscription (payment) button.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @param  SHORT_TEXT               The human-readable product title.
+     * @param  ID_TEXT                  The purchase ID.
+     * @param  float                    A transaction amount.
+     * @param  integer                  The subscription length in the units.
+     * @param  ID_TEXT                  The length units.
+     * @set    d w m y
+     * @param  ID_TEXT                  The currency to use.
+     * @return tempcode                 The button.
+     */
     public function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
     {
         $username = $this->_get_username();
@@ -181,11 +181,11 @@ class Hook_secpay
     }
 
     /**
-	 * Make a subscription cancellation button.
-	 *
-	 * @param  ID_TEXT		The purchase ID.
-	 * @return tempcode		The button.
-	 */
+     * Make a subscription cancellation button.
+     *
+     * @param  ID_TEXT                  The purchase ID.
+     * @return tempcode                 The button.
+     */
     public function make_cancel_button($purchase_id)
     {
         $cancel_url = build_url(array('page' => 'subscriptions','type' => 'cancel','id' => $purchase_id),get_module_zone('subscriptions'));
@@ -193,39 +193,39 @@ class Hook_secpay
     }
 
     /**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
-	 *
-	 * @param  string		Transaction ID to cancel.
-	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
-	 */
-    /*function auto_cancel($trans_id)		Not currently implemented
-	{
-		require_lang('ecommerce');
-		$username=$this->_get_username();
-		$password=get_option('ipn_password');
-		$password_2=get_option('vpn_password');
-		$result=$this->_xml_rpc('https://www.secpay.com:443/secxmlrpc/make_call','SECVPN.repeatCardFullAddr',array($username,$password_2,$trans_id,-1,$password,'','','','','','repeat_change=true,repeat=false'),true);
-		if (is_null($result)) return false;
-		return (strpos($result,'&code=A&')!==false);
-	}*/
+     * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
+     *
+     * @param  string                   Transaction ID to cancel.
+     * @return ?boolean                 True: yes. False: no. (NULL: cancels via a user-URL-directioning)
+     */
+    /*function auto_cancel($trans_id)     Not currently implemented
+    {
+        require_lang('ecommerce');
+        $username=$this->_get_username();
+        $password=get_option('ipn_password');
+        $password_2=get_option('vpn_password');
+        $result=$this->_xml_rpc('https://www.secpay.com:443/secxmlrpc/make_call','SECVPN.repeatCardFullAddr',array($username,$password_2,$trans_id,-1,$password,'','','','','','repeat_change=true,repeat=false'),true);
+        if (is_null($result)) return false;
+        return (strpos($result,'&code=A&')!==false);
+    }*/
 
     /**
-	 * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
-	 *
-	 * @param  float	A transaction amount.
-	 * @return float	The fee.
-	 */
+     * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
+     *
+     * @param  float                    A transaction amount.
+     * @return float                    The fee.
+     */
     public function get_transaction_fee($amount)
     {
         return 0.39; // the fee for <60 transactions per month. If it's more, I'd hope ocPortal's simple accountancy wasn't being relied on (it shouldn't be)!
     }
 
     /**
-	 * Get a list of card types.
-	 *
-	 * @param  ?string	The card type to select by default (NULL: don't care).
-	 * @return tempcode	The list.
-	 */
+     * Get a list of card types.
+     *
+     * @param  ?string                  The card type to select by default (NULL: don't care).
+     * @return tempcode                 The list.
+     */
     public function create_selection_list_card_types($it = null)
     {
         $list = new ocp_tempcode();
@@ -237,23 +237,23 @@ class Hook_secpay
     }
 
     /**
-	 * Perform a transaction.
-	 *
-	 * @param  ?ID_TEXT		The transaction ID (NULL: generate one).
-	 * @param  SHORT_TEXT	Cardholder name.
-	 * @param  SHORT_TEXT	Card number.
-	 * @param  SHORT_TEXT	Transaction amount.
-	 * @param  SHORT_TEXT	Card Expiry date.
-	 * @param  integer		Card Issue number.
-	 * @param  SHORT_TEXT	Card Start date.
-	 * @param  SHORT_TEXT	Card Type.
-	 * @set    "Visa" "Master Card" "Switch" "UK Maestro" "Maestro" "Solo" "Delta" "American Express" "Diners Card" "JCB"
-	 * @param  SHORT_TEXT	Card CV2 number (security number).
-	 * @param  ?integer		The subscription length in the units. (NULL: not a subscription)
-	 * @param  ?ID_TEXT		The length units. (NULL: not a subscription)
-	 * @set    d w m y
-	 * @return array			A tuple: success (boolean), trans-ID (string), message (string), raw message (string).
-	 */
+     * Perform a transaction.
+     *
+     * @param  ?ID_TEXT                 The transaction ID (NULL: generate one).
+     * @param  SHORT_TEXT               Cardholder name.
+     * @param  SHORT_TEXT               Card number.
+     * @param  SHORT_TEXT               Transaction amount.
+     * @param  SHORT_TEXT               Card Expiry date.
+     * @param  integer                  Card Issue number.
+     * @param  SHORT_TEXT               Card Start date.
+     * @param  SHORT_TEXT               Card Type.
+     * @set    "Visa" "Master Card" "Switch" "UK Maestro" "Maestro" "Solo" "Delta" "American Express" "Diners Card" "JCB"
+     * @param  SHORT_TEXT               Card CV2 number (security number).
+     * @param  ?integer                 The subscription length in the units. (NULL: not a subscription)
+     * @param  ?ID_TEXT                 The length units. (NULL: not a subscription)
+     * @set    d w m y
+     * @return array                    A tuple: success (boolean), trans-ID (string), message (string), raw message (string).
+     */
     public function do_transaction($trans_id,$name,$card_number,$amount,$expiry_date,$issue_number,$start_date,$card_type,$cv2,$length = null,$length_units = null)
     {
         if (is_null($trans_id)) {
@@ -305,15 +305,15 @@ class Hook_secpay
     }
 
     /**
-	 * Handle IPN's. The function may produce output, which would be returned to the Payment Gateway. The function may do transaction verification.
-	 *
-	 * @return array	A long tuple of collected data.
-	 */
+     * Handle IPN's. The function may produce output, which would be returned to the Payment Gateway. The function may do transaction verification.
+     *
+     * @return array                    A long tuple of collected data.
+     */
     public function handle_transaction()
     {
-        /*$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');		Useful for debugging
-		fwrite($myfile,serialize($_POST));
-		fclose($myfile);*/
+        /*$myfile=fopen(get_file_base().'/data_custom/ecommerce.log','at');      Useful for debugging
+        fwrite($myfile,serialize($_POST));
+        fclose($myfile);*/
 
         $txn_id = post_param('trans_id');
         if (substr($txn_id,0,7) == 'subscr_') {
@@ -440,11 +440,11 @@ class Hook_secpay
     }
 
     /**
-	 * Store shipping address for orders.
-	 *
-	 * @param  AUTO_LINK		Order ID.
-	 * @return ?mixed			Address ID (NULL: No address record found).
-	 */
+     * Store shipping address for orders.
+     *
+     * @param  AUTO_LINK                Order ID.
+     * @return ?mixed                   Address ID (NULL: No address record found).
+     */
     public function store_shipping_address($order_id)
     {
         if (is_null(post_param('first_name',null))) {

@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Find if a member is online.
  *
- * @param  MEMBER			The member to check
- * @return boolean		Whether they are online
+ * @param  MEMBER                       The member to check
+ * @return boolean                      Whether they are online
  */
 function member_is_online($member_id)
 {
@@ -39,10 +39,10 @@ function member_is_online($member_id)
 /**
  * Get database rows of all the online members.
  *
- * @param  boolean		Whether to use a longer online-time -- the session expiry-time
- * @param  ?MEMBER		We really only need to make sure we get the status for this user, although at this functions discretion more may be returned and the row won't be there if the user is not online (NULL: no filter). May not be the guest ID
- * @param  integer		The total online members, returned by reference
- * @return ?array			Database rows (NULL: too many)
+ * @param  boolean                      Whether to use a longer online-time -- the session expiry-time
+ * @param  ?MEMBER                      We really only need to make sure we get the status for this user, although at this functions discretion more may be returned and the row won't be there if the user is not online (NULL: no filter). May not be the guest ID
+ * @param  integer                      The total online members, returned by reference
+ * @return ?array                       Database rows (NULL: too many)
  */
 function get_users_online($longer_time,$filter,&$count)
 {
@@ -93,9 +93,9 @@ function get_users_online($longer_time,$filter,&$count)
 /**
  * Find if a member is blocked by a member.
  *
- * @param  MEMBER				The member being checked
- * @param  ?MEMBER			The member who may be blocking (NULL: current member)
- * @return boolean			Whether the member is blocked
+ * @param  MEMBER                       The member being checked
+ * @param  ?MEMBER                      The member who may be blocking (NULL: current member)
+ * @return boolean                      Whether the member is blocked
  */
 function member_blocked($member_id,$member_blocker = null)
 {
@@ -144,11 +144,11 @@ function member_blocked($member_id,$member_blocker = null)
 /**
  * Get template-ready details of members viewing the specified ocPortal location.
  *
- * @param  ?ID_TEXT		The page they need to be viewing (NULL: don't care)
- * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: don't care)
- * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: don't care)
- * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-IDs to rows about them (NULL: Too many)
+ * @param  ?ID_TEXT                     The page they need to be viewing (NULL: don't care)
+ * @param  ?ID_TEXT                     The page-type they need to be viewing (NULL: don't care)
+ * @param  ?SHORT_TEXT                  The type-id they need to be viewing (NULL: don't care)
+ * @param  boolean                      Whether this has to be done over the forum driver (multi site network)
+ * @return ?array                       A map of member-IDs to rows about them (NULL: Too many)
  */
 function get_members_viewing_wrap($page = null,$type = null,$id = null,$forum_layer = false)
 {
@@ -191,11 +191,11 @@ function get_members_viewing_wrap($page = null,$type = null,$id = null,$forum_la
 /**
  * Get a map of members viewing the specified ocPortal location.
  *
- * @param  ?ID_TEXT		The page they need to be viewing (NULL: environment current) (blank: blank't care)
- * @param  ?ID_TEXT		The page-type they need to be viewing (NULL: environment current) (blank: don't care)
- * @param  ?SHORT_TEXT	The type-id they need to be viewing (NULL: environment current) (blank: don't care)
- * @param  boolean		Whether this has to be done over the forum driver (multi site network)
- * @return ?array			A map of member-IDs to rows about them (NULL: Too many / disabled)
+ * @param  ?ID_TEXT                     The page they need to be viewing (NULL: environment current) (blank: blank't care)
+ * @param  ?ID_TEXT                     The page-type they need to be viewing (NULL: environment current) (blank: don't care)
+ * @param  ?SHORT_TEXT                  The type-id they need to be viewing (NULL: environment current) (blank: don't care)
+ * @param  boolean                      Whether this has to be done over the forum driver (multi site network)
+ * @return ?array                       A map of member-IDs to rows about them (NULL: Too many / disabled)
  */
 function get_members_viewing($page = null,$type = null,$id = null,$forum_layer = false)
 {
@@ -254,7 +254,7 @@ function get_members_viewing($page = null,$type = null,$id = null,$forum_layer =
 /**
  * Find a user to test access against, if we're planning on making presence of something public.
  *
- * @return MEMBER				The modal member
+ * @return MEMBER                       The modal member
  */
 function get_modal_user()
 {

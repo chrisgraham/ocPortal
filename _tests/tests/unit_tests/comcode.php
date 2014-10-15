@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		testing_platform
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    testing_platform
  */
 
 /**
@@ -34,8 +34,8 @@ class comcode_test_set extends ocp_test_case
 
             $matches = preg_replace('#\s#','',$html) == str_replace("&nbsp;","",preg_replace('#\s#','',$actual->evaluate()));
 
-//			if (!$matches)
-//				exit(preg_replace('#\s#','',$html).' vs '.str_replace("&nbsp;","",preg_replace('#\s#','',$actual->evaluate())));
+//       if (!$matches)
+//          exit(preg_replace('#\s#','',$html).' vs '.str_replace("&nbsp;","",preg_replace('#\s#','',$actual->evaluate())));
 
             $this->assertTrue($matches);
         }

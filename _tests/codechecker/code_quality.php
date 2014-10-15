@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		code_quality
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    code_quality
  */
 
 /*
@@ -1578,11 +1578,11 @@ function check_assignment($c,$c_pos,$function_guard = '')
                 $LOCAL_VARIABLES[$c[2][1]]['mixed_tag'] = true;
                 $e_type = '?mixed';
             }
-            /*elseif (($e_type=='boolean-false') && ($c[3][0]=='LITERAL'))		No, it'll give a mixed type error
-			{
-				global $LOCAL_VARIABLES;
-				$LOCAL_VARIABLES[$c[2][1]]['types'][]='boolean';
-			}*/
+            /*elseif (($e_type=='boolean-false') && ($c[3][0]=='LITERAL'))    No, it'll give a mixed type error
+            {
+                    global $LOCAL_VARIABLES;
+                    $LOCAL_VARIABLES[$c[2][1]]['types'][]='boolean';
+            }*/
             set_ocportal_type($target[1],$e_type);
         } else {
             if ((!is_null($made_call)) && (((isset($GLOBALS['NULL_ERROR_FUNCS'][$made_call]))) || ((isset($GLOBALS['FALSE_ERROR_FUNCS'][$made_call]))))) {
@@ -1855,13 +1855,13 @@ function check_variable($variable,$reference = false)
 
     $next = $variable[2];
     while ($next != array()) { // Complex: we must perform checks to make sure the base is of the correct type for the complexity to be valid. We must also note any deep variable references used in array index / string extract expressions
-        /*if ($next[0]=='CHAR_OF_STRING')		Deprecated syntax
-		{
-			check_expression($next[1]);
-			$passes=ensure_type(array('string'),check_variable(array('VARIABLE',$identifier,array())),$variable[3],'Variable \''.$identifier.'\' must be a string due to dereferencing');
-			if ($passes) infer_expression_type_to_variable_type('string',$next[1]);
-			return 'string';
-		}*/
+        /*if ($next[0]=='CHAR_OF_STRING')    Deprecated syntax
+        {
+            check_expression($next[1]);
+            $passes=ensure_type(array('string'),check_variable(array('VARIABLE',$identifier,array())),$variable[3],'Variable \''.$identifier.'\' must be a string due to dereferencing');
+            if ($passes) infer_expression_type_to_variable_type('string',$next[1]);
+            return 'string';
+        }*/
 
         if ($next[0] == 'ARRAY_AT') {
             if (($identifier == 'GLOBALS') && ($next[1][0] == 'SOLO') && ($next[1][1][0] == 'LITERAL')) {
@@ -2019,11 +2019,11 @@ function reinitialise_local_variables()
 // If the given expression is a direct variable expression, this function will infer the type as the given type. This therefore allows type infering on usage as well as on assignment
 function infer_expression_type_to_variable_type($type,$expression)
 {
-    /*	if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))		Not reliable
-	{
-		$identifier=$expression[1][1];
-		set_ocportal_type($identifier,$type);
-	}*/
+    /*   if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))      Not reliable
+    {
+        $identifier=$expression[1][1];
+        set_ocportal_type($identifier,$type);
+    }*/
 }
 
 function ensure_type($_allowed_types,$actual_type,$pos,$alt_error = null,$extra_strict = false)
@@ -2083,7 +2083,7 @@ function ensure_type($_allowed_types,$actual_type,$pos,$alt_error = null,$extra_
 
     // Special cases for our actual type
     if ($actual_type{0} == '?') {
-        //		if (isset($allowed_types['NULL'])) return true;		We can afford not to give this liberty due to is_null
+        //     if (isset($allowed_types['NULL'])) return true;    We can afford not to give this liberty due to is_null
         $actual_type = substr($actual_type,1);
     }
     if ($actual_type{0} == '~') {

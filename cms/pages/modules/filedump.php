@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		filedump
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    filedump
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_filedump
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_filedump
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('filedump');
@@ -57,11 +57,11 @@ class Module_filedump
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
@@ -88,14 +88,14 @@ class Module_filedump
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -113,10 +113,10 @@ class Module_filedump
     public $place;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         require_lang('filedump');
@@ -208,10 +208,10 @@ class Module_filedump
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_lang('filedump');
@@ -247,10 +247,10 @@ class Module_filedump
     }
 
     /**
-	 * The main user interface for the file dump.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The main user interface for the file dump.
+     *
+     * @return tempcode                 The UI.
+     */
     public function do_gui()
     {
         require_code('form_templates');
@@ -649,16 +649,16 @@ class Module_filedump
     }
 
     /**
-	 * Find whether a file matches the search filter. If there is no filter, anything will match.
-	 *
-	 * @param  PATH		Folder path.
-	 * @param  string		Folder description.
-	 * @param  string		Search filter.
-	 * @param  string		Type filter.
-	 * @set images videos audios others
-	 * @param  boolean	Whether to search recursively.
-	 * @return boolean	Whether it passes the filter.
-	 */
+     * Find whether a file matches the search filter. If there is no filter, anything will match.
+     *
+     * @param  PATH                     Folder path.
+     * @param  string                   Folder description.
+     * @param  string                   Search filter.
+     * @param  string                   Type filter.
+     * @set images videos audios others
+     * @param  boolean                  Whether to search recursively.
+     * @return boolean                  Whether it passes the filter.
+     */
     public function _folder_search($place,$description,$search,$type_filter,$recursive = true)
     {
         if ($type_filter == '') {
@@ -704,15 +704,15 @@ class Module_filedump
     }
 
     /**
-	 * Find whether a file matches the search filter. If there is no filter, anything will match.
-	 *
-	 * @param  ID_TEXT	Filename.
-	 * @param  string		File description.
-	 * @param  string		Search filter.
-	 * @param  string		Type filter.
-	 * @set images videos audios others
-	 * @return boolean	Whether it passes the filter.
-	 */
+     * Find whether a file matches the search filter. If there is no filter, anything will match.
+     *
+     * @param  ID_TEXT                  Filename.
+     * @param  string                   File description.
+     * @param  string                   Search filter.
+     * @param  string                   Type filter.
+     * @set images videos audios others
+     * @return boolean                  Whether it passes the filter.
+     */
     public function _matches_filter($filename,$_description,$search,$type_filter)
     {
         if ($search != '') {
@@ -760,10 +760,10 @@ class Module_filedump
     }
 
     /**
-	 * The main user interface for the file dump.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The main user interface for the file dump.
+     *
+     * @return tempcode                 The UI.
+     */
     public function do_embed()
     {
         require_code('form_templates');
@@ -860,14 +860,14 @@ class Module_filedump
         $fields->attach(form_input_integer(do_lang_tempcode('HEIGHT'),do_lang_tempcode('COMCODE_TAG_attachment_PARAM_height'),'height',post_param_integer('height',null),false));
 
         /*$_description=do_lang('COMCODE_TAG_attachment_PARAM_align');
-		if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
-		$list=new ocp_tempcode();
-		foreach (explode('|',$_description) as $option)
-		{
-			list($option_val,$option_label)=explode('=',$option,2);
-			$list->attach(form_input_list_entry($option_val,($option_val==post_param('align','')),$option_label));
-		}
-		$fields->attach(form_input_list(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_align'),'','align',$list,NULL,false,false));*/
+        if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
+        $list=new ocp_tempcode();
+        foreach (explode('|',$_description) as $option)
+        {
+            list($option_val,$option_label)=explode('=',$option,2);
+            $list->attach(form_input_list_entry($option_val,($option_val==post_param('align','')),$option_label));
+        }
+        $fields->attach(form_input_list(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_align'),'','align',$list,NULL,false,false));*/
 
         $_description = do_lang('COMCODE_TAG_attachment_PARAM_float');
         if (substr($_description,0,strlen($adv)+1) == $adv) {
@@ -959,10 +959,10 @@ class Module_filedump
     }
 
     /**
-	 * The actualiser for handling mass actions.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for handling mass actions.
+     *
+     * @return tempcode                 The UI.
+     */
     public function do_mass()
     {
         $action = post_param('action');
@@ -1184,10 +1184,10 @@ class Module_filedump
     }
 
     /**
-	 * The actualiser for adding a folder.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for adding a folder.
+     *
+     * @return tempcode                 The UI.
+     */
     public function do_add_folder()
     {
         if (!has_privilege(get_member(),'upload_filedump')) {
@@ -1229,10 +1229,10 @@ class Module_filedump
     }
 
     /**
-	 * The actualiser for uploading a file.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for uploading a file.
+     *
+     * @return tempcode                 The UI.
+     */
     public function do_upload()
     {
         if (!has_privilege(get_member(),'upload_filedump')) {
@@ -1338,10 +1338,10 @@ class Module_filedump
     }
 
     /**
-	 * Find URLs referenced that are broken.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * Find URLs referenced that are broken.
+     *
+     * @return tempcode                 The UI.
+     */
     public function broken()
     {
         if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) {
@@ -1386,10 +1386,10 @@ class Module_filedump
     }
 
     /**
-	 * Fix URLs referenced that are broken.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * Fix URLs referenced that are broken.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _broken()
     {
         if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) {

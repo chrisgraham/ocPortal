@@ -8,26 +8,26 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		oc_bank
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    oc_bank
  */
 
 class Hook_pointstore_bank
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
         require_lang('bank');
     }
 
     /**
-	 * Standard pointstore item initialisation function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item initialisation function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -37,10 +37,10 @@ class Hook_pointstore_bank
     }
 
     /**
-	 * Standard interface stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard interface stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action()
     {
         require_code('database_action');
@@ -73,10 +73,10 @@ class Hook_pointstore_bank
     }
 
     /**
-	 * Standard actualisation stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard actualisation stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action_done()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));

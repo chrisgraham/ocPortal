@@ -1,13 +1,13 @@
 <div class="wide_table_wrap"><table class="columned_table results_table wide_table">
-	<thead>
-		<tr>
-			<th>Avatar</th>
-			<th>Member</th>
-			<th>Average post length</th>
-			<th>Number of posts</th>
-		</tr>
-	</thead>
-	<?php
+    <thead>
+        <tr>
+            <th>Avatar</th>
+            <th>Member</th>
+            <th>Average post length</th>
+            <th>Number of posts</th>
+        </tr>
+    </thead>
+    <?php
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
         $max = array_key_exists('max',$map)?intval($map['max']):10;
@@ -35,12 +35,12 @@
             $_num_posts = escape_html(integer_format($_member['cnt']));
 
             echo <<<END
-			<tr>
-				<td>{$_avatar}</td>
-				<td><a href="{$_link}">{$_username}</a></td>
-				<td>{$_av_post_length} letters</td>
-				<td>{$_num_posts} posts</td>
-			</tr>
+            <tr>
+                    <td>{$_avatar}</td>
+                    <td><a href="{$_link}">{$_username}</a></td>
+                    <td>{$_av_post_length} letters</td>
+                    <td>{$_num_posts} posts</td>
+            </tr>
 END;
         }
     ?>

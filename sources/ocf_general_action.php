@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Make a post template.
  *
- * @param  SHORT_TEXT 	The title for the template.
- * @param  LONG_TEXT  	The text of the template.
- * @param  SHORT_TEXT	The multi code specifying which forums this is applicable in.
- * @param  BINARY			Whether to use this as the default post in applicable forum.
- * @return AUTO_LINK 	The added ID
+ * @param  SHORT_TEXT                   The title for the template.
+ * @param  LONG_TEXT                    The text of the template.
+ * @param  SHORT_TEXT                   The multi code specifying which forums this is applicable in.
+ * @param  BINARY                       Whether to use this as the default post in applicable forum.
+ * @return AUTO_LINK                    The added ID
  */
 function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_forums)
 {
@@ -52,12 +52,12 @@ function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_foru
 /**
  * Make an emoticon.
  *
- * @param  SHORT_TEXT	The textual code entered to make the emoticon appear.
- * @param  ID_TEXT		The image code used for the emoticon.
- * @param  integer		The relevance level. 0 is core, shown immediately.
+ * @param  SHORT_TEXT                   The textual code entered to make the emoticon appear.
+ * @param  ID_TEXT                      The image code used for the emoticon.
+ * @param  integer                      The relevance level. 0 is core, shown immediately.
  * @range  0 4
- * @param  BINARY			Whether this may be used as a topic emoticon.
- * @param  BINARY			Whether this may only be used by privileged members
+ * @param  BINARY                       Whether this may be used as a topic emoticon.
+ * @param  BINARY                       Whether this may only be used by privileged members
  */
 function ocf_make_emoticon($code,$theme_img_code,$relevance_level = 1,$use_topics = 1,$is_special = 0)
 {
@@ -80,15 +80,15 @@ function ocf_make_emoticon($code,$theme_img_code,$relevance_level = 1,$use_topic
 /**
  * Make a Welcome E-mail.
  *
- * @param  SHORT_TEXT	A name for the Welcome E-mail
- * @param  SHORT_TEXT	The subject of the Welcome E-mail
- * @param  LONG_TEXT		The message body of the Welcome E-mail
- * @param  integer		The number of hours before sending the e-mail
- * @param  ?AUTO_LINK	What newsletter to send out to instead of members (NULL: none)
- * @param  ?AUTO_LINK	The usergroup to tie to (NULL: none)
- * @param  ID_TEXT		How to send regarding usergroups (blank: indiscriminately)
+ * @param  SHORT_TEXT                   A name for the Welcome E-mail
+ * @param  SHORT_TEXT                   The subject of the Welcome E-mail
+ * @param  LONG_TEXT                    The message body of the Welcome E-mail
+ * @param  integer                      The number of hours before sending the e-mail
+ * @param  ?AUTO_LINK                   What newsletter to send out to instead of members (NULL: none)
+ * @param  ?AUTO_LINK                   The usergroup to tie to (NULL: none)
+ * @param  ID_TEXT                      How to send regarding usergroups (blank: indiscriminately)
  * @set primary secondary ""
- * @return AUTO_LINK		The ID
+ * @return AUTO_LINK                    The ID
  */
 function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter = null,$usergroup = null,$usergroup_type = '')
 {

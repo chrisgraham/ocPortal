@@ -8,20 +8,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		iotds
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    iotds
  */
 
 /**
  * Render an IOTD box.
  *
- * @param  array			The IOTD row
- * @param  ID_TEXT		The zone the iotds module is in
- * @param  boolean		Whether to include extra management links (e.g. editing, choosing, archive, etc)
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		The rendered box
+ * @param  array                        The IOTD row
+ * @param  ID_TEXT                      The zone the iotds module is in
+ * @param  boolean                      Whether to include extra management links (e.g. editing, choosing, archive, etc)
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     The rendered box
  */
 function render_iotd_box($myrow,$zone = '_SEARCH',$include_manage_links = false,$give_context = true,$guid = '')
 {

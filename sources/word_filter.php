@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -31,12 +31,12 @@ function init__word_filter()
  * Check the specified text ($a) for banned words.
  * If any are found, and the member cannot bypass the word filter, an error message is displayed.
  *
- * @param  string			The sentence to check
- * @param  ?ID_TEXT		The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (NULL: don't know param, do not check to avoid)
- * @param  boolean		Whether to avoid dying on fully blocked words (useful if importing, for instance)
- * @param  boolean		Whether to try pattern matching (this takes more resources)
- * @param  boolean		Whether to allow permission-based skipping, and length-based skipping
- * @return string			"Fixed" version
+ * @param  string                       The sentence to check
+ * @param  ?ID_TEXT                     The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (NULL: don't know param, do not check to avoid)
+ * @param  boolean                      Whether to avoid dying on fully blocked words (useful if importing, for instance)
+ * @param  boolean                      Whether to try pattern matching (this takes more resources)
+ * @param  boolean                      Whether to allow permission-based skipping, and length-based skipping
+ * @return string                       "Fixed" version
  */
 function check_word_filter($a,$name = null,$no_die = false,$try_patterns = false,$perm_check = true)
 {
@@ -126,8 +126,8 @@ function check_word_filter($a,$name = null,$no_die = false,$try_patterns = false
 /**
  * Exit with a message about word-filtering.
  *
- * @param  ?ID_TEXT		The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (NULL: don't know param, do not check to avoid)
- * @param  tempcode		Error message
+ * @param  ?ID_TEXT                     The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (NULL: don't know param, do not check to avoid)
+ * @param  tempcode                     Error message
  */
 function warn_exit_wordfilter($name,$message)
 {

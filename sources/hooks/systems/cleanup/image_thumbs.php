@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_cleanup_tools
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_cleanup_tools
  */
 
 class Hook_image_thumbs
 {
     /**
-	 * Find details about this cleanup hook.
-	 *
-	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
-	 */
+     * Find details about this cleanup hook.
+     *
+     * @return ?array                   Map of cleanup hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         if (!function_exists('imagetypes')) {
@@ -40,10 +40,10 @@ class Hook_image_thumbs
     }
 
     /**
-	 * Run the cleanup hook action.
-	 *
-	 * @return tempcode	Results
-	 */
+     * Run the cleanup hook action.
+     *
+     * @return tempcode                 Results
+     */
     public function run()
     {
         erase_thumb_cache();
@@ -53,10 +53,10 @@ class Hook_image_thumbs
     }
 
     /**
-	 * Create filename-mirrored thumbnails for the given directory stub (mirrors stub/foo with stub_thumbs/foo).
-	 *
-	 * @param  string		Directory to mirror
-	 */
+     * Create filename-mirrored thumbnails for the given directory stub (mirrors stub/foo with stub_thumbs/foo).
+     *
+     * @param  string                   Directory to mirror
+     */
     public function directory_thumb_mirror($dir)
     {
         require_code('images');

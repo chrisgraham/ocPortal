@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -30,8 +30,8 @@ function init__input_filter()
 /**
  * Check an input field isn't 'evil'.
  *
- * @param  string			The name of the parameter
- * @param  string			The value retrieved
+ * @param  string                       The name of the parameter
+ * @param  string                       The value retrieved
  */
 function check_input_field($name,$val)
 {
@@ -46,9 +46,9 @@ function check_input_field($name,$val)
 /**
  * Check a posted field isn't 'evil'.
  *
- * @param  string			The name of the parameter
- * @param  string			The value retrieved
- * @return string			The filtered value
+ * @param  string                       The name of the parameter
+ * @param  string                       The value retrieved
+ * @return string                       The filtered value
  */
 function check_posted_field($name,$val)
 {
@@ -88,7 +88,7 @@ function check_posted_field($name,$val)
 /**
  * Find partner sites allowed to do cross-domain requests to us.
  *
- * @return array			Partner domain names
+ * @return array                        Partner domain names
  */
 function get_allowed_partner_sites()
 {
@@ -104,9 +104,9 @@ function get_allowed_partner_sites()
 /**
  * Filter to alter form field values based on fields.xml. Usually a no-op.
  *
- * @param  string			The name of the parameter
- * @param  ?string		The current value of the parameter (NULL: none)
- * @return string			The filtered value of the parameter
+ * @param  string                       The name of the parameter
+ * @param  ?string                      The current value of the parameter (NULL: none)
+ * @return string                       The filtered value of the parameter
  */
 function filter_form_field_default($name,$val)
 {
@@ -234,8 +234,8 @@ function filter_form_field_default($name,$val)
 /**
  * preg_replace callback to apply sentence case.
  *
- * @param  array			Matches
- * @return string			De-shouted string
+ * @param  array                        Matches
+ * @return string                       De-shouted string
  */
 function make_sentence_case_callback($matches)
 {
@@ -245,8 +245,8 @@ function make_sentence_case_callback($matches)
 /**
  * preg_replace callback to de-shout text.
  *
- * @param  array			Matches
- * @return string			De-shouted string
+ * @param  array                        Matches
+ * @return string                       De-shouted string
  */
 function deshout_callback($matches)
 {
@@ -256,9 +256,9 @@ function deshout_callback($matches)
 /**
  * Find all restrictions that apply to our page/type.
  *
- * @param  ?string		The page name scoped for (NULL: current page)
- * @param  ?string		The page type scoped for (NULL: current type)
- * @return array			List of fields, each of which is a map (restriction => attributes)
+ * @param  ?string                      The page name scoped for (NULL: current page)
+ * @param  ?string                      The page type scoped for (NULL: current type)
+ * @return array                        List of fields, each of which is a map (restriction => attributes)
  */
 function load_field_restrictions($this_page = null,$this_type = null)
 {
@@ -284,7 +284,7 @@ function load_field_restrictions($this_page = null,$this_type = null)
 
 /**
  * Field restriction loader.
- * @package		core
+ * @package    core
  */
 class field_restriction_loader
 {
@@ -295,8 +295,8 @@ class field_restriction_loader
     public $field_qualification_stack;
 
     /**
-	 * Run the loader, to load up field-restrictions from the XML file.
-	 */
+     * Run the loader, to load up field-restrictions from the XML file.
+     */
     public function go()
     {
         if (!addon_installed('xml_fields')) {
@@ -337,12 +337,12 @@ class field_restriction_loader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The name of the element found
-	 * @param  array			Array of attributes of the element
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The name of the element found
+     * @param  array                    Array of attributes of the element
+     */
     public function startElement($parser,$tag,$_attributes)
     {
         array_push($this->tag_stack,$tag);
@@ -437,10 +437,10 @@ class field_restriction_loader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     */
     public function endElement($parser)
     {
         $text = str_replace('\n',"\n",$this->text_so_far);
@@ -471,11 +471,11 @@ class field_restriction_loader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The text
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The text
+     */
     public function startText($parser,$data)
     {
         $this->text_so_far .= $data;

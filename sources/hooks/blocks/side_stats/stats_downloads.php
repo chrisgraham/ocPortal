@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 class Hook_stats_downloads
 {
     /**
-	 * Show a stats section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show a stats section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (!addon_installed('downloads')) {

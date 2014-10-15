@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_whats_news_ocf_forumview
 {
     /**
-	 * Find selectable (filterable) categories.
-	 *
-	 * @return ?array				Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
-	 */
+     * Find selectable (filterable) categories.
+     *
+     * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
+     */
     public function choose_categories()
     {
         if (get_forum_type() != 'ocf') {
@@ -36,13 +36,13 @@ class Hook_whats_news_ocf_forumview
     }
 
     /**
-	 * Run function for newsletter hooks.
-	 *
-	 * @param  TIME				The time that the entries found must be newer than
-	 * @param  LANGUAGE_NAME	The language the entries found must be in
-	 * @param  string				Category filter to apply
-	 * @return array				Tuple of result details
-	 */
+     * Run function for newsletter hooks.
+     *
+     * @param  TIME                     The time that the entries found must be newer than
+     * @param  LANGUAGE_NAME            The language the entries found must be in
+     * @param  string                   Category filter to apply
+     * @return array                    Tuple of result details
+     */
     public function run($cutoff_time,$lang,$filter)
     {
         $max = intval(get_option('max_newsletter_whatsnew'));

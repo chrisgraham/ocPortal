@@ -13,9 +13,9 @@
 */
 
 /**
- * @license	http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package	shopping
+ * @license http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package shopping
  */
 
 /*
@@ -25,12 +25,12 @@ Orders are compound-products. They link together multiple eCommerce items into a
 /**
  * Handling shopping orders and dispatch thereof.
  *
- * @param  ID_TEXT		The purchase ID.
- * @param  array			Details of the product.
- * @param  ID_TEXT		The product codename.
- * @param  ID_TEXT		The status this transaction is telling of
+ * @param  ID_TEXT                      The purchase ID.
+ * @param  array                        Details of the product.
+ * @param  ID_TEXT                      The product codename.
+ * @param  ID_TEXT                      The status this transaction is telling of
  * @set    Pending Completed SModified SCancelled
- * @param  SHORT_TEXT	The transaction ID
+ * @param  SHORT_TEXT                   The transaction ID
  */
 function handle_product_orders($purchase_id,$details,$type_code,$payment_status,$txn_id)
 {
@@ -66,16 +66,16 @@ function handle_product_orders($purchase_id,$details,$type_code,$payment_status,
 class Hook_cart_orders
 {
     /**
-	 * Get the products handled by this eCommerce hook.
+     * Get the products handled by this eCommerce hook.
     *
-	 * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
+     * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
     *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
-	 *
-	 * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
-	 * @param  ?ID_TEXT	Product being searched for (NULL: none).
-	 * @param  boolean 	Whether $search refers to the item name rather than the product codename.
-	 * @return array	A map of product name to list of product details.
-	 */
+     *
+     * @param  boolean                  Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
+     * @param  ?ID_TEXT                 Product being searched for (NULL: none).
+     * @param  boolean                  Whether $search refers to the item name rather than the product codename.
+     * @return array                    A map of product name to list of product details.
+     */
     public function get_products($site_lang = false,$search = null,$search_item_names = false)
     {
         $products = array();
@@ -121,23 +121,23 @@ class Hook_cart_orders
     }
 
     /**
-	 * Find the corresponding member to a given purchase ID.
-	 *
-	 * @param  ID_TEXT		The purchase ID.
-	 * @return ?MEMBER		The member (NULL: unknown / can't perform operation).
-	 */
+     * Find the corresponding member to a given purchase ID.
+     *
+     * @param  ID_TEXT                  The purchase ID.
+     * @return ?MEMBER                  The member (NULL: unknown / can't perform operation).
+     */
     public function member_for($purchase_id)
     {
         return $GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','c_member',array('id' => intval($purchase_id)));
     }
 
     /**
-	 * Function to return dispatch type of product.
-	 * (this hook represents a cart order, so find all of it's sub products's dispatch type and decide cart order product's dispatch type - automatic or manual)
-	 *
-	 * @param  SHORT_TEXT	Item ID.
-	 * @return SHORT_TEXT 	Dispatch type.
-	 */
+     * Function to return dispatch type of product.
+     * (this hook represents a cart order, so find all of it's sub products's dispatch type and decide cart order product's dispatch type - automatic or manual)
+     *
+     * @param  SHORT_TEXT               Item ID.
+     * @return SHORT_TEXT               Dispatch type.
+     */
     public function get_product_dispatch_type($order_id)
     {
         $row = $GLOBALS['SITE_DB']->query_select('shopping_order_details',array('*'),array('order_id' => $order_id));
@@ -162,11 +162,11 @@ class Hook_cart_orders
     }
 
     /**
-	 * Function to return order ID from formatted of order ID.
-	 *
-	 * @param  SHORT_TEXT	Item ID.
-	 * @return SHORT_TEXT 	Dispatch type.
-	 */
+     * Function to return order ID from formatted of order ID.
+     *
+     * @param  SHORT_TEXT               Item ID.
+     * @return SHORT_TEXT               Dispatch type.
+     */
     public function set_needed_fields($item_name)
     {
         return str_replace('#','',$item_name);

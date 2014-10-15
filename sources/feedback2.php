@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_feedback_features
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_feedback_features
  */
 
 /**
  * Set an overridden comment topic forum for a feedback scenario. Moves topics if required.
  *
- * @param  ID_TEXT		The feedback code to override the comment topic forum for
- * @param  ?ID_TEXT		The category ID to override the comment topic forum for (NULL: none)
- * @param  ID_TEXT		The new comment topic forum
+ * @param  ID_TEXT                      The feedback code to override the comment topic forum for
+ * @param  ?ID_TEXT                     The category ID to override the comment topic forum for (NULL: none)
+ * @param  ID_TEXT                      The new comment topic forum
  */
 function set_comment_forum_for($feedback_code,$category_id,$forum_id)
 {
@@ -140,17 +140,17 @@ function trackback_script()
 /**
  * Get the tempcode for the manipulation of the feedback fields for some content, if they are enabled in the Admin Zone.
  *
- * @param  boolean		Whether rating is currently/by-default allowed for this resource
- * @param  boolean		Whether comments are currently/by-default allowed for this resource
- * @param  ?boolean		Whether trackbacks are currently/by-default allowed for this resource (NULL: this resource does not support trackbacks regardless)
- * @param  boolean		Whether we're allowed to send trackbacks for this resource
- * @param  LONG_TEXT		The current/by-default notes for this content
- * @param  ?boolean		Whether reviews are currently/by-default allowed for this resource (NULL: no reviews allowed here)
- * @param  boolean		Whether the default values for the allow options is actually off (this determines how the tray auto-hides itself)
- * @param  boolean		If there's to be a notes field
- * @param  boolean		Whether to show a header
- * @param  string			Field name prefix
- * @return tempcode		The feedback editing fields
+ * @param  boolean                      Whether rating is currently/by-default allowed for this resource
+ * @param  boolean                      Whether comments are currently/by-default allowed for this resource
+ * @param  ?boolean                     Whether trackbacks are currently/by-default allowed for this resource (NULL: this resource does not support trackbacks regardless)
+ * @param  boolean                      Whether we're allowed to send trackbacks for this resource
+ * @param  LONG_TEXT                    The current/by-default notes for this content
+ * @param  ?boolean                     Whether reviews are currently/by-default allowed for this resource (NULL: no reviews allowed here)
+ * @param  boolean                      Whether the default values for the allow options is actually off (this determines how the tray auto-hides itself)
+ * @param  boolean                      If there's to be a notes field
+ * @param  boolean                      Whether to show a header
+ * @param  string                       Field name prefix
+ * @return tempcode                     The feedback editing fields
  */
 function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews = null,$default_off = false,$has_notes = true,$show_header = true,$field_name_prefix = '')
 {
@@ -206,10 +206,10 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 /**
  * Send a trackback to somebody else's website.
  *
- * @param  string			A comma-separated list of URLs to which we should trackback
- * @param  string			The article title
- * @param  string			The excerpt to send
- * @return boolean		Success?
+ * @param  string                       A comma-separated list of URLs to which we should trackback
+ * @param  string                       The article title
+ * @param  string                       The excerpt to send
+ * @return boolean                      Success?
 */
 function send_trackbacks($_urls,$title,$excerpt)
 {

@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		activity_feed
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    activity_feed
  */
 
 // activity_feed addon's implementation of activity syndication. Which in turn implements syndication hooks for further syndication (i.e. it's a syndication API built on top of a syndication API, as we don't want to provide lots of implementation code in ocPortal itself when no default use case is shipped).
@@ -18,22 +18,22 @@
 class Activity_activities
 {
     /**
-	 * Syndicate human-intended descriptions of activities performed to the internal wall, and external listeners.
-	 *
-	 * @param  string			Language string code
-	 * @param  string			Label 1 (given as a parameter to the language string code)
-	 * @param  string			Label 2 (given as a parameter to the language string code)
-	 * @param  string			Label 3 (given as a parameter to the language string code)
-	 * @param  string			Page-link 1
-	 * @param  string			Page-link 2
-	 * @param  string			Page-link 3
-	 * @param  string			Addon that caused the event
-	 * @param  BINARY			Whether this post should be public or friends-only
-	 * @param  ?MEMBER		Member being written for (NULL: current member)
-	 * @param  boolean		Whether to push this out as a site event if user requested
-	 * @param  ?MEMBER		Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
-	 * @return ?AUTO_LINK	ID of the row in the activities table (NULL: N/A)
-	 */
+     * Syndicate human-intended descriptions of activities performed to the internal wall, and external listeners.
+     *
+     * @param  string                   Language string code
+     * @param  string                   Label 1 (given as a parameter to the language string code)
+     * @param  string                   Label 2 (given as a parameter to the language string code)
+     * @param  string                   Label 3 (given as a parameter to the language string code)
+     * @param  string                   Page-link 1
+     * @param  string                   Page-link 2
+     * @param  string                   Page-link 3
+     * @param  string                   Addon that caused the event
+     * @param  BINARY                   Whether this post should be public or friends-only
+     * @param  ?MEMBER                  Member being written for (NULL: current member)
+     * @param  boolean                  Whether to push this out as a site event if user requested
+     * @param  ?MEMBER                  Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
+     * @return ?AUTO_LINK               ID of the row in the activities table (NULL: N/A)
+     */
     public function syndicate_described_activity($a_language_string_code = '',$a_label_1 = '',$a_label_2 = '',$a_label_3 = '',$a_page_link_1 = '',$a_page_link_2 = '',$a_page_link_3 = '',$a_addon = '',$a_is_public = 1,$a_member_id = null,$sitewide_too = false,$also_involving = null)
     {
         require_code('activities_submission');
@@ -45,10 +45,10 @@ class Activity_activities
     }
 
     /**
-	 * Detect whether we have external site-wide syndication support somewhere.
-	 *
-	 * @return boolean		Whether we do
-	 */
+     * Detect whether we have external site-wide syndication support somewhere.
+     *
+     * @return boolean                  Whether we do
+     */
     public function has_external_site_wide_syndication()
     {
         $dests = find_all_hooks('systems','syndication');
@@ -63,10 +63,10 @@ class Activity_activities
     }
 
     /**
-	 * Get syndication field UI.
-	 *
-	 * @return tempcode		Syndication fields (or empty)
-	 */
+     * Get syndication field UI.
+     *
+     * @return tempcode                 Syndication fields (or empty)
+     */
     public function get_syndication_option_fields()
     {
         $fields = new ocp_tempcode();

@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Helper function for *_text_file
  *
- * @param  string				The file name (without .txt)
- * @param  ?LANGUAGE_NAME	The language to load from (NULL: none) (blank: search)
- * @return string				The path to the file
+ * @param  string                       The file name (without .txt)
+ * @param  ?LANGUAGE_NAME               The language to load from (NULL: none) (blank: search)
+ * @return string                       The path to the file
  */
 function _find_text_file_path($codename,$lang)
 {
@@ -63,10 +63,10 @@ function _find_text_file_path($codename,$lang)
 /**
  * Read a text file, using the _custom system
  *
- * @param  string				The file name (without .txt)
- * @param  ?LANGUAGE_NAME	The language to load from (NULL: none) (blank: search)
- * @param  boolean			Whether to tolerate missing files
- * @return string				The file contents
+ * @param  string                       The file name (without .txt)
+ * @param  ?LANGUAGE_NAME               The language to load from (NULL: none) (blank: search)
+ * @param  boolean                      Whether to tolerate missing files
+ * @return string                       The file contents
  */
 function read_text_file($codename,$lang = null,$missing_blank = false)
 {
@@ -90,9 +90,9 @@ function read_text_file($codename,$lang = null,$missing_blank = false)
 /**
  * Write a text file, using the _custom system
  *
- * @param  string				The file name (without .txt)
- * @param  ?LANGUAGE_NAME	The language to write for (NULL: none) (blank: search)
- * @param  string				The data to write
+ * @param  string                       The file name (without .txt)
+ * @param  ?LANGUAGE_NAME               The language to write for (NULL: none) (blank: search)
+ * @param  string                       The data to write
  */
 function write_text_file($codename,$lang,$out)
 {

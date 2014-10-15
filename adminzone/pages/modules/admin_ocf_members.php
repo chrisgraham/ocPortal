@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_ocf_members
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -78,10 +78,10 @@ class Module_admin_ocf_members
                 $ret['_SEARCH:admin_lookup'] = array('INVESTIGATE_USER','menu/adminzone/tools/users/investigate_user');
             }
             //if (addon_installed('ecommerce'))
-            //	$ret['_SEARCH:admin_ecommerce:misc']=array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/ecommerce');
+            // $ret['_SEARCH:admin_ecommerce:misc']=array('CUSTOM_PRODUCT_USERGROUP','menu/adminzone/audit/ecommerce/ecommerce');
             //$ret['_SEARCH:admin_ocf_groups:misc']=array('USERGROUPS','menu/social/groups');
             //if (addon_installed('staff'))
-            //	$ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff');
+            // $ret['_SEARCH:admin_staff:misc']=array('STAFF','menu/site_meta/staff');
             $ret['_SEARCH:warnings:ed'] = array('WARNINGS','tabs/member_account/warnings');
         }
 
@@ -91,10 +91,10 @@ class Module_admin_ocf_members
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -160,10 +160,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (get_forum_type() != 'ocf') {
@@ -208,10 +208,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The do-next manager for choosing what to do
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for choosing what to do
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_lang('lookup');
@@ -248,10 +248,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The UI for adding a member.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for adding a member.
+     *
+     * @return tempcode                 The UI
+     */
     public function step1()
     {
         require_code('form_templates');
@@ -274,10 +274,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The actualiser for adding a member.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for adding a member.
+     *
+     * @return tempcode                 The UI
+     */
     public function step2()
     {
         // Read in data
@@ -354,7 +354,7 @@ class Module_admin_ocf_members
         return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             array('_SELF',array('type' => 'step1'),'_SELF'), // Add one
             NULL,// Edit this
             NULL, // Edit one
@@ -376,10 +376,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The UI for choosing delurk criteria.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for choosing delurk criteria.
+     *
+     * @return tempcode                 The UI
+     */
     public function delurk()
     {
         require_code('form_templates');
@@ -461,16 +461,16 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * Find a mapping of member IDs to usernames, of those who'll get delurked.
-	 *
-	 * @param  integer			Maximum forum posts
-	 * @param  integer			Maximum points
-	 * @param  integer			Maximum logged actions
-	 * @param  integer			Minimum days since last login
-	 * @param  integer			Minimum days since joining
-	 * @param  array				List of usergroups
-	 * @return array				Mapping of lurkers
-	 */
+     * Find a mapping of member IDs to usernames, of those who'll get delurked.
+     *
+     * @param  integer                  Maximum forum posts
+     * @param  integer                  Maximum points
+     * @param  integer                  Maximum logged actions
+     * @param  integer                  Minimum days since last login
+     * @param  integer                  Minimum days since joining
+     * @param  array                    List of usergroups
+     * @return array                    Mapping of lurkers
+     */
     public function find_lurkers($max_posts,$max_points,$max_logged_actions,$min_days_since_login,$min_days_since_join,$usergroups)
     {
         $start = 0;
@@ -511,10 +511,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The UI for confirming the deletion results of delurk criteria.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for confirming the deletion results of delurk criteria.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delurk()
     {
         if (function_exists('set_time_limit')) {
@@ -555,10 +555,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The actualiser for deletion members according to delurk criteria.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for deletion members according to delurk criteria.
+     *
+     * @return tempcode                 The UI
+     */
     public function __delurk()
     {
         require_lang('ocf_lurkers');
@@ -574,10 +574,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The actualiser to download a CSV of members.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to download a CSV of members.
+     *
+     * @return tempcode                 The UI
+     */
     public function download_csv()
     {
         require_code('tasks');
@@ -585,10 +585,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The UI for importing a CSV file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for importing a CSV file.
+     *
+     * @return tempcode                 The UI
+     */
     public function import_csv()
     {
         require_code('form_templates');
@@ -611,10 +611,10 @@ class Module_admin_ocf_members
     }
 
     /**
-	 * The actualiser for importing a CSV file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for importing a CSV file.
+     *
+     * @return tempcode                 The UI
+     */
     public function _import_csv()
     {
         set_mass_import_mode();

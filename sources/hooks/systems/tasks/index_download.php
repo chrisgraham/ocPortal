@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 class Hook_task_index_download
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @param  AUTO_LINK		The download ID
-	 * @param  URLPATH		The download file URL
-	 * @param  ID_TEXT		The download filename
-	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @param  AUTO_LINK                The download ID
+     * @param  URLPATH                  The download file URL
+     * @param  ID_TEXT                  The download filename
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run($id,$url,$original_filename)
     {
         require_code('downloads');

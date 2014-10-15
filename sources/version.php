@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*
@@ -25,7 +25,7 @@ The version numbers here are not for interchange. sources/version2.php provides 
 /**
  * Get the minor/patch version of your installation. This changes with each release, including bug fix releases. It generally consists of 'a' or 'a.b', where 'a' increments represent major changes and 'b' increments represent tiny changes or alpha/beta/RC numbering.
  *
- * @return string			The minor/patch version number of your installation (e.g. 0.1 or 1.1 or RC1 or 1.RC1)
+ * @return string                       The minor/patch version number of your installation (e.g. 0.1 or 1.1 or RC1 or 1.RC1)
  */
 function ocp_version_minor()
 {
@@ -35,7 +35,7 @@ function ocp_version_minor()
 /**
  * Get the general version number of your installation (incorporates major and first [numeric] component of minor version number).
  *
- * @return float			The general version number of your installation
+ * @return float                        The general version number of your installation
  */
 function ocp_version_number()
 {
@@ -45,7 +45,7 @@ function ocp_version_number()
 /**
  * Get the timestamp at which this version was released.
  *
- * @return integer		The timestamp at which this version was released.
+ * @return integer                      The timestamp at which this version was released.
  */
 function ocp_version_time()
 {
@@ -55,7 +55,7 @@ function ocp_version_time()
 /**
  * Get the timestamp at which this MAJOR version was released.
  *
- * @return integer		The timestamp at which this MAJOR version was released.
+ * @return integer                      The timestamp at which this MAJOR version was released.
  */
 function ocp_version_time_major()
 {

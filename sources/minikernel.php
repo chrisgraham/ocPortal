@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 // ocPortal can install basically from the real final code, except for...
-//	-- global.php
-//	-- global2.php
-//	-- users.php
-//	--  things that depend on functionality of those that hasn't been emulated here
+// -- global.php
+// -- global2.php
+// -- users.php
+// --  things that depend on functionality of those that hasn't been emulated here
 // This file emulates cut-down versions of the code in those files, for the most part.
 // Once ocPortal is installed, this file is never used.
 
@@ -79,7 +79,7 @@ function init__minikernel()
 /**
  * Find if we are running on a live Google App Engine application.
  *
- * @return boolean		If it is running as a live Google App Engine application
+ * @return boolean                      If it is running as a live Google App Engine application
  */
 function appengine_is_live()
 {
@@ -89,7 +89,7 @@ function appengine_is_live()
 /**
  * Are we currently running HTTPS.
  *
- * @return boolean		If we are
+ * @return boolean                      If we are
  */
 function tacit_https()
 {
@@ -100,7 +100,7 @@ function tacit_https()
 /**
  * Provides a hook for file synchronisation between mirrored servers. Called after any file creation, deletion or edit.
  *
- * @param  PATH				File/directory name to sync on (full path)
+ * @param  PATH                         File/directory name to sync on (full path)
  */
 function sync_file($filename)
 {
@@ -109,7 +109,7 @@ function sync_file($filename)
 /**
  * Return a debugging back-trace of the current execution stack. Use this for debugging purposes.
  *
- * @return tempcode		Debugging backtrace
+ * @return tempcode                     Debugging backtrace
  */
 function get_html_trace()
 {
@@ -123,7 +123,7 @@ function get_html_trace()
     $trace = new ocp_tempcode();
     foreach ($_trace as $i => $stage) {
         $traces = new ocp_tempcode();
-//		if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;
+//    if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;
         $file = '';
         $line = '';
         $__value = mixed();
@@ -183,11 +183,11 @@ function get_html_trace()
  * Do a clean exit, echo the header (if possible) and an error message, followed by a debugging back-trace.
  * It also adds an entry to the error log, for reference.
  *
- * @param  mixed			The error message
+ * @param  mixed                        The error message
  */
 function fatal_exit($text)
 {
-    //	if (is_object($text)) $text=$text->evaluate();
+    //   if (is_object($text)) $text=$text->evaluate();
 
     // To break any looping of errors
     global $EXITING;
@@ -265,11 +265,11 @@ function catch_fatal_errors()
 /**
  * ocPortal error handler (hooked into PHP error system).
  *
- * @param  integer		The error code-number
- * @param  PATH			The error message
- * @param  string			The file the error occurred in
- * @param  integer		The line the error occurred on
- * @return boolean		Always false
+ * @param  integer                      The error code-number
+ * @param  PATH                         The error message
+ * @param  string                       The file the error occurred in
+ * @param  integer                      The line the error occurred on
+ * @return boolean                      Always false
  */
 function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 {
@@ -316,8 +316,8 @@ function ocportal_error_handler($errno,$errstr,$errfile,$errline)
 /**
  * Find whether the current member is a guest.
  *
- * @param  ?MEMBER		Member ID to check (NULL: current user)
- * @return boolean		Whether the current member is a guest
+ * @param  ?MEMBER                      Member ID to check (NULL: current user)
+ * @return boolean                      Whether the current member is a guest
  */
 function is_guest($member_id = null)
 {
@@ -327,7 +327,7 @@ function is_guest($member_id = null)
 /**
  * Find whether we are running in safe mode.
  *
- * @return boolean		Whether we are in safe mode
+ * @return boolean                      Whether we are in safe mode
  */
 function in_safe_mode()
 {
@@ -337,8 +337,8 @@ function in_safe_mode()
 /**
  * Find whether a certain script is being run to get here.
  *
- * @param  string				Script filename (canonically we want NO .php file type suffix)
- * @return boolean			Whether the script is running
+ * @param  string                       Script filename (canonically we want NO .php file type suffix)
+ * @return boolean                      Whether the script is running
  */
 function running_script($is_this_running)
 {
@@ -352,7 +352,7 @@ function running_script($is_this_running)
 /**
  * Get the character set to use. We try and be clever to allow AJAX scripts to avoid loading up language
  *
- * @return string			The character set
+ * @return string                       The character set
  */
 function get_charset()
 {
@@ -378,7 +378,7 @@ function get_charset()
 /**
  * Echo an error message, and a debug back-trace of the current execution stack. Use this for debugging purposes.
  *
- * @param  string			An error message
+ * @param  string                       An error message
  */
 function die_html_trace($message)
 {
@@ -391,7 +391,7 @@ function die_html_trace($message)
 /**
  * This is a less-revealing alternative to fatal_exit, that is used for user-errors/common-corruption-scenarios
  *
- * @param  mixed			The error message
+ * @param  mixed                        The error message
  */
 function inform_exit($text)
 {
@@ -401,7 +401,7 @@ function inform_exit($text)
 /**
  * This is a less-revealing alternative to fatal_exit, that is used for user-errors/common-corruption-scenarios
  *
- * @param  mixed			The error message
+ * @param  mixed                        The error message
  */
 function warn_exit($text)
 {
@@ -450,7 +450,7 @@ function warn_exit($text)
 /**
  * Get the major version of your installation.
  *
- * @return integer		The major version number of your installation
+ * @return integer                      The major version number of your installation
  */
 function ocp_version()
 {
@@ -460,7 +460,7 @@ function ocp_version()
 /**
  * Get the full string version of ocPortal that you are running.
  *
- * @return string			The string saying the full ocPortal version number
+ * @return string                       The string saying the full ocPortal version number
  */
 function ocp_version_pretty()
 {
@@ -470,7 +470,7 @@ function ocp_version_pretty()
 /**
  * Get the domain the website is installed on (preferably, without any www). The domain is used for e-mail defaults amongst other things.
  *
- * @return string			The domain of the website
+ * @return string                       The domain of the website
  */
 function get_domain()
 {
@@ -484,7 +484,7 @@ function get_domain()
 /**
  * Get the type of forums installed.
  *
- * @return string			The type of forum installed
+ * @return string                       The type of forum installed
  */
 function get_forum_type()
 {
@@ -498,7 +498,7 @@ function get_forum_type()
 /**
  * Get the installed forum base URL.
  *
- * @return URLPATH		The installed forum base URL
+ * @return URLPATH                      The installed forum base URL
  */
 function get_forum_base_url()
 {
@@ -515,7 +515,7 @@ function get_forum_base_url()
 /**
  * Get the site name.
  *
- * @return string			The name of the site
+ * @return string                       The name of the site
  */
 function get_site_name()
 {
@@ -525,9 +525,9 @@ function get_site_name()
 /**
  * Get the base url (the minimum fully qualified URL to our installation).
  *
- * @param  ?boolean		Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
- * @param  string			What zone this is running in
- * @return URLPATH		The base-url
+ * @param  ?boolean                     Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
+ * @param  string                       What zone this is running in
+ * @return URLPATH                      The base-url
  */
 function get_base_url($https = null,$zone_for = '')
 {
@@ -546,8 +546,8 @@ function get_base_url($https = null,$zone_for = '')
 /**
  * Get the base url (the minimum fully qualified URL to our personal data installation). For a shared install only, this is different to the base-url.
  *
- * @param  ?boolean		Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
- * @return URLPATH		The base-url
+ * @param  ?boolean                     Whether to get the HTTPS base URL (NULL: do so only if the current page uses the HTTPS base URL)
+ * @return URLPATH                      The base-url
  */
 function get_custom_base_url($https = null)
 {
@@ -557,9 +557,9 @@ function get_custom_base_url($https = null)
 /**
  * Log a hackattack, then displays an error message. It also attempts to send an e-mail to the staff alerting them of the hackattack.
  *
- * @param  ID_TEXT		The reason for the hack attack. This has to be a language string codename
- * @param  SHORT_TEXT	A parameter for the hack attack language string (this should be based on a unique ID, preferably)
- * @param  SHORT_TEXT	A more illustrative parameter, which may be anything (e.g. a title)
+ * @param  ID_TEXT                      The reason for the hack attack. This has to be a language string codename
+ * @param  SHORT_TEXT                   A parameter for the hack attack language string (this should be based on a unique ID, preferably)
+ * @param  SHORT_TEXT                   A more illustrative parameter, which may be anything (e.g. a title)
  */
 function log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b = '')
 {
@@ -570,12 +570,12 @@ function log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b =
  * Check the specified text ($a) for banned words.
  * If any are found, and the member cannot bypass the word filter, an error message is displayed.
  *
- * @param  string			The sentence to check
- * @param  ?ID_TEXT		The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (NULL: don't know param, do not check to avoid)
- * @param  boolean		Whether to avoid dying on fully blocked words (useful if importing, for instance)
- * @param  boolean		Whether to try pattern matching (this takes more resources)
- * @param  boolean		Whether to allow permission-based skipping, and length-based skipping
- * @return string			"Fixed" version
+ * @param  string                       The sentence to check
+ * @param  ?ID_TEXT                     The name of the parameter this is coming from. Certain parameters are not checked, for reasons of efficiency (avoiding loading whole word check list if not needed) (NULL: don't know param, do not check to avoid)
+ * @param  boolean                      Whether to avoid dying on fully blocked words (useful if importing, for instance)
+ * @param  boolean                      Whether to try pattern matching (this takes more resources)
+ * @param  boolean                      Whether to allow permission-based skipping, and length-based skipping
+ * @return string                       "Fixed" version
  */
 function check_word_filter($a,$name = null,$no_die = false,$try_patterns = false,$perm_check = true)
 {
@@ -585,9 +585,9 @@ function check_word_filter($a,$name = null,$no_die = false,$try_patterns = false
 /**
  * Get a value (either POST [u]or[/u] GET), or the default if neither can be found.
  *
- * @param  ID_TEXT		The name of the parameter to get
- * @param  ?string		The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return ?string		The value of the parameter (NULL: not there, and default was NULL)
+ * @param  ID_TEXT                      The name of the parameter to get
+ * @param  ?string                      The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
  */
 function either_param($name,$default = null)
 {
@@ -598,9 +598,9 @@ function either_param($name,$default = null)
 /**
  * Get the value of the specified POST key, if it is found, or the default otherwise.
  *
- * @param  ID_TEXT		The name of the parameter to get
- * @param  ?string		The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return ?string		The value of the parameter (NULL: not there, and default was NULL)
+ * @param  ID_TEXT                      The name of the parameter to get
+ * @param  ?string                      The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
  */
 function post_param($name,$default = null)
 {
@@ -611,9 +611,9 @@ function post_param($name,$default = null)
 /**
  * Get the value of the specified GET key, if it is found, or the default otherwise.
  *
- * @param  ID_TEXT		The name of the parameter to get
- * @param  ?string		The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return ?string		The value of the parameter (NULL: not there, and default was NULL)
+ * @param  ID_TEXT                      The name of the parameter to get
+ * @param  ?string                      The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
  */
 function get_param($name,$default = null)
 {
@@ -624,12 +624,12 @@ function get_param($name,$default = null)
 /**
  * Helper function to load up a GET/POST parameter.
  *
- * @param  array			The array we're extracting parameters from
- * @param  ID_TEXT		The name of the parameter
- * @param  ?mixed			The default value to use for the parameter (NULL: no default)
- * @param  boolean		Whether the parameter has to be an integer
- * @param  boolean		Whether the parameter is a POST parameter
- * @return ?string		The value of the parameter (NULL: not there, and default was NULL)
+ * @param  array                        The array we're extracting parameters from
+ * @param  ID_TEXT                      The name of the parameter
+ * @param  ?mixed                       The default value to use for the parameter (NULL: no default)
+ * @param  boolean                      Whether the parameter has to be an integer
+ * @param  boolean                      Whether the parameter is a POST parameter
+ * @return ?string                      The value of the parameter (NULL: not there, and default was NULL)
  */
 function __param($array,$name,$default,$must_integer = false,$is_post = false)
 {
@@ -648,9 +648,9 @@ function __param($array,$name,$default,$must_integer = false,$is_post = false)
  * This function is the integeric partner of either_param, as it returns the value as an integer.
  * You should always use integer specified versions when inputting integers, for the added security that type validation allows. If the value is of the wrong type, it indicates a hack attempt and will be logged.
  *
- * @param  ID_TEXT		The name of the parameter to get
- * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return integer		The parameter value
+ * @param  ID_TEXT                      The name of the parameter to get
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @return integer                      The parameter value
  */
 function either_param_integer($name,$default = null)
 {
@@ -664,9 +664,9 @@ function either_param_integer($name,$default = null)
 /**
  * This function is the integeric partner of post_param, as it returns the value as an integer.
  *
- * @param  ID_TEXT		The name of the parameter to get
- * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return integer		The parameter value
+ * @param  ID_TEXT                      The name of the parameter to get
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @return integer                      The parameter value
  */
 function post_param_integer($name,$default = null)
 {
@@ -680,9 +680,9 @@ function post_param_integer($name,$default = null)
 /**
  * This function is the integeric partner of get_param, as it returns the value as an integer.
  *
- * @param  ID_TEXT		The name of the parameter to get
- * @param  ?mixed			The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
- * @return integer		The parameter value
+ * @param  ID_TEXT                      The name of the parameter to get
+ * @param  ?mixed                       The default value to give the parameter if the parameter value is not defined (NULL: give error on missing parameter)
+ * @return integer                      The parameter value
  */
 function get_param_integer($name,$default = null)
 {
@@ -696,7 +696,7 @@ function get_param_integer($name,$default = null)
 /**
  * Get the file base for your installation of ocPortal
  *
- * @return PATH			The file base, without a trailing slash
+ * @return PATH                         The file base, without a trailing slash
  */
 function get_file_base()
 {
@@ -707,7 +707,7 @@ function get_file_base()
 /**
  * Get the file base for your installation of ocPortal.  For a shared install only, this is different to the base-url.
  *
- * @return PATH			The file base, without a trailing slash
+ * @return PATH                         The file base, without a trailing slash
  */
 function get_custom_file_base()
 {
@@ -719,8 +719,8 @@ function get_custom_file_base()
  * Get the parameter put into it, with no changes. If it detects that the parameter is naughty (i.e malicious, and probably from a hacker), it will log the hack-attack and output an error message.
  * This function is designed to be called on parameters that will be embedded in a path, and defines malicious as trying to reach a parent directory using '..'. All file paths in ocPortal should be absolute
  *
- * @param  string			String to test
- * @return string			Same as input string
+ * @param  string                       String to test
+ * @return string                       Same as input string
  */
 function filter_naughty($in)
 {
@@ -733,8 +733,8 @@ function filter_naughty($in)
 /**
  * This function is similar to filter_naughty, except it requires the parameter to be strictly alphanumeric. It is intended for use on text that will be put into an eval.
  *
- * @param  string			String to test
- * @return string			Same as input string
+ * @param  string                       String to test
+ * @return string                       Same as input string
  */
 function filter_naughty_harsh($in)
 {
@@ -747,8 +747,8 @@ function filter_naughty_harsh($in)
 /**
  * Make sure that lines are seperated by "\n", with no "\r"'s there at all. For Mac data, this will be a flip scenario. For Linux data this will be a null operation. For windows data this will be change from "\r\n" to just "\n". For a realistic scenario, data could have originated on all kinds of platforms, with some editors converting, some situations being inter-platform, and general confusion. Don't make blind assumptions - use this function to clean data, then write clean code that only considers "\n"'s.
  *
- * @param  string			The data to clean
- * @return string			The cleaned data
+ * @param  string                       The data to clean
+ * @return string                       The cleaned data
  */
 function unixify_line_format($in)
 {
@@ -761,7 +761,7 @@ function unixify_line_format($in)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT		The CSS file required
+ * @param  ID_TEXT                      The CSS file required
  */
 function require_css($css)
 {
@@ -772,7 +772,7 @@ function require_css($css)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT		The JavaScript file required
+ * @param  ID_TEXT                      The JavaScript file required
  */
 function require_javascript($css)
 {
@@ -781,10 +781,10 @@ function require_javascript($css)
 /**
  * Do a wildcard match by converting to a regular expression.
  *
- * @param  string			The haystack
- * @param  string			The needle (a wildcard expression)
- * @param  boolean		Whether full-coverance is required
- * @return boolean		Whether we have a match
+ * @param  string                       The haystack
+ * @param  string                       The needle (a wildcard expression)
+ * @param  boolean                      Whether full-coverance is required
+ * @return boolean                      Whether we have a match
  */
 function simulated_wildcard_match($context,$word,$full_cover = false)
 {
@@ -798,9 +798,9 @@ function simulated_wildcard_match($context,$word,$full_cover = false)
 /**
  * Get data from the persistent cache.
  *
- * @param  mixed			Key
- * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
- * @return ?mixed			The data (NULL: not found / NULL entry)
+ * @param  mixed                        Key
+ * @param  ?TIME                        Minimum timestamp that entries from the cache may hold (NULL: don't care)
+ * @return ?mixed                       The data (NULL: not found / NULL entry)
  */
 function persistent_cache_get($key,$min_cache_date = null)
 {
@@ -810,10 +810,10 @@ function persistent_cache_get($key,$min_cache_date = null)
 /**
  * Put data into the persistent cache.
  *
- * @param  mixed			Key
- * @param  mixed			The data
- * @param  boolean		Whether it is server-wide data
- * @param  ?integer		The expiration time in seconds. (NULL: Default expiry in 60 minutes, or never if it is server-wide).
+ * @param  mixed                        Key
+ * @param  mixed                        The data
+ * @param  boolean                      Whether it is server-wide data
+ * @param  ?integer                     The expiration time in seconds. (NULL: Default expiry in 60 minutes, or never if it is server-wide).
  */
 function persistent_cache_set($key,$data,$server_wide = false,$expire_secs = null)
 {
@@ -822,8 +822,8 @@ function persistent_cache_set($key,$data,$server_wide = false,$expire_secs = nul
 /**
  * Delete data from the persistent cache.
  *
- * @param  mixed			Key name
- * @param  boolean		Whether we are deleting via substring
+ * @param  mixed                        Key name
+ * @param  boolean                      Whether we are deleting via substring
  */
 function persistent_cache_delete($key,$substring = false)
 {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -23,10 +23,10 @@
  * HTML isn't great... no dynamicness/reconfigurability at all.
  * We prefer Comcode with [html]HTML goes here[/html] usage
  *
- * @param  PATH			The relative (to ocPortals base directory) path to the HTML page
- * @param  ?PATH			The file base to load from (NULL: standard)
- * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
- * @return string			The page
+ * @param  PATH                         The relative (to ocPortals base directory) path to the HTML page
+ * @param  ?PATH                        The file base to load from (NULL: standard)
+ * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @return string                       The page
  */
 function load_html_page($string,$file_base = null,&$out = null)
 {

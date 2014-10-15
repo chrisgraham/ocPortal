@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Get meta data from an image, using EXIF primarily, but also XMP and IPTC to get image descriptions.
  * Also gets GPS data and canonicalises in decimal as Latitude and Longitude.
  *
- * @param  PATH		This is the path of the photo which may contain metadata
- * @param  ?string	This is the original filename of the photo which may contain metadata (NULL: derive from path)
- * @return array		Map of meta data, using standard EXIF naming
+ * @param  PATH                         This is the path of the photo which may contain metadata
+ * @param  ?string                      This is the original filename of the photo which may contain metadata (NULL: derive from path)
+ * @return array                        Map of meta data, using standard EXIF naming
  */
 function get_exif_data($path,$filename = null)
 {
@@ -55,8 +55,8 @@ function get_exif_data($path,$filename = null)
 /**
  * Work out canonical Latitude/Longitude details from complex EXIF bits.
  *
- * @param  array		EXIF data
- * @return array		Extra derived EXIF data
+ * @param  array                        EXIF data
+ * @return array                        Extra derived EXIF data
  */
 function _get_simple_gps($exif)
 {
@@ -106,9 +106,9 @@ function _get_simple_gps($exif)
  * Attempt to retrieve a caption from photos seeking XMP, then EXIF, then IPTC binary last.
  * Check this file is a valid image file before passing to this function as an empty string often annoys.
  *
- * @param  PATH		This is the path of the photo which may contain metadata
- * @param  string		This is the original filename of the photo which may contain metadata
- * @return string		Whichever caption is found
+ * @param  PATH                         This is the path of the photo which may contain metadata
+ * @param  string                       This is the original filename of the photo which may contain metadata
+ * @return string                       Whichever caption is found
  */
 function get_exif_image_caption($path,$filename)
 {
@@ -235,10 +235,10 @@ function get_exif_image_caption($path,$filename)
  * Spaces may be added to the names to make them prettier, but otherwise they must be the same.
  * Designed to be used by headless-importers, e.g. bulk importing of media files, to make the process a bit smarter.
  *
- * @param  ID_TEXT	The content type
- * @param  ID_TEXT	The content ID
- * @param  array		The EXIF data
- * @param  ?array		Extra meta data to store, against explicit field IDs (NULL: none)
+ * @param  ID_TEXT                      The content type
+ * @param  ID_TEXT                      The content ID
+ * @param  array                        The EXIF data
+ * @param  ?array                       Extra meta data to store, against explicit field IDs (NULL: none)
  */
 function store_exif($content_type,$content_id,$exif,$map = null)
 {
@@ -306,8 +306,8 @@ function store_exif($content_type,$content_id,$exif,$map = null)
 /**
  * Cleanup some EXIF, to the correct character set.
  *
- * @param  array		The EXIF data
- * @return array		Cleaned up EXIF data
+ * @param  array                        The EXIF data
+ * @return array                        Cleaned up EXIF data
  */
 function cleanup_exif($meta_data)
 {

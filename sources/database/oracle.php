@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_database_drivers
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_database_drivers
  */
 
 /*EXTRA FUNCTIONS: oci.+*/
@@ -26,40 +26,40 @@ For: php_oci8.dll
 
 /**
  * Database Driver.
- * @package		core_database_drivers
+ * @package    core_database_drivers
  */
 class Database_Static_oracle
 {
     public $cache_db = array();
 
     /**
-	 * Get the default user for making db connections (used by the installer as a default).
-	 *
-	 * @return string			The default user for db connections
-	 */
+     * Get the default user for making db connections (used by the installer as a default).
+     *
+     * @return string                   The default user for db connections
+     */
     public function db_default_user()
     {
         return 'system';
     }
 
     /**
-	 * Get the default password for making db connections (used by the installer as a default).
-	 *
-	 * @return string			The default password for db connections
-	 */
+     * Get the default password for making db connections (used by the installer as a default).
+     *
+     * @return string                   The default password for db connections
+     */
     public function db_default_password()
     {
         return '';
     }
 
     /**
-	 * Create a table index.
-	 *
-	 * @param  ID_TEXT		The name of the table to create the index on
-	 * @param  ID_TEXT		The index name (not really important at all)
-	 * @param  string			Part of the SQL query: a comma-separated list of fields to use on the index
-	 * @param  array			The DB connection to make on
-	 */
+     * Create a table index.
+     *
+     * @param  ID_TEXT                  The name of the table to create the index on
+     * @param  ID_TEXT                  The index name (not really important at all)
+     * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
+     * @param  array                    The DB connection to make on
+     */
     public function db_create_index($table_name,$index_name,$_fields,$db)
     {
         if ($index_name[0] == '#') {
@@ -75,12 +75,12 @@ class Database_Static_oracle
     }
 
     /**
-	 * Change the primary key of a table.
-	 *
-	 * @param  ID_TEXT		The name of the table to create the index on
-	 * @param  array			A list of fields to put in the new key
-	 * @param  array			The DB connection to make on
-	 */
+     * Change the primary key of a table.
+     *
+     * @param  ID_TEXT                  The name of the table to create the index on
+     * @param  array                    A list of fields to put in the new key
+     * @param  array                    The DB connection to make on
+     */
     public function db_change_primary_key($table_name,$new_key,$db)
     {
         $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
@@ -88,12 +88,12 @@ class Database_Static_oracle
     }
 
     /**
-	 * Assemble part of a WHERE clause for doing full-text search
-	 *
-	 * @param  string			Our match string (assumes "?" has been stripped already)
-	 * @param  boolean		Whether to do a boolean full text search
-	 * @return string			Part of a WHERE clause for doing full-text search
-	 */
+     * Assemble part of a WHERE clause for doing full-text search
+     *
+     * @param  string                   Our match string (assumes "?" has been stripped already)
+     * @param  boolean                  Whether to do a boolean full text search
+     * @return string                   Part of a WHERE clause for doing full-text search
+     */
     public function db_full_text_assemble($content,$boolean)
     {
         $content = str_replace('"','',$content);
@@ -101,20 +101,20 @@ class Database_Static_oracle
     }
 
     /**
-	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
-	 *
-	 * @return integer			First ID used
-	 */
+     * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
+     *
+     * @return integer                  First ID used
+     */
     public function db_get_first_id()
     {
         return 1;
     }
 
     /**
-	 * Get a map of ocPortal field types, to actual mySQL types.
-	 *
-	 * @return array			The map
-	 */
+     * Get a map of ocPortal field types, to actual mySQL types.
+     *
+     * @return array                    The map
+     */
     public function db_get_type_remap()
     {
         $type_remap = array(
@@ -145,12 +145,12 @@ class Database_Static_oracle
     }
 
     /**
-	 * Create a new table.
-	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  array			A map of field names to ocPortal field types (with *#? encodings)
-	 * @param  array			The DB connection to make on
-	 */
+     * Create a new table.
+     *
+     * @param  ID_TEXT                  The table name
+     * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
+     * @param  array                    The DB connection to make on
+     */
     public function db_create_table($table_name,$fields,$db)
     {
         $type_remap = $this->db_get_type_remap();
@@ -180,7 +180,7 @@ class Database_Static_oracle
 
             $type = isset($type_remap[$type])?$type_remap[$type]:$type;
 
-            $_fields .= '	  ' . $name . ' ' . $type;
+            $_fields .= '    ' . $name . ' ' . $type;
             if (substr($name,-13) == '__text_parsed') {
                 $_fields .= ' DEFAULT \'\'';
             } elseif (substr($name,-13) == '__source_user') {
@@ -190,23 +190,23 @@ class Database_Static_oracle
         }
 
         $this->db_query('CREATE TABLE ' . $table_name . ' (
-		  ' . $_fields . '
-		  PRIMARY KEY (' . $keys . ')
-		)',$db,null,null);
+          ' . $_fields . '
+          PRIMARY KEY (' . $keys . ')
+        )',$db,null,null);
 
         if ($trigger) {
             $query1 = "
-		CREATE SEQUENCE gen_$table_name
-	";
+        CREATE SEQUENCE gen_$table_name
+    ";
             $query2 = "
-		CREATE OR REPLACE TRIGGER gen_$table_name BEFORE INSERT ON $table_name
-		FOR EACH ROW
-		BEGIN
-			SELECT gen_$table_name.nextval
-			into :new.id
-			from dual;
-		END;
-	";
+        CREATE OR REPLACE TRIGGER gen_$table_name BEFORE INSERT ON $table_name
+        FOR EACH ROW
+        BEGIN
+            SELECT gen_$table_name.nextval
+            into :new.id
+            from dual;
+        END;
+    ";
 
             $parsed1 = ociparse($db,$query1);
             $parsed2 = ociparse($db,$query2);
@@ -216,74 +216,74 @@ class Database_Static_oracle
     }
 
     /**
-	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
-	 *
-	 * @param  ID_TEXT		The attribute
-	 * @param  string			The comparison
-	 * @return string			The SQL
-	 */
+     * Encode an SQL statement fragment for a conditional to see if two strings are equal.
+     *
+     * @param  ID_TEXT                  The attribute
+     * @param  string                   The comparison
+     * @return string                   The SQL
+     */
     public function db_string_equal_to($attribute,$compare)
     {
         return $attribute . " LIKE '" . $this->db_escape_string($compare) . "'";
     }
 
     /**
-	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
-	 *
-	 * @param  ID_TEXT		The attribute
-	 * @param  string			The comparison
-	 * @return string			The SQL
-	 */
+     * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
+     *
+     * @param  ID_TEXT                  The attribute
+     * @param  string                   The comparison
+     * @return string                   The SQL
+     */
     public function db_string_not_equal_to($attribute,$compare)
     {
         return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
     }
 
     /**
-	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
-	 *
-	 * @return boolean			Whether a blank string IS NULL
-	 */
+     * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
+     *
+     * @return boolean                  Whether a blank string IS NULL
+     */
     public function db_empty_is_null()
     {
         return true;
     }
 
     /**
-	 * Delete a table.
-	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  array			The DB connection to delete on
-	 */
+     * Delete a table.
+     *
+     * @param  ID_TEXT                  The table name
+     * @param  array                    The DB connection to delete on
+     */
     public function db_drop_table_if_exists($table,$db)
     {
         $this->db_query('DROP TABLE ' . $table,$db,null,null,true);
     }
 
     /**
-	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
-	 *
-	 * @return boolean			Whether the database is a flat file database
-	 */
+     * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
+     *
+     * @return boolean                  Whether the database is a flat file database
+     */
     public function db_is_flat_file_simple()
     {
         return false;
     }
 
     /**
-	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
-	 *
-	 * @param  string			The pattern
-	 * @return string			The encoded pattern
-	 */
+     * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
+     *
+     * @param  string                   The pattern
+     * @return string                   The encoded pattern
+     */
     public function db_encode_like($pattern)
     {
         return $this->db_escape_string($pattern);
     }
 
     /**
-	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
-	 */
+     * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
+     */
     public function db_close_connections()
     {
         foreach ($this->cache_db as $db) {
@@ -294,16 +294,16 @@ class Database_Static_oracle
     }
 
     /**
-	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
-	 *
-	 * @param  boolean		Whether to create a persistent connection
-	 * @param  string			The database name
-	 * @param  string			The database host (the server)
-	 * @param  string			The database connection username
-	 * @param  string			The database connection password
-	 * @param  boolean		Whether to on error echo an error and return with a NULL, rather than giving a critical error
-	 * @return ?array			A database connection (NULL: failed)
-	 */
+     * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
+     *
+     * @param  boolean                  Whether to create a persistent connection
+     * @param  string                   The database name
+     * @param  string                   The database host (the server)
+     * @param  string                   The database connection username
+     * @param  string                   The database connection password
+     * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
+     * @return ?array                   A database connection (NULL: failed)
+     */
     public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
     {
         if ($db_host != 'localhost') {
@@ -342,32 +342,32 @@ class Database_Static_oracle
     }
 
     /**
-	 * Find whether full-text-search is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
+     * Find whether full-text-search is present
+     *
+     * @param  array                    A DB connection
+     * @return boolean                  Whether it is
+     */
     public function db_has_full_text($db)
     {
         return false;
     }
 
     /**
-	 * Find whether full-text-boolean-search is present
-	 *
-	 * @return boolean		Whether it is
-	 */
+     * Find whether full-text-boolean-search is present
+     *
+     * @return boolean                  Whether it is
+     */
     public function db_has_full_text_boolean()
     {
         return false;
     }
 
     /**
-	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
-	 *
-	 * @param  string			The string
-	 * @return string			The escaped string
-	 */
+     * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
+     *
+     * @param  string                   The string
+     * @return string                   The escaped string
+     */
     public function db_escape_string($string)
     {
         $string = str_replace("'","''",$string);
@@ -375,16 +375,16 @@ class Database_Static_oracle
     }
 
     /**
-	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
-	 *
-	 * @param  string			The complete SQL query
-	 * @param  array			A DB connection
-	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
-	 * @param  ?integer		The start row to affect (NULL: no specification)
-	 * @param  boolean		Whether to output an error on failure
-	 * @param  boolean		Whether to get the autoincrement ID created for an insert query
-	 * @return ?mixed			The results (NULL: no results), or the insert ID
-	 */
+     * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
+     *
+     * @param  string                   The complete SQL query
+     * @param  array                    A DB connection
+     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
+     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  boolean                  Whether to output an error on failure
+     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
+     * @return ?mixed                   The results (NULL: no results), or the insert ID
+     */
     public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
     {
         if ((!is_null($start)) && (!is_null($max)) && (strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ')) {
@@ -461,12 +461,12 @@ class Database_Static_oracle
     }
 
     /**
-	 * Get the rows returned from a SELECT query.
-	 *
-	 * @param  resource		The query result pointer
-	 * @param  ?integer		Whether to start reading from (NULL: irrelevant for this forum driver)
-	 * @return array			A list of row maps
-	 */
+     * Get the rows returned from a SELECT query.
+     *
+     * @param  resource                 The query result pointer
+     * @param  ?integer                 Whether to start reading from (NULL: irrelevant for this forum driver)
+     * @return array                    A list of row maps
+     */
     public function db_get_query_rows($stmt,$start = null)
     {
         $out = array();

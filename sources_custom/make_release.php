@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportal_release_build
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportal_release_build
  */
 
 /*EXTRA FUNCTIONS: shell_exec|escapeshellarg*/
@@ -127,53 +127,53 @@ function make_installers($skip_file_grab = false)
         $code = file_get_contents(get_file_base() . '/install.php');
         $auto_installer = fopen($builds_path . '/builds/' . $version_dotted . '/install.php','wb');
         $installer_start = "<?php
-			/* QUICK INSTALLER CODE starts */
+            /* QUICK INSTALLER CODE starts */
 
-			global \$FILE_ARRAY,\$SIZE_ARRAY,\$OFFSET_ARRAY,\$DIR_ARRAY,\$DATADOTOCP_FILE;
-			\$OFFSET_ARRAY = array({$offset_list});
-			\$SIZE_ARRAY = array({$size_list});
-			\$FILE_ARRAY = array({$file_list});
-			\$DATADOTOCP_FILE = fopen('data.ocp','rb');
-			if (\$DATADOTOCP_FILE === false) warn_exit('data.ocp missing / inaccessible');
-			if (filesize('data.ocp') != {$archive_size}) warn_exit('data.ocp not fully uploaded, or wrong version for this installer');
-			if (md5(file_array_get('{$md5_test_path}')) != '{$md5}') warn_exit('data.ocp corrupt. Must not be uploaded in text mode');
+            global \$FILE_ARRAY,\$SIZE_ARRAY,\$OFFSET_ARRAY,\$DIR_ARRAY,\$DATADOTOCP_FILE;
+            \$OFFSET_ARRAY = array({$offset_list});
+            \$SIZE_ARRAY = array({$size_list});
+            \$FILE_ARRAY = array({$file_list});
+            \$DATADOTOCP_FILE = fopen('data.ocp','rb');
+            if (\$DATADOTOCP_FILE === false) warn_exit('data.ocp missing / inaccessible');
+            if (filesize('data.ocp') != {$archive_size}) warn_exit('data.ocp not fully uploaded, or wrong version for this installer');
+            if (md5(file_array_get('{$md5_test_path}')) != '{$md5}') warn_exit('data.ocp corrupt. Must not be uploaded in text mode');
 
-			function file_array_get(\$path)
-			{
-				global \$OFFSET_ARRAY,\$SIZE_ARRAY,\$DATADOTOCP_FILE,\$FILE_BASE;
+            function file_array_get(\$path)
+            {
+                    global \$OFFSET_ARRAY,\$SIZE_ARRAY,\$DATADOTOCP_FILE,\$FILE_BASE;
 
-				if (substr(\$path,0,strlen(\$FILE_BASE.'/')) == \$FILE_BASE.'/')
-					\$path = substr(\$path,strlen(\$FILE_BASE.'/'));
+                    if (substr(\$path,0,strlen(\$FILE_BASE.'/')) == \$FILE_BASE.'/')
+                            \$path = substr(\$path,strlen(\$FILE_BASE.'/'));
 
-				if (!isset(\$OFFSET_ARRAY[\$path])) return;
-				\$offset = \$OFFSET_ARRAY[\$path];
-				\$size = \$SIZE_ARRAY[\$path];
-				if (\$size == 0) return '';
-				fseek(\$DATADOTOCP_FILE,\$offset,SEEK_SET);
-				if (\$size>1024*1024) {
-					return array(\$size,\$DATADOTOCP_FILE,\$offset);
-				}
-				\$data = fread(\$DATADOTOCP_FILE,\$size);
-				return \$data;
-			}
+                    if (!isset(\$OFFSET_ARRAY[\$path])) return;
+                    \$offset = \$OFFSET_ARRAY[\$path];
+                    \$size = \$SIZE_ARRAY[\$path];
+                    if (\$size == 0) return '';
+                    fseek(\$DATADOTOCP_FILE,\$offset,SEEK_SET);
+                    if (\$size>1024*1024) {
+                            return array(\$size,\$DATADOTOCP_FILE,\$offset);
+                    }
+                    \$data = fread(\$DATADOTOCP_FILE,\$size);
+                    return \$data;
+            }
 
-			function file_array_exists(\$path)
-			{
-				global \$OFFSET_ARRAY;
-				return (isset(\$OFFSET_ARRAY[\$path]));
-			}
+            function file_array_exists(\$path)
+            {
+                    global \$OFFSET_ARRAY;
+                    return (isset(\$OFFSET_ARRAY[\$path]));
+            }
 
-			function file_array_get_at(\$i)
-			{
-				global \$FILE_ARRAY;
-				\$name = \$FILE_ARRAY[\$i];
-				return array(\$name,file_array_get(\$name));
-			}
+            function file_array_get_at(\$i)
+            {
+                    global \$FILE_ARRAY;
+                    \$name = \$FILE_ARRAY[\$i];
+                    return array(\$name,file_array_get(\$name));
+            }
 
-			function file_array_count()
-			{
-				return {$file_count};
-			}";
+            function file_array_count()
+            {
+                    return {$file_count};
+            }";
         $installer_start = preg_replace('#^\t{3}#m','',$installer_start); // Format it correctly
         fwrite($auto_installer,$installer_start);
         global $MAKE_INSTALLERS__DIR_ARRAY;
@@ -200,8 +200,8 @@ function make_installers($skip_file_grab = false)
     }
 
     /*
-	The other installers are built up file-by-file...
-	*/
+    The other installers are built up file-by-file...
+    */
 
     // Build manual
     if ($make_manual) {
@@ -241,7 +241,7 @@ function make_installers($skip_file_grab = false)
         if ($cmd_result !== NULL) {
             $output2 .= $cmd_result;
         }
-        //$out.=do_build_zip_output($v,$output2);	Don't mention, as will get auto-deleted after gzipping anyway
+        //$out.=do_build_zip_output($v,$output2);  Don't mention, as will get auto-deleted after gzipping anyway
         chdir($builds_path . '/builds/build/' . $version_branch);
         $cmd = 'gzip -n ' . escapeshellarg($bundled);
         shell_exec($cmd);
@@ -324,12 +324,12 @@ function make_installers($skip_file_grab = false)
     }
 
     $out .= '
-		<h2>Statistics</h2>
-		<ul>
-			<li>Total files compiled: ' . integer_format($MAKE_INSTALLERS__TOTAL_FILES) . '</li>
-			<li>Total directories traversed: ' . integer_format($MAKE_INSTALLERS__TOTAL_DIRS) . '</li>
-			' . $details . '
-		</ul>';
+        <h2>Statistics</h2>
+        <ul>
+            <li>Total files compiled: ' . integer_format($MAKE_INSTALLERS__TOTAL_FILES) . '</li>
+            <li>Total directories traversed: ' . integer_format($MAKE_INSTALLERS__TOTAL_DIRS) . '</li>
+            ' . $details . '
+        </ul>';
 
     // To stop ocProducts-PHP complaining about non-synched files
     global $_CREATED_FILES,$_MODIFIED_FILES;
@@ -397,10 +397,10 @@ function do_build_zip_output($file,$new_output)
 
     $builds_path = get_builds_path();
     return '
-		<div class="zip_surround">
-		<h2>Compiling ZIP file "<a href="' . escape_html($file) . '" title="Download the file.">' . escape_html($builds_path . $version_dotted . '/' . $file) . '</a>"</h2>
-		<p>' . nl2br(trim(escape_html($new_output))) . '</p>
-		</div>'
+        <div class="zip_surround">
+        <h2>Compiling ZIP file "<a href="' . escape_html($file) . '" title="Download the file.">' . escape_html($builds_path . $version_dotted . '/' . $file) . '</a>"</h2>
+        <p>' . nl2br(trim(escape_html($new_output))) . '</p>
+        </div>'
     ;
 }
 

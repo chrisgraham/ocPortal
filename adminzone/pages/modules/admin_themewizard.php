@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		themewizard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    themewizard
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_themewizard
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_themewizard
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -62,10 +62,10 @@ class Module_admin_themewizard
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -124,10 +124,10 @@ class Module_admin_themewizard
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('themes2');
@@ -162,10 +162,10 @@ class Module_admin_themewizard
     }
 
     /**
-	 * UI for a theme wizard step (choose colour).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a theme wizard step (choose colour).
+     *
+     * @return tempcode                 The UI
+     */
     public function step1()
     {
         $post_url = build_url(array('page' => '_SELF','type' => 'step2'),'_SELF',array('keep_theme_seed','keep_theme_dark','keep_theme_source','keep_theme_algorithm'),false,true);
@@ -208,36 +208,36 @@ class Module_admin_themewizard
         require_javascript('javascript_ajax');
         $script = find_script('snippet');
         $javascript = "
-			var form=document.getElementById('main_form');
-			form.elements['source_theme'].onchange=function() {
-				var default_theme=(form.elements['source_theme'].options[form.elements['source_theme'].selectedIndex].value=='default');
-				form.elements['algorithm'][0].checked=default_theme;
-				form.elements['algorithm'][1].checked=!default_theme;
-			}
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					document.getElementById('submit_button').disabled=true;
-					var url='" . addslashes($script) . "?snippet=exists_theme&name='+window.encodeURIComponent(form.elements['themename'].value);
-					if (!do_ajax_field_test(url))
-					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
-					}
-					document.getElementById('submit_button').disabled=false;
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-					return true;
-				};
-		";
+            var form=document.getElementById('main_form');
+            form.elements['source_theme'].onchange=function() {
+                    var default_theme=(form.elements['source_theme'].options[form.elements['source_theme'].selectedIndex].value=='default');
+                    form.elements['algorithm'][0].checked=default_theme;
+                    form.elements['algorithm'][1].checked=!default_theme;
+            }
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            document.getElementById('submit_button').disabled=true;
+                            var url='" . addslashes($script) . "?snippet=exists_theme&name='+window.encodeURIComponent(form.elements['themename'].value);
+                            if (!do_ajax_field_test(url))
+                            {
+                                        document.getElementById('submit_button').disabled=false;
+                                        return false;
+                            }
+                            document.getElementById('submit_button').disabled=false;
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            return true;
+                    };
+        ";
 
         return do_template('FORM_SCREEN',array('_GUID' => '98963f4d7ff60744382f937e6cc5acbf','GET' => true,'SKIP_VALIDATION' => true,'TITLE' => $this->title,'JAVASCRIPT' => $javascript,'FIELDS' => $fields,'URL' => $post_url,'TEXT' => $text,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'HIDDEN' => $hidden));
     }
 
     /**
-	 * UI for a theme wizard step (choose preview).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a theme wizard step (choose preview).
+     *
+     * @return tempcode                 The UI
+     */
     public function step2()
     {
         $source_theme = get_param('source_theme');
@@ -274,10 +274,10 @@ class Module_admin_themewizard
     }
 
     /**
-	 * UI for a theme wizard step (choose save).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a theme wizard step (choose save).
+     *
+     * @return tempcode                 The UI
+     */
     public function step3()
     {
         $source_theme = get_param('source_theme');
@@ -304,10 +304,10 @@ class Module_admin_themewizard
     }
 
     /**
-	 * UI for a theme wizard step (actualisation).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a theme wizard step (actualisation).
+     *
+     * @return tempcode                 The UI
+     */
     public function step4()
     {
         // Add theme
@@ -345,7 +345,7 @@ class Module_admin_themewizard
         return do_next_manager($this->title,$message,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             NULL, // Add one
             NULL, // Edit this
             NULL, // Edit one
@@ -371,10 +371,10 @@ class Module_admin_themewizard
     }
 
     /**
-	 * UI for a logo wizard step (ask for input).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a logo wizard step (ask for input).
+     *
+     * @return tempcode                 The UI
+     */
     public function make_logo()
     {
         if (!function_exists('imagepng')) {
@@ -460,10 +460,10 @@ class Module_admin_themewizard
     }
 
     /**
-	 * UI for a logo wizard step (show preview).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a logo wizard step (show preview).
+     *
+     * @return tempcode                 The UI
+     */
     public function _make_logo()
     {
         $preview = do_template('LOGOWIZARD_2',array('_GUID' => '6e5a442860e5b7644b50c2345c3c8dee','NAME' => post_param('name'),'FONT' => post_param('font'),'LOGO_THEME_IMAGE' => post_param('logo_theme_image'),'BACKGROUND_THEME_IMAGE' => post_param('background_theme_image'),'THEME' => post_param('theme')));
@@ -473,10 +473,10 @@ class Module_admin_themewizard
     }
 
     /**
-	 * UI for a logo wizard step (set).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * UI for a logo wizard step (set).
+     *
+     * @return tempcode                 The UI
+     */
     public function __make_logo()
     {
         $theme = post_param('theme');

@@ -145,7 +145,7 @@ while (($line = fgets($myfile,10000000)) !== false) {
         if ((time() >= $time_start+20) && ($sql_buildup == '')) {
             $refresh_url = 'restore.php?start=' . strval($i+$start_line+get_param_integer('start',0)) . '&start_offset=' . strval(ftell($myfile));
             echo '<meta http-equiv="refresh" content="0;url=' . $refresh_url . '" /> Please wait, continuing.';
-            //header('Location: '.$refresh_url);	Can result in "This web page has a redirect loop" error
+            //header('Location: '.$refresh_url);   Can result in "This web page has a redirect loop" error
             exit();
         }
 
@@ -181,7 +181,7 @@ echo $tpl->evaluate();
  * You should remember this function, and not substitute anything else for it, as that will likely make your code unstable.
  * It is key to source code modularity in ocPortal.
  *
- * @param  string         The codename for the source module to load
+ * @param  string                       The codename for the source module to load
  */
 function require_code($codename)
 {
@@ -211,8 +211,8 @@ function require_code($codename)
 /**
  * Make an object of the given class
  *
- * @param  string			The class name
- * @return object			The object
+ * @param  string                       The class name
+ * @return object                       The object
  */
 function object_factory($class)
 {

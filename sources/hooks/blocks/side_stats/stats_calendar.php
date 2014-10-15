@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 class Hook_stats_calendar
 {
     /**
-	 * Show a stats section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show a stats section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (!addon_installed('calendar')) {

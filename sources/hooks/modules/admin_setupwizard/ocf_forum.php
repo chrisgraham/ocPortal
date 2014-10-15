@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_sw_ocf_forum
 {
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @return array		Current settings.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @return array                    Current settings.
+     */
     public function get_current_settings()
     {
         $settings = array();
@@ -59,11 +59,11 @@ class Hook_sw_ocf_forum
     }
 
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @param  array		Default values for the fields, from the install-profile.
-	 * @return tempcode	An input field.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @param  array                    Default values for the fields, from the install-profile.
+     * @return tempcode                 An input field.
+     */
     public function get_fields($field_defaults)
     {
         if (get_forum_type() != 'ocf') {
@@ -92,8 +92,8 @@ class Hook_sw_ocf_forum
     }
 
     /**
-	 * Run function for setting features from the setup wizard.
-	 */
+     * Run function for setting features from the setup wizard.
+     */
     public function set_fields()
     {
         if (get_forum_type() != 'ocf') {
@@ -140,10 +140,10 @@ class Hook_sw_ocf_forum
     }
 
     /**
-	 * Run function for blocks in the setup wizard.
-	 *
-	 * @return array		Map of block names, to display types.
-	 */
+     * Run function for blocks in the setup wizard.
+     *
+     * @return array                    Map of block names, to display types.
+     */
     public function get_blocks()
     {
         if (get_forum_type() == 'ocf') {

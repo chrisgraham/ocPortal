@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -23,11 +23,11 @@
  *
  * @sets_input_state
  *
- * @param  array			The URL component map (must contain 'page').
- * @param  ID_TEXT		The zone.
- * @param  ID_TEXT		The running script.
- * @param  boolean		Whether to get rid of keep_ variables in current URL.
- * @return array			A list of parameters that would be required to be passed back to reset the state.
+ * @param  array                        The URL component map (must contain 'page').
+ * @param  ID_TEXT                      The zone.
+ * @param  ID_TEXT                      The running script.
+ * @param  boolean                      Whether to get rid of keep_ variables in current URL.
+ * @return array                        A list of parameters that would be required to be passed back to reset the state.
  */
 function set_execution_context($new_get,$new_zone = '_SEARCH',$new_current_script = 'index',$erase_keep_also = false)
 {
@@ -63,8 +63,8 @@ function set_execution_context($new_get,$new_zone = '_SEARCH',$new_current_scrip
 /**
  * Map spaces to %20 and put http:// in front of URLs starting www.
  *
- * @param  URLPATH		The URL to fix
- * @return URLPATH		The fixed result
+ * @param  URLPATH                      The URL to fix
+ * @return URLPATH                      The fixed result
  */
 function remove_url_mistakes($url)
 {
@@ -80,8 +80,8 @@ function remove_url_mistakes($url)
 /**
  * Given a URL or page-link, return an absolute URL.
  *
- * @param  string			URL or page-link
- * @return URLPATH		URL
+ * @param  string                       URL or page-link
+ * @return URLPATH                      URL
  */
 function page_link_as_url($url)
 {
@@ -98,10 +98,10 @@ function page_link_as_url($url)
 /**
  * Get hidden fields for a form representing 'keep_x'. If we are having a GET form instead of a POST form, we need to do this. This function also encodes the page name, as we'll always want that.
  *
- * @param  ID_TEXT		The page for the form to go to (blank: don't attach)
- * @param  boolean		Whether to keep all elements of the current URL represented in this form (rather than just the keep_ fields, and page)
- * @param  ?array			A list of parameters to exclude (NULL: don't exclude any)
- * @return tempcode		The builtup hidden form fields
+ * @param  ID_TEXT                      The page for the form to go to (blank: don't attach)
+ * @param  boolean                      Whether to keep all elements of the current URL represented in this form (rather than just the keep_ fields, and page)
+ * @param  ?array                       A list of parameters to exclude (NULL: don't exclude any)
+ * @return tempcode                     The builtup hidden form fields
  */
 function _build_keep_form_fields($page = '',$keep_all = false,$exclude = null)
 {
@@ -138,9 +138,9 @@ function _build_keep_form_fields($page = '',$keep_all = false,$exclude = null)
 /**
  * Recurser helper function for _build_keep_post_fields.
  *
- * @param  ID_TEXT		Key name to put value under
- * @param  mixed			Value (string or array)
- * @return string			The builtup hidden form fields
+ * @param  ID_TEXT                      Key name to put value under
+ * @param  mixed                        Value (string or array)
+ * @return string                       The builtup hidden form fields
  */
 function _fixed_post_parser($key,$value)
 {
@@ -172,8 +172,8 @@ function _fixed_post_parser($key,$value)
 /**
  * Relay all POST variables for this URL, to the URL embedded in the form.
  *
- * @param  ?array			A list of parameters to exclude (NULL: exclude none)
- * @return tempcode		The builtup hidden form fields
+ * @param  ?array                       A list of parameters to exclude (NULL: exclude none)
+ * @return tempcode                     The builtup hidden form fields
  */
 function _build_keep_post_fields($exclude = null)
 {
@@ -200,8 +200,8 @@ function _build_keep_post_fields($exclude = null)
 /**
  * Takes a URL, and converts it into a file system storable filename. This is used to cache URL contents to the servers filesystem.
  *
- * @param  URLPATH		The URL to convert to an encoded filename
- * @return string			A usable filename based on the URL
+ * @param  URLPATH                      The URL to convert to an encoded filename
+ * @return string                       A usable filename based on the URL
  */
 function _url_to_filename($url_full)
 {
@@ -223,9 +223,9 @@ function _url_to_filename($url_full)
 /**
  * Take a URL and base-URL, and fully qualify the URL according to it.
  *
- * @param  URLPATH		The URL to fully qualified
- * @param  URLPATH		The base-URL
- * @return URLPATH		Fully qualified URL
+ * @param  URLPATH                      The URL to fully qualified
+ * @param  URLPATH                      The base-URL
+ * @return URLPATH                      Fully qualified URL
  */
 function _qualify_url($url,$url_base)
 {
@@ -271,8 +271,8 @@ function _qualify_url($url,$url_base)
 /**
  * Convert a URL to a local file path.
  *
- * @param  URLPATH		The value to convert
- * @return ?PATH			File path (NULL: is not local)
+ * @param  URLPATH                      The value to convert
+ * @return ?PATH                        File path (NULL: is not local)
  */
 function _convert_url_to_path($url)
 {
@@ -307,8 +307,8 @@ function _convert_url_to_path($url)
 /**
  * Sometimes users don't enter full URLs but do intend for them to be absolute. This code tries to see what relative URLs are actually absolute ones, via an algorithm. It then fixes the URL.
  *
- * @param  URLPATH		The URL to fix
- * @return URLPATH		The fixed URL (or original one if no fix was needed)
+ * @param  URLPATH                      The URL to fix
+ * @return URLPATH                      The fixed URL (or original one if no fix was needed)
  */
 function _fixup_protocolless_urls($in)
 {
@@ -347,10 +347,10 @@ function _fixup_protocolless_urls($in)
 /**
  * Convert a local URL to a page-link.
  *
- * @param  URLPATH		The URL to convert. Note it may not be a short URL, and it must be based on the local base URL (else failure WILL occur).
- * @param  boolean		Whether to only convert absolute URLs. Turn this on if you're not sure what you're passing is a URL not and you want to be extra safe.
- * @param  boolean		Whether to only allow perfect conversions.
- * @return string			The page-link (blank: could not convert).
+ * @param  URLPATH                      The URL to convert. Note it may not be a short URL, and it must be based on the local base URL (else failure WILL occur).
+ * @param  boolean                      Whether to only convert absolute URLs. Turn this on if you're not sure what you're passing is a URL not and you want to be extra safe.
+ * @param  boolean                      Whether to only allow perfect conversions.
+ * @return string                       The page-link (blank: could not convert).
  */
 function _url_to_page_link($url,$abs_only = false,$perfect_only = true)
 {
@@ -493,8 +493,8 @@ function _url_to_page_link($url,$abs_only = false,$perfect_only = true)
 /**
  * Convert a local page file path to a written page-link.
  *
- * @param  string			The path.
- * @return string			The page-link (blank: could not convert).
+ * @param  string                       The path.
+ * @return string                       The page-link (blank: could not convert).
  */
 function _page_path_to_page_link($page)
 {
@@ -525,10 +525,10 @@ function _page_path_to_page_link($page)
 /**
  * Called from 'find_id_moniker'. We tried to lookup a moniker, found a hook, but found no stored moniker. So we'll try and autogenerate one.
  *
- * @param  array			The hooks info profile.
- * @param  array			The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
- * @param  ID_TEXT		The URL zone name (only used for Comcode Page URL monikers).
- * @return ?string		The moniker ID (NULL: error generating it somehow, can not do it)
+ * @param  array                        The hooks info profile.
+ * @param  array                        The URL component map (must contain 'page', 'type', and 'id' if this function is to do anything).
+ * @param  ID_TEXT                      The URL zone name (only used for Comcode Page URL monikers).
+ * @return ?string                      The moniker ID (NULL: error generating it somehow, can not do it)
  */
 function autogenerate_new_url_moniker($ob_info,$url_parts,$zone)
 {
@@ -577,13 +577,13 @@ function autogenerate_new_url_moniker($ob_info,$url_parts,$zone)
 /**
  * Called when content is added, or edited/moved, based upon a new form field that specifies what moniker to use.
  *
- * @param  ID_TEXT		Page name.
- * @param  ID_TEXT		Screen type code.
- * @param  ID_TEXT		Resource ID.
- * @param  ID_TEXT		The URL zone name (only used for Comcode Page URL monikers).
- * @param  string			String from which a moniker will be chosen (may not be blank).
- * @param  boolean		Whether we are sure this is a new moniker (makes things more efficient, saves a query).
- * @return string			The chosen moniker.
+ * @param  ID_TEXT                      Page name.
+ * @param  ID_TEXT                      Screen type code.
+ * @param  ID_TEXT                      Resource ID.
+ * @param  ID_TEXT                      The URL zone name (only used for Comcode Page URL monikers).
+ * @param  string                       String from which a moniker will be chosen (may not be blank).
+ * @param  boolean                      Whether we are sure this is a new moniker (makes things more efficient, saves a query).
+ * @return string                       The chosen moniker.
  */
 function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new = false)
 {
@@ -659,13 +659,13 @@ function suggest_new_idmoniker_for($page,$type,$id,$zone,$moniker_src,$is_new = 
 /**
  * Delete an old moniker, and place a new one.
  *
- * @param  ID_TEXT		Page name.
- * @param  ID_TEXT		Screen type code.
- * @param  ID_TEXT		Resource ID.
- * @param  string			String from which a moniker will be chosen (may not be blank).
- * @param  ?string		Whether to skip the exists check for a certain moniker (will be used to pass "existing self" for edits) (NULL: nothing existing to check against).
- * @param  ?string		Where the moniker will be placed in the moniker URL tree (NULL: unknown, so make so no duplicates anywhere).
- * @return string			Chosen moniker.
+ * @param  ID_TEXT                      Page name.
+ * @param  ID_TEXT                      Screen type code.
+ * @param  ID_TEXT                      Resource ID.
+ * @param  string                       String from which a moniker will be chosen (may not be blank).
+ * @param  ?string                      Whether to skip the exists check for a certain moniker (will be used to pass "existing self" for edits) (NULL: nothing existing to check against).
+ * @param  ?string                      Where the moniker will be placed in the moniker URL tree (NULL: unknown, so make so no duplicates anywhere).
+ * @return string                       Chosen moniker.
  */
 function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for = null,$scope_context = null)
 {
@@ -714,8 +714,8 @@ function _choose_moniker($page,$type,$id,$moniker_src,$no_exists_check_for = nul
 /**
  * Generate a moniker from an arbitrary raw string. Does not perform uniqueness checks.
  *
- * @param  string			Raw string.
- * @return ID_TEXT		Moniker.
+ * @param  string                       Raw string.
+ * @return ID_TEXT                      Moniker.
  */
 function _generate_moniker($moniker_src)
 {
@@ -745,12 +745,12 @@ function _generate_moniker($moniker_src)
 /**
  * Take a moniker and it's page-link details, and make a full path from it.
  *
- * @param  ID_TEXT		Page name.
- * @param  ID_TEXT		Screen type code.
- * @param  ID_TEXT		Resource ID.
- * @param  ID_TEXT		The URL zone name (only used for Comcode Page URL monikers).
- * @param  string			Pathless moniker.
- * @return string			The fully qualified moniker.
+ * @param  ID_TEXT                      Page name.
+ * @param  ID_TEXT                      Screen type code.
+ * @param  ID_TEXT                      Resource ID.
+ * @param  ID_TEXT                      The URL zone name (only used for Comcode Page URL monikers).
+ * @param  string                       Pathless moniker.
+ * @return string                       The fully qualified moniker.
  */
 function _give_moniker_scope($page,$type,$id,$zone,$main)
 {
@@ -823,9 +823,9 @@ function _give_moniker_scope($page,$type,$id,$zone,$main)
 /**
  * Take a moniker and it's page-link details, and make a full path from it.
  *
- * @param  ID_TEXT		The content type.
- * @param  SHORT_TEXT	The URL moniker.
- * @return ?ID_TEXT		The ID (NULL: not found).
+ * @param  ID_TEXT                      The content type.
+ * @param  SHORT_TEXT                   The URL moniker.
+ * @return ?ID_TEXT                     The ID (NULL: not found).
  */
 function find_id_via_url_moniker($content_type,$url_moniker)
 {

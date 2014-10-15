@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		welcome_emails
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    welcome_emails
  */
 
 class Hook_Preview_ocf_welcome_email
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			A pair: The preview, the updated post Comcode
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    A pair: The preview, the updated post Comcode
+     */
     public function applies()
     {
         $member_id = get_param_integer('id',get_member());
@@ -47,10 +47,10 @@ class Hook_Preview_ocf_welcome_email
     }
 
     /**
-	 * Run function for preview hooks.
-	 *
-	 * @return array			A pair: The preview, the updated post Comcode
-	 */
+     * Run function for preview hooks.
+     *
+     * @return array                    A pair: The preview, the updated post Comcode
+     */
     public function run()
     {
         $preview = new ocp_tempcode();

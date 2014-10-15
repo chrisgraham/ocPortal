@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 class Hook_pointstore_permission
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
         $GLOBALS['SITE_DB']->query('DELETE FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'member_privileges WHERE active_until IS NOT NULL AND active_until<' . strval(time()));
@@ -32,24 +32,24 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Get fields for adding/editing one of these.
-	 *
-	 * @param  string			What to place onto the end of the field name
-	 * @param  SHORT_TEXT	Title
-	 * @param  LONG_TEXT		Description
-	 * @param  BINARY			Whether it is enabled
-	 * @param  ?integer		The cost in points (NULL: not set)
-	 * @param  ?integer		Number of hours for it to last for (NULL: unlimited)
-	 * @param  ID_TEXT		Permission scope 'type'
-	 * @param  ID_TEXT		Permission scope 'privilege'
-	 * @param  ID_TEXT		Permission scope 'zone'
-	 * @param  ID_TEXT		Permission scope 'page'
-	 * @param  ID_TEXT		Permission scope 'module'
-	 * @param  ID_TEXT		Permission scope 'category'
-	 * @param  SHORT_TEXT	Confirmation mail subject
-	 * @param  LONG_TEXT		Confirmation mail body
-	 * @return tempcode		The fields
-	 */
+     * Get fields for adding/editing one of these.
+     *
+     * @param  string                   What to place onto the end of the field name
+     * @param  SHORT_TEXT               Title
+     * @param  LONG_TEXT                Description
+     * @param  BINARY                   Whether it is enabled
+     * @param  ?integer                 The cost in points (NULL: not set)
+     * @param  ?integer                 Number of hours for it to last for (NULL: unlimited)
+     * @param  ID_TEXT                  Permission scope 'type'
+     * @param  ID_TEXT                  Permission scope 'privilege'
+     * @param  ID_TEXT                  Permission scope 'zone'
+     * @param  ID_TEXT                  Permission scope 'page'
+     * @param  ID_TEXT                  Permission scope 'module'
+     * @param  ID_TEXT                  Permission scope 'category'
+     * @param  SHORT_TEXT               Confirmation mail subject
+     * @param  LONG_TEXT                Confirmation mail body
+     * @return tempcode                 The fields
+     */
     public function get_fields($name_suffix = '',$title = '',$description = '',$enabled = 1,$cost = null,$hours = null,$type = 'member_privileges',$privilege = '',$zone = '',$page = '',$module = '',$category = '',$mail_subject = '',$mail_body = '')
     {
         require_lang('points');
@@ -92,7 +92,7 @@ class Hook_pointstore_permission
         }
         $fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_privilege'),do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_privilege'),'permission_privilege' . $name_suffix,$privileges,null,false,false));
         $zones = new ocp_tempcode();
-        //$zones->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));		Will always scope to a zone. Welcome zone would be '' anyway, so we're simplifying the code by having a zone setting which won't hurt anyway
+        //$zones->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));      Will always scope to a zone. Welcome zone would be '' anyway, so we're simplifying the code by having a zone setting which won't hurt anyway
         require_code('zones2');
         require_code('zones3');
         $zones->attach(create_selection_list_zones($zone));
@@ -132,10 +132,10 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Standard pointstore item configuration function.
-	 *
-	 * @return ?array		A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
-	 */
+     * Standard pointstore item configuration function.
+     *
+     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
+     */
     public function config()
     {
         $fields = new ocp_tempcode();
@@ -160,8 +160,8 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Standard pointstore item configuration save function.
-	 */
+     * Standard pointstore item configuration save function.
+     */
     public function save_config()
     {
         $i = 0;
@@ -250,10 +250,10 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Standard pointstore item initialisation function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item initialisation function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -272,10 +272,10 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Standard interface stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard interface stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -302,10 +302,10 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Standard actualisation stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard actualisation stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action_done()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -362,11 +362,11 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Get a database map for our permission row.
-	 *
-	 * @param  array			Map row of item
-	 * @return array			Permission map row
-	 */
+     * Get a database map for our permission row.
+     *
+     * @param  array                    Map row of item
+     * @return array                    Permission map row
+     */
     public function get_map($row)
     {
         $map = array('member_id' => get_member());
@@ -394,11 +394,11 @@ class Hook_pointstore_permission
     }
 
     /**
-	 * Standard actualisation stage of pointstore item purchase.
-	 *
-	 * @param  array			Map row
-	 * @return boolean		Whether the current member has bought it already
-	 */
+     * Standard actualisation stage of pointstore item purchase.
+     *
+     * @param  array                    Map row
+     * @return boolean                  Whether the current member has bought it already
+     */
     public function bought($row)
     {
         $map = $this->get_map($row);

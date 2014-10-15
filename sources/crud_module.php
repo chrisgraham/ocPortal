@@ -13,14 +13,14 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * CRUD module (Create/Update/Delete), for operations on content types.
- * @package		core
+ * @package    core
  */
 class standard_crud_module
 {
@@ -110,10 +110,10 @@ class standard_crud_module
     public $table = null; // Actually, this is used by choose_feedback_fields_statistically also
 
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -127,14 +127,14 @@ class standard_crud_module
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $entry_points = array();
@@ -163,12 +163,12 @@ class standard_crud_module
     public $success_message_str;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         if (is_null($this->default_type)) {
@@ -387,10 +387,10 @@ class standard_crud_module
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         @ignore_user_abort(true); // Must keep going till completion
@@ -559,13 +559,13 @@ class standard_crud_module
     }
 
     /**
-	 * Statistically work out defaults for feedback fields, if not currently set.
-	 *
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @return array				Array of all input parameters, converted
-	 */
+     * Statistically work out defaults for feedback fields, if not currently set.
+     *
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @return array                    Array of all input parameters, converted
+     */
     public function choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks)
     {
         if (is_null($allow_rating)) {
@@ -587,37 +587,37 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module permission chooser.
-	 *
-	 * @param  ?ID_TEXT		The category ID the permissions are being chosen for (NULL: new category)
-	 * @param  ?tempcode		Extra help to show in interface (NULL: none)
-	 * @param  boolean		Whether this is a new category (don't load permissions, default to on)
-	 * @param  ?tempcode		Label for view permissions (NULL: default)
-	 * @return tempcode		The permission fields
-	 */
+     * Standard CRUD-module permission chooser.
+     *
+     * @param  ?ID_TEXT                 The category ID the permissions are being chosen for (NULL: new category)
+     * @param  ?tempcode                Extra help to show in interface (NULL: none)
+     * @param  boolean                  Whether this is a new category (don't load permissions, default to on)
+     * @param  ?tempcode                Label for view permissions (NULL: default)
+     * @return tempcode                 The permission fields
+     */
     public function get_permission_fields($category_id,$help = null,$new_category = false,$pinterface_view = null)
     {
         return get_category_permissions_for_environment($this->permission_module,$category_id,$this->privilege_page,$help,$new_category,$pinterface_view);
     }
 
     /**
-	 * Set permissions of the news category from POST parameters.
-	 *
-	 * @param  ID_TEXT		The category to set permissions for
-	 */
+     * Set permissions of the news category from POST parameters.
+     *
+     * @param  ID_TEXT                  The category to set permissions for
+     */
     public function set_permissions($id)
     {
         set_category_permissions_from_environment($this->permission_module,$id,$this->privilege_page);
     }
 
     /**
-	 * The do-next manager for after content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?ID_TEXT		The ID of whatever we are working with (NULL: deleted)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?ID_TEXT                 The ID of whatever we are working with (NULL: deleted)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         $archive_url = null;
@@ -639,7 +639,7 @@ class standard_crud_module
         return do_next_manager($title,$description,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             $this->do_next_editing_categories?null:array('_SELF',array('type' => 'a' . $this->type_code),'_SELF',!is_null($this->add_one_label)?$this->add_one_label:null), // Add one
             $this->do_next_editing_categories?null:((is_null($id) || ((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_' . $this->permissions_require . 'range_content',is_null($this->privilege_page_name)?get_page_name():$this->privilege_page_name))))?null:array('_SELF',array('type' => '_e' . $this->type_code,'id' => $id),'_SELF',!is_null($this->edit_this_label)?$this->edit_this_label:null)), // Edit this
             $this->do_next_editing_categories?null:(((!is_null($this->permissions_require)) && (!has_privilege(get_member(),'edit_own_' . $this->permissions_require . 'range_content',is_null($this->privilege_page_name)?get_page_name():$this->privilege_page_name)))?null:array('_SELF',array('type' => 'e' . $this->type_code),'_SELF',!is_null($this->edit_one_label)?$this->edit_one_label:null)), // Edit one
@@ -661,11 +661,11 @@ class standard_crud_module
     }
 
     /**
-	 * If a confirmation is needed, and not been given, ask for one.
-	 *
-	 * @param  tempcode	The page title for what's being done
-	 * @return ?tempcode	The confirmation UI (NULL: all is clear - no confirmation needed)
-	 */
+     * If a confirmation is needed, and not been given, ask for one.
+     *
+     * @param  tempcode                 The page title for what's being done
+     * @return ?tempcode                The confirmation UI (NULL: all is clear - no confirmation needed)
+     */
     public function handle_confirmations($title)
     {
         if (!method_exists($this,'get_preview')) {
@@ -684,11 +684,11 @@ class standard_crud_module
     }
 
     /**
-	 * Get some XHTML for a form to choose a catalogue out of all the available ones.
-	 *
-	 * @param  tempcode		The get_screen_title converted title for this page
-	 * @return ?tempcode		The tempcode for the catalogue chooser (NULL: already chosen)
-	 */
+     * Get some XHTML for a form to choose a catalogue out of all the available ones.
+     *
+     * @param  tempcode                 The get_screen_title converted title for this page
+     * @return ?tempcode                The tempcode for the catalogue chooser (NULL: already chosen)
+     */
     public function choose_catalogue($title)
     {
         if (!$this->catalogue) {
@@ -726,11 +726,11 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI for a separate preview.
-	 *
-	 * @param  tempcode	The page title
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI for a separate preview.
+     *
+     * @param  tempcode                 The page title
+     * @return tempcode                 The UI
+     */
     public function preview_intercept($title)
     {
         require_code('preview');
@@ -744,10 +744,10 @@ class standard_crud_module
     }
 
     /**
-	 * Find whether this content type has a tied catalogue.
-	 *
-	 * @return boolean	Whether it has
-	 */
+     * Find whether this content type has a tied catalogue.
+     *
+     * @return boolean                  Whether it has
+     */
     public function has_tied_catalogue()
     {
         if (!is_null($this->content_type)) {
@@ -758,10 +758,10 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI to add an entry.
-	 *
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI to add an entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function ad()
     {
         if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require))) {
@@ -939,10 +939,10 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI/actualiser to add an entry.
-	 *
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI/actualiser to add an entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function _ad()
     {
         if (!is_null($this->permissions_require)) {
@@ -1029,15 +1029,15 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module entry function to get rows for selection from.
-	 *
-	 * @param  boolean		Whether to force a recache
-	 * @param  ?ID_TEXT		Order to use (NULL: automatic)
-	 * @param  ?array			Extra where clauses (NULL: none)
-	 * @param  boolean		Whether to always access using the site database
-	 * @param  string			Extra join clause for our query (blank: none)
-	 * @return array			A pair: Rows for selection from, Total results
-	 */
+     * Standard CRUD-module entry function to get rows for selection from.
+     *
+     * @param  boolean                  Whether to force a recache
+     * @param  ?ID_TEXT                 Order to use (NULL: automatic)
+     * @param  ?array                   Extra where clauses (NULL: none)
+     * @param  boolean                  Whether to always access using the site database
+     * @param  string                   Extra join clause for our query (blank: none)
+     * @return array                    A pair: Rows for selection from, Total results
+     */
     public function get_entry_rows($recache = false,$orderer = null,$where = null,$force_site_db = false,$join = '')
     {
         if ((!$recache) && (!is_null($orderer)) && (!is_null($where))) {
@@ -1101,10 +1101,10 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module entry list fetcher.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard CRUD-module entry list fetcher.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         list($_entries,) = $this->get_entry_rows();
@@ -1118,10 +1118,10 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI to choose an entry to edit.
-	 *
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI to choose an entry to edit.
+     *
+     * @return tempcode                 The UI
+     */
     public function ed()
     {
         if ((!is_null($this->permissions_require)) && (is_null($this->permissions_cat_require))) {
@@ -1254,10 +1254,10 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI to edit an entry.
-	 *
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI to edit an entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function _ed()
     {
         $submit_name = do_lang_tempcode('SAVE');
@@ -1495,10 +1495,10 @@ class standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI/actualiser to edit an entry.
-	 *
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI/actualiser to edit an entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function __ed()
     {
         $id = mixed(); // Define type as mixed
@@ -1553,11 +1553,11 @@ class standard_crud_module
                 delete_form_custom_fields($this->content_type,$id);
             }
 
-            /*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))		No - resource is gone now, and redirect would almost certainly try to take us back there
-			{
-				$url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
-				return redirect_screen($this->title,$url,do_lang_tempcode($this->success_message_str));
-			}*/
+            /*if ((!is_null($this->redirect_type)) || ((!is_null(get_param('redirect',NULL)))))    No - resource is gone now, and redirect would almost certainly try to take us back there
+            {
+                    $url=(($this->redirect_type=='!') || (is_null($this->redirect_type)))?get_param('redirect'):build_url(array('page'=>'_SELF','type'=>$this->redirect_type),'_SELF');
+                    return redirect_screen($this->title,$url,do_lang_tempcode($this->success_message_str));
+            }*/
 
             clear_ocp_autosave();
 
@@ -1647,11 +1647,11 @@ class standard_crud_module
     }
 
     /**
-	 * Mass delete some entries/categories.
-	 *
-	 * @param  boolean	Whether this is a top level mass delete op (i.e. not a recursion)
-	 * @return ?tempcode	The UI (NULL: not top level)
-	 */
+     * Mass delete some entries/categories.
+     *
+     * @param  boolean                  Whether this is a top level mass delete op (i.e. not a recursion)
+     * @return ?tempcode                The UI (NULL: not top level)
+     */
     public function mass_delete($top_level = true)
     {
         $delete = array();

@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		code_quality
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    code_quality
  */
 
 @ini_set('memory_limit','-1');
@@ -274,8 +274,8 @@ function log_warning($warning,$i = -1,$absolute = false)
     list($pos,$line,$full_line) = pos_to_line_details($i,$absolute);
 
     echo 'WARNING "' . $FILENAME . '" ' . $line . ' ' . $pos . ' ' . 'PHP: ' . $warning . cnl();
-//	if (!isset($MYFILE_WARNINGS)) $MYFILE_WARNINGS=fopen('warnings_'.$START_TIME.'.log','at');
-//	fwrite($MYFILE_WARNINGS,$FILENAME.': '.$warning.' (at line '.$line.', position '.$pos.')  ['.$full_line.']'."\n");
+// if (!isset($MYFILE_WARNINGS)) $MYFILE_WARNINGS=fopen('warnings_'.$START_TIME.'.log','at');
+// fwrite($MYFILE_WARNINGS,$FILENAME.': '.$warning.' (at line '.$line.', position '.$pos.')  ['.$full_line.']'."\n");
     //fclose($MYFILE_WARNINGS);
 }
 
@@ -344,12 +344,12 @@ function fatal_exit($message)
 
 if (!function_exists('is_alphanumeric')) {
     /**
-	 * Find whether the specified string is alphanumeric or not.
-	 *
-	 * @param  string			The string to test
-	 * @param  boolean		Whether to check stricter identifier-validity
-	 * @return boolean		Whether the string is alphanumeric or not
-	 */
+     * Find whether the specified string is alphanumeric or not.
+     *
+     * @param  string                   The string to test
+     * @param  boolean                  Whether to check stricter identifier-validity
+     * @return boolean                  Whether the string is alphanumeric or not
+     */
     function is_alphanumeric($string,$strict = false)
     {
         if ($strict) {

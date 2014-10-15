@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 class Hook_worldpay
@@ -32,30 +32,30 @@ class Hook_worldpay
     //  FuturePay must be enabled for subscriptions to work (contact WorldPay about it)
 
     /**
-	 * Get the gateway username.
-	 *
-	 * @return string			The answer.
-	 */
+     * Get the gateway username.
+     *
+     * @return string                   The answer.
+     */
     public function _get_username()
     {
         return ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
     }
 
     /**
-	 * Get the remote form URL.
-	 *
-	 * @return URLPATH		The remote form URL.
-	 */
+     * Get the remote form URL.
+     *
+     * @return URLPATH                  The remote form URL.
+     */
     public function _get_remote_form_url()
     {
         return 'https://' . (ecommerce_test_mode()?'select-test':'select') . '.worldpay.com/wcc/purchase';
     }
 
     /**
-	 * Get the card/gateway logos and other gateway-required details.
-	 *
-	 * @return tempcode  	The stuff.
-	 */
+     * Get the card/gateway logos and other gateway-required details.
+     *
+     * @return tempcode                 The stuff.
+     */
     public function get_logos()
     {
         $inst_id = ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn');
@@ -66,25 +66,25 @@ class Hook_worldpay
     }
 
     /**
-	 * Generate a transaction ID.
-	 *
-	 * @return string	A transaction ID.
-	 */
+     * Generate a transaction ID.
+     *
+     * @return string                   A transaction ID.
+     */
     public function generate_trans_id()
     {
         return md5(uniqid(strval(mt_rand(0,1000)),true));
     }
 
     /**
-	 * Make a transaction (payment) button.
-	 *
-	 * @param  ID_TEXT		The product codename.
-	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  ID_TEXT		The purchase ID.
-	 * @param  float			A transaction amount.
-	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button.
-	 */
+     * Make a transaction (payment) button.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @param  SHORT_TEXT               The human-readable product title.
+     * @param  ID_TEXT                  The purchase ID.
+     * @param  float                    A transaction amount.
+     * @param  ID_TEXT                  The currency to use.
+     * @return tempcode                 The button.
+     */
     public function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
     {
         $username = $this->_get_username();
@@ -122,18 +122,18 @@ class Hook_worldpay
     }
 
     /**
-	 * Make a subscription (payment) button.
-	 *
-	 * @param  ID_TEXT		The product codename.
-	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  ID_TEXT		The purchase ID.
-	 * @param  float			A transaction amount.
-	 * @param  integer		The subscription length in the units.
-	 * @param  ID_TEXT		The length units.
-	 * @set    d w m y
-	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button.
-	 */
+     * Make a subscription (payment) button.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @param  SHORT_TEXT               The human-readable product title.
+     * @param  ID_TEXT                  The purchase ID.
+     * @param  float                    A transaction amount.
+     * @param  integer                  The subscription length in the units.
+     * @param  ID_TEXT                  The length units.
+     * @set    d w m y
+     * @param  ID_TEXT                  The currency to use.
+     * @return tempcode                 The button.
+     */
     public function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
     {
         $username = $this->_get_username();
@@ -160,7 +160,7 @@ class Hook_worldpay
                 break;
         }
         $digest_option = get_option('ipn_digest');
-        //$digest=md5((($digest_option=='')?($digest_option.':'):'').$trans_id.':'.float_to_raw_string($amount).':'.$currency.$length_units_2.strval($length));	Deprecated
+        //$digest=md5((($digest_option=='')?($digest_option.':'):'').$trans_id.':'.float_to_raw_string($amount).':'.$currency.$length_units_2.strval($length));   Deprecated
         $digest = md5((($digest_option == '')?($digest_option . ':'):'') . ';' . 'cartId:amount:currency:intervalUnit:intervalMult;' . $trans_id . ';' . float_to_raw_string($amount) . ';' . $currency . $length_units_2 . strval($length));
         $GLOBALS['SITE_DB']->query_insert('trans_expecting',array(
             'id' => $trans_id,
@@ -192,11 +192,11 @@ class Hook_worldpay
     }
 
     /**
-	 * Make a subscription cancellation button.
-	 *
-	 * @param  ID_TEXT	The purchase ID.
-	 * @return tempcode	The button.
-	 */
+     * Make a subscription cancellation button.
+     *
+     * @param  ID_TEXT                  The purchase ID.
+     * @return tempcode                 The button.
+     */
     public function make_cancel_button($purchase_id)
     {
         $cancel_url = build_url(array('page' => 'subscriptions','type' => 'cancel','id' => $purchase_id),get_module_zone('subscriptions'));
@@ -204,32 +204,32 @@ class Hook_worldpay
     }
 
     /**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
-	 *
-	 * @param  string		Transaction ID to cancel.
-	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
-	 */
+     * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
+     *
+     * @param  string                   Transaction ID to cancel.
+     * @return ?boolean                 True: yes. False: no. (NULL: cancels via a user-URL-directioning)
+     */
     public function auto_cancel($trans_id)
     {
         return false;
     }
 
     /**
-	 * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
-	 *
-	 * @param  float	A transaction amount.
-	 * @return float	The fee.
-	 */
+     * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
+     *
+     * @param  float                    A transaction amount.
+     * @return float                    The fee.
+     */
     public function get_transaction_fee($amount)
     {
         return 0.045*$amount; // for credit card. Debit card is a flat 50p
     }
 
     /**
-	 * Handle IPN's. The function may produce output, which would be returned to the Payment Gateway. The function may do transaction verification.
-	 *
-	 * @return array	A long tuple of collected data.
-	 */
+     * Handle IPN's. The function may produce output, which would be returned to the Payment Gateway. The function may do transaction verification.
+     *
+     * @return array                    A long tuple of collected data.
+     */
     public function handle_transaction()
     {
         // Test case...
@@ -287,12 +287,12 @@ class Hook_worldpay
     }
 
     /**
-	 * Show a payment response after IPN runs (for hooks that handle redirects in this way).
-	 *
-	 * @param  ID_TEXT		Product.
-	 * @param  ID_TEXT		Purchase ID.
-	 * @return string			The response.
-	 */
+     * Show a payment response after IPN runs (for hooks that handle redirects in this way).
+     *
+     * @param  ID_TEXT                  Product.
+     * @param  ID_TEXT                  Purchase ID.
+     * @return string                   The response.
+     */
     public function show_payment_response($product,$purchase_id)
     {
         $txn_id = post_param('transId');
@@ -302,11 +302,11 @@ class Hook_worldpay
     }
 
     /**
-	 * Store shipping address for orders.
-	 *
-	 * @param  AUTO_LINK		Order ID
-	 * @return ?mixed			Address ID (NULL: No address record found).
-	 */
+     * Store shipping address for orders.
+     *
+     * @param  AUTO_LINK                Order ID
+     * @return ?mixed                   Address ID (NULL: No address record found).
+     */
     public function store_shipping_address($order_id)
     {
         if (is_null(post_param('first_name',null))) {

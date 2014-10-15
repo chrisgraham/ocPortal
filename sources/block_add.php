@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -161,11 +161,11 @@ function block_helper_script()
             $block_types[$this_block_type]->attach(do_template('BLOCK_HELPER_BLOCK_CHOICE',array('_GUID' => '079e9b37fc142d292d4a64940243178a','USAGE' => $usage,'DESCRIPTION' => $descriptiont,'URL' => $url,'LINK_CAPTION' => $link_caption)));
         }
         /*if (array_key_exists($type_wanted,$block_types)) We don't do this now, as we structure by addon name
-		{
-			$x=$block_types[$type_wanted];
-			unset($block_types[$type_wanted]);
-			$block_types=array_merge(array($type_wanted=>$x),$block_types);
-		}*/
+        {
+            $x=$block_types[$type_wanted];
+            unset($block_types[$type_wanted]);
+            $block_types=array_merge(array($type_wanted=>$x),$block_types);
+        }*/
         ksort($block_types); // We sort now instead
         $move_after = $block_types['adminzone_dashboard'];
         unset($block_types['adminzone_dashboard']);
@@ -315,16 +315,16 @@ function block_helper_script()
                     }
                     $fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,null,false,false));
                 }
-                /*elseif ($block.':'.$parameter=='menu:param') // special case for menus		Disabled so Sitemap nodes may be entered
-				{
-					$list=new ocp_tempcode();
-					$rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
-					foreach ($rows as $row)
-					{
-						$list->attach(form_input_list_entry($row['i_menu'],$has_default && $row['i_menu']==$default));
-					}
-					$fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
-				}*/
+                /*elseif ($block.':'.$parameter=='menu:param') // special case for menus     Disabled so Sitemap nodes may be entered
+                    {
+                            $list=new ocp_tempcode();
+                            $rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
+                            foreach ($rows as $row)
+                            {
+                                        $list->attach(form_input_list_entry($row['i_menu'],$has_default && $row['i_menu']==$default));
+                            }
+                            $fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
+                    }*/
                 elseif ($parameter == 'zone') { // zone list
                     $list = new ocp_tempcode();
                     $list->attach(form_input_list_entry('_SEARCH',($default == '')));

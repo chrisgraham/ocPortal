@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		setupwizard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    setupwizard
  */
 
 /**
  * Get Comcode for the pages in the zone.
  *
- * @param  array			List of blocks in the install profile
- * @param  array			Block options in the install profile
- * @param  boolean		Whether we have zone collapsing on
- * @param  ID_TEXT		ID of the install profile
- * @return array			Structure of pages
+ * @param  array                        List of blocks in the install profile
+ * @param  array                        Block options in the install profile
+ * @param  boolean                      Whether we have zone collapsing on
+ * @param  ID_TEXT                      ID of the install profile
+ * @return array                        Structure of pages
  */
 function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$installprofile)
 {

@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 class Hook_login_provider_httpauth
 {
     /**
-	 * Standard login provider hook.
-	 *
-	 * @param  ?MEMBER		Member ID already detected as logged in (NULL: none). May be a guest ID.
-	 * @return ?MEMBER		Member ID now detected as logged in (NULL: none). May be a guest ID.
-	 */
+     * Standard login provider hook.
+     *
+     * @param  ?MEMBER                  Member ID already detected as logged in (NULL: none). May be a guest ID.
+     * @return ?MEMBER                  Member ID now detected as logged in (NULL: none). May be a guest ID.
+     */
     public function try_login($member)
     {
         // Various kinds of possible HTTP authentication

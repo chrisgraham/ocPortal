@@ -22,20 +22,20 @@ function init__cms__pages__modules_custom__cms_galleries($code)
     $code = str_replace(
         '$thumb_width=intval(get_option(\'thumb_width\'));',
         '$thumb_width=intval(get_option(\'thumb_width\'));
-		require_code("workflows");
-		require_lang("workflows");
-		if (!isset($adding))
-			$adding=$url=="";
-		if (can_choose_workflow())
-		{
-			$fields->attach(workflow_choose_ui(false,!$adding));		// Set the first argument to true to show "inherit from parent"
-		}
-		else
-		{
-			if ($adding)
-				$fields->attach(form_input_hidden("workflow","wf_-1"));
-		}
-		',
+        require_code("workflows");
+        require_lang("workflows");
+        if (!isset($adding))
+            $adding=$url=="";
+        if (can_choose_workflow())
+        {
+            $fields->attach(workflow_choose_ui(false,!$adding));     // Set the first argument to true to show "inherit from parent"
+        }
+        else
+        {
+            if ($adding)
+                    $fields->attach(form_input_hidden("workflow","wf_-1"));
+        }
+        ',
         $code
     );
 
@@ -59,17 +59,17 @@ function init__cms__pages__modules_custom__cms_galleries($code)
     $code = str_replace(
         '$fields->attach(form_input_tick(do_lang_tempcode(\'FLOW_MODE_INTERFACE\'),do_lang_tempcode(\'DESCRIPTION_FLOW_MODE_INTERFACE\'),\'flow_mode_interface\',$flow_mode_interface==1));',
         '$fields->attach(form_input_tick(do_lang_tempcode(\'FLOW_MODE_INTERFACE\'),do_lang_tempcode(\'DESCRIPTION_FLOW_MODE_INTERFACE\'),\'flow_mode_interface\',$flow_mode_interface==1));
-		require_code("workflows");
-		require_lang("workflows");
-		if (can_choose_workflow())
-		{
-			$fields->attach(workflow_choose_ui(false,$name!=""));
-		}
-		else
-		{
-			$fields->attach(form_input_hidden("workflow","wf_-1"));
-		}
-		',
+        require_code("workflows");
+        require_lang("workflows");
+        if (can_choose_workflow())
+        {
+            $fields->attach(workflow_choose_ui(false,$name!=""));
+        }
+        else
+        {
+            $fields->attach(form_input_hidden("workflow","wf_-1"));
+        }
+        ',
         $code
     );
     return $code;

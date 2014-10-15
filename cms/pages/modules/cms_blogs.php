@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		news
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    news
  */
 
 require_code('crud_module');
@@ -45,14 +45,14 @@ class Module_cms_blogs extends standard_crud_module
     public $donext_type = null;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -68,12 +68,12 @@ class Module_cms_blogs extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -102,11 +102,11 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         $this->posting_form_title = do_lang_tempcode('BLOG_NEWS_ARTICLE');
@@ -133,10 +133,10 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -151,11 +151,11 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return ?array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL (NULL: nothing to select).
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return ?array                   A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL (NULL: nothing to select).
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -217,10 +217,10 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_news')?null:get_member();
@@ -228,24 +228,24 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a news adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK		The news ID (NULL: new)
-	 * @param  ?AUTO_LINK		The primary category for the news (NULL: personal)
-	 * @param  ?array				A list of categories the news is in (NULL: not known)
-	 * @param  SHORT_TEXT		The news title
-	 * @param  LONG_TEXT			The news summary
-	 * @param  SHORT_TEXT		The name of the author
-	 * @param  BINARY				Whether the news is validated
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @param  BINARY				Whether to show the "send trackback" field
-	 * @param  LONG_TEXT			Notes for the video
-	 * @param  URLPATH			URL to the image for the news entry (blank: use cat image)
-	 * @param  ?array				Scheduled go-live time (NULL: N/A)
-	 * @return array				A tuple of lots of info (fields, hidden fields, trailing fields)
-	 */
+     * Get tempcode for a news adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The news ID (NULL: new)
+     * @param  ?AUTO_LINK               The primary category for the news (NULL: personal)
+     * @param  ?array                   A list of categories the news is in (NULL: not known)
+     * @param  SHORT_TEXT               The news title
+     * @param  LONG_TEXT                The news summary
+     * @param  SHORT_TEXT               The name of the author
+     * @param  BINARY                   Whether the news is validated
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  BINARY                   Whether to show the "send trackback" field
+     * @param  LONG_TEXT                Notes for the video
+     * @param  URLPATH                  URL to the image for the news entry (blank: use cat image)
+     * @param  ?array                   Scheduled go-live time (NULL: N/A)
+     * @return array                    A tuple of lots of info (fields, hidden fields, trailing fields)
+     */
     public function get_form_fields($id = null,$main_news_category = null,$news_category = null,$title = '',$news = '',$author = '',$validated = 1,$allow_rating = null,$allow_comments = null,$allow_trackbacks = null,$send_trackbacks = 1,$notes = '',$image = '',$scheduled = null)
     {
         list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
@@ -333,11 +333,11 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('news',array('submitter','date_and_time'),array('id' => intval($id)),'',1);
@@ -348,11 +348,11 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module cat getter.
-	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
-	 * @return string			The cat
-	 */
+     * Standard crud_module cat getter.
+     *
+     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @return string                   The cat
+     */
     public function get_cat($id)
     {
         $temp = $GLOBALS['SITE_DB']->query_select_value_if_there('news','news_category',array('id' => $id));
@@ -363,11 +363,11 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple of lots of info
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A tuple of lots of info
+     */
     public function fill_in_edit_form($_id)
     {
         $id = intval($_id);
@@ -412,10 +412,10 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The ID of the entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The ID of the entry added
+     */
     public function add_actualisation()
     {
         $author = post_param('author',$GLOBALS['FORUM_DRIVER']->get_username(get_member()));
@@ -497,10 +497,10 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($_id)
     {
         $id = intval($_id);
@@ -593,10 +593,10 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($_id)
     {
         $id = intval($_id);
@@ -605,13 +605,13 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after news content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after news content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id = null)
     {
         $cat = $this->donext_type;
@@ -621,7 +621,7 @@ class Module_cms_blogs extends standard_crud_module
         return do_next_manager($this->title,$description,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             array('_SELF',array('type' => 'ad','cat' => $cat),'_SELF'), // Add one
             (is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_news',array('news',$cat))))?null:array('_SELF',array('type' => '_ed','id' => $id),'_SELF'), // Edit this
             has_privilege(get_member(),'edit_own_midrange_content','cms_news')?array('_SELF',array('type' => 'ed'),'_SELF'):null, // Edit one
@@ -636,10 +636,10 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * The UI to import news
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to import news
+     *
+     * @return tempcode                 The UI
+     */
     public function import_wordpress()
     {
         check_privilege('mass_import',null,null,'cms_news');
@@ -702,10 +702,10 @@ class Module_cms_blogs extends standard_crud_module
     }
 
     /**
-	 * The actualiser to import a wordpress blog
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to import a wordpress blog
+     *
+     * @return tempcode                 The UI
+     */
     public function _import_wordpress()
     {
         check_privilege('mass_import',null,null,'cms_news');

@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    catalogues
  */
 
 class Hook_unvalidated_catalogue_entry
 {
     /**
-	 * Find details on the unvalidated hook.
-	 *
-	 * @return ?array	Map of hook info (NULL: hook is disabled).
-	 */
+     * Find details on the unvalidated hook.
+     *
+     * @return ?array                   Map of hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         $test = $GLOBALS['SITE_DB']->query_select_value_if_there('modules','module_version',array('module_the_name' => 'catalogues'));

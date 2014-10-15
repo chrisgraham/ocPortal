@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		booking
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    booking
  */
 
 class Hook_members_booking
 {
     /**
-	 * Find member-related links to inject.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
-	 */
+     * Find member-related links to inject.
+     *
+     * @param  MEMBER                   The ID of the member we are getting link hooks for
+     * @return array                    List of lists of tuples for results (by link section). Each tuple is: type,title,url
+     */
     public function run($member_id)
     {
         if (!has_actual_page_access(get_member(),'cms_booking')) {

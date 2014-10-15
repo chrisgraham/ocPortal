@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		wiki
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    wiki
  */
 
 /*EXTRA FUNCTIONS: diff_simple_2*/
@@ -26,10 +26,10 @@
 class Module_cms_wiki
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -44,14 +44,14 @@ class Module_cms_wiki
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -65,10 +65,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('wiki');
@@ -82,10 +82,10 @@ class Module_cms_wiki
     public $page_title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -151,10 +151,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         $type = get_param('type','misc');
@@ -191,10 +191,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -209,15 +209,15 @@ class Module_cms_wiki
     }
 
     /**
-	 * Get the fields for adding/editing a Wiki+ page.
-	 *
-	 * @param  ?AUTO_LINK	The page ID (NULL: new)
-	 * @param  SHORT_TEXT	The page title
-	 * @param  LONG_TEXT		Hidden notes pertaining to the page
-	 * @param  BINARY			Whether to hide the posts on the page by default
-	 * @param  AUTO_LINK		The ID of the page (-1 implies we're adding)
-	 * @return array			The fields, the extra fields, the hidden fields.
-	 */
+     * Get the fields for adding/editing a Wiki+ page.
+     *
+     * @param  ?AUTO_LINK               The page ID (NULL: new)
+     * @param  SHORT_TEXT               The page title
+     * @param  LONG_TEXT                Hidden notes pertaining to the page
+     * @param  BINARY                   Whether to hide the posts on the page by default
+     * @param  AUTO_LINK                The ID of the page (-1 implies we're adding)
+     * @return array                    The fields, the extra fields, the hidden fields.
+     */
     public function get_page_fields($id = null,$title = '',$notes = '',$hide_posts = 0,$page_id = -1)
     {
         $fields = new ocp_tempcode();
@@ -261,10 +261,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The UI for adding a Wiki+ page.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for adding a Wiki+ page.
+     *
+     * @return tempcode                 The UI.
+     */
     public function add_page()
     {
         check_submit_permission('cat_low');
@@ -296,10 +296,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The actualiser for adding a Wiki+ page.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for adding a Wiki+ page.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _add_page()
     {
         check_submit_permission('cat_low');
@@ -340,10 +340,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The UI for choosing a Wiki+ page to edit (not normally used).
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for choosing a Wiki+ page to edit (not normally used).
+     *
+     * @return tempcode                 The UI.
+     */
     public function choose_page_to_edit()
     {
         $list = wiki_show_tree();
@@ -361,10 +361,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The UI for editing a Wiki+ page.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for editing a Wiki+ page.
+     *
+     * @return tempcode                 The UI.
+     */
     public function edit_page()
     {
         $__id = get_param('id','',true);
@@ -460,10 +460,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The actualiser for editing a Wiki+ page.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for editing a Wiki+ page.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _edit_page()
     {
         $_id = get_param_wiki_chain('id');
@@ -524,10 +524,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The UI for managing the Wiki+ children of a page.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for managing the Wiki+ children of a page.
+     *
+     * @return tempcode                 The UI.
+     */
     public function edit_tree()
     {
         if (get_option('wiki_enable_children') == '0') {
@@ -574,10 +574,10 @@ class Module_cms_wiki
     }
 
     /**
-	 * The actualiser for managing the Wiki+ children of a page.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for managing the Wiki+ children of a page.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _edit_tree()
     {
         if (get_option('wiki_enable_children') == '0') {

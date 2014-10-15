@@ -15,9 +15,9 @@
 /*EXTRA FUNCTIONS: pspell\_.+*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_validation
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_validation
  */
 
 /*
@@ -292,16 +292,16 @@ function init__validation()
 /**
  * Check the specified XHTML, and return the results.
  *
- * @param  string			The XHTML to validate
- * @param  boolean		Whether to avoid checking for relational errors (false implies just a quick structural check, aka a 'well formed' check)
- * @param  boolean		Whether what is being validated is an HTML fragment, rather than a whole document
- * @param  boolean		Validate javascript
- * @param  boolean		Validate CSS
- * @param  boolean		Validate WCAG
- * @param  boolean		Validate for compatibility
- * @param  boolean		Validate external files
- * @param  boolean		Bring up messages about manual checks
- * @return ?map			Error information (NULL: no error)
+ * @param  string                       The XHTML to validate
+ * @param  boolean                      Whether to avoid checking for relational errors (false implies just a quick structural check, aka a 'well formed' check)
+ * @param  boolean                      Whether what is being validated is an HTML fragment, rather than a whole document
+ * @param  boolean                      Validate javascript
+ * @param  boolean                      Validate CSS
+ * @param  boolean                      Validate WCAG
+ * @param  boolean                      Validate for compatibility
+ * @param  boolean                      Validate external files
+ * @param  boolean                      Bring up messages about manual checks
+ * @return ?map                         Error information (NULL: no error)
  */
 function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$validation_javascript = true,$validation_css = true,$validation_wcag = true,$validation_compat = true,$validation_ext_files = true,$validation_manual = false)
 {
@@ -578,7 +578,7 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
         return array('level_ranges' => $level_ranges,'tag_ranges' => $TAG_RANGES,'value_ranges' => $VALUE_RANGES,'errors' => $errors);
     }
 
-    if (!$well_formed_only) { //	if ((is_null($XHTML_VALIDATOR_OFF)) || (!$well_formed_only)) // validator-off check needed because it's possible a non-validateable portion foobars up possibility of interpreting the rest of the document such that checking ends early
+    if (!$well_formed_only) { // if ((is_null($XHTML_VALIDATOR_OFF)) || (!$well_formed_only)) // validator-off check needed because it's possible a non-validateable portion foobars up possibility of interpreting the rest of the document such that checking ends early
         if (!$is_fragment) {
             foreach (array_keys($to_find) as $tag) {
                 $errors[] = _xhtml_error('XHTML_MISSING_TAG',$tag);
@@ -651,13 +651,13 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
 /**
  * Get some general debugging information for an identified XHTML error.
  *
- * @param  string			The error that occurred
- * @param  string			The first parameter of the error
- * @param  string			The second parameter of the error
- * @param  string			The third parameter of the error
- * @param  boolean		Whether to not do a lang lookup
- * @param  integer		Offset position
- * @return map				A map of the error information
+ * @param  string                       The error that occurred
+ * @param  string                       The first parameter of the error
+ * @param  string                       The second parameter of the error
+ * @param  string                       The third parameter of the error
+ * @param  boolean                      Whether to not do a lang lookup
+ * @param  integer                      Offset position
+ * @return map                          A map of the error information
  */
 function _xhtml_error($error,$param_a = '',$param_b = '',$param_c = '',$raw = false,$rel_pos = 0)
 {
@@ -683,8 +683,8 @@ function _xhtml_error($error,$param_a = '',$param_b = '',$param_c = '',$raw = fa
 /**
  * Checks to see if a string holds a hexadecimal number.
  *
- * @param  string			The string to check
- * @return boolean		Whether the string holds a hexadecimal number
+ * @param  string                       The string to check
+ * @return boolean                      Whether the string holds a hexadecimal number
  */
 function is_hex($string)
 {
@@ -697,8 +697,8 @@ function is_hex($string)
 /**
  * Test the next entity in the output stream.
  *
- * @param  integer		Checking offset
- * @return ?mixed			An array of error details (NULL: no errors)
+ * @param  integer                      Checking offset
+ * @return ?mixed                       An array of error details (NULL: no errors)
  */
 function test_entity($offset = 0)
 {
@@ -733,8 +733,8 @@ function test_entity($offset = 0)
 /**
  * Fix any invalid entities in the text.
  *
- * @param  string			Text to fix in
- * @return string			Fixed result
+ * @param  string                       Text to fix in
+ * @return string                       Fixed result
  */
 function fix_entities($in)
 {
@@ -786,11 +786,11 @@ function fix_entities($in)
 /**
  * Get the next tag in the current XHTML document.
  *
- * @return ?mixed			Either an array of error details, a string of the tag, or NULL for finished (NULL: no next tag)
+ * @return ?mixed                       Either an array of error details, a string of the tag, or NULL for finished (NULL: no next tag)
  */
 function _get_next_tag()
 {
-    //	echo '<p>!</p>';
+    //   echo '<p>!</p>';
 
     global $PARENT_TAG,$POS,$LINENO,$LINESTART,$OUT,$T_POS,$ENTITIES,$LEN,$ANCESTER_BLOCK,$TAG_STACK,$XHTML_VALIDATOR_OFF,$TEXT_NO_BLOCK,$INBETWEEN_TEXT;
     global $TAG_RANGES,$VALUE_RANGES;
@@ -1032,7 +1032,7 @@ function _get_next_tag()
                     if ($GLOBALS['XML_CONSTRAIN']) {
                         $errors[] = array('XML_ATTRIBUTE_ERROR');
                     }
-                    //return array(NULL,$errors);  Actually  <blah nowrap ... />	could cause this
+                    //return array(NULL,$errors);  Actually  <blah nowrap ... /> could cause this
 
                     $status = IN_TAG_BETWEEN_ATTRIBUTES;
                     if (isset($attribute_map[$current_attribute_name])) {
@@ -1205,12 +1205,12 @@ function _get_next_tag()
 /**
  * Checks an XHTML tag for validity, including attributes. Return the results.
  *
- * @param  string			The name of the tag to check
- * @param  map				A map of attributes (name=>value) the tag has
- * @param  boolean		Whether this is a self-closing tag
- * @param  boolean		Whether this is a closing tag
- * @param  list			Errors detected so far. We will add to these and return
- * @return mixed			String for tag basis form, or array of error information
+ * @param  string                       The name of the tag to check
+ * @param  map                          A map of attributes (name=>value) the tag has
+ * @param  boolean                      Whether this is a self-closing tag
+ * @param  boolean                      Whether this is a closing tag
+ * @param  list                         Errors detected so far. We will add to these and return
+ * @return mixed                        String for tag basis form, or array of error information
  */
 function _check_tag($tag,$attributes,$self_close,$close,$errors)
 {
@@ -1248,8 +1248,8 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
 /**
  * Get the tag basis for the specified tag. e.g. '<br />' would become 'br'. Note: tags with parameters given are not supported.
  *
- * @param  string			The full tag
- * @return string			The basis of the tag
+ * @param  string                       The full tag
+ * @return string                       The basis of the tag
  */
 function _get_tag_basis($full)
 {

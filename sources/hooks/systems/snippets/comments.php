@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_feedback_features
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_feedback_features
  */
 
 class Hook_comments
 {
     /**
-	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
-	 *
-	 * @return tempcode  The snippet
-	 */
+     * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
+     *
+     * @return tempcode                 The snippet
+     */
     public function run()
     {
         if (get_option('is_on_comments') == '0') {

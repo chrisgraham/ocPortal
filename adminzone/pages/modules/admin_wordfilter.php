@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		wordfilter
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    wordfilter
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_wordfilter
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,19 +42,19 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('wordfilter');
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
@@ -78,14 +78,14 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -96,10 +96,10 @@ class Module_admin_wordfilter
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -124,10 +124,10 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         $type = get_param('type','misc');
@@ -146,10 +146,10 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * The UI to choose a filtered-word to edit, or to add a filtered-word.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a filtered-word to edit, or to add a filtered-word.
+     *
+     * @return tempcode                 The UI
+     */
     public function word_filter_interface()
     {
         require_code('form_templates');
@@ -185,10 +185,10 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * The actualiser to add a filtered-word.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to add a filtered-word.
+     *
+     * @return tempcode                 The UI
+     */
     public function add_word()
     {
         $word = post_param('word_2');
@@ -200,12 +200,12 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * Add a filtered-word.
-	 *
-	 * @param  SHORT_TEXT	The filtered-word
-	 * @param  SHORT_TEXT	Replacement (blank: block entirely)
-	 * @param  BINARY			Whether to perform a substring match
-	 */
+     * Add a filtered-word.
+     *
+     * @param  SHORT_TEXT               The filtered-word
+     * @param  SHORT_TEXT               Replacement (blank: block entirely)
+     * @param  BINARY                   Whether to perform a substring match
+     */
     public function _add_word($word,$replacement,$substr)
     {
         $test = $GLOBALS['SITE_DB']->query_select_value_if_there('wordfilter','word',array('word' => $word));
@@ -219,10 +219,10 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * The actualiser to delete a filtered-word.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete a filtered-word.
+     *
+     * @return tempcode                 The UI
+     */
     public function remove_word()
     {
         $this->_remove_word(post_param('word'));
@@ -233,10 +233,10 @@ class Module_admin_wordfilter
     }
 
     /**
-	 * Delete a filtered-word.
-	 *
-	 * @param  SHORT_TEXT		The filtered-word
-	 */
+     * Delete a filtered-word.
+     *
+     * @param  SHORT_TEXT               The filtered-word
+     */
     public function _remove_word($word)
     {
         $GLOBALS['SITE_DB']->query_delete('wordfilter',array('word' => $word),'',1);

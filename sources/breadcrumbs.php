@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		breadcrumbs
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    breadcrumbs
  */
 
 /**
@@ -29,9 +29,9 @@ function init__breadcrumbs()
 /**
  * Load all breadcrumb substitutions and return them.
  *
- * @param  string			The default breadcrumbs
- * @param  string			The breadcrumb XML data
- * @return array			The breadcrumb substitutions
+ * @param  string                       The default breadcrumbs
+ * @param  string                       The breadcrumb XML data
+ * @return array                        The breadcrumb substitutions
  */
 function load_breadcrumb_substitutions($current_breadcrumb,$data)
 {
@@ -47,7 +47,7 @@ function load_breadcrumb_substitutions($current_breadcrumb,$data)
 
 /**
  * Breadcrumb composition class.
- * @package		breadcrumbs
+ * @package    breadcrumbs
  */
 class breadcrumb_substitution_loader
 {
@@ -58,11 +58,11 @@ class breadcrumb_substitution_loader
     public $breadcrumb_tpl;
 
     /**
-	 * Run the loader, to load up field-restrictions from the XML file.
-	 *
-	 * @param  string			The default breadcrumbs
-	 * @param  string			The breadcrumb XML data
-	 */
+     * Run the loader, to load up field-restrictions from the XML file.
+     *
+     * @param  string                   The default breadcrumbs
+     * @param  string                   The breadcrumb XML data
+     */
     public function go($current_breadcrumbs,$data)
     {
         $this->tag_stack = array();
@@ -98,12 +98,12 @@ class breadcrumb_substitution_loader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The name of the element found
-	 * @param  array			Array of attributes of the element
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The name of the element found
+     * @param  array                    Array of attributes of the element
+     */
     public function startElement($parser,$tag,$_attributes)
     {
         array_push($this->tag_stack,$tag);
@@ -126,10 +126,10 @@ class breadcrumb_substitution_loader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     */
     public function endElement($parser)
     {
         $tag = array_pop($this->tag_stack);
@@ -145,10 +145,10 @@ class breadcrumb_substitution_loader
                     $attributes['page'] = '';
                 }
                 /*
-				Commented for performance. This isn't user-data, so we're safe
-				$zone=str_replace('~','\~',preg_quote($zone)); // We are using '~' as deliminators for the regexp, as the usual '/' and '#' feature in URL separators
-				$hash=str_replace('~','\~',preg_quote($hash));
-				*/
+                    Commented for performance. This isn't user-data, so we're safe
+                    $zone=str_replace('~','\~',preg_quote($zone)); // We are using '~' as deliminators for the regexp, as the usual '/' and '#' feature in URL separators
+                    $hash=str_replace('~','\~',preg_quote($hash));
+                    */
                 if ($attributes['page'] == '_WILD_NOT_START') {
                     $zones = find_all_zones(false,true);
                     if (isset($zones[$zone])) {
@@ -233,11 +233,11 @@ class breadcrumb_substitution_loader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The text
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The text
+     */
     public function startText($parser,$data)
     {
         $this->text_so_far .= $data;

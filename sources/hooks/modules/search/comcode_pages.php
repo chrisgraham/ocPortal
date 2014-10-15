@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_comcode_pages
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_comcode_pages
  */
 
 class Hook_search_comcode_pages
 {
     /**
-	 * Find details for this search hook.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @return ?array		Map of search hook details (NULL: hook is disabled).
-	 */
+     * Find details for this search hook.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @return ?array                   Map of search hook details (NULL: hook is disabled).
+     */
     public function info($check_permissions = true)
     {
         require_lang('zones');
@@ -42,11 +42,11 @@ class Hook_search_comcode_pages
     }
 
     /**
-	 * Get a list of entries for the content covered by this search hook. In hierarchical list selection format.
-	 *
-	 * @param  string			The default selected item
-	 * @return tempcode		Tree structure
-	 */
+     * Get a list of entries for the content covered by this search hook. In hierarchical list selection format.
+     *
+     * @param  string                   The default selected item
+     * @return tempcode                 Tree structure
+     */
     public function get_tree($selected)
     {
         require_code('zones3');
@@ -55,28 +55,28 @@ class Hook_search_comcode_pages
     }
 
     /**
-	 * Run function for search results.
-	 *
-	 * @param  string			Search string
-	 * @param  boolean		Whether to only do a META (tags) search
-	 * @param  ID_TEXT		Order direction
-	 * @param  integer		Start position in total results
-	 * @param  integer		Maximum results to return in total
-	 * @param  boolean		Whether only to search titles (as opposed to both titles and content)
-	 * @param  string			Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
-	 * @param  SHORT_TEXT	Username/Author to match for
-	 * @param  ?MEMBER		Member-ID to match for (NULL: unknown)
-	 * @param  TIME			Cutoff date
-	 * @param  string			The sort type (gets remapped to a field in this function)
-	 * @set    title add_date
-	 * @param  integer		Limit to this number of results
-	 * @param  string			What kind of boolean search to do
-	 * @set    or and
-	 * @param  string			Where constraints known by the main search code (SQL query fragment)
-	 * @param  string			Comma-separated list of categories to search under
-	 * @param  boolean		Whether it is a boolean search
-	 * @return array			List of maps (template, orderer)
-	 */
+     * Run function for search results.
+     *
+     * @param  string                   Search string
+     * @param  boolean                  Whether to only do a META (tags) search
+     * @param  ID_TEXT                  Order direction
+     * @param  integer                  Start position in total results
+     * @param  integer                  Maximum results to return in total
+     * @param  boolean                  Whether only to search titles (as opposed to both titles and content)
+     * @param  string                   Where clause that selects the content according to the main search string (SQL query fragment) (blank: full-text search)
+     * @param  SHORT_TEXT               Username/Author to match for
+     * @param  ?MEMBER                  Member-ID to match for (NULL: unknown)
+     * @param  TIME                     Cutoff date
+     * @param  string                   The sort type (gets remapped to a field in this function)
+     * @set    title add_date
+     * @param  integer                  Limit to this number of results
+     * @param  string                   What kind of boolean search to do
+     * @set    or and
+     * @param  string                   Where constraints known by the main search code (SQL query fragment)
+     * @param  string                   Comma-separated list of categories to search under
+     * @param  boolean                  Whether it is a boolean search
+     * @return array                    List of maps (template, orderer)
+     */
     public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
     {
         $remapped_orderer = '';
@@ -237,11 +237,11 @@ class Hook_search_comcode_pages
     }
 
     /**
-	 * Run function for rendering a search result.
-	 *
-	 * @param  array		The data row stored when we retrieved the result
-	 * @return tempcode	The output
-	 */
+     * Run function for rendering a search result.
+     *
+     * @param  array                    The data row stored when we retrieved the result
+     * @return tempcode                 The output
+     */
     public function render($row)
     {
         list($zone,$page,$limit_to) = $row['extra'];
@@ -249,13 +249,13 @@ class Hook_search_comcode_pages
     }
 
     /**
-	 * Decide how to show a Comcode page in the search results.
-	 *
-	 * @param  ID_TEXT		The zone for the page
-	 * @param  ID_TEXT		The page name
-	 * @param  string			What search hooks the search is being limited to (blank: not limited)
-	 * @return tempcode		The tempcode showing the Comcode page
-	 */
+     * Decide how to show a Comcode page in the search results.
+     *
+     * @param  ID_TEXT                  The zone for the page
+     * @param  ID_TEXT                  The page name
+     * @param  string                   What search hooks the search is being limited to (blank: not limited)
+     * @return tempcode                 The tempcode showing the Comcode page
+     */
     public function decide_template($zone,$page,$limit_to)
     {
         global $SEARCH__CONTENT_BITS;
@@ -280,19 +280,19 @@ class Hook_search_comcode_pages
                 global $LAX_COMCODE;
                 $LAX_COMCODE = true;
                 /*$temp_summary=comcode_to_tempcode(file_get_contents($comcode_file),NULL,true); Tempcode compiler slowed things down so easier just to show full thing
-				$_temp_summary=$temp_summary->evaluate();
-				if (strlen($_temp_summary)<500)
-				{
-					$summary=$_temp_summary;
-				} else
-				{
-					$entity='&hellip;';
-					if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($entity);
-					$pos=false;//strpos($_temp_summary,'<span class="comcode_highlight">');
-					if ($pos===false) $pos=0;
-					$pos2=max(0,$pos-250);
-					$summary=(($pos2==0)?'':$entity).xhtml_substr($_temp_summary,$pos2,500).$entity;
-				}*/
+                    $_temp_summary=$temp_summary->evaluate();
+                    if (strlen($_temp_summary)<500)
+                    {
+                            $summary=$_temp_summary;
+                    } else
+                    {
+                            $entity='&hellip;';
+                            if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($entity);
+                            $pos=false;//strpos($_temp_summary,'<span class="comcode_highlight">');
+                            if ($pos===false) $pos=0;
+                            $pos2=max(0,$pos-250);
+                            $summary=(($pos2==0)?'':$entity).xhtml_substr($_temp_summary,$pos2,500).$entity;
+                    }*/
                 $GLOBALS['OVERRIDE_SELF_ZONE'] = $zone;
                 $backup_search__contents_bits = $SEARCH__CONTENT_BITS;
                 $SEARCH__CONTENT_BITS = null; // We do not want highlighting, as it'll result in far too much Comcode being parsed (ok for short snippets, not many full pages!)

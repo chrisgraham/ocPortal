@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 require_code('crud_module');
@@ -38,14 +38,14 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     public $title_is_multi_lang = false;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -67,12 +67,12 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -88,10 +88,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @return tempcode                 The output of the run
+     */
     public function run_start()
     {
         $this->extra_donext_whatever_title = do_lang('SECTION_FORUMS');
@@ -118,13 +118,13 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a forum grouping template adding/editing form.
-	 *
-	 * @param  SHORT_TEXT	The title (name) of the forum grouping
-	 * @param  LONG_TEXT		The description for the forum grouping
-	 * @param  BINARY			Whether the forum grouping is expanded by default when shown in the forum view
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a forum grouping template adding/editing form.
+     *
+     * @param  SHORT_TEXT               The title (name) of the forum grouping
+     * @param  LONG_TEXT                The description for the forum grouping
+     * @param  BINARY                   Whether the forum grouping is expanded by default when shown in the forum view
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($title = '',$description = '',$expanded_by_default = 1)
     {
         $fields = new ocp_tempcode();
@@ -136,11 +136,11 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -180,22 +180,22 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @param  ?ID_TEXT		The entry to not show (NULL: none to not show)
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @param  ?ID_TEXT                 The entry to not show (NULL: none to not show)
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries($avoid = null)
     {
         return ocf_create_selection_list_forum_groupings(intval($avoid));
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A triple: fields, hidden-fields, delete-fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A triple: fields, hidden-fields, delete-fields
+     */
     public function fill_in_edit_form($_id)
     {
         $id = intval($_id);
@@ -218,11 +218,11 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($id)
     {
         $count = $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','COUNT(*)');
@@ -230,10 +230,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $tmp = strval(ocf_make_forum_grouping(post_param('title'),post_param('description'),post_param_integer('expanded_by_default',0)));
@@ -245,10 +245,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         ocf_edit_forum_grouping(intval($id),post_param('title'),post_param('description',STRING_MAGIC_NULL),post_param_integer('expanded_by_default',fractional_edit()?INTEGER_MAGIC_NULL:0));
@@ -259,10 +259,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         ocf_delete_forum_grouping(intval($id),post_param_integer('target_forum_grouping'));

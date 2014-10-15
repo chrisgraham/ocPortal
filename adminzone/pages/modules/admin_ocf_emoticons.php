@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 require_code('crud_module');
@@ -36,14 +36,14 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     public $menu_label = 'EMOTICONS';
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -58,12 +58,12 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -89,11 +89,11 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         $this->add_one_label = do_lang_tempcode('ADD_EMOTICON');
@@ -116,22 +116,22 @@ class Module_admin_ocf_emoticons extends standard_crud_module
             require_javascript('javascript_ajax');
             $script = find_script('snippet');
             $this->javascript = "
-				var form=document.getElementById('main_form');
-				form.old_submit=form.onsubmit;
-				form.onsubmit=function()
-					{
-						document.getElementById('submit_button').disabled=true;
-						var url='" . addslashes($script) . "?snippet=exists_emoticon&name='+window.encodeURIComponent(form.elements['code'].value);
-						if (!do_ajax_field_test(url))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
-						document.getElementById('submit_button').disabled=false;
-						if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-						return true;
-					};
-			";
+                    var form=document.getElementById('main_form');
+                    form.old_submit=form.onsubmit;
+                    form.onsubmit=function()
+                            {
+                                        document.getElementById('submit_button').disabled=true;
+                                        var url='" . addslashes($script) . "?snippet=exists_emoticon&name='+window.encodeURIComponent(form.elements['code'].value);
+                                        if (!do_ajax_field_test(url))
+                                        {
+                                                        document.getElementById('submit_button').disabled=false;
+                                                        return false;
+                                        }
+                                        document.getElementById('submit_button').disabled=false;
+                                        if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                                        return true;
+                            };
+            ";
         }
 
         if ($type == 'misc') {
@@ -147,10 +147,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -165,10 +165,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * The UI to import in bulk from an archive file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to import in bulk from an archive file.
+     *
+     * @return tempcode                 The UI
+     */
     public function import()
     {
         if ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['SITE_DB']->connection_write) {
@@ -188,12 +188,12 @@ class Module_admin_ocf_emoticons extends standard_crud_module
         $text = paragraph(do_lang_tempcode('IMPORT_EMOTICONS_WARNING'));
         require_code('images');
         $max = floatval(get_max_image_size())/floatval(1024*1024);
-        /*if ($max<1.0)	Ok - this is silly! Emoticons are tiny.
-		{
-			require_code('files2');
-			$config_url=get_upload_limit_config_url();
-			$text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
-		}*/
+        /*if ($max<1.0) Ok - this is silly! Emoticons are tiny.
+        {
+            require_code('files2');
+            $config_url=get_upload_limit_config_url();
+            $text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
+        }*/
 
         $hidden = build_keep_post_fields();
         $hidden->attach(form_input_hidden('test','1'));
@@ -203,10 +203,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * The actualiser to import in bulk from an archive file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to import in bulk from an archive file.
+     *
+     * @return tempcode                 The UI
+     */
     public function _import()
     {
         post_param('test'); // To pick up on max file size exceeded errors
@@ -317,10 +317,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Import an emoticon.
-	 *
-	 * @param  PATH			Path to the emoticon file, on disk (must be in theme images folder).
-	 */
+     * Import an emoticon.
+     *
+     * @param  PATH                     Path to the emoticon file, on disk (must be in theme images folder).
+     */
     public function _import_emoticon($path)
     {
         $emoticon_code = basename($path,'.' . get_file_extension($path));
@@ -347,16 +347,16 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a post template adding/editing form.
-	 *
-	 * @param  SHORT_TEXT	The emoticon code
-	 * @param  SHORT_TEXT	The theme image code
-	 * @param  integer		The relevance level of the emoticon
-	 * @range  0 4
-	 * @param  BINARY			Whether the emoticon is usable as a topic emoticon
-	 * @param  BINARY			Whether this may only be used by privileged members
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a post template adding/editing form.
+     *
+     * @param  SHORT_TEXT               The emoticon code
+     * @param  SHORT_TEXT               The theme image code
+     * @param  integer                  The relevance level of the emoticon
+     * @range  0 4
+     * @param  BINARY                   Whether the emoticon is usable as a topic emoticon
+     * @param  BINARY                   Whether this may only be used by privileged members
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($code = ':-]',$theme_img_code = '',$relevance_level = 1,$use_topics = 1,$is_special = 0)
     {
         if ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['SITE_DB']->connection_write) {
@@ -407,10 +407,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_radio_entries()
     {
         $_m = $GLOBALS['FORUM_DB']->query_select('f_emoticons',array('e_code','e_theme_img_code'));
@@ -426,11 +426,11 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $m = $GLOBALS['FORUM_DB']->query_select('f_emoticons',array('*'),array('e_code' => $id),'',1);
@@ -445,10 +445,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         require_code('themes2');
@@ -460,10 +460,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         require_code('themes2');
@@ -476,10 +476,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         ocf_delete_emoticon($id);

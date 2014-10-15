@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_warnings
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_warnings
  */
 
 require_code('crud_module');
@@ -36,24 +36,24 @@ class Module_warnings extends standard_crud_module
     public $title_is_multi_lang = true;
 
     /**
-	 * Find icon for this module, specifically to find an icon for the module's main sitemap node. Defined when there is no entry-point for a default page call.
-	 *
-	 * @return string		Icon.
-	 */
+     * Find icon for this module, specifically to find an icon for the module's main sitemap node. Defined when there is no entry-point for a default page call.
+     *
+     * @return string                   Icon.
+     */
     public function get_wrapper_icon()
     {
         return 'tabs/member_account/warnings';
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if ($be_deferential) {
@@ -66,12 +66,12 @@ class Module_warnings extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -115,11 +115,11 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         require_code('ocf_moderation_action');
@@ -155,10 +155,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * View the warning/punishment history for a member.
-	 *
-	 * @return tempcode		The output of the run
-	 */
+     * View the warning/punishment history for a member.
+     *
+     * @return tempcode                 The output of the run
+     */
     public function history()
     {
         require_code('templates_results_table');
@@ -235,10 +235,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Actualiser to undo a certain type of punitive action.
-	 *
-	 * @return tempcode		Result (redirect page)
-	 */
+     * Actualiser to undo a certain type of punitive action.
+     *
+     * @return tempcode                 Result (redirect page)
+     */
     public function undo_charge()
     {
         $id = post_param_integer('id');
@@ -256,10 +256,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Actualiser to undo a certain type of punitive action.
-	 *
-	 * @return tempcode		Result (redirect page)
-	 */
+     * Actualiser to undo a certain type of punitive action.
+     *
+     * @return tempcode                 Result (redirect page)
+     */
     public function undo_probation()
     {
         $id = post_param_integer('id');
@@ -279,10 +279,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Actualiser to undo a certain type of punitive action.
-	 *
-	 * @return tempcode		Result (redirect page)
-	 */
+     * Actualiser to undo a certain type of punitive action.
+     *
+     * @return tempcode                 Result (redirect page)
+     */
     public function undo_banned_ip()
     {
         require_code('failure');
@@ -301,10 +301,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Actualiser to undo a certain type of punitive action.
-	 *
-	 * @return tempcode		Result (redirect page)
-	 */
+     * Actualiser to undo a certain type of punitive action.
+     *
+     * @return tempcode                 Result (redirect page)
+     */
     public function undo_banned_member()
     {
         $id = post_param_integer('id');
@@ -321,10 +321,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Actualiser to undo a certain type of punitive action.
-	 *
-	 * @return tempcode		Result (redirect page)
-	 */
+     * Actualiser to undo a certain type of punitive action.
+     *
+     * @return tempcode                 Result (redirect page)
+     */
     public function undo_silence_from_topic()
     {
         $id = post_param_integer('id');
@@ -347,10 +347,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Actualiser to undo a certain type of punitive action.
-	 *
-	 * @return tempcode		Result (redirect page)
-	 */
+     * Actualiser to undo a certain type of punitive action.
+     *
+     * @return tempcode                 Result (redirect page)
+     */
     public function undo_silence_from_forum()
     {
         $id = post_param_integer('id');
@@ -373,14 +373,14 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a warning adding/editing form.
-	 *
-	 * @param  boolean		Whether it is a new warning/punishment record
-	 * @param  LONG_TEXT		The explanation for the warning/punishment record
-	 * @param  BINARY			Whether to make this a formal warning
-	 * @param  ?MEMBER		The member the warning is for (NULL: get from environment)
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for a warning adding/editing form.
+     *
+     * @param  boolean                  Whether it is a new warning/punishment record
+     * @param  LONG_TEXT                The explanation for the warning/punishment record
+     * @param  BINARY                   Whether to make this a formal warning
+     * @param  ?MEMBER                  The member the warning is for (NULL: get from environment)
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($new = true,$explanation = '',$is_warning = 0,$member_id = null)
     {
         if (is_null($member_id)) {
@@ -517,11 +517,11 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($_id)
     {
         unset($_id);
@@ -529,11 +529,11 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -597,10 +597,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $_m = $GLOBALS['FORUM_DB']->query_select('f_warnings',array('*'),null,'ORDER BY w_time DESC');
@@ -613,11 +613,11 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $warning = $GLOBALS['FORUM_DB']->query_select('f_warnings',array('w_explanation','w_by','w_member_id','w_is_warning'),array('id' => intval($id)),'',1);
@@ -629,10 +629,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $explanation = post_param('explanation');
@@ -819,21 +819,21 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         ocf_edit_warning(intval($id),post_param('explanation'),post_param_integer('is_warning',0));
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['FORUM_DB']->query_select('f_warnings',array('w_by','w_time'),array('id' => intval($id)),'',1);
@@ -844,10 +844,10 @@ class Module_warnings extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         ocf_delete_warning(intval($id));

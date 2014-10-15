@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		news
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    news
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_news
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_news
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('news');
@@ -60,11 +60,11 @@ class Module_news
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
@@ -150,14 +150,14 @@ class Module_news
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $has_blogs = ($GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)',null,'WHERE nc_owner IS NOT NULL')>0);
@@ -187,10 +187,10 @@ class Module_news
     public $category;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -376,10 +376,10 @@ class Module_news
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('feedback');
@@ -408,11 +408,11 @@ class Module_news
     }
 
     /**
-	 * The UI to select a news category to view news within.
-	 *
-	 * @param  ?integer		What to show (NULL: news and blogs, 0: news, 1: blogs)
-	 * @return tempcode		The UI
-	 */
+     * The UI to select a news category to view news within.
+     *
+     * @param  ?integer                 What to show (NULL: news and blogs, 0: news, 1: blogs)
+     * @return tempcode                 The UI
+     */
     public function news_cat_select($blogs)
     {
         $start = get_param_integer('news_categories_start',0);
@@ -482,10 +482,10 @@ class Module_news
     }
 
     /**
-	 * The UI to view the news archive.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to view the news archive.
+     *
+     * @return tempcode                 The UI
+     */
     public function news_archive()
     {
         $ocselect = either_param('active_filter','');
@@ -514,10 +514,10 @@ class Module_news
     }
 
     /**
-	 * The UI to view a news entry.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to view a news entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function view_news()
     {
         $id = $this->id;
@@ -534,8 +534,8 @@ class Module_news
 
         // Rating and comments
         $self_url_map = array('page' => '_SELF','type' => 'view','id' => $id);
-        /*if ($filter!='*') $self_url_map['filter']=$filter;		Potentially makes URL too long for content topic to store, and we probably don't want to store this assumptive context anyway
-		if (($filter_and!='*') && ($filter_and!='')) $self_url_map['filter_and']=$filter_and;*/
+        /*if ($filter!='*') $self_url_map['filter']=$filter;      Potentially makes URL too long for content topic to store, and we probably don't want to store this assumptive context anyway
+        if (($filter_and!='*') && ($filter_and!='')) $self_url_map['filter_and']=$filter_and;*/
         if (!is_null($blog)) {
             $self_url_map['blog'] = $blog;
         }

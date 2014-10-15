@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_vforums
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_vforums
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -77,10 +77,10 @@ class Module_vforums
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -111,10 +111,10 @@ class Module_vforums
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (get_forum_type() != 'ocf') {
@@ -145,10 +145,10 @@ class Module_vforums
     }
 
     /**
-	 * The UI to show topics with new posts since last visit time.
-	 *
-	 * @return tempcode			The UI
-	 */
+     * The UI to show topics with new posts since last visit time.
+     *
+     * @return tempcode                 The UI
+     */
     public function new_posts()
     {
         $title = do_lang_tempcode('POSTS_SINCE');
@@ -181,10 +181,10 @@ class Module_vforums
     }
 
     /**
-	 * The UI to show unanswered topics.
-	 *
-	 * @return tempcode			The UI
-	 */
+     * The UI to show unanswered topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function unanswered_topics()
     {
         $title = do_lang_tempcode('UNANSWERED_TOPICS');
@@ -195,10 +195,10 @@ class Module_vforums
     }
 
     /**
-	 * The UI to show topics you're involved with.
-	 *
-	 * @return tempcode			The UI
-	 */
+     * The UI to show topics you're involved with.
+     *
+     * @return tempcode                 The UI
+     */
     public function involved_topics()
     {
         if (is_guest()) {
@@ -212,10 +212,10 @@ class Module_vforums
     }
 
     /**
-	 * The UI to show topics with unread posts.
-	 *
-	 * @return tempcode			The UI
-	 */
+     * The UI to show topics with unread posts.
+     *
+     * @return tempcode                 The UI
+     */
     public function unread_topics()
     {
         if (is_guest()) {
@@ -229,10 +229,10 @@ class Module_vforums
     }
 
     /**
-	 * The UI to show topics which have been recently read by the current member.
-	 *
-	 * @return tempcode			The UI
-	 */
+     * The UI to show topics which have been recently read by the current member.
+     *
+     * @return tempcode                 The UI
+     */
     public function recently_read()
     {
         if (is_guest()) {
@@ -246,16 +246,16 @@ class Module_vforums
     }
 
     /**
-	 * The UI to show a virtual forum.
-	 *
-	 * @param  tempcode		The title to show for the v-forum
-	 * @param  mixed			The condition (a fragment of an SQL query that gets embedded in the context of a topic selection query). May be string, or array of strings (separate queries to run and merge; done for performance reasons relating to DB indexing)
-	 * @param  string			The ordering of the results
-	 * @param  boolean		Whether to not show pinning in a separate section
-	 * @param  ?array			Extra template parameters to pass through (NULL: none)
-	 * @param  ?string		The table to query (NULL: topic table)
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a virtual forum.
+     *
+     * @param  tempcode                 The title to show for the v-forum
+     * @param  mixed                    The condition (a fragment of an SQL query that gets embedded in the context of a topic selection query). May be string, or array of strings (separate queries to run and merge; done for performance reasons relating to DB indexing)
+     * @param  string                   The ordering of the results
+     * @param  boolean                  Whether to not show pinning in a separate section
+     * @param  ?array                   Extra template parameters to pass through (NULL: none)
+     * @param  ?string                  The table to query (NULL: topic table)
+     * @return tempcode                 The UI
+     */
     public function _vforum($title,$condition,$order,$no_pin = false,$extra_tpl_map = null,$initial_table = null)
     {
         $breadcrumbs = ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));

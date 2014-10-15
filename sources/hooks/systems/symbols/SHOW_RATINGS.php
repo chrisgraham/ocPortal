@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_feedback_features
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_feedback_features
  */
 
 class Hook_symbol_SHOW_RATINGS
 {
     /**
-	 * Run function for symbol hooks. Searches for tasks to perform.
+     * Run function for symbol hooks. Searches for tasks to perform.
     *
-    * @param  array		Symbol parameters
-    * @return string		Result
-	 */
+    * @param  array                     Symbol parameters
+    * @return string                    Result
+     */
     public function run($param)
     {
         $value = '';

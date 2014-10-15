@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -39,13 +39,13 @@ function init__ocf_forums()
 /**
  * Render a forum box.
  *
- * @param  array			Forum row
- * @param  ID_TEXT		Zone to link through to
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean		Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		The forum box
+ * @param  array                        Forum row
+ * @param  ID_TEXT                      Zone to link through to
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     The forum box
  */
 function render_forum_box($row,$zone = '_SEARCH',$give_context = true,$include_breadcrumbs = true,$root = null,$guid = '')
 {
@@ -96,8 +96,8 @@ function render_forum_box($row,$zone = '_SEARCH',$give_context = true,$include_b
 /**
  * Get SQL clause to limit a query to accessible forums.
  *
- * @param  ID_TEXT		Field name.
- * @return string			SQL clause.
+ * @param  ID_TEXT                      Field name.
+ * @return string                       SQL clause.
  */
 function get_forum_access_sql($field)
 {
@@ -142,9 +142,9 @@ function get_forum_access_sql($field)
 /**
  * Organise a list of forum rows into a tree structure.
  *
- * @param  array			The list of all forum rows (be aware that this will get modified for performance reasons).
- * @param  AUTO_LINK		The forum row that we are taking as the root of our current recursion.
- * @return array			The child list of $forum_id.
+ * @param  array                        The list of all forum rows (be aware that this will get modified for performance reasons).
+ * @param  AUTO_LINK                    The forum row that we are taking as the root of our current recursion.
+ * @return array                        The child list of $forum_id.
  */
 function ocf_organise_into_tree(&$all_forums,$forum_id)
 {
@@ -163,11 +163,11 @@ function ocf_organise_into_tree(&$all_forums,$forum_id)
 /**
  * Gets a list of subordinate forums of a certain forum.
  *
- * @param  AUTO_LINK		The ID of the forum we are finding subordinate forums of.
- * @param  ?string		The field name to use in the OR list (NULL: do not make an OR list, return an array).
- * @param  ?array			The forum tree structure (NULL: unknown, it will be found using ocf_organise_into_tree).
- * @param  boolean		Whether to ignore permissions in this.
- * @return mixed			The list (is either a true list, or an OR list).
+ * @param  AUTO_LINK                    The ID of the forum we are finding subordinate forums of.
+ * @param  ?string                      The field name to use in the OR list (NULL: do not make an OR list, return an array).
+ * @param  ?array                       The forum tree structure (NULL: unknown, it will be found using ocf_organise_into_tree).
+ * @param  boolean                      Whether to ignore permissions in this.
+ * @return mixed                        The list (is either a true list, or an OR list).
  */
 function ocf_get_all_subordinate_forums($forum_id,$create_or_list = null,$tree = null,$ignore_permissions = false)
 {
@@ -233,21 +233,21 @@ function ocf_get_all_subordinate_forums($forum_id,$create_or_list = null,$tree =
     return $subordinates;
 }
 
-/*function ocf_is_up_to_date_on_forum($forum_id,$member_id=NULL)		Interesting function, not currently needed
+/*function ocf_is_up_to_date_on_forum($forum_id,$member_id=NULL)     Interesting function, not currently needed
 {
-	$_last_topic=$GLOBALS['FORUM_DB']->query_select('f_forums',array('f_cache_last_time','f_cache_last_topic_id'),array('id'=>$forum_id));
-	if (!array_key_exists(0,$_last_topic)) return false; // Data error, but let's just trip past
-	$topic_last_time=$_last_topic[0]['f_cache_last_time'];
-	$topic_id=$_last_topic[0]['f_cache_last_topic_id'];
-	return ocf_has_read_topic($topic_id,$topic_last_time,$member_id);
+    $_last_topic=$GLOBALS['FORUM_DB']->query_select('f_forums',array('f_cache_last_time','f_cache_last_topic_id'),array('id'=>$forum_id));
+    if (!array_key_exists(0,$_last_topic)) return false; // Data error, but let's just trip past
+    $topic_last_time=$_last_topic[0]['f_cache_last_time'];
+    $topic_id=$_last_topic[0]['f_cache_last_topic_id'];
+    return ocf_has_read_topic($topic_id,$topic_last_time,$member_id);
 }*/
 
 /**
  * Find whether a member may moderate a certain forum.
  *
- * @param  AUTO_LINK		The ID of the forum.
- * @param  ?MEMBER		The member ID (NULL: current member).
- * @return boolean		The answer.
+ * @param  AUTO_LINK                    The ID of the forum.
+ * @param  ?MEMBER                      The member ID (NULL: current member).
+ * @return boolean                      The answer.
  */
 function ocf_may_moderate_forum($forum_id,$member_id = null)
 {
@@ -265,9 +265,9 @@ function ocf_may_moderate_forum($forum_id,$member_id = null)
 /**
  * Get an OR list of a forums parents, suited for selection from the f_topics table.
  *
- * @param  AUTO_LINK		The ID of the forum.
- * @param  ?AUTO_LINK	The ID of the parent forum (-1: get it from the DB) (NULL: there is no parent, as it is the root forum).
- * @return string			The OR list.
+ * @param  AUTO_LINK                    The ID of the forum.
+ * @param  ?AUTO_LINK                   The ID of the parent forum (-1: get it from the DB) (NULL: there is no parent, as it is the root forum).
+ * @return string                       The OR list.
  */
 function ocf_get_forum_parent_or_list($forum_id,$parent_id = -1)
 {
@@ -291,12 +291,12 @@ function ocf_get_forum_parent_or_list($forum_id,$parent_id = -1)
 /**
  * Get breadcrumbs for a forum.
  *
- * @param  mixed			The ID of the forum we are at in our path (NULL: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
- * @param  ?mixed			The name of the given forum as string or Tempcode (NULL: find it from the DB).
- * @param  ?AUTO_LINK	The parent forum of the given forum (NULL: find it from the DB).
- * @param  boolean		Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
- * @param  ?AUTO_LINK	Virtual root (NULL: none).
- * @return tempcode		The breadcrumbs.
+ * @param  mixed                        The ID of the forum we are at in our path (NULL: end of recursion) (false: no forum ID available, this_name and parent_forum must not be NULL).
+ * @param  ?mixed                       The name of the given forum as string or Tempcode (NULL: find it from the DB).
+ * @param  ?AUTO_LINK                   The parent forum of the given forum (NULL: find it from the DB).
+ * @param  boolean                      Whether this is being called as the recursion start of deriving the breadcrumbs (top level call).
+ * @param  ?AUTO_LINK                   Virtual root (NULL: none).
+ * @return tempcode                     The breadcrumbs.
  */
 function ocf_forum_breadcrumbs($end_point_forum,$this_name = null,$parent_forum = null,$start = true,$root = null)
 {

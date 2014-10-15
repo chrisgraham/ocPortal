@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_Profiles_Tabs_Edit_settings
 {
     /**
-	 * Find whether this hook is active.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return boolean		Whether this hook is active
-	 */
+     * Find whether this hook is active.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @return boolean                  Whether this hook is active
+     */
     public function is_active($member_id_of,$member_id_viewing)
     {
         return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
     }
 
     /**
-	 * Render function for profile tabs edit hooks.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
-	 */
+     * Render function for profile tabs edit hooks.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @return ?array                   A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
+     */
     public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
     {
         $order = 0;
@@ -149,7 +149,7 @@ class Hook_Profiles_Tabs_Edit_settings
                 $timezone = null;
             } else {
                 $preview_posts = post_param_integer('preview_posts',0);
-                $auto_monitor_contrib_content = null;//post_param_integer('auto_monitor_contrib_content',0);	Moved to notifications tab
+                $auto_monitor_contrib_content = null;//post_param_integer('auto_monitor_contrib_content',0);   Moved to notifications tab
                 $views_signatures = post_param_integer('views_signatures',0);
                 $timezone = post_param('timezone',get_site_timezone());
             }
@@ -260,31 +260,31 @@ class Hook_Profiles_Tabs_Edit_settings
 
         $script = find_script('username_check');
         $javascript = "
-			var form=document.getElementById('email_address').form;
-			form.prior_profile_edit_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					if (typeof form.elements['edit_password']!='undefined')
-					{
-						if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['edit_password'].value))
-						{
-							window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
-							return false;
-						}
-					}
-					if (form.elements['edit_password'].value!='')
-					{
-						var url='" . addslashes($script) . "?';
-						if (!do_ajax_field_test(url,'password='+window.encodeURIComponent(form.elements['edit_password'].value)))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
-					}
-					if (typeof form.prior_profile_edit_submit!='undefined' && form.prior_profile_edit_submit) return form.prior_profile_edit_submit();
-					return true;
-				};
-		";
+            var form=document.getElementById('email_address').form;
+            form.prior_profile_edit_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            if (typeof form.elements['edit_password']!='undefined')
+                            {
+                                        if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['edit_password'].value))
+                                        {
+                                                        window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
+                                                        return false;
+                                        }
+                            }
+                            if (form.elements['edit_password'].value!='')
+                            {
+                                        var url='" . addslashes($script) . "?';
+                                        if (!do_ajax_field_test(url,'password='+window.encodeURIComponent(form.elements['edit_password'].value)))
+                                        {
+                                                        document.getElementById('submit_button').disabled=false;
+                                                        return false;
+                                        }
+                            }
+                            if (typeof form.prior_profile_edit_submit!='undefined' && form.prior_profile_edit_submit) return form.prior_profile_edit_submit();
+                            return true;
+                    };
+        ";
 
         $text = '';
 

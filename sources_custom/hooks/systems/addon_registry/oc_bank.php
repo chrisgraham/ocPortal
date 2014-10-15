@@ -8,88 +8,88 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		oc_bank
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    oc_bank
  */
 
 class Hook_addon_registry_oc_bank
 {
     /**
-	 * Get a list of file permissions to set
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a list of file permissions to set
+     *
+     * @return array                    File permissions to set
+     */
     public function get_chmod_array()
     {
         return array();
     }
 
     /**
-	 * Get the version of ocPortal this addon is for
-	 *
-	 * @return float			Version number
-	 */
+     * Get the version of ocPortal this addon is for
+     *
+     * @return float                    Version number
+     */
     public function get_version()
     {
         return ocp_version_number();
     }
 
     /**
-	 * Get the addon category
-	 *
-	 * @return string			The category
-	 */
+     * Get the addon category
+     *
+     * @return string                   The category
+     */
     public function get_category()
     {
         return 'Fun and Games';
     }
 
     /**
-	 * Get the addon author
-	 *
-	 * @return string			The author
-	 */
+     * Get the addon author
+     *
+     * @return string                   The author
+     */
     public function get_author()
     {
         return 'Kamen Blaginov';
     }
 
     /**
-	 * Find other authors
-	 *
-	 * @return array			A list of co-authors that should be attributed
-	 */
+     * Find other authors
+     *
+     * @return array                    A list of co-authors that should be attributed
+     */
     public function get_copyright_attribution()
     {
         return array();
     }
 
     /**
-	 * Get the addon licence (one-line summary only)
-	 *
-	 * @return string			The licence
-	 */
+     * Get the addon licence (one-line summary only)
+     *
+     * @return string                   The licence
+     */
     public function get_licence()
     {
         return 'Licensed on the same terms as ocPortal';
     }
 
     /**
-	 * Get the description of the addon
-	 *
-	 * @return string			Description of the addon
-	 */
+     * Get the description of the addon
+     *
+     * @return string                   Description of the addon
+     */
     public function get_description()
     {
         return 'Members can deposit some of their hard earned points (but not the gift points) into a \"bank account\" and extract them again only after a month. The administrator can set the interest rate, that users will get with their points back at the end of the account term. To set the Interest rate go to Admin Zone > Setup > Manage point-store inventory and click \"edit your point-store configuration\" and change the interest rate to the level you would like. To deposit points go to the point store and click on the bank option and choose how much you would like to deposit for a month. The interest paid out will be at the level it was at when the points were deposited.';
     }
 
     /**
-	 * Get a list of tutorials that apply to this addon
-	 *
-	 * @return array			List of tutorials
-	 */
+     * Get a list of tutorials that apply to this addon
+     *
+     * @return array                    List of tutorials
+     */
     public function get_applicable_tutorials()
     {
         return array(
@@ -97,10 +97,10 @@ class Hook_addon_registry_oc_bank
     }
 
     /**
-	 * Get a mapping of dependency types
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a mapping of dependency types
+     *
+     * @return array                    File permissions to set
+     */
     public function get_dependencies()
     {
         return array(
@@ -116,10 +116,10 @@ class Hook_addon_registry_oc_bank
     }
 
     /**
-	 * Get a list of files that belong to this addon
-	 *
-	 * @return array			List of files
-	 */
+     * Get a list of files that belong to this addon
+     *
+     * @return array                    List of files
+     */
     public function get_file_list()
     {
         return array(
@@ -133,18 +133,18 @@ class Hook_addon_registry_oc_bank
     }
 
     /**
-	 * Uninstall the addon.
-	 */
+     * Uninstall the addon.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('bank');
     }
 
     /**
-	 * Install the addon.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 */
+     * Install the addon.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     */
     public function install($upgrade_from = null)
     {
         if (is_null($upgrade_from)) {

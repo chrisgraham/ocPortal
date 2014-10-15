@@ -9,16 +9,16 @@
 
 if (!function_exists('_do_lang')) {
     /**
-	 * Get the human-readable form of a language ID, or a language entry from a language INI file.
-	 *
-	 * @param  ID_TEXT		The language ID
-	 * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
-	 * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
-	 * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
-	 * @param  ?LANGUAGE_NAME The language to use (NULL: users language)
-	 * @param  boolean		Whether to cause ocPortal to exit if the lookup does not succeed
-	 * @return ?mixed			The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
-	 */
+     * Get the human-readable form of a language ID, or a language entry from a language INI file.
+     *
+     * @param  ID_TEXT                  The language ID
+     * @param  ?mixed                   The first token [string or tempcode] (replaces {1}) (NULL: none)
+     * @param  ?mixed                   The second token [string or tempcode] (replaces {2}) (NULL: none)
+     * @param  ?mixed                   The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+     * @param  ?LANGUAGE_NAME           The language to use (NULL: users language)
+     * @param  boolean                  Whether to cause ocPortal to exit if the lookup does not succeed
+     * @return ?mixed                   The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
+     */
     function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang = null,$require_result = true)
     {
         global $LANGUAGE_STRINGS_CACHE,$USER_LANG_CACHED,$RECORD_LANG_STRINGS,$XSS_DETECT,$PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED;
@@ -283,13 +283,13 @@ if (!function_exists('_do_lang')) {
 
 if (!function_exists('get_translated_text')) {
     /**
-	 * Try to return the human-readable version of the language ID, passed in as $entry.
-	 *
-	 * @param  mixed				The ID (if multi-lang-content on), or the string itself
-	 * @param  ?object			The database connection to use (NULL: standard site connection)
-	 * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
-	 * @return string				The human-readable version
-	 */
+     * Try to return the human-readable version of the language ID, passed in as $entry.
+     *
+     * @param  mixed                    The ID (if multi-lang-content on), or the string itself
+     * @param  ?object                  The database connection to use (NULL: standard site connection)
+     * @param  ?LANGUAGE_NAME           The language (NULL: uses the current language)
+     * @return string                   The human-readable version
+     */
     function get_translated_text($entry,$connection = null,$lang = null)
     {
         if (!multi_lang_content()) {
@@ -360,9 +360,9 @@ if (!function_exists('get_translated_text')) {
 /**
  * Convert a language string into another language string.
  *
- * @param  mixed			The string to convert
- * @param  LONG_TEXT		The language to convert to
- * @return LONG_TEXT		The converted string
+ * @param  mixed                        The string to convert
+ * @param  LONG_TEXT                    The language to convert to
+ * @return LONG_TEXT                    The converted string
  */
 function google_translate($str_in,$lang)
 {
@@ -494,9 +494,9 @@ function google_translate($str_in,$lang)
 /**
  * Check google cache.
  *
- * @param  STRING		The string TO CONVERT
- * @param  STRING		The lANGUAGE STRING
- * @return ARRAY		array of data
+ * @param  STRING                       The string TO CONVERT
+ * @param  STRING                       The lANGUAGE STRING
+ * @return ARRAY                        array of data
  */
 function check_google_cache($str,$lang)
 {
@@ -519,10 +519,10 @@ function check_google_cache($str,$lang)
 /**
  * Save successful google response of gtranslate table.
  *
- * @param  STRING		The string TO CONVERT
- * @param  STRING		The lANGUAGE STRING
- * @param  STRING		result of request
- * @return BINARY		If success return true
+ * @param  STRING                       The string TO CONVERT
+ * @param  STRING                       The lANGUAGE STRING
+ * @param  STRING                       result of request
+ * @return BINARY                       If success return true
  */
 function save_google_cache($str,$lang,$result)
 {
@@ -533,10 +533,10 @@ function save_google_cache($str,$lang,$result)
 
 if (!function_exists('get_site_default_lang')) {
     /**
-	 * Get the site's default language, with support for URL overrides.
-	 *
-	 * @return LANGUAGE_NAME  The site's default language
-	 */
+     * Get the site's default language, with support for URL overrides.
+     *
+     * @return LANGUAGE_NAME            The site's default language
+     */
     function get_site_default_lang()
     {
         // Site default then

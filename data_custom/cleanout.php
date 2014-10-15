@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 // Find ocPortal base directory, and chdir into it
@@ -52,7 +52,7 @@ if (!headers_sent()) {
 /**
  * Execute some temporary code put into this function.
  *
- * @return  mixed		Arbitrary result to output, if no text has already gone out
+ * @return  mixed    Arbitrary result to output, if no text has already gone out
  */
 function cleanup()
 {
@@ -203,11 +203,11 @@ function cleanup()
         ),
 
         /*array( Probably unwanted
-			'delete_menu_item',
-			'menus2',
-			'menu_items',
-			'id',
-		),*/
+            'delete_menu_item',
+            'menus2',
+            'menu_items',
+            'id',
+        ),*/
 
         array(
             'delete_news_category',
@@ -266,13 +266,13 @@ function cleanup()
             array(),
         ),
 
-        /*array(	Probably not wanted
-			'ocf_delete_emoticon',
-			'ocf_general_action2',
-			'f_emoticons',
-			'e_code',
-			array(),
-		),*/
+        /*array(  Probably not wanted
+            'ocf_delete_emoticon',
+            'ocf_general_action2',
+            'f_emoticons',
+            'e_code',
+            array(),
+        ),*/
 
         array(
             'ocf_delete_welcome_email',
@@ -298,13 +298,13 @@ function cleanup()
             array(db_get_first_id(),db_get_first_id()+1),
         ),
 
-        /*array(	Probably not wanted
-			'ocf_delete_custom_field',
-			'ocf_members_action2',
-			'f_custom_fields',
-			'id',
-			array(),
-		),*/
+        /*array(  Probably not wanted
+            'ocf_delete_custom_field',
+            'ocf_members_action2',
+            'f_custom_fields',
+            'id',
+            array(),
+        ),*/
 
         array(
             'ocf_delete_warning',
@@ -370,52 +370,52 @@ function cleanup()
             array(),
         ),
 
-        /*array(	Probably not wanted
-			'actual_delete_zone',
-			'zones2',
-			'zones',
-			'zone_name',
-			array('','site','adminzone','cms','collaboration','forum'),
-		),*/
+        /*array(  Probably not wanted
+            'actual_delete_zone',
+            'zones2',
+            'zones',
+            'zone_name',
+            array('','site','adminzone','cms','collaboration','forum'),
+        ),*/
 
-        /*array(	Probably not wanted
-			'delete_ocp_page',
-			'zones3',
-			'comcode_pages',
-			array('the_zone','the_page'),
-			array(
-				array('adminzone','netlink'),
-				array('adminzone','panel_top'),
-				array('adminzone','quotes'),
-				array('adminzone','start'),
-				array('cms','panel_top'),
-				array('collaboration','about'),
-				array('collaboration','panel_left'),
-				array('collaboration','start'),
-				array('forum','panel_left'),
-				array('site','advertise'),
-				array('site','donate'),
-				array('site','guestbook'),
-				array('site','help'),
-				array('site','panel_left'),
-				array('site','panel_right'),
-				array('site','start'),
-				array('site','userguide_chatcode'),
-				array('site','userguide_comcode'),
-				array('','404'),
-				array('','feedback'),
-				array('','keymap'),
-				array('','panel_bottom'),
-				array('','panel_left'),
-				array('','panel_right'),
-				array('','panel_top'),
-				array('','privacy'),
-				array('','recommend_help'),
-				array('','rules'),
-				array('','sitemap'),
-				array('','start'),
-			),
-		),*/
+        /*array(  Probably not wanted
+            'delete_ocp_page',
+            'zones3',
+            'comcode_pages',
+            array('the_zone','the_page'),
+            array(
+                    array('adminzone','netlink'),
+                    array('adminzone','panel_top'),
+                    array('adminzone','quotes'),
+                    array('adminzone','start'),
+                    array('cms','panel_top'),
+                    array('collaboration','about'),
+                    array('collaboration','panel_left'),
+                    array('collaboration','start'),
+                    array('forum','panel_left'),
+                    array('site','advertise'),
+                    array('site','donate'),
+                    array('site','guestbook'),
+                    array('site','help'),
+                    array('site','panel_left'),
+                    array('site','panel_right'),
+                    array('site','start'),
+                    array('site','userguide_chatcode'),
+                    array('site','userguide_comcode'),
+                    array('','404'),
+                    array('','feedback'),
+                    array('','keymap'),
+                    array('','panel_bottom'),
+                    array('','panel_left'),
+                    array('','panel_right'),
+                    array('','panel_top'),
+                    array('','privacy'),
+                    array('','recommend_help'),
+                    array('','rules'),
+                    array('','sitemap'),
+                    array('','start'),
+            ),
+        ),*/
 
         array(
             'wiki_delete_post',
@@ -469,7 +469,7 @@ function cleanup()
 
                     call_user_func_array($function,array_merge($row,$extra_params));
                 }
-                //$start+=100;	Actually, don't do this - as deletion will have changed offsets
+                //$start+=100;   Actually, don't do this - as deletion will have changed offsets
             } while (count($rows) != 0);
         }
     }

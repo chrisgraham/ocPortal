@@ -13,55 +13,55 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_database_drivers
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_database_drivers
  */
 
 /**
  * Base class for MySQL database drivers.
- * @package		core_database_drivers
+ * @package    core_database_drivers
  */
 class Database_super_mysql
 {
     /**
-	 * Find whether the database may run GROUP BY unfettered with restrictions on the SELECT'd fields having to be represented in it or aggregate functions
-	 *
-	 * @return boolean		Whether it can
-	 */
+     * Find whether the database may run GROUP BY unfettered with restrictions on the SELECT'd fields having to be represented in it or aggregate functions
+     *
+     * @return boolean                  Whether it can
+     */
     public function can_arbitrary_groupby()
     {
         return true;
     }
 
     /**
-	 * Get the default user for making db connections (used by the installer as a default).
-	 *
-	 * @return string			The default user for db connections
-	 */
+     * Get the default user for making db connections (used by the installer as a default).
+     *
+     * @return string                   The default user for db connections
+     */
     public function db_default_user()
     {
         return 'root';
     }
 
     /**
-	 * Get the default password for making db connections (used by the installer as a default).
-	 *
-	 * @return string			The default password for db connections
-	 */
+     * Get the default password for making db connections (used by the installer as a default).
+     *
+     * @return string                   The default password for db connections
+     */
     public function db_default_password()
     {
         return '';
     }
 
     /**
-	 * Create a table index.
-	 *
-	 * @param  ID_TEXT		The name of the table to create the index on
-	 * @param  ID_TEXT		The index name (not really important at all)
-	 * @param  string			Part of the SQL query: a comma-separated list of fields to use on the index
-	 * @param  array			The DB connection to make on
-	 */
+     * Create a table index.
+     *
+     * @param  ID_TEXT                  The name of the table to create the index on
+     * @param  ID_TEXT                  The index name (not really important at all)
+     * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
+     * @param  array                    The DB connection to make on
+     */
     public function db_create_index($table_name,$index_name,$_fields,$db)
     {
         if ($index_name[0] == '#') {
@@ -77,12 +77,12 @@ class Database_super_mysql
     }
 
     /**
-	 * Change the primary key of a table.
-	 *
-	 * @param  ID_TEXT		The name of the table to create the index on
-	 * @param  array			A list of fields to put in the new key
-	 * @param  array			The DB connection to make on
-	 */
+     * Change the primary key of a table.
+     *
+     * @param  ID_TEXT                  The name of the table to create the index on
+     * @param  array                    A list of fields to put in the new key
+     * @param  array                    The DB connection to make on
+     */
     public function db_change_primary_key($table_name,$new_key,$db)
     {
         $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
@@ -90,12 +90,12 @@ class Database_super_mysql
     }
 
     /**
-	 * Assemble part of a WHERE clause for doing full-text search
-	 *
-	 * @param  string			Our match string (assumes "?" has been stripped already)
-	 * @param  boolean		Whether to do a boolean full text search
-	 * @return string			Part of a WHERE clause for doing full-text search
-	 */
+     * Assemble part of a WHERE clause for doing full-text search
+     *
+     * @param  string                   Our match string (assumes "?" has been stripped already)
+     * @param  boolean                  Whether to do a boolean full text search
+     * @return string                   Part of a WHERE clause for doing full-text search
+     */
     public function db_full_text_assemble($content,$boolean)
     {
         if (!$boolean) {
@@ -110,20 +110,20 @@ class Database_super_mysql
     }
 
     /**
-	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
-	 *
-	 * @return integer			First ID used
-	 */
+     * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
+     *
+     * @return integer                  First ID used
+     */
     public function db_get_first_id()
     {
         return 1;
     }
 
     /**
-	 * Get a map of ocPortal field types, to actual mySQL types.
-	 *
-	 * @return array			The map
-	 */
+     * Get a map of ocPortal field types, to actual mySQL types.
+     *
+     * @return array                    The map
+     */
     public function db_get_type_remap()
     {
         $type_remap = array(
@@ -154,23 +154,23 @@ class Database_super_mysql
     }
 
     /**
-	 * Whether to use InnoDB for mySQL. Change this function by hand - official only MyISAM supported
-	 *
-	 * @return boolean			Answer
-	 */
+     * Whether to use InnoDB for mySQL. Change this function by hand - official only MyISAM supported
+     *
+     * @return boolean                  Answer
+     */
     public function using_innodb()
     {
         return false;
     }
 
     /**
-	 * Create a new table.
-	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  array			A map of field names to ocPortal field types (with *#? encodings)
-	 * @param  array			The DB connection to make on
-	 * @param  ID_TEXT		The table name with no table prefix
-	 */
+     * Create a new table.
+     *
+     * @param  ID_TEXT                  The table name
+     * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
+     * @param  array                    The DB connection to make on
+     * @param  ID_TEXT                  The table name with no table prefix
+     */
     public function db_create_table($table_name,$fields,$db,$raw_table_name)
     {
         $type_remap = $this->db_get_type_remap();
@@ -195,7 +195,7 @@ class Database_super_mysql
 
             $type = isset($type_remap[$type])?$type_remap[$type]:$type;
 
-            $_fields .= '	  ' . $name . ' ' . $type;
+            $_fields .= '    ' . $name . ' ' . $type;
             if (substr($name,-13) == '__text_parsed') {
                 $_fields .= ' DEFAULT \'\'';
             } elseif (substr($name,-13) == '__source_user') {
@@ -212,8 +212,8 @@ class Database_super_mysql
         }
 
         $query = 'CREATE TABLE ' . $table_name . ' (' . "\n" . $_fields . '
-			PRIMARY KEY (' . $keys . ')
-		)';
+            PRIMARY KEY (' . $keys . ')
+        )';
 
         $query .= ' CHARACTER SET=utf8';
 
@@ -222,77 +222,77 @@ class Database_super_mysql
     }
 
     /**
-	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
-	 *
-	 * @param  ID_TEXT		The attribute
-	 * @param  string			The comparison
-	 * @return string			The SQL
-	 */
+     * Encode an SQL statement fragment for a conditional to see if two strings are equal.
+     *
+     * @param  ID_TEXT                  The attribute
+     * @param  string                   The comparison
+     * @return string                   The SQL
+     */
     public function db_string_equal_to($attribute,$compare)
     {
         return $attribute . "='" . db_escape_string($compare) . "'";
     }
 
     /**
-	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
-	 *
-	 * @param  ID_TEXT		The attribute
-	 * @param  string			The comparison
-	 * @return string			The SQL
-	 */
+     * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
+     *
+     * @param  ID_TEXT                  The attribute
+     * @param  string                   The comparison
+     * @return string                   The SQL
+     */
     public function db_string_not_equal_to($attribute,$compare)
     {
         return $attribute . "<>'" . db_escape_string($compare) . "'";
     }
 
     /**
-	 * Find whether expression ordering support is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
+     * Find whether expression ordering support is present
+     *
+     * @param  array                    A DB connection
+     * @return boolean                  Whether it is
+     */
     public function db_has_expression_ordering($db)
     {
         return true;
     }
 
     /**
-	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
-	 *
-	 * @return boolean			Whether a blank string IS NULL
-	 */
+     * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
+     *
+     * @return boolean                  Whether a blank string IS NULL
+     */
     public function db_empty_is_null()
     {
         return false;
     }
 
     /**
-	 * Delete a table.
-	 *
-	 * @param  ID_TEXT			The table name
-	 * @param  array				The DB connection to delete on
-	 */
+     * Delete a table.
+     *
+     * @param  ID_TEXT                  The table name
+     * @param  array                    The DB connection to delete on
+     */
     public function db_drop_table_if_exists($table,$db)
     {
         $this->db_query('DROP TABLE IF EXISTS ' . $table,$db);
     }
 
     /**
-	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
-	 *
-	 * @return boolean			Whether the database is a flat file database
-	 */
+     * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
+     *
+     * @return boolean                  Whether the database is a flat file database
+     */
     public function db_is_flat_file_simple()
     {
         return false;
     }
 
     /**
-	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
-	 *
-	 * @param  string			The pattern
-	 * @return string			The encoded pattern
-	 */
+     * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
+     *
+     * @param  string                   The pattern
+     * @return string                   The encoded pattern
+     */
     public function db_encode_like($pattern)
     {
         $ret = preg_replace('#([^\\\\])\\\\\\\\_#','${1}\_',$this->db_escape_string($pattern));
@@ -300,8 +300,8 @@ class Database_super_mysql
     }
 
     /**
-	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
-	 */
+     * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
+     */
     public function db_close_connections()
     {
         $this->cache_db = array();

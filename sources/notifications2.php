@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_notifications
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_notifications
  */
 
 /**
  * Get a map of notification types available to our member.
  *
- * @param  ?MEMBER		Member this is for (NULL: just check globally)
- * @return array			Map of notification types (integer code to language string code)
+ * @param  ?MEMBER                      Member this is for (NULL: just check globally)
+ * @return array                        Map of notification types (integer code to language string code)
  */
 function _get_available_notification_types($member_id_of = null)
 {
@@ -47,8 +47,8 @@ function _get_available_notification_types($member_id_of = null)
 /**
  * Put out a user interface for managing notifications overall.
  *
- * @param  MEMBER			Member this is for
- * @return tempcode		UI
+ * @param  MEMBER                       Member this is for
+ * @return tempcode                     UI
  */
 function notifications_ui($member_id_of)
 {
@@ -224,10 +224,10 @@ function notifications_ui($member_id_of)
 /**
  * Put out a user interface for managing notifications for a notification-category supporting content type. Also toggle notifications if an ID is passed.
  *
- * @param  ID_TEXT		The notification code to work with
- * @param  ?tempcode		Special message to output if we have toggled to enable (NULL: use standard)
- * @param  ?tempcode		Special message to output if we have toggled to disable (NULL: use standard)
- * @return tempcode		UI
+ * @param  ID_TEXT                      The notification code to work with
+ * @param  ?tempcode                    Special message to output if we have toggled to enable (NULL: use standard)
+ * @param  ?tempcode                    Special message to output if we have toggled to disable (NULL: use standard)
+ * @return tempcode                     UI
  */
 function notifications_ui_advanced($notification_code,$enable_message = null,$disable_message = null)
 {
@@ -352,13 +352,13 @@ function notifications_ui_advanced($notification_code,$enable_message = null,$di
 /**
  * Build a tree UI for all categories available.
  *
- * @param  array			Notification types
- * @param  ID_TEXT		The notification code to work with
- * @param  object			Notificiation hook object
- * @param  ?ID_TEXT		Category we're looking under (NULL: root)
- * @param  integer		Recursion depth
- * @param  ?boolean		Value to change setting to (NULL: do not change)
- * @return tempcode		UI
+ * @param  array                        Notification types
+ * @param  ID_TEXT                      The notification code to work with
+ * @param  object                       Notificiation hook object
+ * @param  ?ID_TEXT                     Category we're looking under (NULL: root)
+ * @param  integer                      Recursion depth
+ * @param  ?boolean                     Value to change setting to (NULL: do not change)
+ * @return tempcode                     UI
  */
 function _notifications_build_category_tree($_notification_types,$notification_code,$ob,$id,$depth = 0,$force_change_children_to = null)
 {
@@ -461,9 +461,9 @@ function _notifications_build_category_tree($_notification_types,$notification_c
 /**
  * Copy notification settings from a parent category to a child category.
  *
- * @param  ID_TEXT		Parent category type
- * @param  ID_TEXT		Parent category ID
- * @param  ID_TEXT		Child category ID
+ * @param  ID_TEXT                      Parent category type
+ * @param  ID_TEXT                      Parent category ID
+ * @param  ID_TEXT                      Child category ID
  */
 function copy_notifications_to_new_child($notification_code,$id,$child_id)
 {

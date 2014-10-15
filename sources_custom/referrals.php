@@ -83,7 +83,7 @@ function assign_referral_awards($referee,$trigger)
 
                 $num_total_qualified_by_referrer,$num_total_by_referrer
             );
-            //if ($qualified_trigger) break; // Only do the first qualified scheme, not multiple schemes		ACTUALLY we will allow multiple; no actual harm
+            //if ($qualified_trigger) break; // Only do the first qualified scheme, not multiple schemes    ACTUALLY we will allow multiple; no actual harm
         }
     }
 }
@@ -482,7 +482,7 @@ function referrer_report_script($ret = false)
     $table = 'f_invites i LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members referrer ON referrer.id=i_inviter LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members referee ON referee.m_email_address=i_email_address';
     $referrals = $GLOBALS['FORUM_DB']->query(
         'SELECT i_time AS time,referrer.id AS referrer_id,referrer.m_username AS referrer,referrer.m_email_address AS referrer_email,referee.id AS referee_id,referee.m_username AS referee,i_email_address AS referee_email,i_taken AS qualified
-		FROM ' .
+        FROM ' .
         $GLOBALS['FORUM_DB']->get_table_prefix() . $table .
         ' WHERE ' .
         $where .

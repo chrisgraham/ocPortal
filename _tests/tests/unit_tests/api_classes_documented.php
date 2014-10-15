@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		testing_platform
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    testing_platform
  */
 
 /**
@@ -21,8 +21,8 @@ class api_classes_documented_test_set extends ocp_test_case
     public function testAPIClassesDocumented()
     {
         /*
-		NB: This only bothers with stuff we are going to include in the PHPDocumentor scan. Otherwise we don't care as ocPortal doesn't (packages work on a file level, this isn't Java).
-		*/
+        NB: This only bothers with stuff we are going to include in the PHPDocumentor scan. Otherwise we don't care as ocPortal doesn't (packages work on a file level, this isn't Java).
+        */
 
         foreach (array('sources','sources/database','sources/database/shared','sources/forum','sources/forum/shared') as $d) {
             $path = get_file_base() . '/' . $d;

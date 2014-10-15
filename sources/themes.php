@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -33,14 +33,14 @@ function init__themes()
 /**
  * Find the URL to the theme image of the specified ID. It searches various priorities, including language and theme overrides.
  *
- * @param  ID_TEXT			The theme image ID
- * @param  boolean			Whether to silently fail (i.e. not give out an error message when a theme image cannot be found)
- * @param  boolean			Whether to leave URLs as relative local URLs
- * @param  ?ID_TEXT			The theme to search in (NULL: users current theme)
- * @param  ?LANGUAGE_NAME  The language to search for (NULL: users current language)
- * @param  ?object			The database to use (NULL: site database)
- * @param  boolean			Whether to only search the default 'images' filesystem
- * @return URLPATH			The URL found (blank: not found)
+ * @param  ID_TEXT                      The theme image ID
+ * @param  boolean                      Whether to silently fail (i.e. not give out an error message when a theme image cannot be found)
+ * @param  boolean                      Whether to leave URLs as relative local URLs
+ * @param  ?ID_TEXT                     The theme to search in (NULL: users current theme)
+ * @param  ?LANGUAGE_NAME               The language to search for (NULL: users current language)
+ * @param  ?object                      The database to use (NULL: site database)
+ * @param  boolean                      Whether to only search the default 'images' filesystem
+ * @return URLPATH                      The URL found (blank: not found)
  */
 function find_theme_image($id,$silent_fail = false,$leave_local = false,$theme = null,$lang = null,$db = null,$pure_only = false)
 {
@@ -263,8 +263,8 @@ function find_theme_image($id,$silent_fail = false,$leave_local = false,$theme =
 /**
  * Filter a path so it runs through a CDN.
  *
- * @param  URLPATH			Input URL
- * @return URLPATH			Output URL
+ * @param  URLPATH                      Input URL
+ * @return URLPATH                      Output URL
  */
 function cdn_filter($path)
 {
@@ -323,11 +323,11 @@ function cdn_filter($path)
 /**
  * Search for a specified image file within a theme for a specified language.
  *
- * @param  ID_TEXT			The theme
- * @param  ?LANGUAGE_NAME	The language (NULL: try generally, under no specific language)
- * @param  ID_TEXT			The theme image ID
- * @param  ID_TEXT			Directory to search
- * @return ?string			The path to the image (NULL: was not found)
+ * @param  ID_TEXT                      The theme
+ * @param  ?LANGUAGE_NAME               The language (NULL: try generally, under no specific language)
+ * @param  ID_TEXT                      The theme image ID
+ * @param  ID_TEXT                      Directory to search
+ * @return ?string                      The path to the image (NULL: was not found)
  */
 function _search_img_file($theme,$lang,$id,$dir = 'images')
 {

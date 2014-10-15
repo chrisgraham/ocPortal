@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		booking
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    booking
  */
 
 /**
@@ -19,10 +19,10 @@
 class Module_booking
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -37,8 +37,8 @@ class Module_booking
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('bookable');
@@ -52,17 +52,17 @@ class Module_booking
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
             $GLOBALS['SITE_DB']->create_table('bookable',array(
                 'id' => '*AUTO',
-                //'num_available'=>'INTEGER',		Implied by number of bookable_codes attached to bookable_id
+                //'num_available'=>'INTEGER',      Implied by number of bookable_codes attached to bookable_id
                 'title' => 'SHORT_TRANS__COMCODE',
                 'description' => 'LONG_TRANS__COMCODE',
                 'price' => 'REAL',
@@ -161,14 +161,14 @@ class Module_booking
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -179,10 +179,10 @@ class Module_booking
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -211,10 +211,10 @@ class Module_booking
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('booking');
@@ -247,10 +247,10 @@ class Module_booking
     }
 
     /**
-	 * Allow the user to choose what to book, on a high level - what bookables, what dates.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Allow the user to choose what to book, on a high level - what bookables, what dates.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function choose_bookables_and_dates()
     {
         $query = 'SELECT * FROM ' . get_table_prefix() . 'bookable WHERE enabled=1';
@@ -374,7 +374,7 @@ class Module_booking
                 'BOOKABLE_DATE_TO_YEAR' => date('Y',$date_to),
             );
 
-            //Wrong - we're sorting by sort_order	sort_maps_by($categories[$category]['BOOKABLES'],'BOOKABLE_TITLE');
+            //Wrong - we're sorting by sort_order  sort_maps_by($categories[$category]['BOOKABLES'],'BOOKABLE_TITLE');
         }
 
         ksort($categories);
@@ -434,11 +434,11 @@ class Module_booking
     }
 
     /**
-	 * Read settings the user has chosen, from the POST environment.
-	 *
-	 * @param  array		Details of the particular bookable.
-	 * @return array		Tuple of details: number wanted, date from, date to).
-	 */
+     * Read settings the user has chosen, from the POST environment.
+     *
+     * @param  array                    Details of the particular bookable.
+     * @return array                    Tuple of details: number wanted, date from, date to).
+     */
     public function _read_chosen_bookable_settings($bookable)
     {
         $quantity = post_param_integer('bookable_' . strval($bookable['id']) . '_quantity',0);
@@ -461,10 +461,10 @@ class Module_booking
     }
 
     /**
-	 * Flesh out the details of a booking.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Flesh out the details of a booking.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function flesh_out()
     {
         // Check booking: redirect to last step as re-entrant if not valid
@@ -528,10 +528,10 @@ class Module_booking
     }
 
     /**
-	 * Let the user login / do an inline join.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Let the user login / do an inline join.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function join_or_login()
     {
         // Check login: skip to thanks if logged in
@@ -566,10 +566,10 @@ class Module_booking
     }
 
     /**
-	 * E-mails staff and receipt notice to user, and saves everything.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * E-mails staff and receipt notice to user, and saves everything.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function thanks()
     {
         // Finish join operation, if applicable

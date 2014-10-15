@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Cache Driver.
- * @package		core
+ * @package    core
  */
 class ocp_filecache
 {
     /**
-	 * Constructor.
-	 */
+     * Constructor.
+     */
     public function __construct()
     {
         require_code('files');
@@ -35,10 +35,10 @@ class ocp_filecache
     public $objects_list = null;
 
     /**
-	 * Instruction to load up the objects list.
-	 *
-	 * @return array			The list of objects
-	 */
+     * Instruction to load up the objects list.
+     *
+     * @return array                    The list of objects
+     */
     public function load_objects_list()
     {
         if (is_null($this->objects_list)) {
@@ -51,12 +51,12 @@ class ocp_filecache
     }
 
     /**
-	 * Get data from the persistent cache.
-	 *
-	 * @param  string			Key
-	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
-	 * @return ?mixed			The data (NULL: not found / NULL entry)
-	 */
+     * Get data from the persistent cache.
+     *
+     * @param  string                   Key
+     * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (NULL: don't care)
+     * @return ?mixed                   The data (NULL: not found / NULL entry)
+     */
     public function get($key,$min_cache_date = null)
     {
         $myfile = @fopen(get_custom_file_base() . '/caches/persistent/' . md5($key) . '.gcd','rb');
@@ -84,13 +84,13 @@ class ocp_filecache
     }
 
     /**
-	 * Put data into the persistent cache.
-	 *
-	 * @param  string			Key
-	 * @param  mixed			The data
-	 * @param  integer		Various flags (parameter not used)
-	 * @param  ?integer		The expiration time in seconds (NULL: no expiry)
-	 */
+     * Put data into the persistent cache.
+     *
+     * @param  string                   Key
+     * @param  mixed                    The data
+     * @param  integer                  Various flags (parameter not used)
+     * @param  ?integer                 The expiration time in seconds (NULL: no expiry)
+     */
     public function set($key,$data,$flags = 0,$expire_secs = null)
     {
         if ($key !== 'PERSISTENT_CACHE_OBJECTS') {
@@ -128,10 +128,10 @@ class ocp_filecache
     }
 
     /**
-	 * Delete data from the persistent cache.
-	 *
-	 * @param  string			Key
-	 */
+     * Delete data from the persistent cache.
+     *
+     * @param  string                   Key
+     */
     public function delete($key)
     {
         if ($key !== 'PERSISTENT_CACHE_OBJECTS') {
@@ -146,8 +146,8 @@ class ocp_filecache
     }
 
     /**
-	 * Remove all data from the persistent cache.
-	 */
+     * Remove all data from the persistent cache.
+     */
     public function flush()
     {
         // Update list of persistent-objects

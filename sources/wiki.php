@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		wiki
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    wiki
  */
 
 /*
@@ -25,13 +25,13 @@ The concept of a chain is crucial to proper understanding of the Wiki+ system. P
 /**
  * Get tempcode for a Wiki+ post 'feature box' for the given row
  *
- * @param  array			The database field row of it
- * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean		Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		A box for it, linking to the full page
+ * @param  array                        The database field row of it
+ * @param  ID_TEXT                      The zone to use
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     A box for it, linking to the full page
  */
 function render_wiki_post_box($row,$zone = '_SEARCH',$give_context = true,$include_breadcrumbs = true,$root = null,$guid = '')
 {
@@ -69,13 +69,13 @@ function render_wiki_post_box($row,$zone = '_SEARCH',$give_context = true,$inclu
 /**
  * Get tempcode for a Wiki+ post 'feature box' for the given row
  *
- * @param  array			The database field row of it
- * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  boolean		Whether to include breadcrumbs (if there are any)
- * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		A box for it, linking to the full page
+ * @param  array                        The database field row of it
+ * @param  ID_TEXT                      The zone to use
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  boolean                      Whether to include breadcrumbs (if there are any)
+ * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     A box for it, linking to the full page
  */
 function render_wiki_page_box($row,$zone = '_SEARCH',$give_context = true,$include_breadcrumbs = true,$root = null,$guid = '')
 {
@@ -116,15 +116,15 @@ function render_wiki_page_box($row,$zone = '_SEARCH',$give_context = true,$inclu
 /**
  * Edit a Wiki+ post
  *
- * @param  AUTO_LINK		The page ID
- * @param  string			The new post
- * @param  BINARY			Whether the post will be validated
- * @param  ?MEMBER		The member doing the action (NULL: current member)
- * @param  boolean		Whether to send out a notification out
- * @param  ?TIME			The add time (NULL: now)
- * @param  integer		The number of views so far
- * @param  ?TIME			The edit time (NULL: N/A)
- * @return AUTO_LINK		The post ID
+ * @param  AUTO_LINK                    The page ID
+ * @param  string                       The new post
+ * @param  BINARY                       Whether the post will be validated
+ * @param  ?MEMBER                      The member doing the action (NULL: current member)
+ * @param  boolean                      Whether to send out a notification out
+ * @param  ?TIME                        The add time (NULL: now)
+ * @param  integer                      The number of views so far
+ * @param  ?TIME                        The edit time (NULL: N/A)
+ * @return AUTO_LINK                    The post ID
  */
 function wiki_add_post($page_id,$message,$validated = 1,$member = null,$send_notification = true,$add_time = null,$views = 0,$edit_date = null)
 {
@@ -199,15 +199,15 @@ function wiki_add_post($page_id,$message,$validated = 1,$member = null,$send_not
 /**
  * Edit a Wiki+ post
  *
- * @param  AUTO_LINK		The post ID
- * @param  string			The new post
- * @param  BINARY			Whether the post will be validated
- * @param  ?MEMBER		The member doing the action (NULL: current member)
- * @param  ?AUTO_LINK	The page ID (NULL: do not change)
- * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME			Add time (NULL: do not change)
- * @param  ?integer		Number of views (NULL: do not change)
- * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    The post ID
+ * @param  string                       The new post
+ * @param  BINARY                       Whether the post will be validated
+ * @param  ?MEMBER                      The member doing the action (NULL: current member)
+ * @param  ?AUTO_LINK                   The page ID (NULL: do not change)
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?integer                     Number of views (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function wiki_edit_post($id,$message,$validated,$member = null,$page_id = null,$edit_time = null,$add_time = null,$views = null,$null_is_literal = false)
 {
@@ -279,8 +279,8 @@ function wiki_edit_post($id,$message,$validated,$member = null,$page_id = null,$
 /**
  * Delete a Wiki+ post
  *
- * @param  AUTO_LINK		The post ID
- * @param  ?MEMBER		The member doing the action (NULL: current member)
+ * @param  AUTO_LINK                    The post ID
+ * @param  ?MEMBER                      The member doing the action (NULL: current member)
  */
 function wiki_delete_post($post_id,$member = null)
 {
@@ -317,18 +317,18 @@ function wiki_delete_post($post_id,$member = null)
 /**
  * Add a Wiki+ page
  *
- * @param  SHORT_TEXT	The page title
- * @param  LONG_TEXT		The page description
- * @param  LONG_TEXT		Hidden notes pertaining to the page
- * @param  BINARY			Whether to hide the posts on the page by default
- * @param  ?MEMBER		The member doing the action (NULL: current member)
- * @param  ?TIME			The add time (NULL: now)
- * @param  integer		The number of views so far
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?TIME			The edit time (NULL: N/A)
- * @param  boolean		Whether to send a notification
- * @return AUTO_LINK		The page ID
+ * @param  SHORT_TEXT                   The page title
+ * @param  LONG_TEXT                    The page description
+ * @param  LONG_TEXT                    Hidden notes pertaining to the page
+ * @param  BINARY                       Whether to hide the posts on the page by default
+ * @param  ?MEMBER                      The member doing the action (NULL: current member)
+ * @param  ?TIME                        The add time (NULL: now)
+ * @param  integer                      The number of views so far
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?TIME                        The edit time (NULL: N/A)
+ * @param  boolean                      Whether to send a notification
+ * @return AUTO_LINK                    The page ID
  */
 function wiki_add_page($title,$description,$notes,$hide_posts,$member = null,$add_time = null,$views = 0,$meta_keywords = '',$meta_description = '',$edit_date = null,$send_notification = true)
 {
@@ -396,18 +396,18 @@ function wiki_add_page($title,$description,$notes,$hide_posts,$member = null,$ad
 /**
  * Edit a Wiki+ page
  *
- * @param  AUTO_LINK		The page ID
- * @param  SHORT_TEXT	The page title
- * @param  LONG_TEXT		The page description
- * @param  LONG_TEXT		Hidden notes pertaining to the page
- * @param  BINARY			Whether to hide the posts on the page by default
- * @param  SHORT_TEXT	Meta keywords
- * @param  LONG_TEXT		Meta description
- * @param  ?MEMBER		The member doing the action (NULL: current member)
- * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME			Add time (NULL: do not change)
- * @param  ?integer		Views (NULL: do not change)
- * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    The page ID
+ * @param  SHORT_TEXT                   The page title
+ * @param  LONG_TEXT                    The page description
+ * @param  LONG_TEXT                    Hidden notes pertaining to the page
+ * @param  BINARY                       Whether to hide the posts on the page by default
+ * @param  SHORT_TEXT                   Meta keywords
+ * @param  LONG_TEXT                    Meta description
+ * @param  ?MEMBER                      The member doing the action (NULL: current member)
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?integer                     Views (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keywords,$meta_description,$member = null,$edit_time = null,$add_time = null,$views = null,$null_is_literal = false)
 {
@@ -467,7 +467,7 @@ function wiki_edit_page($id,$title,$description,$notes,$hide_posts,$meta_keyword
 /**
  * Delete a Wiki+ page
  *
- * @param  AUTO_LINK		The page ID
+ * @param  AUTO_LINK                    The page ID
  */
 function wiki_delete_page($id)
 {
@@ -510,9 +510,9 @@ function wiki_delete_page($id)
 /**
  * Get a chain script parameter or just an ID, in which case it does more work), and converts it into a ID/chain pair
  *
- * @param  ID_TEXT		The name of the GET parameter that stores the chain
- * @param  ?string		The default value for the chain (NULL: no default)
- * @return array			An array of two elements: an ID and a chain
+ * @param  ID_TEXT                      The name of the GET parameter that stores the chain
+ * @param  ?string                      The default value for the chain (NULL: no default)
+ * @return array                        An array of two elements: an ID and a chain
  */
 function get_param_wiki_chain($parameter_name,$default_value = null)
 {
@@ -542,12 +542,12 @@ function get_param_wiki_chain($parameter_name,$default_value = null)
 /**
  * Convert a Wiki+ chain to a nice breadcrumb trail.
  *
- * @param  string			The chain to convert (which should include the current page ID)
- * @param  ?string		The title of the current Wiki+ page (if not given, it is looked up) (NULL: work it out)
- * @param  boolean		Whether to show the final breadcrumbs element with a link to it (all others will always have links if $links is true)
- * @param  boolean		Whether to show links to pages in the breadcrumbs
- * @param  boolean		Whether to make the link as a virtual-root link (only applies if $final_link is true)
- * @return tempcode		Tempcode of the breadcrumb XHTML
+ * @param  string                       The chain to convert (which should include the current page ID)
+ * @param  ?string                      The title of the current Wiki+ page (if not given, it is looked up) (NULL: work it out)
+ * @param  boolean                      Whether to show the final breadcrumbs element with a link to it (all others will always have links if $links is true)
+ * @param  boolean                      Whether to show links to pages in the breadcrumbs
+ * @param  boolean                      Whether to make the link as a virtual-root link (only applies if $final_link is true)
+ * @return tempcode                     Tempcode of the breadcrumb XHTML
  */
 function wiki_breadcrumbs($chain,$current_title = null,$final_link = false,$links = true,$this_link_virtual_root = false)
 {
@@ -610,9 +610,9 @@ function wiki_breadcrumbs($chain,$current_title = null,$final_link = false,$link
 /**
  * Create a Wiki+ chain from the specified page ID
  *
- * @param  AUTO_LINK		The ID of the page to derive a chain for
- * @param  ?AUTO_LINK	Virtual root to use (NULL: none)
- * @return string			The Wiki+ chain derived
+ * @param  AUTO_LINK                    The ID of the page to derive a chain for
+ * @param  ?AUTO_LINK                   Virtual root to use (NULL: none)
+ * @return string                       The Wiki+ chain derived
  */
 function wiki_derive_chain($id,$root = null)
 {
@@ -664,13 +664,13 @@ function wiki_derive_chain($id,$root = null)
 /**
  * Get a nice formatted XHTML list of all the children beneath the specified Wiki+ page. This function is recursive.
  *
- * @param  ?AUTO_LINK	The Wiki+ page to select by default (NULL: none)
- * @param  ?AUTO_LINK	The Wiki+ page to look beneath (NULL: the root)
- * @param  string			Breadcrumbs built up so far, in recursion (blank: starting recursion)
- * @param  boolean		Whether to include orphaned pages in the breadcrumbs
- * @param  boolean		Whether to create a compound list (gets pairs: tempcode, and comma-separated list of children)
- * @param  boolean		Whether to use titles in IDs after a ! (used on tree edit page)
- * @return mixed			Tempcode for the list / pair of tempcode and compound
+ * @param  ?AUTO_LINK                   The Wiki+ page to select by default (NULL: none)
+ * @param  ?AUTO_LINK                   The Wiki+ page to look beneath (NULL: the root)
+ * @param  string                       Breadcrumbs built up so far, in recursion (blank: starting recursion)
+ * @param  boolean                      Whether to include orphaned pages in the breadcrumbs
+ * @param  boolean                      Whether to create a compound list (gets pairs: tempcode, and comma-separated list of children)
+ * @param  boolean                      Whether to use titles in IDs after a ! (used on tree edit page)
+ * @return mixed                        Tempcode for the list / pair of tempcode and compound
  */
 function wiki_show_tree($select = null,$id = null,$breadcrumbs = '',$include_orphans = true,$use_compound_list = false,$ins_format = false)
 {
@@ -726,14 +726,14 @@ function wiki_show_tree($select = null,$id = null,$breadcrumbs = '',$include_orp
 /**
  * Helper function. Get a nice formatted XHTML list of all the children beneath the specified Wiki+ page. This function is recursive.
  *
- * @param  array			A list of pages we've already seen (we don't repeat them in multiple list positions)
- * @param  ?AUTO_LINK	The Wiki+ page to select by default (NULL: none)
- * @param  AUTO_LINK		The Wiki+ page to look beneath
- * @param  string			Breadcrumbs built up so far, in recursion (blank: starting recursion)
- * @param  SHORT_TEXT	The title of the Wiki+ page to look beneath
- * @param  boolean		Whether to create a compound list (gets pairs: tempcode, and comma-separated list of children)
- * @param  boolean		Whether to use titles in IDs after a ! (used on tree edit page)
- * @return mixed			Tempcode for the list / pair of tempcode and compound
+ * @param  array                        A list of pages we've already seen (we don't repeat them in multiple list positions)
+ * @param  ?AUTO_LINK                   The Wiki+ page to select by default (NULL: none)
+ * @param  AUTO_LINK                    The Wiki+ page to look beneath
+ * @param  string                       Breadcrumbs built up so far, in recursion (blank: starting recursion)
+ * @param  SHORT_TEXT                   The title of the Wiki+ page to look beneath
+ * @param  boolean                      Whether to create a compound list (gets pairs: tempcode, and comma-separated list of children)
+ * @param  boolean                      Whether to use titles in IDs after a ! (used on tree edit page)
+ * @return mixed                        Tempcode for the list / pair of tempcode and compound
  */
 function _wiki_show_tree(&$wiki_seen,$select,$id,$breadcrumbs,$title,$use_compound_list = false,$ins_format = false)
 {
@@ -765,9 +765,9 @@ function _wiki_show_tree(&$wiki_seen,$select,$id,$breadcrumbs,$title,$use_compou
         }
     }
 
-//	$out=form_input_list_entry(strval($id),($select==$id),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'d9d4a951df598edd3f08f87be634965b','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'ID'=>$id)));
-//	$out='<option value="'.(!$use_compound_list?$id:$compound_list).'">'.$breadcrumbs.$title.'</option>';
-//	$out.=$_below;
+// $out=form_input_list_entry(strval($id),($select==$id),do_template('WIKI_LIST_TREE_LINE',array('_GUID'=>'d9d4a951df598edd3f08f87be634965b','BREADCRUMBS'=>$breadcrumbs,'TITLE'=>$title,'ID'=>$id)));
+// $out='<option value="'.(!$use_compound_list?$id:$compound_list).'">'.$breadcrumbs.$title.'</option>';
+// $out.=$_below;
     $out = form_input_list_entry(((!$use_compound_list)?strval($id):$compound_list) . ($ins_format?('!' . $title):''),false,$breadcrumbs . $title);
     $out->attach($_below);
 
@@ -781,14 +781,14 @@ function _wiki_show_tree(&$wiki_seen,$select,$id,$breadcrumbs,$title,$use_compou
 /**
  * Get a list of maps containing all the subpages, and path information, of the specified page - and those beneath it, recursively.
  *
- * @param  array			A list of pages we've already seen (we don't repeat them in multiple list positions)
- * @param  ?AUTO_LINK	The page being at the root of our recursion (NULL: true root page)
- * @param  ?string		The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
- * @param  ?ID_TEXT		The name of the $page_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
- * @param  boolean		Whether to collect post counts with our breadcrumbs information
- * @param  boolean		Whether to make a compound list (a pair of a comma-separated list of children, and the child array)
- * @param  ?integer		The number of recursive levels to search (NULL: all)
- * @return array			A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
+ * @param  array                        A list of pages we've already seen (we don't repeat them in multiple list positions)
+ * @param  ?AUTO_LINK                   The page being at the root of our recursion (NULL: true root page)
+ * @param  ?string                      The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
+ * @param  ?ID_TEXT                     The name of the $page_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
+ * @param  boolean                      Whether to collect post counts with our breadcrumbs information
+ * @param  boolean                      Whether to make a compound list (a pair of a comma-separated list of children, and the child array)
+ * @param  ?integer                     The number of recursive levels to search (NULL: all)
+ * @return array                        A list of maps for all subcategories. Each map entry containins the fields 'id' (category ID) and 'breadcrumbs' (path to the category, including the categories own title). There is also an additional 'downloadcount' entry if stats were requested
  */
 function get_wiki_page_tree(&$wiki_seen,$page_id = null,$breadcrumbs = null,$title = null,$do_stats = true,$use_compound_list = false,$levels = null)
 {
@@ -861,8 +861,8 @@ function get_wiki_page_tree(&$wiki_seen,$page_id = null,$breadcrumbs = null,$tit
 /**
  * Dispatch a notification about a Wiki+ post
  *
- * @param  AUTO_LINK		The post ID
- * @param  ID_TEXT		The action type
+ * @param  AUTO_LINK                    The post ID
+ * @param  ID_TEXT                      The action type
  * @set ADD EDIT
  */
 function dispatch_wiki_post_notification($post_id,$type)
@@ -887,8 +887,8 @@ function dispatch_wiki_post_notification($post_id,$type)
 /**
  * Dispatch a notification about a Wiki+ page
  *
- * @param  AUTO_LINK		The page ID
- * @param  ID_TEXT		The action type
+ * @param  AUTO_LINK                    The page ID
+ * @param  ID_TEXT                      The action type
  * @set ADD EDIT
  */
 function dispatch_wiki_page_notification($page_id,$type)

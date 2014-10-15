@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		filedump
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    filedump
  */
 
 /**
  * Find broken filedump links, and try and find how to fix it.
  *
- * @return array		Filedump broken links, to replacement path (or NULL).
+ * @return array                        Filedump broken links, to replacement path (or NULL).
  */
 function find_broken_filedump_links()
 {
@@ -49,8 +49,8 @@ function find_broken_filedump_links()
 /**
  * Re-map pre-existing filedump links from one path to another.
  *
- * @param  string		Old path (give a path relative to uploads/filedump, with leading slash)
- * @param  string		New path (give a path relative to uploads/filedump, with leading slash)
+ * @param  string                       Old path (give a path relative to uploads/filedump, with leading slash)
+ * @param  string                       New path (give a path relative to uploads/filedump, with leading slash)
  */
 function update_filedump_links($from,$to)
 {
@@ -102,8 +102,8 @@ function update_filedump_links($from,$to)
 /**
  * Find all filedump links used.
  *
- * @param  string		Focus on a particular filedump file (give a path relative to uploads/filedump, with leading slash) (blank: no filter)
- * @return array		Filedump links used, and where
+ * @param  string                       Focus on a particular filedump file (give a path relative to uploads/filedump, with leading slash) (blank: no filter)
+ * @return array                        Filedump links used, and where
  */
 function find_filedump_links($focus = '')
 {
@@ -159,10 +159,10 @@ function find_filedump_links($focus = '')
 /**
  * Find filedump links within some Comcode (an approximation).
  *
- * @param  string		Comcode to scan
- * @param  mixed		An identifier for where this Comcode was from
- * @param  string		Focus on a particular filedump file (give a path relative to uploads/filedump), with leading slash (blank: no filter)
- * @param  array		Paths found (passed by reference)
+ * @param  string                       Comcode to scan
+ * @param  mixed                        An identifier for where this Comcode was from
+ * @param  string                       Focus on a particular filedump file (give a path relative to uploads/filedump), with leading slash (blank: no filter)
+ * @param  array                        Paths found (passed by reference)
  */
 function extract_filedump_links($comcode,$identifier,$focus,&$paths_used)
 {

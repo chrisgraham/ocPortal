@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Check to see if a member deserves promotion, and handle it.
  *
- * @param  ?MEMBER	The member (NULL: current member).
+ * @param  ?MEMBER                      The member (NULL: current member).
  */
 function ocf_member_handle_promotion($member_id = null)
 {
@@ -105,17 +105,17 @@ function ocf_member_handle_promotion($member_id = null)
 /**
  * Send out a notification, as a topic just got a new post.
  *
- * @param  URLPATH		The URL to view the new post.
- * @param  AUTO_LINK		The ID of the topic that got posted in.
- * @param  ?AUTO_LINK	The forum that the topic is in (NULL: find out from the DB).
- * @param  MEMBER			The member that made the post triggering this tracking notification.
- * @param  boolean		Whether the post started a new topic.
- * @param  LONG_TEXT		The post, in Comcode format.
- * @param  SHORT_TEXT	The topic title (blank: look it up from the $topic_id). If non-blank we must use it as it is implying the database might not have the correct value yet.
- * @param  ?MEMBER		Only send the notification to this member (NULL: no such limit).
- * @param  boolean		Whether this is for a Private Topic.
- * @param  ?ID_TEXT		DO NOT send notifications to: The notification code (NULL: no restriction)
- * @param  ?SHORT_TEXT	DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
+ * @param  URLPATH                      The URL to view the new post.
+ * @param  AUTO_LINK                    The ID of the topic that got posted in.
+ * @param  ?AUTO_LINK                   The forum that the topic is in (NULL: find out from the DB).
+ * @param  MEMBER                       The member that made the post triggering this tracking notification.
+ * @param  boolean                      Whether the post started a new topic.
+ * @param  LONG_TEXT                    The post, in Comcode format.
+ * @param  SHORT_TEXT                   The topic title (blank: look it up from the $topic_id). If non-blank we must use it as it is implying the database might not have the correct value yet.
+ * @param  ?MEMBER                      Only send the notification to this member (NULL: no such limit).
+ * @param  boolean                      Whether this is for a Private Topic.
+ * @param  ?ID_TEXT                     DO NOT send notifications to: The notification code (NULL: no restriction)
+ * @param  ?SHORT_TEXT                  DO NOT send notifications to: The category within the notification code (NULL: none / no restriction)
  */
 function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,$is_starter,$post,$topic_title,$_limit_to = null,$is_pt = false,$no_notify_for__notification_code = null,$no_notify_for__code_category = null)
 {
@@ -158,16 +158,16 @@ function ocf_send_topic_notification($url,$topic_id,$forum_id,$sender_member_id,
 /**
  * Update a topic's cacheing.
  *
- * @param  AUTO_LINK		The ID of the topic to update cacheing of.
- * @param  ?integer		The post count difference we know the topic has undergone (NULL: we'll need to work out from scratch how many posts are in the topic)
- * @param  boolean		Whether this is the latest post in the topic.
- * @param  boolean		Whether this is the first post in the topic.
- * @param  ?AUTO_LINK	The ID of the last post in the topic (NULL: unknown).
- * @param  ?TIME			The time of the last post in the topic (NULL: unknown).
- * @param  ?string		The title of the last post in the topic (NULL: unknown).
- * @param  ?AUTO_LINK	The ID of the last posts language string for the topic (NULL: unknown).
- * @param  ?string		The last username to post in the topic (NULL: unknown).
- * @param  ?MEMBER		The ID of the last member to post in the topic (NULL: unknown).
+ * @param  AUTO_LINK                    The ID of the topic to update cacheing of.
+ * @param  ?integer                     The post count difference we know the topic has undergone (NULL: we'll need to work out from scratch how many posts are in the topic)
+ * @param  boolean                      Whether this is the latest post in the topic.
+ * @param  boolean                      Whether this is the first post in the topic.
+ * @param  ?AUTO_LINK                   The ID of the last post in the topic (NULL: unknown).
+ * @param  ?TIME                        The time of the last post in the topic (NULL: unknown).
+ * @param  ?string                      The title of the last post in the topic (NULL: unknown).
+ * @param  ?AUTO_LINK                   The ID of the last posts language string for the topic (NULL: unknown).
+ * @param  ?string                      The last username to post in the topic (NULL: unknown).
+ * @param  ?MEMBER                      The ID of the last member to post in the topic (NULL: unknown).
  */
 function ocf_force_update_topic_cacheing($topic_id,$post_count_dif = null,$last = true,$first = false,$last_post_id = null,$last_time = null,$last_title = null,$last_post = null,$last_username = null,$last_member_id = null)
 {
@@ -223,20 +223,20 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif = null,$last 
     if ($first) {
         $update_first =
         't_cache_first_post_id=' . (is_null($first_post_id)?'NULL':strval($first_post_id)) . ',
-		' . (($first_title == '')?'':('t_cache_first_title=\'' . db_escape_string($first_title) . '\'') . ',') . '
-		t_cache_first_time=' . (is_null($first_time)?'NULL':strval($first_time)) . ',
-		t_cache_first_post=' . (multi_lang_content()?((is_null($first_post)?'\'NULL\'':strval($first_post))):'\'\'') . ',
-		t_cache_first_username=\'' . db_escape_string($first_username) . '\',
-		t_cache_first_member_id=' . (is_null($first_member_id)?'NULL':strval($first_member_id)) . ',';
+        ' . (($first_title == '')?'':('t_cache_first_title=\'' . db_escape_string($first_title) . '\'') . ',') . '
+        t_cache_first_time=' . (is_null($first_time)?'NULL':strval($first_time)) . ',
+        t_cache_first_post=' . (multi_lang_content()?((is_null($first_post)?'\'NULL\'':strval($first_post))):'\'\'') . ',
+        t_cache_first_username=\'' . db_escape_string($first_username) . '\',
+        t_cache_first_member_id=' . (is_null($first_member_id)?'NULL':strval($first_member_id)) . ',';
     }
 
     if ($last) {
         $update_last =
         't_cache_last_post_id=' . (is_null($last_post_id)?'NULL':strval($last_post_id)) . ',
-		t_cache_last_title=\'' . db_escape_string($last_title) . '\',
-		t_cache_last_time=' . (is_null($last_time)?'NULL':strval($last_time)) . ',
-		t_cache_last_username=\'' . db_escape_string($last_username) . '\',
-		t_cache_last_member_id=' . (is_null($last_member_id)?'NULL':strval($last_member_id)) . ',';
+        t_cache_last_title=\'' . db_escape_string($last_title) . '\',
+        t_cache_last_time=' . (is_null($last_time)?'NULL':strval($last_time)) . ',
+        t_cache_last_username=\'' . db_escape_string($last_username) . '\',
+        t_cache_last_member_id=' . (is_null($last_member_id)?'NULL':strval($last_member_id)) . ',';
     }
 
     $GLOBALS['FORUM_DB']->query('UPDATE ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics SET ' .
@@ -260,15 +260,15 @@ function ocf_force_update_topic_cacheing($topic_id,$post_count_dif = null,$last 
 /**
  * Update a forums cached details.
  *
- * @param  AUTO_LINK		The ID of the forum to update the cached details of.
- * @param  ?integer		How much to increment the topic count by (NULL: It has to be completely recalculated).
- * @param  ?integer		How much to increment the post count by (NULL: It has to be completely recalculated).
- * @param  ?AUTO_LINK	The ID of the last topic (NULL: Unknown, it will have to be looked up).
- * @param  ?string		The title of the last topic (NULL: Unknown, it will have to be looked up).
- * @param  ?TIME			The last post time of the last topic (NULL: Unknown, it will have to be looked up).
- * @param  ?string		The last post username of the last topic (NULL: Unknown, it will have to be looked up).
- * @param  ?MEMBER		The last post member of the last topic (NULL: Unknown, it will have to be looked up).
- * @param  ?AUTO_LINK	The forum the last post was in (note this makes sense, because there may be subforums under this forum that we have to take into account). (NULL: Unknown, it will have to be looked up).
+ * @param  AUTO_LINK                    The ID of the forum to update the cached details of.
+ * @param  ?integer                     How much to increment the topic count by (NULL: It has to be completely recalculated).
+ * @param  ?integer                     How much to increment the post count by (NULL: It has to be completely recalculated).
+ * @param  ?AUTO_LINK                   The ID of the last topic (NULL: Unknown, it will have to be looked up).
+ * @param  ?string                      The title of the last topic (NULL: Unknown, it will have to be looked up).
+ * @param  ?TIME                        The last post time of the last topic (NULL: Unknown, it will have to be looked up).
+ * @param  ?string                      The last post username of the last topic (NULL: Unknown, it will have to be looked up).
+ * @param  ?MEMBER                      The last post member of the last topic (NULL: Unknown, it will have to be looked up).
+ * @param  ?AUTO_LINK                   The forum the last post was in (note this makes sense, because there may be subforums under this forum that we have to take into account). (NULL: Unknown, it will have to be looked up).
  */
 function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment = null,$num_posts_increment = null,$last_topic_id = null,$last_title = null,$last_time = null,$last_username = null,$last_member_id = null,$last_forum_id = null)
 {
@@ -311,20 +311,20 @@ function ocf_force_update_forum_cacheing($forum_id,$num_topics_increment = null,
 
     $GLOBALS['FORUM_DB']->query('UPDATE ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums SET ' .
         (!is_null($num_posts_increment)?('
-		f_cache_num_topics=(f_cache_num_topics+' . strval($num_topics_increment) . '),
-		f_cache_num_posts=(f_cache_num_posts+' . strval($num_posts_increment) . '),')
+        f_cache_num_topics=(f_cache_num_topics+' . strval($num_topics_increment) . '),
+        f_cache_num_posts=(f_cache_num_posts+' . strval($num_posts_increment) . '),')
         :
         ('
-		f_cache_num_topics=' . strval($num_topics) . ',
-		f_cache_num_posts=' . strval($num_posts) . ',
-		')) .
+        f_cache_num_topics=' . strval($num_topics) . ',
+        f_cache_num_posts=' . strval($num_posts) . ',
+        ')) .
         'f_cache_last_topic_id=' . (!is_null($last_topic_id)?strval($last_topic_id):'NULL') . ',
-		f_cache_last_title=\'' . db_escape_string($last_title) . '\',
-		f_cache_last_time=' . (!is_null($last_time)?strval($last_time):'NULL') . ',
-		f_cache_last_username=\'' . db_escape_string($last_username) . '\',
-		f_cache_last_member_id=' . (!is_null($last_member_id)?strval($last_member_id):'NULL') . ',
-		f_cache_last_forum_id=' . (!is_null($last_forum_id)?strval($last_forum_id):'NULL') . '
-			WHERE id=' . strval($forum_id),1,null,false,true);
+        f_cache_last_title=\'' . db_escape_string($last_title) . '\',
+        f_cache_last_time=' . (!is_null($last_time)?strval($last_time):'NULL') . ',
+        f_cache_last_username=\'' . db_escape_string($last_username) . '\',
+        f_cache_last_member_id=' . (!is_null($last_member_id)?strval($last_member_id):'NULL') . ',
+        f_cache_last_forum_id=' . (!is_null($last_forum_id)?strval($last_forum_id):'NULL') . '
+            WHERE id=' . strval($forum_id),1,null,false,true);
 
     // Now, are there any parents who need updating?
     if (!is_null($forum_id)) {

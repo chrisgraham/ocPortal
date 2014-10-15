@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		syndication_blocks
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    syndication_blocks
  */
 
 class Block_bottom_rss
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -39,10 +39,10 @@ class Block_bottom_rss
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -52,11 +52,11 @@ class Block_bottom_rss
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         $url = array_key_exists('param',$map)?$map['param']:(get_brand_base_url() . '/backend.php?type=rss&mode=news&filter=16,17,18,19,20'); // http://channel9.msdn.com/Feeds/RSS/
@@ -104,8 +104,8 @@ class Block_bottom_rss
 /**
  * Find the cache signature for the block.
  *
- * @param  array	The block parameters.
- * @return array	The cache signature.
+ * @param  array                        The block parameters.
+ * @return array                        The cache signature.
  */
 function block_bottom_rss__cache_on($map)
 {

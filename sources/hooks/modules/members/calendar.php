@@ -13,26 +13,26 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 class Hook_members_calendar
 {
     /**
-	 * Find member-related links to inject.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
-	 */
+     * Find member-related links to inject.
+     *
+     * @param  MEMBER                   The ID of the member we are getting link hooks for
+     * @return array                    List of lists of tuples for results (by link section). Each tuple is: type,title,url
+     */
     public function run($member_id)
     {
         if (!addon_installed('calendar')) {
             return array();
         }
 
-        //if (!has_privilege(get_member(),'assume_any_member')) return array();	Now will have separate permission filtering
+        //if (!has_privilege(get_member(),'assume_any_member')) return array();  Now will have separate permission filtering
         if (!has_actual_page_access(get_member(),'calendar',get_module_zone('calendar'))) {
             return array();
         }

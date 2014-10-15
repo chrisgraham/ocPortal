@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_signatures
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_signatures
  */
 
 class Hook_Preview_ocf_signature
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			Quartet: Whether it applies, the attachment ID type, whether the forum DB is used [optional], list of fields to limit to [optional]
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    Quartet: Whether it applies, the attachment ID type, whether the forum DB is used [optional], list of fields to limit to [optional]
+     */
     public function applies()
     {
         require_lang('ocf');

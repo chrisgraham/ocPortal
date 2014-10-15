@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 class Hook_page_groupings_core
 {
     /**
-	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
-	 *
-	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
-	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
-	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
-	 */
+     * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
+     *
+     * @param  ?MEMBER                  Member ID to run as (NULL: current member)
+     * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
+     * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
+     */
     public function run($member_id = null,$extensive_docs = false)
     {
         require_code('site');
@@ -90,7 +90,7 @@ class Hook_page_groupings_core
             (get_forum_type() != 'ocf')?null:array('security','menu/adminzone/security/usergroups_temp',array('admin_group_member_timeouts',array('type' => 'misc'),get_module_zone('admin_group_member_timeouts')),do_lang_tempcode('group_member_timeouts:GROUP_MEMBER_TIMEOUTS'),'group_member_timeouts:DOC_MANAGE_GROUP_MEMBER_TIMEOUTS'),
             (get_forum_type() == 'ocf')?null:array('security','menu/social/groups',array('admin_permissions',array('type' => 'absorb'),get_module_zone('admin_security')),do_lang_tempcode('permissions:ABSORB_PERMISSIONS'),'permissions:DOC_ABSORB_PERMISSIONS'),
 
-            //(get_comcode_zone('start',false)===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),	Attached to zone, so this is not needed
+            //(get_comcode_zone('start',false)===NULL)?NULL:array('','menu/start',array('start',array(),get_comcode_zone('start')),do_lang_tempcode('HOME')),  Attached to zone, so this is not needed
             array('','menu/pages',array('admin',array('type' => 'pages'),'adminzone'),do_lang_tempcode('PAGES')),
             array('','menu/rich_content',array('admin',array('type' => 'rich_content'),'adminzone'),do_lang_tempcode('menus:RICH_CONTENT')),
             array('','menu/site_meta',array('admin',array('type' => 'site_meta'),'adminzone'),do_lang_tempcode('menus:SITE_META')),
@@ -98,14 +98,14 @@ class Hook_page_groupings_core
 
             (get_comcode_zone('about',false) === NULL || get_comcode_zone('about',false) == 'collaboration')?null:array('pages','menu/pages/about_us',array('about',array(),get_comcode_zone('about')),do_lang_tempcode('menus:ABOUT')),
 
-            //(get_comcode_zone('keymap',false)===NULL)?NULL:array('site_meta',/*'menu/pages/keymap'*/NULL,array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),	Shows as child of help page
+            //(get_comcode_zone('keymap',false)===NULL)?NULL:array('site_meta',/*'menu/pages/keymap'*/NULL,array('keymap',array(),get_comcode_zone('keymap')),do_lang_tempcode('KEYBOARD_MAP')),   Shows as child of help page
             (get_comcode_zone('privacy',false) === NULL || get_option('bottom_show_privacy_link') == '1')?null:array('site_meta','menu/pages/privacy_policy',array('privacy',array(),get_comcode_zone('privacy')),do_lang_tempcode('PRIVACY')),
             (get_comcode_zone('rules',false) === NULL || get_option('bottom_show_rules_link') == '1')?null:array('site_meta','menu/pages/rules',array('rules',array(),get_comcode_zone('rules')),do_lang_tempcode('RULES')),
             (get_comcode_zone('feedback',false) === NULL || get_option('bottom_show_feedback_link') == '1')?null:array('site_meta','menu/site_meta/contact_us',array('feedback',array(),get_comcode_zone('feedback')),do_lang_tempcode('FEEDBACK')),
-            //(get_comcode_zone('sitemap',false)===NULL || get_option('bottom_show_sitemap_button')=='1')?NULL:array('site_meta','tool_buttons/sitemap',array('sitemap',array(),get_comcode_zone('sitemap')),do_lang_tempcode('SITEMAP')),	Redundant, menu itself is a sitemap
+            //(get_comcode_zone('sitemap',false)===NULL || get_option('bottom_show_sitemap_button')=='1')?NULL:array('site_meta','tool_buttons/sitemap',array('sitemap',array(),get_comcode_zone('sitemap')),do_lang_tempcode('SITEMAP')),   Redundant, menu itself is a sitemap
             // userguide_comcode is child of help_page
             (get_forum_type() == 'none' || !is_guest($member_id))?null:array('site_meta','menu/site_meta/user_actions/login',array('login',array(),''),do_lang_tempcode('_LOGIN')),
-            //(get_forum_type()=='none' || is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/logout',array('login',array(),''),do_lang_tempcode('LOGOUT')),	Don't show an immediate action, don't want accidental preloading
+            //(get_forum_type()=='none' || is_guest($member_id))?NULL:array('site_meta','menu/site_meta/user_actions/logout',array('login',array(),''),do_lang_tempcode('LOGOUT')), Don't show an immediate action, don't want accidental preloading
             (get_forum_type() != 'ocf')?null:array('site_meta','menu/site_meta/user_actions/join',array('join',array(),get_module_zone('join')),do_lang_tempcode('_JOIN')),
             (get_forum_type() != 'ocf')?null:array('site_meta','menu/site_meta/user_actions/lost_password',array('lost_password',array(),get_module_zone('lost_password')),do_lang_tempcode('ocf:LOST_PASSWORD')),
 

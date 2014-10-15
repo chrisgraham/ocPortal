@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -49,8 +49,8 @@ function init__files()
 /**
  * Get the number of bytes for a PHP config option. Code taken from the PHP manual.
  *
- * @param  string			PHP config option value.
- * @return integer		Number of bytes.
+ * @param  string                       PHP config option value.
+ * @return integer                      Number of bytes.
  */
 function php_return_bytes($val)
 {
@@ -76,8 +76,8 @@ function php_return_bytes($val)
 /**
  * Get a formatted-string filesize for the specified file. It is formatted as such: x MB/KB/Bytes (or unknown). It is assumed that the file exists.
  *
- * @param  URLPATH		The URL that the file size of is being worked out for. Should be local.
- * @return string			The formatted-string file size
+ * @param  URLPATH                      The URL that the file size of is being worked out for. Should be local.
+ * @return string                       The formatted-string file size
  */
 function get_file_size($url)
 {
@@ -99,8 +99,8 @@ function get_file_size($url)
 /**
  * Format the specified filesize.
  *
- * @param  integer		The number of bytes the file has
- * @return string			The formatted-string file size
+ * @param  integer                      The number of bytes the file has
+ * @return string                       The formatted-string file size
  */
 function clean_file_size($bytes)
 {
@@ -135,9 +135,9 @@ function clean_file_size($bytes)
 /**
  * Parse the specified INI file, and get an array of what it found.
  *
- * @param  ?PATH			The path to the ini file to open (NULL: given contents in $file instead)
- * @param  ?string		The contents of the file (NULL: the file needs opening)
- * @return array			A map of the contents of the ini files
+ * @param  ?PATH                        The path to the ini file to open (NULL: given contents in $file instead)
+ * @param  ?string                      The contents of the file (NULL: the file needs opening)
+ * @return array                        A map of the contents of the ini files
  */
 function better_parse_ini_file($filename,$file = null)
 {
@@ -178,10 +178,10 @@ function better_parse_ini_file($filename,$file = null)
 /**
  * Find whether a file is known to be something that should/could be there but isn't an ocPortal distribution file, or for some other reason should be ignored.
  *
- * @param  string			File path (relative to ocPortal base directory)
- * @param  integer		Bitmask of extra stuff to ignore (see IGNORE_* constants)
- * @param  integer		Set this to 0 if you don't want the default IGNORE_* constants to carry through
- * @return boolean		Whether it should be ignored
+ * @param  string                       File path (relative to ocPortal base directory)
+ * @param  integer                      Bitmask of extra stuff to ignore (see IGNORE_* constants)
+ * @param  integer                      Set this to 0 if you don't want the default IGNORE_* constants to carry through
+ * @return boolean                      Whether it should be ignored
  */
 function should_ignore_file($filepath,$bitmask = 0,$bitmask_defaults = 0)
 {
@@ -526,9 +526,9 @@ function should_ignore_file($filepath,$bitmask = 0,$bitmask_defaults = 0)
 /**
  * Delete all the contents of a directory, and any subdirectories of that specified directory (recursively).
  *
- * @param  PATH			The pathname to the directory to delete
- * @param  boolean		Whether to preserve files there by default
- * @param  boolean		Whether to just delete files
+ * @param  PATH                         The pathname to the directory to delete
+ * @param  boolean                      Whether to preserve files there by default
+ * @param  boolean                      Whether to just delete files
  */
 function deldir_contents($dir,$default_preserve = false,$just_files = false)
 {

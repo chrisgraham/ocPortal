@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -30,11 +30,11 @@ function init__ocf_notifications()
 /**
  * Get the personal post rows for the current member.
  *
- * @param  ?integer	The maximum number of rows to get (gets newest first) (NULL: no limit).
- * @param  boolean	Whether to only get unread ones.
- * @param  boolean	Whether to include inline personal posts.
- * @param  ?TIME		Only since this date (NULL: no limit).
- * @return array		The personal post rows (with corresponding topic details).
+ * @param  ?integer                     The maximum number of rows to get (gets newest first) (NULL: no limit).
+ * @param  boolean                      Whether to only get unread ones.
+ * @param  boolean                      Whether to include inline personal posts.
+ * @param  ?TIME                        Only since this date (NULL: no limit).
+ * @return array                        The personal post rows (with corresponding topic details).
  */
 function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_barrier = null)
 {
@@ -52,16 +52,16 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
     $unread_clause = '';
     if ($unread) {
         $unread_clause = '
-			t_cache_last_time > ' . strval(time()-60*60*24*intval(get_option('post_history_days'))) . ' AND
-			(l_time IS NULL OR l_time < p.p_time) AND
-		';
+            t_cache_last_time > ' . strval(time()-60*60*24*intval(get_option('post_history_days'))) . ' AND
+            (l_time IS NULL OR l_time < p.p_time) AND
+        ';
     }
 
     $time_clause = '';
     if (!is_null($time_barrier)) {
         $time_clause = '
-			t_cache_last_time>' . strval($time_barrier) . ' AND
-		';
+            t_cache_last_time>' . strval($time_barrier) . ' AND
+        ';
     }
 
     // NB: The "p_intended_solely_for" bit in the PT clauses is because inline private posts do not register as the t_cache_last_post_id even if they are the most recent post. We want to ensure we join to the most recent post.
@@ -74,16 +74,16 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
         $query .= ',p2.p_post,p2.p_post__text_parsed,p2.p_post__source_user';
     }
     $query .= ' FROM
-	' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
-	LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
-	JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
+    ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
+    LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
+    JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
     if (!multi_lang_content()) {
         $query .= ' LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p2 ON p2.id=t.t_cache_first_post_id';
     }
     $query .= ' WHERE
-	' . $unread_clause . $time_clause . '
-	t_pt_from=' . strval($member_id) . '
-	' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+    ' . $unread_clause . $time_clause . '
+    t_pt_from=' . strval($member_id) . '
+    ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
 
     $query .= ' UNION ';
 
@@ -95,16 +95,16 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
         $query .= ',p2.p_post,p2.p_post__text_parsed,p2.p_post__source_user';
     }
     $query .= ' FROM
-	' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
-	LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
-	JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
+    ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
+    LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
+    JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
     if (!multi_lang_content()) {
         $query .= ' LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p2 ON p2.id=t.t_cache_first_post_id';
     }
     $query .= ' WHERE
-	' . $unread_clause . $time_clause . '
-	t_pt_to=' . strval($member_id) . '
-	' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+    ' . $unread_clause . $time_clause . '
+    t_pt_to=' . strval($member_id) . '
+    ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
 
     $query .= ' UNION ';
 
@@ -116,17 +116,17 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
         $query .= ',p2.p_post,p2.p_post__text_parsed,p2.p_post__source_user';
     }
     $query .= ' FROM
-	' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
-	LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_special_pt_access i ON (i.s_topic_id=t.id)
-	LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
-	JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
+    ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
+    LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_special_pt_access i ON (i.s_topic_id=t.id)
+    LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
+    JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
     if (!multi_lang_content()) {
         $query .= ' LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p2 ON p2.id=t.t_cache_first_post_id';
     }
     $query .= ' WHERE
-	' . $unread_clause . $time_clause . '
-	i.s_member_id=' . strval($member_id) . '
-	' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+    ' . $unread_clause . $time_clause . '
+    i.s_member_id=' . strval($member_id) . '
+    ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
 
     if ($include_inline) {
         $query .= ' UNION ';
@@ -139,16 +139,16 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
             $query .= ',p2.p_post,p2.p_post__text_parsed,p2.p_post__source_user';
         }
         $query .= ' FROM
-		' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
-		LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
-		JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
+        ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics t
+        LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ( t.id=l_topic_id AND l_member_id=' . strval($member_id) . ' )
+        JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON (p.id=t.t_cache_last_post_id OR p_topic_id=t.id AND p.p_intended_solely_for=' . strval($member_id) . ')';
         if (!multi_lang_content()) {
             $query .= ' LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p2 ON p2.id=t.t_cache_first_post_id';
         }
         $query .= ' WHERE
-		' . $unread_clause . $time_clause . '
-		p.p_intended_solely_for=' . strval($member_id) . '
-		' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+        ' . $unread_clause . $time_clause . '
+        p.p_intended_solely_for=' . strval($member_id) . '
+        ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
     }
 
     $query .= ' ORDER BY t_cache_last_time DESC';
@@ -164,8 +164,8 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
 /**
  * Calculate OCF notifications and render.
  *
- * @param  MEMBER		Member to look up for.
- * @return array		A pair: Number of notifications, Rendered notifications.
+ * @param  MEMBER                       Member to look up for.
+ * @return array                        A pair: Number of notifications, Rendered notifications.
  */
 function generate_notifications($member_id)
 {

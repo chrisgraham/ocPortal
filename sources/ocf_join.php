@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -44,12 +44,12 @@ function check_joining_allowed()
 /**
  * Get the join form.
  *
- * @param  tempcode		URL to direct to
- * @param  boolean		Whether to handle CAPTCHA (if enabled at all)
- * @param  boolean		Whether to ask for intro messages (if enabled at all)
- * @param  boolean		Whether to check for invites (if enabled at all)
- * @param  boolean		Whether to check email-address restrictions (if enabled at all)
- * @return array			A tuple: Necessary JavaScript code, the form
+ * @param  tempcode                     URL to direct to
+ * @param  boolean                      Whether to handle CAPTCHA (if enabled at all)
+ * @param  boolean                      Whether to ask for intro messages (if enabled at all)
+ * @param  boolean                      Whether to check for invites (if enabled at all)
+ * @param  boolean                      Whether to check email-address restrictions (if enabled at all)
+ * @return array                        A tuple: Necessary JavaScript code, the form
  */
 function ocf_join_form($url,$captcha_if_enabled = true,$intro_message_if_enabled = true,$invites_if_enabled = true,$one_per_email_address_if_enabled = true)
 {
@@ -108,61 +108,61 @@ function ocf_join_form($url,$captcha_if_enabled = true,$intro_message_if_enabled
 
     $script = find_script('username_check');
     $javascript = "
-		var form=document.getElementById('username').form;
-		form.elements['username'].onchange=function()
-		{
-			if (form.elements['intro_title'])
-				form.elements['intro_title'].value='" . addslashes(do_lang('INTRO_POST_DEFAULT')) . "'.replace(/\{1\}/g,form.elements['username'].value);
-		}
-		form.old_submit=form.onsubmit;
-		form.onsubmit=function()
-			{
-				if ((typeof form.elements['confirm']!='undefined') && (form.elements['confirm'].type=='checkbox') && (!form.elements['confirm'].checked))
-				{
-					window.fauxmodal_alert('" . php_addslashes(do_lang('DESCRIPTION_I_AGREE_RULES')) . "');
-					return false;
-				}
-				if ((typeof form.elements['email_address_confirm']!='undefined') && (form.elements['email_address_confirm'].value!=form.elements['email_address'].value))
-				{
-					window.fauxmodal_alert('" . php_addslashes(do_lang('EMAIL_ADDRESS_MISMATCH')) . "');
-					return false;
-				}
-				if ((typeof form.elements['password_confirm']!='undefined') && (form.elements['password_confirm'].value!=form.elements['password'].value))
-				{
-					window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
-					return false;
-				}
-				document.getElementById('submit_button').disabled=true;
-				var url='" . addslashes($script) . "?username='+window.encodeURIComponent(form.elements['username'].value);
-				if (!do_ajax_field_test(url,'password='+window.encodeURIComponent(form.elements['password'].value)))
-				{
-					document.getElementById('submit_button').disabled=false;
-					return false;
-				}
-	";
+        var form=document.getElementById('username').form;
+        form.elements['username'].onchange=function()
+        {
+            if (form.elements['intro_title'])
+                    form.elements['intro_title'].value='" . addslashes(do_lang('INTRO_POST_DEFAULT')) . "'.replace(/\{1\}/g,form.elements['username'].value);
+        }
+        form.old_submit=form.onsubmit;
+        form.onsubmit=function()
+            {
+                    if ((typeof form.elements['confirm']!='undefined') && (form.elements['confirm'].type=='checkbox') && (!form.elements['confirm'].checked))
+                    {
+                            window.fauxmodal_alert('" . php_addslashes(do_lang('DESCRIPTION_I_AGREE_RULES')) . "');
+                            return false;
+                    }
+                    if ((typeof form.elements['email_address_confirm']!='undefined') && (form.elements['email_address_confirm'].value!=form.elements['email_address'].value))
+                    {
+                            window.fauxmodal_alert('" . php_addslashes(do_lang('EMAIL_ADDRESS_MISMATCH')) . "');
+                            return false;
+                    }
+                    if ((typeof form.elements['password_confirm']!='undefined') && (form.elements['password_confirm'].value!=form.elements['password'].value))
+                    {
+                            window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
+                            return false;
+                    }
+                    document.getElementById('submit_button').disabled=true;
+                    var url='" . addslashes($script) . "?username='+window.encodeURIComponent(form.elements['username'].value);
+                    if (!do_ajax_field_test(url,'password='+window.encodeURIComponent(form.elements['password'].value)))
+                    {
+                            document.getElementById('submit_button').disabled=false;
+                            return false;
+                    }
+    ";
     $script = find_script('snippet');
     if ($invites_if_enabled) {
         if (get_option('is_on_invites') == '1') {
             $javascript .= "
-				url='" . addslashes($script) . "?snippet=invite_missing&name='+window.encodeURIComponent(form.elements['email_address'].value);
-				if (!do_ajax_field_test(url))
-				{
-					document.getElementById('submit_button').disabled=false;
-					return false;
-				}
-			";
+                    url='" . addslashes($script) . "?snippet=invite_missing&name='+window.encodeURIComponent(form.elements['email_address'].value);
+                    if (!do_ajax_field_test(url))
+                    {
+                            document.getElementById('submit_button').disabled=false;
+                            return false;
+                    }
+            ";
         }
     }
     if ($one_per_email_address_if_enabled) {
         if (get_option('one_per_email_address') == '1') {
             $javascript .= "
-				url='" . addslashes($script) . "?snippet=email_exists&name='+window.encodeURIComponent(form.elements['email_address'].value);
-				if (!do_ajax_field_test(url))
-				{
-					document.getElementById('submit_button').disabled=false;
-					return false;
-				}
-			";
+                    url='" . addslashes($script) . "?snippet=email_exists&name='+window.encodeURIComponent(form.elements['email_address'].value);
+                    if (!do_ajax_field_test(url))
+                    {
+                            document.getElementById('submit_button').disabled=false;
+                            return false;
+                    }
+            ";
         }
     }
     if ($captcha_if_enabled) {
@@ -170,22 +170,22 @@ function ocf_join_form($url,$captcha_if_enabled = true,$intro_message_if_enabled
             require_code('captcha');
             if (use_captcha()) {
                 $javascript .= "
-					url='" . addslashes($script) . "?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
-					if (!do_ajax_field_test(url))
-					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
-					}
-				";
+                            url='" . addslashes($script) . "?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
+                            if (!do_ajax_field_test(url))
+                            {
+                                        document.getElementById('submit_button').disabled=false;
+                                        return false;
+                            }
+                    ";
             }
         }
     }
     $javascript .= "
-				document.getElementById('submit_button').disabled=false;
-				if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-				return true;
-			};
-	";
+                    document.getElementById('submit_button').disabled=false;
+                    if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                    return true;
+            };
+    ";
 
     $form = do_template('FORM',array('_GUID' => 'f6dba5638ae50a04562df50b1f217311','TEXT' => '','HIDDEN' => $hidden,'FIELDS' => $fields,'SUBMIT_ICON' => 'menu__site_meta__user_actions__join','SUBMIT_NAME' => $submit_name,'URL' => $url));
 
@@ -195,15 +195,15 @@ function ocf_join_form($url,$captcha_if_enabled = true,$intro_message_if_enabled
 /**
  * Actualise the join form.
  *
- * @param  boolean		Whether to handle CAPTCHA (if enabled at all)
- * @param  boolean		Whether to ask for intro messages (if enabled at all)
- * @param  boolean		Whether to check for invites (if enabled at all)
- * @param  boolean		Whether to check email-address restrictions (if enabled at all)
- * @param  boolean		Whether to require staff confirmation (if enabled at all)
- * @param  boolean		Whether to force email address validation (if enabled at all)
- * @param  boolean		Whether to do COPPA checks (if enabled at all)
- * @param  boolean		Whether to instantly log the user in
- * @return array			A tuple: Messages to show (currently nothing else in tuple)
+ * @param  boolean                      Whether to handle CAPTCHA (if enabled at all)
+ * @param  boolean                      Whether to ask for intro messages (if enabled at all)
+ * @param  boolean                      Whether to check for invites (if enabled at all)
+ * @param  boolean                      Whether to check email-address restrictions (if enabled at all)
+ * @param  boolean                      Whether to require staff confirmation (if enabled at all)
+ * @param  boolean                      Whether to force email address validation (if enabled at all)
+ * @param  boolean                      Whether to do COPPA checks (if enabled at all)
+ * @param  boolean                      Whether to instantly log the user in
+ * @return array                        A tuple: Messages to show (currently nothing else in tuple)
  */
 function ocf_join_actual($captcha_if_enabled = true,$intro_message_if_enabled = true,$invites_if_enabled = true,$one_per_email_address_if_enabled = true,$confirm_if_enabled = true,$validate_if_enabled = true,$coppa_if_enabled = true,$instant_login = true)
 {

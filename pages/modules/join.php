@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_join
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_join
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -66,10 +66,10 @@ class Module_join
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -101,10 +101,10 @@ class Module_join
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('ocf_join');
@@ -131,10 +131,10 @@ class Module_join
     }
 
     /**
-	 * The UI to accept the rules of joining.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to accept the rules of joining.
+     *
+     * @return tempcode                 The UI
+     */
     public function step1()
     {
         if (!is_guest()) {
@@ -171,10 +171,10 @@ class Module_join
     }
 
     /**
-	 * The UI to enter profile details.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to enter profile details.
+     *
+     * @return tempcode                 The UI
+     */
     public function step2()
     {
         if (!is_guest()) {
@@ -198,10 +198,10 @@ class Module_join
     }
 
     /**
-	 * The actualiser for adding a member.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for adding a member.
+     *
+     * @return tempcode                 The UI
+     */
     public function step3()
     {
         if ((get_option('show_first_join_page') == '1') && (post_param_integer('confirm',0) != 1)) {
@@ -232,10 +232,10 @@ class Module_join
     }
 
     /**
-	 * The actualiser for setting up account confirmation.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for setting up account confirmation.
+     *
+     * @return tempcode                 The UI
+     */
     public function step4()
     {
         // Check confirm code correct

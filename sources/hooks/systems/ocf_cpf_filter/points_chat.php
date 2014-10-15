@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 class Hook_ocf_cpf_filter_points_chat
 {
     /**
-	 * Find which special CPFs to enable.
-	 *
-	 * @return array			A list of CPFs to enable
-	 */
+     * Find which special CPFs to enable.
+     *
+     * @return array                    A list of CPFs to enable
+     */
     public function to_enable()
     {
         return array();//Actually, hide all these  array('points_gained_chat'=>1);

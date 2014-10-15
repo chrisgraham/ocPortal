@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		stats_block
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    stats_block
  */
 
 class Hook_stats_forum
 {
     /**
-	 * Show a stats section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show a stats section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (get_forum_type() != 'none') {

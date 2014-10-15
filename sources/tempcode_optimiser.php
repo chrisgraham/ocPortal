@@ -13,27 +13,27 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*
-	Note that optimisation also happens in Tempcode compilation:
-	 - Comments optimised out.
-	 - Some symbols are made static.
-	 - Simple language string calls are made static.
-	 - Some directives and symbols are converted to simple PHP.
-	 - Static NOT expressions are optimised out (*1)
-	 - Some directives with static expressions, and ternary symbol calls, are optimised out (*1).
+    Note that optimisation also happens in Tempcode compilation:
+     - Comments optimised out.
+     - Some symbols are made static.
+     - Simple language string calls are made static.
+     - Some directives and symbols are converted to simple PHP.
+     - Static NOT expressions are optimised out (*1)
+     - Some directives with static expressions, and ternary symbol calls, are optimised out (*1).
 
-	*1 - usually due to symbols being made static, and hence knowing the outcome
+    *1 - usually due to symbols being made static, and hence knowing the outcome
 */
 
 /**
  * Optimise for memory and execution time. This is typically used before something is cached.
  *
- * @param  object		Optimise a Tempcode object.
+ * @param  object                       Optimise a Tempcode object.
  */
 function optimise_tempcode(&$ob)
 {

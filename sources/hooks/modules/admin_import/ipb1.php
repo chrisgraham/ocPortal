@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		import
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    import
  */
 
 require_code('hooks/modules/admin_import/shared/ipb');
@@ -23,10 +23,10 @@ require_code('hooks/modules/admin_import/shared/ipb');
 class Hook_ipb1 extends Hook_ipb_base
 {
     /**
-	 * Standard importer hook info function.
-	 *
-	 * @return ?array	Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
-	 */
+     * Standard importer hook info function.
+     *
+     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -74,12 +74,12 @@ class Hook_ipb1 extends Hook_ipb_base
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_forum_groupings($db,$table_prefix,$old_base_dir)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'categories');
@@ -110,12 +110,12 @@ class Hook_ipb1 extends Hook_ipb_base
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_forums($db,$table_prefix,$old_base_dir)
     {
         require_code('ocf_forums_action2');
@@ -178,20 +178,20 @@ class Hook_ipb1 extends Hook_ipb_base
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_config($db,$table_prefix,$file_base)
     {
         global $PROBED_FORUM_CONFIG;
         require($file_base . '/conf_global.php');
         set_option('staff_address',$PROBED_FORUM_CONFIG['email_out']);
         set_option('restricted_usernames',$PROBED_FORUM_CONFIG['ban_names']);
-        /*set_option('forum_posts_per_page',$PROBED_FORUM_CONFIG['display_max_posts']);	Not useful
-		set_option('forum_topics_per_page',$PROBED_FORUM_CONFIG['display_max_topics']);*/
+        /*set_option('forum_posts_per_page',$PROBED_FORUM_CONFIG['display_max_posts']);   Not useful
+        set_option('forum_topics_per_page',$PROBED_FORUM_CONFIG['display_max_topics']);*/
         set_option('site_name',$PROBED_FORUM_CONFIG['home_name']);
         set_option('site_closed',$PROBED_FORUM_CONFIG['board_offline']);
         set_option('closed',$PROBED_FORUM_CONFIG['offline_msg']);
@@ -203,12 +203,12 @@ class Hook_ipb1 extends Hook_ipb_base
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'messages WHERE vid<>\'sent\' ORDER BY msg_date');

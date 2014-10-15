@@ -13,43 +13,43 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Add a usergroup.
  *
- * @param  SHORT_TEXT	The name of the usergroup.
- * @param  BINARY			Whether members are automatically put into the when they join.
- * @param  BINARY			Whether members of this usergroup are all super administrators.
- * @param  BINARY			Whether members of this usergroup are all super moderators.
- * @param  SHORT_TEXT 	The title for primary members of this usergroup that don't have their own title.
- * @param  URLPATH		The rank image for this.
- * @param  ?GROUP			The that members of this usergroup get promoted to at point threshold (NULL: no promotion prospects).
- * @param  ?integer		The point threshold for promotion (NULL: no promotion prospects).
- * @param  ?MEMBER		The leader of this usergroup (NULL: none).
- * @param  ?integer		The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
- * @param  ?integer		The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
- * @param  ?integer		The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer		The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer		The maximum avatar width that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer		The maximum avatar height that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer		The maximum post length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer		The maximum signature length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer		The number of gift points that members of this usergroup start with (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  ?integer		The number of gift points that members of this usergroup get per day (group 'best of' applies). (NULL: average for existing usergroups)
- * @param  BINARY			Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies).
- * @param  BINARY			Whether the usergroup is presented for joining at joining (implies anyone may be in the, but only choosable at joining)
- * @param  BINARY			Whether the name and membership of the is hidden
- * @param  ?integer		The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (NULL: next).
- * @param  BINARY			Whether the rank image will not be shown for secondary membership
- * @param  BINARY			Whether members may join this usergroup without requiring any special permission
- * @param  BINARY			Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
- * @param  boolean		Whether to force the title as unique, if there's a conflict
- * @param  boolean		Whether permissions should be auto-copied
- * @return AUTO_LINK		The ID of the new.
+ * @param  SHORT_TEXT                   The name of the usergroup.
+ * @param  BINARY                       Whether members are automatically put into the when they join.
+ * @param  BINARY                       Whether members of this usergroup are all super administrators.
+ * @param  BINARY                       Whether members of this usergroup are all super moderators.
+ * @param  SHORT_TEXT                   The title for primary members of this usergroup that don't have their own title.
+ * @param  URLPATH                      The rank image for this.
+ * @param  ?GROUP                       The that members of this usergroup get promoted to at point threshold (NULL: no promotion prospects).
+ * @param  ?integer                     The point threshold for promotion (NULL: no promotion prospects).
+ * @param  ?MEMBER                      The leader of this usergroup (NULL: none).
+ * @param  ?integer                     The number of seconds that members of this usergroup must endure between submits (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
+ * @param  ?integer                     The number of seconds that members of this usergroup must endure between accesses (group 'best of' applies). 0 means N/A. (NULL: average for existing usergroups)
+ * @param  ?integer                     The number of megabytes that members of this usergroup may attach per day (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer                     The number of attachments that members of this usergroup may attach to something (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer                     The maximum avatar width that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer                     The maximum avatar height that members of this usergroup may have (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer                     The maximum post length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer                     The maximum signature length that members of this usergroup may make (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer                     The number of gift points that members of this usergroup start with (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  ?integer                     The number of gift points that members of this usergroup get per day (group 'best of' applies). (NULL: average for existing usergroups)
+ * @param  BINARY                       Whether e-mail confirmation is needed for new IP addresses seen for any member of this usergroup (group 'best of' applies).
+ * @param  BINARY                       Whether the usergroup is presented for joining at joining (implies anyone may be in the, but only choosable at joining)
+ * @param  BINARY                       Whether the name and membership of the is hidden
+ * @param  ?integer                     The display order this will be given, relative to other usergroups. Lower numbered usergroups display before higher numbered usergroups (NULL: next).
+ * @param  BINARY                       Whether the rank image will not be shown for secondary membership
+ * @param  BINARY                       Whether members may join this usergroup without requiring any special permission
+ * @param  BINARY                       Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum.
+ * @param  boolean                      Whether to force the title as unique, if there's a conflict
+ * @param  boolean                      Whether permissions should be auto-copied
+ * @return AUTO_LINK                    The ID of the new.
  */
 function ocf_make_group($name,$is_default = 0,$is_super_admin = 0,$is_super_moderator = 0,$title = '',$rank_image = '',$promotion_target = null,$promotion_threshold = null,$group_leader = null,$flood_control_submit_secs = null,$flood_control_access_secs = null,$max_daily_upload_mb = null,$max_attachments_per_post = null,$max_avatar_width = null,$max_avatar_height = null,$max_post_length_comcode = null,$max_sig_length_comcode = null,$gift_points_base = null,$gift_points_per_day = null,$enquire_on_new_ips = 0,$is_presented_at_install = 0,$hidden = 0,$order = null,$rank_image_pri_only = 1,$open_membership = 0,$is_private_club = 0,$uniqify = false,$comes_with_permissions = true)
 {

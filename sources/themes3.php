@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_themeing
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_themeing
  */
 
 /**
@@ -52,9 +52,9 @@ function tempcode_tester_script()
 /**
  * Delete a theme image.
  *
- * @param  SHORT_TEXT		The theme image ID
- * @param  ?ID_TEXT			The theme to delete in (NULL: all themes)
- * @param  ?LANGUAGE_NAME	The language to delete in (NULL: all languages) (blank: all languages)
+ * @param  SHORT_TEXT                   The theme image ID
+ * @param  ?ID_TEXT                     The theme to delete in (NULL: all themes)
+ * @param  ?LANGUAGE_NAME               The language to delete in (NULL: all languages) (blank: all languages)
  */
 function actual_delete_theme_image($id,$theme = null,$lang = null)
 {
@@ -85,9 +85,9 @@ function actual_delete_theme_image($id,$theme = null,$lang = null)
 /**
  * Regenerate all the theme image paths in the database.
  *
- * @param  ID_TEXT	The theme we're searching in.
- * @param  ?array		A map of languages (lang=>1) (NULL: find it in-function).
- * @param  ?ID_TEXT  The theme we're storing in (NULL: same as $theme).
+ * @param  ID_TEXT                      The theme we're searching in.
+ * @param  ?array                       A map of languages (lang=>1) (NULL: find it in-function).
+ * @param  ?ID_TEXT                     The theme we're storing in (NULL: same as $theme).
  */
 function regen_theme_images($theme,$langs = null,$target_theme = null)
 {
@@ -128,7 +128,7 @@ function regen_theme_images($theme,$langs = null,$target_theme = null)
 /**
  * Delete uploaded theme image if not tied into anything.
  *
- * @param  URLPATH			The URL to the theme image being deleted
+ * @param  URLPATH                      The URL to the theme image being deleted
  */
 function cleanup_theme_images($old_url)
 {
@@ -152,8 +152,8 @@ function cleanup_theme_images($old_url)
 /**
  * Rename a theme.
  *
- * @param  ID_TEXT		The original theme name
- * @param  ID_TEXT		The new theme name
+ * @param  ID_TEXT                      The original theme name
+ * @param  ID_TEXT                      The new theme name
  */
 function actual_rename_theme($theme,$to)
 {
@@ -190,8 +190,8 @@ function actual_rename_theme($theme,$to)
 /**
  * Copy a theme.
  *
- * @param  ID_TEXT		The original theme name
- * @param  ID_TEXT		The copy's theme name
+ * @param  ID_TEXT                      The original theme name
+ * @param  ID_TEXT                      The copy's theme name
  */
 function actual_copy_theme($theme,$to)
 {
@@ -229,7 +229,7 @@ function actual_copy_theme($theme,$to)
 /**
  * Delete a theme.
  *
- * @param  ID_TEXT		The theme name
+ * @param  ID_TEXT                      The theme name
  */
 function actual_delete_theme($theme)
 {

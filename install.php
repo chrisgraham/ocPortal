@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		installer
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    installer
  */
 
 if (!function_exists('preg_match')) {
@@ -74,9 +74,9 @@ if (!array_key_exists('type',$_GET)) {
     echo '<!DOCTYPE html>' . "\n";
     if (count($_GET) == 0) { // Special code to skip checks if need-be. The XHTML here is invalid but unfortunately it does need to be.
         echo '<script>// <![CDATA[
-			window.setTimeout(function () { if (!document.getElementsByTagName("div")[0]) window.location+="?skip_disk_checks=1"; }, 30000);
-			window.setInterval(function () { if ((!document.getElementsByTagName("div")[0]) && (document.body) && (document.body.innerHTML) && (document.body.innerHTML.indexOf("Maximum execution time")!=-1)) window.location+="?skip_disk_checks=1"; }, 500);
-		//]]></script>';
+            window.setTimeout(function () { if (!document.getElementsByTagName("div")[0]) window.location+="?skip_disk_checks=1"; }, 30000);
+            window.setInterval(function () { if ((!document.getElementsByTagName("div")[0]) && (document.body) && (document.body.innerHTML) && (document.body.innerHTML.indexOf("Maximum execution time")!=-1)) window.location+="?skip_disk_checks=1"; }, 500);
+        //]]></script>';
     }
 }
 
@@ -277,7 +277,7 @@ if (@is_resource($DATADOTOCP_FILE)) {
 /**
  * First installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_1()
 {
@@ -469,7 +469,7 @@ function step_1()
 /**
  * Second installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_2()
 {
@@ -501,7 +501,7 @@ function step_2()
 /**
  * Third installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_3()
 {
@@ -670,7 +670,7 @@ function step_3()
 /**
  * Fourth installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_4()
 {
@@ -700,8 +700,8 @@ function step_4()
     // Try and grab ourselves forum details
     global $PROBED_FORUM_CONFIG;
     /** When forum drivers are asked to probe configuration from a potentially existing forum, it gets stored in here.
-	 * @global array $PROBED_FORUM_CONFIG
-	 */
+     * @global array $PROBED_FORUM_CONFIG
+     */
     $PROBED_FORUM_CONFIG = array();
     $PROBED_FORUM_CONFIG['sql_database'] = '';
     $PROBED_FORUM_CONFIG['sql_user'] = '';
@@ -923,9 +923,9 @@ function step_4()
     } else {
         $hidden->attach(form_input_hidden('table_prefix',$table_prefix));
     }
-    /*if (!GOOGLE_APPENGINE) {	Excessive, let user tune later
-		$options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
-	}*/
+    /*if (!GOOGLE_APPENGINE) {   Excessive, let user tune later
+        $options->attach(make_tick(do_lang_tempcode('USE_PERSISTENT'),example('','USE_PERSISTENT_TEXT'),'use_persistent',$use_persistent?1:0));
+    }*/
 
     if (($use_msn == 0) && ($forum_type != 'ocf')) { // Merge into one set of options
         $forum_options->attach($options);
@@ -946,17 +946,17 @@ function step_4()
             $sections->attach(do_template('INSTALLER_STEP_4_SECTION',array('HIDDEN' => '','TITLE' => $title,'TEXT' => $text,'OPTIONS' => $options)));
 
             $js->attach('
-				var gae_application=document.getElementById(\'gae_application\');
-				gae_application.onchange=function () {
-					var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
-					gae_live_db_site.value=gae_live_db_site.value.replace(/(<application>|ocportal)/g,gae_application.value);
-					var gae_live_db_site_host=document.getElementById(\'gae_live_db_site_host\');
-					gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/(<application>|ocportal)/g,gae_application.value);
-					var gae_bucket_name=document.getElementById(\'gae_bucket_name\');
-					gae_bucket_name.value=gae_bucket_name.value.replace(/(<application>|ocportal)/g,gae_application.value);
-				};
-				gae_application.onchange();
-			');
+                    var gae_application=document.getElementById(\'gae_application\');
+                    gae_application.onchange=function () {
+                            var gae_live_db_site=document.getElementById(\'gae_live_db_site\');
+                            gae_live_db_site.value=gae_live_db_site.value.replace(/(<application>|ocportal)/g,gae_application.value);
+                            var gae_live_db_site_host=document.getElementById(\'gae_live_db_site_host\');
+                            gae_live_db_site_host.value=gae_live_db_site_host.value.replace(/(<application>|ocportal)/g,gae_application.value);
+                            var gae_bucket_name=document.getElementById(\'gae_bucket_name\');
+                            gae_bucket_name.value=gae_bucket_name.value.replace(/(<application>|ocportal)/g,gae_application.value);
+                    };
+                    gae_application.onchange();
+            ');
         } else {
             $title = do_lang_tempcode((($forum_type == 'ocf' || $forum_type == 'none') && $use_msn == 0)?'DATABASE_SETTINGS':'OCPORTAL_SETTINGS');
             if (!$forum_options->is_empty()) {
@@ -1013,7 +1013,7 @@ function step_4()
 /**
  * Fifth installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_5()
 {
@@ -1207,7 +1207,7 @@ function include_ocf()
 /**
  * Fifth installation step: FTP upload (not used for manual installer).
  *
- * @return array		A pair: progress report/ui, and number of files uploaded so far (or -1 meaning all uploaded)
+ * @return array                        A pair: progress report/ui, and number of files uploaded so far (or -1 meaning all uploaded)
  */
 function step_5_ftp()
 {
@@ -1507,7 +1507,7 @@ function step_5_ftp()
 /**
  * Fifth installation step: sanity checks.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_5_checks()
 {
@@ -1548,7 +1548,7 @@ function step_5_checks()
 /**
  * Fifth installation step: writing of configuration.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_5_write_config()
 {
@@ -1662,7 +1662,7 @@ if (!function_exists(\'git_repos\')) {
     /**
      * Find the git branch name. This is useful for making this config file context-adaptive (i.e. dev settings vs production settings).
      *
-     * @return ?ID_TEXT	Branch name (NULL: not in git)
+     * @return ?ID_TEXT                 Branch name (NULL: not in git)
      */
     function git_repos()
     {
@@ -1752,7 +1752,7 @@ if (!function_exists(\'git_repos\')) {
 /**
  * Fifth installation step: uninstallation of old install.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_5_uninstall()
 {
@@ -1780,7 +1780,7 @@ function step_5_uninstall()
 /**
  * Fifth installation step: core tables.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_5_core()
 {
@@ -1882,7 +1882,7 @@ function step_5_core()
 /**
  * Fifth installation step: more core tables.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_5_core_2()
 {
@@ -1996,7 +1996,7 @@ function step_5_core_2()
 /**
  * Sixth installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_6()
 {
@@ -2071,7 +2071,7 @@ function big_installation_common()
 /**
  * Seventh installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_7()
 {
@@ -2104,7 +2104,7 @@ function step_7()
     require_code('addons2');
     $addons = find_all_hooks('systems','addon_registry');
     foreach ($addons as $addon => $place) {
-        //if ($place=='sources_custom') continue;	Now we are actually installing custom addons too
+        //if ($place=='sources_custom') continue;  Now we are actually installing custom addons too
 
         reinstall_addon_soft($addon);
         $log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID' => '9fafb3dd014d589fcc057bba54fc4ag3','SOMETHING' => do_lang_tempcode('INSTALL_ADDON',escape_html($addon)))));
@@ -2121,7 +2121,7 @@ function step_7()
 /**
  * Eighth installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_8()
 {
@@ -2147,7 +2147,7 @@ function step_8()
 /**
  * Ninth installation step.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_9()
 {
@@ -2187,7 +2187,7 @@ function step_9()
 /**
  * Tenth installation step: wrapper and special interface.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_10()
 {
@@ -2222,7 +2222,7 @@ function step_10()
 /**
  * Tenth installation step: main.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_10_populate_database()
 {
@@ -2243,7 +2243,7 @@ function step_10_populate_database()
             }
         }
     }
-//	$log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'6a160da6fd9031e90b37a40aea149137','SOMETHING'=>do_lang('TABLES_CREATED','ocPortal'))));
+// $log->attach(do_template('INSTALLER_DONE_SOMETHING',array('_GUID'=>'6a160da6fd9031e90b37a40aea149137','SOMETHING'=>do_lang('TABLES_CREATED','ocPortal'))));
 
     return $log;
 }
@@ -2251,7 +2251,7 @@ function step_10_populate_database()
 /**
  * Tenth installation step: forum part.
  *
- * @return tempcode		Progress report / UI
+ * @return tempcode                     Progress report / UI
  */
 function step_10_forum_stuff()
 {
@@ -2276,7 +2276,7 @@ function step_10_forum_stuff()
  * You should remember this function, and not substitute anything else for it, as that will likely make your code unstable.
  * It is key to source code modularity in ocPortal.
  *
- * @param  string			The codename for the source module to load
+ * @param  string                       The codename for the source module to load
  */
 function require_code($codename)
 {
@@ -2325,18 +2325,18 @@ function require_code($codename)
         }
     }
 
-    /*if (!array_key_exists('type',$_GET))	Memory usage debugging. Not safe, as can mess up Tempcode generation (mixed echos) {
-		if (function_exists('memory_get_usage')) {
-			echo '<!-- Memory diff for '.$codename.' was: '.number_format(memory_get_usage()-$prior).' -->'."\n";
-		}
-	}*/
+    /*if (!array_key_exists('type',$_GET))   Memory usage debugging. Not safe, as can mess up Tempcode generation (mixed echos) {
+        if (function_exists('memory_get_usage')) {
+            echo '<!-- Memory diff for '.$codename.' was: '.number_format(memory_get_usage()-$prior).' -->'."\n";
+        }
+    }*/
 }
 
 /**
  * Make an object of the given class
  *
- * @param  string			The class name
- * @return object			The object
+ * @param  string                       The class name
+ * @return object                       The object
  */
 function object_factory($class)
 {
@@ -2528,13 +2528,13 @@ function handle_self_referencing_embedment()
 /**
  * Make the UI for an installer textual option.
  *
- * @param  tempcode		The human readable name for the option
- * @param  tempcode		A description of the option
- * @param  ID_TEXT		The name of the option
- * @param  string			The default/current value of the option
- * @param  boolean		Whether the options value should be kept star'red out (e.g. it is a password)
- * @param  boolean		Whether the option is required
- * @return tempcode		The option
+ * @param  tempcode                     The human readable name for the option
+ * @param  tempcode                     A description of the option
+ * @param  ID_TEXT                      The name of the option
+ * @param  string                       The default/current value of the option
+ * @param  boolean                      Whether the options value should be kept star'red out (e.g. it is a password)
+ * @param  boolean                      Whether the option is required
+ * @return tempcode                     The option
  */
 function make_option($nice_name,$description,$name,$value,$hidden = false,$required = false)
 {
@@ -2562,11 +2562,11 @@ function make_option($nice_name,$description,$name,$value,$hidden = false,$requi
 /**
  * Make the UI for an installer tick option.
  *
- * @param  tempcode		The human readable name for the option
- * @param  tempcode		A description of the option
- * @param  ID_TEXT		The name of the option
- * @param  BINARY			The default/current value of the option
- * @return tempcode		The list of usergroups
+ * @param  tempcode                     The human readable name for the option
+ * @param  tempcode                     A description of the option
+ * @param  ID_TEXT                      The name of the option
+ * @param  BINARY                       The default/current value of the option
+ * @return tempcode                     The list of usergroups
  */
 function make_tick($nice_name,$description,$name,$value)
 {
@@ -2577,9 +2577,9 @@ function make_tick($nice_name,$description,$name,$value)
 /**
  * Get an example string for the installer UI (abstraction).
  *
- * @param  string			The name of the example text language string (blank: none)
- * @param  string			The name of the example description language string (blank: none)
- * @return tempcode		The text
+ * @param  string                       The name of the example text language string (blank: none)
+ * @param  string                       The name of the example description language string (blank: none)
+ * @return tempcode                     The text
  */
 function example($example,$description = '')
 {
@@ -2598,7 +2598,7 @@ function example($example,$description = '')
 /**
  * Test whether a file exists and is writable.
  *
- * @param  PATH			The file path
+ * @param  PATH                         The file path
  */
 function test_writable($file)
 {
@@ -2610,8 +2610,8 @@ function test_writable($file)
 /**
  * Using the current forum driver, find the forum path.
  *
- * @param  string			What the user manually gave as the forum path (may be blank)
- * @return ?URLPATH		The answer (NULL: could not find the forum)
+ * @param  string                       What the user manually gave as the forum path (may be blank)
+ * @return ?URLPATH                     The answer (NULL: could not find the forum)
  */
 function find_forum_path($given)
 {
@@ -2631,9 +2631,9 @@ function find_forum_path($given)
 /**
  * Get the contents of a directory, with support for searching the installation archive.
  *
- * @param  PATH			The directory to get the contents of
- * @param  boolean		Whether just to get .php files
- * @return array			A map of the contents (file=>dir)
+ * @param  PATH                         The directory to get the contents of
+ * @param  boolean                      Whether just to get .php files
+ * @return array                        A map of the contents (file=>dir)
  */
 function get_dir_contents($dir,$php = false)
 {
@@ -2716,7 +2716,7 @@ function get_dir_contents($dir,$php = false)
 /**
  * Get default table prefix.
  *
- * @return string			Default ocPortal table prefix
+ * @return string                       Default ocPortal table prefix
  */
 function get_default_table_prefix()
 {
@@ -2727,8 +2727,8 @@ function get_default_table_prefix()
 /**
  * Return decompressed version of the input (at time of writing, no compression being used for quick installer archiving).
  *
- * @param  string			The file in raw compressed form
- * @return string			The decompressed file
+ * @param  string                       The file in raw compressed form
+ * @return string                       The decompressed file
  */
 function compress_filter($input)
 {
@@ -2738,7 +2738,7 @@ function compress_filter($input)
 
 /**
  * Try and get a good .htaccess file built.
- * @param  resource		FTP connection to server
+ * @param  resource                     FTP connection to server
  */
 function test_htaccess($conn)
 {
@@ -2908,10 +2908,10 @@ END;
         foreach ($clauses as $i => $clause) {
             $myfile = fopen(get_file_base() . '/exports/addons/index.php',GOOGLE_APPENGINE?'wb':'wt');
             fwrite($myfile,"<" . "?php
-			@header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
-			@header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-			@header('Pragma: no-cache'); // for proxies, and also IE
-			");
+            @header('Expires: Mon, 20 Dec 1998 01:00:00 GMT');
+            @header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+            @header('Pragma: no-cache'); // for proxies, and also IE
+            ");
             fclose($myfile);
 
             $myfile = fopen(get_file_base() . '/exports/addons' . DIRECTORY_SEPARATOR . '.htaccess',GOOGLE_APPENGINE?'wb':'wt');

@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 class Hook_symbol_CHAT_IM
 {
     /**
-	 * Run function for symbol hooks. Searches for tasks to perform.
+     * Run function for symbol hooks. Searches for tasks to perform.
     *
-    * @param  array		Symbol parameters
-    * @return string		Result
-	 */
+    * @param  array                     Symbol parameters
+    * @return string                    Result
+     */
     public function run($param)
     {
         $value = '';

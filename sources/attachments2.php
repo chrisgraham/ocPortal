@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 /*
@@ -25,14 +25,14 @@ Adding attachments.
 /**
  * Get an array containing new Comcode, and tempcode. The function wraps the normal comcode_to_tempcode function. The function will do attachment management, including deleting of attachments that have become unused due to editing of some Comcode and removing of the reference.
  *
- * @param  LONG_TEXT		The unparsed Comcode that references the attachments
- * @param  ID_TEXT		The type the attachment will be used for (e.g. download)
- * @param  ID_TEXT		The ID the attachment will be used for
- * @param  boolean		Whether we are only previewing the attachments (i.e. don't store them!)
- * @param  ?object		The database connection to use (NULL: standard site connection)
- * @param  ?boolean		Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges) (NULL: autodetect)
- * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
- * @return array			A map containing 'Comcode' (after substitution for tying down the new attachments) and 'tempcode'
+ * @param  LONG_TEXT                    The unparsed Comcode that references the attachments
+ * @param  ID_TEXT                      The type the attachment will be used for (e.g. download)
+ * @param  ID_TEXT                      The ID the attachment will be used for
+ * @param  boolean                      Whether we are only previewing the attachments (i.e. don't store them!)
+ * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?boolean                     Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges) (NULL: autodetect)
+ * @param  ?MEMBER                      The member to use for ownership permissions (NULL: current member)
+ * @return array                        A map containing 'Comcode' (after substitution for tying down the new attachments) and 'tempcode'
  */
 function do_comcode_attachments($comcode,$type,$id,$previewing_only = false,$connection = null,$insert_as_admin = null,$for_member = null)
 {
@@ -173,10 +173,10 @@ function do_comcode_attachments($comcode,$type,$id,$previewing_only = false,$con
 /**
  * Convert attachments embedded as data URLs (usually the result of pasting in) to real attachment Comcode.
  *
- * @param  string			Our Comcode
- * @param  ID_TEXT		The type the attachment will be used for (e.g. download)
- * @param  ID_TEXT		The ID the attachment will be used for
- * @param  object			The database connection to use
+ * @param  string                       Our Comcode
+ * @param  ID_TEXT                      The type the attachment will be used for (e.g. download)
+ * @param  ID_TEXT                      The ID the attachment will be used for
+ * @param  object                       The database connection to use
  */
 function _handle_data_url_attachments(&$comcode,$type,$id,$connection)
 {
@@ -229,12 +229,12 @@ function _handle_data_url_attachments(&$comcode,$type,$id,$connection)
 /**
  * Convert attachments marked for 'extraction' to real attachment Comcode.
  *
- * @param  string			Our Comcode
- * @param  string			The attachment file key
- * @param  ID_TEXT		The type the attachment will be used for (e.g. download)
- * @param  ID_TEXT		The ID the attachment will be used for
- * @param  array			Reg-exp grabbed parameters from the extract marker attachment (we will re-use them for each individual attachment)
- * @param  object			The database connection to use
+ * @param  string                       Our Comcode
+ * @param  string                       The attachment file key
+ * @param  ID_TEXT                      The type the attachment will be used for (e.g. download)
+ * @param  ID_TEXT                      The ID the attachment will be used for
+ * @param  array                        Reg-exp grabbed parameters from the extract marker attachment (we will re-use them for each individual attachment)
+ * @param  object                       The database connection to use
  */
 function _handle_attachment_extraction(&$comcode,$key,$type,$id,$matches_extract,$connection)
 {
@@ -444,16 +444,16 @@ function _check_attachment_count()
 /**
  * Insert some Comcode content that may contain attachments, and return the language ID.
  *
- * @param  ID_TEXT		The field name
- * @param  integer		The level of importance this language string holds
+ * @param  ID_TEXT                      The field name
+ * @param  integer                      The level of importance this language string holds
  * @set    1 2 3 4
- * @param  LONG_TEXT		The Comcode content
- * @param  ID_TEXT		The arbitrary type that the attached is for (e.g. download)
- * @param  ID_TEXT		The ID in the set of the arbitrary types that the attached is for
- * @param  ?object		The database connection to use (NULL: standard site connection)
- * @param  boolean		Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges)
- * @param  ?MEMBER		The member to use for ownership permissions (NULL: current member)
- * @return array			The language ID save fields
+ * @param  LONG_TEXT                    The Comcode content
+ * @param  ID_TEXT                      The arbitrary type that the attached is for (e.g. download)
+ * @param  ID_TEXT                      The ID in the set of the arbitrary types that the attached is for
+ * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  boolean                      Whether to insert it as an admin (any Comcode parsing will be carried out with admin privileges)
+ * @param  ?MEMBER                      The member to use for ownership permissions (NULL: current member)
+ * @return array                        The language ID save fields
  */
 function insert_lang_comcode_attachments($field_name,$level,$text,$type,$id,$connection = null,$insert_as_admin = false,$for_member = null)
 {
@@ -515,8 +515,8 @@ function insert_lang_comcode_attachments($field_name,$level,$text,$type,$id,$con
 /**
  * Finalise attachments which were created during a preview, so that they have the proper reference IDs.
  *
- * @param  ID_TEXT		The ID in the set of the arbitrary types that the attached is for
- * @param  ?object		The database connection to use (NULL: standard site connection)
+ * @param  ID_TEXT                      The ID in the set of the arbitrary types that the attached is for
+ * @param  ?object                      The database connection to use (NULL: standard site connection)
  */
 function final_attachments_from_preview($id,$connection = null)
 {

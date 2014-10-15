@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_warnings
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_warnings
  */
 
 class Hook_Profiles_Tabs_warnings
 {
     /**
-	 * Find whether this hook is active.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return boolean		Whether this hook is active
-	 */
+     * Find whether this hook is active.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @return boolean                  Whether this hook is active
+     */
     public function is_active($member_id_of,$member_id_viewing)
     {
         return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member'))) && ($GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id' => $member_id_of,'w_is_warning' => 1))>0);
     }
 
     /**
-	 * Render function for profile tab hooks.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
-	 */
+     * Render function for profile tab hooks.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
+     */
     public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
     {
         require_lang('ocf_warnings');

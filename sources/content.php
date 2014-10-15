@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*
@@ -37,11 +37,11 @@ Notes about hook info...
 /**
  * Given a particular bit of feedback content, check if the user may access it.
  *
- * @param  MEMBER			User to check
- * @param  ID_TEXT		Content type
- * @param  ID_TEXT		Content ID
- * @param  ID_TEXT		Content type type
- * @return boolean		Whether there is permission
+ * @param  MEMBER                       User to check
+ * @param  ID_TEXT                      Content type
+ * @param  ID_TEXT                      Content ID
+ * @param  ID_TEXT                      Content type type
+ * @return boolean                      Whether there is permission
  */
 function may_view_content_behind($member_id,$content_type,$content_id,$type_has = 'content_type')
 {
@@ -86,8 +86,8 @@ function may_view_content_behind($member_id,$content_type,$content_id,$type_has 
 /**
  * Get the CMA hook object for a content type. Also works for resource types (i.e. if it's a resource, although not actually considered content technically).
  *
- * @param  ID_TEXT	The content type
- * @return ?object	The object (NULL: could not get one)
+ * @param  ID_TEXT                      The content type
+ * @return ?object                      The object (NULL: could not get one)
  */
 function get_content_object($content_type)
 {
@@ -112,12 +112,12 @@ function get_content_object($content_type)
 /**
  * Find a different content type code from the one had.
  *
- * @param  ID_TEXT		Content type type we know
+ * @param  ID_TEXT                      Content type type we know
  * @set addon content_type meta_hook search_hook seo_type_code feedback_type_code permissions_type_code module table
- * @param  ID_TEXT		Content type ID we know
- * @param  ID_TEXT		Desired content type
+ * @param  ID_TEXT                      Content type ID we know
+ * @param  ID_TEXT                      Desired content type
  * @set addon content_type meta_hook search_hook seo_type_code feedback_type_code permissions_type_code module table
- * @return ID_TEXT		Corrected content type type (blank: could not find)
+ * @return ID_TEXT                      Corrected content type type (blank: could not find)
  */
 function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 {
@@ -150,10 +150,10 @@ function convert_ocportal_type_codes($type_has,$type_id,$type_wanted)
 /**
  * Find content type info, for a particular content type type we know.
  *
- * @param  ID_TEXT		Content type type we know
+ * @param  ID_TEXT                      Content type type we know
  * @set addon content_type meta_hook search_hook seo_type_code feedback_type_code permissions_type_code module table
- * @param  ID_TEXT		Content type ID we know
- * @return array			Content type info list (blank: could not find)
+ * @param  ID_TEXT                      Content type ID we know
+ * @return array                        Content type info list (blank: could not find)
  */
 function convert_ocportal_type_codes_multiple($type_has,$type_id)
 {
@@ -180,10 +180,10 @@ function convert_ocportal_type_codes_multiple($type_has,$type_id)
 /**
  * Get meta details of a content item
  *
- * @param  ID_TEXT		Content type
- * @param  ID_TEXT		Content ID
- * @param  boolean		Whether to use the content API as resource-fs requires (may be slightly different)
- * @return array			Tuple: title, submitter, content hook info, the content row, URL (for use within current browser session), URL (for use in emails / sharing)
+ * @param  ID_TEXT                      Content type
+ * @param  ID_TEXT                      Content ID
+ * @param  boolean                      Whether to use the content API as resource-fs requires (may be slightly different)
+ * @return array                        Tuple: title, submitter, content hook info, the content row, URL (for use within current browser session), URL (for use in emails / sharing)
  */
 function content_get_details($content_type,$content_id,$resourcefs_style = false)
 {
@@ -289,9 +289,9 @@ function content_get_details($content_type,$content_id,$resourcefs_style = false
 /**
  * Get the content row of a content item.
  *
- * @param  ID_TEXT			The content ID
- * @param  array				The info array for the content type
- * @return ?array				The row (NULL: not found)
+ * @param  ID_TEXT                      The content ID
+ * @param  array                        The info array for the content type
+ * @return ?array                       The row (NULL: not found)
  */
 function content_get_row($content_id,$cma_info)
 {
@@ -315,9 +315,9 @@ function content_get_row($content_id,$cma_info)
 /**
  * Get the string content ID for some data.
  *
- * @param  array				The data row
- * @param  array				The info array for the content type
- * @return ID_TEXT			The ID
+ * @param  array                        The data row
+ * @param  array                        The info array for the content type
+ * @return ID_TEXT                      The ID
  */
 function extract_content_str_id_from_data($data,$cma_info)
 {
@@ -337,10 +337,10 @@ function extract_content_str_id_from_data($data,$cma_info)
 /**
  * Given the string content ID get a mapping we could use as a WHERE map.
  *
- * @param  ID_TEXT			The ID
- * @param  array				The info array for the content type
- * @param  ?string			The table alias (NULL: none)
- * @return array				The mapping
+ * @param  ID_TEXT                      The ID
+ * @param  array                        The info array for the content type
+ * @param  ?string                      The table alias (NULL: none)
+ * @return array                        The mapping
  */
 function get_content_where_for_str_id($str_id,$cma_info,$table_alias = null)
 {
@@ -358,9 +358,9 @@ function get_content_where_for_str_id($str_id,$cma_info,$table_alias = null)
 /**
  * Given the string content ID get a mapping we could use as a WHERE map.
  *
- * @param  array				The ID
- * @param  array				The info array for the content type
- * @param  ?string			The table alias (NULL: none)
+ * @param  array                        The ID
+ * @param  array                        The info array for the content type
+ * @param  ?string                      The table alias (NULL: none)
  */
 function append_content_select_for_id(&$select,$cma_info,$table_alias = null)
 {

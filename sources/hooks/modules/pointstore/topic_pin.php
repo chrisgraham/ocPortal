@@ -13,26 +13,26 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 class Hook_pointstore_topic_pin
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
         require_lang('ocf');
     }
 
     /**
-	 * Standard pointstore item "shop front" function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item "shop front" function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -45,10 +45,10 @@ class Hook_pointstore_topic_pin
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function _topic_pin()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -83,20 +83,20 @@ class Hook_pointstore_topic_pin
         // Return template
         $post_url = build_url(array('page' => '_SELF','type' => '__topic_pin','id' => 'topic_pin'),'_SELF');
         $javascript = "
-			var form=document.getElementById('days').form;
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					var days=form.elements['days'].value;
-					if (days>" . strval(intval(get_option('topic_pin_max_days'))) . ")
-					{
-						window.fauxmodal_alert('" . php_addslashes(do_lang('TOPIC_PINNED_MAX_DAYS',integer_format(intval(get_option('topic_pin_max_days'))),'xxx')) . "'.replace(/xxx/g,days));
-						return false;
-					}
-					return true;
-				}
-			;
-		";
+            var form=document.getElementById('days').form;
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            var days=form.elements['days'].value;
+                            if (days>" . strval(intval(get_option('topic_pin_max_days'))) . ")
+                            {
+                                        window.fauxmodal_alert('" . php_addslashes(do_lang('TOPIC_PINNED_MAX_DAYS',integer_format(intval(get_option('topic_pin_max_days'))),'xxx')) . "'.replace(/xxx/g,days));
+                                        return false;
+                            }
+                            return true;
+                    }
+            ;
+        ";
         return do_template('FORM_SCREEN',array('_GUID' => '318a1f335fd0d2d9380024eb5438d2d8','HIDDEN' => '',
             'TITLE' => $title,
             'ACTION' => do_lang_tempcode('TOPIC_PINNING'),
@@ -110,10 +110,10 @@ class Hook_pointstore_topic_pin
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function __topic_pin()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -164,10 +164,10 @@ class Hook_pointstore_topic_pin
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function ___topic_pin()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));

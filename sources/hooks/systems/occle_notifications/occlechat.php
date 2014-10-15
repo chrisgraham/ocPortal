@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		occle
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    occle
  */
 
 class Hook_occle_notification_occlechat
 {
     /**
-	* Run function for OcCLE notification hooks.
-	*
-	* @param  ?integer	The "current" time on which to base queries (NULL: now)
-	* @return ~array 		Array of section, type and message responses (false: nothing)
-	*/
+    * Run function for OcCLE notification hooks.
+    *
+    * @param  ?integer                  The "current" time on which to base queries (NULL: now)
+    * @return ~array                    Array of section, type and message responses (false: nothing)
+    */
     public function run($timestamp = null)
     {
         if (is_null($timestamp)) {

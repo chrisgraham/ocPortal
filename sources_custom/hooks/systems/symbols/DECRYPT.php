@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		password_censor
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    password_censor
  */
 
 class Hook_symbol_DECRYPT
 {
     /**
-	 * Run function for symbol hooks. Searches for tasks to perform.
+     * Run function for symbol hooks. Searches for tasks to perform.
     *
-    * @param  array		Symbol parameters
-    * @return string		Result
-	 */
+    * @param  array                     Symbol parameters
+    * @return string                    Result
+     */
     public function run($param)
     {
         $value = '';

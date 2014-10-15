@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 class Hook_members_gifts
 {
     /**
-	 * Find member-related links to inject.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
-	 */
+     * Find member-related links to inject.
+     *
+     * @param  MEMBER                   The ID of the member we are getting link hooks for
+     * @return array                    List of lists of tuples for results (by link section). Each tuple is: type,title,url
+     */
     public function run($member_id)
     {
         require_lang('ocgifts');
@@ -38,11 +38,11 @@ class Hook_members_gifts
     }
 
     /**
-	 * Get sections to inject to about tab of the member profile.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting sections for
-	 * @return array		List of sections. Each tuple is Tempcode.
-	 */
+     * Get sections to inject to about tab of the member profile.
+     *
+     * @param  MEMBER                   The ID of the member we are getting sections for
+     * @return array                    List of sections. Each tuple is Tempcode.
+     */
     public function get_sections($member_id)
     {
         require_lang('ocgifts');

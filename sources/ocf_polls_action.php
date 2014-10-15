@@ -13,24 +13,24 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Add a forum poll.
  *
- * @param  AUTO_LINK		The ID of the topic to add the poll to.
- * @param  SHORT_TEXT	The question.
- * @param  BINARY			Whether the result tallies are kept private until the poll is made non-private.
- * @param  BINARY			Whether the poll is open for voting.
- * @param  integer		The minimum number of selections that may be made.
- * @param  integer		The maximum number of selections that may be made.
- * @param  BINARY			Whether members must have a post in the topic before they made vote.
- * @param  array			A list of pairs of the potential voteable answers and the number of votes.
- * @param  boolean		Whether to check there are permissions to make the poll.
- * @return AUTO_LINK 	The ID of the newly created forum poll.
+ * @param  AUTO_LINK                    The ID of the topic to add the poll to.
+ * @param  SHORT_TEXT                   The question.
+ * @param  BINARY                       Whether the result tallies are kept private until the poll is made non-private.
+ * @param  BINARY                       Whether the poll is open for voting.
+ * @param  integer                      The minimum number of selections that may be made.
+ * @param  integer                      The maximum number of selections that may be made.
+ * @param  BINARY                       Whether members must have a post in the topic before they made vote.
+ * @param  array                        A list of pairs of the potential voteable answers and the number of votes.
+ * @param  boolean                      Whether to check there are permissions to make the poll.
+ * @return AUTO_LINK                    The ID of the newly created forum poll.
  */
 function ocf_make_poll($topic_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$check_permissions = true)
 {

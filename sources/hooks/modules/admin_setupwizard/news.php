@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		news
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    news
  */
 
 class Hook_sw_news
 {
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @return array		Current settings.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @return array                    Current settings.
+     */
     public function get_current_settings()
     {
         $settings = array();
@@ -46,11 +46,11 @@ class Hook_sw_news
     }
 
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @param  array		Default values for the fields, from the install-profile.
-	 * @return tempcode	An input field.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @param  array                    Default values for the fields, from the install-profile.
+     * @return tempcode                 An input field.
+     */
     public function get_fields($field_defaults)
     {
         if (!addon_installed('news')) {
@@ -73,8 +73,8 @@ class Hook_sw_news
     }
 
     /**
-	 * Run function for setting features from the setup wizard.
-	 */
+     * Run function for setting features from the setup wizard.
+     */
     public function set_fields()
     {
         if (!addon_installed('news')) {
@@ -103,10 +103,10 @@ class Hook_sw_news
     }
 
     /**
-	 * Run function for blocks in the setup wizard.
-	 *
-	 * @return array		Map of block names, to display types.
-	 */
+     * Run function for blocks in the setup wizard.
+     *
+     * @return array                    Map of block names, to display types.
+     */
     public function get_blocks()
     {
         return array(array('main_news' => array('NO','YES')),array('side_news_archive' => array('PANEL_NONE','PANEL_NONE'),'side_news_categories' => array('PANEL_RIGHT','PANEL_RIGHT'),'side_news' => array('PANEL_NONE','PANEL_NONE')));

@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -32,16 +32,16 @@ if (!running_script('tracker')) {
     }
     $frame_name = 'frame_' . uniqid('',true);
     echo '
-		<div style="padding: 1em">
-			<iframe title="' . $title_tracker . '" frameborder="0" name="' . $frame_name . '" id="' . $frame_name . '" marginwidth="0" marginheight="0" class="expandable_iframe" scrolling="no" src="' . find_script('tracker') . $params . '">' . $title_tracker . '</iframe>
-		</div>
+        <div style="padding: 1em">
+            <iframe title="' . $title_tracker . '" frameborder="0" name="' . $frame_name . '" id="' . $frame_name . '" marginwidth="0" marginheight="0" class="expandable_iframe" scrolling="no" src="' . find_script('tracker') . $params . '">' . $title_tracker . '</iframe>
+        </div>
 
-		<script>// <![CDATA[
-			window.setInterval(function() {
-				if ((typeof window.frames[\'' . $frame_name . '\']!=\'undefined\') && (typeof window.frames[\'' . $frame_name . '\'].trigger_resize!=\'undefined\')) resizeFrame(\'' . $frame_name . '\');
-			}, 1000);
-		//]]></script>
-	';
+        <script>// <![CDATA[
+            window.setInterval(function() {
+                    if ((typeof window.frames[\'' . $frame_name . '\']!=\'undefined\') && (typeof window.frames[\'' . $frame_name . '\'].trigger_resize!=\'undefined\')) resizeFrame(\'' . $frame_name . '\');
+            }, 1000);
+        //]]></script>
+    ';
     return;
 }
 
@@ -132,38 +132,38 @@ if (count($issues) == 0) {
 
         $out = '';
         $out .= '
-			<div style="float: left; width: 140px; text-align: center; border: 1px solid #AAA" class="medborder">
-				<p style="font-size: 1.5em"><strong>' . escape_html(number_format($votes)) . '</strong> ' . (($votes == 1)?do_lang('FEATURES_vote'):do_lang('FEATURES_votes')) . '</p>
-		';
+            <div style="float: left; width: 140px; text-align: center; border: 1px solid #AAA" class="medborder">
+                    <p style="font-size: 1.5em"><strong>' . escape_html(number_format($votes)) . '</strong> ' . (($votes == 1)?do_lang('FEATURES_vote'):do_lang('FEATURES_votes')) . '</p>
+        ';
 
         if (!$voted) {
             $out .= '
-					<p onclick="this.style.border=\'1px dotted blue\';"><a style="text-decoration: none" target="_blank" href="' . escape_html($vote_url) . '"><img style="vertical-align: middle" src="' . find_theme_image('tracker/plus') . '" /> <span style="vertical-align: middle">' . do_lang('FEATURES_Vote') . '</span></a></p>
-			';
+                            <p onclick="this.style.border=\'1px dotted blue\';"><a style="text-decoration: none" target="_blank" href="' . escape_html($vote_url) . '"><img style="vertical-align: middle" src="' . find_theme_image('tracker/plus') . '" /> <span style="vertical-align: middle">' . do_lang('FEATURES_Vote') . '</span></a></p>
+            ';
         } else {
             $out .= '
-					<p onclick="this.style.border=\'1px dotted blue\';"><a style="text-decoration: none" target="_blank" href="' . escape_html($unvote_url) . '"><img style="vertical-align: middle" src="' . find_theme_image('tracker/minus') . '" /> <span style="vertical-align: middle">' . do_lang('FEATURES_Unvote') . '</span></a></p>';
+                            <p onclick="this.style.border=\'1px dotted blue\';"><a style="text-decoration: none" target="_blank" href="' . escape_html($unvote_url) . '"><img style="vertical-align: middle" src="' . find_theme_image('tracker/minus') . '" /> <span style="vertical-align: middle">' . do_lang('FEATURES_Unvote') . '</span></a></p>';
         }
 
         $out .= '<p style="font-size: 0.8em">' . do_lang('FEATURES_Raised_percent_of',$_percentage,$_credits);
 
         if (!is_null($cost)) {
             $out .= '
-					<br />
-					<span class="associated_details">(' . do_lang('FEATURES_credits_hours_cost',$_credits,$_hours,$_cost) . ')</span>';
+                            <br />
+                            <span class="associated_details">(' . do_lang('FEATURES_credits_hours_cost',$_credits,$_hours,$_cost) . ')</span>';
         }
         $out .= '
-				</p>
-			</div>
+                    </p>
+            </div>
 
-			<div style="margin-left: 150px">
-				<p style="min-height: 7.5em">' . xhtml_substr(nl2br(escape_html($description)),0,310,false,true) . '</p>
+            <div style="margin-left: 150px">
+                    <p style="min-height: 7.5em">' . xhtml_substr(nl2br(escape_html($description)),0,310,false,true) . '</p>
 
-				<p style="float: right; margin-bottom: 0" class="associated_details" style="color: #777">' . do_lang('FEATURES_Suggested_by',$member_linked,$date_prepped) . '</p>
+                    <p style="float: right; margin-bottom: 0" class="associated_details" style="color: #777">' . do_lang('FEATURES_Suggested_by',$member_linked,$date_prepped) . '</p>
 
-				<p class="associated_link_to_small" style="float: left; margin-bottom: 0">&raquo; <a href="' . escape_html($full_url) . '">' . do_lang('FEATURES_Full_details') . '</a> (' . escape_html(number_format($num_comments)) . ' ' . ($comments_label) . ')</p>
-			</div>
-		';
+                    <p class="associated_link_to_small" style="float: left; margin-bottom: 0">&raquo; <a href="' . escape_html($full_url) . '">' . do_lang('FEATURES_Full_details') . '</a> (' . escape_html(number_format($num_comments)) . ' ' . ($comments_label) . ')</p>
+            </div>
+        ';
 
         echo static_evaluate_tempcode(put_in_standard_box(make_string_tempcode($out),$title,'curved'));
     }

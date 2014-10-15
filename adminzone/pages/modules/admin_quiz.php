@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		quizzes
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    quizzes
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_quiz
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_quiz
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -63,10 +63,10 @@ class Module_admin_quiz
     public $row;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -136,10 +136,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('quiz');
@@ -178,10 +178,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * The do-next manager for before setup management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before setup management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_lang('quiz');
@@ -198,10 +198,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         require_code('form_templates');
@@ -216,10 +216,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @return tempcode                 The UI
+     */
     public function export_quiz()
     {
         $fields = new ocp_tempcode();
@@ -234,8 +234,8 @@ class Module_admin_quiz
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 */
+     * Standard crud_module delete actualiser.
+     */
     public function _export_quiz()
     {
         require_code('files2');
@@ -245,10 +245,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * UI: find quiz winner.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * UI: find quiz winner.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function find_winner()
     {
         require_code('form_templates');
@@ -273,10 +273,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * Actualiser: find quiz winner.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Actualiser: find quiz winner.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function _find_winner()
     {
         $id = post_param_integer('id');
@@ -372,10 +372,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * Choose quiz to view results of.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Choose quiz to view results of.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function quiz_results()
     {
         require_code('form_templates');
@@ -405,10 +405,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * View quiz results.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * View quiz results.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function _quiz_results()
     {
         $id = get_param_integer('id',null); // quiz ID
@@ -520,10 +520,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * View a single filled-in quiz.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * View a single filled-in quiz.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function __quiz_results()
     {
         $id = get_param_integer('id'); // entry ID
@@ -592,10 +592,10 @@ class Module_admin_quiz
     }
 
     /**
-	 * Delete some quiz results.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Delete some quiz results.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function delete_quiz_results()
     {
         $to_delete = array();

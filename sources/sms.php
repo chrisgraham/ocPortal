@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		sms
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    sms
  */
 
 /**
  * Prepare a phone number for use with the SMS gateway.
  *
- * @param  string			The number
- * @return string			Cleaned number
+ * @param  string                       The number
+ * @return string                       Cleaned number
  */
 function cleanup_mobile_number($number)
 {
@@ -32,9 +32,9 @@ function cleanup_mobile_number($number)
 /**
  * Attempt to send an SMS.
  *
- * @param  string			The message
- * @param  array			The member IDs of those receiving messages
- * @return integer		How many were sent
+ * @param  string                       The message
+ * @param  array                        The member IDs of those receiving messages
+ * @return integer                      How many were sent
  */
 function sms_wrap($message,$to_sms)
 {
@@ -104,22 +104,22 @@ function sms_wrap($message,$to_sms)
         if ($to == '') {
             continue;
         }
-        // TODO: if (!array_key_exists($to,$confirmed_numbers)) continue;			#376 on tracker
+        // TODO: if (!array_key_exists($to,$confirmed_numbers)) continue;        #376 on tracker
         $to = xmlentities($to);
 
         $xml = <<<END
 <clickAPI>
-	<sendMsg>
-		<api_id>{$api_id}</api_id>
-		<user>{$username}</user>
-		<password>{$password}</password>
-		<to>{$to}</to>
-		<text>{$_message}</text>
-		<from>{$site_name}</from>
-		<callback>{$callback}</callback>
-		<max_credits>2.5</max_credits>
-		<concat>{$concat}</concat>
-	</sendMsg>
+    <sendMsg>
+        <api_id>{$api_id}</api_id>
+        <user>{$username}</user>
+        <password>{$password}</password>
+        <to>{$to}</to>
+        <text>{$_message}</text>
+        <from>{$site_name}</from>
+        <callback>{$callback}</callback>
+        <max_credits>2.5</max_credits>
+        <concat>{$concat}</concat>
+    </sendMsg>
 </clickAPI>
 END;
 
@@ -144,15 +144,15 @@ function sms_callback_script()
 {
     // Currently does nothing. Would receive messages in the form below, via the "data" GET parameter
     /*
-	< ?xml version="1.0"? >
-	<callback>
-		<apiMsgId>996411ad91fa211e7d17bc873aa4a41d</apiMsgId>
-		<cliMsgId></cliMsgId>
-		<timestamp>1218008129</timestamp>
-		<to>279995631564</to>
-		<from>27833001171</from>
-		<charge>0.300000</charge>
-		<status>004</status>
-	</callback>
-	*/
+    < ?xml version="1.0"? >
+    <callback>
+        <apiMsgId>996411ad91fa211e7d17bc873aa4a41d</apiMsgId>
+        <cliMsgId></cliMsgId>
+        <timestamp>1218008129</timestamp>
+        <to>279995631564</to>
+        <from>27833001171</from>
+        <charge>0.300000</charge>
+        <status>004</status>
+    </callback>
+    */
 }

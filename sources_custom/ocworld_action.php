@@ -8,24 +8,24 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocworld
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocworld
  */
 
 /**
  * Wrapper and actualiser to add an item. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  string		The name of the item
- * @param  integer	The cost the item
- * @param  BINARY		Whether the item is finite
- * @param  BINARY		Whether the item may be used for bribes
- * @param  BINARY		Whether the item may be used to provide a health boost
- * @param  URLPATH	The picture of the item
- * @param  integer	The maximum number of these items a player may have
- * @param  BINARY		Whether the item may be replicated via a new item copy source
- * @param  string		Description for the item
+ * @param  MEMBER                       The member performing the action
+ * @param  string                       The name of the item
+ * @param  integer                      The cost the item
+ * @param  BINARY                       Whether the item is finite
+ * @param  BINARY                       Whether the item may be used for bribes
+ * @param  BINARY                       Whether the item may be used to provide a health boost
+ * @param  URLPATH                      The picture of the item
+ * @param  integer                      The maximum number of these items a player may have
+ * @param  BINARY                       Whether the item may be replicated via a new item copy source
+ * @param  string                       Description for the item
  */
 function add_item_wrap($member_id,$name,$cost,$not_infinite,$bribable,$healthy,$picture_url,$max_per_player,$replicateable,$description)
 {
@@ -89,14 +89,14 @@ function add_item_wrap($member_id,$name,$cost,$not_infinite,$bribable,$healthy,$
 /**
  * Actualiser to add an item.
  *
- * @param  string		The name of the item
- * @param  BINARY		Whether the item may be used for bribes
- * @param  BINARY		Whether the item may be used to provide a health boost
- * @param  URLPATH	The picture of the item
- * @param  MEMBER		The owner of the item
- * @param  integer	The maximum number of these items a player may have
- * @param  BINARY		Whether the item may be replicated via a new item copy source
- * @param  string		Description for the item
+ * @param  string                       The name of the item
+ * @param  BINARY                       Whether the item may be used for bribes
+ * @param  BINARY                       Whether the item may be used to provide a health boost
+ * @param  URLPATH                      The picture of the item
+ * @param  MEMBER                       The owner of the item
+ * @param  integer                      The maximum number of these items a player may have
+ * @param  BINARY                       Whether the item may be replicated via a new item copy source
+ * @param  string                       Description for the item
  */
 function add_item($name,$bribable,$healthy,$picture_url,$owner,$max_per_player,$replicateable,$description)
 {
@@ -115,10 +115,10 @@ function add_item($name,$bribable,$healthy,$picture_url,$owner,$max_per_player,$
 /**
  * Wrapper and actualiser to add an item copy. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  string		The name of the item
- * @param  integer	The cost of the item copy
- * @param  BINARY		Whether the item is finite.
+ * @param  MEMBER                       The member performing the action
+ * @param  string                       The name of the item
+ * @param  integer                      The cost of the item copy
+ * @param  BINARY                       Whether the item is finite.
  */
 function add_item_wrap_copy($member_id,$name,$cost,$not_infinite)
 {
@@ -164,21 +164,21 @@ function add_item_wrap_copy($member_id,$name,$cost,$not_infinite)
 /**
  * Wrapper and actualiser to add a room. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  integer	Code showing where the room will be relative to the members current room. 0=above. 1=below. 2=right. 3=left.
- * @set		0 1 2 3
- * @param  string		Name for the room
- * @param  string		Description of room
- * @param  string		Hint for password to enter room
- * @param  string		Password to enter room
- * @param  string		Message to give if a given entrance password is wrong
- * @param  string		Item required for a member to have to enter the room
- * @param  BINARY		Whether the room is locked to the top
- * @param  BINARY		Whether the room is locked to the bottom
- * @param  BINARY		Whether the room is locked to the right
- * @param  BINARY		Whether the room is locked to the left
- * @param  URLPATH	The room's picture
- * @param  BINARY		Whether portals may be placed in the room
+ * @param  MEMBER                       The member performing the action
+ * @param  integer                      Code showing where the room will be relative to the members current room. 0=above. 1=below. 2=right. 3=left.
+ * @set     0 1 2 3
+ * @param  string                       Name for the room
+ * @param  string                       Description of room
+ * @param  string                       Hint for password to enter room
+ * @param  string                       Password to enter room
+ * @param  string                       Message to give if a given entrance password is wrong
+ * @param  string                       Item required for a member to have to enter the room
+ * @param  BINARY                       Whether the room is locked to the top
+ * @param  BINARY                       Whether the room is locked to the bottom
+ * @param  BINARY                       Whether the room is locked to the right
+ * @param  BINARY                       Whether the room is locked to the left
+ * @param  URLPATH                      The room's picture
+ * @param  BINARY                       Whether portals may be placed in the room
  */
 function add_room_wrap($member_id,$relative,$name,$text,$password_question,$password_answer,$password_fail_message,$required_item,$locked_up,$locked_down,$locked_right,$locked_left,$picture_url,$allow_portal)
 {
@@ -273,22 +273,22 @@ function add_room_wrap($member_id,$relative,$name,$text,$password_question,$pass
 /**
  * Actualiser to edit a room.
  *
- * @param  string		Name for the room
- * @param  AUTO_LINK	The room's realm
- * @param  integer	The room's X ordinate
- * @param  integer	The room's  Y ordinate
- * @param  string		Description of room
- * @param  string		Hint for password to enter room
- * @param  string		Password to enter room
- * @param  string		Message to give if a given entrance password is wrong
- * @param  string		Item required for a member to have to enter the room
- * @param  BINARY		Whether the room is locked to the top
- * @param  BINARY		Whether the room is locked to the bottom
- * @param  BINARY		Whether the room is locked to the right
- * @param  BINARY		Whether the room is locked to the left
- * @param  URLPATH	The room's picture
- * @param  MEMBER		Owner of the room
- * @param  BINARY		Whether portals may be placed in the room
+ * @param  string                       Name for the room
+ * @param  AUTO_LINK                    The room's realm
+ * @param  integer                      The room's X ordinate
+ * @param  integer                      The room's  Y ordinate
+ * @param  string                       Description of room
+ * @param  string                       Hint for password to enter room
+ * @param  string                       Password to enter room
+ * @param  string                       Message to give if a given entrance password is wrong
+ * @param  string                       Item required for a member to have to enter the room
+ * @param  BINARY                       Whether the room is locked to the top
+ * @param  BINARY                       Whether the room is locked to the bottom
+ * @param  BINARY                       Whether the room is locked to the right
+ * @param  BINARY                       Whether the room is locked to the left
+ * @param  URLPATH                      The room's picture
+ * @param  MEMBER                       Owner of the room
+ * @param  BINARY                       Whether portals may be placed in the room
  */
 function add_room($name,$realm,$x,$y,$text,$password_question,$password_answer,$password_fail_message,$required_item,$locked_up,$locked_down,$locked_right,$locked_left,$picture_url,$owner,$allow_portal)
 {
@@ -315,21 +315,21 @@ function add_room($name,$realm,$x,$y,$text,$password_question,$password_answer,$
 /**
  * Wrapper and actualiser to add a realm. Does not return.
  *
- * @param  ?MEMBER	The member performing the action (NULL: no member)
- * @param  string		Name for the realm
- * @param  string		Name of the realm's troll
- * @param  string		Name of the jail room
- * @param  string		Text for the jail room
- * @param  URLPATH	The picture for the jail room
- * @param  string		Name of the jail house room
- * @param  string		Text for the jail house room
- * @param  URLPATH	The picture for the jail house room
- * @param  string		Name of the lobby room
- * @param  string		Text for the lobby room
- * @param  URLPATH	The picture for the lobby room
- * @param  array		List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
- * @param  BINARY		Whether the realm is private
- * @param  boolean	Whether to redirect after
+ * @param  ?MEMBER                      The member performing the action (NULL: no member)
+ * @param  string                       Name for the realm
+ * @param  string                       Name of the realm's troll
+ * @param  string                       Name of the jail room
+ * @param  string                       Text for the jail room
+ * @param  URLPATH                      The picture for the jail room
+ * @param  string                       Name of the jail house room
+ * @param  string                       Text for the jail house room
+ * @param  URLPATH                      The picture for the jail house room
+ * @param  string                       Name of the lobby room
+ * @param  string                       Text for the lobby room
+ * @param  URLPATH                      The picture for the lobby room
+ * @param  array                        List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
+ * @param  BINARY                       Whether the realm is private
+ * @param  boolean                      Whether to redirect after
  */
 function add_realm_wrap($member_id,$name,$troll_name,$jail_name,$jail_text,$jail_pic_url,$jail_house_name,$jail_house_text,$jail_house_pic_url,$lobby_name,$lobby_text,$lobby_pic_url,$qa,$private,$redirect = true)
 {
@@ -406,12 +406,12 @@ function add_realm_wrap($member_id,$name,$troll_name,$jail_name,$jail_text,$jail
 /**
  * Output a room screen.
  *
- * @param  AUTO_LINK	The ID of the realm (this is not an auto-increment)
- * @param  string		Name for the realm
- * @param  string		Name of the realm's troll
- * @param  array		List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
- * @param  MEMBER		The owner of the realm
- * @param  BINARY		Whether the realm is private
+ * @param  AUTO_LINK                    The ID of the realm (this is not an auto-increment)
+ * @param  string                       Name for the realm
+ * @param  string                       Name of the realm's troll
+ * @param  array                        List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
+ * @param  MEMBER                       The owner of the realm
+ * @param  BINARY                       Whether the realm is private
  */
 function add_realm($id,$name,$troll_name,$qa,$owner,$private)
 {
@@ -451,12 +451,12 @@ function add_realm($id,$name,$troll_name,$qa,$owner,$private)
 /**
  * Wrapper and actualiser to add a portal. Does not return.
  *
- * @param  MEMBER		The member performing the action (portal comes from where member currently is)
- * @param  string		Name of the portal
- * @param  string		Description of the portal
- * @param  AUTO_LINK	The realm the portal goes to
- * @param  integer	The X ordinate the portal goes to
- * @param  integer	The Y ordinate the portal goes to
+ * @param  MEMBER                       The member performing the action (portal comes from where member currently is)
+ * @param  string                       Name of the portal
+ * @param  string                       Description of the portal
+ * @param  AUTO_LINK                    The realm the portal goes to
+ * @param  integer                      The X ordinate the portal goes to
+ * @param  integer                      The Y ordinate the portal goes to
  */
 function add_portal_wrap($member_id,$name,$text,$end_location_realm,$end_location_x,$end_location_y)
 {
@@ -499,8 +499,8 @@ function add_portal_wrap($member_id,$name,$text,$end_location_realm,$end_locatio
         ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');
     }
 
-/*	if ((!has_privilege($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$end_location_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$end_location_realm))==1))	Can make a portal to a realm you don't control
-		ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');*/
+/* if ((!has_privilege($member_id,'administer_ocworld')) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','owner',array('id'=>$end_location_realm))!=$member_id) && ($GLOBALS['SITE_DB']->query_select_value('w_realms','r_private',array('id'=>$end_location_realm))==1)) Can make a portal to a realm you don't control
+        ocw_refresh_with_message(do_lang_tempcode('W_NO_EDIT_ACCESS_PRIVATE_REALM'),'warn');*/
 
     // Charge them
     if (!has_privilege($member_id,'administer_ocworld')) {
@@ -522,15 +522,15 @@ function add_portal_wrap($member_id,$name,$text,$end_location_realm,$end_locatio
 /**
  * Actualiser to add a portal.
  *
- * @param  string		Name of the portal
- * @param  string		Description of the portal
- * @param  AUTO_LINK	The realm the portal goes to
- * @param  integer	The X ordinate the portal goes to
- * @param  integer	The Y ordinate the portal goes to
- * @param  AUTO_LINK	The realm the portal comes from
- * @param  MEMBER		The owner of the realm
- * @param  integer	The X ordinate the portal comes from
- * @param  integer	The Y ordinate the portal comes from
+ * @param  string                       Name of the portal
+ * @param  string                       Description of the portal
+ * @param  AUTO_LINK                    The realm the portal goes to
+ * @param  integer                      The X ordinate the portal goes to
+ * @param  integer                      The Y ordinate the portal goes to
+ * @param  AUTO_LINK                    The realm the portal comes from
+ * @param  MEMBER                       The owner of the realm
+ * @param  integer                      The X ordinate the portal comes from
+ * @param  integer                      The Y ordinate the portal comes from
  */
 function add_portal($name,$text,$realm,$x,$y,$end_location_realm,$owner,$end_location_x,$end_location_y)
 {
@@ -550,7 +550,7 @@ function add_portal($name,$text,$realm,$x,$y,$end_location_realm,$owner,$end_loc
 /**
  * Wrapper and actualiser to delete an item. Does not return.
  *
- * @param  string		The name of the item
+ * @param  string                       The name of the item
  */
 function delete_item_wrap($name)
 {
@@ -586,7 +586,7 @@ function delete_item_wrap($name)
 /**
  * Wrapper and actualiser to delete a room. Does not return.
  *
- * @param  MEMBER		The member, who is at the room being deleted
+ * @param  MEMBER                       The member, who is at the room being deleted
  */
 function delete_room_wrap($member_id)
 {
@@ -614,9 +614,9 @@ function delete_room_wrap($member_id)
 /**
  * Actualiser to delete a room. Does not return.
  *
- * @param  integer	The room's source X ordinate
- * @param  integer	The room's source Y ordinate
- * @param  AUTO_LINK	The room's source realm
+ * @param  integer                      The room's source X ordinate
+ * @param  integer                      The room's source Y ordinate
+ * @param  AUTO_LINK                    The room's source realm
  */
 function delete_room($x,$y,$realm)
 {
@@ -635,8 +635,8 @@ function delete_room($x,$y,$realm)
 /**
  * Wrapper and actualiser to delete a portal. Does not return.
  *
- * @param  MEMBER		The member, who is at the room the portal is in
- * @param  AUTO_LINK	The portal's destination realm (identifies the portal from those in the room)
+ * @param  MEMBER                       The member, who is at the room the portal is in
+ * @param  AUTO_LINK                    The portal's destination realm (identifies the portal from those in the room)
  */
 function delete_portal_wrap($member_id,$dest_realm)
 {
@@ -660,10 +660,10 @@ function delete_portal_wrap($member_id,$dest_realm)
 /**
  * Actualiser to delete a portal. Does not return.
  *
- * @param  integer	The portal's source X ordinate
- * @param  integer	The portal's source Y ordinate
- * @param  AUTO_LINK	The portal's source realm
- * @param  AUTO_LINK	The portal's destination realm
+ * @param  integer                      The portal's source X ordinate
+ * @param  integer                      The portal's source Y ordinate
+ * @param  AUTO_LINK                    The portal's source realm
+ * @param  AUTO_LINK                    The portal's destination realm
  */
 function delete_portal($x,$y,$realm,$dest_realm)
 {
@@ -676,7 +676,7 @@ function delete_portal($x,$y,$realm,$dest_realm)
 /**
  * Wrapper and actualiser to delete a realm. Does not return.
  *
- * @param  MEMBER		The member who is in the room
+ * @param  MEMBER                       The member who is in the room
  */
 function delete_realm_wrap($member_id)
 {
@@ -706,7 +706,7 @@ function delete_realm_wrap($member_id)
 /**
  * Actualiser to delete a realm. Does not return.
  *
- * @param  AUTO_LINK	Realm to delete
+ * @param  AUTO_LINK                    Realm to delete
  */
 function delete_realm($realm)
 {
@@ -731,23 +731,23 @@ function delete_realm($realm)
 /**
  * Wrapper and actualiser to edit a room. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  string		Name for the room
- * @param  string		Description of room
- * @param  string		Hint for password to enter room
- * @param  string		Password to enter room
- * @param  string		Message to give if a given entrance password is wrong
- * @param  AUTO_LINK	Item required for a member to have to enter the room
- * @param  BINARY		Whether the room is locked to the top
- * @param  BINARY		Whether the room is locked to the bottom
- * @param  BINARY		Whether the room is locked to the right
- * @param  BINARY		Whether the room is locked to the left
- * @param  URLPATH	The room's picture
- * @param  BINARY		Whether portals may be placed in the room
- * @param  MEMBER		Owner of the room
- * @param  AUTO_LINK	The room's realm
- * @param  integer	The room's X ordinate
- * @param  integer	The room's Y ordinate
+ * @param  MEMBER                       The member performing the action
+ * @param  string                       Name for the room
+ * @param  string                       Description of room
+ * @param  string                       Hint for password to enter room
+ * @param  string                       Password to enter room
+ * @param  string                       Message to give if a given entrance password is wrong
+ * @param  AUTO_LINK                    Item required for a member to have to enter the room
+ * @param  BINARY                       Whether the room is locked to the top
+ * @param  BINARY                       Whether the room is locked to the bottom
+ * @param  BINARY                       Whether the room is locked to the right
+ * @param  BINARY                       Whether the room is locked to the left
+ * @param  URLPATH                      The room's picture
+ * @param  BINARY                       Whether portals may be placed in the room
+ * @param  MEMBER                       Owner of the room
+ * @param  AUTO_LINK                    The room's realm
+ * @param  integer                      The room's X ordinate
+ * @param  integer                      The room's Y ordinate
  */
 function edit_room_wrap($member_id,$name,$text,$password_question,$password_answer,$password_fail_message,$required_item,$locked_up,$locked_down,$locked_right,$locked_left,$picture_url,$allow_portal,$new_owner,$new_x,$new_y,$new_realm)
 {
@@ -797,25 +797,25 @@ function edit_room_wrap($member_id,$name,$text,$password_question,$password_answ
 /**
  * Actualiser to edit a room.
  *
- * @param  string		Name for the room
- * @param  AUTO_LINK	The room's current realm
- * @param  integer	The room's current X ordinate
- * @param  integer	The room's current Y ordinate
- * @param  string		Description of room
- * @param  string		Hint for password to enter room
- * @param  string		Password to enter room
- * @param  string		Message to give if a given entrance password is wrong
- * @param  AUTO_LINK	Item required for a member to have to enter the room
- * @param  BINARY		Whether the room is locked to the top
- * @param  BINARY		Whether the room is locked to the bottom
- * @param  BINARY		Whether the room is locked to the right
- * @param  BINARY		Whether the room is locked to the left
- * @param  URLPATH	The room's picture
- * @param  BINARY		Whether portals may be placed in the room
- * @param  MEMBER		Owner of the room
- * @param  AUTO_LINK	The room's realm
- * @param  integer	The room's X ordinate
- * @param  integer	The room's Y ordinate
+ * @param  string                       Name for the room
+ * @param  AUTO_LINK                    The room's current realm
+ * @param  integer                      The room's current X ordinate
+ * @param  integer                      The room's current Y ordinate
+ * @param  string                       Description of room
+ * @param  string                       Hint for password to enter room
+ * @param  string                       Password to enter room
+ * @param  string                       Message to give if a given entrance password is wrong
+ * @param  AUTO_LINK                    Item required for a member to have to enter the room
+ * @param  BINARY                       Whether the room is locked to the top
+ * @param  BINARY                       Whether the room is locked to the bottom
+ * @param  BINARY                       Whether the room is locked to the right
+ * @param  BINARY                       Whether the room is locked to the left
+ * @param  URLPATH                      The room's picture
+ * @param  BINARY                       Whether portals may be placed in the room
+ * @param  MEMBER                       Owner of the room
+ * @param  AUTO_LINK                    The room's realm
+ * @param  integer                      The room's X ordinate
+ * @param  integer                      The room's Y ordinate
  */
 function edit_room($name,$realm,$x,$y,$text,$password_question,$password_answer,$password_fail_message,$required_item,$locked_up,$locked_down,$locked_right,$locked_left,$picture_url,$allow_portal,$new_owner,$new_x,$new_y,$new_realm)
 {
@@ -827,12 +827,12 @@ function edit_room($name,$realm,$x,$y,$text,$password_question,$password_answer,
 /**
  * Wrapper and actualiser to edit a realm. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  string		Name for the realm
- * @param  string		Name of the realm's troll
- * @param  array		List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
- * @param  BINARY		Whether the realm is private
- * @param  ?MEMBER	The owner of the realm (NULL: same as $member_id)
+ * @param  MEMBER                       The member performing the action
+ * @param  string                       Name for the realm
+ * @param  string                       Name of the realm's troll
+ * @param  array                        List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
+ * @param  BINARY                       Whether the realm is private
+ * @param  ?MEMBER                      The owner of the realm (NULL: same as $member_id)
  */
 function edit_realm_wrap($member_id,$name,$troll_name,$qa,$private,$new_owner)
 {
@@ -862,12 +862,12 @@ function edit_realm_wrap($member_id,$name,$troll_name,$qa,$private,$new_owner)
 /**
  * Actualiser to edit a realm.
  *
- * @param  AUTO_LINK	The realm
- * @param  string		Name for the realm
- * @param  string		Name of the realms troll
- * @param  array		List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
- * @param  BINARY		Whether the realm is private
- * @param  MEMBER		The owner of the realm
+ * @param  AUTO_LINK                    The realm
+ * @param  string                       Name for the realm
+ * @param  string                       Name of the realms troll
+ * @param  array                        List of maps (holding 'q' and 'a') for the trolls questions and answers. Must consist of indices 1 to 30. Blank entries mean 'not set'.
+ * @param  BINARY                       Whether the realm is private
+ * @param  MEMBER                       The owner of the realm
  */
 function edit_realm($realm,$name,$troll_name,$qa,$private,$new_owner)
 {
@@ -888,17 +888,17 @@ function edit_realm($realm,$name,$troll_name,$qa,$private,$new_owner)
 /**
  * Wrapper to edit a portal. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  AUTO_LINK	The realm the portal heads to
- * @param  string		Name of the portal
- * @param  string		Description of the portal
- * @param  AUTO_LINK	The current realm the portal comes from
- * @param  integer	The current X ordinate the portal comes from
- * @param  integer	The current Y ordinate the portal comes from
- * @param  MEMBER		The owner of the realm
- * @param  AUTO_LINK	The realm the portal comes from
- * @param  integer	The X ordinate the portal comes from
- * @param  integer	The Y ordinate the portal comes from
+ * @param  MEMBER                       The member performing the action
+ * @param  AUTO_LINK                    The realm the portal heads to
+ * @param  string                       Name of the portal
+ * @param  string                       Description of the portal
+ * @param  AUTO_LINK                    The current realm the portal comes from
+ * @param  integer                      The current X ordinate the portal comes from
+ * @param  integer                      The current Y ordinate the portal comes from
+ * @param  MEMBER                       The owner of the realm
+ * @param  AUTO_LINK                    The realm the portal comes from
+ * @param  integer                      The X ordinate the portal comes from
+ * @param  integer                      The Y ordinate the portal comes from
  */
 function edit_portal_wrap($member_id,$dest_realm,$name,$text,$end_location_realm,$end_location_x,$end_location_y,$new_owner,$new_x,$new_y,$new_realm)
 {
@@ -961,16 +961,16 @@ function edit_portal_wrap($member_id,$dest_realm,$name,$text,$end_location_realm
 /**
  * Wrapper to edit an item. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  string		The name of the item
- * @param  string		The old name for the item
- * @param  BINARY		Whether the item may be used for bribes
- * @param  BINARY		Whether the item may be used to provide a health boost
- * @param  URLPATH	The picture of the item
- * @param  MEMBER		The owner of the item
- * @param  integer	The maximum number of these items a player may have
- * @param  BINARY		Whether the item may be replicated via a new item copy source
- * @param  string		Description for the item
+ * @param  MEMBER                       The member performing the action
+ * @param  string                       The name of the item
+ * @param  string                       The old name for the item
+ * @param  BINARY                       Whether the item may be used for bribes
+ * @param  BINARY                       Whether the item may be used to provide a health boost
+ * @param  URLPATH                      The picture of the item
+ * @param  MEMBER                       The owner of the item
+ * @param  integer                      The maximum number of these items a player may have
+ * @param  BINARY                       Whether the item may be replicated via a new item copy source
+ * @param  string                       Description for the item
  */
 function edit_item_wrap($member_id,$original_name,$name,$bribable,$healthy,$picture_url,$new_owner,$max_per_player,$replicateable,$description)
 {
@@ -1001,15 +1001,15 @@ function edit_item_wrap($member_id,$original_name,$name,$bribable,$healthy,$pict
 /**
  * Edit an item.
  *
- * @param  string		The name of the item
- * @param  string		The old name for the item
- * @param  BINARY		Whether the item may be used for bribes
- * @param  BINARY		Whether the item may be used to provide a health boost
- * @param  URLPATH	The picture of the item
- * @param  MEMBER		The owner of the item
- * @param  integer	The maximum number of these items a player may have
- * @param  BINARY		Whether the item may be replicated via a new item copy source
- * @param  string		Description for the item
+ * @param  string                       The name of the item
+ * @param  string                       The old name for the item
+ * @param  BINARY                       Whether the item may be used for bribes
+ * @param  BINARY                       Whether the item may be used to provide a health boost
+ * @param  URLPATH                      The picture of the item
+ * @param  MEMBER                       The owner of the item
+ * @param  integer                      The maximum number of these items a player may have
+ * @param  BINARY                       Whether the item may be replicated via a new item copy source
+ * @param  string                       Description for the item
  */
 function edit_item($name,$original_name,$bribable,$healthy,$picture_url,$new_owner,$max_per_player,$replicateable,$description)
 {
@@ -1036,14 +1036,14 @@ function edit_item($name,$original_name,$bribable,$healthy,$picture_url,$new_own
 /**
  * Wrapper to edit an item copy. Does not return.
  *
- * @param  MEMBER		The member performing the action
- * @param  string		The name of the item
- * @param  integer	The cost of the item copy
- * @param  BINARY		Whether the item is finite.
- * @param  integer	The X ordinate of the item copy
- * @param  integer	The Y ordinate of the item copy
- * @param  AUTO_LINK	The realm of the item copy
- * @param  MEMBER		The owner of the item copy source
+ * @param  MEMBER                       The member performing the action
+ * @param  string                       The name of the item
+ * @param  integer                      The cost of the item copy
+ * @param  BINARY                       Whether the item is finite.
+ * @param  integer                      The X ordinate of the item copy
+ * @param  integer                      The Y ordinate of the item copy
+ * @param  AUTO_LINK                    The realm of the item copy
+ * @param  MEMBER                       The owner of the item copy source
  */
 function edit_item_wrap_copy($member_id,$name,$cost,$not_infinite,$new_x,$new_y,$new_realm,$member)
 {
@@ -1088,16 +1088,16 @@ function edit_item_wrap_copy($member_id,$name,$cost,$not_infinite,$new_x,$new_y,
 /**
  * Actualiser to edit an item copy.
  *
- * @param  MEMBER		The owner of the item copy source
- * @param  string		The name of the item
- * @param  BINARY		Whether the item is finite.
- * @param  integer	The cost of the item copy
- * @param  integer	The X ordinate of the item copy
- * @param  integer	The Y ordinate of the item copy
- * @param  AUTO_LINK	The realm of the item copy
- * @param  integer	The new X ordinate of the item copy
- * @param  integer	The new Y ordinate of the item copy
- * @param  AUTO_LINK	The new realm of the item copy
+ * @param  MEMBER                       The owner of the item copy source
+ * @param  string                       The name of the item
+ * @param  BINARY                       Whether the item is finite.
+ * @param  integer                      The cost of the item copy
+ * @param  integer                      The X ordinate of the item copy
+ * @param  integer                      The Y ordinate of the item copy
+ * @param  AUTO_LINK                    The realm of the item copy
+ * @param  integer                      The new X ordinate of the item copy
+ * @param  integer                      The new Y ordinate of the item copy
+ * @param  AUTO_LINK                    The new realm of the item copy
  */
 function edit_item_copy($member_id,$name,$not_infinite,$cost,$new_x,$new_y,$new_realm,$x,$y,$realm)
 {

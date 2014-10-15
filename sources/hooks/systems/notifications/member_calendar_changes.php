@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 class Hook_Notification_member_calendar_changes extends Hook_Notification__Staff
 {
     /**
-	 * Get a list of all the notification codes this hook can handle.
-	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
-	 *
-	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
-	 */
+     * Get a list of all the notification codes this hook can handle.
+     * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
+     *
+     * @return array                    List of codes (mapping between code names, and a pair: section and labelling for those codes)
+     */
     public function list_handled_codes()
     {
         $list = array();

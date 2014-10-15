@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 class Hook_config_oembed_manual_patterns
 {
     /**
-	 * Gets the details relating to the config option.
-	 *
-	 * @return ?array		The details (NULL: disabled)
-	 */
+     * Gets the details relating to the config option.
+     *
+     * @return ?array                   The details (NULL: disabled)
+     */
     public function get_details()
     {
         return array(
@@ -41,10 +41,10 @@ class Hook_config_oembed_manual_patterns
     }
 
     /**
-	 * Gets the default value for the config option.
-	 *
-	 * @return ?string		The default value (NULL: option is disabled)
-	 */
+     * Gets the default value for the config option.
+     *
+     * @return ?string                  The default value (NULL: option is disabled)
+     */
     public function get_default()
     {
         $default = '';
@@ -57,16 +57,16 @@ class Hook_config_oembed_manual_patterns
         $default .= "(https?://.*\.flickr\.com/photos/.*|https?://flic\.kr/p/.*) = http://www.flickr.com/services/oembed\n";
         $default .= "(https?://instagram\.com/p/.*) = http://api.instagram.com/oembed\n";
         $default .= "(http?://i.*\.photobucket\.com/albums/.*|https?://gi.*\.photobucket\.com/groups/.*) = http://photobucket.com/oembed\n"; // NB: With this one you need to be really careful to get the *image* URL. Page URLs do not work, it's confusing!
-        //$default.="(https?://twitter\.yfrog\.com/.*) = http://www.yfrog.com/api/oembed\n";	Does not work
+        //$default.="(https?://twitter\.yfrog\.com/.*) = http://www.yfrog.com/api/oembed\n"; Does not work
         $default .= "(https?://soundcloud\.com/.*/.*) = http://soundcloud.com/oembed\n";
         $default .= "(https?://twitter\.com/.*/status/\d+) = https://api.twitter.com/1/statuses/oembed.{format}\n";
         $default .= "(https?://(www\.)?ustream\.tv/.*) = http://www.ustream.tv/oembed\n";
 
         $default .= "(https?://twitpic\.com/.*) = http://noembed.com/embed\n";
         /*
-		These are not very good - we may as well just do OpenGraph on them ourselves rather than relying on noembed
-		default.="(https?://www\.amazon\.com/.*) = http://noembed.com/embed\n";
-		*/
+        These are not very good - we may as well just do OpenGraph on them ourselves rather than relying on noembed
+        default.="(https?://www\.amazon\.com/.*) = http://noembed.com/embed\n";
+        */
 
         $default .= "(https?://www\.imdb\.com/title/.*|http://twitpic\.com/.*) = http://api.embed.ly/1/oembed\n";
         $default .= "(https?://\w+\.wiki(pedia|media)\.org/wiki/.*) = http://api.embed.ly/1/oembed\n";
@@ -78,9 +78,9 @@ class Hook_config_oembed_manual_patterns
         $default .= "(https?://tinypic.com/.*) = http://api.embed.ly/1/oembed\n";
         $default .= "(https?://www\.justin\.tv/.*) = http://api.embed.ly/1/oembed\n";
         /*
-		Embedly requires an API key for high usage. It's pretty good though. To use an API key, do e.g.:
-		$_oembed_manual_patterns.="(http://www\.imdb\.com/title/.*|http://twitpic\.com/.*) = http://api.embed.ly/1/oembed?key=xxxxxx\n";
-		*/
+        Embedly requires an API key for high usage. It's pretty good though. To use an API key, do e.g.:
+        $_oembed_manual_patterns.="(http://www\.imdb\.com/title/.*|http://twitpic\.com/.*) = http://api.embed.ly/1/oembed?key=xxxxxx\n";
+        */
 
         return $default;
 

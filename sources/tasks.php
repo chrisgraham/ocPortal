@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -47,7 +47,7 @@ function tasks_script()
 /**
  * Execute a background task.
  *
- * @param  array				The task row
+ * @param  array                        The task row
  */
 function execute_task_background($task_row)
 {
@@ -134,14 +134,14 @@ function execute_task_background($task_row)
 /**
  * Send out the newsletter.
  *
- * @param  string				Title to use for completion notification subject lines
- * @param  ?tempcode			Title to use if there is no queueing or a queue message (NULL: don't return a full screen)
- * @param  ID_TEXT			The task hook
- * @param  ?array				Arguments for the task (NULL: no arguments)
- * @param  boolean			Whether to run the task at the end of the script (if it's not going to be put into the task queue)
- * @param  boolean			Whether to forcibly bypass the task queue (because we've determined somehow it will be a quick task)
- * @param  boolean			Whether to send a notification of the task having come out of the queue
- * @return tempcode			UI (function may not return if the task is immediate and doesn't have a text/html result)
+ * @param  string                       Title to use for completion notification subject lines
+ * @param  ?tempcode                    Title to use if there is no queueing or a queue message (NULL: don't return a full screen)
+ * @param  ID_TEXT                      The task hook
+ * @param  ?array                       Arguments for the task (NULL: no arguments)
+ * @param  boolean                      Whether to run the task at the end of the script (if it's not going to be put into the task queue)
+ * @param  boolean                      Whether to forcibly bypass the task queue (because we've determined somehow it will be a quick task)
+ * @param  boolean                      Whether to send a notification of the task having come out of the queue
+ * @return tempcode                     UI (function may not return if the task is immediate and doesn't have a text/html result)
  */
 function call_user_func_array__long_task($plain_title,$title,$hook,$args = null,$run_at_end_of_script = false,$force_immediate = false,$send_notification = true)
 {
@@ -232,12 +232,12 @@ function call_user_func_array__long_task($plain_title,$title,$hook,$args = null,
             @unlink($content_result[1]);
             sync_file($content_result[1]);
         }/* elseif (is_object($content_result))
-		{
-			$content_result->evaluate_echo(NULL);
-		} else
-		{
-			echo $content_result;
-		}*/
+        {
+            $content_result->evaluate_echo(NULL);
+        } else
+        {
+            echo $content_result;
+        }*/
         else {
             fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }

@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		testing_platform
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    testing_platform
  */
 
 /**
@@ -21,8 +21,8 @@ class installsql_test_set extends ocp_test_case
     public function testInstallSql()
     {
         /*
-		NB: We usually make install.sql using the old free Navicat Lite, or phpMyAdmin. This test may not find issues with generation in other software.
-		*/
+        NB: We usually make install.sql using the old free Navicat Lite, or phpMyAdmin. This test may not find issues with generation in other software.
+        */
 
         $contents = file_get_contents(get_file_base() . '/install.sql');
 

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		occle
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    occle
  */
 
 /**
@@ -61,9 +61,9 @@ function make_functions_dat()
 /**
  * Scan a directory for PHP files.
  *
- * @param  PATH		The directory
- * @param  boolean	Whether to skip custom files
- * @return array		Found files
+ * @param  PATH                         The directory
+ * @param  boolean                      Whether to skip custom files
+ * @return array                        Found files
  */
 function make_functions_dat_do_dir($dir,$no_custom = false)
 {
@@ -98,13 +98,13 @@ function make_functions_dat_do_dir($dir,$no_custom = false)
 class Hook_occle_command_find_function
 {
     /**
-	 * Run function for OcCLE hooks.
-	 *
-	 * @param  array	The options with which the command was called
-	 * @param  array	The parameters with which the command was called
-	 * @param  object	A reference to the OcCLE filesystem object
-	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
-	 */
+     * Run function for OcCLE hooks.
+     *
+     * @param  array                    The options with which the command was called
+     * @param  array                    The parameters with which the command was called
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
+     */
     public function run($options,$parameters,&$occle_fs)
     {
         if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {

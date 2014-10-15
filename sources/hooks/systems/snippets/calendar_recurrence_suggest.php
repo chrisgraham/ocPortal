@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 class Hook_calendar_recurrence_suggest
 {
     /**
-	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
-	 *
-	 * @return tempcode  The snippet
-	 */
+     * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
+     *
+     * @return tempcode                 The snippet
+     */
     public function run()
     {
         require_code('calendar');

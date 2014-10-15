@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -145,7 +145,7 @@ function init__site()
 /**
  * Load up details for the current zone.
  *
- * @return  ID_TEXT		The "real" zone name (not actually the zone name, but the zone name wants details to load for).
+ * @return  ID_TEXT     The "real" zone name (not actually the zone name, but the zone name wants details to load for).
  */
 function load_zone_data()
 {
@@ -153,8 +153,8 @@ function load_zone_data()
     $zone_name = get_zone_name();
     $real_zone = (($RELATIVE_PATH == '_tests') || ($RELATIVE_PATH == 'data') || ($RELATIVE_PATH == 'data_custom'))?get_param('zone',''):$zone_name;
     /** A map of the current zone that is running.
-	 * @global array $ZONE
-	 */
+     * @global array $ZONE
+     */
     if ($ZONE === NULL) {
         $ZONE = persistent_cache_get(array('ZONE',$real_zone));
 
@@ -222,7 +222,7 @@ function load_redirect_cache()
  *
  * @sets_output_state
  *
- * @param  mixed			JavaScript to attach (Tempcode or string)
+ * @param  mixed                        JavaScript to attach (Tempcode or string)
  */
 function attach_to_javascript($data)
 {
@@ -238,7 +238,7 @@ function attach_to_javascript($data)
  *
  * @sets_output_state
  *
- * @param  mixed			XHTML to attach (Tempcode or string)
+ * @param  mixed                        XHTML to attach (Tempcode or string)
  */
 function attach_to_screen_header($data)
 {
@@ -254,7 +254,7 @@ function attach_to_screen_header($data)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT		Parameter name
+ * @param  ID_TEXT                      Parameter name
  */
 function inform_non_canonical_parameter($param)
 {
@@ -276,11 +276,11 @@ function inform_non_canonical_parameter($param)
  *
  * @sets_output_state
  *
- * @param  mixed			The type of special message
- * @param  ID_TEXT		The template to use
+ * @param  mixed                        The type of special message
+ * @param  ID_TEXT                      The template to use
  * @set    inform notice warn
- * @param  boolean		Whether to put into the helper panel instead of the normal header area
- * @return string			Blank string so it can be chained in the Tempcode compiler. You will rarely want to use this return value. It's kind of a failsafe.
+ * @param  boolean                      Whether to put into the helper panel instead of the normal header area
+ * @return string                       Blank string so it can be chained in the Tempcode compiler. You will rarely want to use this return value. It's kind of a failsafe.
  */
 function attach_message($message,$type = 'inform',$put_in_helper_panel = false)
 {
@@ -374,8 +374,8 @@ function attach_message($message,$type = 'inform',$put_in_helper_panel = false)
 /**
  * Get the relative URL to the logo for the current zone.
  *
- * @param  ?ID_TEXT		The zone being operated within (NULL: auto-detect)
- * @return URLPATH		The relative URL to the logo for the current zone
+ * @param  ?ID_TEXT                     The zone being operated within (NULL: auto-detect)
+ * @return URLPATH                      The relative URL to the logo for the current zone
  */
 function get_logo_url($zone_name = null)
 {
@@ -399,8 +399,8 @@ function get_logo_url($zone_name = null)
 /**
  * Get the tempcode for the breadcrumbs.
  *
- * @param  boolean		Whether to show a self segment
- * @return tempcode		The breadcrumbs
+ * @param  boolean                      Whether to show a self segment
+ * @return tempcode                     The breadcrumbs
  */
 function breadcrumbs($show_self = true)
 {
@@ -451,8 +451,8 @@ function breadcrumbs($show_self = true)
 /**
  * Get the tempcode for the default breadcrumbs stub. This isn't entirely a default, because it does work with breadcrumb_set_parents. We refer to it as a default as it is possible to override the whole breadcrumbs environment via the special BREADCRUMBS global variable.
  *
- * @param  boolean		Whether we'll be providing a link to where we are currently at
- * @return tempcode		The default breadcrumb stub
+ * @param  boolean                      Whether we'll be providing a link to where we are currently at
+ * @return tempcode                     The default breadcrumb stub
  */
 function breadcrumbs_get_default_stub($link_to_self_entrypoint = true)
 {
@@ -511,8 +511,8 @@ function breadcrumbs_get_default_stub($link_to_self_entrypoint = true)
  *
  * @sets_output_state
  *
- * @param  tempcode		The segment
- * @param  ?mixed			The title of the follower of the segment OR an array as for breadcrumb_set_parents (NULL: implicit in $segment)
+ * @param  tempcode                     The segment
+ * @param  ?mixed                       The title of the follower of the segment OR an array as for breadcrumb_set_parents (NULL: implicit in $segment)
  */
 function breadcrumb_add_segment($segment,$final_title = null)
 {
@@ -556,7 +556,7 @@ function breadcrumb_add_segment($segment,$final_title = null)
  *
  * @sets_output_state
  *
- * @param  array			The list of parent entry points (pairs: entry point, title)
+ * @param  array                        The list of parent entry points (pairs: entry point, title)
  */
 function breadcrumb_set_parents($parents)
 {
@@ -569,7 +569,7 @@ function breadcrumb_set_parents($parents)
  *
  * @sets_output_state
  *
- * @param  tempcode		The title
+ * @param  tempcode                     The title
  */
 function breadcrumb_set_self($title)
 {
@@ -582,7 +582,7 @@ function breadcrumb_set_self($title)
  *
  * @sets_output_state
  *
- * @param  URLPATH		The URL
+ * @param  URLPATH                      The URL
  */
 function set_feed_url($url)
 {
@@ -595,9 +595,9 @@ function set_feed_url($url)
  *
  * @sets_output_state
  *
- * @param  tempcode		The text
- * @param  boolean		Whether to append
- * @param  boolean		Whether to add a box around the parameter
+ * @param  tempcode                     The text
+ * @param  boolean                      Whether to append
+ * @param  boolean                      Whether to add a box around the parameter
  */
 function set_helper_panel_text($text,$append = true,$put_in_box = true)
 {
@@ -621,7 +621,7 @@ function set_helper_panel_text($text,$append = true,$put_in_box = true)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT		The page name of the tutorial (must be an existing one on the brand site, i.e. ocPortal.com)
+ * @param  ID_TEXT                      The page name of the tutorial (must be an existing one on the brand site, i.e. ocPortal.com)
  */
 function set_helper_panel_tutorial($tutorial)
 {
@@ -635,7 +635,7 @@ function set_helper_panel_tutorial($tutorial)
  *
  * @sets_output_state
  *
- * @param  string			The short title
+ * @param  string                       The short title
  */
 function set_short_title($title)
 {
@@ -646,8 +646,8 @@ function set_short_title($title)
 /**
  * Process URL monikers, changing 'id' GET param to be correct.
  *
- * @param  ID_TEXT		The page name to do it for
- * @param  boolean		Do a redirect if we're not on the canonical URL
+ * @param  ID_TEXT                      The page name to do it for
+ * @param  boolean                      Do a redirect if we're not on the canonical URL
  */
 function process_url_monikers($page,$redirect_if_non_canonical = true)
 {
@@ -783,19 +783,19 @@ function do_site()
     $show_edit_links = get_param_integer('show_edit_links',0);
     global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
     /** Whether we will be embedding template markers in the output.
-	 * @sets_output_state
-	 *
-	 * @global ?array $KEEP_MARKERS
-	 */
+     * @sets_output_state
+     *
+     * @global ?array $KEEP_MARKERS
+     */
     $KEEP_MARKERS = ($keep_markers == 1) || ($special_page_type == 'show_markers');
     if (($KEEP_MARKERS) && (!headers_sent())) {
         header('Content-type: text/html; charset=' . get_charset());
     }
     /** Whether we will be embedding edit links in the output.
-	 * @sets_output_state
-	 *
-	 * @global ?array $SHOW_EDIT_LINKS
-	 */
+     * @sets_output_state
+     *
+     * @global ?array $SHOW_EDIT_LINKS
+     */
     $SHOW_EDIT_LINKS = ($show_edit_links == 1) || ($special_page_type == 'show_edit_links');
     if (($special_page_type != 'view') && ($special_page_type != 'show_markers')) {
         require_code('view_modes');
@@ -913,8 +913,8 @@ function do_site()
             echo $out_evaluated;
         } else {
             $GLOBALS['FINISHING_OUTPUT'] = true;
-            /*if (get_option('gzip_output')=='1')	Does not work well
-				ob_start('_compress_html_output');*/
+            /*if (get_option('gzip_output')=='1')  Does not work well
+                    ob_start('_compress_html_output');*/
             $out->evaluate_echo(null);
         }
     }
@@ -967,14 +967,14 @@ function do_site()
 /**
  * Take the specified parameters, and try to find the corresponding page, then execute a function to load the page (load_html_page/load_comcode_page).
  *
- * @param  ID_TEXT		The codename of the page to load
- * @param  boolean		Whether it is required for this page to exist (shows an error if it doesn't) -- otherwise, it will just return NULL
- * @param  ?ID_TEXT		The zone the page is being loaded in (NULL: as shown by access URL)
- * @param  ?ID_TEXT		The type of page - for if you know it (NULL: don't know it)
- * @param  boolean		Whether the page is being included from another
- * @param  boolean		Whether to not check for redirects (normally you would)
- * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
- * @return ?tempcode		The page (NULL: no page)
+ * @param  ID_TEXT                      The codename of the page to load
+ * @param  boolean                      Whether it is required for this page to exist (shows an error if it doesn't) -- otherwise, it will just return NULL
+ * @param  ?ID_TEXT                     The zone the page is being loaded in (NULL: as shown by access URL)
+ * @param  ?ID_TEXT                     The type of page - for if you know it (NULL: don't know it)
+ * @param  boolean                      Whether the page is being included from another
+ * @param  boolean                      Whether to not check for redirects (normally you would)
+ * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @return ?tempcode                    The page (NULL: no page)
  */
 function request_page($codename,$required,$zone = null,$page_type = null,$being_included = false,$no_redirect_check = false,&$out = null)
 {
@@ -1128,12 +1128,12 @@ function request_page($codename,$required,$zone = null,$page_type = null,$being_
 /**
  * Take the specified parameters, and try to find the corresponding page (caching front end).
  *
- * @param  ID_TEXT			The codename of the page to load
- * @param  ID_TEXT			The zone the page is being loaded in
- * @param  ?ID_TEXT			The type of page - for if you know it (NULL: don't know it)
- * @param  ?LANGUAGE_NAME	Language name (NULL: users language)
- * @param  boolean			Whether to not check for redirects (normally you would)
- * @return ~array				A list of details (false: page not found)
+ * @param  ID_TEXT                      The codename of the page to load
+ * @param  ID_TEXT                      The zone the page is being loaded in
+ * @param  ?ID_TEXT                     The type of page - for if you know it (NULL: don't know it)
+ * @param  ?LANGUAGE_NAME               Language name (NULL: users language)
+ * @param  boolean                      Whether to not check for redirects (normally you would)
+ * @return ~array                       A list of details (false: page not found)
  */
 function _request_page($codename,$zone,$page_type = null,$lang = null,$no_redirect_check = false)
 {
@@ -1148,12 +1148,12 @@ function _request_page($codename,$zone,$page_type = null,$lang = null,$no_redire
 /**
  * Take the specified parameters, and try to find the corresponding page.
  *
- * @param  ID_TEXT			The codename of the page to load
- * @param  ID_TEXT			The zone the page is being loaded in
- * @param  ?ID_TEXT			The type of page - for if you know it (NULL: don't know it)
- * @param  ?LANGUAGE_NAME	Language name (NULL: users language)
- * @param  boolean			Whether to not check for redirects (normally you would)
- * @return ~array				A list of details (false: page not found)
+ * @param  ID_TEXT                      The codename of the page to load
+ * @param  ID_TEXT                      The zone the page is being loaded in
+ * @param  ?ID_TEXT                     The type of page - for if you know it (NULL: don't know it)
+ * @param  ?LANGUAGE_NAME               Language name (NULL: users language)
+ * @param  boolean                      Whether to not check for redirects (normally you would)
+ * @return ~array                       A list of details (false: page not found)
  */
 function __request_page($codename,$zone,$page_type = null,$lang = null,$no_redirect_check = false)
 {
@@ -1366,10 +1366,10 @@ function __request_page($codename,$zone,$page_type = null,$lang = null,$no_redir
 /**
  * Take the specified parameters, and try to find a redirect for the corresponding page
  *
- * @param  ID_TEXT			The codename of the page to load
- * @param  ID_TEXT			The zone the page is being loaded in
- * @param  boolean			Whether to also search in wildcard mode
- * @return ~array				A list of details (false: page not found)
+ * @param  ID_TEXT                      The codename of the page to load
+ * @param  ID_TEXT                      The zone the page is being loaded in
+ * @param  boolean                      Whether to also search in wildcard mode
+ * @return ~array                       A list of details (false: page not found)
  */
 function _request_page__redirects($codename,$zone,$wildcard_mode = false)
 {
@@ -1403,13 +1403,13 @@ function _request_page__redirects($codename,$zone,$wildcard_mode = false)
 /**
  * Get the parsed contents of a Comcode page.
  *
- * @param  PATH			The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
- * @param  ID_TEXT		The zone the page is being loaded from
- * @param  ID_TEXT		The codename of the page
- * @param  ?PATH			The file base to load from (NULL: standard)
- * @param  boolean		Whether the page is being included from another
- * @param  ?object		Semi-filled output template (NULL: definitely not doing output streaming)
- * @return tempcode		The page
+ * @param  PATH                         The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+ * @param  ID_TEXT                      The zone the page is being loaded from
+ * @param  ID_TEXT                      The codename of the page
+ * @param  ?PATH                        The file base to load from (NULL: standard)
+ * @param  boolean                      Whether the page is being included from another
+ * @param  ?object                      Semi-filled output template (NULL: definitely not doing output streaming)
+ * @return tempcode                     The page
  */
 function load_comcode_page($string,$zone,$codename,$file_base = null,$being_included = false,&$out = null)
 {
@@ -1656,12 +1656,12 @@ function load_comcode_page($string,$zone,$codename,$file_base = null,$being_incl
 /**
  * Get a UI element of a route from a known Comcode page back to the declared root of the tree.
  *
- * @param  ID_TEXT		The Comcode page name
- * @param  ID_TEXT		The Comcode page zone
- * @param  ID_TEXT		The virtual root
- * @param  boolean		Whether not to put a link at this point in the navigation tree (usually, because the viewer is already at it)
- * @param  integer		The number of jumps we have gone through so far (cuts out after 10 as a failsafe)
- * @return tempcode		The navigation element
+ * @param  ID_TEXT                      The Comcode page name
+ * @param  ID_TEXT                      The Comcode page zone
+ * @param  ID_TEXT                      The virtual root
+ * @param  boolean                      Whether not to put a link at this point in the navigation tree (usually, because the viewer is already at it)
+ * @param  integer                      The number of jumps we have gone through so far (cuts out after 10 as a failsafe)
+ * @return tempcode                     The navigation element
  */
 function comcode_breadcrumbs($the_page,$the_zone,$root = '',$no_link_for_me_sir = true,$jumps = 0)
 {
@@ -1752,8 +1752,8 @@ function comcode_breadcrumbs($the_page,$the_zone,$root = '',$no_link_for_me_sir 
 /**
  * Log statistics for the page view.
  *
- * @param  string			The string to the page file
- * @param  integer		The time taken for page loading in milliseconds
+ * @param  string                       The string to the page file
+ * @param  integer                      The time taken for page loading in milliseconds
  */
 function log_stats($string,$pg_time)
 {
@@ -1823,10 +1823,10 @@ function log_stats($string,$pg_time)
 /* *
  * Output filter to compress HTML.
  *
- * @param  string			The HTML to filter
- * @return string			Compressed HTML
+ * @param  string                       The HTML to filter
+ * @return string                       Compressed HTML
  */
 /*f unction _compress_html_output($data)
 {
-	return preg_replace(array('#>[ \t]+#','#[ \t]+<#','#\n[ \t]+\n#','#\n+#'),array('> ',' <',"\n","\n"),$data);
+    return preg_replace(array('#>[ \t]+#','#[ \t]+<#','#\n[ \t]+\n#','#\n+#'),array('> ',' <',"\n","\n"),$data);
 }*/

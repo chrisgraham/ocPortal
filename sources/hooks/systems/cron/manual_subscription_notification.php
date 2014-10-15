@@ -13,22 +13,22 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 class Hook_cron_manual_subscription_notification
 {
     /**
-	 * Run function for CRON hooks. Searches for tasks to perform.
-	 */
+     * Run function for CRON hooks. Searches for tasks to perform.
+     */
     public function run()
     {
         /*
-		Send staff notifications for expiring manual notifications.
-		This might be used by the staff in order to get someone to send in a cheque, for example.
-		*/
+        Send staff notifications for expiring manual notifications.
+        This might be used by the staff in order to get someone to send in a cheque, for example.
+        */
 
         $_last_time = get_long_value('last_cron_manual_subscription_notification');
         $last_time = is_null($_last_time)?mixed():intval($_last_time);

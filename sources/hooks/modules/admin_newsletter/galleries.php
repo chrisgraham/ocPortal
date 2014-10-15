@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 class Hook_whats_news_galleries
 {
     /**
-	 * Find selectable (filterable) categories.
-	 *
-	 * @return ?array				Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
-	 */
+     * Find selectable (filterable) categories.
+     *
+     * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
+     */
     public function choose_categories()
     {
         if (!addon_installed('galleries')) {
@@ -38,13 +38,13 @@ class Hook_whats_news_galleries
     }
 
     /**
-	 * Run function for newsletter hooks.
-	 *
-	 * @param  TIME				The time that the entries found must be newer than
-	 * @param  LANGUAGE_NAME	The language the entries found must be in
-	 * @param  string				Category filter to apply
-	 * @return array				Tuple of result details
-	 */
+     * Run function for newsletter hooks.
+     *
+     * @param  TIME                     The time that the entries found must be newer than
+     * @param  LANGUAGE_NAME            The language the entries found must be in
+     * @param  string                   Category filter to apply
+     * @return array                    Tuple of result details
+     */
     public function run($cutoff_time,$lang,$filter)
     {
         if (!addon_installed('galleries')) {

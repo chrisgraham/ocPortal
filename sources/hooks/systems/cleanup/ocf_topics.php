@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_ocf_topics
 {
     /**
-	 * Find details about this cleanup hook.
-	 *
-	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
-	 */
+     * Find details about this cleanup hook.
+     *
+     * @return ?array                   Map of cleanup hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         if (get_forum_type() != 'ocf') {
@@ -44,10 +44,10 @@ class Hook_ocf_topics
     }
 
     /**
-	 * Run the cleanup hook action.
-	 *
-	 * @return tempcode	Results
-	 */
+     * Run the cleanup hook action.
+     *
+     * @return tempcode                 Results
+     */
     public function run()
     {
         if (get_forum_type() != 'ocf') {

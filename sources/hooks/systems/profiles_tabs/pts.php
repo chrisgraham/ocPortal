@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_Profiles_Tabs_pts
 {
     /**
-	 * Find whether this hook is active.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return boolean		Whether this hook is active
-	 */
+     * Find whether this hook is active.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @return boolean                  Whether this hook is active
+     */
     public function is_active($member_id_of,$member_id_viewing)
     {
         return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'view_other_pt')));
     }
 
     /**
-	 * Render function for profile tab hooks.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
-	 */
+     * Render function for profile tab hooks.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
+     */
     public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
     {
         $title = do_lang_tempcode('PRIVATE_TOPICS_INBOX');

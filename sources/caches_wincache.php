@@ -13,26 +13,26 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*EXTRA FUNCTIONS: wincache\_.+*/
 
 /**
  * Cache Driver.
- * @package		core
+ * @package    core
  */
 class ocp_wincache
 {
     public $objects_list = null;
 
     /**
-	 * Instruction to load up the objects list.
-	 *
-	 * @return array			The list of objects
-	 */
+     * Instruction to load up the objects list.
+     *
+     * @return array                    The list of objects
+     */
     public function load_objects_list()
     {
         if (is_null($this->objects_list)) {
@@ -46,12 +46,12 @@ class ocp_wincache
     }
 
     /**
-	 * Get data from the persistent cache.
-	 *
-	 * @param  string			Key
-	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
-	 * @return ?mixed			The data (NULL: not found / NULL entry)
-	 */
+     * Get data from the persistent cache.
+     *
+     * @param  string                   Key
+     * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (NULL: don't care)
+     * @return ?mixed                   The data (NULL: not found / NULL entry)
+     */
     public function get($key,$min_cache_date = null)
     {
         $success = false;
@@ -66,13 +66,13 @@ class ocp_wincache
     }
 
     /**
-	 * Put data into the persistent cache.
-	 *
-	 * @param  string			Key
-	 * @param  mixed			The data
-	 * @param  integer		Various flags (parameter not used)
-	 * @param  ?integer		The expiration time in seconds (NULL: no expiry)
-	 */
+     * Put data into the persistent cache.
+     *
+     * @param  string                   Key
+     * @param  mixed                    The data
+     * @param  integer                  Various flags (parameter not used)
+     * @param  ?integer                 The expiration time in seconds (NULL: no expiry)
+     */
     public function set($key,$data,$flags = 0,$expire_secs = null)
     {
         // Update list of persistent-objects
@@ -89,10 +89,10 @@ class ocp_wincache
     }
 
     /**
-	 * Delete data from the persistent cache.
-	 *
-	 * @param  string			Key
-	 */
+     * Delete data from the persistent cache.
+     *
+     * @param  string                   Key
+     */
     public function delete($key)
     {
         // Update list of persistent-objects
@@ -104,8 +104,8 @@ class ocp_wincache
     }
 
     /**
-	 * Remove all data from the persistent cache.
-	 */
+     * Remove all data from the persistent cache.
+     */
     public function flush()
     {
         // Update list of persistent-objects

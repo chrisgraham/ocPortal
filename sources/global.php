@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 // Quick JS loader
@@ -34,8 +34,8 @@ if ((strpos($script_name,'/sources/') !== false) || (strpos($script_name,'/sourc
  * You should remember this function, and not substitute anything else for it, as that will likely make your code unstable.
  * It is key to source code modularity in ocPortal.
  *
- * @param  string			The codename for the source module to load (or a full relative path, ending with .php; if custom checking is needed, this must be the custom version)
- * @param  boolean		Whether to cleanly fail when a source file is missing
+ * @param  string                       The codename for the source module to load (or a full relative path, ending with .php; if custom checking is needed, this must be the custom version)
+ * @param  boolean                      Whether to cleanly fail when a source file is missing
  */
 function require_code($codename,$light_exit = false)
 {
@@ -167,7 +167,7 @@ function require_code($codename,$light_exit = false)
                         include($path_b);
                     }
                 } else {
-                    //static $log_file=NULL;if ($log_file===NULL) $log_file=fopen(get_file_base().'/log.'.strval(time()).'.txt','wb');fwrite($log_file,$path_b."\n");		Good for debugging errors in eval'd code
+                    //static $log_file=NULL;if ($log_file===NULL) $log_file=fopen(get_file_base().'/log.'.strval(time()).'.txt','wb');fwrite($log_file,$path_b."\n");      Good for debugging errors in eval'd code
                     eval($orig); // Load up modified original
                 }
 
@@ -307,7 +307,7 @@ function require_code($codename,$light_exit = false)
 /**
  * Require code, but without looking for sources_custom overrides
  *
- * @param  string			The codename for the source module to load
+ * @param  string                       The codename for the source module to load
  */
 function require_code_no_override($codename)
 {
@@ -325,7 +325,7 @@ function require_code_no_override($codename)
 /**
  * Find if we are running on a live Google App Engine application.
  *
- * @return boolean		If it is running as a live Google App Engine application
+ * @return boolean                      If it is running as a live Google App Engine application
  */
 function appengine_is_live()
 {
@@ -335,7 +335,7 @@ function appengine_is_live()
 /**
  * Are we currently running HTTPS.
  *
- * @return boolean		If we are
+ * @return boolean                      If we are
  */
 function tacit_https()
 {
@@ -346,9 +346,9 @@ function tacit_https()
 /**
  * Make an object of the given class
  *
- * @param  string			The class name
- * @param  boolean		Whether to return NULL if there is no such class
- * @return ?object		The object (NULL: no such class)
+ * @param  string                       The class name
+ * @param  boolean                      Whether to return NULL if there is no such class
+ * @return ?object                      The object (NULL: no such class)
  */
 function object_factory($class,$failure_ok = false)
 {
@@ -364,7 +364,7 @@ function object_factory($class,$failure_ok = false)
 /**
  * Get the file base for your installation of ocPortal
  *
- * @return PATH			The file base, without a trailing slash
+ * @return PATH                         The file base, without a trailing slash
  */
 function get_file_base()
 {
@@ -375,7 +375,7 @@ function get_file_base()
 /**
  * Get the file base for your installation of ocPortal.  For a shared install, or a GAE-install, this is different to the file-base.
  *
- * @return PATH			The file base, without a trailing slash
+ * @return PATH                         The file base, without a trailing slash
  */
 function get_custom_file_base()
 {
@@ -397,9 +397,9 @@ function get_custom_file_base()
  * Get the parameter put into it, with no changes. If it detects that the parameter is naughty (i.e malicious, and probably from a hacker), it will log the hack-attack and output an error message.
  * This function is designed to be called on parameters that will be embedded in a path, and defines malicious as trying to reach a parent directory using '..'. All file paths in ocPortal should be absolute
  *
- * @param  string			String to test
- * @param  boolean		Whether to just filter out the naughtyness
- * @return string			Same as input string
+ * @param  string                       String to test
+ * @param  boolean                      Whether to just filter out the naughtyness
+ * @return string                       Same as input string
  */
 function filter_naughty($in,$preg = false)
 {
@@ -424,9 +424,9 @@ function filter_naughty($in,$preg = false)
 /**
  * This function is similar to filter_naughty, except it requires the parameter to be strictly alphanumeric. It is intended for use on text that will be put into an eval.
  *
- * @param  string			String to test
- * @param  boolean		Whether to just filter out the naughtyness
- * @return string			Same as input string
+ * @param  string                       String to test
+ * @param  boolean                      Whether to just filter out the naughtyness
+ * @return string                       Same as input string
  */
 function filter_naughty_harsh($in,$preg = false)
 {
@@ -447,25 +447,25 @@ function filter_naughty_harsh($in,$preg = false)
 /**
  * Include some PHP code, compiling to HHVM's hack, for type strictness (uses ocPortal phpdoc comments).
  *
- * @param  PATH			Include path
- * @return ?mixed			Code return code (NULL: actual NULL)
+ * @param  PATH                         Include path
+ * @return ?mixed                       Code return code (NULL: actual NULL)
  */
 function hhvm_include($path)
 {
     return include($path); // Disable this line to enable the fancy Hack support. We don't maintain this 100%, but it is a great performance option.
 
-    /*//if (!is_file($path.'.hh'))	// Leave this commented when debugging
-	{
-		if ($path==get_file_base().'/sources/php.php') return include($path);
-		if ($path==get_file_base().'/sources/type_validation.php') return include($path);
-		if (strpos($path,'_custom')!==false) return include($path);
+    /*//if (!is_file($path.'.hh'))  // Leave this commented when debugging
+    {
+        if ($path==get_file_base().'/sources/php.php') return include($path);
+        if ($path==get_file_base().'/sources/type_validation.php') return include($path);
+        if (strpos($path,'_custom')!==false) return include($path);
 
-		require_code('php');
-		$path=substr($path,strlen(get_file_base())+1);
-		$new_code=convert_from_php_to_hhvm_hack($path);
-		file_put_contents($path.'.hh',$new_code);
-	}
-	return include($path.'.hh');*/
+        require_code('php');
+        $path=substr($path,strlen(get_file_base())+1);
+        $new_code=convert_from_php_to_hhvm_hack($path);
+        file_put_contents($path.'.hh',$new_code);
+    }
+    return include($path.'.hh');*/
 }
 
 // Useful for basic profiling

@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		directory_protect
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    directory_protect
  */
 
 // Find ocPortal base directory, and chdir into it
@@ -142,9 +142,9 @@ error_reporting(0);
 // Send actual data
 $myfile = fopen($_full,'rb');
 fseek($myfile,$from);
-/*if ($size==$new_length)		Uses a lot of memory :S
+/*if ($size==$new_length)     Uses a lot of memory :S
 {
-	fpassthru($myfile);
+    fpassthru($myfile);
 } else*/
 {
     $i = 0;

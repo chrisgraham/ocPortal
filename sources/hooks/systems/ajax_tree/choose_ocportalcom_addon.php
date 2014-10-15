@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_addon_management
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_addon_management
  */
 
 class Hook_choose_ocportalcom_addon
 {
     /**
-	 * This will get the XML file from ocportal.com.
-	 *
-	 * @param  ?ID_TEXT		The ID to do under (NULL: root)
-	 * @return string			The XML file
-	 */
+     * This will get the XML file from ocportal.com.
+     *
+     * @param  ?ID_TEXT                 The ID to do under (NULL: root)
+     * @return string                   The XML file
+     */
     public function get_file($id)
     {
         $stub = (get_param_integer('localhost',0) == 1)?get_base_url():'http://ocportal.com';
@@ -47,27 +47,27 @@ class Hook_choose_ocportalcom_addon
     }
 
     /**
-	 * Run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
-	 *
-	 * @param  ?ID_TEXT		The ID to do under (NULL: root)
-	 * @param  array			Options being passed through
-	 * @param  ?ID_TEXT		The ID to select by default (NULL: none)
-	 * @return string			XML in the special category,entry format
-	 */
+     * Run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
+     *
+     * @param  ?ID_TEXT                 The ID to do under (NULL: root)
+     * @param  array                    Options being passed through
+     * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
+     * @return string                   XML in the special category,entry format
+     */
     public function run($id,$options,$default = null)
     {
         return $this->get_file($id);
     }
 
     /**
-	 * Generate a simple selection list for the ajax-tree hook. Returns a normal <select> style <option>-list, for fallback purposes
-	 *
-	 * @param  ?ID_TEXT		The ID to do under (NULL: root) - not always supported
-	 * @param  array			Options being passed through
-	 * @param  ?ID_TEXT		The ID to select by default (NULL: none)
-	 * @param  string			Prefix titles with this
-	 * @return tempcode		The nice list
-	 */
+     * Generate a simple selection list for the ajax-tree hook. Returns a normal <select> style <option>-list, for fallback purposes
+     *
+     * @param  ?ID_TEXT                 The ID to do under (NULL: root) - not always supported
+     * @param  array                    Options being passed through
+     * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
+     * @param  string                   Prefix titles with this
+     * @return tempcode                 The nice list
+     */
     public function simple($id,$options,$it = null,$prefix = '')
     {
         $file = $this->get_file($id);

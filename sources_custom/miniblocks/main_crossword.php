@@ -52,8 +52,8 @@ echo '<div class="float_surrounder crossword">';
 echo <<<END
 <table class="questionTable results_table" border="0" cellpadding="4">
 <tr>
-	<th>Num.</th>
-	<th>Question</th>
+    <th>Num.</th>
+    <th>Question</th>
 </tr>
 END;
 
@@ -68,8 +68,8 @@ foreach ($words as $key => $word) {
     $word_hints .= strval($key+1) . '=' . $_word;
     echo <<<END
 <tr>
-	<td>{$_key}.</td>
-	<td>{$_question}</td>
+    <td>{$_key}.</td>
+    <td>{$_question}</td>
 </tr>
 END;
 }

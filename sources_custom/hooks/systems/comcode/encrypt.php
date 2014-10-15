@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		password_censor
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    password_censor
  */
 
 class Hook_comcode_encrypt
 {
     /**
-	 * Run function for comcode hooks. They find the custom-comcode-row-like attributes of the tag.
-	 *
-	 * @return array			Fake custom Comcode row
-	 */
+     * Run function for comcode hooks. They find the custom-comcode-row-like attributes of the tag.
+     *
+     * @return array                    Fake custom Comcode row
+     */
     public function get_tag()
     {
         return array(

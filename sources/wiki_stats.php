@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		wiki
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    wiki
  */
 
 /**
  * Get the number of Wiki+ pages currently in the database.
  *
- * @return integer		The number of pages in the Wiki+ database
+ * @return integer                      The number of pages in the Wiki+ database
  */
 function get_num_wiki_pages()
 {
@@ -42,7 +42,7 @@ function get_num_wiki_pages()
 /**
  * Get the number of Wiki+ posts currently in the database.
  *
- * @return integer		The number of posts in the Wiki+ database
+ * @return integer                      The number of posts in the Wiki+ database
  */
 function get_num_wiki_posts()
 {

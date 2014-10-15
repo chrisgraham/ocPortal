@@ -214,7 +214,7 @@ if ((count($files) == 0) && (@$_GET['full_scan'] != '1')) {
         $files = push_bugfix_do_dir(get_file_base(),$git_found,24*60*60*14);
     }
     /*$git_status='required="required"';
-	$git_status_2='';*/
+    $git_status_2='';*/
     $git_status_3 = '<strong>Git commit ID</strong>';
     $choose_files_label = '<strong>Choose files</strong>';
 }
@@ -226,77 +226,77 @@ echo <<<END
 
 <style>
 #bugfix_form label {
-	float: left;
-	width: 430px;
+    float: left;
+    width: 430px;
 }
 </style>
 
 <form action="{$post_url}" method="post" id="bugfix_form">
-	<fieldset>
-		<legend>Classification</legend>
+    <fieldset>
+        <legend>Classification</legend>
 
-		<div>
-			<label for="version">Version</label>
-			<input step="0.1" required="required" name="version" id="version" type="text" value="{$on_disk_version}" />
-		</div>
+        <div>
+            <label for="version">Version</label>
+            <input step="0.1" required="required" name="version" id="version" type="text" value="{$on_disk_version}" />
+        </div>
 
-		<div>
-			<label for="title">Bug summary</label>
-			<input size="60" required="required" name="title" id="title" type="text" value="" />
-		</div>
+        <div>
+            <label for="title">Bug summary</label>
+            <input size="60" required="required" name="title" id="title" type="text" value="" />
+        </div>
 
-		<div>
-			<label for="notes">Notes / Description</label>
-			<textarea cols="40" rows="7" required="required" name="notes" id="notes"></textarea>
-		</div>
+        <div>
+            <label for="notes">Notes / Description</label>
+            <textarea cols="40" rows="7" required="required" name="notes" id="notes"></textarea>
+        </div>
 
-		<div>
-			<label for="affects">Affects</label>
-			<input size="40" name="affects" id="affects" type="text" value="" placeholder="optional" />
-		</div>
-	</fieldset>
+        <div>
+            <label for="affects">Affects</label>
+            <input size="40" name="affects" id="affects" type="text" value="" placeholder="optional" />
+        </div>
+    </fieldset>
 
-	<fieldset>
-		<legend>Recognition signature <em>(optional)</em></legend>
+    <fieldset>
+        <legend>Recognition signature <em>(optional)</em></legend>
 
-		<div>
-			<label for="recog_error_substring">Error message substring <span style="font-size: 0.8em">(use <kbd>xxx</kbd> to make a wild-card)</span></label>
-			<input size="40" name="recog_error_substring" id="recog_error_substring" type="text" value="" placeholder="optional" />
-		</div>
-	</fieldset>
+        <div>
+            <label for="recog_error_substring">Error message substring <span style="font-size: 0.8em">(use <kbd>xxx</kbd> to make a wild-card)</span></label>
+            <input size="40" name="recog_error_substring" id="recog_error_substring" type="text" value="" placeholder="optional" />
+        </div>
+    </fieldset>
 
-	<fieldset>
-		<legend>Post to</legend>
+    <fieldset>
+        <legend>Post to</legend>
 
-		<div>
-			<label for="post_id">Forum post ID to reply to</label>
-			<input name="post_id" id="post_id" type="number" value="" placeholder="optional" />
-		</div>
+        <div>
+            <label for="post_id">Forum post ID to reply to</label>
+            <input name="post_id" id="post_id" type="number" value="" placeholder="optional" />
+        </div>
 
-		<div>
-			<label for="tracker_id">Tracker ID to attach to <span style="font-size: 0.8em">(if not entered a new one will be made)</span></label>
-			<input onchange="this.form.elements['post_to_bug_catalogue'].checked=false;" name="tracker_id" id="tracker_id" type="number" value="" placeholder="optional" />
-		</div>
+        <div>
+            <label for="tracker_id">Tracker ID to attach to <span style="font-size: 0.8em">(if not entered a new one will be made)</span></label>
+            <input onchange="this.form.elements['post_to_bug_catalogue'].checked=false;" name="tracker_id" id="tracker_id" type="number" value="" placeholder="optional" />
+        </div>
 
-		<div>
-			<label for="post_to_bug_catalogue">Post to bug catalogue <span style="font-size: 0.8em">(if hotfix is worth advertising and issue is new)</span></label>
-			<input checked="checked" type="checkbox" id="post_to_bug_catalogue" name="post_to_bug_catalogue" />
-		</div>
+        <div>
+            <label for="post_to_bug_catalogue">Post to bug catalogue <span style="font-size: 0.8em">(if hotfix is worth advertising and issue is new)</span></label>
+            <input checked="checked" type="checkbox" id="post_to_bug_catalogue" name="post_to_bug_catalogue" />
+        </div>
 
-		<div>
-			<label for="git_commit_id">{$git_status_3}{$git_status_2}</label>
-			<input onchange="document.getElementById('fixed_files').required=(this.value=='');" name="git_commit_id" id="git_commit_id" type="text" value="" {$git_status} />
-		</div>
-	</fieldset>
+        <div>
+            <label for="git_commit_id">{$git_status_3}{$git_status_2}</label>
+            <input onchange="document.getElementById('fixed_files').required=(this.value=='');" name="git_commit_id" id="git_commit_id" type="text" value="" {$git_status} />
+        </div>
+    </fieldset>
 END;
 
 if (count($files) != 0) {
     echo <<<END
-	<fieldset>
-		<legend>Fix</legend>
+    <fieldset>
+        <legend>Fix</legend>
 
-		<label for="fixed_files">{$choose_files_label}</label>
-		<select size="15" required="required" multiple="multiple" name="fixed_files[]" id="fixed_files">
+        <label for="fixed_files">{$choose_files_label}</label>
+        <select size="15" required="required" multiple="multiple" name="fixed_files[]" id="fixed_files">
 END;
     foreach ($files as $file) {
         $git_dirty = isset($git_found[$file]);
@@ -304,41 +304,41 @@ END;
         echo '<option' . ($git_dirty?' selected="selected"':'') . '>' . escape_html($file) . '</option>';
     }
     echo <<<END
-		</select>
-	</fieldset>
+        </select>
+    </fieldset>
 END;
 }
 
 echo <<<END
-	<fieldset>
-		<legend>Submission</legend>
+    <fieldset>
+        <legend>Submission</legend>
 
-		<div>
-			<label for="password">Master password for ocPortal.com</label>
-			<input autocomplete="autocomplete" required="required" name="password" id="password" type="password" value="" />
-		</div>
+        <div>
+            <label for="password">Master password for ocPortal.com</label>
+            <input autocomplete="autocomplete" required="required" name="password" id="password" type="password" value="" />
+        </div>
 
-		<div>
-			<label style="margin-left: 430px; width: 10em" for="submit_to_test">
-				Submit to test site
-				<!-- remove disabled if testing -->
-				<input disabled="disabled" name="submit_to" id="submit_to_test" type="radio" value="test" />
-			</label>
+        <div>
+            <label style="margin-left: 430px; width: 10em" for="submit_to_test">
+                    Submit to test site
+                    <!-- remove disabled if testing -->
+                    <input disabled="disabled" name="submit_to" id="submit_to_test" type="radio" value="test" />
+            </label>
 
-			<label style="width: 10em" for="submit_to_live">
-				Submit to live site
-				<input name="submit_to" id="submit_to_live" type="radio" value="live" checked="checked" />
-			</label>
-		</div>
-	</fieldset>
+            <label style="width: 10em" for="submit_to_live">
+                    Submit to live site
+                    <input name="submit_to" id="submit_to_live" type="radio" value="live" checked="checked" />
+            </label>
+        </div>
+    </fieldset>
 
-	<p style="margin-left: 440px;">
-		<input class="buttons__proceed button_screen" type="submit" value="Submit fix" />
-	</p>
+    <p style="margin-left: 440px;">
+        <input class="buttons__proceed button_screen" type="submit" value="Submit fix" />
+    </p>
 
-	<p>
-		<em>Once submitted, fixes to the fix should be handled using this tool again, to submit to the tracker ID that had been auto-created the first time.</em>
-	</p>
+    <p>
+        <em>Once submitted, fixes to the fix should be handled using this tool again, to submit to the tracker ID that had been auto-created the first time.</em>
+    </p>
 </form>
 END;
 
@@ -461,8 +461,8 @@ function make_call($call,$params,$file = null)
     $result = @file_get_contents($call_url,false,$context);
     if ($result === false) {
         echo '
-			<form method="post" target="_blank" action="' . escape_html($call_url) . '">
-		';
+            <form method="post" target="_blank" action="' . escape_html($call_url) . '">
+        ';
         foreach ($data as $key => $val) {
             if (!is_array($val)) {
                 echo '<input type="hidden" name="' . escape_html($key) . '" value="' . escape_html($val) . '" />';
@@ -479,9 +479,9 @@ function make_call($call,$params,$file = null)
             }
         }
         echo '
-				<input class="buttons__proceed button_screen" type="submit" value="Action failed: Try manually" />
-			</form>
-		';
+                    <input class="buttons__proceed button_screen" type="submit" value="Action failed: Try manually" />
+            </form>
+        ';
     }
     if ($result == 'Access Denied') {
         echo '<p>Access denied</p>';

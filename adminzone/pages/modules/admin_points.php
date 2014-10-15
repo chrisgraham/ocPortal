@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		points
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    points
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_points
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_points
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -65,10 +65,10 @@ class Module_admin_points
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -105,10 +105,10 @@ class Module_admin_points
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('points');
@@ -133,11 +133,11 @@ class Module_admin_points
     }
 
     /**
-	 * An interface for choosing between dates.
-	 *
-	 * @param  tempcode	The title to display.
-	 * @return tempcode	The result of execution.
-	 */
+     * An interface for choosing between dates.
+     *
+     * @param  tempcode                 The title to display.
+     * @return tempcode                 The result of execution.
+     */
     public function _get_between($title)
     {
         require_code('form_templates');
@@ -161,10 +161,10 @@ class Module_admin_points
     }
 
     /**
-	 * Export a CSV of point transactions.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Export a CSV of point transactions.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function points_export()
     {
         $d = array(get_input_date('from',true),get_input_date('to',true));
@@ -178,10 +178,10 @@ class Module_admin_points
     }
 
     /**
-	 * The UI to view all point transactions ordered by date.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to view all point transactions ordered by date.
+     *
+     * @return tempcode                 The UI
+     */
     public function points_log()
     {
         $start = get_param_integer('start',0);
@@ -243,10 +243,10 @@ class Module_admin_points
     }
 
     /**
-	 * The actualiser to reverse a point gift transaction.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to reverse a point gift transaction.
+     *
+     * @return tempcode                 The UI
+     */
     public function reverse()
     {
         $id = post_param_integer('id');
@@ -292,10 +292,10 @@ class Module_admin_points
     }
 
     /**
-	 * The actualiser to charge a member points.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to charge a member points.
+     *
+     * @return tempcode                 The UI
+     */
     public function points_charge()
     {
         $member = post_param_integer('member');

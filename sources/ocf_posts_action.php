@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -30,8 +30,8 @@ function init__ocf_posts_action()
 /**
  * Get a list of post templates that apply to a certain forum.
  *
- * @param  AUTO_LINK The ID of the forum.
- * @return array 		The list of applicable post templates.
+ * @param  AUTO_LINK                    The ID of the forum.
+ * @return array                        The list of applicable post templates.
  */
 function ocf_get_post_templates($forum_id)
 {
@@ -59,10 +59,10 @@ function ocf_get_post_templates($forum_id)
 /**
  * Check a post would be valid.
  *
- * @param  LONG_TEXT		The post.
- * @param  ?AUTO_LINK	The ID of the topic the post would be in (NULL: don't check with regard to any particular topic).
- * @param  ?MEMBER		The poster (NULL: current member).
- * @return ?array			Row of the existing post if a double post (single row map-element in a list of rows) (NULL: not a double post).
+ * @param  LONG_TEXT                    The post.
+ * @param  ?AUTO_LINK                   The ID of the topic the post would be in (NULL: don't check with regard to any particular topic).
+ * @param  ?MEMBER                      The poster (NULL: current member).
+ * @return ?array                       Row of the existing post if a double post (single row map-element in a list of rows) (NULL: not a double post).
  */
 function ocf_check_post($post,$topic_id = null,$poster = null)
 {
@@ -105,34 +105,34 @@ function ocf_check_post($post,$topic_id = null,$poster = null)
 /**
  * Add a post.
  *
- * @param  AUTO_LINK		The ID of the topic to add the post to.
- * @param  SHORT_TEXT	The title of the post (may be blank).
- * @param  LONG_TEXT		The post.
- * @param  BINARY			Whether to skip showing the posters signature in the post.
- * @param  ?boolean		Whether the post is the first in the topic (NULL: work it out).
- * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially).
- * @param  BINARY			Whether the post is marked emphasised.
- * @param  ?string		The name of the person making the post (NULL: username of current member).
- * @param  ?IP				The IP address the post is to be made under (NULL: IP of current user).
- * @param  ?TIME			The time of the post (NULL: now).
- * @param  ?MEMBER		The poster (NULL: current member).
- * @param  ?MEMBER		The member that this post is intended solely for (NULL: public).
- * @param  ?TIME			The last edit time of the post (NULL: never edited).
- * @param  ?MEMBER		The member that was last to edit the post (NULL: never edited).
- * @param  boolean		Whether to check permissions for whether the post may be made as it is given.
- * @param  boolean		Whether to update the caches after making the post.
- * @param  ?AUTO_LINK	The forum the post will be in (NULL: find out from the DB).
- * @param  boolean		Whether to allow attachments in this post.
- * @param  ?string		The title of the topic (NULL: find from the DB).
- * @param  BINARY			Whether the topic is a sunk topic.
- * @param  ?AUTO_LINK 	Force an ID (NULL: don't force an ID)
- * @param  boolean		Whether to make the post anonymous
- * @param  boolean		Whether to skip post checks
- * @param  ?boolean		Whether this is for a new Private Topic (NULL: work it out)
- * @param  boolean		Whether to explicitly insert the Comcode with admin privileges
- * @param  ?AUTO_LINK	Parent post ID (NULL: none-threaded/root-of-thread)
- * @param  boolean		Whether to send out notifications
- * @return AUTO_LINK		The ID of the new post.
+ * @param  AUTO_LINK                    The ID of the topic to add the post to.
+ * @param  SHORT_TEXT                   The title of the post (may be blank).
+ * @param  LONG_TEXT                    The post.
+ * @param  BINARY                       Whether to skip showing the posters signature in the post.
+ * @param  ?boolean                     Whether the post is the first in the topic (NULL: work it out).
+ * @param  ?BINARY                      Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially).
+ * @param  BINARY                       Whether the post is marked emphasised.
+ * @param  ?string                      The name of the person making the post (NULL: username of current member).
+ * @param  ?IP                          The IP address the post is to be made under (NULL: IP of current user).
+ * @param  ?TIME                        The time of the post (NULL: now).
+ * @param  ?MEMBER                      The poster (NULL: current member).
+ * @param  ?MEMBER                      The member that this post is intended solely for (NULL: public).
+ * @param  ?TIME                        The last edit time of the post (NULL: never edited).
+ * @param  ?MEMBER                      The member that was last to edit the post (NULL: never edited).
+ * @param  boolean                      Whether to check permissions for whether the post may be made as it is given.
+ * @param  boolean                      Whether to update the caches after making the post.
+ * @param  ?AUTO_LINK                   The forum the post will be in (NULL: find out from the DB).
+ * @param  boolean                      Whether to allow attachments in this post.
+ * @param  ?string                      The title of the topic (NULL: find from the DB).
+ * @param  BINARY                       Whether the topic is a sunk topic.
+ * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  boolean                      Whether to make the post anonymous
+ * @param  boolean                      Whether to skip post checks
+ * @param  ?boolean                     Whether this is for a new Private Topic (NULL: work it out)
+ * @param  boolean                      Whether to explicitly insert the Comcode with admin privileges
+ * @param  ?AUTO_LINK                   Parent post ID (NULL: none-threaded/root-of-thread)
+ * @param  boolean                      Whether to send out notifications
+ * @return AUTO_LINK                    The ID of the new post.
  */
 function ocf_make_post($topic_id,$title,$post,$skip_sig = 0,$is_starter = false,$validated = null,$is_emphasised = 0,$poster_name_if_guest = null,$ip_address = null,$time = null,$poster = null,$intended_solely_for = null,$last_edit_time = null,$last_edit_by = null,$check_permissions = true,$update_cacheing = true,$forum_id = null,$support_attachments = true,$topic_title = '',$sunk = 0,$id = null,$anonymous = false,$skip_post_checks = false,$is_pt = false,$insert_comcode_as_admin = false,$parent_id = null,$send_notification = true)
 {
@@ -351,10 +351,10 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig = 0,$is_starter = false,
             }
             if ($validated == 1) {
                 if (!is_null($forum_id)) {
-                    /*if ($sunk==1)		Don't hide posts to sunk topics actually, it's too weird
-					{
-						$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET f_cache_num_topics=(f_cache_num_topics+'.(($is_starter)?'1':'0').'),f_cache_num_posts=(f_cache_num_posts+1) WHERE id='.strval($topic_id));
-					} else*/
+                    /*if ($sunk==1)    Don't hide posts to sunk topics actually, it's too weird
+                            {
+                                        $GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums SET f_cache_num_topics=(f_cache_num_topics+'.(($is_starter)?'1':'0').'),f_cache_num_posts=(f_cache_num_posts+1) WHERE id='.strval($topic_id));
+                            } else*/
                     {
                         require_code('ocf_posts_action2');
 
@@ -423,8 +423,8 @@ function ocf_make_post($topic_id,$title,$post,$skip_sig = 0,$is_starter = false,
 /**
  * Force a members post count to be recalculated.
  *
- * @param  MEMBER		The member.
- * @param  ?integer	The amount to add to the post count (NULL: fully recalculate the post count).
+ * @param  MEMBER                       The member.
+ * @param  ?integer                     The amount to add to the post count (NULL: fully recalculate the post count).
  */
 function ocf_force_update_member_post_count($member_id,$member_post_count_dif = null)
 {
@@ -457,9 +457,9 @@ function ocf_force_update_member_post_count($member_id,$member_post_count_dif = 
 /**
  * Decache cached OCF elements depending on a certain forum, and optionally a certain member.
  *
- * @param  AUTO_LINK The ID of the forum.
- * @param  ?string	The name of the forum (NULL: find it from the DB).
- * @param  ?MEMBER	The member (NULL: do no member decacheing).
+ * @param  AUTO_LINK                    The ID of the forum.
+ * @param  ?string                      The name of the forum (NULL: find it from the DB).
+ * @param  ?MEMBER                      The member (NULL: do no member decacheing).
  */
 function ocf_decache_ocp_blocks($updated_forum_id,$forum_name = null,$member = null)
 {

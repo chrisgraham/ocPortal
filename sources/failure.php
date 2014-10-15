@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -31,8 +31,8 @@ function init__failure()
     }
 
     /** Whether we want errors to result in simple text responses. Useful for AJAX scripts.
-	 * @global boolean $WANT_TEXT_ERRORS
-	 */
+     * @global boolean $WANT_TEXT_ERRORS
+     */
     global $WANT_TEXT_ERRORS;
     $WANT_TEXT_ERRORS = false;
 
@@ -65,9 +65,9 @@ function suggest_fatalistic()
 /**
  * Terminate with an error caused by unzipping.
  *
- * @param  integer	The zip error number.
- * @param  boolean	Whether mzip was used.
- * @return tempcode	Error message.
+ * @param  integer                      The zip error number.
+ * @param  boolean                      Whether mzip was used.
+ * @return tempcode                     Error message.
  */
 function zip_error($errno,$mzip = false)
 {
@@ -108,10 +108,10 @@ function zip_error($errno,$mzip = false)
 /**
  * Handle invalid parameter values.
  *
- * @param  string			The parameter deemed to have an invalid value somehow
- * @param  ?string		The value of the parameter deemed invalid (NULL: we known we can't recover)
- * @param  boolean		Whether the parameter is a POST parameter
- * @return string			Fixed parameter (usually the function won't return [instead will give an error], but in special cases, it can filter an invalid return)
+ * @param  string                       The parameter deemed to have an invalid value somehow
+ * @param  ?string                      The value of the parameter deemed invalid (NULL: we known we can't recover)
+ * @param  boolean                      Whether the parameter is a POST parameter
+ * @return string                       Fixed parameter (usually the function won't return [instead will give an error], but in special cases, it can filter an invalid return)
  */
 function _param_invalid($name,$ret,$posted)
 {
@@ -151,9 +151,9 @@ function _param_invalid($name,$ret,$posted)
 /**
  * Complain about a field being missing.
  *
- * @param  string			The name of the parameter
- * @param  ?boolean		Whether the parameter is a POST parameter (NULL: undetermined)
- * @param  array			The array we're extracting parameters from
+ * @param  string                       The name of the parameter
+ * @param  ?boolean                     Whether the parameter is a POST parameter (NULL: undetermined)
+ * @param  array                        The array we're extracting parameters from
  */
 function improperly_filled_in($name,$posted,$array)
 {
@@ -178,7 +178,7 @@ function improperly_filled_in($name,$posted,$array)
 /**
  * Complain about a POST field being missing.
  *
- * @param  string			The name of the parameter
+ * @param  string                       The name of the parameter
  */
 function improperly_filled_in_post($name)
 {
@@ -198,12 +198,12 @@ function improperly_filled_in_post($name)
 /**
  * Called by 'ocportal_error_handler'. ocPortal error handler (hooked into PHP error system).
  *
- * @param  ID_TEXT		Error type indicator (tiny human-readable text string)
- * @param  integer		The error code-number
- * @param  PATH			The error message
- * @param  string			The file the error occurred in
- * @param  integer		The line the error occurred on
- * @param  integer		The syslog type (used by GAE logging)
+ * @param  ID_TEXT                      Error type indicator (tiny human-readable text string)
+ * @param  integer                      The error code-number
+ * @param  PATH                         The error message
+ * @param  string                       The file the error occurred in
+ * @param  integer                      The line the error occurred on
+ * @param  integer                      The syslog type (used by GAE logging)
  */
 function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_type)
 {
@@ -234,9 +234,9 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
     if (get_param_integer('keep_fatalistic',0) == 0) {
         $php_error_label = $errstr . ' in ' . $errfile . ' on line ' . strval($errline) . ' @ ' . get_self_url_easy();
         /*$log.="\n";
-		ob_start();
-		debug_print_backtrace(); Does not work consistently, sometimes just kills PHP
-		$log.=ob_get_clean();*/
+        ob_start();
+        debug_print_backtrace(); Does not work consistently, sometimes just kills PHP
+        $log.=ob_get_clean();*/
         if ((function_exists('syslog')) && (GOOGLE_APPENGINE)) {
             syslog($syslog_type,$php_error_label);
         }
@@ -261,11 +261,11 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
 /**
  * Get the tempcode for a warn page.
  *
- * @param  tempcode		The title of the warn page
- * @param  mixed			The text to put on the warn page (either tempcode or string)
- * @param  boolean		Whether to provide a back button
- * @param  boolean		Whether match key messages / redirects should be supported
- * @return tempcode		The warn page
+ * @param  tempcode                     The title of the warn page
+ * @param  mixed                        The text to put on the warn page (either tempcode or string)
+ * @param  boolean                      Whether to provide a back button
+ * @param  boolean                      Whether match key messages / redirects should be supported
+ * @return tempcode                     The warn page
  */
 function _warn_screen($title,$text,$provide_back = true,$support_match_key_messages = false)
 {
@@ -293,8 +293,8 @@ function _warn_screen($title,$text,$provide_back = true,$support_match_key_messa
 /**
  * Do a terminal execution on a defined page type
  *
- * @param  string			The error message
- * @return string			Sanitised error message
+ * @param  string                       The error message
+ * @return string                       Sanitised error message
  */
 function _sanitise_error_msg($text)
 {
@@ -305,9 +305,9 @@ function _sanitise_error_msg($text)
 /**
  * Do a terminal execution on a defined page type
  *
- * @param  mixed			The error message (string or tempcode)
- * @param  ID_TEXT		Name of the terminal page template
- * @param  boolean		?Whether match key messages / redirects should be supported (NULL: detect)
+ * @param  mixed                        The error message (string or tempcode)
+ * @param  ID_TEXT                      Name of the terminal page template
+ * @param  boolean                      ?Whether match key messages / redirects should be supported (NULL: detect)
  */
 function _generic_exit($text,$template,$support_match_key_messages = false)
 {
@@ -354,7 +354,7 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
     @header('Content-type: text/html; charset=' . get_charset());
     @header('Content-Disposition: inline');
 
-    //$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);		Disabled as causes weird crashes
+    //$x=@ob_get_contents(); @ob_end_clean(); //if (is_string($x)) @print($x);      Disabled as causes weird crashes
 
     if ($GLOBALS['HTTP_STATUS_CODE'] == '200') {
         if (($text_eval == do_lang('ocf:NO_MARKERS_SELECTED')) || ($text_eval == do_lang('NOTHING_SELECTED'))) {
@@ -416,8 +416,8 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
 /**
  * Normalise an IPv6 address.
  *
- * @param  IP				IP address
- * @return IP				Normalised address
+ * @param  IP                           IP address
+ * @return IP                           Normalised address
  */
 function _inet_pton($ip)
 {
@@ -433,9 +433,9 @@ function _inet_pton($ip)
 /**
  * Find if an IP address is within a CIDR range. Based on comment in PHP manual: http://php.net/manual/en/ref.network.php
  *
- * @param  IP				IP address
- * @param  SHORT_TEXT	CIDR range (e.g. 204.93.240.0/24)
- * @return boolean		Whether it is
+ * @param  IP                           IP address
+ * @param  SHORT_TEXT                   CIDR range (e.g. 204.93.240.0/24)
+ * @return boolean                      Whether it is
  */
 function ip_cidr_check($ip,$cidr)
 {
@@ -481,11 +481,11 @@ function ip_cidr_check($ip,$cidr)
 /**
  * Log a hackattack, then displays an error message. It also attempts to send an e-mail to the staff alerting them of the hackattack.
  *
- * @param  ID_TEXT		The reason for the hack attack. This has to be a language string codename
- * @param  SHORT_TEXT	A parameter for the hack attack language string (this should be based on a unique ID, preferably)
- * @param  SHORT_TEXT	A more illustrative parameter, which may be anything (e.g. a title)
- * @param  boolean		Whether to silently log the hack rather than also exiting
- * @param  boolean		Whether a ban should be immediate
+ * @param  ID_TEXT                      The reason for the hack attack. This has to be a language string codename
+ * @param  SHORT_TEXT                   A parameter for the hack attack language string (this should be based on a unique ID, preferably)
+ * @param  SHORT_TEXT                   A more illustrative parameter, which may be anything (e.g. a title)
+ * @param  boolean                      Whether to silently log the hack rather than also exiting
+ * @param  boolean                      Whether a ban should be immediate
  */
 function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b = '',$silent = false,$instant_ban = false)
 {
@@ -704,11 +704,11 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
 /**
  * Add an IP-ban.
  *
- * @param  IP				The IP address to ban
- * @param  LONG_TEXT		Explanation for ban
- * @param  ?TIME			When to ban until (NULL: no limit)
- * @param  boolean		Whether this is a positive ban (as opposed to a cached negative)
- * @return boolean		Whether a change actually happened
+ * @param  IP                           The IP address to ban
+ * @param  LONG_TEXT                    Explanation for ban
+ * @param  ?TIME                        When to ban until (NULL: no limit)
+ * @param  boolean                      Whether this is a positive ban (as opposed to a cached negative)
+ * @return boolean                      Whether a change actually happened
  */
 function add_ip_ban($ip,$descrip = '',$ban_until = null,$ban_positive = true)
 {
@@ -762,7 +762,7 @@ function add_ip_ban($ip,$descrip = '',$ban_until = null,$ban_positive = true)
 /**
  * Remove an IP-ban.
  *
- * @param  IP				The IP address to unban
+ * @param  IP                           The IP address to unban
  */
 function remove_ip_ban($ip)
 {
@@ -794,8 +794,8 @@ function remove_ip_ban($ip)
 /**
  * Lookup error on ocportal.com, to see if there is more information.
  *
- * @param  mixed				The error message (string or tempcode)
- * @return ?string			The result from the web service (NULL: no result)
+ * @param  mixed                        The error message (string or tempcode)
+ * @return ?string                      The result from the web service (NULL: no result)
  */
 function get_webservice_result($error_message)
 {
@@ -868,8 +868,8 @@ function get_webservice_result($error_message)
  * Do a fatal exit, echo the header (if possible) and an error message, followed by a debugging back-trace.
  * It also adds an entry to the error log, for reference.
  *
- * @param  mixed				The error message (string or tempcode)
- * @param  boolean			Whether to return
+ * @param  mixed                        The error message (string or tempcode)
+ * @param  boolean                      Whether to return
  */
 function _fatal_exit($text,$return = false)
 {
@@ -905,14 +905,14 @@ function _fatal_exit($text,$return = false)
         header('Content-type: text/xml');
         $output = '<' . '?xml version="1.0" encoding="' . get_charset() . '" ?' . '>
 <response>
-	<result>
-		<command>' . xmlentities(post_param('command','')) . '</command>
-		<stdcommand></stdcommand>
-		<stdhtml><div xmlns="http://www.w3.org/1999/xhtml">' . ((get_param_integer('keep_fatalistic',0) == 1)?static_evaluate_tempcode(get_html_trace()):'') . '</div></stdhtml>
-		<stdout>' . xmlentities(is_object($text)?strip_html($text->evaluate()):$text) . '</stdout>
-		<stderr>' . xmlentities(do_lang('EVAL_ERROR')) . '</stderr>
-		<stdnotifications><div xmlns="http://www.w3.org/1999/xhtml"></div></stdnotifications>
-	</result>
+    <result>
+        <command>' . xmlentities(post_param('command','')) . '</command>
+        <stdcommand></stdcommand>
+        <stdhtml><div xmlns="http://www.w3.org/1999/xhtml">' . ((get_param_integer('keep_fatalistic',0) == 1)?static_evaluate_tempcode(get_html_trace()):'') . '</div></stdhtml>
+        <stdout>' . xmlentities(is_object($text)?strip_html($text->evaluate()):$text) . '</stdout>
+        <stderr>' . xmlentities(do_lang('EVAL_ERROR')) . '</stderr>
+        <stdnotifications><div xmlns="http://www.w3.org/1999/xhtml"></div></stdnotifications>
+    </result>
 </response>';
 
         if ($GLOBALS['XSS_DETECT']) {
@@ -993,9 +993,9 @@ function _fatal_exit($text,$return = false)
 /**
  * Relay an error message, if appropriate, to e-mail listeners (sometimes ocProducts, and site staff).
  *
- * @param  string			A error message (in HTML)
- * @param  boolean		Also send to ocProducts
- * @param  ID_TEXT		The notification type
+ * @param  string                       A error message (in HTML)
+ * @param  boolean                      Also send to ocProducts
+ * @param  ID_TEXT                      The notification type
  */
 function relay_error_notification($text,$ocproducts = true,$notification_type = 'error_occurred')
 {
@@ -1079,7 +1079,7 @@ function relay_error_notification($text,$ocproducts = true,$notification_type = 
 /**
  * Find whether the current user may see stack dumps.
  *
- * @return boolean			Whether the current user may see stack dumps
+ * @return boolean                      Whether the current user may see stack dumps
  */
 function may_see_stack_dumps()
 {
@@ -1108,7 +1108,7 @@ function may_see_stack_dumps()
 /**
  * Echo an error message, and a debug back-trace of the current execution stack. Use this for debugging purposes.
  *
- * @param  string			An error message
+ * @param  string                       An error message
  */
 function die_html_trace($message)
 {
@@ -1147,8 +1147,8 @@ function die_html_trace($message)
 /**
  * Prepare a value for display in a stack trace.
  *
- * @param  mixed			Complex value
- * @return string			String version
+ * @param  mixed                        Complex value
+ * @return string                       String version
  */
 function put_value_in_stack_trace($value)
 {
@@ -1188,7 +1188,7 @@ function put_value_in_stack_trace($value)
 /**
  * Return a debugging back-trace of the current execution stack. Use this for debugging purposes.
  *
- * @return tempcode		Debugging backtrace
+ * @return tempcode                     Debugging backtrace
  */
 function get_html_trace()
 {
@@ -1197,7 +1197,7 @@ function get_html_trace()
     $trace = new ocp_tempcode();
     foreach ($_trace as $i => $stage) {
         $traces = new ocp_tempcode();
-        //if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;	Hinders more than helps
+        //if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;  Hinders more than helps
         $file = '';
         $line = '';
         $__value = mixed();
@@ -1238,10 +1238,10 @@ function get_html_trace()
 /**
  * See if a match-key message affects the error context we are in. May also internally trigger a redirect.
  *
- * @param  string			Message screen text that is about to be displayed
- * @param  boolean		Only if it is a zone-level match-key
- * @param  boolean		Whether to only consider text matches, not match-key matches
- * @return ?tempcode		The message (NULL: no change)
+ * @param  string                       Message screen text that is about to be displayed
+ * @param  boolean                      Only if it is a zone-level match-key
+ * @param  boolean                      Whether to only consider text matches, not match-key matches
+ * @return ?tempcode                    The message (NULL: no change)
  */
 function _look_for_match_key_message($natural_text,$only_if_zone = false,$only_text_match = false)
 {
@@ -1309,9 +1309,9 @@ function _look_for_match_key_message($natural_text,$only_if_zone = false,$only_t
 /**
  * Show a helpful access-denied page. Has a login ability if it senses that logging in could curtail the error.
  *
- * @param  ID_TEXT		The class of error (e.g. PRIVILEGE)
- * @param  string			The parameter given to the error message
- * @param  boolean		Force the user to login (even if perhaps they are logged in already)
+ * @param  ID_TEXT                      The class of error (e.g. PRIVILEGE)
+ * @param  string                       The parameter given to the error message
+ * @param  boolean                      Force the user to login (even if perhaps they are logged in already)
  */
 function _access_denied($class,$param,$force_login)
 {
@@ -1358,10 +1358,10 @@ function _access_denied($class,$param,$force_login)
     // NB: Also see similar running_script lines in globalise function
         if (get_param_integer('save_and_stay',0) == 1) {
             $middle = inform_screen(get_screen_title('ERROR_OCCURRED'),protect_from_escaping('
-				<script type="text/javascript">// <![CDATA[
-					window.fauxmodal_alert(\'' . addslashes(strip_html($message->evaluate())) . '\');
-				//]]></script>
-			'));
+                    <script type="text/javascript">// <![CDATA[
+                            window.fauxmodal_alert(\'' . addslashes(strip_html($message->evaluate())) . '\');
+                    //]]></script>
+            '));
 
             $echo = globalise($middle,null,'',true);
             $echo->evaluate_echo(null,true);

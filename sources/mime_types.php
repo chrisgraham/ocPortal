@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Find the mime type for the given file extension. It does not take into account whether the file type has been white-listed or not, and returns a binary download mime type for any unknown extensions.
  *
- * @param  string			The file extension (no dot)
- * @param  boolean		Whether there are admin privileges, to render dangerous media types (client-side risk only)
- * @return string			The MIME type
+ * @param  string                       The file extension (no dot)
+ * @param  boolean                      Whether there are admin privileges, to render dangerous media types (client-side risk only)
+ * @return string                       The MIME type
  */
 function get_mime_type($extension,$as_admin)
 {

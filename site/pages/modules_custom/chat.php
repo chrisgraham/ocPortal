@@ -10,14 +10,14 @@
 class Mx_chat extends Module_chat
 {
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -26,10 +26,10 @@ class Mx_chat extends Module_chat
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -111,10 +111,10 @@ class Mx_chat extends Module_chat
     }
 
     /**
-	 * The UI to choose a chat room.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a chat room.
+     *
+     * @return tempcode                 The UI
+     */
     public function chat_lobby()
     {
         require_javascript('javascript_ajax_people_lists');
@@ -133,8 +133,8 @@ class Mx_chat extends Module_chat
         // Rooms
         $room_url = build_url(array('page' => '_SELF','type' => 'room','id' => 'room_id'),'_SELF');
         $fields = '
-			<ul id="rooms"></ul>
-		';
+            <ul id="rooms"></ul>
+        ';
 
         $seteffectslink = hyperlink(build_url(array('page' => '_SELF','type' => 'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
 
@@ -161,10 +161,10 @@ class Mx_chat extends Module_chat
     }
 
     /**
-	 * The UI for a chat room.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for a chat room.
+     *
+     * @return tempcode                 The UI
+     */
     public function chat_room()
     {
         require_javascript('javascript_posting');
@@ -209,10 +209,10 @@ class Mx_chat extends Module_chat
     }
 
     /**
-	 * Save the user's options into a cookie.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Save the user's options into a cookie.
+     *
+     * @return tempcode                 The UI
+     */
     public function chat_options()
     {
         $value = preg_replace('#^\##','',post_param('text_colour',get_option('chat_default_post_colour'))) . ';' . post_param('font_name',get_option('chat_default_post_font')) . ';';

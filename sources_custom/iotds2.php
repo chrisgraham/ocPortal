@@ -8,30 +8,30 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		iotds
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    iotds
  */
 
 /**
  * Add an IOTD to the database and return the ID of the new entry.
  *
- * @param  URLPATH			The URL to the IOTD image
- * @param  SHORT_TEXT		The IOTD title
- * @param  LONG_TEXT			The IOTD caption
- * @param  URLPATH			The URL to the IOTD thumbnail image
- * @param  BINARY				Whether the IOTD is currently in use (note: setting this to 1 will not actually set the IOTD, and if it is 1, then the IOTD must be explicitly set only to this)
- * @param  BINARY				Whether the IOTD may be rated
- * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY				Whether the IOTD may be trackbacked
- * @param  LONG_TEXT			Notes for the IOTD
- * @param  ?TIME				The time of submission (NULL: now)
- * @param  ?MEMBER			The IOTD submitter (NULL: current member)
- * @param  BINARY				Whether the IOTD has been used before
- * @param  ?TIME				The time the IOTD was used (NULL: never)
- * @param  integer			The number of views had
- * @param  ?TIME				The edit date (NULL: never)
- * @return AUTO_LINK			The ID of the IOTD just added
+ * @param  URLPATH                      The URL to the IOTD image
+ * @param  SHORT_TEXT                   The IOTD title
+ * @param  LONG_TEXT                    The IOTD caption
+ * @param  URLPATH                      The URL to the IOTD thumbnail image
+ * @param  BINARY                       Whether the IOTD is currently in use (note: setting this to 1 will not actually set the IOTD, and if it is 1, then the IOTD must be explicitly set only to this)
+ * @param  BINARY                       Whether the IOTD may be rated
+ * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       Whether the IOTD may be trackbacked
+ * @param  LONG_TEXT                    Notes for the IOTD
+ * @param  ?TIME                        The time of submission (NULL: now)
+ * @param  ?MEMBER                      The IOTD submitter (NULL: current member)
+ * @param  BINARY                       Whether the IOTD has been used before
+ * @param  ?TIME                        The time the IOTD was used (NULL: never)
+ * @param  integer                      The number of views had
+ * @param  ?TIME                        The edit date (NULL: never)
+ * @return AUTO_LINK                    The ID of the IOTD just added
  */
 function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$time = null,$submitter = null,$used = 0,$use_time = null,$views = 0,$edit_date = null)
 {
@@ -77,20 +77,20 @@ function add_iotd($url,$title,$caption,$thumb_url,$current,$allow_rating,$allow_
 /**
  * Edit an IOTD.
  *
- * @param  AUTO_LINK			The ID of the IOTD to edit
- * @param  SHORT_TEXT		The IOTD title
- * @param  LONG_TEXT			The IOTD caption
- * @param  URLPATH			The URL to the IOTD image
- * @param  URLPATH			The URL to the IOTD thumbnail image
- * @param  BINARY				Whether the IOTD may be rated
- * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY				Whether the IOTD may be trackbacked
- * @param  LONG_TEXT			Notes for the IOTD
- * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME				Add time (NULL: do not change)
- * @param  ?integer			Number of views (NULL: do not change)
- * @param  ?MEMBER			Submitter (NULL: do not change)
- * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    The ID of the IOTD to edit
+ * @param  SHORT_TEXT                   The IOTD title
+ * @param  LONG_TEXT                    The IOTD caption
+ * @param  URLPATH                      The URL to the IOTD image
+ * @param  URLPATH                      The URL to the IOTD thumbnail image
+ * @param  BINARY                       Whether the IOTD may be rated
+ * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       Whether the IOTD may be trackbacked
+ * @param  LONG_TEXT                    Notes for the IOTD
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?integer                     Number of views (NULL: do not change)
+ * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
@@ -159,7 +159,7 @@ function edit_iotd($id,$title,$caption,$thumb_url,$url,$allow_rating,$allow_comm
 /**
  * Delete an IOTD.
  *
- * @param  AUTO_LINK		The ID of the IOTD to delete
+ * @param  AUTO_LINK                    The ID of the IOTD to delete
  */
 function delete_iotd($id)
 {
@@ -193,7 +193,7 @@ function delete_iotd($id)
 /**
  * Set the IOTD.
  *
- * @param  AUTO_LINK		The IOTD ID to set
+ * @param  AUTO_LINK                    The IOTD ID to set
  */
 function set_iotd($id)
 {

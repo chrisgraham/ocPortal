@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_comcode_pages
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_comcode_pages
  */
 
 class Hook_content_meta_aware_comcode_page
 {
     /**
-	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
-	 *
-	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
-	 * @return ?array		Map of award content-type info (NULL: disabled).
-	 */
+     * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
+     *
+     * @param  ?ID_TEXT                 The zone to link through to (NULL: autodetect).
+     * @return ?array                   Map of award content-type info (NULL: disabled).
+     */
     public function info($zone = null)
     {
         return array(
@@ -91,17 +91,17 @@ class Hook_content_meta_aware_comcode_page
     }
 
     /**
-	 * Run function for content hooks. Renders a content box for an award/randomisation.
-	 *
-	 * @param  array		The database row for the content
-	 * @param  ID_TEXT	The zone to display in
-	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
-	 * @param  boolean	Whether to include breadcrumbs (if there are any)
-	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
-	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
-	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
-	 * @return tempcode	Results
-	 */
+     * Run function for content hooks. Renders a content box for an award/randomisation.
+     *
+     * @param  array                    The database row for the content
+     * @param  ID_TEXT                  The zone to display in
+     * @param  boolean                  Whether to include context (i.e. say WHAT this is, not just show the actual content)
+     * @param  boolean                  Whether to include breadcrumbs (if there are any)
+     * @param  ?ID_TEXT                 Virtual root to use (NULL: none)
+     * @param  boolean                  Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+     * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
+     * @return tempcode                 Results
+     */
     public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
     {
         unset($zone); // Meaningless here

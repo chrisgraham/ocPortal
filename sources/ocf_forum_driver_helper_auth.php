@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -23,13 +23,13 @@
  * All authorisation, cookies, and form-logins, are passed through this function.
  * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
  *
- * @param  object			Link to the real forum driver
- * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
- * @param  ?MEMBER		The member ID (NULL: use member name)
- * @param  MD5				The md5-hashed password
- * @param  string			The raw password
- * @param  boolean		Whether this is a cookie login, determines how the hashed password is treated for the value passed in
- * @return array			A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
+ * @param  object                       Link to the real forum driver
+ * @param  ?SHORT_TEXT                  The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
+ * @param  ?MEMBER                      The member ID (NULL: use member name)
+ * @param  MD5                          The md5-hashed password
+ * @param  string                       The raw password
+ * @param  boolean                      Whether this is a cookie login, determines how the hashed password is treated for the value passed in
+ * @return array                        A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
  */
 function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$password_raw,$cookie_login = false)
 {
@@ -126,10 +126,10 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 
         // Doesn't exist any more? This is a special case - the 'LDAP member' exists in our DB, but not LDAP. It has been deleted from LDAP or LDAP server has jumped
         /*if (is_null($rows[0]['m_pass_hash_salted']))
-		{
-			$out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',$username);
-			return $out;
-		} No longer appropriate with new authentication mode - instead we just have to give an invalid password message  */
+        {
+            $out['error']=do_lang_tempcode('_MEMBER_NO_EXIST',$username);
+            return $out;
+        } No longer appropriate with new authentication mode - instead we just have to give an invalid password message  */
 
         $row = array_merge($row,ocf_ldap_authorise_login($username,$password_hashed));
     }
@@ -177,15 +177,15 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
                     return $out;
                 }
                 break;
-            case 'md5': // Old style plain md5		(also works if both are unhashed: used for LDAP)
+            case 'md5': // Old style plain md5     (also works if both are unhashed: used for LDAP)
                 if (($password_hashed != $row['m_pass_hash_salted']) && ($password_hashed != '!!!')) { // The !!! bit would never be in a hash, but for plain text checks using this same code, we sometimes use '!!!' to mean 'Error'.
                     $out['error'] = do_lang_tempcode('MEMBER_BAD_PASSWORD');
                     return $out;
                 }
                 break;
             /*case 'httpauth':
-				// This is handled in get_member()
-				break;*/
+                    // This is handled in get_member()
+                    break;*/
             case 'ldap':
                 if ($password_hashed != $row['m_pass_hash_salted']) {
                     $out['error'] = do_lang_tempcode('MEMBER_BAD_PASSWORD');

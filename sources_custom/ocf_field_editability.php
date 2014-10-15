@@ -8,8 +8,8 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 /* This file is designed to be overwritten by addons that implement external user sync schemes. */
@@ -18,9 +18,9 @@
  * Find is a field is editable.
  * Called for fields that have a fair chance of being set to auto-sync, and hence be locked to local edits.
  *
- * @param  ID_TEXT		Field name
- * @param  ID_TEXT		The special type of the user (built-in types are: <blank>, ldap, httpauth, <name of import source>)
- * @return boolean		Whether the field is editable
+ * @param  ID_TEXT                      Field name
+ * @param  ID_TEXT                      The special type of the user (built-in types are: <blank>, ldap, httpauth, <name of import source>)
+ * @return boolean                      Whether the field is editable
  */
 function ocf_field_editable($field_name,$special_type)
 {

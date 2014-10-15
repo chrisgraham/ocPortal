@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_contact_member
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_contact_member
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_contact_member
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -46,10 +46,10 @@ class Module_contact_member
     public $to_name;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -88,10 +88,10 @@ class Module_contact_member
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_lang('mail');
@@ -121,10 +121,10 @@ class Module_contact_member
     }
 
     /**
-	 * The UI to contact a member.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to contact a member.
+     *
+     * @return tempcode                 The UI
+     */
     public function gui()
     {
         $member_id = $this->member_id;
@@ -198,10 +198,10 @@ class Module_contact_member
     }
 
     /**
-	 * The actualiser to contact a member.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to contact a member.
+     *
+     * @return tempcode                 The UI
+     */
     public function actual()
     {
         if (addon_installed('captcha')) {

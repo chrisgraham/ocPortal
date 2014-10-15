@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_language_editing
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_language_editing
  */
 
 /**
  * Rebuild database indices, using correct rules for new field types.
  *
- * @param  boolean		Whether to only rebuild translatable field indexes
+ * @param  boolean                      Whether to only rebuild translatable field indexes
  */
 function rebuild_indices($only_trans = false)
 {
@@ -233,7 +233,7 @@ function enable_content_translation()
 /**
  * Change content translation setting in th config file.
  *
- * @param  boolean		New setting value (i.e. on or off)
+ * @param  boolean                      New setting value (i.e. on or off)
  */
 function _update_base_config_for_content_translation($new_setting)
 {

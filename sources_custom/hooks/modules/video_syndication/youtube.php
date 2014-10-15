@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		gallery_syndication
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    gallery_syndication
  */
 
 class video_syndication_youtube
@@ -79,14 +79,14 @@ class video_syndication_youtube
         do {
             if (!is_null($transcoding_id)) {
                 /* EDIT: Actually we looked at transcoding table instead and lookup individual video and process as such
-				$query_params['category']='sync'.strval($local_id); // Covers {http://gdata.youtube.com/schemas/2007/developertags.cat} and {http://gdata.youtube.com/schemas/2007/keywords.cat}
-				$xml=$this->_http('https://gdata.youtube.com/feeds/api/users/default/uploads',$query_params);
+                    $query_params['category']='sync'.strval($local_id); // Covers {http://gdata.youtube.com/schemas/2007/developertags.cat} and {http://gdata.youtube.com/schemas/2007/keywords.cat}
+                    $xml=$this->_http('https://gdata.youtube.com/feeds/api/users/default/uploads',$query_params);
 
-				if (!isset($parsed->entry)) // Annoying! Youtube search index takes time and doesn't consider unlisted. We therefore need to search much harder.
-				{
-					unset($query_params['category']);
-					$xml=$this->_http('https://gdata.youtube.com/feeds/api/users/default/uploads',$query_params);
-				}*/
+                    if (!isset($parsed->entry)) // Annoying! Youtube search index takes time and doesn't consider unlisted. We therefore need to search much harder.
+                    {
+                            unset($query_params['category']);
+                            $xml=$this->_http('https://gdata.youtube.com/feeds/api/users/default/uploads',$query_params);
+                    }*/
 
                 $xml = $this->_http('https://gdata.youtube.com/feeds/api/users/default/uploads/' . $transcoding_id,array());
 
@@ -342,11 +342,11 @@ class video_syndication_youtube
     public function leave_comment($video,$comment)
     {
         $xml = trim('
-			<' . '?xml version="1.0" encoding="UTF-8"?' . '>
-			<entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007">
-				<content>' . xmlentities($comment) . '</content>
-			</entry>
-		');
+            <' . '?xml version="1.0" encoding="UTF-8"?' . '>
+            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007">
+                    <content>' . xmlentities($comment) . '</content>
+            </entry>
+        ');
 
         try {
             $response = $this->_http('https://gdata.youtube.com/feeds/api/videos/' . $video['remote_id'] . '/comments',array(),'POST',$xml);
@@ -386,29 +386,29 @@ class video_syndication_youtube
 
         // Now generate the XML...
         $xml = '
-			<' . '?xml version="1.0"?' . '>
-			<entry xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:yt="http://gdata.youtube.com/schemas/2007">
-				<media:group>
-					<media:title type="plain">' . xmlentities($video['title']) . '</media:title>
-					<media:description type="plain">' . xmlentities($video['description']) . '</media:description>';
+            <' . '?xml version="1.0"?' . '>
+            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:yt="http://gdata.youtube.com/schemas/2007">
+                    <media:group>
+                            <media:title type="plain">' . xmlentities($video['title']) . '</media:title>
+                            <media:description type="plain">' . xmlentities($video['description']) . '</media:description>';
         if ($category !== NULL) {
             $xml .= '
-					<media:category scheme="http://gdata.youtube.com/schemas/2007/categories.cat">' . xmlentities($category) . '</media:category>';
+                            <media:category scheme="http://gdata.youtube.com/schemas/2007/categories.cat">' . xmlentities($category) . '</media:category>';
         }
         $xml .= '
-					<media:keywords>' . xmlentities(implode(', ',$video['tags'])) . ', sync' . strval($video['local_id']) . '</media:keywords>';
+                            <media:keywords>' . xmlentities(implode(', ',$video['tags'])) . ', sync' . strval($video['local_id']) . '</media:keywords>';
         if ($is_initial) {
             $xml .= '
-					<media:category scheme="http://gdata.youtube.com/schemas/2007/developertags.cat">sync' . xmlentities(strval($video['local_id'])) . '</media:category>';
+                            <media:category scheme="http://gdata.youtube.com/schemas/2007/developertags.cat">sync' . xmlentities(strval($video['local_id'])) . '</media:category>';
         }
         $xml .= '
-				</media:group>
-				<yt:accessControl action="rate" permission="' . ($video['allow_rating']?'allowed':'denied') . '" />
-				<yt:accessControl action="comment" permission="' . ($video['allow_comments']?'allowed':'denied') . '" />
-				<yt:accessControl action="list" permission="' . ($video['validated']?'allowed':'denied') . '" />
-				<updated>' . date('c',$video['mtime']) . '</updated>
-			</entry>
-		';
+                    </media:group>
+                    <yt:accessControl action="rate" permission="' . ($video['allow_rating']?'allowed':'denied') . '" />
+                    <yt:accessControl action="comment" permission="' . ($video['allow_comments']?'allowed':'denied') . '" />
+                    <yt:accessControl action="list" permission="' . ($video['validated']?'allowed':'denied') . '" />
+                    <updated>' . date('c',$video['mtime']) . '</updated>
+            </entry>
+        ';
 
         return trim($xml);
     }

@@ -155,25 +155,25 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
             if ($type == 'Apache') {
                 $rules_txt .= '
 
-				# Needed for mod_rewrite. Disable this line if your server does not have AllowOverride permission (can be one cause of Internal Server Errors)
-				Options +FollowSymLinks
+                    # Needed for mod_rewrite. Disable this line if your server does not have AllowOverride permission (can be one cause of Internal Server Errors)
+                    Options +FollowSymLinks
 
-				RewriteEngine on
+                    RewriteEngine on
 
-				# If rewrites are directing to bogus URLs, try adding a "RewriteBase /" line, or a "RewriteBase /subdir" line if you\'re in a subdirectory. Requirements vary from server to server.
-				';
+                    # If rewrites are directing to bogus URLs, try adding a "RewriteBase /" line, or a "RewriteBase /subdir" line if you\'re in a subdirectory. Requirements vary from server to server.
+                    ';
             }
             $rules_txt .= '
-			# Anything that would point to a real file should actually be allowed to do so. If you have a "RewriteBase /subdir" command, you may need to change to "%{DOCUMENT_ROOT}/subdir/$1".
-			RewriteCond %{DOCUMENT_ROOT}/$1 -f [OR]
-			RewriteCond %{DOCUMENT_ROOT}/$1 -l [OR]
-			RewriteCond %{DOCUMENT_ROOT}/$1 -d
-			RewriteRule (.*) - [L]
+            # Anything that would point to a real file should actually be allowed to do so. If you have a "RewriteBase /subdir" command, you may need to change to "%{DOCUMENT_ROOT}/subdir/$1".
+            RewriteCond %{DOCUMENT_ROOT}/$1 -f [OR]
+            RewriteCond %{DOCUMENT_ROOT}/$1 -l [OR]
+            RewriteCond %{DOCUMENT_ROOT}/$1 -d
+            RewriteRule (.*) - [L]
 
-			# WebDAV implementation (requires the non-bundled WebDAV addon)
-			RewriteRule ^webdav(/.*|$) data_custom/webdav.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+            # WebDAV implementation (requires the non-bundled WebDAV addon)
+            RewriteRule ^webdav(/.*|$) data_custom/webdav.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
-			';
+            ';
             foreach ($rewrite_rules as $x => $rewrite_rule_block) {
                 if ($x != 0) {
                     $rules_txt .= "\n";
@@ -217,9 +217,9 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
                         $rules_txt .= '<--';
                     }
                     $rules_txt .= '<rule name="Imported Rule ' . strval($i+1) . '" stopProcessing="' . (in_array('L',$flags)?'true':'false') . '">
-					   <match url="' . htmlentities($rule) . '" ignoreCase="false" />
-					   <action ' . $type_str . ' url="' . htmlentities($rule) . '" appendQueryString="' . (in_array('QSA',$flags)?'true':'false') . '" />
-					</rule>';
+                               <match url="' . htmlentities($rule) . '" ignoreCase="false" />
+                               <action ' . $type_str . ' url="' . htmlentities($rule) . '" appendQueryString="' . (in_array('QSA',$flags)?'true':'false') . '" />
+                            </rule>';
                     if (!$enabled) {
                         $rules_txt .= '-->';
                     }
@@ -290,10 +290,10 @@ function write_to($file_path,$type,$match_start,$match_end,$indent_level,$rewrit
                     }
 
                     $rules_txt .= ($enabled?'':'#') . 'rule' . strval($i+1) . ' {
-						' . ($enabled?'':'#') . 'pattern = ' . $rule . '
-						' . ($enabled?'':'#') . 'to = ' . $to . '
-						' . ($enabled?'':'#') . 'qsa = ' . (in_array('QSA',$flags)?'true':'false') . '
-					' . ($enabled?'':'#') . '}';
+                                        ' . ($enabled?'':'#') . 'pattern = ' . $rule . '
+                                        ' . ($enabled?'':'#') . 'to = ' . $to . '
+                                        ' . ($enabled?'':'#') . 'qsa = ' . (in_array('QSA',$flags)?'true':'false') . '
+                            ' . ($enabled?'':'#') . '}';
                 }
                 $i++;
             }

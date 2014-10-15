@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 require_code('crud_module');
@@ -35,14 +35,14 @@ class Module_admin_chat extends standard_crud_module
     public $menu_label = 'SECTION_CHAT';
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -58,12 +58,12 @@ class Module_admin_chat extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -85,11 +85,11 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         $this->extra_donext_entries = array(
@@ -113,10 +113,10 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         $this->add_one_label = do_lang_tempcode('ADD_CHATROOM');
@@ -135,10 +135,10 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a adding/editing form.
-	 *
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a adding/editing form.
+     *
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields()
     {
         list($fields,$hidden) = get_chatroom_fields();
@@ -150,10 +150,10 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         require_code('chat_lobby');
@@ -173,11 +173,11 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id' => intval($id)),'',1);
@@ -208,10 +208,10 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         list($allow2,$allow2_groups,$disallow2,$disallow2_groups) = read_in_chat_perm_fields();
@@ -230,10 +230,10 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $_room_owner = post_param('room_owner',STRING_MAGIC_NULL);
@@ -259,20 +259,20 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         delete_chatroom(intval($id));
     }
 
     /**
-	 * The UI to delete all chat rooms.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to delete all chat rooms.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_all()
     {
         $fields = new ocp_tempcode();
@@ -285,10 +285,10 @@ class Module_admin_chat extends standard_crud_module
     }
 
     /**
-	 * The actualiser to delete all chat rooms.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete all chat rooms.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete_all()
     {
         $delete = post_param_integer('continue_delete',0);

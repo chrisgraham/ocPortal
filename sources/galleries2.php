@@ -15,18 +15,18 @@
 /*EXTRA FUNCTIONS: shell_exec*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 /**
  * Get width,height,length of a video file. Note: unfortunately mpeg is not possible without huge amounts of code.
  *
- * @param  PATH			The path to the video file
- * @param  string			The original filename of the video file (so we can find the file type from the file extension)
- * @param  boolean		Whether to skip over errored files instead of dying. We don't currently make use of this as our readers aren't sophisticard enough to properly spot erroneous situations.
- * @return ~array			The triplet of width/height/length (possibly containing NULL's for when we can't detect properties) (false: error)
+ * @param  PATH                         The path to the video file
+ * @param  string                       The original filename of the video file (so we can find the file type from the file extension)
+ * @param  boolean                      Whether to skip over errored files instead of dying. We don't currently make use of this as our readers aren't sophisticard enough to properly spot erroneous situations.
+ * @return ~array                       The triplet of width/height/length (possibly containing NULL's for when we can't detect properties) (false: error)
  */
 function get_video_details($file_path,$filename,$delay_errors = false)
 {
@@ -120,8 +120,8 @@ function get_video_details($file_path,$filename,$delay_errors = false)
 /**
  * Read an integer from the given binary chunk. The integer is in intel endian form.
  *
- * @param  string			The binary chunk
- * @return integer		The integer
+ * @param  string                       The binary chunk
+ * @return integer                      The integer
  */
 function read_intel_endian_int($buffer)
 {
@@ -137,8 +137,8 @@ function read_intel_endian_int($buffer)
 /**
  * Read an integer from the given binary chunk. The integer is in network endian form.
  *
- * @param  string			The binary chunk
- * @return integer		The integer
+ * @param  string                       The binary chunk
+ * @return integer                      The integer
  */
 function read_network_endian_int($buffer)
 {
@@ -154,8 +154,8 @@ function read_network_endian_int($buffer)
 /**
  * Get width,height,length of a .wmv video file.
  *
- * @param  resource		The file handle
- * @return array			The triplet (possibly containing NULL's for when we can't detect properties)
+ * @param  resource                     The file handle
+ * @return array                        The triplet (possibly containing NULL's for when we can't detect properties)
  */
 function _get_wmv_details($file)
 {
@@ -167,9 +167,9 @@ function _get_wmv_details($file)
 /**
  * Get chunk-bytes-read,width,height,length of a chunk list of a .wmv video file.
  *
- * @param  resource		The file handle
- * @param  ?integer		The length of the current chunk list (NULL: covers full file)
- * @return ?array			The quartet (possibly containing NULL's for when we can't detect properties) (NULL: error)
+ * @param  resource                     The file handle
+ * @param  ?integer                     The length of the current chunk list (NULL: covers full file)
+ * @return ?array                       The quartet (possibly containing NULL's for when we can't detect properties) (NULL: error)
  */
 function _get_wmv_details_do_chunk_list($file,$chunk_length = null)
 {
@@ -238,8 +238,8 @@ function _get_wmv_details_do_chunk_list($file,$chunk_length = null)
 /**
  * Get width,height,length of a .avi video file.
  *
- * @param  resource		The file handle
- * @return array			The triplet (possibly containing NULL's for when we can't detect properties)
+ * @param  resource                     The file handle
+ * @return array                        The triplet (possibly containing NULL's for when we can't detect properties)
  */
 function _get_avi_details($file)
 {
@@ -257,8 +257,8 @@ function _get_avi_details($file)
 /**
  * Get width,height,length of a .rm/.ram video file.
  *
- * @param  resource		The file handle
- * @return ?array			The triplet (possibly containing NULL's for when we can't detect properties) (NULL: error)
+ * @param  resource                     The file handle
+ * @return ?array                       The triplet (possibly containing NULL's for when we can't detect properties) (NULL: error)
  */
 function _get_ram_details($file) // + rm
 {
@@ -289,8 +289,8 @@ function _get_ram_details($file) // + rm
 /**
  * Get width,height,length of a .mov/.qt video file.
  *
- * @param  resource		The file handle
- * @return ?array			The triplet (possibly containing NULL's for when we can't detect properties) (NULL: error)
+ * @param  resource                     The file handle
+ * @return ?array                       The triplet (possibly containing NULL's for when we can't detect properties) (NULL: error)
  */
 function _get_mov_details($file)
 {
@@ -306,9 +306,9 @@ function _get_mov_details($file)
 /**
  * Get chunk-bytes-read,width,height,length of a atom list of a .mov/.qt video file.
  *
- * @param  resource		The file handle
- * @param  ?integer		The length of the current atom list (NULL: covers full file)
- * @return array			The quartet (possibly containing NULL's for when we can't detect properties)
+ * @param  resource                     The file handle
+ * @param  ?integer                     The length of the current atom list (NULL: covers full file)
+ * @return array                        The quartet (possibly containing NULL's for when we can't detect properties)
  */
 function _get_mov_details_do_atom_list($file,$atom_size = null)
 {
@@ -328,7 +328,7 @@ function _get_mov_details_do_atom_list($file,$atom_size = null)
         }
         $count += 4;
         if ($size == 0) {
-            //			$qt_atom=true;
+            //       $qt_atom=true;
             fseek($file,8,SEEK_CUR);
             $size = read_network_endian_int(fread($file,4));
             $count += 12;
@@ -392,24 +392,24 @@ function _get_mov_details_do_atom_list($file,$atom_size = null)
 /**
  * Add an image to a specified gallery.
  *
- * @param  SHORT_TEXT	Image title
- * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The image description
- * @param  URLPATH		The URL to the actual image
- * @param  URLPATH		The URL to the thumbnail of the actual image
- * @param  BINARY			Whether the image has been validated for display on the site
- * @param  BINARY			Whether the image may be rated
- * @param  BINARY			Whether the image may be commented upon
- * @param  BINARY			Whether the image may be trackbacked
- * @param  LONG_TEXT		Hidden notes associated with the image
- * @param  ?MEMBER		The submitter (NULL: current member)
- * @param  ?TIME			The time of adding (NULL: now)
- * @param  ?TIME			The time of editing (NULL: never)
- * @param  integer		The number of views
- * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
- * @return AUTO_LINK		The ID of the new entry
+ * @param  SHORT_TEXT                   Image title
+ * @param  ID_TEXT                      The gallery name
+ * @param  LONG_TEXT                    The image description
+ * @param  URLPATH                      The URL to the actual image
+ * @param  URLPATH                      The URL to the thumbnail of the actual image
+ * @param  BINARY                       Whether the image has been validated for display on the site
+ * @param  BINARY                       Whether the image may be rated
+ * @param  BINARY                       Whether the image may be commented upon
+ * @param  BINARY                       Whether the image may be trackbacked
+ * @param  LONG_TEXT                    Hidden notes associated with the image
+ * @param  ?MEMBER                      The submitter (NULL: current member)
+ * @param  ?TIME                        The time of adding (NULL: now)
+ * @param  ?TIME                        The time of editing (NULL: never)
+ * @param  integer                      The number of views
+ * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @return AUTO_LINK                    The ID of the new entry
  */
 function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter = null,$add_date = null,$edit_date = null,$views = 0,$id = null,$meta_keywords = '',$meta_description = '')
 {
@@ -491,24 +491,24 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 /**
  * Edit an image in a specified gallery.
  *
- * @param  AUTO_LINK		The ID of the image to edit
- * @param  SHORT_TEXT	Image title
- * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The image description
- * @param  URLPATH		The URL to the actual image
- * @param  URLPATH		The URL to the thumbnail of the actual image
- * @param  BINARY			Whether the image has been validated for display on the site
- * @param  BINARY			Whether the image may be rated
- * @param  BINARY			Whether the image may be commented upon
- * @param  BINARY			Whether the image may be trackbacked
- * @param  LONG_TEXT		Hidden notes associated with the image
- * @param  SHORT_TEXT	Meta keywords
- * @param  LONG_TEXT		Meta description
- * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME			Add time (NULL: do not change)
- * @param  ?integer		Number of views (NULL: do not change)
- * @param  ?MEMBER		Submitter (NULL: do not change)
- * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    The ID of the image to edit
+ * @param  SHORT_TEXT                   Image title
+ * @param  ID_TEXT                      The gallery name
+ * @param  LONG_TEXT                    The image description
+ * @param  URLPATH                      The URL to the actual image
+ * @param  URLPATH                      The URL to the thumbnail of the actual image
+ * @param  BINARY                       Whether the image has been validated for display on the site
+ * @param  BINARY                       Whether the image may be rated
+ * @param  BINARY                       Whether the image may be commented upon
+ * @param  BINARY                       Whether the image may be trackbacked
+ * @param  LONG_TEXT                    Hidden notes associated with the image
+ * @param  SHORT_TEXT                   Meta keywords
+ * @param  LONG_TEXT                    Meta description
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?integer                     Number of views (NULL: do not change)
+ * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
@@ -609,8 +609,8 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 /**
  * Delete a specified image from the database, and delete the file if possible.
  *
- * @param  AUTO_LINK		The ID of the image
- * @param  boolean		Whether to delete the actual file also
+ * @param  AUTO_LINK                    The ID of the image
+ * @param  boolean                      Whether to delete the actual file also
  */
 function delete_image($id,$delete_full = true)
 {
@@ -662,9 +662,9 @@ function delete_image($id,$delete_full = true)
 /**
  * Create a video thumbnail.
  *
- * @param  URLPATH		Video to get thumbail from (must be local)
- * @param  ?PATH			Where to save to (NULL: decide for ourselves)
- * @return URLPATH		Thumbnail, only valid if expected_output_path was passed as NULL (blank: could not generate)
+ * @param  URLPATH                      Video to get thumbail from (must be local)
+ * @param  ?PATH                        Where to save to (NULL: decide for ourselves)
+ * @return URLPATH                      Thumbnail, only valid if expected_output_path was passed as NULL (blank: could not generate)
  */
 function create_video_thumb($src_url,$expected_output_path = null)
 {
@@ -818,27 +818,27 @@ function create_video_thumb($src_url,$expected_output_path = null)
 /**
  * Add a video to a specified gallery.
  *
- * @param  SHORT_TEXT	Video title
- * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The video description
- * @param  URLPATH		The URL to the actual video
- * @param  URLPATH		The URL to the thumbnail of the actual video
- * @param  BINARY			Whether the video has been validated for display on the site
- * @param  BINARY			Whether the video may be rated
- * @param  BINARY			Whether the video may be commented upon
- * @param  BINARY			Whether the video may be trackbacked
- * @param  LONG_TEXT		Hidden notes associated with the video
- * @param  integer		The length of the video
- * @param  integer		The width of the video
- * @param  integer		The height of the video
- * @param  ?MEMBER		The submitter (NULL: current member)
- * @param  ?TIME			The time of adding (NULL: now)
- * @param  ?TIME			The time of editing (NULL: never)
- * @param  integer		The number of views
- * @param  ?AUTO_LINK	Force an ID (NULL: don't force an ID)
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
- * @return AUTO_LINK		The ID of the new entry
+ * @param  SHORT_TEXT                   Video title
+ * @param  ID_TEXT                      The gallery name
+ * @param  LONG_TEXT                    The video description
+ * @param  URLPATH                      The URL to the actual video
+ * @param  URLPATH                      The URL to the thumbnail of the actual video
+ * @param  BINARY                       Whether the video has been validated for display on the site
+ * @param  BINARY                       Whether the video may be rated
+ * @param  BINARY                       Whether the video may be commented upon
+ * @param  BINARY                       Whether the video may be trackbacked
+ * @param  LONG_TEXT                    Hidden notes associated with the video
+ * @param  integer                      The length of the video
+ * @param  integer                      The width of the video
+ * @param  integer                      The height of the video
+ * @param  ?MEMBER                      The submitter (NULL: current member)
+ * @param  ?TIME                        The time of adding (NULL: now)
+ * @param  ?TIME                        The time of editing (NULL: never)
+ * @param  integer                      The number of views
+ * @param  ?AUTO_LINK                   Force an ID (NULL: don't force an ID)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @return AUTO_LINK                    The ID of the new entry
  */
 function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter = null,$add_date = null,$edit_date = null,$views = 0,$id = null,$meta_keywords = '',$meta_description = '')
 {
@@ -933,27 +933,27 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
 /**
  * Edit a video in a specified gallery.
  *
- * @param  AUTO_LINK		The ID of the entry to edit
- * @param  SHORT_TEXT	Video title
- * @param  ID_TEXT		The gallery name
- * @param  LONG_TEXT		The video description
- * @param  URLPATH		The URL to the actual video
- * @param  URLPATH		The URL to the thumbnail of the actual video
- * @param  BINARY			Whether the video has been validated for display on the site
- * @param  BINARY			Whether the video may be rated
- * @param  BINARY			Whether the video may be commented upon
- * @param  BINARY			Whether the video may be trackbacked
- * @param  LONG_TEXT		Hidden notes associated with the video
- * @param  integer		The length of the video
- * @param  integer		The width of the video
- * @param  integer		The height of the video
- * @param  SHORT_TEXT	Meta keywords
- * @param  LONG_TEXT		Meta description
- * @param  ?TIME			Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME			Add time (NULL: do not change)
- * @param  ?integer		Number of views (NULL: do not change)
- * @param  ?MEMBER		Submitter (NULL: do not change)
- * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  AUTO_LINK                    The ID of the entry to edit
+ * @param  SHORT_TEXT                   Video title
+ * @param  ID_TEXT                      The gallery name
+ * @param  LONG_TEXT                    The video description
+ * @param  URLPATH                      The URL to the actual video
+ * @param  URLPATH                      The URL to the thumbnail of the actual video
+ * @param  BINARY                       Whether the video has been validated for display on the site
+ * @param  BINARY                       Whether the video may be rated
+ * @param  BINARY                       Whether the video may be commented upon
+ * @param  BINARY                       Whether the video may be trackbacked
+ * @param  LONG_TEXT                    Hidden notes associated with the video
+ * @param  integer                      The length of the video
+ * @param  integer                      The width of the video
+ * @param  integer                      The height of the video
+ * @param  SHORT_TEXT                   Meta keywords
+ * @param  LONG_TEXT                    Meta description
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?integer                     Number of views (NULL: do not change)
+ * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
@@ -1067,8 +1067,8 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
 /**
  * Delete a video in a specified gallery.
  *
- * @param  AUTO_LINK		The ID of the entry to delete
- * @param  boolean		Whether to delete the actual video file from disk as well as the entry
+ * @param  AUTO_LINK                    The ID of the entry to delete
+ * @param  boolean                      Whether to delete the actual video file from disk as well as the entry
  */
 function delete_video($id,$delete_full = true)
 {
@@ -1122,9 +1122,9 @@ function delete_video($id,$delete_full = true)
 /**
  * Watermarks an image with the appropriate gallery watermarks.
  *
- * @param  ID_TEXT		The name of the gallery for the image
- * @param  PATH			The path to the image file
- * @param  string			The original file name of the image
+ * @param  ID_TEXT                      The name of the gallery for the image
+ * @param  PATH                         The path to the image file
+ * @param  string                       The original file name of the image
  */
 function watermark_gallery_image($gallery,$file_path,$filename)
 {
@@ -1190,10 +1190,10 @@ function watermark_gallery_image($gallery,$file_path,$filename)
 /**
  * Watermark the corner of an image.
  *
- * @param  resource		The image resource being watermarked
- * @param  URLPATH		The (local) URL to the watermark file
- * @param  BINARY			Whether a right hand side corner is being watermarked
- * @param  BINARY			Whether a bottom edge corner is being watermarked
+ * @param  resource                     The image resource being watermarked
+ * @param  URLPATH                      The (local) URL to the watermark file
+ * @param  BINARY                       Whether a right hand side corner is being watermarked
+ * @param  BINARY                       Whether a bottom edge corner is being watermarked
  */
 function _watermark_corner(/*&*/$source,$watermark_url,$x,$y)
 {
@@ -1216,9 +1216,9 @@ function _watermark_corner(/*&*/$source,$watermark_url,$x,$y)
 /**
  * Make sure the detailed image file is not bigger than the defined box width.
  *
- * @param  PATH			The path to the image file
- * @param  string			The original filename of the image
- * @param  integer		The box width
+ * @param  PATH                         The path to the image file
+ * @param  string                       The original filename of the image
+ * @param  integer                      The box width
  */
 function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
 {
@@ -1236,29 +1236,29 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
 /**
  * Add a gallery with the specified parameters.
  *
- * @param  ID_TEXT		The gallery codename
- * @param  SHORT_TEXT	The full human-readeable name of the gallery
- * @param  LONG_TEXT		The description of the gallery
- * @param  LONG_TEXT		Hidden notes associated with the gallery
- * @param  ID_TEXT		The parent gallery (blank: no parent)
- * @param  BINARY			Whether images may be put in this gallery
- * @param  BINARY			Whether videos may be put in this gallery
- * @param  BINARY			Whether the gallery serves as a container for automatically created member galleries
- * @param  BINARY			Whether the gallery uses the flow mode interface
- * @param  URLPATH		The representative image of the gallery (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  BINARY			Whether rating are allowed
- * @param  BINARY			Whether comments are allowed
- * @param  boolean		Whether to skip the check for whether the gallery exists (useful for importers)
- * @param  ?TIME			The add time (NULL: now)
- * @param  ?MEMBER		The gallery owner (NULL: nobody)
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
- * @param  boolean		Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT		The name
+ * @param  ID_TEXT                      The gallery codename
+ * @param  SHORT_TEXT                   The full human-readeable name of the gallery
+ * @param  LONG_TEXT                    The description of the gallery
+ * @param  LONG_TEXT                    Hidden notes associated with the gallery
+ * @param  ID_TEXT                      The parent gallery (blank: no parent)
+ * @param  BINARY                       Whether images may be put in this gallery
+ * @param  BINARY                       Whether videos may be put in this gallery
+ * @param  BINARY                       Whether the gallery serves as a container for automatically created member galleries
+ * @param  BINARY                       Whether the gallery uses the flow mode interface
+ * @param  URLPATH                      The representative image of the gallery (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  BINARY                       Whether rating are allowed
+ * @param  BINARY                       Whether comments are allowed
+ * @param  boolean                      Whether to skip the check for whether the gallery exists (useful for importers)
+ * @param  ?TIME                        The add time (NULL: now)
+ * @param  ?MEMBER                      The gallery owner (NULL: nobody)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images = 1,$accept_videos = 1,$is_member_synched = 0,$flow_mode_interface = 0,$rep_image = '',$watermark_top_left = '',$watermark_top_right = '',$watermark_bottom_left = '',$watermark_bottom_right = '',$allow_rating = 1,$allow_comments = 1,$skip_exists_check = false,$add_date = null,$g_owner = null,$meta_keywords = '',$meta_description = '',$uniqify = false)
 {
@@ -1341,30 +1341,30 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
 /**
  * Edit a gallery.
  *
- * @param  ID_TEXT		The old gallery codename (in case we are renaming)
- * @param  ID_TEXT		The gallery codename (maybe the same as the old one)
- * @param  SHORT_TEXT	The full human-readeable name of the gallery
- * @param  LONG_TEXT		The description of the gallery
- * @param  LONG_TEXT		Hidden notes associated with the gallery
- * @param  ?ID_TEXT		The parent gallery (NULL: no parent)
- * @param  BINARY			Whether images may be put in this gallery
- * @param  BINARY			Whether videos may be put in this gallery
- * @param  BINARY			Whether the gallery serves as a container for automatically created member galleries
- * @param  BINARY			Whether the gallery uses the flow mode interface
- * @param  URLPATH		The representative image of the gallery (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  URLPATH		Watermark (blank: none)
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit)
- * @param  BINARY			Whether rating are allowed
- * @param  BINARY			Whether comments are allowed
- * @param  ?MEMBER		The gallery owner (NULL: nobody)
- * @param  ?TIME			The add time (NULL: now)
- * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
- * @param  boolean		Whether to force the name as unique, if there's a conflict
- * @return ID_TEXT		The name
+ * @param  ID_TEXT                      The old gallery codename (in case we are renaming)
+ * @param  ID_TEXT                      The gallery codename (maybe the same as the old one)
+ * @param  SHORT_TEXT                   The full human-readeable name of the gallery
+ * @param  LONG_TEXT                    The description of the gallery
+ * @param  LONG_TEXT                    Hidden notes associated with the gallery
+ * @param  ?ID_TEXT                     The parent gallery (NULL: no parent)
+ * @param  BINARY                       Whether images may be put in this gallery
+ * @param  BINARY                       Whether videos may be put in this gallery
+ * @param  BINARY                       Whether the gallery serves as a container for automatically created member galleries
+ * @param  BINARY                       Whether the gallery uses the flow mode interface
+ * @param  URLPATH                      The representative image of the gallery (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  URLPATH                      Watermark (blank: none)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit)
+ * @param  BINARY                       Whether rating are allowed
+ * @param  BINARY                       Whether comments are allowed
+ * @param  ?MEMBER                      The gallery owner (NULL: nobody)
+ * @param  ?TIME                        The add time (NULL: now)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  boolean                      Whether to force the name as unique, if there's a conflict
+ * @return ID_TEXT                      The name
  */
 function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id = null,$accept_images = 1,$accept_videos = 1,$is_member_synched = 0,$flow_mode_interface = 0,$rep_image = '',$watermark_top_left = '',$watermark_top_right = '',$watermark_bottom_left = '',$watermark_bottom_right = '',$meta_keywords = null,$meta_description = null,$allow_rating = 1,$allow_comments = 1,$g_owner = null,$add_time = null,$null_is_literal = false,$uniqify = false)
 {
@@ -1500,7 +1500,7 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id =
 /**
  * Delete a specified gallery.
  *
- * @param  ID_TEXT		The gallery codename
+ * @param  ID_TEXT                      The gallery codename
  */
 function delete_gallery($name)
 {
@@ -1571,7 +1571,7 @@ function delete_gallery($name)
 /**
  * The UI shows member galleries that do not exist. If it is a member gallery, and it does not exist, it'll need making, before something can be added. This gallery performs the check and makes the gallery if needed.
  *
- * @param  ID_TEXT		The gallery codename
+ * @param  ID_TEXT                      The gallery codename
  */
 function make_member_gallery_if_needed($cat)
 {
@@ -1609,8 +1609,8 @@ function make_member_gallery_if_needed($cat)
 /**
  * Get the potential title of a gallery - real name if gallery exists.
  *
- * @param  ID_TEXT		The gallery codename
- * @return ?SHORT_TEXT	The gallery title (NULL: does not exist and won't be auto-created)
+ * @param  ID_TEXT                      The gallery codename
+ * @return ?SHORT_TEXT                  The gallery title (NULL: does not exist and won't be auto-created)
  */
 function get_potential_gallery_title($cat)
 {

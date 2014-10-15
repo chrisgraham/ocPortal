@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /*
@@ -154,7 +154,7 @@ function uninstall_ocf()
 /**
  * Install/upgrade OCF.
  *
- * @param  ?float	The version to upgrade from (NULL: fresh install).
+ * @param  ?float                       The version to upgrade from (NULL: fresh install).
  */
 function install_ocf($upgrade_from = null)
 {

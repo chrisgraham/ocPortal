@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_fields
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_fields
  */
 
 class Hook_fields_reference_multi
 {
     /**
-	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
-	 *
-	 * @param  ?ID_TEXT		Only find if we can potential match this field type (NULL: no filter)
-	 * @return array			Map of field type to field type title
-	 */
+     * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
+     *
+     * @param  ?ID_TEXT                 Only find if we can potential match this field type (NULL: no filter)
+     * @return array                    Map of field type to field type title
+     */
     public function get_field_types($filter = null)
     {
         if (!addon_installed('catalogues')) {
@@ -53,23 +53,23 @@ class Hook_fields_reference_multi
     // ==============
 
     /**
-	 * Get special Tempcode for inputting this field.
-	 *
-	 * @param  array			The row for the field to input
-	 * @return ?array			List of specially encoded input detail rows (NULL: nothing special)
-	 */
+     * Get special Tempcode for inputting this field.
+     *
+     * @param  array                    The row for the field to input
+     * @return ?array                   List of specially encoded input detail rows (NULL: nothing special)
+     */
     public function get_search_inputter($row)
     {
         return NULL;
     }
 
     /**
-	 * Get special SQL from POSTed parameters for this field.
-	 *
-	 * @param  array			The row for the field to input
-	 * @param  integer		We're processing for the ith row
-	 * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
-	 */
+     * Get special SQL from POSTed parameters for this field.
+     *
+     * @param  array                    The row for the field to input
+     * @param  integer                  We're processing for the ith row
+     * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
+     */
     public function inputted_to_sql_for_search($row,$i)
     {
         return exact_match_sql($row,$i);
@@ -80,13 +80,13 @@ class Hook_fields_reference_multi
     // ===================
 
     /**
-	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
-	 *
-	 * @param  ?array			The field details (NULL: new field)
-	 * @param  ?boolean		Whether a default value cannot be blank (NULL: don't "lock in" a new default value)
-	 * @param  ?string		The given default value as a string (NULL: don't "lock in" a new default value)
-	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
-	 */
+     * Get some info bits relating to our field type, that helps us look it up / set defaults.
+     *
+     * @param  ?array                   The field details (NULL: new field)
+     * @param  ?boolean                 Whether a default value cannot be blank (NULL: don't "lock in" a new default value)
+     * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
+     * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
+     */
     public function get_field_value_row_bits($field,$required = null,$default = null)
     {
         unset($field);
@@ -94,12 +94,12 @@ class Hook_fields_reference_multi
     }
 
     /**
-	 * Convert a field value to something renderable.
-	 *
-	 * @param  array			The field details
-	 * @param  mixed			The raw value
-	 * @return mixed			Rendered field (tempcode or string)
-	 */
+     * Convert a field value to something renderable.
+     *
+     * @param  array                    The field details
+     * @param  mixed                    The raw value
+     * @return mixed                    Rendered field (tempcode or string)
+     */
     public function render_field_value($field,$ev)
     {
         if (is_object($ev)) {
@@ -128,23 +128,23 @@ class Hook_fields_reference_multi
     // ======================
 
     /**
-	 * Get form inputter.
-	 *
-	 * @param  string			The field name
-	 * @param  string			The field description
-	 * @param  array			The field details
-	 * @param  ?string		The actual current value of the field (NULL: none)
-	 * @param  boolean		Whether this is for a new entry
-	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
-	 */
+     * Get form inputter.
+     *
+     * @param  string                   The field name
+     * @param  string                   The field description
+     * @param  array                    The field details
+     * @param  ?string                  The actual current value of the field (NULL: none)
+     * @param  boolean                  Whether this is for a new entry
+     * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
+     */
     public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
     {
         /*$_list=new ocp_tempcode();
-		$list=create_selection_list_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
-		if (($field['cf_required']==0) || ($actual_value==='') || (is_null($actual_value)) || ($list->is_empty()))
-			$_list->attach(form_input_list_entry('',(($actual_value==='') || (is_null($actual_value))),do_lang_tempcode('NA_EM')));
-		$_list->attach($list);
-		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);*/
+        $list=create_selection_list_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
+        if (($field['cf_required']==0) || ($actual_value==='') || (is_null($actual_value)) || ($list->is_empty()))
+            $_list->attach(form_input_list_entry('',(($actual_value==='') || (is_null($actual_value))),do_lang_tempcode('NA_EM')));
+        $_list->attach($list);
+        return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);*/
         $options = array();
         if (($field['cf_type'] != 'reference_multi') && (substr($field['cf_type'],0,3) == 'cx_')) {
             $options['catalogue_name'] = substr($field['cf_type'],3);
@@ -153,14 +153,14 @@ class Hook_fields_reference_multi
     }
 
     /**
-	 * Find the posted value from the get_field_inputter field
-	 *
-	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
-	 * @param  array			The field details
-	 * @param  ?string		Where the files will be uploaded to (NULL: do not store an upload, return NULL if we would need to do so)
-	 * @param  ?array			Former value of field (NULL: none)
-	 * @return ?string		The value (NULL: could not process)
-	 */
+     * Find the posted value from the get_field_inputter field
+     *
+     * @param  boolean                  Whether we were editing (because on edit, it could be a fractional edit)
+     * @param  array                    The field details
+     * @param  ?string                  Where the files will be uploaded to (NULL: do not store an upload, return NULL if we would need to do so)
+     * @param  ?array                   Former value of field (NULL: none)
+     * @return ?string                  The value (NULL: could not process)
+     */
     public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
     {
         $id = $field['id'];

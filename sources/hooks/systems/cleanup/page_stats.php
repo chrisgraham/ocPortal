@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		stats
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    stats
  */
 
 class Hook_page_stats
 {
     /**
-	 * Find details about this cleanup hook.
-	 *
-	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
-	 */
+     * Find details about this cleanup hook.
+     *
+     * @return ?array                   Map of cleanup hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         require_lang('stats');
@@ -39,10 +39,10 @@ class Hook_page_stats
     }
 
     /**
-	 * Run the cleanup hook action.
-	 *
-	 * @return tempcode	Results
-	 */
+     * Run the cleanup hook action.
+     *
+     * @return tempcode                 Results
+     */
     public function run()
     {
         require_lang('stats');
@@ -106,7 +106,7 @@ class Hook_page_stats
                         $list .= strval($value);
                     }
                 }
-                fwrite($tmpfile,"	\$GLOBALS['SITE_DB']->query_insert('stats',array($list));\n");
+                fwrite($tmpfile,"   \$GLOBALS['SITE_DB']->query_insert('stats',array($list));\n");
 
                 if ($or_list != '') {
                     $or_list .= ' OR ';

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		polls
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    polls
  */
 
 require_code('crud_module');
@@ -39,14 +39,14 @@ class Module_cms_polls extends standard_crud_module
     public $content_type = 'poll';
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -63,12 +63,12 @@ class Module_cms_polls extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -81,11 +81,11 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         require_code('polls');
@@ -104,10 +104,10 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('polls');
@@ -115,10 +115,10 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -133,11 +133,11 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -201,10 +201,10 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_polls')?null:get_member();
@@ -213,27 +213,27 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a poll adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK		The poll ID (NULL: new)
-	 * @param  SHORT_TEXT		The question
-	 * @param  SHORT_TEXT		The first answer
-	 * @param  SHORT_TEXT		The second answer
-	 * @param  SHORT_TEXT		The third answer
-	 * @param  SHORT_TEXT		The fourth answer
-	 * @param  SHORT_TEXT		The fifth answer
-	 * @param  SHORT_TEXT		The sixth answer
-	 * @param  SHORT_TEXT		The seventh answer
-	 * @param  SHORT_TEXT		The eigth answer
-	 * @param  SHORT_TEXT		The ninth answer
-	 * @param  SHORT_TEXT		The tenth answer
-	 * @param  boolean			Whether the poll is/will-be currently active
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @param  LONG_TEXT			Notes for the poll
-	 * @return array				A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a poll adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The poll ID (NULL: new)
+     * @param  SHORT_TEXT               The question
+     * @param  SHORT_TEXT               The first answer
+     * @param  SHORT_TEXT               The second answer
+     * @param  SHORT_TEXT               The third answer
+     * @param  SHORT_TEXT               The fourth answer
+     * @param  SHORT_TEXT               The fifth answer
+     * @param  SHORT_TEXT               The sixth answer
+     * @param  SHORT_TEXT               The seventh answer
+     * @param  SHORT_TEXT               The eigth answer
+     * @param  SHORT_TEXT               The ninth answer
+     * @param  SHORT_TEXT               The tenth answer
+     * @param  boolean                  Whether the poll is/will-be currently active
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  LONG_TEXT                Notes for the poll
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($id = null,$question = '',$a1 = '',$a2 = '',$a3 = '',$a4 = '',$a5 = '',$a6 = '',$a7 = '',$a8 = '',$a9 = '',$a10 = '',$current = false,$allow_rating = 1,$allow_comments = 1,$allow_trackbacks = 1,$notes = '')
     {
         list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
@@ -275,11 +275,11 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('poll',array('submitter','date_and_time'),array('id' => intval($id)),'',1);
@@ -290,11 +290,11 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A quartet: fields, hidden, delete-fields, text
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A quartet: fields, hidden, delete-fields, text
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id' => intval($id)));
@@ -307,10 +307,10 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $question = post_param('question');
@@ -383,10 +383,10 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('poll',array('is_current','submitter','num_options'),array('id' => intval($id)),'',1);
@@ -479,10 +479,10 @@ class Module_cms_polls extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('poll',array('is_current','submitter'),array('id' => intval($id)),'',1);

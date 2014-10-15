@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Get a count of members in a (or more full details if $non_validated is true).
  *
- * @param  GROUP		The ID of the group.
- * @param  boolean	Whether to include those in the as a primary member.
- * @param  boolean	Whether to include those applied to join the, but not validated in.
- * @param  boolean	Whether to include those in the as a secondary member.
- * @param  boolean	Whether to include those members who are not validated as site members at all yet (parameter currently ignored).
- * @return integer	The count.
+ * @param  GROUP                        The ID of the group.
+ * @param  boolean                      Whether to include those in the as a primary member.
+ * @param  boolean                      Whether to include those applied to join the, but not validated in.
+ * @param  boolean                      Whether to include those in the as a secondary member.
+ * @param  boolean                      Whether to include those members who are not validated as site members at all yet (parameter currently ignored).
+ * @return integer                      The count.
  */
 function ocf_get_group_members_raw_count($group_id,$include_primaries = true,$non_validated = false,$include_secondaries = true,$include_unvalidated_members = true)
 {
@@ -39,7 +39,7 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries = true,$no
     if ($include_primaries) {
         $map = array('m_primary_group' => $group_id);
         if (!$include_unvalidated_members) {
-            //$map['m_validated_confirm_code']='';	Actually we don't want to consider this here
+            //$map['m_validated_confirm_code']=''; Actually we don't want to consider this here
             $map['m_validated'] = 1;
         }
         $b = $GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)',$map);
@@ -94,14 +94,14 @@ function ocf_get_group_members_raw_count($group_id,$include_primaries = true,$no
 /**
  * Get a list of members in a (or more full details if $non_validated is true).
  *
- * @param  GROUP		The ID of the group.
- * @param  boolean	Whether to include those in the as a primary member.
- * @param  boolean	Whether to include those applied to join the, but not validated in (also causes it to return maps that contain this info).
- * @param  boolean	Whether to include those in the as a secondary member.
- * @param  boolean	Whether to include those members who are not validated as site members at all yet (parameter currently ignored).
- * @param  ?integer	Return up to this many entries for primary members and this many entries for secondary members and all LDAP members (NULL: no limit, only use no limit if querying very restricted usergroups!)
- * @param  integer	Return primary members after this offset and secondary members after this offset
- * @return array		The list.
+ * @param  GROUP                        The ID of the group.
+ * @param  boolean                      Whether to include those in the as a primary member.
+ * @param  boolean                      Whether to include those applied to join the, but not validated in (also causes it to return maps that contain this info).
+ * @param  boolean                      Whether to include those in the as a secondary member.
+ * @param  boolean                      Whether to include those members who are not validated as site members at all yet (parameter currently ignored).
+ * @param  ?integer                     Return up to this many entries for primary members and this many entries for secondary members and all LDAP members (NULL: no limit, only use no limit if querying very restricted usergroups!)
+ * @param  integer                      Return primary members after this offset and secondary members after this offset
+ * @return array                        The list.
  */
 function ocf_get_group_members_raw($group_id,$include_primaries = true,$non_validated = false,$include_secondaries = true,$include_unvalidated_members = true,$max = null,$start = 0)
 {
@@ -120,7 +120,7 @@ function ocf_get_group_members_raw($group_id,$include_primaries = true,$non_vali
     if ($include_primaries) {
         $map = array('m_primary_group' => $group_id);
         if (!$include_unvalidated_members) {
-            //$map['m_validated_confirm_code']='';	Actually we don't want to consider this here
+            //$map['m_validated_confirm_code']=''; Actually we don't want to consider this here
             $map['m_validated'] = 1;
         }
         $_members2 = $GLOBALS['FORUM_DB']->query_select('f_members',array('id','m_username'),$map,'',$max,$start);

@@ -15,9 +15,9 @@
 /*EXTRA FUNCTIONS: shell_exec|fsockopen*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -29,44 +29,44 @@ function init__files2()
 
     global $HTTP_DOWNLOAD_MIME_TYPE,$HTTP_DOWNLOAD_SIZE,$HTTP_DOWNLOAD_URL,$HTTP_MESSAGE,$HTTP_MESSAGE_B,$HTTP_NEW_COOKIES,$HTTP_FILENAME,$HTTP_CHARSET,$HTTP_DOWNLOAD_MTIME;
     /** The mime type returned from the last file lookup.
-	 * @global ?ID_TEXT $HTTP_DOWNLOAD_MIME_TYPE
-	 */
+     * @global ?ID_TEXT $HTTP_DOWNLOAD_MIME_TYPE
+     */
     $HTTP_DOWNLOAD_MIME_TYPE = null;
     /** The download size returned from the last file lookup.
-	 * @global ?ID_TEXT $HTTP_DOWNLOAD_SIZE
-	 */
+     * @global ?ID_TEXT $HTTP_DOWNLOAD_SIZE
+     */
     $HTTP_DOWNLOAD_SIZE = null;
     /** The redirected URL for the last file lookup.
-	 * @global ?ID_TEXT $HTTP_DOWNLOAD_URL
-	 */
+     * @global ?ID_TEXT $HTTP_DOWNLOAD_URL
+     */
     $HTTP_DOWNLOAD_URL = null;
     /** The file modification time returned from the last file lookup.
-	 * @global ?ID_TEXT $HTTP_DOWNLOAD_MTIME
-	 */
+     * @global ?ID_TEXT $HTTP_DOWNLOAD_MTIME
+     */
     $HTTP_DOWNLOAD_MTIME = null;
     /** The status code returned from the last file lookup (e.g. "200" or "404").
-	 * @global string $HTTP_MESSAGE
-	 */
+     * @global string $HTTP_MESSAGE
+     */
     $HTTP_MESSAGE = null;
     $HTTP_MESSAGE_B = null;
     /** The cookies returned from the last file lookup.
-	 * @global ?ID_TEXT $HTTP_NEW_COOKIES
-	 */
+     * @global ?ID_TEXT $HTTP_NEW_COOKIES
+     */
     $HTTP_NEW_COOKIES = null;
     /** The filename returned from the last file lookup.
-	 * @global ?ID_TEXT $HTTP_FILENAME
-	 */
+     * @global ?ID_TEXT $HTTP_FILENAME
+     */
     $HTTP_FILENAME = null;
     /** The character set returned from the last file lookup.
-	 * @global ?ID_TEXT $HTTP_CHARSET
-	 */
+     * @global ?ID_TEXT $HTTP_CHARSET
+     */
     $HTTP_CHARSET = null;
 }
 
 /**
  * Make a missing required directory, or exit with an error if we cannot.
  *
- * @param PATH			Path to create
+ * @param PATH       Path to create
  */
 function make_missing_directory($dir)
 {
@@ -80,7 +80,7 @@ function make_missing_directory($dir)
 /**
  * Discern the cause of a file-write error, and show an appropriate error message.
  *
- * @param PATH			File path that could not be written (full path, not relative)
+ * @param PATH       File path that could not be written (full path, not relative)
  */
 function _intelligent_write_error($path)
 {
@@ -99,8 +99,8 @@ function _intelligent_write_error($path)
 /**
  * Discern the cause of a file-write error, and return an appropriate error message.
  *
- * @param  PATH			File path that could not be written
- * @return tempcode		Message
+ * @param  PATH                         File path that could not be written
+ * @return tempcode                     Message
  */
 function _intelligent_write_error_inline($path)
 {
@@ -117,8 +117,8 @@ function _intelligent_write_error_inline($path)
 /**
  * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
  *
- * @param  string		The prefix of the temporary file name.
- * @return ~string	The name of the temporary file (false: error).
+ * @param  string                       The prefix of the temporary file name.
+ * @return ~string                      The name of the temporary file (false: error).
  */
 function _ocp_tempnam($prefix)
 {
@@ -144,7 +144,7 @@ function _ocp_tempnam($prefix)
 /**
  * Provides a hook for file synchronisation between mirrored servers. Called after any file creation, deletion or edit.
  *
- * @param  PATH				File/directory name to sync on (full path)
+ * @param  PATH                         File/directory name to sync on (full path)
  */
 function _sync_file($filename)
 {
@@ -181,8 +181,8 @@ function _sync_file($filename)
 /**
  * Provides a hook for file-move synchronisation between mirrored servers. Called after any rename or move action.
  *
- * @param  PATH				File/directory name to move from (may be full or relative path)
- * @param  PATH				File/directory name to move to (may be full or relative path)
+ * @param  PATH                         File/directory name to move from (may be full or relative path)
+ * @param  PATH                         File/directory name to move to (may be full or relative path)
  */
 function _sync_file_move($old,$new)
 {
@@ -204,9 +204,9 @@ function _sync_file_move($old,$new)
 /**
  * Delete all the contents of a directory, and any subdirectories of that specified directory (recursively).
  *
- * @param  PATH			The pathname to the directory to delete
- * @param  boolean		Whether to preserve files there by default
- * @param  boolean		Whether to just delete files
+ * @param  PATH                         The pathname to the directory to delete
+ * @param  boolean                      Whether to preserve files there by default
+ * @param  boolean                      Whether to just delete files
  */
 function _deldir_contents($dir,$default_preserve = false,$just_files = false)
 {
@@ -247,12 +247,12 @@ function _deldir_contents($dir,$default_preserve = false,$just_files = false)
 /**
  * Output data to a CSV file.
  *
- * @param  array			List of maps, each map representing a row
- * @param  ID_TEXT		Filename to output
- * @param  boolean		Whether to output CSV headers
- * @param  boolean		Whether to output/exit when we're done instead of return
- * @param  ?PATH			File to spool into (NULL: none)
- * @return string			CSV data (we might not return though, depending on $exit; if $outfile_path is not NULL, this will be blank)
+ * @param  array                        List of maps, each map representing a row
+ * @param  ID_TEXT                      Filename to output
+ * @param  boolean                      Whether to output CSV headers
+ * @param  boolean                      Whether to output/exit when we're done instead of return
+ * @param  ?PATH                        File to spool into (NULL: none)
+ * @return string                       CSV data (we might not return though, depending on $exit; if $outfile_path is not NULL, this will be blank)
  */
 function make_csv($data,$filename = 'data.csv',$headers = true,$output_and_exit = true,$outfile_path = null)
 {
@@ -323,8 +323,8 @@ function make_csv($data,$filename = 'data.csv',$headers = true,$output_and_exit 
 /**
  * Find path to the PHP executable.
  *
- * @param  boolean		Whether we need a CGI interpreter
- * @return PATH			Path to PHP
+ * @param  boolean                      Whether we need a CGI interpreter
+ * @return PATH                         Path to PHP
  */
 function find_php_path($cgi = false)
 {
@@ -379,12 +379,12 @@ function find_php_path($cgi = false)
 /**
  * Get the contents of a directory, recursively. It is assumed that the directory exists.
  *
- * @param  PATH			The path to search
- * @param  PATH			The path we prepend to everything we find (intended to be used inside the recursion)
- * @param  boolean		Whether to also get special files
- * @param  boolean		Whether to recurse (if not, will return directories as files)
- * @param  boolean		Whether to get files (if not, will return directories as files)
- * @return array			The contents of the directory
+ * @param  PATH                         The path to search
+ * @param  PATH                         The path we prepend to everything we find (intended to be used inside the recursion)
+ * @param  boolean                      Whether to also get special files
+ * @param  boolean                      Whether to recurse (if not, will return directories as files)
+ * @param  boolean                      Whether to get files (if not, will return directories as files)
+ * @return array                        The contents of the directory
  */
 function get_directory_contents($path,$rel_path = '',$special_too = false,$recurse = true,$files_wanted = true)
 {
@@ -422,9 +422,9 @@ function get_directory_contents($path,$rel_path = '',$special_too = false,$recur
 /**
  * Get the size in bytes of a directory. It is assumed that the directory exists.
  *
- * @param  PATH			The path to search
- * @param  boolean		Whether to recurse (if not, will return directories as files)
- * @return integer		The extra space requested
+ * @param  PATH                         The path to search
+ * @param  boolean                      Whether to recurse (if not, will return directories as files)
+ * @return integer                      The extra space requested
  */
 function get_directory_size($path,$recurse = true)
 {
@@ -454,7 +454,7 @@ function get_directory_size($path,$recurse = true)
 /**
  * Get the URL to the config option group for editing limits
  *
- * @return ?URLPATH		The URL to the config option group for editing limits (NULL: no access)
+ * @return ?URLPATH                     The URL to the config option group for editing limits (NULL: no access)
  */
 function get_upload_limit_config_url()
 {
@@ -470,9 +470,9 @@ function get_upload_limit_config_url()
 /**
  * Get the maximum allowed upload filesize, as specified in the configuration
  *
- * @param  ?MEMBER		Member we consider quota for (NULL: do not consider quota)
- * @param  ?object		Database connection to get quota from (NULL: site DB)
- * @return integer		The maximum allowed upload filesize, in bytes
+ * @param  ?MEMBER                      Member we consider quota for (NULL: do not consider quota)
+ * @param  ?object                      Database connection to get quota from (NULL: site DB)
+ * @return integer                      The maximum allowed upload filesize, in bytes
  */
 function get_max_file_size($source_member = null,$connection = null)
 {
@@ -521,11 +521,11 @@ function get_max_file_size($source_member = null,$connection = null)
 /**
  * Check uploaded file extensions for possible malicious intent, and if some is found, an error is put out, and the hackattack logged.
  *
- * @param  string			The filename
- * @param  boolean		Whether to skip the server side security check
- * @param  ?string		Delete this file if we have to exit (NULL: no file to delete)
- * @param  boolean		Whether to allow errors without dying
- * @return boolean		Success status
+ * @param  string                       The filename
+ * @param  boolean                      Whether to skip the server side security check
+ * @param  ?string                      Delete this file if we have to exit (NULL: no file to delete)
+ * @param  boolean                      Whether to allow errors without dying
+ * @return boolean                      Success status
  */
 function check_extension($name,$skip_server_side_security_check = false,$file_to_delete = null,$accept_errors = false)
 {
@@ -592,12 +592,12 @@ function check_extension($name,$skip_server_side_security_check = false,$file_to
 /**
  * Delete an uploaded file from disk, if it's URL has changed (i.e. it's been replaced, leaving a redundant disk file).
  *
- * @param  string		The path to the upload directory
- * @param  ID_TEXT	The table name
- * @param  ID_TEXT	The table field name
- * @param  mixed		The table ID field name, or a map array
- * @param  mixed		The table ID
- * @param  ?string	The new URL to use (NULL: deleting without replacing: no change check)
+ * @param  string                       The path to the upload directory
+ * @param  ID_TEXT                      The table name
+ * @param  ID_TEXT                      The table field name
+ * @param  mixed                        The table ID field name, or a map array
+ * @param  mixed                        The table ID
+ * @param  ?string                      The new URL to use (NULL: deleting without replacing: no change check)
  */
 function delete_upload($upload_path,$table,$field,$id_field,$id,$new_url = null)
 {
@@ -625,7 +625,7 @@ function delete_upload($upload_path,$table,$field,$id_field,$id,$new_url = null)
 /**
  * Check bandwidth usage against page view ratio for shared hosting.
  *
- * @param  integer		The extra bandwidth requested
+ * @param  integer                      The extra bandwidth requested
  */
 function check_shared_bandwidth_usage($extra)
 {
@@ -639,8 +639,8 @@ function check_shared_bandwidth_usage($extra)
         }
     }
     if (array_key_exists('throttle_bandwidth_complementary',$SITE_INFO)) {
-        //		$timestamp_start=$SITE_INFO['custom_user_'].current_share_user();	Actually we'll do by views
-//		$days_till_now=(time()-$timestamp_start)/(24*60*60);
+        //     $timestamp_start=$SITE_INFO['custom_user_'].current_share_user(); Actually we'll do by views
+//    $days_till_now=(time()-$timestamp_start)/(24*60*60);
         $views_till_now = intval(get_value('page_views'));
         $bandwidth_allowed = $SITE_INFO['throttle_bandwidth_complementary']+$SITE_INFO['throttle_bandwidth_views_per_meg']*$views_till_now;
         $total_bandwidth = intval(get_value('download_bandwidth'));
@@ -653,7 +653,7 @@ function check_shared_bandwidth_usage($extra)
 /**
  * Check disk space usage against page view ratio for shared hosting.
  *
- * @param  integer		The extra space in bytes requested
+ * @param  integer                      The extra space in bytes requested
  */
 function check_shared_space_usage($extra)
 {
@@ -667,8 +667,8 @@ function check_shared_space_usage($extra)
         }
     }
     if (array_key_exists('throttle_space_complementary',$SITE_INFO)) {
-        //		$timestamp_start=$SITE_INFO['custom_user_'].current_share_user();	Actually we'll do by views
-//		$days_till_now=(time()-$timestamp_start)/(24*60*60);
+        //     $timestamp_start=$SITE_INFO['custom_user_'].current_share_user(); Actually we'll do by views
+//    $days_till_now=(time()-$timestamp_start)/(24*60*60);
         $views_till_now = intval(get_value('page_views'));
         $space_allowed = $SITE_INFO['throttle_space_complementary']+$SITE_INFO['throttle_space_views_per_meg']*$views_till_now;
         $total_space = get_directory_size(get_custom_file_base() . '/uploads');
@@ -681,27 +681,27 @@ function check_shared_space_usage($extra)
 /**
  * Return the file in the URL by downloading it over HTTP. If a byte limit is given, it will only download that many bytes. It outputs warnings, returning NULL, on error.
  *
- * @param  URLPATH		The URL to download
- * @param  ?integer		The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
+ * @param  URLPATH                      The URL to download
+ * @param  ?integer                     The number of bytes to download. This is not a guarantee, it is a minimum (NULL: all bytes)
  * @range  1 max
- * @param  boolean		Whether to throw an ocPortal error, on error
- * @param  boolean		Whether to block redirects (returns NULL when found)
- * @param  string			The user-agent to identify as
- * @param  ?array			An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
- * @param  ?array			An optional array of cookies to send (NULL: none)
- * @param  ?string		'accept' header value (NULL: don't pass one)
- * @param  ?string		'accept-charset' header value (NULL: don't pass one)
- * @param  ?string		'accept-language' header value (NULL: don't pass one)
- * @param  ?resource		File handle to write to (NULL: do not do that)
- * @param  ?string		The HTTP referer (NULL: none)
- * @param  ?array			A pair: authentication username and password (NULL: none)
- * @param  float			The timeout
- * @param  boolean		Whether to treat the POST parameters as a raw POST (rather than using MIME)
- * @param  ?array			Files to send. Map between field to file path (NULL: none)
- * @param  ?array			Extra headers to send (NULL: none)
- * @param  ?string		HTTP verb (NULL: auto-decide based on other parameters)
- * @param  string			The content type to use if a raw HTTP post
- * @return ?string		The data downloaded (NULL: error)
+ * @param  boolean                      Whether to throw an ocPortal error, on error
+ * @param  boolean                      Whether to block redirects (returns NULL when found)
+ * @param  string                       The user-agent to identify as
+ * @param  ?array                       An optional array of POST parameters to send; if this is NULL, a GET request is used (NULL: none)
+ * @param  ?array                       An optional array of cookies to send (NULL: none)
+ * @param  ?string                      'accept' header value (NULL: don't pass one)
+ * @param  ?string                      'accept-charset' header value (NULL: don't pass one)
+ * @param  ?string                      'accept-language' header value (NULL: don't pass one)
+ * @param  ?resource                    File handle to write to (NULL: do not do that)
+ * @param  ?string                      The HTTP referer (NULL: none)
+ * @param  ?array                       A pair: authentication username and password (NULL: none)
+ * @param  float                        The timeout
+ * @param  boolean                      Whether to treat the POST parameters as a raw POST (rather than using MIME)
+ * @param  ?array                       Files to send. Map between field to file path (NULL: none)
+ * @param  ?array                       Extra headers to send (NULL: none)
+ * @param  ?string                      HTTP verb (NULL: auto-decide based on other parameters)
+ * @param  string                       The content type to use if a raw HTTP post
+ * @return ?string                      The data downloaded (NULL: error)
  */
 function _http_download_file($url,$byte_limit = null,$trigger_error = true,$no_redirect = false,$ua = 'ocPortal',$post_params = null,$cookies = null,$accept = null,$accept_charset = null,$accept_language = null,$write_to_file = null,$referer = null,$auth = null,$timeout = 6.0,$raw_post = false,$files = null,$extra_headers = null,$http_verb = null,$raw_content_type = 'application/xml')
 {
@@ -1070,9 +1070,9 @@ function _http_download_file($url,$byte_limit = null,$trigger_error = true,$no_r
                                             }
                                             $line = curl_exec($ch);
                 /*if ((count($curl_headers)!=0) && ((!is_null($files)))) // Useful for debugging
-				{
-					var_dump(curl_getinfo($ch,CURLINFO_HEADER_OUT));exit();
-				}*/
+                    {
+                            var_dump(curl_getinfo($ch,CURLINFO_HEADER_OUT));exit();
+                    }*/
                 if ($line === false) {
                     $error = curl_error($ch);
                     curl_close($ch);
@@ -1679,7 +1679,7 @@ function _http_download_file($url,$byte_limit = null,$trigger_error = true,$no_r
 /**
  * Read in any HTTP headers from an HTTP line, that we probe for.
  *
- * @param  string			The line
+ * @param  string                       The line
  */
 function _read_in_headers($line)
 {
@@ -1715,8 +1715,8 @@ function _read_in_headers($line)
 /**
  * Extract meta details from a URL.
  *
- * @param  URLPATH		Webpage URL
- * @return array			A map of meta details extracted from the webpage
+ * @param  URLPATH                      Webpage URL
+ * @return array                        A map of meta details extracted from the webpage
  */
 function get_webpage_meta_details($url)
 {
@@ -1836,8 +1836,8 @@ function get_webpage_meta_details($url)
  * Final filter for downloader output: try a bit harder to detect the character encoding, in case it was not in an HTTP filter.
  * Manipulates the $HTTP_CHARSET global.
  *
- * @param  string                        The HTTP stream we will look through
- * @return string                        Same as $out
+ * @param  string                       The HTTP stream we will look through
+ * @return string                       Same as $out
  */
 function _detect_character_encoding($out)
 {

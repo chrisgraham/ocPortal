@@ -8,17 +8,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore_to_main
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore_to_main
  */
 
 /**
  * Handling of a purchased permission.
  *
- * @param  ID_TEXT	The purchase ID.
- * @param  array		Details of the product.
- * @param  ID_TEXT	The product codename.
+ * @param  ID_TEXT                      The purchase ID.
+ * @param  array                        Details of the product.
+ * @param  ID_TEXT                      The product codename.
  */
 function handle_permission_purchase($purchase_id,$details,$type_code)
 {
@@ -51,9 +51,9 @@ function handle_permission_purchase($purchase_id,$details,$type_code)
 /**
  * Get a database map for our permission row.
  *
- * @param  array			Map row of item
- * @param  MEMBER			Member ID
- * @return array			Permission map row
+ * @param  array                        Map row of item
+ * @param  MEMBER                       Member ID
+ * @return array                        Permission map row
  */
 function get_sales_permission_map($row,$member)
 {
@@ -87,10 +87,10 @@ function get_sales_permission_map($row,$member)
 class Hook_permission
 {
     /**
-	 * Get the products handled by this eCommerce hook.
-	 *
-	 * @return array		A map of product name to list of product details.
-	 */
+     * Get the products handled by this eCommerce hook.
+     *
+     * @return array                    A map of product name to list of product details.
+     */
     public function get_products()
     {
         $ppc = floatval(get_option('points_per_currency_unit'));
@@ -112,10 +112,10 @@ class Hook_permission
     }
 
     /**
-	 * Whether this product is available.
-	 *
-	 * @return integer	The availability code (a ECOMMERCE_PRODUCT_* constant).
-	 */
+     * Whether this product is available.
+     *
+     * @return integer                  The availability code (a ECOMMERCE_PRODUCT_* constant).
+     */
     public function is_available($type_code,$member)
     {
         if (is_guest($member)) {
@@ -141,11 +141,11 @@ class Hook_permission
     }
 
     /**
-	 * Get the message for use in the purchase wizard.
-	 *
-	 * @param  string		The product in question.
-	 * @return tempcode	The message.
-	 */
+     * Get the message for use in the purchase wizard.
+     *
+     * @param  string                   The product in question.
+     * @return tempcode                 The message.
+     */
     public function get_message($type_code)
     {
         $id = intval(substr($type_code,strlen('PERMISSION_')));
@@ -159,10 +159,10 @@ class Hook_permission
     }
 
     /**
-	 * Get fields that need to be filled in in the purchase wizard.
-	 *
-	 * @return ?array		The fields and message text (NULL: none).
-	 */
+     * Get fields that need to be filled in in the purchase wizard.
+     *
+     * @return ?array                   The fields and message text (NULL: none).
+     */
     public function get_needed_fields()
     {
         return NULL;

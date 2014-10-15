@@ -13,22 +13,22 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_validation
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_validation
  */
 
 /*
 No support for:
- - new('foo'). / new('foo')[	REASON: no good reason to do it really
- - (function foo())(). / (function foo())()[	REASON: no good reason to do it really
- - if...(then)...catch...else	REASON: seen it, doubt it's valid
- - Full DOM	REASON: not implemented on any browser. If however, conditional testing is used, the validator will let it pass
- - (Most) HTML attributes hardcoded into DOM objects	REASON: no reason to do it, and less compatible and clear than getAttribute
- - ";" insertion	REASON: very sloppy
+ - new('foo'). / new('foo')[  REASON: no good reason to do it really
+ - (function foo())(). / (function foo())()[ REASON: no good reason to do it really
+ - if...(then)...catch...else REASON: seen it, doubt it's valid
+ - Full DOM REASON: not implemented on any browser. If however, conditional testing is used, the validator will let it pass
+ - (Most) HTML attributes hardcoded into DOM objects  REASON: no reason to do it, and less compatible and clear than getAttribute
+ - ";" insertion  REASON: very sloppy
  - New 'HTML5' APIs (not well supported yet)
- - checking against argument types	REASON: JavaScript extension, but we could do. Not a lot of advantage, quite a lot of work
- - checking for locked	REASON: JavaScript extension, but we could do. Not a lot of advantage, quite a lot of work
+ - checking against argument types  REASON: JavaScript extension, but we could do. Not a lot of advantage, quite a lot of work
+ - checking for locked  REASON: JavaScript extension, but we could do. Not a lot of advantage, quite a lot of work
 
 Some checks are commented out, as practical JavaScript does not tend to be at all type-strict.
 */
@@ -178,9 +178,9 @@ function reset_js_global_variables()
 /**
  * Check some JS code for validity.
  *
- * @param  string			Code
- * @param  boolean		Whether to return raw-errors
- * @return array			Standard validator report output
+ * @param  string                       Code
+ * @param  boolean                      Whether to return raw-errors
+ * @return array                        Standard validator report output
  */
 function check_js($data,$raw_errors = false)
 {
@@ -222,7 +222,7 @@ function check_js($data,$raw_errors = false)
 /**
  * Do the actual code check on the parse structure.
  *
- * @param  map				Parse structure
+ * @param  map                          Parse structure
  */
 function _check_js($structure)
 {
@@ -255,7 +255,7 @@ function _check_js($structure)
 /**
  * Check a function declaration.
  *
- * @param  map				The function details
+ * @param  map                          The function details
  */
 function js_check_function($function)
 {
@@ -289,7 +289,7 @@ function js_check_function($function)
 /**
  * Check a variable list for consistency.
  *
- * @param  list				The variable list
+ * @param  list                         The variable list
  */
 function js_check_variable_list($JS_LOCAL_VARIABLES)
 {
@@ -347,7 +347,7 @@ function js_check_variable_list($JS_LOCAL_VARIABLES)
 
         // Check for non-used variables
         if (($v['unused_value']) && ($name != '__return') && ($name != '_') && (!$v['is_global']) && (!in_array($name,array('this','arguments','event')))) {
-            //			js_log_warning('CHECKER','Non-used '.($v['unused_value']?'value':'variable').' (\''.$name.'\')',$v['first_mention']);	Annoying error, unneeded, inaccurate
+            //       js_log_warning('CHECKER','Non-used '.($v['unused_value']?'value':'variable').' (\''.$name.'\')',$v['first_mention']);   Annoying error, unneeded, inaccurate
         }
     }
 }
@@ -355,8 +355,8 @@ function js_check_variable_list($JS_LOCAL_VARIABLES)
 /**
  * Check a parsed command.
  *
- * @param  list				The command
- * @param  integer			The block depth we are searching at
+ * @param  list                         The command
+ * @param  integer                      The block depth we are searching at
  */
 function js_check_command($command,$depth)
 {
@@ -394,10 +394,10 @@ function js_check_command($command,$depth)
                 $switch_type = js_check_expression($c[1]);
                 foreach ($c[2] as $case) {
                     /*if (!is_null($case[0]))
-					{
-						$passes=js_ensure_type(array($switch_type),js_check_expression($case[0]),$c_pos,'Switch type inconsistency');
-						if ($passes) js_infer_expression_type_to_variable_type($switch_type,$case[0]);
-					}*/
+                            {
+                                        $passes=js_ensure_type(array($switch_type),js_check_expression($case[0]),$c_pos,'Switch type inconsistency');
+                                        if ($passes) js_infer_expression_type_to_variable_type($switch_type,$case[0]);
+                            }*/
                     js_check_command($case[1],$depth+1);
                 }
                 break;
@@ -501,9 +501,9 @@ function js_check_command($command,$depth)
 /**
  * Check an assignment statement.
  *
- * @param  list				The complex assignment details
- * @param  integer			The position this is at in the parse
- * @return string				The assigned type
+ * @param  list                         The complex assignment details
+ * @param  integer                      The position this is at in the parse
+ * @return string                       The assigned type
  */
 function js_check_assignment($c,$c_pos)
 {
@@ -548,10 +548,10 @@ function js_check_assignment($c,$c_pos)
 /**
  * Check an expression.
  *
- * @param  list				The complex expression
- * @param  boolean			Whether the expression is being used as a command (i.e. whether the expression is not used for the result, but rather, the secondary consequences of calculating it)
- * @param  boolean			Whether the expression is being guarded and hence is not a proper reference
- * @return string				The type
+ * @param  list                         The complex expression
+ * @param  boolean                      Whether the expression is being used as a command (i.e. whether the expression is not used for the result, but rather, the secondary consequences of calculating it)
+ * @param  boolean                      Whether the expression is being guarded and hence is not a proper reference
+ * @return string                       The type
  */
 function js_check_expression($e,$secondary = false,$is_guarded = false)
 {
@@ -574,10 +574,10 @@ function js_check_expression($e,$secondary = false,$is_guarded = false)
         $type_a = js_check_expression($e[2][0]);
         $type_b = js_check_expression($e[2][1]);
         /*if (($type_a!='Null') && ($type_b!='Null'))
-		{
-			$passes=js_ensure_type(array($type_a),$type_b,$c_pos,'Type symettry error in unary operator');
-			//if ($passes) js_infer_expression_type_to_variable_type($type_a,$e[2][1]);
-		}*/
+        {
+            $passes=js_ensure_type(array($type_a),$type_b,$c_pos,'Type symettry error in unary operator');
+            //if ($passes) js_infer_expression_type_to_variable_type($type_a,$e[2][1]);
+        }*/
         return $type_a;
     }
     if (in_array($e[0],array('BOOLEAN_AND','BOOLEAN_OR'))) {
@@ -739,10 +739,10 @@ function js_check_expression($e,$secondary = false,$is_guarded = false)
 /**
  * Check a function call.
  *
- * @param  list				The (possibly complex) variable that is the function identifier
- * @param  integer			The position this is at in the parse
- * @param  ?string			The class the given variable is in (NULL: global/as-specified-internally-in-c)
- * @return ?string			The return type (NULL: nothing returned)
+ * @param  list                         The (possibly complex) variable that is the function identifier
+ * @param  integer                      The position this is at in the parse
+ * @param  ?string                      The class the given variable is in (NULL: global/as-specified-internally-in-c)
+ * @return ?string                      The return type (NULL: nothing returned)
  */
 function js_check_call($c,$c_pos,$class = null)
 {
@@ -763,13 +763,13 @@ function js_check_call($c,$c_pos,$class = null)
 /**
  * Check a variable.
  *
- * @param  list				The (possibly complex) variable
- * @param  boolean			Whether the variable is being used referentially (i.e. not being set)
- * @param  boolean			Whether to return the type and function-return-type pair, rather than just the type
- * @param  ?string			The class the variable is referencing within (NULL: global)
- * @param  boolean			Whether the given class is being referenced directly in static form
- * @param  boolean			Whether this is for a function call
- * @return mixed				The return type and possibly function return type (if requested)
+ * @param  list                         The (possibly complex) variable
+ * @param  boolean                      Whether the variable is being used referentially (i.e. not being set)
+ * @param  boolean                      Whether to return the type and function-return-type pair, rather than just the type
+ * @param  ?string                      The class the variable is referencing within (NULL: global)
+ * @param  boolean                      Whether the given class is being referenced directly in static form
+ * @param  boolean                      Whether this is for a function call
+ * @return mixed                        The return type and possibly function return type (if requested)
  */
 function js_check_variable($variable,$reference = false,$function_duality = false,$class = null,$allow_static = false,$is_call = false)
 {
@@ -809,7 +809,7 @@ function js_check_variable($variable,$reference = false,$function_duality = fals
                 if (($GLOBALS['JS_PARSING_CONDITIONAL']) && (count($variable[2]) == 0)) { // We're running a conditional on this, meaning the user is likely checking to see if it exists (if it's a boolean that doesn't exist, we're in trouble, but unfortunately it's ambiguous).
                     // We add the variable, because it might have been guaranteed. We're screwed if it is not a guaranteeing conditional, but it's impossible to test that ("the halting problem")
                     if (($class == 'Window') || ($class == 'Self')) {
-                        //js_add_variable_reference($identifier,$variable[count($variable)-1],true,false,NULL,true);	Causes confusion
+                        //js_add_variable_reference($identifier,$variable[count($variable)-1],true,false,NULL,true); Causes confusion
                     }
                     $JS_PROTOTYPES[$class][1][] = array('!Object',$identifier); // Could be any type
                 }
@@ -857,8 +857,8 @@ function js_check_variable($variable,$reference = false,$function_duality = fals
             js_check_expression($variable[2][1]);
             $exp_type = js_check_variable(array('VARIABLE',$identifier,array(),$variable[count($variable)-1]),true,false,$class);
 
-//			$passes=js_ensure_type(array('!Array'),$exp_type,$variable[3],'Variable \''.$identifier.'\' must be an Array due to dereferencing (is '.$exp_type.')');
-//			if ($passes) js_infer_expression_type_to_variable_type('!Array',$variable[2][1]);
+//       $passes=js_ensure_type(array('!Array'),$exp_type,$variable[3],'Variable \''.$identifier.'\' must be an Array due to dereferencing (is '.$exp_type.')');
+//       if ($passes) js_infer_expression_type_to_variable_type('!Array',$variable[2][1]);
             $pos = strpos($exp_type,'Array');
             if ($pos !== false) {
                 $exp_type = substr($exp_type,0,$pos);
@@ -909,7 +909,7 @@ function js_check_variable($variable,$reference = false,$function_duality = fals
 /**
  * Scan through a complex variable, checking any expressions embedded in it.
  *
- * @param  list				The complex variable
+ * @param  list                         The complex variable
  */
 function js_scan_extractive_expressions($variable)
 {
@@ -925,8 +925,8 @@ function js_scan_extractive_expressions($variable)
 /**
  * Get the type of a variable.
  *
- * @param  list				The variable
- * @return string				The type
+ * @param  list                         The variable
+ * @return string                       The type
  */
 function js_get_variable_type($variable)
 {
@@ -956,8 +956,8 @@ function js_get_variable_type($variable)
 /**
  * Add a type to the list of used types for a variable.
  *
- * @param  string			The variable name
- * @param  string			The type
+ * @param  string                       The variable name
+ * @param  string                       The type
  */
 function js_set_ocportal_type($identifier,$type)
 {
@@ -968,12 +968,12 @@ function js_set_ocportal_type($identifier,$type)
 /**
  * Add a reference to a named variable.
  *
- * @param  string				The variable name
- * @param  integer			Where the first mention of the variable is
- * @param  boolean			Whether this is an instantiation reference
- * @param  boolean			Whether this is a reference (as opposed to instantiation/setting)
- * @param  ?string			The result-type (NULL: not a function)
- * @param  boolean			Whether this is a function call
+ * @param  string                       The variable name
+ * @param  integer                      Where the first mention of the variable is
+ * @param  boolean                      Whether this is an instantiation reference
+ * @param  boolean                      Whether this is a reference (as opposed to instantiation/setting)
+ * @param  ?string                      The result-type (NULL: not a function)
+ * @param  boolean                      Whether this is a function call
  */
 function js_add_variable_reference($identifier,$first_mention,$instantiation = true,$reference = false,$function_return = null,$is_call = false)
 {
@@ -992,26 +992,26 @@ function js_add_variable_reference($identifier,$first_mention,$instantiation = t
 /**
  * If the given expression is a direct variable expression, this function will infer the type as the given type. This therefore allows type inferring on usage as well as on assignment.
  *
- * @param  string				The type
- * @param  list				The expression
+ * @param  string                       The type
+ * @param  list                         The expression
  */
 function js_infer_expression_type_to_variable_type($type,$expr)
 {
-    /*	if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))		Not reliable enough, JS is very dynamic
-	{
-		$identifier=$expression[1][1];
-		js_set_ocportal_type($identifier,$type);
-	}*/
+    /*   if (($expression[0]=='VARIABLE') && (count($expression[1][2])==0))      Not reliable enough, JS is very dynamic
+    {
+        $identifier=$expression[1][1];
+        js_set_ocportal_type($identifier,$type);
+    }*/
 }
 
 /**
  * Do type checking for something specific.
  *
- * @param  list				List of allowed types
- * @param  string				Actual type involved
- * @param  integer			Current parse position
- * @param  ?string			Specific error message to give (NULL: use default)
- * @return boolean			Whether it type-checks
+ * @param  list                         List of allowed types
+ * @param  string                       Actual type involved
+ * @param  integer                      Current parse position
+ * @param  ?string                      Specific error message to give (NULL: use default)
+ * @return boolean                      Whether it type-checks
  */
 function js_ensure_type($_allowed_types,$actual_type,$pos,$alt_error = null)
 {

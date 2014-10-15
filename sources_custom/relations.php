@@ -41,14 +41,14 @@ function get_innodb_table_sql($tables,$all_tables)
         $fields = $tables_values[$loop_it];
 
         $_i = strval($i);
-        $out .= "		CREATE TABLE {$table_prefix}{$table}
-		(\n";
+        $out .= "    CREATE TABLE {$table_prefix}{$table}
+        (\n";
         $keys = array();
         $type_remap = get_innodb_data_types();
         foreach ($fields as $field => $type) {
             $_type = $type_remap[str_replace(array('*','?'),array('',''),$type)];
             $nullness = (strpos($type,'*') !== false)?'NULL':'NOT NULL';
-            $out .= "			{$field} {$_type} {$nullness},\n";
+            $out .= "         {$field} {$_type} {$nullness},\n";
             if (strpos($type,'*') !== false) {
                 $keys[] = $field;
             }
@@ -75,7 +75,7 @@ function get_innodb_table_sql($tables,$all_tables)
                 }
             }
         }
-        $out .= "			PRIMARY KEY (";
+        $out .= "       PRIMARY KEY (";
         foreach ($keys as $it => $key) {
             if ($it != 0) {
                 $out .= ',';
@@ -83,7 +83,7 @@ function get_innodb_table_sql($tables,$all_tables)
             $out .= $key;
         }
         $out .= ")
-		) TYPE=InnoDB;\n\n";
+        ) TYPE=InnoDB;\n\n";
 
         $i++;
     }
@@ -96,8 +96,8 @@ function get_innodb_table_sql($tables,$all_tables)
         $source_id = strval(array_search($from_table,array_keys($tables)));
         $target_id = strval(array_search($to_table,array_keys($tables)));
         $out .= "
-		CREATE INDEX `{$from}` ON {$table_prefix}{$from_table}({$from_field});
-		ALTER TABLE {$table_prefix}{$from_table} ADD FOREIGN KEY `{$from}` ({$from_field}) REFERENCES {$table_prefix}{$to_table} ({$to_field});\n";
+        CREATE INDEX `{$from}` ON {$table_prefix}{$from_table}({$from_field});
+        ALTER TABLE {$table_prefix}{$from_table} ADD FOREIGN KEY `{$from}` ({$from_field}) REFERENCES {$table_prefix}{$to_table} ({$to_field});\n";
     }
 
     return $out;
@@ -460,25 +460,25 @@ function get_code_to_fix_foreign_keys() // Temporary code to help fixup AUTO/AUT
 
     /*
 
-	The following do not work without fiddling, mostly due to allowed NULL's, so some manual changes need doing too.
+    The following do not work without fiddling, mostly due to allowed NULL's, so some manual changes need doing too.
 
-	ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp_galleries (name);
-	ALTER TABLE ocp_stats ADD FOREIGN KEY `stats.member_id` (member_id) REFERENCES ocp_f_members (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option3` (option3) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option4` (option4) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option5` (option5) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option6` (option6) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option7` (option7) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option8` (option8) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option9` (option9) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option10` (option10) REFERENCES ocp_translate (id);
-	ALTER TABLE ocp_group_category_access ADD FOREIGN KEY `group_category_access.category_name` (category_name) REFERENCES ocp_anything (id);
-	ALTER TABLE ocp_group_privileges ADD FOREIGN KEY `group_privileges.category_name` (category_name) REFERENCES ocp_anything (id);
-	ALTER TABLE ocp_group_privileges ADD FOREIGN KEY `group_privileges.the_page` (the_page) REFERENCES ocp_modules (module_the_name);
-	ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
-	ALTER TABLE ocp_seo_meta ADD FOREIGN KEY `seo_meta.meta_for_id` (meta_for_id) REFERENCES ocp_anything (id);
-	ALTER TABLE ocp_url_id_monikers ADD FOREIGN KEY `url_id_monikers.m_resource_id` (m_resource_id) REFERENCES ocp_anything (id);
-	ALTER TABLE ocp_import_id_remap ADD FOREIGN KEY `import_id_remap.id_new` (id_new) REFERENCES ocp_anything (id);
+    ALTER TABLE ocp_galleries ADD FOREIGN KEY `galleries.parent_id` (parent_id) REFERENCES ocp_galleries (name);
+    ALTER TABLE ocp_stats ADD FOREIGN KEY `stats.member_id` (member_id) REFERENCES ocp_f_members (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option3` (option3) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option4` (option4) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option5` (option5) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option6` (option6) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option7` (option7) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option8` (option8) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option9` (option9) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_poll ADD FOREIGN KEY `poll.option10` (option10) REFERENCES ocp_translate (id);
+    ALTER TABLE ocp_group_category_access ADD FOREIGN KEY `group_category_access.category_name` (category_name) REFERENCES ocp_anything (id);
+    ALTER TABLE ocp_group_privileges ADD FOREIGN KEY `group_privileges.category_name` (category_name) REFERENCES ocp_anything (id);
+    ALTER TABLE ocp_group_privileges ADD FOREIGN KEY `group_privileges.the_page` (the_page) REFERENCES ocp_modules (module_the_name);
+    ALTER TABLE ocp_f_groups ADD FOREIGN KEY `f_groups.g_group_leader` (g_group_leader) REFERENCES ocp_f_members (id);
+    ALTER TABLE ocp_seo_meta ADD FOREIGN KEY `seo_meta.meta_for_id` (meta_for_id) REFERENCES ocp_anything (id);
+    ALTER TABLE ocp_url_id_monikers ADD FOREIGN KEY `url_id_monikers.m_resource_id` (m_resource_id) REFERENCES ocp_anything (id);
+    ALTER TABLE ocp_import_id_remap ADD FOREIGN KEY `import_id_remap.id_new` (id_new) REFERENCES ocp_anything (id);
 
-	*/
+    */
 }

@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_comcode_pages
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_comcode_pages
  */
 
 class Hook_comcode_pages
 {
     /**
-	 * Find details about this cleanup hook.
-	 *
-	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
-	 */
+     * Find details about this cleanup hook.
+     *
+     * @return ?array                   Map of cleanup hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         require_lang('zones');
@@ -38,10 +38,10 @@ class Hook_comcode_pages
     }
 
     /**
-	 * Run the cleanup hook action.
-	 *
-	 * @return tempcode	Results
-	 */
+     * Run the cleanup hook action.
+     *
+     * @return tempcode                 Results
+     */
     public function run()
     {
         require_code('caches3');

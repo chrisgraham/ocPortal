@@ -15,9 +15,9 @@
 /*EXTRA FUNCTIONS: (var_export)|(debug_print_backtrace)|(memory_get_usage)*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -36,11 +36,11 @@ function semi_dev_mode_startup()
 {
     global $SEMI_DEV_MODE,$DEV_MODE;
     if ($SEMI_DEV_MODE) {
-        /*if ((mt_rand(0,2)==1) && ($DEV_MODE) && (running_script('index')))	We know this works now, so let's stop messing up our development speed
-		{
-			require_code('caches3');
-			erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
-		}*/
+        /*if ((mt_rand(0,2)==1) && ($DEV_MODE) && (running_script('index')))  We know this works now, so let's stop messing up our development speed
+        {
+            require_code('caches3');
+            erase_cached_templates(true); // Stop anything trying to read a template cache item (E.g. CSS, JS) that might not exist!
+        }*/
 
         if ((strpos(ocp_srv('HTTP_REFERER'),ocp_srv('HTTP_HOST')) !== false) && (strpos(ocp_srv('HTTP_REFERER'),'keep_devtest') !== false) && (!running_script('attachment')) && (!running_script('upgrader')) && (strpos(ocp_srv('HTTP_REFERER'),'login') === false) && (is_null(get_param('keep_devtest',null)))) {
             $_GET['keep_devtest'] = '1';
@@ -53,8 +53,8 @@ function semi_dev_mode_startup()
     global $_CREATED_FILES;
     if (isset($_CREATED_FILES)) { // Comes from ocProducts custom PHP version
         /**
-		 * Run after-tests for debug mode, to make sure coding standards are met.
-		 */
+         * Run after-tests for debug mode, to make sure coding standards are met.
+         */
         function dev_mode_aftertests()
         {
             global $_CREATED_FILES,$_MODIFIED_FILES;
@@ -93,8 +93,8 @@ function semi_dev_mode_startup()
 /**
  * Remove ocPortal's strictness, to help integration of third-party code.
  *
- * @param  boolean		Whether to also set the content type to plain-HTML
- * @param  boolean		Whether to destrictify MySQL commands over the ocPortal database driver
+ * @param  boolean                      Whether to also set the content type to plain-HTML
+ * @param  boolean                      Whether to destrictify MySQL commands over the ocPortal database driver
  */
 function destrictify($change_content_type = true,$mysql_too = false)
 {
@@ -124,7 +124,7 @@ function destrictify($change_content_type = true,$mysql_too = false)
         }
         @ini_set('include_path',$include_path);
     }
-    //disable_php_memory_limit();	Don't do this, recipe for disaster
+    //disable_php_memory_limit();   Don't do this, recipe for disaster
     @ini_set('suhosin.executor.disable_emodifier','0');
     @ini_set('suhosin.executor.multiheader','0');
     $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -164,7 +164,7 @@ function restrictify()
     @ini_set('suhosin.executor.disable_emodifier','1');
     @ini_set('suhosin.executor.multiheader','1');
     $GLOBALS['NO_DB_SCOPE_CHECK'] = false;
-    //$GLOBALS['NO_QUERY_LIMIT']=false;	Leave off, may have been set elsewhere than destrictify();
+    //$GLOBALS['NO_QUERY_LIMIT']=false;   Leave off, may have been set elsewhere than destrictify();
 }
 
 /**
@@ -190,8 +190,8 @@ function inspect_plain()
 /**
  * Output whatever arguments are given for debugging. If possible it'll output with plain text, but if output has already started it will attach messages.
  *
- * @param  array			Arguments to output
- * @param  boolean		Whether to force text output
+ * @param  array                        Arguments to output
+ * @param  boolean                      Whether to force text output
  */
 function _inspect($args,$force_plain = false)
 {
@@ -247,7 +247,7 @@ function _inspect($args,$force_plain = false)
 /**
  * Record the memory usage at this point.
  *
- * @param  ?string		The name of the memory point (NULL: use a simple counter)
+ * @param  ?string                      The name of the memory point (NULL: use a simple counter)
  */
 function memory_trace_point($name = null)
 {
@@ -282,20 +282,20 @@ function show_memory_points()
 /*!*
  * Finds if a function is being run underneath another function, and exit if there is a death message to output. This function should only be used when coding.
  *
- * @param  string			The function to check running underneath
- * @param  ?string		The message to exit with (NULL: return, do not exit)
- * @return boolean		Whether we are
+ * @param  string                       The function to check running underneath
+ * @param  ?string                      The message to exit with (NULL: return, do not exit)
+ * @return boolean                      Whether we are
  */
 /*function debug_running_underneath($function,$death_message=NULL)
 {
-	$stack=debug_backtrace();
-	foreach ($stack as $level)
-	{
-		if (in_array($function,$level))
-		{
-			if (!is_null($death_message)) fatal_exit($death_message);
-			return true;
-		}
-	}
-	return false;
+    $stack=debug_backtrace();
+    foreach ($stack as $level)
+    {
+        if (in_array($function,$level))
+        {
+            if (!is_null($death_message)) fatal_exit($death_message);
+            return true;
+        }
+    }
+    return false;
 }*/

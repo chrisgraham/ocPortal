@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		code_quality
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    code_quality
  */
 
 function parse($_tokens = null)
@@ -1200,10 +1200,10 @@ function _parse_variable_dereferencing_chain_segment($suppress_error)
             break;
 
         /*case 'CURLY_OPEN':  Not in PHP 6
-			pparse__parser_next();
-			$variable=array('CHAR_OF_STRING',_parse_expression(),$GLOBALS['I']);
-			pparse__parser_expect('CURLY_CLOSE');
-			break;*/
+            pparse__parser_next();
+            $variable=array('CHAR_OF_STRING',_parse_expression(),$GLOBALS['I']);
+            pparse__parser_expect('CURLY_CLOSE');
+            break;*/
 
         default:
             $variable = array();
@@ -1487,13 +1487,13 @@ function _parse_parameter()
             } else {
                 $parameter = array('RECEIVE_BY_REFERENCE',$variable,null,$GLOBALS['I']);
             }
-            /*$next_2=pparse__parser_peek();		Not valid in all PHP versions
-			if ($next_2=='EQUAL')
-			{
-				pparse__parser_next();
-				$value=_parse_literal();
-				$parameter[2]=$value;
-			}*/
+            /*$next_2=pparse__parser_peek();    Not valid in all PHP versions
+            if ($next_2=='EQUAL')
+            {
+                    pparse__parser_next();
+                    $value=_parse_literal();
+                    $parameter[2]=$value;
+            }*/
             break;
 
         case 'variable':
@@ -1593,12 +1593,12 @@ function pparse__parser_next($all = false)
 function parser_error($message)
 {
     global $TOKENS,$I;
-    /*foreach ($TOKENS as $key=>$token)	Debug output
-	{
-		if ($key==$I) echo '<strong>';
-		echo ' '.$token[0].' ';
-		if ($key==$I) echo '</strong>';
-	}*/
+    /*foreach ($TOKENS as $key=>$token)   Debug output
+    {
+        if ($key==$I) echo '<strong>';
+        echo ' '.$token[0].' ';
+        if ($key==$I) echo '</strong>';
+    }*/
     list($pos,$line,$full_line) = pos_to_line_details($I);
     die_error('PARSER',$pos,$line,$message);
 }
@@ -1635,6 +1635,6 @@ function handle_comment($comment)
         if (strpos($comment[1],'HACKHACK') !== false) {
             log_warning('HACKHACK comment found (' . str_replace("\n",' ',trim($comment[1])) . ')',$GLOBALS['I']);
         }
-        //if (strpos($comment[1],'XHTMLXHTML')!==false) log_warning('XHTMLXHTML comment found',$GLOBALS['I']);	Don't want to report these
+        //if (strpos($comment[1],'XHTMLXHTML')!==false) log_warning('XHTMLXHTML comment found',$GLOBALS['I']); Don't want to report these
     }
 }

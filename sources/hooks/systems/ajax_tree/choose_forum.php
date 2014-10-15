@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_choose_forum
 {
     /**
-	 * Run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
-	 *
-	 * @param  ?ID_TEXT		The ID to do under (NULL: root)
-	 * @param  array			Options being passed through
-	 * @param  ?ID_TEXT		The ID to select by default (NULL: none)
-	 * @return string			XML in the special category,entry format
-	 */
+     * Run function for ajax-tree hooks. Generates XML for a tree list, which is interpreted by JavaScript and expanded on-demand (via new calls).
+     *
+     * @param  ?ID_TEXT                 The ID to do under (NULL: root)
+     * @param  array                    Options being passed through
+     * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
+     * @return string                   XML in the special category,entry format
+     */
     public function run($id,$options,$default = null)
     {
         require_code('ocf_forums');
@@ -93,13 +93,13 @@ class Hook_choose_forum
     }
 
     /**
-	 * Generate a simple selection list for the ajax-tree hook. Returns a normal <select> style <option>-list, for fallback purposes
-	 *
-	 * @param  ?ID_TEXT		The ID to do under (NULL: root) - not always supported
-	 * @param  array			Options being passed through
-	 * @param  ?ID_TEXT		The ID to select by default (NULL: none)
-	 * @return tempcode		The nice list
-	 */
+     * Generate a simple selection list for the ajax-tree hook. Returns a normal <select> style <option>-list, for fallback purposes
+     *
+     * @param  ?ID_TEXT                 The ID to do under (NULL: root) - not always supported
+     * @param  array                    Options being passed through
+     * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
+     * @return tempcode                 The nice list
+     */
     public function simple($id,$options,$it = null)
     {
         require_code('ocf_forums2');

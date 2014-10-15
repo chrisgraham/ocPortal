@@ -13,48 +13,48 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		sms
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    sms
  */
 
 class Hook_addon_registry_sms
 {
     /**
-	 * Get a list of file permissions to set
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a list of file permissions to set
+     *
+     * @return array                    File permissions to set
+     */
     public function get_chmod_array()
     {
         return array();
     }
 
     /**
-	 * Get the version of ocPortal this addon is for
-	 *
-	 * @return float			Version number
-	 */
+     * Get the version of ocPortal this addon is for
+     *
+     * @return float                    Version number
+     */
     public function get_version()
     {
         return ocp_version_number();
     }
 
     /**
-	 * Get the description of the addon
-	 *
-	 * @return string			Description of the addon
-	 */
+     * Get the description of the addon
+     *
+     * @return string                   Description of the addon
+     */
     public function get_description()
     {
         return 'Provides an option for the software to send SMS messages, via the commercial Clickatell web service.';
     }
 
     /**
-	 * Get a list of tutorials that apply to this addon
-	 *
-	 * @return array			List of tutorials
-	 */
+     * Get a list of tutorials that apply to this addon
+     *
+     * @return array                    List of tutorials
+     */
     public function get_applicable_tutorials()
     {
         return array(
@@ -63,10 +63,10 @@ class Hook_addon_registry_sms
     }
 
     /**
-	 * Get a mapping of dependency types
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a mapping of dependency types
+     *
+     * @return array                    File permissions to set
+     */
     public function get_dependencies()
     {
         return array(
@@ -77,20 +77,20 @@ class Hook_addon_registry_sms
     }
 
     /**
-	 * Explicitly say which icon should be used
-	 *
-	 * @return URLPATH		Icon
-	 */
+     * Explicitly say which icon should be used
+     *
+     * @return URLPATH                  Icon
+     */
     public function get_default_icon()
     {
         return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
     }
 
     /**
-	 * Get a list of files that belong to this addon
-	 *
-	 * @return array			List of files
-	 */
+     * Get a list of files that belong to this addon
+     *
+     * @return array                    List of files
+     */
     public function get_file_list()
     {
         return array(
@@ -110,8 +110,8 @@ class Hook_addon_registry_sms
     }
 
     /**
-	 * Uninstall the addon.
-	 */
+     * Uninstall the addon.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('sms_log');
@@ -123,10 +123,10 @@ class Hook_addon_registry_sms
     }
 
     /**
-	 * Install the addon.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 */
+     * Install the addon.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     */
     public function install($upgrade_from = null)
     {
         if (is_null($upgrade_from)) {
@@ -142,12 +142,12 @@ class Hook_addon_registry_sms
             add_privilege('GENERAL_SETTINGS','sms_higher_limit',false);
             add_privilege('GENERAL_SETTINGS','sms_higher_trigger_limit',false);
 
-            /*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(		Not currently implemented
-				'm_phone_number'=>'*SHORT_TEXT',
-				'm_member_id'=>'MEMBER',
-				'm_time'=>'TIME',
-				'm_confirm_code'=>'IP',
-			));*/
+            /*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(    Not currently implemented
+                    'm_phone_number'=>'*SHORT_TEXT',
+                    'm_member_id'=>'MEMBER',
+                    'm_time'=>'TIME',
+                    'm_confirm_code'=>'IP',
+            ));*/
             /*$GLOBALS['SITE_DB']->create_index('confirmed_mobiles','confirmed_numbers',array('m_confirm_code'));*/
         }
     }

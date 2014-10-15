@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Erase a seo entry... as these shouldn't be left hanging around once content is deleted.
  *
- * @param  ID_TEXT		The type of resource (e.g. download)
- * @param  ID_TEXT		The ID of the resource
+ * @param  ID_TEXT                      The type of resource (e.g. download)
+ * @param  ID_TEXT                      The ID of the resource
  */
 function seo_meta_erase_storage($type,$id)
 {
@@ -42,10 +42,10 @@ function seo_meta_erase_storage($type,$id)
 /**
  * Get template fields to insert into a form page, for manipulation of seo fields.
  *
- * @param  ID_TEXT		The type of resource (e.g. download)
- * @param  ?ID_TEXT		The ID of the resource (NULL: adding)
- * @param  boolean		Whether to show a header
- * @return tempcode		Form page tempcode fragment
+ * @param  ID_TEXT                      The type of resource (e.g. download)
+ * @param  ?ID_TEXT                     The ID of the resource (NULL: adding)
+ * @param  boolean                      Whether to show a header
+ * @return tempcode                     Form page tempcode fragment
  */
 function seo_get_fields($type,$id = null,$show_header = true)
 {
@@ -75,10 +75,10 @@ function seo_get_fields($type,$id = null,$show_header = true)
 /**
  * Explictly sets the meta information for the specified resource.
  *
- * @param  ID_TEXT		The type of resource (e.g. download)
- * @param  ID_TEXT		The ID of the resource
- * @param  SHORT_TEXT	The keywords to use
- * @param  SHORT_TEXT	The description to use
+ * @param  ID_TEXT                      The type of resource (e.g. download)
+ * @param  ID_TEXT                      The ID of the resource
+ * @param  SHORT_TEXT                   The keywords to use
+ * @param  SHORT_TEXT                   The description to use
  */
 function seo_meta_set_for_explicit($type,$id,$keywords,$description)
 {
@@ -119,9 +119,9 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
 /**
  * Automatically extracts meta information from some source data.
  *
- * @param  array			Array of content strings to summarise from
- * @param  SHORT_TEXT	The description to use
- * @return array			A pair: Keyword string generated, Description generated
+ * @param  array                        Array of content strings to summarise from
+ * @param  SHORT_TEXT                   The description to use
+ * @return array                        A pair: Keyword string generated, Description generated
  */
 function _seo_meta_find_data($keyword_sources,$description = '')
 {
@@ -277,11 +277,11 @@ function _seo_meta_find_data($keyword_sources,$description = '')
 /**
  * Sets the meta information for the specified resource, by auto-summarisation from the given parameters.
  *
- * @param  ID_TEXT		The type of resource (e.g. download)
- * @param  ID_TEXT		The ID of the resource
- * @param  array			Array of content strings to summarise from
- * @param  SHORT_TEXT	The description to use
- * @return SHORT_TEXT	Keyword string generated (it's also saved in the DB, so usually you won't want to collect this)
+ * @param  ID_TEXT                      The type of resource (e.g. download)
+ * @param  ID_TEXT                      The ID of the resource
+ * @param  array                        Array of content strings to summarise from
+ * @param  SHORT_TEXT                   The description to use
+ * @return SHORT_TEXT                   Keyword string generated (it's also saved in the DB, so usually you won't want to collect this)
  */
 function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
 {

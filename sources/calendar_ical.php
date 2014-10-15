@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 /**
  * Escapes a string as per the ical format.
  *
- * @param  string				Input
- * @return string				Output
+ * @param  string                       Input
+ * @return string                       Output
  */
 function ical_escape($in)
 {
@@ -308,7 +308,7 @@ function output_ical()
 /**
  * Import ical events to members's event calendar.
  *
- * @param  PATH		File path
+ * @param  PATH                         File path
 */
 function ical_import($file_name)
 {
@@ -385,8 +385,8 @@ function ical_import($file_name)
 /**
  * Get array of an events from node of an imported ical file
  *
- * @param  array		Array of given event details
- * @return array		Returns array of event details for mapping
+ * @param  array                        Array of given event details
+ * @return array                        Returns array of event details for mapping
  */
 function get_event_data_ical($calendar_nodes)
 {
@@ -427,8 +427,8 @@ function get_event_data_ical($calendar_nodes)
     $rec_array = array('FREQ','BYDAY','INTERVAL','COUNT');
     $rec_by_day = array('MO','TU','WE','TH','FR','SA','SU');
 
-//	if (array_key_exists('LOCATION',$calendar_nodes))
-//		$geo_position=$calendar_nodes['LOCATION'];		We don't support these in ocPortal, at least not yet
+// if (array_key_exists('LOCATION',$calendar_nodes))
+//    $geo_position=$calendar_nodes['LOCATION'];      We don't support these in ocPortal, at least not yet
 
     if ((array_key_exists('CLASS',$calendar_nodes)) && ($calendar_nodes['CLASS'] == 'PRIVATE')) {
         $is_public = 0;

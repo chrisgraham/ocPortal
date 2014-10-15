@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 // This is the standard zone bootstrap file. Zone: root.
@@ -31,8 +31,8 @@ if ($profile) {
     $MICROTIME = microtime(true);
 
     /**
-	 * Profile tick function.
-	 */
+     * Profile tick function.
+     */
     function tick_func()
     {
         global $FUNC_WATCH,$MICROTIME;
@@ -49,8 +49,8 @@ if ($profile) {
         }
         $FUNC_WATCH[$func] += $LAST_MICROTIME-$MICROTIME;
     }
-/*	register_tick_function('tick_func');
-	declare(ticks=10);*/
+/* register_tick_function('tick_func');
+    declare(ticks=10);*/
 }
 
 global $FORCE_INVISIBLE_GUEST;

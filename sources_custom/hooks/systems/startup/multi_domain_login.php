@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		multi_domain_login
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    multi_domain_login
  */
 
 class Hook_startup_multi_domain_login
@@ -18,7 +18,7 @@ class Hook_startup_multi_domain_login
     public function run($MICRO_BOOTUP,$MICRO_AJAX_BOOTUP)
     {
         if ((!$MICRO_AJAX_BOOTUP) && (!$MICRO_BOOTUP) && (running_script('index'))) {
-            //if (isset($_POST['login_username'])) return;	Actually, we'll use caching to avoid this
+            //if (isset($_POST['login_username'])) return;  Actually, we'll use caching to avoid this
 
             $value = "<!-- Syndicate sessions -->\n";
             $value .= '<script>';

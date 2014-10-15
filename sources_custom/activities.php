@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		activity_feed
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    activity_feed
  */
 
 /*
@@ -20,18 +20,18 @@ TODO: Support if JS disabled, possibly remove jQuery dependency
 /**
  * Get SQL for querying activities, appropriate to the given settings.
  *
- * @param  MEMBER			The viewing member; permissions are checked against this, NOT against the member_ids parameter
- * @param  ID_TEXT		The view mode
+ * @param  MEMBER                       The viewing member; permissions are checked against this, NOT against the member_ids parameter
+ * @param  ID_TEXT                      The view mode
  * @set some_members friends all
- * @param  array			A list of member IDs
- * @return array			A pair: SQL WHERE clause to use on the activities table, a boolean indicating whether it is worth querying
+ * @param  array                        A list of member IDs
+ * @return array                        A pair: SQL WHERE clause to use on the activities table, a boolean indicating whether it is worth querying
  */
 function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 {
     $proceed_selection = true; // There are some cases in which even glancing at the database is a waste of precious time.
 
     /*if (isset($member_ids[0])) // Useful for testing
-		$viewer_member=$member_ids[0];*/
+        $viewer_member=$member_ids[0];*/
 
     $guest_id = $GLOBALS['FORUM_DRIVER']->get_guest_id();
     $is_guest = is_guest($viewer_member); // Can't be doing with overcomplicated SQL breakages. Weed it out.
@@ -194,9 +194,9 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 /**
  * Render an activity to Tempcode/HTML.
  *
- * @param  array			Database row
- * @param  boolean		Whether the rendered activity will be shown in a live ocPortal (as opposed to being e-mailed, for example)
- * @return array			Rendered activity
+ * @param  array                        Database row
+ * @param  boolean                      Whether the rendered activity will be shown in a live ocPortal (as opposed to being e-mailed, for example)
+ * @return array                        Rendered activity
  */
 function render_activity($row,$use_inside_ocp = true)
 {
@@ -266,9 +266,9 @@ function render_activity($row,$use_inside_ocp = true)
 /**
  * Convert a page-link into a tempcode.
  *
- * @param  string			The page-link
- * @param  boolean		Whether the link is for putting out externally to the site (so no keep_* parameters)
- * @return array			tempcode url
+ * @param  string                       The page-link
+ * @param  boolean                      Whether the link is for putting out externally to the site (so no keep_* parameters)
+ * @return array                        tempcode url
  */
 function page_link_to_tempcode($page_link,$external = false)
 {

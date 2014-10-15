@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 /**
@@ -31,14 +31,14 @@ function init__comcode()
 
     global $LAX_COMCODE;
     /** Set whether the lax Comcode parser should be used, which is important for any Comcode not being interactively added (i.e. existing Comcode should not cause errors, even if it is poor quality).
-	 * @global boolean $LAX_COMCODE
-	 */
+     * @global boolean $LAX_COMCODE
+     */
     $LAX_COMCODE = null;
 
     global $VALID_COMCODE_TAGS;
     /** A list of all valid Comcode tags that we recognise.
-	 * @global array $VALID_COMCODE_TAGS
-	 */
+     * @global array $VALID_COMCODE_TAGS
+     */
     $VALID_COMCODE_TAGS = array(
         'samp' => 1,'q' => 1,'var' => 1,'overlay' => 1,'tooltip' => 1,
         'section' => 1,'section_controller' => 1,
@@ -60,8 +60,8 @@ function init__comcode()
 /**
  * Make text usable inside a string inside Comcode
  *
- * @param  string			Raw text
- * @return string			Escaped text
+ * @param  string                       Raw text
+ * @return string                       Escaped text
  */
 function comcode_escape($in)
 {
@@ -71,9 +71,9 @@ function comcode_escape($in)
 /**
  * Convert (X)HTML into Comcode
  *
- * @param  LONG_TEXT		The HTML to be converted
- * @param  boolean		Whether to force full conversion regardless of settings
- * @return LONG_TEXT		The equivalent Comcode
+ * @param  LONG_TEXT                    The HTML to be converted
+ * @param  boolean                      Whether to force full conversion regardless of settings
+ * @return LONG_TEXT                    The equivalent Comcode
  */
 function html_to_comcode($html,$force = true)
 {
@@ -89,8 +89,8 @@ function html_to_comcode($html,$force = true)
  * Get the text with all the emoticon codes replaced with the correct XHTML. Emoticons are determined by your forum system.
  * This is not used in the normal Comcode chain - it's for non-Comcode things that require emoticons (actually in reality it is used in the Comcode chain if the optimiser sees that a full parse is not needed)
  *
- * @param  string			The text to add emoticons to (assumption: that this is XHTML)
- * @return string			The XHTML with the image-substitution of emoticons
+ * @param  string                       The text to add emoticons to (assumption: that this is XHTML)
+ * @return string                       The XHTML with the image-substitution of emoticons
  */
 function apply_emoticons($text)
 {
@@ -101,20 +101,20 @@ function apply_emoticons($text)
 /**
  * Convert the specified Comcode (unknown format) into a tempcode tree. You shouldn't output the tempcode tree to the browser, as it looks really horrible. If you are in a rare case where you need to output directly (not through templates), you should call the evaluate method on the tempcode object, to convert it into a string.
  *
- * @param  LONG_TEXT		The Comcode to convert
- * @param  ?MEMBER		The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully (NULL: current member)
- * @param  boolean		Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one. Note that if this is passed false, and $source_member is an admin, it will be parsed using admin privileges anyway.
- * @param  ?integer		The position to conduct wordwrapping at (NULL: do not conduct word-wrapping)
- * @param  ?string		A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between JavaScript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
- * @param  ?object		The database connection to use (NULL: standard site connection)
- * @param  boolean		Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
- * @param  boolean		Whether this is being pre-parsed, to pick up errors before row insertion.
- * @param  boolean		Whether to treat this whole thing as being wrapped in semihtml, but apply normal security otherwise.
- * @param  boolean		Whether we are only doing this parse to find the title structure
- * @param  boolean		Whether to only check the Comcode. It's best to use the check_comcode function which will in turn use this parameter.
- * @param  ?array			A list of words to highlight (NULL: none)
- * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
- * @return tempcode		The tempcode generated
+ * @param  LONG_TEXT                    The Comcode to convert
+ * @param  ?MEMBER                      The member the evaluation is running as. This is a security issue, and you should only run as an administrator if you have considered where the Comcode came from carefully (NULL: current member)
+ * @param  boolean                      Whether to explicitly execute this with admin rights. There are a few rare situations where this should be done, for data you know didn't come from a member, but is being evaluated by one. Note that if this is passed false, and $source_member is an admin, it will be parsed using admin privileges anyway.
+ * @param  ?integer                     The position to conduct wordwrapping at (NULL: do not conduct word-wrapping)
+ * @param  ?string                      A special identifier that can identify this resource in a sea of our resources of this class; usually this can be ignored, but may be used to provide a binding between JavaScript in evaluated Comcode, and the surrounding environment (NULL: no explicit binding)
+ * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  boolean                      Whether to parse so as to create something that would fit inside a semihtml tag. It means we generate HTML, with Comcode written into it where the tag could never be reverse-converted (e.g. a block).
+ * @param  boolean                      Whether this is being pre-parsed, to pick up errors before row insertion.
+ * @param  boolean                      Whether to treat this whole thing as being wrapped in semihtml, but apply normal security otherwise.
+ * @param  boolean                      Whether we are only doing this parse to find the title structure
+ * @param  boolean                      Whether to only check the Comcode. It's best to use the check_comcode function which will in turn use this parameter.
+ * @param  ?array                       A list of words to highlight (NULL: none)
+ * @param  ?MEMBER                      The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
+ * @return tempcode                     The tempcode generated
  */
 function comcode_to_tempcode($comcode,$source_member = null,$as_admin = false,$wrap_pos = 60,$pass_id = null,$connection = null,$semiparse_mode = false,$preparse_mode = false,$is_all_semihtml = false,$structure_sweep = false,$check_only = false,$highlight_bits = null,$on_behalf_of_member = null)
 {
@@ -159,9 +159,9 @@ function comcode_to_tempcode($comcode,$source_member = null,$as_admin = false,$w
 /**
  * Strip out any Comcode from this "plain text". Useful for semantic text is wanted but where Comcode is used as "the next best thing" we have.
  *
- * @param  string			Plain-text/Comcode
- * @param  boolean		Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
- * @return string			Purified plain-text
+ * @param  string                       Plain-text/Comcode
+ * @param  boolean                      Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
+ * @return string                       Purified plain-text
  */
 function strip_comcode($text,$for_extract = false)
 {

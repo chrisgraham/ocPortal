@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Do a highly-simplified XML-RPC request (no actual calling supported - just messaging).
  *
- * @param  URLPATH	The XML-RPC call URL
- * @param  string		The method name to call.
- * @param  array		An array of parameters.
- * @param  boolean	Whether to accept failure.
- * @return ?string	The result (NULL: failed).
+ * @param  URLPATH                      The XML-RPC call URL
+ * @param  string                       The method name to call.
+ * @param  array                        An array of parameters.
+ * @param  boolean                      Whether to accept failure.
+ * @return ?string                      The result (NULL: failed).
  */
 function xml_rpc($url,$method,$params,$accept_failure = false)
 {
@@ -41,9 +41,9 @@ function xml_rpc($url,$method,$params,$accept_failure = false)
         $value = _xml_rpc_type_convert($_value);
         $rpc .= <<<END
 
-	  <param>
-			<value>{$value}</value>
-	  </param>
+      <param>
+            <value>{$value}</value>
+      </param>
 END;
     }
     $rpc .= <<<END
@@ -59,8 +59,8 @@ END;
 /**
  * Convert some data to XML-RPC format.
  *
- * @param  mixed		Data
- * @return string		XML-RPC format version
+ * @param  mixed                        Data
+ * @return string                       XML-RPC format version
  */
 function _xml_rpc_type_convert($_value)
 {

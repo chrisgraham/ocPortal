@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_comcode_pages
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_comcode_pages
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_cms_comcode_pages
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,14 +42,14 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -58,10 +58,10 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         return array('submit_highrange_content' => array(1,'COMCODE_PAGE_ADD'),'edit_highrange_content' => array(1,'COMCODE_PAGE_EDIT'),'edit_own_highrange_content' => array(1,'COMCODE_PAGE_OWN_EDIT'),'bypass_validation_highrange_content' => array(1,'BYPASS_COMCODE_PAGE_VALIDATION'));
@@ -73,10 +73,10 @@ class Module_cms_comcode_pages
     public $file;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -136,10 +136,10 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('zones2');
@@ -162,14 +162,14 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * The do-next manager for after content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  ?ID_TEXT		The name of the page just handled (NULL: none)
-	 * @param  ID_TEXT		The name of the zone just handled (blank: none/welcome-zone)
-	 * @param  tempcode		The text to show (blank: default)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  ?ID_TEXT                 The name of the page just handled (NULL: none)
+     * @param  ID_TEXT                  The name of the zone just handled (blank: none/welcome-zone)
+     * @param  tempcode                 The text to show (blank: default)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$page,$zone,$completion_text)
     {
         if (!addon_installed('page_management')) {
@@ -182,11 +182,11 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * Get all pages.
-	 *
-	 * @param  LANGUAGE_NAME	The language we are searching for pages of
-	 * @return array				The map (page name => path/time)
-	 */
+     * Get all pages.
+     *
+     * @param  LANGUAGE_NAME            The language we are searching for pages of
+     * @return array                    The map (page name => path/time)
+     */
     public function get_comcode_files_array($lang)
     {
         $zones = find_all_zones();
@@ -218,14 +218,14 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * Get a map of page names to paths, under the given specifications.
-	 *
-	 * @param  ID_TEXT		The zone we are searching in
-	 * @param  PATH			The subdirectory to search for pages in
-	 * @param  string			The file stub to find for
-	 * @param  boolean		Whether we are doing a multi-site check on the base directory
-	 * @return array			The map (page name => path/time)
-	 */
+     * Get a map of page names to paths, under the given specifications.
+     *
+     * @param  ID_TEXT                  The zone we are searching in
+     * @param  PATH                     The subdirectory to search for pages in
+     * @param  string                   The file stub to find for
+     * @param  boolean                  Whether we are doing a multi-site check on the base directory
+     * @return array                    The map (page name => path/time)
+     */
     public function get_comcode_revisions($zone,$subdir,$find_for,$also_checking_base = false)
     {
         $filesarray = array();
@@ -267,10 +267,10 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * The UI to choose a page to edit.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a page to edit.
+     *
+     * @return tempcode                 The UI
+     */
     public function ed()
     {
         $lang = choose_language($this->title,true);
@@ -526,7 +526,7 @@ class Module_cms_comcode_pages
                 protect_from_escaping($zone_hyperlink),
                 $page_hyperlink,
                 protect_from_escaping(do_template('COMCODE_TELETYPE',array('_GUID' => 'bf4dbed562e189c84aa33c17d06c2791','CONTENT' => preg_replace('#([\w\d\_]{22})#','${1} ',escape_html($table_row['wrappable_page_link']))))),
-                //$parent_page,	Save space
+                //$parent_page,  Save space
                 //$username,
                 //$add_date,
                 //$validated,
@@ -569,13 +569,13 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * Find the filebase-relative path of a Comcode page. Allows override via restore_from parameter.
-	 *
-	 * @param  LANGUAGE_NAME	The language most preferable
-	 * @param  ID_TEXT			The page name
-	 * @param  ID_TEXT			The zone
-	 * @return PATH				The path
-	 */
+     * Find the filebase-relative path of a Comcode page. Allows override via restore_from parameter.
+     *
+     * @param  LANGUAGE_NAME            The language most preferable
+     * @param  ID_TEXT                  The page name
+     * @param  ID_TEXT                  The zone
+     * @return PATH                     The path
+     */
     public function find_comcode_page($lang,$file,$zone)
     {
         $restore_from = zone_black_magic_filterer(filter_naughty(get_param('restore_from',$zone . '/' . 'pages/comcode_custom/' . $lang . '/' . $file . '.txt')),true);
@@ -593,10 +593,10 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * The UI to edit a page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a page.
+     *
+     * @return tempcode                 The UI
+     */
     public function _ed()
     {
         require_code('form_templates');
@@ -892,10 +892,10 @@ class Module_cms_comcode_pages
     }
 
     /**
-	 * The actualiser to edit a Comcode page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a Comcode page.
+     *
+     * @return tempcode                 The UI
+     */
     public function __ed()
     {
         // Load up settings from the environments

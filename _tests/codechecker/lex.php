@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		code_quality
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    code_quality
  */
 
 // These are standalone lexer tokens: finding them doesn't affect the lexing state
@@ -420,17 +420,17 @@ function lex($text = null)
                     }
 
                     /*$terse_style=!isset($GLOBALS['NON_TERSE']); IDEA Maybe put back, but should be optional
-					if ($terse_style)
-					{
-						if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('COMMA','IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER','OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
-					} else
-					{
-						if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
-						if (($i_current>0) && (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r")) && (in_array($token_found,array('COMMA')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
-						if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
-					}
-					if (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r") && (in_array($token_found,array('IF','ELSEIF','FOREACH','FOR','WHILE','DO')))) log_warning('Missing following spacing (for '.$token_found.') against coding standards',$i,true);
-					if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('BOOLEAN_AND','BOOLEAN_XOR','BOOLEAN_OR','BOOLEAN_OR_2')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);*/
+                            if ($terse_style)
+                            {
+                                        if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('COMMA','IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER','OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
+                            } else
+                            {
+                                        if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
+                                        if (($i_current>0) && (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r")) && (in_array($token_found,array('COMMA')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
+                                        if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
+                            }
+                            if (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r") && (in_array($token_found,array('IF','ELSEIF','FOREACH','FOR','WHILE','DO')))) log_warning('Missing following spacing (for '.$token_found.') against coding standards',$i,true);
+                            if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('BOOLEAN_AND','BOOLEAN_XOR','BOOLEAN_OR','BOOLEAN_OR_2')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);*/
 
                     $tokens[] = array($token_found,$i);
                 } else {
@@ -794,9 +794,9 @@ function lex($text = null)
 /**
  * Helper function for usort to sort a list by string length.
  *
- * @param  string			The first string to compare
- * @param  string			The second string to compare
- * @return boolean		  The comparison result
+ * @param  string                       The first string to compare
+ * @param  string                       The second string to compare
+ * @return boolean                      The comparison result
  */
 function plex__strlen_sort($a,$b)
 {

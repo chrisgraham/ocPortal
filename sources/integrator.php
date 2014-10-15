@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Take a URL and process it to make a hard include. We'll get the HTML and we'll also load up some global stuff for 'do_header' to use.
  *
- * @param  URLPATH	The URL that we're operating on.
- * @param  URLPATH	We open up linked URLs under this recursively.
- * @return string		The cleaned up contents at the URL, set up for the recursive integrator usage.
+ * @param  URLPATH                      The URL that we're operating on.
+ * @param  URLPATH                      We open up linked URLs under this recursively.
+ * @return string                       The cleaned up contents at the URL, set up for the recursive integrator usage.
  */
 function reprocess_url($url,$operation_base_url)
 {

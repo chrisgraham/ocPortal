@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -35,8 +35,8 @@ function init__upload_syndication()
 /**
  * Get details for what upload syndication we can do for particular filtered upload types.
  *
- * @param  integer		The kind of files we are going to be handling.
- * @return array			A pair: JSON data describing what upload syndication we can do (may be NULL), a filetype filter.
+ * @param  integer                      The kind of files we are going to be handling.
+ * @return array                        A pair: JSON data describing what upload syndication we can do (may be NULL), a filetype filter.
  */
 function get_upload_syndication_json($file_handling_types)
 {
@@ -127,8 +127,8 @@ function upload_syndication_auth_script()
 /**
  * Find if upload syndication will happen. Tell's us we do not need to worry about quota.
  *
- * @param  ID_TEXT		Upload field name.
- * @return boolean		Whether it will?
+ * @param  ID_TEXT                      Upload field name.
+ * @return boolean                      Whether it will?
  */
 function upload_will_syndicate($name)
 {
@@ -155,13 +155,13 @@ function upload_will_syndicate($name)
 /**
  * Do upload syndication (after an upload has been received, in-context).
  *
- * @param  ID_TEXT		Upload field name.
- * @param  string			Title associated with the upload.
- * @param  string			Description associated with the upload.
- * @param  URLPATH		URL to the upload (should be local, if it isn't we'll return quickly without doing anything).
- * @param  ID_TEXT		Filename.
- * @param  boolean		Whether to delete the local copy, if the current user has no upload quota. If no syndication was set, an error will be given.
- * @return URLPATH		New URL (if we deleted the local copy, it will be a remote URL).
+ * @param  ID_TEXT                      Upload field name.
+ * @param  string                       Title associated with the upload.
+ * @param  string                       Description associated with the upload.
+ * @param  URLPATH                      URL to the upload (should be local, if it isn't we'll return quickly without doing anything).
+ * @param  ID_TEXT                      Filename.
+ * @param  boolean                      Whether to delete the local copy, if the current user has no upload quota. If no syndication was set, an error will be given.
+ * @return URLPATH                      New URL (if we deleted the local copy, it will be a remote URL).
  */
 function handle_upload_syndication($name,$title,$description,$url,$filename,$remove_locally_if_no_quota)
 {

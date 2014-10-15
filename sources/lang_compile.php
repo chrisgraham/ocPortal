@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -30,13 +30,13 @@ function init__lang_compile()
 /**
  * Load up a language file, compiling it (it's not cached yet).
  *
- * @param  ID_TEXT			The language file name
- * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
- * @param  ?string			The language type (lang_custom, or custom) (NULL: normal priorities are used)
+ * @param  ID_TEXT                      The language file name
+ * @param  ?LANGUAGE_NAME               The language (NULL: uses the current language)
+ * @param  ?string                      The language type (lang_custom, or custom) (NULL: normal priorities are used)
  * @set    lang_custom custom
- * @param  PATH				Where we are cacheing too
- * @param  boolean			Whether to just return if there was a loading error
- * @return boolean			Whether we FAILED to load
+ * @param  PATH                         Where we are cacheing too
+ * @param  boolean                      Whether to just return if there was a loading error
+ * @return boolean                      Whether we FAILED to load
  */
 function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors = false)
 {
@@ -176,10 +176,10 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
 /**
  * Get an array of all the INI language entries in the specified language.
  *
- * @param  LANGUAGE_NAME	The language
- * @param  ID_TEXT			The language file
- * @param  boolean			Force usage of original file
- * @return array				The language entries
+ * @param  LANGUAGE_NAME                The language
+ * @param  ID_TEXT                      The language file
+ * @param  boolean                      Force usage of original file
+ * @return array                        The language entries
  */
 function get_lang_file_map($lang,$file,$non_custom = false)
 {
@@ -226,10 +226,10 @@ function get_lang_file_map($lang,$file,$non_custom = false)
 /**
  * Extend a language map from strings in a given language file.
  *
- * @param  PATH			The path to the language file
- * @param  array			The currently loaded language map
- * @param  ?boolean		Whether to get descriptions rather than strings (NULL: no, but we might pick up some descriptions accidently)
- * @param  boolean		Whether $b is infact not a path, but the actual file contents
+ * @param  PATH                         The path to the language file
+ * @param  array                        The currently loaded language map
+ * @param  ?boolean                     Whether to get descriptions rather than strings (NULL: no, but we might pick up some descriptions accidently)
+ * @param  boolean                      Whether $b is infact not a path, but the actual file contents
  */
 function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file = false)
 {

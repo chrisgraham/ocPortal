@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		staff
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    staff
  */
 
 class Hook_ocf_cpf_filter_staff_filter
 {
     /**
-	 * Find which special CPFs to enable.
-	 *
-	 * @return array			A list of CPFs to enable
-	 */
+     * Find which special CPFs to enable.
+     *
+     * @return array                    A list of CPFs to enable
+     */
     public function to_enable()
     {
         global $SITE_INFO;

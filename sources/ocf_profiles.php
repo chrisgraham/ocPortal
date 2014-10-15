@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Render a member profile.
  *
- * @param  tempcode		Screen title
- * @param  MEMBER			The ID of the member who is being viewed
- * @param  ?MEMBER		The ID of the member who is doing the viewing (NULL: current member)
- * @param  ?ID_TEXT		The username of the member who is being viewed (NULL: work out from member_id_of)
- * @return tempcode		The rendered profile
+ * @param  tempcode                     Screen title
+ * @param  MEMBER                       The ID of the member who is being viewed
+ * @param  ?MEMBER                      The ID of the member who is doing the viewing (NULL: current member)
+ * @param  ?ID_TEXT                     The username of the member who is being viewed (NULL: work out from member_id_of)
+ * @return tempcode                     The rendered profile
  */
 function render_profile_tabset($title,$member_id_of,$member_id_viewing = null,$username = null)
 {

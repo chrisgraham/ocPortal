@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Find a list of all the tables that can be imported/exported as XML.
  *
- * @return array			List of tables
+ * @return array                        List of tables
  */
 function find_all_xml_tables()
 {
@@ -39,8 +39,8 @@ function find_all_xml_tables()
 /**
  * Export ocPortal database tables to an equivalent XML format, automatically.
  *
- * @param  ?array			List of tables to export (NULL: all tables except those skippable)
- * @return string			Exported data in XML format
+ * @param  ?array                       List of tables to export (NULL: all tables except those skippable)
+ * @return string                       Exported data in XML format
  */
 function export_to_xml($tables = null)
 {
@@ -71,9 +71,9 @@ function export_to_xml($tables = null)
 /**
  * Add layer(s) of tabbing to some XML.
  *
- * @param  string			XML in
- * @param  integer		The tab depth
- * @return string			XML out
+ * @param  string                       XML in
+ * @param  integer                      The tab depth
+ * @return string                       XML out
  */
 function _tab($in,$depth = 1)
 {
@@ -85,8 +85,8 @@ function _tab($in,$depth = 1)
 /**
  * Export an ocPortal database table to an equivalent XML format.
  *
- * @param  ID_TEXT		Table to export
- * @return string			Exported data in XML format
+ * @param  ID_TEXT                      Table to export
+ * @return string                       Exported data in XML format
  */
 function _export_table_to_xml($table)
 {
@@ -135,14 +135,14 @@ function _export_table_to_xml($table)
 /**
  * Export a table by tree recursion.
  *
- * @param  ID_TEXT		Table to export
- * @param  array			The row we're at
- * @param  array			List of field definitions for the row
- * @param  ID_TEXT		SEO type code
- * @param  ID_TEXT		Permission type code
- * @param  ID_TEXT		ID field name
- * @param  ID_TEXT		Parent ID field name
- * @return string			Exported data in XML format
+ * @param  ID_TEXT                      Table to export
+ * @param  array                        The row we're at
+ * @param  array                        List of field definitions for the row
+ * @param  ID_TEXT                      SEO type code
+ * @param  ID_TEXT                      Permission type code
+ * @param  ID_TEXT                      ID field name
+ * @param  ID_TEXT                      Parent ID field name
+ * @return string                       Exported data in XML format
  */
 function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field)
 {
@@ -161,14 +161,14 @@ function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$per
 /**
  * Export an ocPortal database row to an equivalent XML format.
  *
- * @param  ID_TEXT		Table to export
- * @param  array			DB row
- * @param  array			List of field definitions for the row
- * @param  ?ID_TEXT		SEO type code (NULL: N/A)
- * @param  ?ID_TEXT		Permission type code (NULL: N/A)
- * @param  ?ID_TEXT		ID field name (NULL: N/A)
- * @param  boolean		Whether to include the end tag for the row
- * @return string			Exported data in XML format
+ * @param  ID_TEXT                      Table to export
+ * @param  array                        DB row
+ * @param  array                        List of field definitions for the row
+ * @param  ?ID_TEXT                     SEO type code (NULL: N/A)
+ * @param  ?ID_TEXT                     Permission type code (NULL: N/A)
+ * @param  ?ID_TEXT                     ID field name (NULL: N/A)
+ * @param  boolean                      Whether to include the end tag for the row
+ * @return string                       Exported data in XML format
  */
 function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$include_end = true)
 {
@@ -295,8 +295,8 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 /**
  * Take a PHP map array, and make it look nice.
  *
- * @param  array			Map array
- * @return string			Pretty version
+ * @param  array                        Map array
+ * @return string                       Pretty version
  */
 function make_map_nice($map)
 {
@@ -321,9 +321,9 @@ function make_map_nice($map)
 /**
  * Import to ocPortal database table from the equivalent XML format.
  *
- * @param  string			Data in XML format
- * @param  boolean		Synchronise deletes as well as inserts/updates
- * @return array			List of operations performed
+ * @param  string                       Data in XML format
+ * @param  boolean                      Synchronise deletes as well as inserts/updates
+ * @return array                        List of operations performed
  */
 function import_from_xml($xml_data,$delete_missing_rows = false)
 {
@@ -391,14 +391,14 @@ function import_from_xml($xml_data,$delete_missing_rows = false)
 /**
  * Import to ocPortal database table from an XML row (possibly having descendant rows, via tree structure).
  *
- * @param  object			The XML parser object
- * @param  array			Existing data in table
- * @param  array			Field meta data for all fields
- * @param  array			Meta data about table IDs
- * @param  array			The record details being imported
- * @param  array			The insert IDs thus far
- * @param  ?AUTO_LINK	The ID of the auto-inserted parent to this row (NULL: N/A)
- * @return array			List of operations performed
+ * @param  object                       The XML parser object
+ * @param  array                        Existing data in table
+ * @param  array                        Field meta data for all fields
+ * @param  array                        Meta data about table IDs
+ * @param  array                        The record details being imported
+ * @param  array                        The insert IDs thus far
+ * @param  ?AUTO_LINK                   The ID of the auto-inserted parent to this row (NULL: N/A)
+ * @return array                        List of operations performed
  */
 function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,$table,&$insert_ids,$last_parent_id = null)
 {
@@ -679,10 +679,10 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 /**
  * Get the XML for transferring a language string.
  *
- * @param  AUTO_LINK		Language ID
- * @param  ID_TEXT		The element name
- * @param  object			Database connection
- * @return string			XML (no root tag)
+ * @param  AUTO_LINK                    Language ID
+ * @param  ID_TEXT                      The element name
+ * @param  object                       Database connection
+ * @return string                       XML (no root tag)
  */
 function get_translated_text_xml($id,$name,$db)
 {
@@ -699,9 +699,9 @@ function get_translated_text_xml($id,$name,$db)
 /**
  * Parse some text for language string values, and insert.
  *
- * @param  ID_TEXT		The field name
- * @param  string			XML (with root tag), or just flat text if multi-lang-content is not on
- * @return array			The language ID save fields
+ * @param  ID_TEXT                      The field name
+ * @param  string                       XML (with root tag), or just flat text if multi-lang-content is not on
+ * @return array                        The language ID save fields
  */
 function insert_lang_xml($field_name,$xml_data)
 {

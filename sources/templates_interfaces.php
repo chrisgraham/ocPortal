@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_abstract_interfaces
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_abstract_interfaces
  */
 
 /**
  * Get tempcode for cropped text, that fully reveals itself on mouse-over.
  *
- * @param  string			The text
- * @param  integer		The length to crop at
- * @return tempcode		The cropped text
+ * @param  string                       The text
+ * @param  integer                      The length to crop at
+ * @return tempcode                     The cropped text
  */
 function tpl_crop_text_mouse_over($text,$len)
 {

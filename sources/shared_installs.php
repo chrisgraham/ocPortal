@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Find the user-ID of the current shared-site install from the accessing URL. This should only ever be called when it is known a shared-site is in operation
  *
- * @return ?ID_TEXT		The shared-site install (NULL: not on one)
+ * @return ?ID_TEXT                     The shared-site install (NULL: not on one)
  */
 function current_share_user()
 {

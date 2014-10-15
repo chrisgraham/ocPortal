@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		import
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    import
  */
 
 /**
@@ -39,10 +39,10 @@ function init__hooks__modules__admin_import__phpbb2()
 class Hook_phpbb2
 {
     /**
-	 * Standard importer hook info function.
-	 *
-	 * @return ?array	Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
-	 */
+     * Standard importer hook info function.
+     *
+     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -84,11 +84,11 @@ class Hook_phpbb2
     }
 
     /**
-	 * Probe a file path for DB access details.
-	 *
-	 * @param  string			The probe path
-	 * @return array			A quartet of the details (db_name, db_user, db_pass, table_prefix)
-	 */
+     * Probe a file path for DB access details.
+     *
+     * @param  string                   The probe path
+     * @return array                    A quartet of the details (db_name, db_user, db_pass, table_prefix)
+     */
     public function probe_db_access($file_base)
     {
         $dbname = '';
@@ -105,12 +105,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_config($db,$table_prefix,$file_base)
     {
         $config_remapping = array(
@@ -167,12 +167,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_groups($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'config');
@@ -210,12 +210,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_members($db,$table_prefix,$file_base)
     {
         $default_group = get_first_default_group();
@@ -303,12 +303,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_member_files($db,$table_prefix,$file_base)
     {
         global $STRICT_FILE;
@@ -378,12 +378,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ip_bans($db,$table_prefix,$file_base)
     {
         require_code('failure');
@@ -401,11 +401,11 @@ class Hook_phpbb2
     }
 
     /**
-	 * Convert an IP address from phpBB hexadecimal string format.
-	 *
-	 * @param  string			The phpBB IP address
-	 * @return IP				The normal IP address
-	 */
+     * Convert an IP address from phpBB hexadecimal string format.
+     *
+     * @param  string                   The phpBB IP address
+     * @return IP                       The normal IP address
+     */
     public function _un_phpbb_ip($ip)
     {
         if (strlen($ip)<8) {
@@ -417,12 +417,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_forum_groupings($db,$table_prefix,$old_base_dir)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'categories');
@@ -446,12 +446,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_forums($db,$table_prefix,$old_base_dir)
     {
         require_code('ocf_forums_action2');
@@ -476,8 +476,8 @@ class Hook_phpbb2
             $access_mapping = array();
             if ($row['forum_status'] == 0) {
                 $permissions = $db->query('SELECT * FROM ' . $table_prefix . 'auth_access WHERE forum_id=' . strval($row['forum_id']));
-//				$row['group_id']=-1;
-//				$permissions[]=$row;
+//          $row['group_id']=-1;
+//          $permissions[]=$row;
                 foreach ($permissions as $p) {
                     $v = 0;
                     if ($p['auth_read'] == 1) {
@@ -514,12 +514,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_topics($db,$table_prefix,$file_base)
     {
         $row_start = 0;
@@ -543,12 +543,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_posts($db,$table_prefix,$file_base)
     {
         global $STRICT_FILE;
@@ -602,46 +602,46 @@ class Hook_phpbb2
     }
 
     /**
-	 * Substitution callback for 'fix_links'.
-	 *
-	 * @param  array				The match
-	 * @return  string			The substitution string
-	 */
+     * Substitution callback for 'fix_links'.
+     *
+     * @param  array                    The match
+     * @return  string        The substitution string
+     */
     public function _fix_links_callback_topic($m)
     {
         return 'index.php?page=topicview&id=' . strval(import_id_remap_get('topic',strval($m[2]),true));
     }
 
     /**
-	 * Substitution callback for 'fix_links'.
-	 *
-	 * @param  array				The match
-	 * @return  string			The substitution string
-	 */
+     * Substitution callback for 'fix_links'.
+     *
+     * @param  array                    The match
+     * @return  string        The substitution string
+     */
     public function _fix_links_callback_forum($m)
     {
         return 'index.php?page=forumview&id=' . strval(import_id_remap_get('forum',strval($m[2]),true));
     }
 
     /**
-	 * Substitution callback for 'fix_links'.
-	 *
-	 * @param  array				The match
-	 * @return  string			The substitution string
-	 */
+     * Substitution callback for 'fix_links'.
+     *
+     * @param  array                    The match
+     * @return  string        The substitution string
+     */
     public function _fix_links_callback_member($m)
     {
         return 'index.php?page=members&type=view&id=' . strval(import_id_remap_get('member',strval($m[2]),true));
     }
 
     /**
-	 * Convert phpBB URLs pasted in text fields into ocPortal ones.
-	 *
-	 * @param  string			The text field text (e.g. a post)
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @return string			The new text field text
-	 */
+     * Convert phpBB URLs pasted in text fields into ocPortal ones.
+     *
+     * @param  string                   The text field text (e.g. a post)
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @return string                   The new text field text
+     */
     public function fix_links($post,$db,$table_prefix)
     {
         global $OLD_BASE_URL;
@@ -661,12 +661,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function. Note that this is designed for a very popular phpBB mod, and will exit silently if the mod hasn't been installed.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function. Note that this is designed for a very popular phpBB mod, and will exit silently if the mod hasn't been installed.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_post_files($db,$table_prefix,$file_base)
     {
         global $STRICT_FILE;
@@ -732,12 +732,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_polls_and_votes($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'vote_desc');
@@ -787,12 +787,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'privmsgs p LEFT JOIN ' . $table_prefix . 'privmsgs_text t ON p.privmsgs_id=t.privmsgs_text_id WHERE privmsgs_type<>2 AND privmsgs_type<>4 ORDER BY privmsgs_date');
@@ -861,12 +861,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_notifications($db,$table_prefix,$file_base)
     {
         require_code('notifications');
@@ -898,12 +898,12 @@ class Hook_phpbb2
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_wordfilter($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'words');

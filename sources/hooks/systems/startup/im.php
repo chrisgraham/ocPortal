@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 class Hook_startup_im
 {
     /**
-	 * Run startup code.
-	 */
+     * Run startup code.
+     */
     public function run()
     {
         // Initialise site-wide IM

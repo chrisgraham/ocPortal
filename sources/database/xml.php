@@ -15,44 +15,44 @@
 /*EXTRA FUNCTIONS: glob*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_database_drivers
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_database_drivers
  */
 
 /*
-	Known (intentional) issues in SQL support (we are targetting MySQL-4.0 compatibility, similar to SQL-92)
-		We support a few MySQL functions: REPLACE, LENGTH, CONCAT. These are not likely usable on all DB's.
-		We do not support the range of standard SQL functions.
-		We do not support SQL data types or CAST, we use ocPortal ones instead. We don't support complex type-specific ops such as "+" for string concatenation.
-		HAVING is not supported
-		We do not support SQL functions (COUNT etc) outside of a SELECT clause
-		We do not have any special table/field naming escaping support-- so you need to use names that aren't awkward
-		MySQL-style auto-increment is supported, but actually done as key randomisation, once install has finished
-		Indexes are not supported
-		We ARE type strict, unlike MySQL (even MySQL strict mode won't complain if a type conversion is always lossless, such as integer to string)
-		We only really support expressions in certain places in a query
-		Data Control Language (DCL) is not supported
-		Semi-colons to split queries are not supported at the driver level
-		Temporary tables are not supported
-		Views are not supported
-		Integrity checking (field constraints, CHECK) is not supported
-		Transactions are not supported
-		Full-text-search is not supported
-		Special foreign key support is not supported
-		INTERSECT and EXCEPT are not supported
-		JOIN's are not supported in DELETE or UPDATE queries
-		Sub-query support is limited to the IN and EXISTS constructs
-		Character set support is just whatever ocPortal is set to; there is no special supported
-		SELECT INTO is not supported
-		LIMIT's on UPDATE queries not supported
-		Expressions in ORDER BY clauses will be ignored
-		Default values for fields are not supported
-		Field naming for things like COUNT(*) will not be consistent with MySQL
-		You must specify the field names in INSERT queries
-		Expressions are not supported in the SELECT clause, except inside aggregate functions
-	This database system is intended only for ocPortal, and not as a general purpose database. In ocPortal our philosophy is to write logic in PHP, not SQL, hence the subset supported.
-	Also as we have to target MySQL-4.0 we can't implement some more sophisticated featured, in case programmers rely on them!
+    Known (intentional) issues in SQL support (we are targetting MySQL-4.0 compatibility, similar to SQL-92)
+        We support a few MySQL functions: REPLACE, LENGTH, CONCAT. These are not likely usable on all DB's.
+        We do not support the range of standard SQL functions.
+        We do not support SQL data types or CAST, we use ocPortal ones instead. We don't support complex type-specific ops such as "+" for string concatenation.
+        HAVING is not supported
+        We do not support SQL functions (COUNT etc) outside of a SELECT clause
+        We do not have any special table/field naming escaping support-- so you need to use names that aren't awkward
+        MySQL-style auto-increment is supported, but actually done as key randomisation, once install has finished
+        Indexes are not supported
+        We ARE type strict, unlike MySQL (even MySQL strict mode won't complain if a type conversion is always lossless, such as integer to string)
+        We only really support expressions in certain places in a query
+        Data Control Language (DCL) is not supported
+        Semi-colons to split queries are not supported at the driver level
+        Temporary tables are not supported
+        Views are not supported
+        Integrity checking (field constraints, CHECK) is not supported
+        Transactions are not supported
+        Full-text-search is not supported
+        Special foreign key support is not supported
+        INTERSECT and EXCEPT are not supported
+        JOIN's are not supported in DELETE or UPDATE queries
+        Sub-query support is limited to the IN and EXISTS constructs
+        Character set support is just whatever ocPortal is set to; there is no special supported
+        SELECT INTO is not supported
+        LIMIT's on UPDATE queries not supported
+        Expressions in ORDER BY clauses will be ignored
+        Default values for fields are not supported
+        Field naming for things like COUNT(*) will not be consistent with MySQL
+        You must specify the field names in INSERT queries
+        Expressions are not supported in the SELECT clause, except inside aggregate functions
+    This database system is intended only for ocPortal, and not as a general purpose database. In ocPortal our philosophy is to write logic in PHP, not SQL, hence the subset supported.
+    Also as we have to target MySQL-4.0 we can't implement some more sophisticated featured, in case programmers rely on them!
 */
 
 /**
@@ -98,7 +98,7 @@ function init__database__xml()
 /**
  * Get a list of all SQL keywords
  *
- * @return array			List of keywords
+ * @return array                        List of keywords
  */
 function _get_sql_keywords()
 {
@@ -124,56 +124,56 @@ function _get_sql_keywords()
 
 /**
  * Database Driver.
- * @package		core_database_drivers
+ * @package    core_database_drivers
  */
 class Database_Static_xml
 {
     /**
-	 * Find whether the database may run GROUP BY unfettered with restrictions on the SELECT'd fields having to be represented in it or aggregate functions
-	 *
-	 * @return boolean		Whether it can
-	 */
+     * Find whether the database may run GROUP BY unfettered with restrictions on the SELECT'd fields having to be represented in it or aggregate functions
+     *
+     * @return boolean                  Whether it can
+     */
     public function can_arbitrary_groupby()
     {
         return true;
     }
 
     /**
-	 * Get the default user for making db connections (used by the installer as a default).
-	 *
-	 * @return string			The default user for db connections
-	 */
+     * Get the default user for making db connections (used by the installer as a default).
+     *
+     * @return string                   The default user for db connections
+     */
     public function db_default_user()
     {
         return '';
     }
 
     /**
-	 * Get the default password for making db connections (used by the installer as a default).
-	 *
-	 * @return string			The default password for db connections
-	 */
+     * Get the default password for making db connections (used by the installer as a default).
+     *
+     * @return string                   The default password for db connections
+     */
     public function db_default_password()
     {
         return '';
     }
 
     /**
-	 * Find whether subquery support is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
+     * Find whether subquery support is present
+     *
+     * @param  array                    A DB connection
+     * @return boolean                  Whether it is
+     */
     public function db_has_subqueries($db)
     {
         return true;
     }
 
     /**
-	 * Get a map of ocPortal field types, to actual mySQL types.
-	 *
-	 * @return array			The map
-	 */
+     * Get a map of ocPortal field types, to actual mySQL types.
+     *
+     * @return array                    The map
+     */
     public function db_get_type_remap()
     {
         $type_remap = array(
@@ -204,25 +204,25 @@ class Database_Static_xml
     }
 
     /**
-	 * Create a table index.
-	 *
-	 * @param  ID_TEXT		The name of the table to create the index on
-	 * @param  ID_TEXT		The index name (not really important at all)
-	 * @param  string			Part of the SQL query: a comma-separated list of fields to use on the index
-	 * @param  array			The DB connection to make on
-	 */
+     * Create a table index.
+     *
+     * @param  ID_TEXT                  The name of the table to create the index on
+     * @param  ID_TEXT                  The index name (not really important at all)
+     * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
+     * @param  array                    The DB connection to make on
+     */
     public function db_create_index($table_name,$index_name,$_fields,$db)
     {
         // Indexes not supported
     }
 
     /**
-	 * Change the primary key of a table.
-	 *
-	 * @param  ID_TEXT		The name of the table to create the index on
-	 * @param  array			A list of fields to put in the new key
-	 * @param  array			The DB connection to make on
-	 */
+     * Change the primary key of a table.
+     *
+     * @param  ID_TEXT                  The name of the table to create the index on
+     * @param  array                    A list of fields to put in the new key
+     * @param  array                    The DB connection to make on
+     */
     public function db_change_primary_key($table_name,$new_key,$db)
     {
         $this->db_query('UPDATE db_meta SET m_type=REPLACE(m_type,\'*\',\'\') WHERE ' . db_string_equal_to('m_table',$table_name),$db);
@@ -232,23 +232,23 @@ class Database_Static_xml
     }
 
     /**
-	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
-	 *
-	 * @return integer			First ID used
-	 */
+     * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
+     *
+     * @return integer                  First ID used
+     */
     public function db_get_first_id()
     {
         return 1;
     }
 
     /**
-	 * Create a new table.
-	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  array			A map of field names to ocPortal field types (with *#? encodings)
-	 * @param  array			The DB connection to make on
-	 * @param  boolean		Whether to only do it if it does not currently exist
-	 */
+     * Create a new table.
+     *
+     * @param  ID_TEXT                  The table name
+     * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
+     * @param  array                    The DB connection to make on
+     * @param  boolean                  Whether to only do it if it does not currently exist
+     */
     public function db_create_table($table_name,$fields,$db,$if_not_exists = false)
     {
         if (!is_null($GLOBALS['XML_CHAIN_DB'])) {
@@ -279,45 +279,45 @@ class Database_Static_xml
     }
 
     /**
-	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
-	 *
-	 * @param  ID_TEXT		The attribute
-	 * @param  string			The comparison
-	 * @return string			The SQL
-	 */
+     * Encode an SQL statement fragment for a conditional to see if two strings are equal.
+     *
+     * @param  ID_TEXT                  The attribute
+     * @param  string                   The comparison
+     * @return string                   The SQL
+     */
     public function db_string_equal_to($attribute,$compare)
     {
         return $attribute . "='" . $this->db_escape_string($compare) . "'";
     }
 
     /**
-	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
-	 *
-	 * @param  ID_TEXT		The attribute
-	 * @param  string			The comparison
-	 * @return string			The SQL
-	 */
+     * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
+     *
+     * @param  ID_TEXT                  The attribute
+     * @param  string                   The comparison
+     * @return string                   The SQL
+     */
     public function db_string_not_equal_to($attribute,$compare)
     {
         return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
     }
 
     /**
-	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
-	 *
-	 * @return boolean			Whether a blank string IS NULL
-	 */
+     * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
+     *
+     * @return boolean                  Whether a blank string IS NULL
+     */
     public function db_empty_is_null()
     {
         return false;
     }
 
     /**
-	 * Delete a table.
-	 *
-	 * @param  ID_TEXT		The table name
-	 * @param  array			The DB connection to delete on
-	 */
+     * Delete a table.
+     *
+     * @param  ID_TEXT                  The table name
+     * @param  array                    The DB connection to delete on
+     */
     public function db_drop_table_if_exists($table_name,$db)
     {
         if (!is_null($GLOBALS['XML_CHAIN_DB'])) {
@@ -345,44 +345,44 @@ class Database_Static_xml
     }
 
     /**
-	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
-	 *
-	 * @return boolean			Whether the database is a flat file database
-	 */
+     * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
+     *
+     * @return boolean                  Whether the database is a flat file database
+     */
     public function db_is_flat_file_simple()
     {
         return true;
     }
 
     /**
-	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
-	 *
-	 * @param  string			The pattern
-	 * @return string			The encoded pattern
-	 */
+     * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
+     *
+     * @param  string                   The pattern
+     * @return string                   The encoded pattern
+     */
     public function db_encode_like($pattern)
     {
         return $this->db_escape_string($pattern);
     }
 
     /**
-	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
-	 */
+     * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
+     */
     public function db_close_connections()
     {
     }
 
     /**
-	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
-	 *
-	 * @param  boolean		Whether to create a persistent connection
-	 * @param  string			The database name
-	 * @param  string			The database host (the server)
-	 * @param  string			The database connection username
-	 * @param  string			The database connection password
-	 * @param  boolean		Whether to on error echo an error and return with a NULL, rather than giving a critical error
-	 * @return ?array			A database connection (NULL: failed)
-	 */
+     * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
+     *
+     * @param  boolean                  Whether to create a persistent connection
+     * @param  string                   The database name
+     * @param  string                   The database host (the server)
+     * @param  string                   The database connection username
+     * @param  string                   The database connection password
+     * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
+     * @return ?array                   A database connection (NULL: failed)
+     */
     public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
     {
         if ((strpos($db_name,'\\') === false) && (strpos($db_name,'/') === false)) {
@@ -399,62 +399,62 @@ class Database_Static_xml
     }
 
     /**
-	 * Find whether full-text-search is present
-	 *
-	 * @param  array			A DB connection
-	 * @return boolean		Whether it is
-	 */
+     * Find whether full-text-search is present
+     *
+     * @param  array                    A DB connection
+     * @return boolean                  Whether it is
+     */
     public function db_has_full_text($db)
     {
         return is_null($GLOBALS['XML_CHAIN_DB'])?false:$GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text($GLOBALS['XML_CHAIN_DB']->connection_read);
     }
 
     /**
-	 * Assemble part of a WHERE clause for doing full-text search
-	 *
-	 * @param  string			Our match string (assumes "?" has been stripped already)
-	 * @param  boolean		Whether to do a boolean full text search
-	 * @return string			Part of a WHERE clause for doing full-text search
-	 */
+     * Assemble part of a WHERE clause for doing full-text search
+     *
+     * @param  string                   Our match string (assumes "?" has been stripped already)
+     * @param  boolean                  Whether to do a boolean full text search
+     * @return string                   Part of a WHERE clause for doing full-text search
+     */
     public function db_full_text_assemble($content,$boolean)
     {
         return is_null($GLOBALS['XML_CHAIN_DB'])?'':$GLOBALS['XML_CHAIN_DB']->static_ob->db_full_text_assemble($content,$boolean);
     }
 
     /**
-	 * Find whether full-text-boolean-search is present
-	 *
-	 * @return boolean		Whether it is
-	 */
+     * Find whether full-text-boolean-search is present
+     *
+     * @return boolean                  Whether it is
+     */
     public function db_has_full_text_boolean()
     {
         return is_null($GLOBALS['XML_CHAIN_DB'])?false:$GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text_boolean($GLOBALS['XML_CHAIN_DB']->connection_read);
     }
 
     /**
-	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
-	 *
-	 * @param  string			The string
-	 * @return string			The escaped string
-	 */
+     * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
+     *
+     * @param  string                   The string
+     * @return string                   The escaped string
+     */
     public function db_escape_string($string)
     {
         return addslashes($string);
     }
 
     /**
-	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
-	 *
-	 * @param  string			The complete SQL query
-	 * @param  array			A DB connection
-	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
-	 * @param  ?integer		The start row to affect (NULL: no specification)
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  boolean		Whether to get the autoincrement ID created for an insert query
-	 * @param  boolean		Whether to force the query to execute on the XML database driver (won't optimise by using MySQL). Useful for calls happening for multi-part queries from within this DB driver
-	 * @param  boolean		Whether we are saving as a 'volatile' file extension
-	 * @return ?mixed			The results (NULL: no results), or the insert ID
-	 */
+     * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
+     *
+     * @param  string                   The complete SQL query
+     * @param  array                    A DB connection
+     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
+     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
+     * @param  boolean                  Whether to force the query to execute on the XML database driver (won't optimise by using MySQL). Useful for calls happening for multi-part queries from within this DB driver
+     * @param  boolean                  Whether we are saving as a 'volatile' file extension
+     * @return ?mixed                   The results (NULL: no results), or the insert ID
+     */
     public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false,$no_syndicate = false,$save_as_volatile = false)
     {
         global $DELIMITERS_FLIPPED,$DELIMITERS,$SYMBOL_DELIMITER;
@@ -660,11 +660,11 @@ class Database_Static_xml
     }
 
     /**
-	 * See if an item is a prefix to something in the delimiter array.
-	 *
-	 * @param  string			The item
-	 * @return boolean		Whether it is
-	 */
+     * See if an item is a prefix to something in the delimiter array.
+     *
+     * @param  string                   The item
+     * @return boolean                  Whether it is
+     */
     public function is_start_of_delimiter($looking)
     {
         global $DELIMITERS_FLIPPED,$DELIMITERS,$DELIMITERS_ALPHA;
@@ -685,13 +685,13 @@ class Database_Static_xml
     }
 
     /**
-	 * Find the schema for a table.
-	 *
-	 * @param  array			The database
-	 * @param  string			The table name
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?array			The schema map (NULL: not found)
-	 */
+     * Find the schema for a table.
+     *
+     * @param  array                    The database
+     * @param  string                   The table name
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?array                   The schema map (NULL: not found)
+     */
     public function _read_schema($db,$table_name,$fail_ok = false)
     {
         global $SCHEMA_CACHE;
@@ -763,12 +763,12 @@ class Database_Static_xml
     }
 
     /**
-	 * Type check some data destined to go into a table.
-	 *
-	 * @param  array			The schema
-	 * @param  array			The data
-	 * @param  string			Query that was executed
-	 */
+     * Type check some data destined to go into a table.
+     *
+     * @param  array                    The schema
+     * @param  array                    The data
+     * @param  string                   Query that was executed
+     */
     public function _type_check($schema,$record,$query)
     {
         foreach ($record as $key => $val) {
@@ -822,18 +822,18 @@ class Database_Static_xml
     }
 
     /**
-	 * Read in all the records from a table.
-	 *
-	 * @param  array			Database connection
-	 * @param  string			The table name
-	 * @param  string			What the table will be renamed to (blank: N/A)
-	 * @param  ?array			Schema to type-set against (NULL: do not do type-setting)
-	 * @param  ?array			Expression filtering results (used for optimisation, seeing if we can get a quick key match) (NULL: no data to filter with)
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  string			Query that was executed
-	 * @param  boolean		Whether to include fields that are present in the actual records but not in our schema
-	 * @return ?array			The collected records (NULL: error)
-	 */
+     * Read in all the records from a table.
+     *
+     * @param  array                    Database connection
+     * @param  string                   The table name
+     * @param  string                   What the table will be renamed to (blank: N/A)
+     * @param  ?array                   Schema to type-set against (NULL: do not do type-setting)
+     * @param  ?array                   Expression filtering results (used for optimisation, seeing if we can get a quick key match) (NULL: no data to filter with)
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  string                   Query that was executed
+     * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
+     * @return ?array                   The collected records (NULL: error)
+     */
     public function _read_all_records($db,$table_name,$table_as,$schema,$where_expr,$fail_ok,$query,$include_unused_fields = false)
     {
         $records = array();
@@ -1021,14 +1021,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Take an expression and do our best to collapse it into a fixed mapping of stuff we know we are going to AND.
-	 *
-	 * @param  array			The expression parse tree
-	 * @param  string			What the table will be renamed to (blank: N/A)
-	 * @param  ?array			Schema to type-set against (NULL: do not do type-setting)
-	 * @param  boolean		Whether to do a not-full-accurate search
-	 * @return array			AND map
-	 */
+     * Take an expression and do our best to collapse it into a fixed mapping of stuff we know we are going to AND.
+     *
+     * @param  array                    The expression parse tree
+     * @param  string                   What the table will be renamed to (blank: N/A)
+     * @param  ?array                   Schema to type-set against (NULL: do not do type-setting)
+     * @param  boolean                  Whether to do a not-full-accurate search
+     * @return array                    AND map
+     */
     public function _turn_where_expr_to_map($where_expr,$table_as,$schema = null,$not_full_accuracy = false)
     {
         if ($where_expr[0] == 'BRACKETED') {
@@ -1092,14 +1092,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Read a record from an XML file.
-	 *
-	 * @param  PATH			The file path
-	 * @param  ?array			Schema to type-set against (NULL: do not do type-setting)
-	 * @param  ?array			Substrings to check it is in, used for performance (NULL: none)
-	 * @param  boolean		Whether to include fields that are present in the actual records but not in our schema
-	 * @return ?array			The record map (NULL: does not contain requested substrings)
-	 */
+     * Read a record from an XML file.
+     *
+     * @param  PATH                     The file path
+     * @param  ?array                   Schema to type-set against (NULL: do not do type-setting)
+     * @param  ?array                   Substrings to check it is in, used for performance (NULL: none)
+     * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
+     * @return ?array                   The record map (NULL: does not contain requested substrings)
+     */
     public function _read_record($path,$schema = null,$must_contain_strings = null,$include_unused_fields = false)
     {
         if (file_exists($path . '.mine')) {
@@ -1141,8 +1141,8 @@ class Database_Static_xml
         }
 
         /*$ob=new xml_file_parse($file_contents); Too slow
-		if (!is_null($ob->error)) fatal_exit($ob->error);
-		$_record=$ob->output;*/
+        if (!is_null($ob->error)) fatal_exit($ob->error);
+        $_record=$ob->output;*/
         // This is much faster, even though it's a bit of a hack as it assumes all records are as ocPortal would write them
         $bits = preg_split('#</?([^>]*)>#',$file_contents,-1,PREG_SPLIT_DELIM_CAPTURE);
         $_record = array();
@@ -1229,13 +1229,13 @@ class Database_Static_xml
     }
 
     /**
-	 * Write in all the records to a table.
-	 *
-	 * @param  array			Database connection
-	 * @param  string			The table name
-	 * @param  array			The list of record maps
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 */
+     * Write in all the records to a table.
+     *
+     * @param  array                    Database connection
+     * @param  string                   The table name
+     * @param  array                    The list of record maps
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     */
     public function _write_records($db,$table_name,$records,$fail_ok = false)
     {
         foreach ($records as $guid => $record) {
@@ -1247,15 +1247,15 @@ class Database_Static_xml
     }
 
     /**
-	 * Write a record to an XML file.
-	 *
-	 * @param  array			Database connection
-	 * @param  string			The table name
-	 * @param  string			The GUID
-	 * @param  array			The record map
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  boolean		Whether we are saving as a 'volatile' file extension
-	 */
+     * Write a record to an XML file.
+     *
+     * @param  array                    Database connection
+     * @param  string                   The table name
+     * @param  string                   The GUID
+     * @param  array                    The record map
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  boolean                  Whether we are saving as a 'volatile' file extension
+     */
     public function _write_record($db,$table_name,$guid,$record,$fail_ok = false,$save_as_volatile = false)
     {
         $suffix = $save_as_volatile?'.xml-volatile':'.xml';
@@ -1312,15 +1312,15 @@ class Database_Static_xml
         fix_permissions($path,0666);
         sync_file($path);
 
-        /*if (file_exists($db[0].'/'.$table_name.'/.svn/prop-base/'))		If we want them in subversion as binary, but we probably don't as merging can often work
-		{
-			$tpath=$db[0].'/'.$table_name.'/.svn/prop-base/'.$guid.$suffix;
-			$myfile=fopen($tpath,'wb');
-			fwrite($myfile,'K 13\nsvn:mime-type\nV 24\napplication/octet-stream\nEND');
-			fclose($myfile);
-			fix_permissions($tpath,0666);
-			sync_file($tpath);
-		}*/
+        /*if (file_exists($db[0].'/'.$table_name.'/.svn/prop-base/'))      If we want them in subversion as binary, but we probably don't as merging can often work
+        {
+            $tpath=$db[0].'/'.$table_name.'/.svn/prop-base/'.$guid.$suffix;
+            $myfile=fopen($tpath,'wb');
+            fwrite($myfile,'K 13\nsvn:mime-type\nV 24\napplication/octet-stream\nEND');
+            fclose($myfile);
+            fix_permissions($tpath,0666);
+            sync_file($tpath);
+        }*/
 
         unset($GLOBALS['DIR_CONTENTS_CACHE'][$table_name]);
 
@@ -1331,35 +1331,35 @@ class Database_Static_xml
             if ($path != $new_path) {
                 rename($path,$new_path);
                 /*if (substr($path,-5)=='.mine')
-					unlink();  Yuck, messy, we will ignore this potential problem - people should not edit stuff that is conflicted */
+                            unlink();  Yuck, messy, we will ignore this potential problem - people should not edit stuff that is conflicted */
             }
         }
     }
 
     /**
-	 * Write a record to an XML file.
-	 *
-	 * @param  PATH			The file path
-	 * @param  array			Database connection
-	 */
+     * Write a record to an XML file.
+     *
+     * @param  PATH                     The file path
+     * @param  array                    Database connection
+     */
     public function _delete_record($path,$db)
     {
         /* This generally is a bad idea. Things can get deleted then re-made, and we don't even need it. This command works better:
-		svn status | grep '\!.*\.xml' | awk '{print $2;}' | xargs svn rm
-		$svn_command='svn remove "'.str_replace('"','\"',$path).'"';
-		//@shell_exec($svn_command);	Can't do as it would not execute with the correct permissions
-		$new=!file_exists($db[0].'/deletions.sh');
-		$command_file=@fopen($db[0].'/deletions.sh','at');
-		if ($command_file!==false)
-		{
-			if ($new)
-				fwrite($command_file,'#!/bin/sh'."\n");
-			fwrite($command_file,$svn_command."\n");
-			fclose($command_file);
-			require_code('files');
-			fix_permissions($db[0].'/deletions.sh',0777);
-			sync_file($db[0].'/deletions.sh');
-		}*/
+        svn status | grep '\!.*\.xml' | awk '{print $2;}' | xargs svn rm
+        $svn_command='svn remove "'.str_replace('"','\"',$path).'"';
+        //@shell_exec($svn_command);   Can't do as it would not execute with the correct permissions
+        $new=!file_exists($db[0].'/deletions.sh');
+        $command_file=@fopen($db[0].'/deletions.sh','at');
+        if ($command_file!==false)
+        {
+            if ($new)
+                    fwrite($command_file,'#!/bin/sh'."\n");
+            fwrite($command_file,$svn_command."\n");
+            fclose($command_file);
+            require_code('files');
+            fix_permissions($db[0].'/deletions.sh',0777);
+            sync_file($db[0].'/deletions.sh');
+        }*/
 
         if (file_exists($path)) {
             $myfile = fopen($path,GOOGLE_APPENGINE?'wb':'ab');
@@ -1381,17 +1381,17 @@ class Database_Static_xml
     }
 
     /**
-	 * Check to see if there is a key conflict problem.
-	 *
-	 * @param  array			Database connection
-	 * @param  string			The table name
-	 * @param  array			The schema
-	 * @param  array			The record
-	 * @param  string			Query that was executed
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  ?string		The GUID representing what we have now (so we don't think we're conflicting with ourself) (NULL: not yet added)
-	 * @return boolean		Whether there was a conflict
-	 */
+     * Check to see if there is a key conflict problem.
+     *
+     * @param  array                    Database connection
+     * @param  string                   The table name
+     * @param  array                    The schema
+     * @param  array                    The record
+     * @param  string                   Query that was executed
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  ?string                  The GUID representing what we have now (so we don't think we're conflicting with ourself) (NULL: not yet added)
+     * @return boolean                  Whether there was a conflict
+     */
     public function _key_conflict_check($db,$table_name,$schema,$record,$query,$fail_ok,$existing_identity = null)
     {
         $where = '';
@@ -1433,14 +1433,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute a DROP query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?mixed			The results (NULL: no results)
-	 */
+     * Execute a DROP query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?mixed                   The results (NULL: no results)
+     */
     public function _do_query_drop($tokens,$query,$db,$fail_ok)
     {
         $at = 0;
@@ -1477,14 +1477,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute an ALTER query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?mixed			The results (NULL: no results)
-	 */
+     * Execute an ALTER query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?mixed                   The results (NULL: no results)
+     */
     public function _do_query_alter($tokens,$query,$db,$fail_ok)
     {
         global $SCHEMA_CACHE;
@@ -1624,14 +1624,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute a CREATE query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?mixed			The results (NULL: no results)
-	 */
+     * Execute a CREATE query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?mixed                   The results (NULL: no results)
+     */
     public function _do_query_create($tokens,$query,$db,$fail_ok)
     {
         $at = 0;
@@ -1713,17 +1713,17 @@ class Database_Static_xml
     }
 
     /**
-	 * Wrapper to execute an INSERT query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  boolean		Whether to get the autoincrement ID created for an insert query
-	 * @param  ?integer		The random key that we would use (NULL: not generated yet)
-	 * @param  boolean		Whether we are saving as a 'volatile' file extension
-	 * @return ?mixed			The insert ID (NULL: not requested / error)
-	 */
+     * Wrapper to execute an INSERT query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
+     * @param  ?integer                 The random key that we would use (NULL: not generated yet)
+     * @param  boolean                  Whether we are saving as a 'volatile' file extension
+     * @return ?mixed                   The insert ID (NULL: not requested / error)
+     */
     public function _do_query_insert($tokens,$query,$db,$fail_ok,$get_insert_id,&$random_key,$save_as_volatile = false)
     {
         $_inserts = $this->_do_query_insert__parse($tokens,$query,$db,$fail_ok);
@@ -1735,14 +1735,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Parse an INSERT query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?array			A pair: the table, and the rows to insert (NULL: error)
-	 */
+     * Parse an INSERT query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?array                   A pair: the table, and the rows to insert (NULL: error)
+     */
     public function _do_query_insert__parse($tokens,$query,$db,$fail_ok)
     {
         // Parse
@@ -1809,18 +1809,18 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute an INSERT query.
-	 *
-	 * @param  array			Rows being inserted
-	 * @param  ID_TEXT		Table name we're inserting into
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  boolean		Whether to get the autoincrement ID created for an insert query
-	 * @param  ?integer		The random key that we would use (NULL: not generated yet)
-	 * @param  boolean		Whether we are saving as a 'volatile' file extension
-	 * @return ?mixed			The insert ID (NULL: not requested / error)
-	 */
+     * Execute an INSERT query.
+     *
+     * @param  array                    Rows being inserted
+     * @param  ID_TEXT                  Table name we're inserting into
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  boolean                  Whether to get the autoincrement ID created for an insert query
+     * @param  ?integer                 The random key that we would use (NULL: not generated yet)
+     * @param  boolean                  Whether we are saving as a 'volatile' file extension
+     * @return ?mixed                   The insert ID (NULL: not requested / error)
+     */
     public function _do_query_insert__execute($inserts,$table_name,$query,$db,$fail_ok,$get_insert_id,&$random_key,$save_as_volatile = false)
     {
         global $TABLE_BASES;
@@ -1875,17 +1875,17 @@ class Database_Static_xml
     }
 
     /**
-	 * Parse an SQL expression.
-	 *
-	 * @param  integer		Our offset counter
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to work as a connection point to seek out logic connection expression parts
-	 * @param  boolean		Whether to work as a connection point to seek out arithmetic connection expression parts
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?array			The expression (NULL: error)
-	 */
+     * Parse an SQL expression.
+     *
+     * @param  integer                  Our offset counter
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to work as a connection point to seek out logic connection expression parts
+     * @param  boolean                  Whether to work as a connection point to seek out arithmetic connection expression parts
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?array                   The expression (NULL: error)
+     */
     public function _parsing_read_expression(&$at,$tokens,$query,$db,$look_for_connectives = true,$look_for_any_connectives = true,$fail_ok = false)
     {
         $token = $this->_parsing_read($at,$tokens,$query);
@@ -2115,13 +2115,13 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute an expression.
-	 *
-	 * @param  array			The expression
-	 * @param  array			Bindings available in the execution scope
-	 * @param  string			Query that was executed
-	 * @return ?mixed			The result (NULL: error/NULL)
-	 */
+     * Execute an expression.
+     *
+     * @param  array                    The expression
+     * @param  array                    Bindings available in the execution scope
+     * @param  string                   Query that was executed
+     * @return ?mixed                   The result (NULL: error/NULL)
+     */
     public function _execute_expression($expr,$bindings,$query)
     {
         switch ($expr[0]) {
@@ -2135,7 +2135,7 @@ class Database_Static_xml
                 return NULL;
 
             case 'FIELD':
-                //if (!array_key_exists($expr[1],$bindings)) {@var_dump($bindings);exit($expr[1]);}	// Useful for debugging
+                //if (!array_key_exists($expr[1],$bindings)) {@var_dump($bindings);exit($expr[1]);}   // Useful for debugging
                 return $bindings[$expr[1]];
 
             case '+':
@@ -2228,16 +2228,16 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute an UPDATE query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
-	 * @param  ?integer		The start row to affect (NULL: no specification)
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?mixed			The results (NULL: no results)
-	 */
+     * Execute an UPDATE query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
+     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?mixed                   The results (NULL: no results)
+     */
     public function _do_query_update($tokens,$query,$db,$max,$start,$fail_ok)
     {
         // Parse
@@ -2322,16 +2322,16 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute a DELETE query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
-	 * @param  ?integer		The start row to affect (NULL: no specification)
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?mixed			The results (NULL: no results)
-	 */
+     * Execute a DELETE query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
+     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?mixed                   The results (NULL: no results)
+     */
     public function _do_query_delete($tokens,$query,$db,$max,$start,$fail_ok)
     {
         // Parse
@@ -2392,18 +2392,18 @@ class Database_Static_xml
     }
 
     /**
-	 * Execute a SELECT query.
-	 *
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  ?integer		The maximum number of rows to affect (NULL: no limit)
-	 * @param  ?integer		The start row to affect (NULL: no specification)
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  integer		Our offset counter
-	 * @param  boolean		Whether to not do the check to make sure we've parsed everything
-	 * @return ?mixed			The results (NULL: no results)
-	 */
+     * Execute a SELECT query.
+     *
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  ?integer                 The maximum number of rows to affect (NULL: no limit)
+     * @param  ?integer                 The start row to affect (NULL: no specification)
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  integer                  Our offset counter
+     * @param  boolean                  Whether to not do the check to make sure we've parsed everything
+     * @return ?mixed                   The results (NULL: no results)
+     */
     public function _do_query_select($tokens,$query,$db,$max,$start,$fail_ok,&$at,$do_end_check = true)
     {
         // Parse
@@ -2926,14 +2926,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Run SQL data filter functions over a result set.
-	 *
-	 * @param  array			The set of results we are operating on
-	 * @param  array			Parse tree of what we are selecting
-	 * @param  array			Record we are copying the function results into
-	 * @param  string			Query that was executed
-	 * @return array			The result row based on the set
-	 */
+     * Run SQL data filter functions over a result set.
+     *
+     * @param  array                    The set of results we are operating on
+     * @param  array                    Parse tree of what we are selecting
+     * @param  array                    Record we are copying the function results into
+     * @param  string                   Query that was executed
+     * @return array                    The result row based on the set
+     */
     public function _function_set_scoping($set,$select,$rep,$query)
     {
         foreach ($select as $s) {
@@ -3023,16 +3023,16 @@ class Database_Static_xml
     }
 
     /**
-	 * Read in a table specifier clause for a WHERE query.
-	 *
-	 * @param  integer		Our offset counter
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  array			Database connection
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  integer		How many closing brackets we expect
-	 * @return ?array			Join condition (NULL: no join here)
-	 */
+     * Read in a table specifier clause for a WHERE query.
+     *
+     * @param  integer                  Our offset counter
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  array                    Database connection
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  integer                  How many closing brackets we expect
+     * @return ?array                   Join condition (NULL: no join here)
+     */
     public function _read_join(&$at,$tokens,$query,$db,$fail_ok,&$closing_brackets_needed)
     {
         $token = $this->_parsing_read($at,$tokens,$query,true);
@@ -3112,14 +3112,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Optimize a join condition into a join scope set, if possible.
-	 *
-	 * @param  array			Join condition (parsed WHERE-style clause)
-	 * @param  array			Schema so far
-	 * @param  array			Records so far
-	 * @param  string			The renaming of our table, so we can recognise it in the join condition
-	 * @return array			Altered join condition
-	 */
+     * Optimize a join condition into a join scope set, if possible.
+     *
+     * @param  array                    Join condition (parsed WHERE-style clause)
+     * @param  array                    Schema so far
+     * @param  array                    Records so far
+     * @param  string                   The renaming of our table, so we can recognise it in the join condition
+     * @return array                    Altered join condition
+     */
     public function _setify_join_condition_for_optimisation($join_condition,$schema,$records,$joined_as)
     {
         if ($join_condition[0] == 'AND') {
@@ -3148,18 +3148,18 @@ class Database_Static_xml
     }
 
     /**
-	 * Get results from a JOIN.
-	 *
-	 * @param  array			Database connection
-	 * @param  string			The renaming of our table, so we can recognise it in the join condition
-	 * @param  array			Join op-tree
-	 * @param  string			Query that was executed
-	 * @param  array			Records so far
-	 * @param  array			Schema so far
-	 * @param  array			Expression filtering results (used for optimisation, seeing if we can get a quick key match)
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return ?array			A pair: an array of results, an array of the schema for what has been joined (NULL: error)
-	 */
+     * Get results from a JOIN.
+     *
+     * @param  array                    Database connection
+     * @param  string                   The renaming of our table, so we can recognise it in the join condition
+     * @param  array                    Join op-tree
+     * @param  string                   Query that was executed
+     * @param  array                    Records so far
+     * @param  array                    Schema so far
+     * @param  array                    Expression filtering results (used for optimisation, seeing if we can get a quick key match)
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return ?array                   A pair: an array of results, an array of the schema for what has been joined (NULL: error)
+     */
     public function _execute_join($db,$joined_as_prior,$join,$query,$records,$schema,$where_expr,$fail_ok = false)
     {
         $joined_as = $join[2];
@@ -3283,14 +3283,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Reads the next token.
-	 *
-	 * @param  integer		Our offset counter
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  boolean		Whether it can return NULL if we're out of output (otherwise fails)
-	 * @return ?string		Token read (NULL: error, read too far)
-	 */
+     * Reads the next token.
+     *
+     * @param  integer                  Our offset counter
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  boolean                  Whether it can return NULL if we're out of output (otherwise fails)
+     * @return ?string                  Token read (NULL: error, read too far)
+     */
     public function _parsing_read(&$at,$tokens,$query,$fail_ok = false)
     {
         $at++;
@@ -3306,15 +3306,15 @@ class Database_Static_xml
     }
 
     /**
-	 * Expect a certain token next.
-	 *
-	 * @param  integer		Our offset counter
-	 * @param  array			Tokens
-	 * @param  string			Token expected
-	 * @param  string			Query that was executed
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return boolean		Success status
-	 */
+     * Expect a certain token next.
+     *
+     * @param  integer                  Our offset counter
+     * @param  array                    Tokens
+     * @param  string                   Token expected
+     * @param  string                   Query that was executed
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return boolean                  Success status
+     */
     public function _parsing_expects(&$at,$tokens,$token,$query,$fail_ok = false)
     {
         $next = $this->_parsing_read($at,$tokens,$query,$fail_ok);
@@ -3326,14 +3326,14 @@ class Database_Static_xml
     }
 
     /**
-	 * Check we've consumed all our tokens.
-	 *
-	 * @param  integer		Our offset counter
-	 * @param  array			Tokens
-	 * @param  string			Query that was executed
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @return boolean		Success status
-	 */
+     * Check we've consumed all our tokens.
+     *
+     * @param  integer                  Our offset counter
+     * @param  array                    Tokens
+     * @param  string                   Query that was executed
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @return boolean                  Success status
+     */
     public function _parsing_check_ended($at,$tokens,$query,$fail_ok = false)
     {
         do {
@@ -3347,13 +3347,13 @@ class Database_Static_xml
     }
 
     /**
-	 * Give out an error message and die, when a query fails.
-	 *
-	 * @param  string			The query that failed
-	 * @param  boolean		Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
-	 * @param  ?string		Error message (NULL: none)
-	 * @return ?mixed			Always returns null (NULL: error)
-	 */
+     * Give out an error message and die, when a query fails.
+     *
+     * @param  string                   The query that failed
+     * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
+     * @param  ?string                  Error message (NULL: none)
+     * @return ?mixed                   Always returns null (NULL: error)
+     */
     public function _bad_query($query,$fail_ok = false,$error = null)
     {
         if (!$fail_ok) {
@@ -3367,12 +3367,12 @@ class Database_Static_xml
     }
 
     /**
-	 * Generate a GUID for a record, preferably from the key, but doesn't have to be.
-	 *
-	 * @param  ?array			The schema (NULL: don't have/use)
-	 * @param  ?array			The record (NULL: don't have/use)
-	 * @return string			The GUID
-	 */
+     * Generate a GUID for a record, preferably from the key, but doesn't have to be.
+     *
+     * @param  ?array                   The schema (NULL: don't have/use)
+     * @param  ?array                   The record (NULL: don't have/use)
+     * @return string                   The GUID
+     */
     public function _guid($schema = null,$record = null)
     {
         if ((!is_null($schema)) && (!is_null($record))) {
@@ -3426,22 +3426,22 @@ class Database_Static_xml
     }
 
     /**
-	 * Escape a value for use in a filesystem path.
-	 *
-	 * @param  string	Value to escape (original value)
-	 * @return string	Escaped value
-	 */
+     * Escape a value for use in a filesystem path.
+     *
+     * @param  string                   Value to escape (original value)
+     * @return string                   Escaped value
+     */
     public function _escape_name($in)
     {
         return str_replace(array('=',':',',','/','|'),array('!equals!','!colon!','!comma!','!slash!','!pipe!'),$in);
     }
 
     /**
-	 * Unescape a value from a filesystem path back to the original.
-	 *
-	 * @param  string	Escaped value
-	 * @return string	Original value
-	 */
+     * Unescape a value from a filesystem path back to the original.
+     *
+     * @param  string                   Escaped value
+     * @return string                   Original value
+     */
     public function _unescape_name($in)
     {
         return str_replace(array('!equals!','!colon!','!comma!','!slash!','!pipe!'),array('=',':',',','/','|'),$in);

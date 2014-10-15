@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 class Block_side_galleries
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -39,10 +39,10 @@ class Block_side_galleries
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -52,11 +52,11 @@ class Block_side_galleries
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         require_lang('galleries');
@@ -100,14 +100,14 @@ class Block_side_galleries
     }
 
     /**
-	 * Show a group of subgalleries for use in a compact tree structure.
-	 *
-	 * @param  ID_TEXT			The zone our gallery module is in
-	 * @param  array				A list of gallery rows
-	 * @param  ID_TEXT			The template to use to show each subgallery
-	 * @param  boolean			Whether to show empty galleries
-	 * @return tempcode			The shown galleries
-	 */
+     * Show a group of subgalleries for use in a compact tree structure.
+     *
+     * @param  ID_TEXT                  The zone our gallery module is in
+     * @param  array                    A list of gallery rows
+     * @param  ID_TEXT                  The template to use to show each subgallery
+     * @param  boolean                  Whether to show empty galleries
+     * @return tempcode                 The shown galleries
+     */
     public function inside($zone,$galleries,$tpl,$show_empty)
     {
         $content = new ocp_tempcode();

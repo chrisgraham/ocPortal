@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		newsletter
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    newsletter
  */
 
 class Hook_config_newsletter_title
 {
     /**
-	 * Gets the details relating to the config option.
-	 *
-	 * @return ?array		The details (NULL: disabled)
-	 */
+     * Gets the details relating to the config option.
+     *
+     * @return ?array                   The details (NULL: disabled)
+     */
     public function get_details()
     {
         return array(
@@ -42,10 +42,10 @@ class Hook_config_newsletter_title
     }
 
     /**
-	 * Gets the default value for the config option.
-	 *
-	 * @return ?string		The default value (NULL: option is disabled)
-	 */
+     * Gets the default value for the config option.
+     *
+     * @return ?string                  The default value (NULL: option is disabled)
+     */
     public function get_default()
     {
         return get_option('site_name') . ' ' . ocp_mb_strtolower(do_lang('newsletter:NEWSLETTER'));

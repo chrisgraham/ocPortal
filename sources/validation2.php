@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_validation
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_validation
  */
 
 /*EXTRA FUNCTIONS: pspell\_.+*/
@@ -205,8 +205,8 @@ function init__validation2()
     $enforce_inumber = '[0-9]+';
     $enforce_character = '.';
     $enforce_color = '(black|silver|gray|white|maroon|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|orange|red|(\#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f])|(\#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]))'; // orange and red aren't 'official' -- but kind of handy ;). In reality, the colour codes were never properly defined, and these two are obvious names for obviously needed ones-- they'll be supported
-    $enforce_length = '((0)|(' . $enforce_number . '(|in|cm|mm|ex|pt|pc|px|em|%))|((' . $enforce_number . ')?\.' . $enforce_number . '(in|cm|mm|ex|em|%)))'; // |ex|pt|in|cm|mm|pc	We don't want these in our XHTML... preferably we only want em when it comes to font size!
-    $enforce_ilength = '((0)|(' . $enforce_inumber . '(|in|cm|mm|ex|pt|pc|px|em|%))|((' . $enforce_inumber . ')?\.' . $enforce_inumber . '(in|cm|mm|ex|em|%)))'; // |ex|pt|in|cm|mm|pc	We don't want these in our XHTML... preferably we only want em when it comes to font size!
+    $enforce_length = '((0)|(' . $enforce_number . '(|in|cm|mm|ex|pt|pc|px|em|%))|((' . $enforce_number . ')?\.' . $enforce_number . '(in|cm|mm|ex|em|%)))'; // |ex|pt|in|cm|mm|pc  We don't want these in our XHTML... preferably we only want em when it comes to font size!
+    $enforce_ilength = '((0)|(' . $enforce_inumber . '(|in|cm|mm|ex|pt|pc|px|em|%))|((' . $enforce_inumber . ')?\.' . $enforce_inumber . '(in|cm|mm|ex|em|%)))'; // |ex|pt|in|cm|mm|pc We don't want these in our XHTML... preferably we only want em when it comes to font size!
     $enforce_pixels = '[0-9]+';
     $enforce_auto_or_length = '(auto|' . $enforce_length . ')';
     $enforce_auto_or_ilength = '(auto|' . $enforce_ilength . ')';
@@ -377,9 +377,9 @@ function init__validation2()
 
         /* Purposely left out these CSS2 features due to very poor browser support (not just IE not having it) */
         /*
-		(print module)
-		(aural module)
-		*/
+        (print module)
+        (aural module)
+        */
 
         /* These are non standard but we want them */
         'writing-mode' => '(tb-rl|lr-tb)', // A more complex W3C standard is underway. Only IE supports this one.
@@ -679,7 +679,7 @@ function init__validation2()
         'script' => array(/*'type'*/),
         'bdo' => array('dir'),
         'basefont' => array('size'),
-        //	'param'=>array('name'), Not needed in XHTML strict
+        //  'param'=>array('name'), Not needed in XHTML strict
         'iframe' => array('src','title'),
         'img' => array('src','alt'),
         'label' => array('for'),
@@ -831,12 +831,12 @@ function init__validation2()
 /**
  * Checks an XHTML tag for validity, including attributes. Return the results.
  *
- * @param  string			The name of the tag to check
- * @param  map				A map of attributes (name=>value) the tag has
- * @param  boolean		Whether this is a self-closing tag
- * @param  boolean		Whether this is a closing tag
- * @param  list			Errors detected so far. We will add to these and return
- * @return array			Array of error information
+ * @param  string                       The name of the tag to check
+ * @param  map                          A map of attributes (name=>value) the tag has
+ * @param  boolean                      Whether this is a self-closing tag
+ * @param  boolean                      Whether this is a closing tag
+ * @param  list                         Errors detected so far. We will add to these and return
+ * @return array                        Array of error information
  */
 function __check_tag($tag,$attributes,$self_close,$close,$errors)
 {
@@ -1153,11 +1153,11 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
                     $errors[] = array('WCAG_BAD_LAYOUT_TABLE');
                 }
 
-                /*if (!isset($attributes['abbr']))	We used to enforce th length for accessibility, but this is impractical since 'abbr' attribute was dropped in HTML5
-				{
-					$content=trim(substr($OUT,$POS,strpos($OUT,'</th>',$POS)-$POS)); // This isn't perfect - In theory a th could contain a table itself: but it's not very semantic if it does
-					if (strlen(trim(@html_entity_decode(strip_tags($content),ENT_QUOTES,get_charset())))>40) $errors[]=array('WCAG_TH_TOO_LONG');
-				}*/
+                /*if (!isset($attributes['abbr'])) We used to enforce th length for accessibility, but this is impractical since 'abbr' attribute was dropped in HTML5
+                    {
+                            $content=trim(substr($OUT,$POS,strpos($OUT,'</th>',$POS)-$POS)); // This isn't perfect - In theory a th could contain a table itself: but it's not very semantic if it does
+                            if (strlen(trim(@html_entity_decode(strip_tags($content),ENT_QUOTES,get_charset())))>40) $errors[]=array('WCAG_TH_TOO_LONG');
+                    }*/
                 break;
 
             case 'a':
@@ -1180,12 +1180,12 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
                 break;
         }
 
-        /*if (($tag[0]=='h') && (is_numeric(substr($tag,1))))	 Excessive check, heading order gaps are okay as long as order is still logical
-		{
-			global $LAST_HEADING;
-			if ($LAST_HEADING<intval(substr($tag,1))-1) $errors[]=array('WCAG_HEADING_ORDER');
-			$LAST_HEADING=intval(substr($tag,1));
-		}*/
+        /*if (($tag[0]=='h') && (is_numeric(substr($tag,1))))   Excessive check, heading order gaps are okay as long as order is still logical
+        {
+            global $LAST_HEADING;
+            if ($LAST_HEADING<intval(substr($tag,1))-1) $errors[]=array('WCAG_HEADING_ORDER');
+            $LAST_HEADING=intval(substr($tag,1));
+        }*/
 
         if (isset($attributes['accesskey'])) {
             $this_href = isset($attributes['href'])?$attributes['href']:uniqid('',true);
@@ -1213,11 +1213,11 @@ function __check_tag($tag,$attributes,$self_close,$close,$errors)
 /**
  * Checks a tag's inline/block/normal nesting situations.
  *
- * @param  string			The name of the tag to check
- * @param  map				A map of attributes (name=>value) the tag has
- * @param  boolean		Whether this is a self-closing tag
- * @param  boolean		Whether this is a closing tag
- * @return ?list			Array of errors (NULL: none)
+ * @param  string                       The name of the tag to check
+ * @param  map                          A map of attributes (name=>value) the tag has
+ * @param  boolean                      Whether this is a self-closing tag
+ * @param  boolean                      Whether this is a closing tag
+ * @return ?list                        Array of errors (NULL: none)
  */
 function _check_blockyness($tag,$attributes,$self_close,$close)
 {
@@ -1238,7 +1238,7 @@ function _check_blockyness($tag,$attributes,$self_close,$close)
             $errors[] = array($TAGS_DEPRECATE_ALLOW?'XHTML_DEPRECATED_TAG':'XHTML_UNKNOWN_TAG',$tag);
         }
     } elseif ((isset($TAGS_INLINE[$tag])) || (isset($TAGS_INLINE_DEPRECATED[$tag]))) {
-        //if (($BLOCK_CONSTRAIN) && ($PARENT_TAG!='span') && ((isset($TAGS_NORMAL[$PARENT_TAG])) || ((isset($TAGS_NORMAL_DEPRECATED[$PARENT_TAG]))))) $errors[]=array('XHTML_ANCESTER_INLINE_NORMAL',$tag);	This restriction isn't really a proper one, some validators seem to have it but it is not used anymore (XHTML5+) and pretty silly
+        //if (($BLOCK_CONSTRAIN) && ($PARENT_TAG!='span') && ((isset($TAGS_NORMAL[$PARENT_TAG])) || ((isset($TAGS_NORMAL_DEPRECATED[$PARENT_TAG]))))) $errors[]=array('XHTML_ANCESTER_INLINE_NORMAL',$tag); This restriction isn't really a proper one, some validators seem to have it but it is not used anymore (XHTML5+) and pretty silly
         if ($tag != 'label') {
             $ANCESTER_INLINE += $dif;
         }
@@ -1267,11 +1267,11 @@ function _check_blockyness($tag,$attributes,$self_close,$close)
 /**
  * Checks a tag's attributes.
  *
- * @param  string			The name of the tag to check
- * @param  map				A map of attributes (name=>value) the tag has
- * @param  boolean		Whether this is a self-closing tag
- * @param  boolean		Whether this is a closing tag
- * @return ?list			Array of errors (NULL: none)
+ * @param  string                       The name of the tag to check
+ * @param  map                          A map of attributes (name=>value) the tag has
+ * @param  boolean                      Whether this is a self-closing tag
+ * @param  boolean                      Whether this is a closing tag
+ * @return ?list                        Array of errors (NULL: none)
  */
 function _check_attributes($tag,$attributes,$self_close,$close)
 {
@@ -1380,8 +1380,8 @@ function _check_attributes($tag,$attributes,$self_close,$close)
 /**
  * Checks the spelling of some text.
  *
- * @param  string			The text
- * @return list			Array of errors
+ * @param  string                       The text
+ * @return list                         Array of errors
  */
 function validate_spelling($value)
 {
@@ -1393,10 +1393,10 @@ function validate_spelling($value)
 
     $lang = strtolower($THE_LANGUAGE);
     $sub_lang = '';
-    /*if ($lang=='en')	Not reliable
-	{
-		$sub_lang='british';
-	}*/
+    /*if ($lang=='en')  Not reliable
+    {
+        $sub_lang='british';
+    }*/
     if (is_null($PSPELL_LINK)) {
         $PSPELL_LINK = @pspell_new($lang,$sub_lang,'','',PSPELL_FAST);
     }
@@ -1424,11 +1424,11 @@ function validate_spelling($value)
 /**
  * Checks the content under a tag's external references.
  *
- * @param  string			The name of the tag to check
- * @param  map				A map of attributes (name=>value) the tag has
- * @param  boolean		Whether this is a self-closing tag
- * @param  boolean		Whether this is a closing tag
- * @return ?list			Array of errors (NULL: none)
+ * @param  string                       The name of the tag to check
+ * @param  map                          A map of attributes (name=>value) the tag has
+ * @param  boolean                      Whether this is a self-closing tag
+ * @param  boolean                      Whether this is a closing tag
+ * @return ?list                        Array of errors (NULL: none)
  */
 function _check_externals($tag,$attributes,$self_close,$close)
 {
@@ -1484,7 +1484,7 @@ function _check_externals($tag,$attributes,$self_close,$close)
         $VALIDATED_ALREADY[$attributes['src']] = 1;
         $url = qualify_url($attributes['src'],$GLOBALS['URL_BASE']);
         if ($url != '') {
-            $iframe = http_download_file($url,null,false);             //	 Sometimes disabled due to my iframe producing a weird PHP exception, that was stopping me working
+            $iframe = http_download_file($url,null,false);             //   Sometimes disabled due to my iframe producing a weird PHP exception, that was stopping me working
             if ((!is_null($iframe)) && ($iframe != '')) {
                 require_code('character_sets');
 
@@ -1505,11 +1505,11 @@ function _check_externals($tag,$attributes,$self_close,$close)
 /**
  * Checks link accessibility.
  *
- * @param  string			The name of the tag to check
- * @param  map				A map of attributes (name=>value) the tag has
- * @param  boolean		Whether this is a self-closing tag
- * @param  boolean		Whether this is a closing tag
- * @return ?list			Array of errors (NULL: none)
+ * @param  string                       The name of the tag to check
+ * @param  map                          A map of attributes (name=>value) the tag has
+ * @param  boolean                      Whether this is a self-closing tag
+ * @param  boolean                      Whether this is a closing tag
+ * @return ?list                        Array of errors (NULL: none)
  */
 function _check_link_accessibility($tag,$attributes,$self_close,$close)
 {
@@ -1519,12 +1519,12 @@ function _check_link_accessibility($tag,$attributes,$self_close,$close)
 
     // Check positioning - not anymore "until user agents"
     /*if ((!is_null($LAST_A_TAG)) && (isset($attributes['href'])))
-	{
-		$between=substr($OUT,$LAST_A_TAG+1,$TAG_RANGES[count($TAG_RANGES)-1][0]-$LAST_A_TAG-2);
-		$between=str_replace('&nbsp;',' ',$between);
-		$between=strip_tags($between,'<li><td><img><hr><br><p><th>');
-		if (trim($between)=='') $errors[]=array('WCAG_ADJACENT_LINKS');
-	}*/
+    {
+        $between=substr($OUT,$LAST_A_TAG+1,$TAG_RANGES[count($TAG_RANGES)-1][0]-$LAST_A_TAG-2);
+        $between=str_replace('&nbsp;',' ',$between);
+        $between=strip_tags($between,'<li><td><img><hr><br><p><th>');
+        if (trim($between)=='') $errors[]=array('WCAG_ADJACENT_LINKS');
+    }*/
 
     // Check captioning
     global $A_LINKS;
@@ -1572,11 +1572,11 @@ function _check_link_accessibility($tag,$attributes,$self_close,$close)
 /**
  * Checks form field labelling.
  *
- * @param  string			The name of the tag to check
- * @param  map				A map of attributes (name=>value) the tag has
- * @param  boolean		Whether this is a self-closing tag
- * @param  boolean		Whether this is a closing tag
- * @return ?list			Array of errors (NULL: none)
+ * @param  string                       The name of the tag to check
+ * @param  map                          A map of attributes (name=>value) the tag has
+ * @param  boolean                      Whether this is a self-closing tag
+ * @param  boolean                      Whether this is a closing tag
+ * @return ?list                        Array of errors (NULL: none)
  */
 function _check_labelling($tag,$attributes,$self_close,$close)
 {
@@ -1586,7 +1586,7 @@ function _check_labelling($tag,$attributes,$self_close,$close)
 
     global $FOR_LABEL_IDS,$FOR_LABEL_IDS_2,$INPUT_TAG_IDS;
     if (($tag == 'td')/* || ($tag=='div')*/) {
-        //$FOR_LABEL_IDS=array(); // Can't work across table cells		Actually this is an ancient and lame restriction that hurts accessibility more than helping it
+        //$FOR_LABEL_IDS=array(); // Can't work across table cells      Actually this is an ancient and lame restriction that hurts accessibility more than helping it
     }
     if (($tag == 'label') && (isset($attributes['for']))) {
         $FOR_LABEL_IDS[$attributes['for']] = 1;
@@ -1628,8 +1628,8 @@ function _check_labelling($tag,$attributes,$self_close,$close)
 /**
  * Checks a CSS style sheet (high level).
  *
- * @param  string			The data of the style sheet
- * @return ?map			Error information (NULL: no error)
+ * @param  string                       The data of the style sheet
+ * @return ?map                         Error information (NULL: no error)
  */
 function check_css($data)
 {
@@ -1655,8 +1655,8 @@ function check_css($data)
 /**
  * Checks a CSS style sheet.
  *
- * @param  string			The data of the style sheet
- * @return ?map			Error information (NULL: no error)
+ * @param  string                       The data of the style sheet
+ * @return ?map                         Error information (NULL: no error)
  */
 function _validate_css_sheet($data)
 {
@@ -1938,10 +1938,10 @@ function _validate_css_sheet($data)
 /**
  * Checks a CSS class.
  *
- * @param  string			The data of the CSS class
- * @param  integer		Current parse position
- * @param  integer		The higher-level line number we are checking for (to give better debug output)
- * @return ?map			Error information (NULL: no error)
+ * @param  string                       The data of the CSS class
+ * @param  integer                      Current parse position
+ * @param  integer                      The higher-level line number we are checking for (to give better debug output)
+ * @return ?map                         Error information (NULL: no error)
  */
 function _validate_css_class($data,$_i,$line = 0)
 {
@@ -2059,10 +2059,10 @@ function _validate_css_class($data,$_i,$line = 0)
 /**
  * Checks a CSS attribute/value combination is appropriate.
  *
- * @param  string			The name of the attribute
- * @param  string			The value of the attribute
- * @param  integer		Current parse position
- * @return ?map			Error information (NULL: no error)
+ * @param  string                       The name of the attribute
+ * @param  string                       The value of the attribute
+ * @param  integer                      Current parse position
+ * @return ?map                         Error information (NULL: no error)
  */
 function _check_css_value($key,$value,$_i)
 {

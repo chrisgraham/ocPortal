@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Make sure that the given URL contains a session if cookies are disabled.
  * NB: This is used for login redirection. It had to add the session ID into the redirect url.
  *
- * @param  URLPATH		The URL to enforce results in session persistence for the user
- * @return URLPATH		The fixed URL
+ * @param  URLPATH                      The URL to enforce results in session persistence for the user
+ * @return URLPATH                      The fixed URL
  */
 function _enforce_sessioned_url($url)
 {
@@ -79,10 +79,10 @@ function _enforce_sessioned_url($url)
  *
  * @sets_output_state
  *
- * @param  MEMBER			Logged in member
- * @param  BINARY			Whether the session should be considered confirmed
- * @param  boolean		Whether the session should be invisible
- * @return ID_TEXT		New session ID
+ * @param  MEMBER                       Logged in member
+ * @param  BINARY                       Whether the session should be considered confirmed
+ * @param  boolean                      Whether the session should be invisible
+ * @return ID_TEXT                      New session ID
  */
 function create_session($member,$session_confirmed = 0,$invisible = false)
 {
@@ -183,8 +183,8 @@ function create_session($member,$session_confirmed = 0,$invisible = false)
  *
  * @sets_output_state
  *
- * @param  ID_TEXT		The session ID
- * @param  boolean		Whether this is a guest session (guest sessions will use persistent cookies)
+ * @param  ID_TEXT                      The session ID
+ * @param  boolean                      Whether this is a guest session (guest sessions will use persistent cookies)
  */
 function set_session_id($id,$guest_session = false)  // NB: Guests sessions can persist because they are more benign
 {
@@ -196,10 +196,10 @@ function set_session_id($id,$guest_session = false)  // NB: Guests sessions can 
 
     // Save cookie
     $timeout = $guest_session?(time()+intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))):null;
-    /*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))		Useful for testing non-cookie support, but annoying if left on
-	{
-		$test=false;
-	} else*/
+    /*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))      Useful for testing non-cookie support, but annoying if left on
+    {
+        $test=false;
+    } else*/
     {
         $test = @setcookie(get_session_cookie(),$id,$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
     }
@@ -234,8 +234,8 @@ function force_httpauth()
 /**
  * Filter a member ID through SU, if SU is on and if the user has permission.
  *
- * @param  MEMBER			Real logged in member
- * @return MEMBER			Simulated member
+ * @param  MEMBER                       Real logged in member
+ * @return MEMBER                       Simulated member
  */
 function try_su_login($member)
 {
@@ -302,7 +302,7 @@ function try_su_login($member)
 /**
  * Try and login via HTTP authentication. This function is only called if HTTP authentication is currently active. With HTTP authentication we trust the PHP_AUTH_USER setting.
  *
- * @return ?MEMBER		Logged in member (NULL: no login happened)
+ * @return ?MEMBER                      Logged in member (NULL: no login happened)
  */
 function try_httpauth_login()
 {
@@ -337,7 +337,7 @@ function try_httpauth_login()
 /**
  * Do a cookie login.
  *
- * @return MEMBER			Logged in member (NULL: no login happened)
+ * @return MEMBER                       Logged in member (NULL: no login happened)
  */
 function try_cookie_login()
 {

@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		external_db_login
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    external_db_login
  */
 
 class Hook_login_provider_external_db
 {
     /**
-	 * Standard login provider hook.
-	 *
-	 * @param  ?MEMBER		Member ID already detected as logged in (NULL: none). May be a guest ID.
-	 * @return ?MEMBER		Member ID now detected as logged in (NULL: none). May be a guest ID.
-	 */
+     * Standard login provider hook.
+     *
+     * @param  ?MEMBER                  Member ID already detected as logged in (NULL: none). May be a guest ID.
+     * @return ?MEMBER                  Member ID now detected as logged in (NULL: none). May be a guest ID.
+     */
     public function try_login($member)
     {
         if ((is_null($member)) || (is_guest($member))) {

@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 class Hook_pointstore_pop3
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
     }
 
     /**
-	 * Standard pointstore item "shop front" function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item "shop front" function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         return array();
     }
 
     /**
-	 * Standard pointstore item configuration save function.
-	 */
+     * Standard pointstore item configuration save function.
+     */
     public function save_config()
     {
         $pop3 = post_param_integer('pop3',-1);
@@ -52,8 +52,8 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Update an e-mail address from what was chosen in an interface; update or delete each price/cost/item
-	 */
+     * Update an e-mail address from what was chosen in an interface; update or delete each price/cost/item
+     */
     public function _do_price_mail()
     {
         $i = 0;
@@ -72,10 +72,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Get fields for adding/editing one of these.
-	 *
-	 * @return tempcode		The fields
-	 */
+     * Get fields for adding/editing one of these.
+     *
+     * @return tempcode                 The fields
+     */
     public function get_fields()
     {
         $fields = new ocp_tempcode();
@@ -85,10 +85,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Standard pointstore item configuration function.
-	 *
-	 * @return ?array		A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
-	 */
+     * Standard pointstore item configuration function.
+     *
+     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
+     */
     public function config()
     {
         $rows = $GLOBALS['SITE_DB']->query('SELECT price,name FROM ' . get_table_prefix() . 'prices WHERE name LIKE \'' . db_encode_like('pop3_%') . '\'');
@@ -109,10 +109,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Standard pointstore introspection.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard pointstore introspection.
+     *
+     * @return tempcode                 The UI
+     */
     public function pop3info()
     {
         if (get_option('is_on_pop3_buy') == '0') {
@@ -136,10 +136,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function newpop3()
     {
         if (get_option('is_on_pop3_buy') == '0') {
@@ -167,19 +167,19 @@ class Hook_pointstore_pop3
         $fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','pass2',true));
 
         $javascript = "
-			var form=document.getElementById('pass1').form;
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					if ((form.elements['pass1'].value!=form.elements['pass2'].value))
-					{
-						window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
-						return false;
-					}
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-					return true;
-				};
-		";
+            var form=document.getElementById('pass1').form;
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            if ((form.elements['pass1'].value!=form.elements['pass2'].value))
+                            {
+                                        window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
+                                        return false;
+                            }
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            return true;
+                    };
+        ";
 
         // Return template
         $newpop_url = build_url(array('page' => '_SELF','type' => '_newpop3','id' => 'pop3'),'_SELF');
@@ -197,10 +197,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function _newpop3()
     {
         if (get_option('is_on_pop3_buy') == '0') {
@@ -264,10 +264,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function __newpop3()
     {
         if (get_option('is_on_pop3_buy') == '0') {
@@ -329,10 +329,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function buyquota()
     {
         if (get_option('is_on_pop3_buy') == '0') {
@@ -371,10 +371,10 @@ class Hook_pointstore_pop3
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function _buyquota()
     {
         if (get_option('is_on_pop3_buy') == '0') {

@@ -8,43 +8,43 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		webdav
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    webdav
  */
 
 namespace webdav_occlefs
 {
     /**
-	 * Base node-class
-	 *
-	 * The node class implements the method used by both the File and the Directory classes
-	 *
-	 * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
-	 * @author Evert Pot (http://www.rooftopsolutions.nl/)
-	 * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
-	 */
+     * Base node-class
+     *
+     * The node class implements the method used by both the File and the Directory classes
+     *
+     * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
+     * @author Evert Pot (http://www.rooftopsolutions.nl/)
+     * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+     */
     abstract class Node implements \Sabre\DAV\INode
     {
         /**
-		 * The path to the current node
-		 *
-		 * @var string
-		 */
+         * The path to the current node
+         *
+         * @var string
+         */
         protected $path;
 
         /**
-		 * The OcCLE-fs object we are chaining to
-		 *
-		 * @var object
-		 */
+         * The OcCLE-fs object we are chaining to
+         *
+         * @var object
+         */
         protected $occlefs;
 
         /**
-		 * Sets up the node, expects a full path name
-		 *
-		 * @param string $path
-		 */
+         * Sets up the node, expects a full path name
+         *
+         * @param string $path
+         */
         public function __construct($path)
         {
             $this->path = $path;
@@ -54,10 +54,9 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns the name of the node
-		 *
-		 * @return string
-		 */
+         * Returns the name of the node
+         *
+         * @return string                        */
         public function getName()
         {
             list(,$name) = \Sabre\DAV\URLUtil::splitPath($this->path);
@@ -65,11 +64,10 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Renames the node
-		 *
-		 * @param string $name The new name
-		 * @return void
-		 */
+         * Renames the node
+         *
+         * @param string $name The new name
+         * @return void                          */
         public function setName($name)
         {
             list($parentPath,) = \Sabre\DAV\URLUtil::splitPath($this->path);
@@ -100,10 +98,9 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns the last modification time, as a unix timestamp
-		 *
-		 * @return int
-		 */
+         * Returns the last modification time, as a unix timestamp
+         *
+         * @return int                           */
         public function getLastModified()
         {
             if ($this->path == '') {
@@ -127,11 +124,10 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns the last modification time, as a unix timestamp
-		 *
-		 * @param array $parsedPath Directory listing
-		 * @return array
-		 */
+         * Returns the last modification time, as a unix timestamp
+         *
+         * @param array $parsedPath Directory listing
+         * @return array                         */
         public function _listingWrap($parsedPath)
         {
             $sz = serialize($parsedPath);
@@ -144,21 +140,20 @@ namespace webdav_occlefs
     }
 
     /**
-	 * Directory class
-	 *
-	 * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
-	 * @author Evert Pot (http://www.rooftopsolutions.nl/)
-	 * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
-	 */
+     * Directory class
+     *
+     * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
+     * @author Evert Pot (http://www.rooftopsolutions.nl/)
+     * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+     */
     class Directory extends Node implements \Sabre\DAV\ICollection
     {
         /**
-		 * Creates a new file in the directory
-		 *
-		 * @param string $name Name of the file
-		 * @param resource|string $data Initial payload
-		 * @return null|string
-		 */
+         * Creates a new file in the directory
+         *
+         * @param string $name Name of the file
+         * @param resource|string $data Initial payload
+         * @return null|string                   */
         public function createFile($name,$data = null)
         {
             $newPath = $this->path . '/' . $name;
@@ -180,11 +175,10 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Creates a new subdirectory
-		 *
-		 * @param string $name
-		 * @return void
-		 */
+         * Creates a new subdirectory
+         *
+         * @param string $name
+         * @return void                          */
         public function createDirectory($name)
         {
             $newPath = $this->path . '/' . $name;
@@ -201,14 +195,13 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns a specific child node, referenced by its name
-		 *
-		 * This method must throw \Sabre\DAV\Exception\NotFound if the node does not
-		 * exist.
-		 *
-		 * @param string $name
-		 * @return \Sabre\DAV\INode
-		 */
+         * Returns a specific child node, referenced by its name
+         *
+         * This method must throw \Sabre\DAV\Exception\NotFound if the node does not
+         * exist.
+         *
+         * @param string $name
+         * @return \Sabre\DAV\INode              */
         public function getChild($name)
         {
             $path = $this->path . '/' . $name;
@@ -229,10 +222,9 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns an array with all the child nodes
-		 *
-		 * @return \Sabre\DAV\INode[]
-		 */
+         * Returns an array with all the child nodes
+         *
+         * @return \Sabre\DAV\INode[]            */
         public function getChildren()
         {
             $listing = $this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
@@ -257,11 +249,10 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Checks if a child exists.
-		 *
-		 * @param string $name
-		 * @return bool
-		 */
+         * Checks if a child exists.
+         *
+         * @param string $name
+         * @return bool                          */
         public function childExists($name)
         {
             $listing = $this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
@@ -279,10 +270,9 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Deletes all files in this directory, and then itself
-		 *
-		 * @return void
-		 */
+         * Deletes all files in this directory, and then itself
+         *
+         * @return void                          */
         public function delete()
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -298,20 +288,19 @@ namespace webdav_occlefs
     }
 
     /**
-	 * File class
-	 *
-	 * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
-	 * @author Evert Pot (http://www.rooftopsolutions.nl/)
-	 * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
-	 */
+     * File class
+     *
+     * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
+     * @author Evert Pot (http://www.rooftopsolutions.nl/)
+     * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+     */
     class File extends Node implements \Sabre\DAV\IFile
     {
         /**
-		 * Updates the data
-		 *
-		 * @param resource $data
-		 * @return void
-		 */
+         * Updates the data
+         *
+         * @param resource $data
+         * @return void                          */
         public function put($data)
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -330,10 +319,9 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns the data
-		 *
-		 * @return string
-		 */
+         * Returns the data
+         *
+         * @return string                        */
         public function get()
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -348,10 +336,9 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Delete the current file
-		 *
-		 * @return void
-		 */
+         * Delete the current file
+         *
+         * @return void                          */
         public function delete()
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -366,10 +353,9 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns the size of the node, in bytes
-		 *
-		 * @return int
-		 */
+         * Returns the size of the node, in bytes
+         *
+         * @return int                           */
         public function getSize()
         {
             list($currentPath,$currentName) = \Sabre\DAV\URLUtil::splitPath($this->path);
@@ -392,27 +378,25 @@ namespace webdav_occlefs
         }
 
         /**
-		 * Returns the ETag for a file
-		 *
-		 * An ETag is a unique identifier representing the current version of the file. If the file changes, the ETag MUST change.
-		 * The ETag is an arbitrary string, but MUST be surrounded by double-quotes.
-		 *
-		 * Return null if the ETag can not effectively be determined
-		 *
-		 * @return mixed
-		 */
+         * Returns the ETag for a file
+         *
+         * An ETag is a unique identifier representing the current version of the file. If the file changes, the ETag MUST change.
+         * The ETag is an arbitrary string, but MUST be surrounded by double-quotes.
+         *
+         * Return null if the ETag can not effectively be determined
+         *
+         * @return mixed                         */
         public function getETag()
         {
             return null;
         }
 
         /**
-		 * Returns the mime-type for a file
-		 *
-		 * If null is returned, we'll assume application/octet-stream
-		 *
-		 * @return mixed
-		 */
+         * Returns the mime-type for a file
+         *
+         * If null is returned, we'll assume application/octet-stream
+         *
+         * @return mixed                         */
         public function getContentType()
         {
             return null;
@@ -422,15 +406,14 @@ namespace webdav_occlefs
     class Auth extends \Sabre\DAV\Auth\Backend\AbstractBasic
     {
         /**
-		 * Validates a username and password
-		 *
-		 * This method should return true or false depending on if login
-		 * succeeded.
-		 *
-		 * @param string $username
-		 * @param string $password
-		 * @return bool
-		 */
+         * Validates a username and password
+         *
+         * This method should return true or false depending on if login
+         * succeeded.
+         *
+         * @param string $username
+         * @param string $password
+         * @return bool                          */
         public function validateUserPass($username,$password)
         {
             $password_hashed = $GLOBALS['FORUM_DRIVER']->forum_md5($password,$username);

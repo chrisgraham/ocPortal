@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_validation
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_validation
  */
 
 /**
@@ -157,7 +157,7 @@ function init__js_lex()
 
     // Loaded lexer tokens that change the lexing state
     // ================================================
-//	$TOKENS['REGEXP']='/'; // Ending it with "/" is implicit in the LEXER_REGEXP state
+// $TOKENS['REGEXP']='/'; // Ending it with "/" is implicit in the LEXER_REGEXP state
     $TOKENS['START_ML_COMMENT'] = '/*'; // Ending it with "* /" is implicit in the LEXER_ML_COMMENT state
     $TOKENS['COMMENT'] = '//'; // Ending it with a new-line is implicit in the LEXER_COMMENT state
     $TOKENS['DOUBLE_QUOTE'] = '"'; // Ending it with non-escaped " is implicit in LEXER_DOUBLE_QUOTE_STRING_LITERAL state (as well as extended escaping)
@@ -184,8 +184,8 @@ function init__js_lex()
 /**
  * Lex some JavaScript code.
  *
- * @param  string			The code
- * @return list			List of lexed tokens
+ * @param  string                       The code
+ * @return list                         List of lexed tokens
  */
 function js_lex($text)
 {
@@ -504,8 +504,8 @@ function js_lex($text)
 /**
  * Get the next character whilst lexing
  *
- * @param  integer		Get character at this position
- * @return list			Get triplet about the next character (whether end reached, new position, character)
+ * @param  integer                      Get character at this position
+ * @return list                         Get triplet about the next character (whether end reached, new position, character)
  */
 function lex__get_next_char($i)
 {
@@ -520,9 +520,9 @@ function lex__get_next_char($i)
 /**
  * Get the next characters whilst lexing
  *
- * @param  integer		Get character at this position
- * @param  integer		How many to get
- * @return list			Get triplet about the next character (whether end reached, new position, characters)
+ * @param  integer                      Get character at this position
+ * @param  integer                      How many to get
+ * @return list                         Get triplet about the next character (whether end reached, new position, characters)
  */
 function lex__get_next_chars($i,$num)
 {
@@ -534,9 +534,9 @@ function lex__get_next_chars($i,$num)
 /**
  * Convert a position to a triplet of details about the line it is on.
  *
- * @param  integer		The position
- * @param  boolean		Whether the position is a string offset (as opposed to a token position)
- * @return list			The quartet of details (line offset, line number, the line, the absolute position)
+ * @param  integer                      The position
+ * @param  boolean                      Whether the position is a string offset (as opposed to a token position)
+ * @return list                         The quartet of details (line offset, line number, the line, the absolute position)
  */
 function js_pos_to_line_details($i,$absolute = false)
 {
@@ -563,12 +563,12 @@ function js_pos_to_line_details($i,$absolute = false)
 /**
  * Make a JS error (critically).
  *
- * @param  string			The system causing the error
- * @param  integer		The position
- * @param  string			The line
- * @param  string			The error
- * @param  integer		The global position
- * @return ?boolean		Always NULL (NULL: exit)
+ * @param  string                       The system causing the error
+ * @param  integer                      The position
+ * @param  string                       The line
+ * @param  string                       The error
+ * @param  integer                      The global position
+ * @return ?boolean                     Always NULL (NULL: exit)
  */
 function js_die_error($system,$pos,$line,$message,$i)
 {
@@ -581,10 +581,10 @@ function js_die_error($system,$pos,$line,$message,$i)
 /**
  * Log a warning when lexing/parsing/checking.
  *
- * @param  string			The system causing the error
- * @param  string			The warning
- * @param  integer		The global position
- * @param  boolean		Whether the position is a string offset (as opposed to a token position)
+ * @param  string                       The system causing the error
+ * @param  string                       The warning
+ * @param  integer                      The global position
+ * @param  boolean                      Whether the position is a string offset (as opposed to a token position)
  */
 function js_log_warning($system,$warning,$i = -1,$absolute = false)
 {
@@ -607,9 +607,9 @@ function js_log_warning($system,$warning,$i = -1,$absolute = false)
 /**
  * Helper function for usort to sort a list by string length.
  *
- * @param  string			The first string to compare
- * @param  string			The second string to compare
- * @return integer		The comparison result
+ * @param  string                       The first string to compare
+ * @param  string                       The second string to compare
+ * @return integer                      The comparison result
  */
 function jlex__strlen_sort($a,$b)
 {

@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 /**
  * Block a member.
  *
- * @param  MEMBER			The member blocking
- * @param  MEMBER			The member being blocked
- * @param  ?TIME			The logged time of the block (NULL: now)
+ * @param  MEMBER                       The member blocking
+ * @param  MEMBER                       The member being blocked
+ * @param  ?TIME                        The logged time of the block (NULL: now)
  */
 function blocking_add($blocker,$blocked,$time = null)
 {
@@ -48,8 +48,8 @@ function blocking_add($blocker,$blocked,$time = null)
 /**
  * Unblock a member.
  *
- * @param  MEMBER			The member unblocking
- * @param  MEMBER			The member being unblocked
+ * @param  MEMBER                       The member unblocking
+ * @param  MEMBER                       The member being unblocked
  */
 function blocking_remove($blocker,$blocked)
 {
@@ -64,9 +64,9 @@ function blocking_remove($blocker,$blocked)
 /**
  * Add a friend.
  *
- * @param  MEMBER			The member befriending
- * @param  MEMBER			The member being befriended
- * @param  ?TIME			The logged time of the friendship (NULL: now)
+ * @param  MEMBER                       The member befriending
+ * @param  MEMBER                       The member being befriended
+ * @param  ?TIME                        The logged time of the friendship (NULL: now)
  */
 function friend_add($likes,$liked,$time = null)
 {
@@ -103,7 +103,7 @@ function friend_add($likes,$liked,$time = null)
         log_it('MAKE_FRIEND',strval($likes),strval($liked));
         require_code('activities');
         syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_displayname,'','','_SEARCH:members:view:' . strval($liked),'_SEARCH:members:view:' . strval($likes),'','chat',1,$likes);
-        //syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_displayname,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked);	Should only show if the user also does this
+        //syndicate_described_activity('chat:PEOPLE_NOW_FRIENDS',$to_displayname,'','','_SEARCH:members:view:'.strval($liked),'_SEARCH:members:view:'.strval($likes),'','chat',1,$liked); Should only show if the user also does this
 
         decache('main_friends_list');
     }
@@ -112,8 +112,8 @@ function friend_add($likes,$liked,$time = null)
 /**
  * Remove ('dump') a friend.
  *
- * @param  MEMBER			The member befriending
- * @param  MEMBER			The member being dumped
+ * @param  MEMBER                       The member befriending
+ * @param  MEMBER                       The member being dumped
  */
 function friend_remove($likes,$liked)
 {
@@ -130,16 +130,16 @@ function friend_remove($likes,$liked)
 /**
  * Get form fields for adding/editing a chatroom.
  *
- * @param  ?AUTO_LINK	The chat room ID (NULL: new)
- * @param  boolean		Whether the room is being made as a private room by the current member
- * @param  SHORT_TEXT	The room name
- * @param  LONG_TEXT		The welcome message
- * @param  SHORT_TEXT	The owner username
- * @param  LONG_TEXT		The comma-separated list of users that may access it (blank: no restriction)
- * @param  LONG_TEXT		The comma-separated list of usergroups that may access it (blank: no restriction)
- * @param  LONG_TEXT		The comma-separated list of users that may NOT access it (blank: no restriction)
- * @param  LONG_TEXT		The comma-separated list of usergroups that may NOT access it (blank: no restriction)
- * @return array			A pair: The input fields, Hidden fields
+ * @param  ?AUTO_LINK                   The chat room ID (NULL: new)
+ * @param  boolean                      Whether the room is being made as a private room by the current member
+ * @param  SHORT_TEXT                   The room name
+ * @param  LONG_TEXT                    The welcome message
+ * @param  SHORT_TEXT                   The owner username
+ * @param  LONG_TEXT                    The comma-separated list of users that may access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of usergroups that may access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of users that may NOT access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of usergroups that may NOT access it (blank: no restriction)
+ * @return array                        A pair: The input fields, Hidden fields
  */
 function get_chatroom_fields($id = null,$is_made_by_me = false,$room_name = '',$welcome = '',$username = '',$allow2 = '',$allow2_groups = '',$disallow2 = '',$disallow2_groups = '')
 {
@@ -232,7 +232,7 @@ function get_chatroom_fields($id = null,$is_made_by_me = false,$room_name = '',$
 /**
  * Read in chat permission fields, from the complex posted data.
  *
- * @return array			A tuple of permission fields
+ * @return array                        A tuple of permission fields
  */
 function read_in_chat_perm_fields()
 {
@@ -305,16 +305,16 @@ function read_in_chat_perm_fields()
 /**
  * Add a chatroom.
  *
- * @param  SHORT_TEXT		The welcome message
- * @param  SHORT_TEXT		The room name
- * @param  MEMBER				The room owner
- * @param  LONG_TEXT			The comma-separated list of users that may access it (blank: no restriction)
- * @param  LONG_TEXT			The comma-separated list of usergroups that may access it (blank: no restriction)
- * @param  LONG_TEXT			The comma-separated list of users that may NOT access it (blank: no restriction)
- * @param  LONG_TEXT			The comma-separated list of usergroups that may NOT access it (blank: no restriction)
- * @param  LANGUAGE_NAME	The room language
- * @param  BINARY				Whether it is an IM room
- * @return AUTO_LINK			The chat room ID
+ * @param  SHORT_TEXT                   The welcome message
+ * @param  SHORT_TEXT                   The room name
+ * @param  MEMBER                       The room owner
+ * @param  LONG_TEXT                    The comma-separated list of users that may access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of usergroups that may access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of users that may NOT access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of usergroups that may NOT access it (blank: no restriction)
+ * @param  LANGUAGE_NAME                The room language
+ * @param  BINARY                       Whether it is an IM room
+ * @return AUTO_LINK                    The chat room ID
  */
 function add_chatroom($welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$room_language,$is_im = 0)
 {
@@ -349,15 +349,15 @@ function add_chatroom($welcome,$room_name,$room_owner,$allow2,$allow2_groups,$di
 /**
  * Edit a chatroom.
  *
- * @param  AUTO_LINK			The chat room ID
- * @param  SHORT_TEXT		The welcome message
- * @param  SHORT_TEXT		The room name
- * @param  MEMBER				The room owner
- * @param  LONG_TEXT			The comma-separated list of users that may access it (blank: no restriction)
- * @param  LONG_TEXT			The comma-separated list of usergroups that may access it (blank: no restriction)
- * @param  LONG_TEXT			The comma-separated list of users that may NOT access it (blank: no restriction)
- * @param  LONG_TEXT			The comma-separated list of usergroups that may NOT access it (blank: no restriction)
- * @param  LANGUAGE_NAME	The room language
+ * @param  AUTO_LINK                    The chat room ID
+ * @param  SHORT_TEXT                   The welcome message
+ * @param  SHORT_TEXT                   The room name
+ * @param  MEMBER                       The room owner
+ * @param  LONG_TEXT                    The comma-separated list of users that may access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of usergroups that may access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of users that may NOT access it (blank: no restriction)
+ * @param  LONG_TEXT                    The comma-separated list of usergroups that may NOT access it (blank: no restriction)
+ * @param  LANGUAGE_NAME                The room language
  */
 function edit_chatroom($id,$welcome,$room_name,$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,$room_language)
 {
@@ -391,7 +391,7 @@ function edit_chatroom($id,$welcome,$room_name,$room_owner,$allow2,$allow2_group
 /**
  * Delete a chatroom.
  *
- * @param  AUTO_LINK		The chat room ID
+ * @param  AUTO_LINK                    The chat room ID
  */
 function delete_chatroom($id)
 {
@@ -425,7 +425,7 @@ function delete_chatroom($id)
 /**
  * Delete chat messages.
  *
- * @param  array			Where query to specify what to delete
+ * @param  array                        Where query to specify what to delete
  */
 function delete_chat_messages($where)
 {
@@ -466,8 +466,8 @@ function delete_all_chatrooms()
 /**
  * Ban a member from a chatroom.
  *
- * @param  MEMBER			The member to ban
- * @param  AUTO_LINK		The chat room ID
+ * @param  MEMBER                       The member to ban
+ * @param  AUTO_LINK                    The chat room ID
  */
 function chatroom_ban_to($member_id,$id)
 {
@@ -485,8 +485,8 @@ function chatroom_ban_to($member_id,$id)
 /**
  * Unban a member from a chatroom.
  *
- * @param  MEMBER			The member to unban
- * @param  AUTO_LINK		The chat room ID
+ * @param  MEMBER                       The member to unban
+ * @param  AUTO_LINK                    The chat room ID
  */
 function chatroom_unban_to($member_id,$id)
 {
@@ -508,7 +508,7 @@ function chatroom_unban_to($member_id,$id)
 /**
  * Delete all messages in a chatroom.
  *
- * @param  AUTO_LINK		The chat room ID
+ * @param  AUTO_LINK                    The chat room ID
  */
 function delete_chatroom_messages($id)
 {

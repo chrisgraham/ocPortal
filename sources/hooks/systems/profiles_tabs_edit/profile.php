@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_Profiles_Tabs_Edit_profile
 {
     /**
-	 * Find whether this hook is active.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return boolean		Whether this hook is active
-	 */
+     * Find whether this hook is active.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @return boolean                  Whether this hook is active
+     */
     public function is_active($member_id_of,$member_id_viewing)
     {
         if (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance'))) {
@@ -52,13 +52,13 @@ class Hook_Profiles_Tabs_Edit_profile
     }
 
     /**
-	 * Render function for profile tabs edit hooks.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
-	 */
+     * Render function for profile tabs edit hooks.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @return ?array                   A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
+     */
     public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
     {
         $order = 10;

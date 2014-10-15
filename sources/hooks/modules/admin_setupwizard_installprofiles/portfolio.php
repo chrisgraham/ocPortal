@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 class Hook_admin_setupwizard_installprofiles_portfolio
 {
     /**
-	 * Get info about the installprofile
-	 *
-	 * @return array			Map of installprofile details
-	 */
+     * Get info about the installprofile
+     *
+     * @return array                    Map of installprofile details
+     */
     public function info()
     {
         require_lang('galleries');
@@ -34,10 +34,10 @@ class Hook_admin_setupwizard_installprofiles_portfolio
     }
 
     /**
-	 * Get a list of addons that are kept with this installation profile (added to the list of addons always kept)
-	 *
-	 * @return array			Pair: List of addons in the profile, Separated list of ones to show under advanced
-	 */
+     * Get a list of addons that are kept with this installation profile (added to the list of addons always kept)
+     *
+     * @return array                    Pair: List of addons in the profile, Separated list of ones to show under advanced
+     */
     public function get_addon_list()
     {
         return array(
@@ -46,10 +46,10 @@ class Hook_admin_setupwizard_installprofiles_portfolio
     }
 
     /**
-	 * Get a map of default settings associated with this installation profile
-	 *
-	 * @return array			Map of default settings
-	 */
+     * Get a map of default settings associated with this installation profile
+     *
+     * @return array                    Map of default settings
+     */
     public function field_defaults()
     {
         return array(
@@ -72,10 +72,10 @@ class Hook_admin_setupwizard_installprofiles_portfolio
     }
 
     /**
-	 * Find details of desired blocks
-	 *
-	 * @return array			Details of what blocks are wanted
-	 */
+     * Find details of desired blocks
+     *
+     * @return array                    Details of what blocks are wanted
+     */
     public function default_blocks()
     {
         return array(
@@ -95,10 +95,10 @@ class Hook_admin_setupwizard_installprofiles_portfolio
     }
 
     /**
-	 * Get options for blocks in this profile
-	 *
-	 * @return array			Details of what block options are wanted
-	 */
+     * Get options for blocks in this profile
+     *
+     * @return array                    Details of what block options are wanted
+     */
     public function block_options()
     {
         return array(
@@ -106,8 +106,8 @@ class Hook_admin_setupwizard_installprofiles_portfolio
     }
 
     /**
-	 * Execute any special code needed to put this install profile into play
-	 */
+     * Execute any special code needed to put this install profile into play
+     */
     public function install_code()
     {
     }

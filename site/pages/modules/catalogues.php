@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    catalogues
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_catalogues
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_catalogues
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('catalogues');
@@ -72,11 +72,11 @@ class Module_catalogues
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         require_lang('catalogues');
@@ -313,7 +313,7 @@ class Module_catalogues
             $cat_id = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('c_name' => 'products'));
 
             $fields = array(
-                //		Name							 Description			Type			  Defines order  Required  Visible  Searchable
+                //      Name                     Description         Type          Defines order  Required  Visible  Searchable
                 array('ECOM_CAT_product_title','DESCRIPTION_TITLE','short_trans',1,1,1,1),
                 array('ECOM_CAT_sku','ECOM_CATD_sku','random',0,1,1,1),
                 array('ECOM_CAT_price_pre_tax','ECOM_CATD_price_pre_tax','float',0,1,1,1),
@@ -351,7 +351,7 @@ class Module_catalogues
 
             $GLOBALS['SITE_DB']->create_index('catalogue_efv_long','#lcv_value',array('cv_value'),'id');
             $GLOBALS['SITE_DB']->create_index('catalogue_efv_short','#scv_value',array('cv_value'),'id');
-            //$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','ilcv_value',array('cv_value'),'id');	Not allowed, LONG_TEXT can not be in key. People shouldn't order by this anyway
+            //$GLOBALS['SITE_DB']->create_index('catalogue_efv_long','ilcv_value',array('cv_value'),'id');  Not allowed, LONG_TEXT can not be in key. People shouldn't order by this anyway
             $GLOBALS['SITE_DB']->create_index('catalogue_efv_short','iscv_value',array('cv_value'),'id');
             $GLOBALS['SITE_DB']->create_index('catalogue_efv_long','lcf_id',array('cf_id'),'id');
             $GLOBALS['SITE_DB']->create_index('catalogue_efv_short','scf_id',array('cf_id'),'id');
@@ -426,14 +426,14 @@ class Module_catalogues
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if ($be_deferential) {
@@ -461,10 +461,10 @@ class Module_catalogues
     public $ecommerce;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -692,10 +692,10 @@ class Module_catalogues
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_css('catalogues');
@@ -724,10 +724,10 @@ class Module_catalogues
     }
 
     /**
-	 * The UI to show a list of catalogues to choose from.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a list of catalogues to choose from.
+     *
+     * @return tempcode                 The UI
+     */
     public function list_catalogues()
     {
         $ecommerce = get_param_integer('ecommerce',null);
@@ -769,10 +769,10 @@ class Module_catalogues
     }
 
     /**
-	 * The UI to show the index of a catalogue.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show the index of a catalogue.
+     *
+     * @return tempcode                 The UI
+     */
     public function view_catalogue_index()
     {
         $catalogue_name = $this->catalogue_name;
@@ -828,10 +828,10 @@ class Module_catalogues
     }
 
     /**
-	 * The UI to show a catalogue A-Z screen.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a catalogue A-Z screen.
+     *
+     * @return tempcode                 The UI
+     */
     public function view_atoz()
     {
         $id = $this->id;
@@ -944,10 +944,10 @@ class Module_catalogues
     }
 
     /**
-	 * The UI to show a catalogue category.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a catalogue category.
+     *
+     * @return tempcode                 The UI
+     */
     public function view_catalogue_category()
     {
         require_code('feedback');
@@ -1056,10 +1056,10 @@ class Module_catalogues
     }
 
     /**
-	 * The UI to show a catalogue entry.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a catalogue entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function view_catalogue_entry()
     {
         return $this->screen;

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*
@@ -95,8 +95,8 @@ function init__tempcode__runtime()
 /**
  * Escape a string to fit within PHP double quotes TWICE. Needed sometimes when generating code. This function exists for performance reasons.
  *
- * @param  string			String in
- * @return string			Resultant string
+ * @param  string                       String in
+ * @return string                       Resultant string
  */
 function php_addslashes_twice($in)
 {
@@ -104,16 +104,16 @@ function php_addslashes_twice($in)
 
     /*// This code does not work, provides awfully confusing Tempcode errors...
 
-	global $PHP_REP_FROM,$PHP_REP_TO_TWICE;
-	return str_replace($PHP_REP_FROM,$PHP_REP_TO_TWICE,$in);
-	//return str_replace("\n",'\n',str_replace('$','\$',str_replace('\\\'','\'',addslashes($in))));*/
+    global $PHP_REP_FROM,$PHP_REP_TO_TWICE;
+    return str_replace($PHP_REP_FROM,$PHP_REP_TO_TWICE,$in);
+    //return str_replace("\n",'\n',str_replace('$','\$',str_replace('\\\'','\'',addslashes($in))));*/
 }
 
 /**
  * Convert a string to tempcode.
  *
- * @param  string			String
- * @return tempcode		Tempcode
+ * @param  string                       String
+ * @return tempcode                     Tempcode
  */
 function make_string_tempcode($string)
 {
@@ -126,9 +126,9 @@ function make_string_tempcode($string)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array			A list of escaping to do
- * @param  string			The string to apply the escapings to
- * @return string			Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
+ * @param  array                        A list of escaping to do
+ * @param  string                       The string to apply the escapings to
+ * @return string                       Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
  */
 function apply_tempcode_escaping($escaped,&$value)
 {
@@ -174,9 +174,9 @@ function apply_tempcode_escaping($escaped,&$value)
 /**
  * Apply whatever escaping is requested to the given value.
  *
- * @param  array			A list of escaping to do
- * @param  string			The string to apply the escapings to
- * @return string			Output string
+ * @param  array                        A list of escaping to do
+ * @param  string                       The string to apply the escapings to
+ * @return string                       Output string
  */
 function apply_tempcode_escaping_inline($escaped,$value)
 {
@@ -222,11 +222,11 @@ function apply_tempcode_escaping_inline($escaped,$value)
 /**
  * This will create a new tempcode object that is containing a single specifed language code
  *
- * @param  ID_TEXT		The ID of the symbol to use
- * @param  ?mixed			The first token [string or tempcode] (replaces {1}) (NULL: none)
- * @param  ?mixed			The second token [string or tempcode] (replaces {2}) (NULL: none)
- * @param  ?mixed			The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
- * @return tempcode		A language tempcode object
+ * @param  ID_TEXT                      The ID of the symbol to use
+ * @param  ?mixed                       The first token [string or tempcode] (replaces {1}) (NULL: none)
+ * @param  ?mixed                       The second token [string or tempcode] (replaces {2}) (NULL: none)
+ * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
+ * @return tempcode                     A language tempcode object
  */
 function do_lang_tempcode($symbol,$token1 = null,$token2 = null,$token3 = null)
 {
@@ -253,10 +253,10 @@ function do_lang_tempcode($symbol,$token1 = null,$token2 = null,$token3 = null)
 /**
  * This will create a new tempcode object that is containing a single specifed symbol
  *
- * @param  ID_TEXT		The ID of the symbol to use
- * @param  ?array			Symbol parameters (NULL: none)
- * @param  ?array			Escaping (NULL: none)
- * @return tempcode		A symbol tempcode object
+ * @param  ID_TEXT                      The ID of the symbol to use
+ * @param  ?array                       Symbol parameters (NULL: none)
+ * @param  ?array                       Escaping (NULL: none)
+ * @return tempcode                     A symbol tempcode object
  */
 function symbol_tempcode($symbol,$parameters = null,$escape = null)
 {
@@ -271,10 +271,10 @@ function symbol_tempcode($symbol,$parameters = null,$escape = null)
 /**
  * This will create a new tempcode object that is containing a single specifed directive
  *
- * @param  ID_TEXT		The ID of the symbol to use
- * @param  tempcode		The contents
- * @param  ?array			Directive parameters (NULL: none)
- * @return tempcode		A directive tempcode object
+ * @param  ID_TEXT                      The ID of the symbol to use
+ * @param  tempcode                     The contents
+ * @param  ?array                       Directive parameters (NULL: none)
+ * @return tempcode                     A directive tempcode object
  */
 function directive_tempcode($directive,$content,$parameters = null)
 {
@@ -290,8 +290,8 @@ function directive_tempcode($directive,$content,$parameters = null)
 /**
  * Simple function to evaluate some Tempcode. Very rarely to be used, only if you can't call a method (e.g. you are copying direct into an array, such as in block cacheing).
  *
- * @param  tempcode		Tempcode object
- * @return string			Evaluated string
+ * @param  tempcode                     Tempcode object
+ * @return string                       Evaluated string
  */
 function static_evaluate_tempcode($ob)
 {
@@ -301,16 +301,16 @@ function static_evaluate_tempcode($ob)
 /**
  * Get a tempcoded version of a normal XHTML template. It is perhaps the most common ocPortal function to load up templates using do_template, and then attach them together either as parameters to each other, or via the tempcode attach method.
  *
- * @param  ID_TEXT			The codename of the template being loaded
- * @param  ?array				A map of parameters for the template (key to value) (NULL: no parameters)
- * @param  ?LANGUAGE_NAME 	The language to load the template in (templates can embed language references) (NULL: users own language)
- * @param  boolean			Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT			Alternate template to use if the primary one does not exist (NULL: none)
- * @param  string				File type suffix of template file (e.g. .tpl)
- * @param  string				Subdirectory type to look in
+ * @param  ID_TEXT                      The codename of the template being loaded
+ * @param  ?array                       A map of parameters for the template (key to value) (NULL: no parameters)
+ * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (NULL: users own language)
+ * @param  boolean                      Whether to not produce a stack dump if the template is missing
+ * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (NULL: none)
+ * @param  string                       File type suffix of template file (e.g. .tpl)
+ * @param  string                       Subdirectory type to look in
  * @set    templates css
- * @param  ID_TEXT			Theme to use
- * @return tempcode			The tempcode for this template
+ * @param  ID_TEXT                      Theme to use
+ * @return tempcode                     The tempcode for this template
  */
 function do_template($codename,$parameters = null,$lang = null,$light_error = false,$fallback = null,$suffix = '.tpl',$type = 'templates',$theme = null)
 {
@@ -479,8 +479,8 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
 /**
  * Certain symbols need preprocessing, before the output stream is made.
  *
- * @param  array			Symbol details
- * @param  array			Where we store children stuff
+ * @param  array                        Symbol details
+ * @param  array                        Where we store children stuff
  */
 function handle_symbol_preprocessing($bit,&$children)
 {
@@ -767,12 +767,12 @@ function handle_symbol_preprocessing($bit,&$children)
 
 /**
  * Tempcode (non-compiled implementation).
- * @package		core
+ * @package    core
  */
 class ocp_tempcode
 {
     // An array of bits where each bit is array($escape,$type,$value[,$params])
-    //	NB: 'escape' doesn't apply for tempcode-typed-parameters or language-references
+    //   NB: 'escape' doesn't apply for tempcode-typed-parameters or language-references
     public $bits;
 
     public $codename = ':container'; // The name of the template it came from
@@ -782,10 +782,10 @@ class ocp_tempcode
     var $children = null,$fresh = null;
 
     /**
-	 * Constructor of tempcode
-	 *
-	 * @param  ?array			Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
-	 */
+     * Constructor of tempcode
+     *
+     * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
+     */
     public function ocp_tempcode($details = null)
     {
         if (!isset($details)) {
@@ -827,12 +827,12 @@ class ocp_tempcode
     }
 
     /**
-	 * Parse a single symbol from an input stream and append it.
-	 *
-	 * @param  string				Code string (input stream)
-	 * @param  integer			Read position
-	 * @param  integer			Length of input string
-	 */
+     * Parse a single symbol from an input stream and append it.
+     *
+     * @param  string                   Code string (input stream)
+     * @param  integer                  Read position
+     * @param  integer                  Length of input string
+     */
     public function parse_from(&$code,&$pos,&$len)
     {
         $temp = template_to_tempcode(substr($code,$pos,$len-$pos),0,false,'');
@@ -840,15 +840,15 @@ class ocp_tempcode
     }
 
     /**
-	 * Decache the object.
-	 */
+     * Decache the object.
+     */
     public function decache()
     {
     }
 
     /**
-	 * Scan this Tempcode for anything that needs to be symbol-preprocessed
-	 */
+     * Scan this Tempcode for anything that needs to be symbol-preprocessed
+     */
     public function handle_symbol_preprocessing()
     {
         foreach ($this->bits as $bit) {
@@ -866,23 +866,23 @@ class ocp_tempcode
     }
 
     /**
-	 * Find whether a variable within this Tempcode is parameterless.
-	 *
-	 * @param  integer			Offset to the variable
-	 * @return boolean			Whether it is parameterless
-	 */
+     * Find whether a variable within this Tempcode is parameterless.
+     *
+     * @param  integer                  Offset to the variable
+     * @return boolean                  Whether it is parameterless
+     */
     public function parameterless($at)
     {
         return ((!array_key_exists($at,$this->bits)) || ($this->bits[$at][3] == array()));
     }
 
     /**
-	 * Attach the specified tempcode to the right of the current tempcode object.
-	 *
-	 * @param  mixed			The tempcode/string to attach
-	 * @param  boolean		If we've already merged the children from what we're attaching into the child tree (at bind stage)
-	 * @param  ?array       Extra escaping (NULL: none)
-	 */
+     * Attach the specified tempcode to the right of the current tempcode object.
+     *
+     * @param  mixed                    The tempcode/string to attach
+     * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
+     * @param  ?array                   Extra escaping (NULL: none)
+     */
     public function attach($attach,$avoid_children_merge = false,$escape = null)
     {
         if ($attach === '') {
@@ -938,11 +938,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Replace the named parameter with a specific value. Hardly used, but still important.
-	 *
-	 * @param  string			Named parameter
-	 * @param  object			Specific value
-	 */
+     * Replace the named parameter with a specific value. Hardly used, but still important.
+     *
+     * @param  string                   Named parameter
+     * @param  object                   Specific value
+     */
     public function singular_bind($parameter,$value)
     {
         foreach ($this->bits as $i => $bit) {
@@ -967,11 +967,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Assemble the current tempcode object into a single serialised (compiled) tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
-	 *
-	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
-	 * @return string				The assembly result
-	 */
+     * Assemble the current tempcode object into a single serialised (compiled) tempcode storage representation (parameters and certain symbols and not evaluated). The output of the function is language-tied.
+     *
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current users language)
+     * @return string                   The assembly result
+     */
     public function to_assembly($lang = null)
     {
         if (is_null($lang)) {
@@ -1014,12 +1014,12 @@ class ocp_tempcode
     }
 
     /**
-	 * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object.
-	 *
-	 * @param  string			The assembled tempcode
-	 * @param  boolean		Return error code on failure, rather than exiting
-	 * @return boolean		Success status (it can fail, if the compiled cache file is corrupt)
-	 */
+     * The opposite of to_assembly - it decodes a tempcode storage representation and turns it into a proper tempcode object.
+     *
+     * @param  string                   The assembled tempcode
+     * @param  boolean                  Return error code on failure, rather than exiting
+     * @return boolean                  Success status (it can fail, if the compiled cache file is corrupt)
+     */
     public function from_assembly(&$raw_data,$allow_failure = false)
     {
         if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
@@ -1029,11 +1029,11 @@ class ocp_tempcode
 
         $this->bits = @unserialize($raw_data) or $this->bits = array();
 
-//		global $PREPROCESSED_BLOCKS;
+//    global $PREPROCESSED_BLOCKS;
 
-//		foreach ($this->bits as $bit)
-//			if (($bit[1]==TC_SYMBOL) && (isset($PREPROCESSED_BLOCKS[$bit[2]])))
-//				handle_symbol_preprocessing($bit);
+//    foreach ($this->bits as $bit)
+//       if (($bit[1]==TC_SYMBOL) && (isset($PREPROCESSED_BLOCKS[$bit[2]])))
+//          handle_symbol_preprocessing($bit);
 
         $this->codename = '';
 
@@ -1041,16 +1041,16 @@ class ocp_tempcode
     }
 
     /**
-	 * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound tempcode object)
-	 *
-	 * @param  array				Map of parameters to bind parameter bits to
-	 * @param  ID_TEXT			The codename of the template this tempcode is from
-	 * @param  boolean			Whether we are looking under a loop
-	 * @return tempcode			The new bound tempcode object
-	 */
+     * Bind the parameter bits, or recursively bind children (doesn't change self, returns a bound tempcode object)
+     *
+     * @param  array                    Map of parameters to bind parameter bits to
+     * @param  ID_TEXT                  The codename of the template this tempcode is from
+     * @param  boolean                  Whether we are looking under a loop
+     * @return tempcode                 The new bound tempcode object
+     */
     public function bind(&$parameters,$codename,$under_loop = false)
     {
-        //		global $PREPROCESSED_BLOCKS;
+        //     global $PREPROCESSED_BLOCKS;
 
         foreach ($parameters as $key => $val) {
             if (is_bool($val)) {
@@ -1075,8 +1075,8 @@ class ocp_tempcode
 
         foreach ($this->bits as $bit) { // Remembering that each tempcode object is divided into bits, and each bit is on the same level, taking the bind parameters. And the parameters themselves take parameters, which exist on the same parameter level (e.g. {!FOO,{BAR}}{FOO} -- {BAR} is bound on the same level as {FOO}
             $bit_1 = $bit[1];
-//			if (($bit_1==TC_SYMBOL) && (isset($PREPROCESSED_BLOCKS[$bit[2]])))
-//				handle_symbol_preprocessing($bit);
+//       if (($bit_1==TC_SYMBOL) && (isset($PREPROCESSED_BLOCKS[$bit[2]])))
+//          handle_symbol_preprocessing($bit);
 
             // Parameter binding of the variable as needed
             if ($bit[3]) {
@@ -1173,11 +1173,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Parse the current tempcode object, then echo it to the browser.
-	 *
-	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current users language)
-	 * @return string				Blank string. Allows chaining within echo statements
-	 */
+     * Parse the current tempcode object, then echo it to the browser.
+     *
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current users language)
+     * @return string                   Blank string. Allows chaining within echo statements
+     */
     public function evaluate_echo($lang = null)
     {
         if (ocp_srv('REQUEST_METHOD') == 'HEAD') {
@@ -1233,20 +1233,20 @@ class ocp_tempcode
     }
 
     /**
-	 * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty
-	 *
-	 * @return boolean		Whether it is entirely empty
-	 */
+     * Find whether the tempcode object entirely empty (devoid of anything evaluable), not just evaluates as empty
+     *
+     * @return boolean                  Whether it is entirely empty
+     */
     public function is_empty_shell()
     {
         return count($this->bits) == 0;
     }
 
     /**
-	 * Find whether the tempcode object is empty or not.
-	 *
-	 * @return boolean		Whether the tempcode object is empty
-	 */
+     * Find whether the tempcode object is empty or not.
+     *
+     * @return boolean                  Whether the tempcode object is empty
+     */
     public function is_empty()
     {
         foreach ($this->bits as $bit) {
@@ -1274,11 +1274,11 @@ class ocp_tempcode
     }
 
     /**
-	 * Parses the current tempcode object, then return the parsed string
-	 *
-	 * @param  ?LANGUAGE_NAME	The language to evaluate with (NULL: current user's language)
-	 * @return string				The evaluated thing. Voila, it's all over!
-	 */
+     * Parses the current tempcode object, then return the parsed string
+     *
+     * @param  ?LANGUAGE_NAME           The language to evaluate with (NULL: current user's language)
+     * @return string                   The evaluated thing. Voila, it's all over!
+     */
     public function evaluate($lang = null)
     {
         global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$RECORD_TEMPLATES_TREE,$SIMPLE_ESCAPED,$EVALUATE_LANG,$EVALUATE_ESCAPE;

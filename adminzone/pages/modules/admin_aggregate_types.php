@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		aggregate_types
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    aggregate_types
  */
 
 require_code('crud_module');
@@ -37,10 +37,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     public $edit_one_label = null;
 
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -54,19 +54,19 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('aggregate_type_instances');
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         $GLOBALS['SITE_DB']->create_table('aggregate_type_instances',array(
@@ -81,14 +81,14 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -105,12 +105,12 @@ class Module_admin_aggregate_types extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         if (is_null($type)) {
@@ -140,11 +140,11 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         require_code('aggregate_types');
@@ -174,10 +174,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before setup management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before setup management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -193,13 +193,13 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a forum grouping template adding/editing form.
-	 *
-	 * @param  ID_TEXT		The aggregate type (blank: ask first)
-	 * @param  SHORT_TEXT	The label for the instance
-	 * @param  ?array			Other parameters (NULL: no values known yet)
-	 * @return mixed			Either Tempcode; or a tuple: form fields, hidden fields, delete fields.
-	 */
+     * Get tempcode for a forum grouping template adding/editing form.
+     *
+     * @param  ID_TEXT                  The aggregate type (blank: ask first)
+     * @param  SHORT_TEXT               The label for the instance
+     * @param  ?array                   Other parameters (NULL: no values known yet)
+     * @return mixed                    Either Tempcode; or a tuple: form fields, hidden fields, delete fields.
+     */
     public function get_form_fields($aggregate_type = '',$aggregate_label = '',$other_parameters = null)
     {
         if ($aggregate_type == '') {
@@ -250,11 +250,11 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -297,11 +297,11 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A triple: fields, hidden-fields, delete-fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A triple: fields, hidden-fields, delete-fields
+     */
     public function fill_in_edit_form($_id)
     {
         $id = intval($_id);
@@ -316,10 +316,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Read in parameters for adding/editing.
-	 *
-	 * @return array			Parameters
-	 */
+     * Read in parameters for adding/editing.
+     *
+     * @return array                    Parameters
+     */
     public function _read_in_parameters()
     {
         $aggregate_label = post_param('aggregate_label');
@@ -335,10 +335,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         list($aggregate_label,$aggregate_type,$other_parameters) = $this->_read_in_parameters();
@@ -347,10 +347,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         list($aggregate_label,$aggregate_type,$other_parameters) = $this->_read_in_parameters();
@@ -358,10 +358,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         $delete_matches = false;
@@ -372,10 +372,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * The UI to edit the aggregate_types XML file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit the aggregate_types XML file.
+     *
+     * @return tempcode                 The UI
+     */
     public function xml()
     {
         parse_aggregate_xml(true);
@@ -389,10 +389,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * The UI actualiser edit the aggregate_types XML file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI actualiser edit the aggregate_types XML file.
+     *
+     * @return tempcode                 The UI
+     */
     public function _xml()
     {
         if (!file_exists(get_custom_file_base() . '/data_custom')) {
@@ -420,10 +420,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * The UI to start a synchronisation of aggregate content type instances.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to start a synchronisation of aggregate content type instances.
+     *
+     * @return tempcode                 The UI
+     */
     public function sync()
     {
         require_code('form_templates');
@@ -455,10 +455,10 @@ class Module_admin_aggregate_types extends standard_crud_module
     }
 
     /**
-	 * The actualiser to start a synchronisation of aggregate content type instances.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to start a synchronisation of aggregate content type instances.
+     *
+     * @return tempcode                 The UI
+     */
     public function _sync()
     {
         $types = $_POST['aggregate_type'];

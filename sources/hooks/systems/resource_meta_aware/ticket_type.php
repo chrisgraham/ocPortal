@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tickets
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tickets
  */
 
 class Hook_resource_meta_aware_ticket_type
 {
     /**
-	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
-	 *
-	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
-	 * @return ?array		Map of award content-type info (NULL: disabled).
-	 */
+     * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
+     *
+     * @param  ?ID_TEXT                 The zone to link through to (NULL: autodetect).
+     * @return ?array                   Map of award content-type info (NULL: disabled).
+     */
     public function info($zone = null)
     {
         return array(

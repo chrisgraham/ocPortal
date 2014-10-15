@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_upgrader
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_upgrader
  */
 
 /**
@@ -124,62 +124,62 @@ function upgrade_script()
 <p>{$l_choices}</p>
 
 <div style=\"margin: 0 50px\">
-	<h2>{$l_maintenance}&hellip;</h2><ul class=\"compact_list\">
-		<li>{$l_clear_caches}</li>";
+    <h2>{$l_maintenance}&hellip;</h2><ul class=\"compact_list\">
+        <li>{$l_clear_caches}</li>";
                     if (!is_suexec_like()) {
                         echo "
-					";
+                            ";
                     }
                     if (GOOGLE_APPENGINE) {
                         echo "
-		<li>{$l_check_permissions}</li>
-		<li>{$l_fix_permissions}</li>
-						";
+        <li>{$l_check_permissions}</li>
+        <li>{$l_fix_permissions}</li>
+                                        ";
                     }
                     echo "
-	</ul>";
+    </ul>";
 
                     echo "
-	<h2 style=\"margin-top: 2em\">{$l_upgrading}&hellip;</h2>
+    <h2 style=\"margin-top: 2em\">{$l_upgrading}&hellip;</h2>
 
-	<h3>{$l_important}</h3>
+    <h3>{$l_important}</h3>
 
-	<p>{$l_bugs}</p>
+    <p>{$l_bugs}</p>
 
-	<h3>{$l_release_notes}</h3>
+    <h3>{$l_release_notes}</h3>
 
-	<p>{$l_refer_release_notes}</p>
+    <p>{$l_refer_release_notes}</p>
 
-	<h3>{$l_upgrade_steps}</h3>
+    <h3>{$l_upgrade_steps}</h3>
 
-	<div class=\"wide_table_wrap\"><table class=\"columned_table autosized_table results_table wide_table spaced_table\">
-		<thead>
-			<tr>
-				<th>{$l_step}</th>
-				<th>{$l_action}</th>
-				<th>{$l_estimated_time}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr><th>X</th><td>{$l_not_for_patch} {$l_tutorial}</td><td>" . escape_html(display_time_period(60*120)) . "</td></tr>
-			<tr><th>1</th><td>{$l_take_backup}</td><td>" . escape_html(display_time_period(60*120)) . "</td></tr>
-			<tr><th>2</th><td>{$l_close_site}  {$l_fu_closedness}<br /><q style=\"font-style: italic\">" . $closed->evaluate() . "</q> <span class=\"associated_link\"><a href=\"" . escape_html($closed_url->evaluate()) . "\" title=\"(this link will open in a new window)\" target=\"_blank\">" . do_lang('CHANGE') . "</a></span></td><td>" . escape_html(display_time_period(60)) . "</td></tr>
-			<tr><th>3</th><td>{$l_download}</td><td>" . escape_html(display_time_period(60*5)) . "</td></tr>
-			<tr><th>4</th><td>{$l_not_for_patch} {$l_integrity_scan_no_merging}<!-- " . do_lang('OR') . " {$l_integrity_scan}--></td><td>" . str_replace(' ','&nbsp;',escape_html(display_time_period(60*10))) . "&nbsp;&dagger;</td></tr>
-			<tr><th>5</th><td>{$l_not_for_patch} {$l_database_upgrade}<br />{$l_up_info}</td><td>" . escape_html(display_time_period(60*5)) . "</td></tr>
-			<tr><th>6</th><td>{$l_not_for_patch} {$l_theme_upgrade}</td><td>" . escape_html(display_time_period(60*5)) . "</td></tr>
-			<tr><th>7</th><td>{$l_clear_caches}</td><td>1 minute</td></tr>
-			<tr><th>8</th><td>{$l_open_site}  {$l_fu_closedness}</td><td>1 minute</td></tr>
-		</tbody>
-	</table></div>
+    <div class=\"wide_table_wrap\"><table class=\"columned_table autosized_table results_table wide_table spaced_table\">
+        <thead>
+            <tr>
+                    <th>{$l_step}</th>
+                    <th>{$l_action}</th>
+                    <th>{$l_estimated_time}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><th>X</th><td>{$l_not_for_patch} {$l_tutorial}</td><td>" . escape_html(display_time_period(60*120)) . "</td></tr>
+            <tr><th>1</th><td>{$l_take_backup}</td><td>" . escape_html(display_time_period(60*120)) . "</td></tr>
+            <tr><th>2</th><td>{$l_close_site}  {$l_fu_closedness}<br /><q style=\"font-style: italic\">" . $closed->evaluate() . "</q> <span class=\"associated_link\"><a href=\"" . escape_html($closed_url->evaluate()) . "\" title=\"(this link will open in a new window)\" target=\"_blank\">" . do_lang('CHANGE') . "</a></span></td><td>" . escape_html(display_time_period(60)) . "</td></tr>
+            <tr><th>3</th><td>{$l_download}</td><td>" . escape_html(display_time_period(60*5)) . "</td></tr>
+            <tr><th>4</th><td>{$l_not_for_patch} {$l_integrity_scan_no_merging}<!-- " . do_lang('OR') . " {$l_integrity_scan}--></td><td>" . str_replace(' ','&nbsp;',escape_html(display_time_period(60*10))) . "&nbsp;&dagger;</td></tr>
+            <tr><th>5</th><td>{$l_not_for_patch} {$l_database_upgrade}<br />{$l_up_info}</td><td>" . escape_html(display_time_period(60*5)) . "</td></tr>
+            <tr><th>6</th><td>{$l_not_for_patch} {$l_theme_upgrade}</td><td>" . escape_html(display_time_period(60*5)) . "</td></tr>
+            <tr><th>7</th><td>{$l_clear_caches}</td><td>1 minute</td></tr>
+            <tr><th>8</th><td>{$l_open_site}  {$l_fu_closedness}</td><td>1 minute</td></tr>
+        </tbody>
+    </table></div>
 
-	<p>&dagger; {$l_customisations}</p>
+    <p>&dagger; {$l_customisations}</p>
 
-	<h2 style=\"margin-top: 2em\">{$l_error_correction}&hellip;</h2><ul class=\"compact_list\">
-		<li style=\"padding: 0.5em\">{$l_safe_mode}</li>
-		<li style=\"padding: 0.5em\">{$l_addon_management}</li>
-		<li style=\"padding: 0.5em\">{$l_remove_addon_files}</li>
-	</ul>
+    <h2 style=\"margin-top: 2em\">{$l_error_correction}&hellip;</h2><ul class=\"compact_list\">
+        <li style=\"padding: 0.5em\">{$l_safe_mode}</li>
+        <li style=\"padding: 0.5em\">{$l_addon_management}</li>
+        <li style=\"padding: 0.5em\">{$l_remove_addon_files}</li>
+    </ul>
 </div>
 ";
                     $show_more_link = false;
@@ -502,7 +502,7 @@ function upgrade_script()
 /**
  * Get hidden form fields for relaying POST information.
  *
- * @return string		The hidden form fields for relaying POST information.
+ * @return string                       The hidden form fields for relaying POST information.
  */
 function post_fields_relay()
 {
@@ -516,11 +516,11 @@ function post_fields_relay()
 /**
  * Generate a form-based link to relay POST information to a URL.
  *
- * @param  string		The URL (something like 'upgrader.php?type=ocf')
- * @param  string		The URL caption text
- * @param  boolean	Whether it is disabled
- * @param  string		Extra JavaScript
- * @return string		The form-based link
+ * @param  string                       The URL (something like 'upgrader.php?type=ocf')
+ * @param  string                       The URL caption text
+ * @param  boolean                      Whether it is disabled
+ * @param  string                       Extra JavaScript
+ * @return string                       The form-based link
  */
 function fu_link($url,$text,$disabled = false,$js = '')
 {
@@ -537,7 +537,7 @@ function fu_link($url,$text,$disabled = false,$js = '')
 /**
  * Output a login page.
  *
- * @param  ?string	Error message (NULL: none)
+ * @param  ?string                      Error message (NULL: none)
  */
 function up_do_login($message = null)
 {
@@ -607,46 +607,46 @@ function up_do_login($message = null)
         $url .= '&keep_show_loading=1';
     }
     echo "
-	<p>{$l_login_info}</p>
-	<form title=\"{$l_login}\" action=\"" . escape_html($url) . "\" method=\"post\">
-	" . (is_null($news_id)?'':('<input type="hidden" name="news_id" value="' . strval($news_id) . '" />')) . "
-	<p>
-		{$l_password}: <input type=\"password\" name=\"given_password\" value=\"" . escape_html(post_param('password','')) . "\" />
-	</p>
-	";
+    <p>{$l_login_info}</p>
+    <form title=\"{$l_login}\" action=\"" . escape_html($url) . "\" method=\"post\">
+    " . (is_null($news_id)?'':('<input type="hidden" name="news_id" value="' . strval($news_id) . '" />')) . "
+    <p>
+        {$l_password}: <input type=\"password\" name=\"given_password\" value=\"" . escape_html(post_param('password','')) . "\" />
+    </p>
+    ";
 
     require_code('files');
     if ((is_suexec_like()) || ((!function_exists('ftp_ssl_connect')) && (!function_exists('ftp_connect')))) {
     } else {
         echo "
-		<hr class=\"spaced_rule\" />
-		{$l_ftp_info}
-		<table>
-			<tbody>
-				<tr><th>{$l_ftp_domain}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_domain\" value=\"" . escape_html($ftp_domain) . "\" /></td></tr>
-				<tr><th>{$l_ftp_directory}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_folder\" value=\"" . escape_html($ftp_folder) . "\" /></td></tr>
-				<tr><th>{$l_ftp_username}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_username\" value=\"" . escape_html($ftp_username) . "\" /></td></tr>
-				<tr><th>{$l_ftp_password}:</th><td><input size=\"50\" type=\"password\" name=\"ftp_password\" /></td></tr>
-			</tbody>
-		</table>
-		<hr class=\"spaced_rule\" />
-		";
+        <hr class=\"spaced_rule\" />
+        {$l_ftp_info}
+        <table>
+            <tbody>
+                    <tr><th>{$l_ftp_domain}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_domain\" value=\"" . escape_html($ftp_domain) . "\" /></td></tr>
+                    <tr><th>{$l_ftp_directory}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_folder\" value=\"" . escape_html($ftp_folder) . "\" /></td></tr>
+                    <tr><th>{$l_ftp_username}:</th><td><input size=\"50\" type=\"text\" name=\"ftp_username\" value=\"" . escape_html($ftp_username) . "\" /></td></tr>
+                    <tr><th>{$l_ftp_password}:</th><td><input size=\"50\" type=\"password\" name=\"ftp_password\" /></td></tr>
+            </tbody>
+        </table>
+        <hr class=\"spaced_rule\" />
+        ";
     }
 
     echo "
-	<p>
-		<input class=\"menu__site_meta__user_actions__login button_screen\" type=\"submit\" value=\"{$l_login}\" />
-	</p>
-	</form>
-	";
+    <p>
+        <input class=\"menu__site_meta__user_actions__login button_screen\" type=\"submit\" value=\"{$l_login}\" />
+    </p>
+    </form>
+    ";
 
     echo "
-	<hr class=\"spaced_rule\" />
-	<div style=\"font-size: 0.8em\">
-	<h2>{$l_login_forgot_password_q}</h2>
-	<p>{$l_login_info_pass_forget}</p>
-	</div>
-	";
+    <hr class=\"spaced_rule\" />
+    <div style=\"font-size: 0.8em\">
+    <h2>{$l_login_forgot_password_q}</h2>
+    <p>{$l_login_info_pass_forget}</p>
+    </div>
+    ";
 }
 
 /**
@@ -663,26 +663,26 @@ function up_do_header()
     @ob_end_clean();
     echo <<<END
 <!DOCTYPE html>
-	<html lang="{$lang}" dir="{$dir}">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset={$charset}" />
+    <html lang="{$lang}" dir="{$dir}">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset={$charset}" />
 
-		<title>{$upgrader_title}</title>
-		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
+        <title>{$upgrader_title}</title>
+        <link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 
-		<style>/*<![CDATA[*/
+        <style>/*<![CDATA[*/
 END;
     @print(file_get_contents(css_enforce('global','default',false)));
     echo <<<END
-			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
-			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		/*]]>*/</style>
+            .screen_title { text-decoration: underline; display: block; background: url('themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
+            a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
+        /*]]>*/</style>
 
-		<meta name="robots" content="noindex, nofollow" />
-	</head>
-	<body class="website_body"><div class="global_middle">
-		<h1 class="screen_title">{$upgrader_title}</h1>
-		<p>{$upgrader_intro}</p><hr class="spaced_rule" />
+        <meta name="robots" content="noindex, nofollow" />
+    </head>
+    <body class="website_body"><div class="global_middle">
+        <h1 class="screen_title">{$upgrader_title}</h1>
+        <p>{$upgrader_intro}</p><hr class="spaced_rule" />
 END;
 }
 
@@ -692,7 +692,7 @@ END;
 function up_do_footer()
 {
     echo <<<END
-	</div></body>
+    </div></body>
 </html>
 END;
 }
@@ -723,7 +723,7 @@ function clear_caches_2()
 /**
  * Find extra directories to chmod
  *
- * @return array		Extra directories to chmod
+ * @return array                        Extra directories to chmod
  */
 function get_chmod_array_2()
 {
@@ -743,7 +743,7 @@ function get_chmod_array_2()
 /**
  * Do permission checking
  *
- * @return string		Output messages
+ * @return string                       Output messages
  */
 function check_perms()
 {
@@ -786,15 +786,15 @@ function check_perms()
             }
         }
         /*if (strpos($chmod,'themes/default')!==false) // chmod ALL theme files
-		{
-			foreach (array_keys($themes) as $theme)
-			{
-				$_chmod=str_replace('themes/default','themes/'.$theme,$chmod);
-				if (!file_exists(get_file_base().'/'.$_chmod)) continue;
-				if (!is_writable_wrap(get_file_base().'/'.$_chmod)) $out.='<li>'.do_lang('FU_NEEDS_CHMOD','<kbd>'.escape_html($_chmod).'</kbd>').'</li>';
-			}
-		} else
-		{*/
+        {
+            foreach (array_keys($themes) as $theme)
+            {
+                    $_chmod=str_replace('themes/default','themes/'.$theme,$chmod);
+                    if (!file_exists(get_file_base().'/'.$_chmod)) continue;
+                    if (!is_writable_wrap(get_file_base().'/'.$_chmod)) $out.='<li>'.do_lang('FU_NEEDS_CHMOD','<kbd>'.escape_html($_chmod).'</kbd>').'</li>';
+            }
+        } else
+        {*/
             if (!file_exists(get_file_base() . '/' . $chmod)) {
                 continue;
             }
@@ -816,7 +816,7 @@ function check_perms()
 /**
  * Do permission setting
  *
- * @return string		Output messages
+ * @return string                       Output messages
  */
 function fix_perms()
 {
@@ -860,16 +860,16 @@ function fix_perms()
             }
         }
         /*if (strpos($chmod,'themes/default')!==false)
-		{
-			foreach (array_keys($themes) as $theme)
-			{
-				$_chmod=str_replace('themes/default','themes/'.$theme,$chmod);
-				if (!file_exists(get_file_base().'/'.$_chmod)) continue;
-				if (!is_writable_wrap(get_file_base().'/'.$_chmod))
-					afm_set_perms($_chmod,true);
-			}
-		} else
-		{*/
+        {
+            foreach (array_keys($themes) as $theme)
+            {
+                    $_chmod=str_replace('themes/default','themes/'.$theme,$chmod);
+                    if (!file_exists(get_file_base().'/'.$_chmod)) continue;
+                    if (!is_writable_wrap(get_file_base().'/'.$_chmod))
+                            afm_set_perms($_chmod,true);
+            }
+        } else
+        {*/
             if (!file_exists(get_file_base() . '/' . $chmod)) {
                 continue;
             }
@@ -899,7 +899,7 @@ function fix_perms()
 /**
  * Tell the user about any modules that need moving again (because the ocp ones haven't moved).
  *
- * @return array		Pair: HTML list of moved files, raw list
+ * @return array                        Pair: HTML list of moved files, raw list
  */
 function move_modules()
 {
@@ -934,9 +934,9 @@ function move_modules()
 /**
  * Find any excess permissions
  *
- * @param  array		Permissions that DO need to be set
- * @param  string		Where we are searching under
- * @return string		Messages
+ * @param  array                        Permissions that DO need to be set
+ * @param  string                       Where we are searching under
+ * @return string                       Messages
  */
 function check_excess_perms($array,$rel = '')
 {
@@ -979,10 +979,10 @@ function check_excess_perms($array,$rel = '')
 /**
  * Do an integrity check. This does not include an alien check in basic mode; otherwise check_alien() is called within this function.
  *
- * @param  boolean	Whether to just do the minimum basic scan.
- * @param  boolean 	Whether merging of CSS changes is allowed.
- * @param  boolean 	Whether to give some help to unix people.
- * @return string		Results.
+ * @param  boolean                      Whether to just do the minimum basic scan.
+ * @param  boolean                      Whether merging of CSS changes is allowed.
+ * @param  boolean                      Whether to give some help to unix people.
+ * @return string                       Results.
  */
 function run_integrity_check($basic = false,$allow_merging = true,$unix_help = false)
 {
@@ -1219,12 +1219,12 @@ function run_integrity_check($basic = false,$allow_merging = true,$unix_help = f
 /**
  * Check for out-dated files.
  *
- * @param  SHORT_TEXT	The directory we are scanning relative to
- * @param  SHORT_TEXT	The directory (relative) we are scanning
- * @param  array 			Unserialised data/files.dat
- * @param  array 			A list of the contents of our addon registry hook files
- * @param  boolean 		Whether merging of CSS changes is allowed
- * @return array			Tuple of various kinds of outdated/missing files
+ * @param  SHORT_TEXT                   The directory we are scanning relative to
+ * @param  SHORT_TEXT                   The directory (relative) we are scanning
+ * @param  array                        Unserialised data/files.dat
+ * @param  array                        A list of the contents of our addon registry hook files
+ * @param  boolean                      Whether merging of CSS changes is allowed
+ * @return array                        Tuple of various kinds of outdated/missing files
  */
 function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,$allow_merging)
 {
@@ -1331,13 +1331,13 @@ function check_outdated__handle_overrides($dir,$rela,&$master_data,&$hook_files,
 /**
  * Check for alien files.
  *
- * @param  array			List of files from non-bundled addons (a map: relative file paths as keys of map)
- * @param  array			List of files from old version
- * @param  array			List of verbatim files
- * @param  SHORT_TEXT	The directory we are scanning relative to
- * @param  SHORT_TEXT	The directory (relative) we are scanning
- * @param  boolean		Whether to give raw output (no UI)
- * @return array			A pair: HTML list of alien files, HTML list of addon files
+ * @param  array                        List of files from non-bundled addons (a map: relative file paths as keys of map)
+ * @param  array                        List of files from old version
+ * @param  array                        List of verbatim files
+ * @param  SHORT_TEXT                   The directory we are scanning relative to
+ * @param  SHORT_TEXT                   The directory (relative) we are scanning
+ * @param  boolean                      Whether to give raw output (no UI)
+ * @return array                        A pair: HTML list of alien files, HTML list of addon files
  */
 function check_alien($addon_files,$old_files,$files,$dir,$rela = '',$raw = false)
 {
@@ -1476,7 +1476,7 @@ function _integrity_scan()
 /**
  * Version specific upgrading. These are things that are relatively major structural changes and therefore will get done outside the module upgrade system.
  *
- * @return boolean		Whether anything was done
+ * @return boolean                      Whether anything was done
  */
 function version_specific()
 {
@@ -1584,9 +1584,9 @@ function version_specific()
 /**
  * Rename a zone in the database and move any custom pages in it.
  *
- * @param  ID_TEXT		The old name of the zone
- * @param  ID_TEXT		The new name of the zone
- * @param  boolean		Whether to assume the main zone row has already been renamed as part of a wider editing operation
+ * @param  ID_TEXT                      The old name of the zone
+ * @param  ID_TEXT                      The new name of the zone
+ * @param  boolean                      Whether to assume the main zone row has already been renamed as part of a wider editing operation
  */
 function fu_rename_zone($zone,$new_zone,$dont_bother_with_main_row = false)
 {
@@ -1611,7 +1611,7 @@ function fu_rename_zone($zone,$new_zone,$dont_bother_with_main_row = false)
 /**
  * Upgrade all modules.
  *
- * @return string		List of upgraded/installed modules/blocks
+ * @return string                       List of upgraded/installed modules/blocks
  */
 function upgrade_modules()
 {
@@ -1694,7 +1694,7 @@ function upgrade_modules()
 /**
  * Upgrade OCF if appropriate.
  *
- * @return boolean		Whether anything was done
+ * @return boolean                      Whether anything was done
  */
 function ocf_upgrade()
 {
@@ -1741,9 +1741,9 @@ function fix_mysql_database_charset()
 /**
  * Refresh a MySQL database's character set.
  *
- * @param  ID_TEXT		Character set
- * @param  object			Database
- * @param  boolean		Whether to let MySQL do a reencoding of the characters (if this is set to false we actually are adjusting the interpretation whilst leaving the disk data the same)
+ * @param  ID_TEXT                      Character set
+ * @param  object                       Database
+ * @param  boolean                      Whether to let MySQL do a reencoding of the characters (if this is set to false we actually are adjusting the interpretation whilst leaving the disk data the same)
  */
 function change_mysql_database_charset($new_charset,$db,$reencode = false)
 {
@@ -1819,7 +1819,7 @@ function change_mysql_database_charset($new_charset,$db,$reencode = false)
 /**
  * Upgrade all themes.
  *
- * @return  string	HTML output
+ * @return  string   HTML output
  */
 function upgrade_themes()
 {
@@ -1864,11 +1864,11 @@ function upgrade_themes()
 /**
  * Upgrade a theme automatically, using hand-coded migration arrays.
  *
- * @param   ID_TEXT	Theme to be upgraded
- * @param   float		From version
- * @param   float		Target version
- * @param   boolean	Whether executing a test run (i.e. not do anything)
- * @return  array		A pair: List of errors, List of successes
+ * @param   ID_TEXT  Theme to be upgraded
+ * @param   float    From version
+ * @param   float    Target version
+ * @param   boolean  Whether executing a test run (i.e. not do anything)
+ * @return  array    A pair: List of errors, List of successes
  */
 function upgrade_theme($theme,$from_version,$to_version,$test_run = true)
 {
@@ -1931,12 +1931,12 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run = true)
         );
 
         /*Find deleted/renamed templates:
-		OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -r $OLD $NEW | grep .tpl$ | grep "Only in "$OLD | sed "s#Only in "$OLD": ##"*/
+        OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -r $OLD $NEW | grep .tpl$ | grep "Only in "$OLD | sed "s#Only in "$OLD": ##"*/
         $templates_rename = array(
         );
 
         /*Find diff of changes templates
-		OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -u $OLD $NEW > ~/Desktop/diff.txt*/
+        OLD=/Library/WebServer/Documents/test/themes/default/templates ; NEW=/Library/WebServer/Documents/git/themes/default/templates ; diff -u $OLD $NEW > ~/Desktop/diff.txt*/
         $templates_borked = array(
         );
     } else {
@@ -1967,7 +1967,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run = true)
             $orig_css_file_contents = $css_file_contents;
             if (strpos($css_file_contents,$css_recognition_string) === false) {
                 $errors[] = do_lang_tempcode('NON_RECOGNISED_CSS_FILE',escape_html($css_file),escape_html(float_to_raw_string($from_version)));
-                //continue;		Actually we'll let it pass
+                //continue;      Actually we'll let it pass
             }
 
             // Apply single match rules. First check single match rules apply exactly once (means rule is bogus if it matches more than once, or unusable if not at all)
@@ -2223,7 +2223,7 @@ function upgrade_theme($theme,$from_version,$to_version,$test_run = true)
 /**
  * Upgrade shared installs.
  *
- * @param   integer	Position to proceed from
+ * @param   integer  Position to proceed from
  */
 function upgrade_sharedinstall_sites($from = 0)
 {

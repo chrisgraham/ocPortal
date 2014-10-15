@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		wordfilter
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    wordfilter
  */
 
 class Hook_sw_wordfilter
 {
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @return array		Current settings.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @return array                    Current settings.
+     */
     public function get_current_settings()
     {
         $settings = array();
@@ -33,11 +33,11 @@ class Hook_sw_wordfilter
     }
 
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @param  array		Default values for the fields, from the install-profile.
-	 * @return tempcode	An input field.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @param  array                    Default values for the fields, from the install-profile.
+     * @return tempcode                 An input field.
+     */
     public function get_fields($field_defaults)
     {
         $current_settings = $this->get_current_settings();
@@ -52,8 +52,8 @@ class Hook_sw_wordfilter
     }
 
     /**
-	 * Run function for setting features from the setup wizard.
-	 */
+     * Run function for setting features from the setup wizard.
+     */
     public function set_fields()
     {
         if (post_param_integer('have_default_wordfilter',0) == 0) {

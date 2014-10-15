@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		syndication
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    syndication
  */
 
 /**
@@ -43,7 +43,7 @@ function backend_cloud_script()
         exit('false');
     }
     $port = post_param_integer('port','80');
-//	$watching_channel=$_POST['channels'];
+// $watching_channel=$_POST['channels'];
     $status = _cloud_register_them($path,$procedure,$protocol,$port,get_param('type',''));
     if (!$status) {
         exit('false');
@@ -54,12 +54,12 @@ function backend_cloud_script()
 /**
  * Set up an RSS cloud registration.
  *
- * @param  SHORT_TEXT	The news category title
- * @param  ID_TEXT		The procedure they are interested in
- * @param  ID_TEXT		The protocol they are using
- * @param  integer		The port to connect to them on
- * @param  string			The channel they are interested in
- * @return boolean		Success status
+ * @param  SHORT_TEXT                   The news category title
+ * @param  ID_TEXT                      The procedure they are interested in
+ * @param  ID_TEXT                      The protocol they are using
+ * @param  integer                      The port to connect to them on
+ * @param  string                       The channel they are interested in
+ * @return boolean                      Success status
  */
 function _cloud_register_them($path,$procedure,$protocol,$port,$watching_channel)
 {
@@ -240,9 +240,9 @@ function rss_backend_script()
 /**
  * Get enclosure details from a URL, as efficiently as possible.
  *
- * @param  URLPATH		The (possibly short) URL to get details for
- * @param  URLPATH		The full URL to get details for
- * @return array			A pair: the length of the data, the mime type
+ * @param  URLPATH                      The (possibly short) URL to get details for
+ * @param  URLPATH                      The full URL to get details for
+ * @return array                        A pair: the length of the data, the mime type
  */
 function get_enclosure_details($url,$enclosure_url)
 {

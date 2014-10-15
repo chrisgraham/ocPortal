@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_themeing
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_themeing
  */
 
 /**
@@ -31,7 +31,7 @@ function init__lorem()
 /**
  * Get suitable placeholder text.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function lorem_word()
 {
@@ -41,7 +41,7 @@ function lorem_word()
 /**
  * Get suitable placeholder text.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function lorem_word_2()
 {
@@ -51,7 +51,7 @@ function lorem_word_2()
 /**
  * Get suitable placeholder text.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function lorem_phrase()
 {
@@ -61,7 +61,7 @@ function lorem_phrase()
 /**
  * Get suitable placeholder text: title.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function lorem_title()
 {
@@ -71,7 +71,7 @@ function lorem_title()
 /**
  * Get suitable placeholder text: title.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_ip()
 {
@@ -81,7 +81,7 @@ function placeholder_ip()
 /**
  * Get suitable placeholder text.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function lorem_sentence()
 {
@@ -91,7 +91,7 @@ function lorem_sentence()
 /**
  * Get suitable placeholder text.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function lorem_paragraph()
 {
@@ -101,7 +101,7 @@ function lorem_paragraph()
 /**
  * Get suitable placeholder text.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function lorem_chunk()
 {
@@ -111,7 +111,7 @@ function lorem_chunk()
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function lorem_word_html()
 {
@@ -125,7 +125,7 @@ function lorem_word_html()
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function lorem_word_2_html()
 {
@@ -139,7 +139,7 @@ function lorem_word_2_html()
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function lorem_phrase_html()
 {
@@ -153,7 +153,7 @@ function lorem_phrase_html()
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function lorem_sentence_html()
 {
@@ -167,7 +167,7 @@ function lorem_sentence_html()
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function lorem_paragraph_html()
 {
@@ -181,7 +181,7 @@ function lorem_paragraph_html()
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function lorem_chunk_html()
 {
@@ -195,7 +195,7 @@ function lorem_chunk_html()
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function placeholder_form()
 {
@@ -211,7 +211,7 @@ function placeholder_form()
 /**
  * Get fields
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function placeholder_fields()
 {
@@ -227,7 +227,7 @@ function placeholder_fields()
 /**
  * Get fields, but composed of divs (used by forum)
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function placeholder_fields_as_divs()
 {
@@ -243,8 +243,8 @@ function placeholder_fields_as_divs()
 /**
  * Get form with a field
  *
- * @param  ID_TEXT		The field name wanted.
- * @return tempcode		Place holder text.
+ * @param  ID_TEXT                      The field name wanted.
+ * @return tempcode                     Place holder text.
  */
 function placeholder_form_with_field($field_name)
 {
@@ -265,7 +265,7 @@ function placeholder_form_with_field($field_name)
 /**
  * Get suitable placeholder text.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function placeholder_table()
 {
@@ -279,7 +279,7 @@ function placeholder_table()
 /**
  * Get suitable placeholder URL.
  *
- * @return tempcode		Place holder URL.
+ * @return tempcode                     Place holder URL.
  */
 function placeholder_url()
 {
@@ -293,7 +293,7 @@ function placeholder_url()
 /**
  * Get suitable placeholder link.
  *
- * @return tempcode		Place holder link.
+ * @return tempcode                     Place holder link.
  */
 function placeholder_link()
 {
@@ -307,7 +307,7 @@ function placeholder_link()
 /**
  * Get a random number
  *
- * @return string			Random number
+ * @return string                       Random number
  */
 function placeholder_random()
 {
@@ -320,7 +320,7 @@ function placeholder_random()
 /**
  * Get a random ID
  *
- * @return string			Random ID
+ * @return string                       Random ID
  */
 function placeholder_random_id()
 {
@@ -333,7 +333,7 @@ function placeholder_random_id()
 /**
  * Get a button
  *
- * @return tempcode		Button
+ * @return tempcode                     Button
  */
 function placeholder_button()
 {
@@ -347,7 +347,7 @@ function placeholder_button()
 /**
  * Get options for drop-down box
  *
- * @return string		Place holder text
+ * @return string                       Place holder text
  */
 function placeholder_options()
 {
@@ -362,8 +362,8 @@ function placeholder_options()
 /**
  * Get an array
  *
- * @param  integer		Number of array elements.
- * @return array			Place holder array.
+ * @param  integer                      Number of array elements.
+ * @return array                        Place holder array.
  */
 function placeholder_array($num_elements = 3)
 {
@@ -378,7 +378,7 @@ function placeholder_array($num_elements = 3)
 /**
  * Get a list
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_list_item()
 {
@@ -388,7 +388,7 @@ function placeholder_list_item()
 /**
  * Get some set of data
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_types()
 {
@@ -398,7 +398,7 @@ function placeholder_types()
 /**
  * Get an image
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function placeholder_image()
 {
@@ -412,7 +412,7 @@ function placeholder_image()
 /**
  * Get suitable placeholder date.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_date()
 {
@@ -422,7 +422,7 @@ function placeholder_date()
 /**
  * Get time
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_time()
 {
@@ -432,7 +432,7 @@ function placeholder_time()
 /**
  * Get suitable placeholder timestamp.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_date_raw()
 {
@@ -442,7 +442,7 @@ function placeholder_date_raw()
 /**
  * Get suitable placeholder number.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_number()
 {
@@ -452,7 +452,7 @@ function placeholder_number()
 /**
  * Get suitable placeholder ID.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_id()
 {
@@ -462,7 +462,7 @@ function placeholder_id()
 /**
  * Get suitable placeholder filesize.
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_filesize()
 {
@@ -473,7 +473,7 @@ function placeholder_filesize()
 /**
  * Get javascript code
  *
- * @return string			Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_javascript_code()
 {
@@ -483,7 +483,7 @@ function placeholder_javascript_code()
 /**
  * Get image url
  *
- * @return string			Image url
+ * @return string                       Image url
  */
 function placeholder_image_url()
 {
@@ -493,7 +493,7 @@ function placeholder_image_url()
 /**
  * Get a blank screen, for a parameter which is not visible and typically blank.
  *
- * @return string		Place holder text.
+ * @return string                       Place holder text.
  */
 function placeholder_blank()
 {
@@ -503,7 +503,7 @@ function placeholder_blank()
 /**
  * Get suitable placeholder breadcrumbs.
  *
- * @return tempcode		Place holder text.
+ * @return tempcode                     Place holder text.
  */
 function placeholder_breadcrumbs()
 {
@@ -517,15 +517,15 @@ function placeholder_breadcrumbs()
 /**
  * Lorem version of do_template. It will reprocess the template into something that is "stable XHTML" and thus can work inside an XHTML editor
  *
- * @param  ID_TEXT			The codename of the template being loaded
- * @param  ?array				A map of parameters for the template (key to value) (NULL: no parameters)
- * @param  ?LANGUAGE_NAME 	The language to load the template in (templates can embed language references) (NULL: users own language)
- * @param  boolean			Whether to not produce a stack dump if the template is missing
- * @param  ?ID_TEXT			Alternate template to use if the primary one does not exist (NULL: none)
- * @param  string				File type suffix of template file (e.g. .tpl)
- * @param  string				Subdirectory type to look in
+ * @param  ID_TEXT                      The codename of the template being loaded
+ * @param  ?array                       A map of parameters for the template (key to value) (NULL: no parameters)
+ * @param  ?LANGUAGE_NAME               The language to load the template in (templates can embed language references) (NULL: users own language)
+ * @param  boolean                      Whether to not produce a stack dump if the template is missing
+ * @param  ?ID_TEXT                     Alternate template to use if the primary one does not exist (NULL: none)
+ * @param  string                       File type suffix of template file (e.g. .tpl)
+ * @param  string                       Subdirectory type to look in
  * @set    templates css
- * @return tempcode			The tempcode for this template
+ * @return tempcode                     The tempcode for this template
  */
 function do_lorem_template($codename,$parameters = null,$lang = null,$light_error = false,$fallback = null,$suffix = '.tpl',$type = 'templates')
 {
@@ -535,12 +535,12 @@ function do_lorem_template($codename,$parameters = null,$lang = null,$light_erro
 /**
  * Lorem version of globalise. It will wrap the input into something that is "stable XHTML" and thus can work inside an XHTML editor.
  *
- * @param  tempcode		The tempcode to put into a nice frame
- * @param  ?mixed			'Additional' message (NULL: none)
- * @param  string			The type of special message
+ * @param  tempcode                     The tempcode to put into a nice frame
+ * @param  ?mixed                       'Additional' message (NULL: none)
+ * @param  string                       The type of special message
  * @set    inform warn ""
- * @param  boolean		Whether to include the header/footer/panels
- * @return tempcode		Standalone page
+ * @param  boolean                      Whether to include the header/footer/panels
+ * @return tempcode                     Standalone page
  */
 function lorem_globalise($middle,$message = null,$type = '',$include_header_and_footer = false)
 {
@@ -565,7 +565,7 @@ function lorem_globalise($middle,$message = null,$type = '',$include_header_and_
 /**
  * Get an array of emoticons.
  *
- * @return array		emoticons
+ * @return array                        emoticons
  */
 function placeholder_emoticons()
 {
@@ -592,7 +592,7 @@ function placeholder_emoticons()
 /**
  * Get an avatar image.
  *
- * @return URLPATH		image
+ * @return URLPATH                      image
  */
 function placeholder_avatar()
 {
@@ -602,7 +602,7 @@ function placeholder_avatar()
 /**
  * Get a table of emoticons.
  *
- * @return tempcode		emotocons
+ * @return tempcode                     emotocons
  */
 function placeholder_emoticon_chooser()
 {
@@ -617,8 +617,8 @@ function placeholder_emoticon_chooser()
 /**
  * Get a theme image code.
  *
- * @param  string			The theme image directory to find a code under
- * @return string			The code
+ * @param  string                       The theme image directory to find a code under
+ * @return string                       The code
  */
 function placeholder_img_code($type = '')
 {
@@ -650,7 +650,7 @@ function placeholder_img_code($type = '')
 /**
  * Get pagination.
  *
- * @return tempcode		Pagination.
+ * @return tempcode                     Pagination.
  */
 function placeholder_pagination()
 {
@@ -743,7 +743,7 @@ function placeholder_pagination()
 /**
  * Get all Comcode files.
  *
- * @return array		List of Comcode files.
+ * @return array                        List of Comcode files.
  */
 function find_comcodes()
 {
@@ -759,7 +759,7 @@ function find_comcodes()
 /**
  * Get all HTML files.
  *
- * @return array		List of HTML files.
+ * @return array                        List of HTML files.
  */
 function find_html()
 {
@@ -775,7 +775,7 @@ function find_html()
 /**
  * Find the template/screen previews
  *
- * @return array		The map of previews (template to a tuple of preview details)
+ * @return array                        The map of previews (template to a tuple of preview details)
  */
 function find_all_previews__by_template()
 {
@@ -802,7 +802,7 @@ function find_all_previews__by_template()
 /**
  * Find the template/screen previews
  *
- * @return array		The map of previews (screen to a list of templates)
+ * @return array                        The map of previews (screen to a list of templates)
  */
 function find_all_previews__by_screen()
 {
@@ -830,10 +830,10 @@ function find_all_previews__by_screen()
 /**
  * Shows the preview of a screen
  *
- * @param  ID_TEXT		The template to be previewed
- * @param  ?ID_TEXT		The hook the preview is in (NULL: search)
- * @param  ID_TEXT		The name of the screen preview
- * @return tempcode		The previewed screen
+ * @param  ID_TEXT                      The template to be previewed
+ * @param  ?ID_TEXT                     The hook the preview is in (NULL: search)
+ * @param  ID_TEXT                      The name of the screen preview
+ * @return tempcode                     The previewed screen
  */
 function render_screen_preview($template,$hook,$function)
 {
@@ -880,7 +880,7 @@ function render_screen_preview($template,$hook,$function)
         $complete_html = false;
     }
     if (is_plain_text_template($temp_name)) {
-        //@header('Content-type: text/plain');		Let it show with WITH_WHITESPACE
+        //@header('Content-type: text/plain');     Let it show with WITH_WHITESPACE
         $text = true;
     } else {
         $text = false;
@@ -904,7 +904,7 @@ function render_screen_preview($template,$hook,$function)
 /**
  * Get an additional list of templates that should be treated as text.
  *
- * @return array			The list of templates
+ * @return array                        The list of templates
  */
 function get_text_templates()
 {
@@ -941,8 +941,8 @@ function get_text_templates()
 /**
  * Checks if the template is a text template
  *
- * @param  string		Name of the template
- * @return boolean	Whether it is
+ * @param  string                       Name of the template
+ * @return boolean                      Whether it is
  */
 function is_plain_text_template($temp_name)
 {
@@ -967,9 +967,9 @@ function is_plain_text_template($temp_name)
 /**
  * Checks if the template is a full screen template
  *
- * @param  ?string		Name of the template (NULL: do not use as criteria, use other as criteria, which must iself be non-NULL)
- * @param  ?tempcode		The instantiated template (NULL: do not use as criteria, use other as criteria, which must iself be non-NULL)
- * @return boolean		Whether it is
+ * @param  ?string                      Name of the template (NULL: do not use as criteria, use other as criteria, which must iself be non-NULL)
+ * @param  ?tempcode                    The instantiated template (NULL: do not use as criteria, use other as criteria, which must iself be non-NULL)
+ * @return boolean                      Whether it is
  */
 function is_full_screen_template($temp_name = null,$tempcode = null)
 {

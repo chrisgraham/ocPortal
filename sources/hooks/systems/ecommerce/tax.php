@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 class Hook_tax
 {
     /**
-	 * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
-	 *
-	 * @param  ID_TEXT		Product codename.
-	 * @return ?tempcode		Input field in standard Tempcode format for fields (NULL: no identifier).
-	 */
+     * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
+     *
+     * @param  ID_TEXT                  Product codename.
+     * @return ?tempcode                Input field in standard Tempcode format for fields (NULL: no identifier).
+     */
     public function get_identifier_manual_field_inputter($type_code)
     {
         return NULL;
     }
 
     /**
-	 * Get the products handled by this eCommerce hook.
+     * Get the products handled by this eCommerce hook.
     *
-	 * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
+     * IMPORTANT NOTE TO PROGRAMMERS: This function may depend only on the database, and not on get_member() or any GET/POST values.
     *  Such dependencies will break IPN, which works via a Guest and no dependable environment variables. It would also break manual transactions from the Admin Zone.
-	 *
-	 * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
-	 * @return array		A map of product name to list of product details.
-	 */
+     *
+     * @param  boolean                  Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
+     * @return array                    A map of product name to list of product details.
+     */
     public function get_products($site_lang = false)
     {
         $products = array(

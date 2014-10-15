@@ -18,7 +18,7 @@
 /*EXTRA FUNCTIONS: shell_exec*/
 
 /**
- * @copyright	Francesco M. Munafo'
+ * @copyright  Francesco M. Munafo'
  * @package core
  */
 
@@ -37,38 +37,38 @@ function init__m_zip()
     if (!function_exists('zip_open')) {
         @eval("class ZIPARCHIVE
 {
-	const ER_OK=0;  /* N No error */
-	const ER_MULTIDISK=1;  /* N Multi-disk zip archives not supported */
-	const ER_RENAME=2;  /* S Renaming temporary file failed */
-	const ER_CLOSE=3;  /* S Closing zip archive failed */
-	const ER_SEEK=4;  /* S Seek error */
-	const ER_READ=5;  /* S Read error */
-	const ER_WRITE=6;  /* S Write error */
-	const ER_CRC=7;  /* N CRC error */
-	const ER_ZIPCLOSED=8;  /* N Containing zip archive was closed */
-	const ER_NOENT=9;  /* N No such file */
-	const ER_EXISTS=10;  /* N File already exists */
-	const ER_OPEN=11;  /* S Can't open file */
-	const ER_TMPOPEN=12;  /* S Failure to create temporary file */
-	const ER_ZLIB=13;  /* Z Zlib error */
-	const ER_MEMORY=14;  /* N Malloc failure */
-	const ER_CHANGED=15;  /* N Entry has been changed */
-	const ER_COMPNOTSUPP=16;  /* N Compression method not supported */
-	const ER_EOF=17;  /* N Premature EOF */
-	const ER_INVAL=18;  /* N Invalid argument */
-	const ER_NOZIP=19;  /* N Not a zip archive */
-	const ER_INTERNAL=20;  /* N Internal error */
-	const ER_INCONS=21;  /* N Zip archive inconsistent */
-	const ER_REMOVE=22;  /* S Can't remove file */
-	const ER_DELETED=23;  /* N Entry has been deleted */
+    const ER_OK=0;  /* N No error */
+    const ER_MULTIDISK=1;  /* N Multi-disk zip archives not supported */
+    const ER_RENAME=2;  /* S Renaming temporary file failed */
+    const ER_CLOSE=3;  /* S Closing zip archive failed */
+    const ER_SEEK=4;  /* S Seek error */
+    const ER_READ=5;  /* S Read error */
+    const ER_WRITE=6;  /* S Write error */
+    const ER_CRC=7;  /* N CRC error */
+    const ER_ZIPCLOSED=8;  /* N Containing zip archive was closed */
+    const ER_NOENT=9;  /* N No such file */
+    const ER_EXISTS=10;  /* N File already exists */
+    const ER_OPEN=11;  /* S Can't open file */
+    const ER_TMPOPEN=12;  /* S Failure to create temporary file */
+    const ER_ZLIB=13;  /* Z Zlib error */
+    const ER_MEMORY=14;  /* N Malloc failure */
+    const ER_CHANGED=15;  /* N Entry has been changed */
+    const ER_COMPNOTSUPP=16;  /* N Compression method not supported */
+    const ER_EOF=17;  /* N Premature EOF */
+    const ER_INVAL=18;  /* N Invalid argument */
+    const ER_NOZIP=19;  /* N Not a zip archive */
+    const ER_INTERNAL=20;  /* N Internal error */
+    const ER_INCONS=21;  /* N Zip archive inconsistent */
+    const ER_REMOVE=22;  /* S Can't remove file */
+    const ER_DELETED=23;  /* N Entry has been deleted */
 }
 ");
 
 /**
  * Open a zip file for reading.
  *
- * @param  PATH			The zip file path
- * @return mixed			The zip file resource (number if error)
+ * @param  PATH                         The zip file path
+ * @return mixed                        The zip file resource (number if error)
  */
 function zip_open($zip_file)
 {
@@ -136,8 +136,8 @@ function zip_open($zip_file)
 /**
  * Close a zip file.
  *
- * @param  array			The zip file resource
- * @return boolean		Whether the file closed correctly
+ * @param  array                        The zip file resource
+ * @return boolean                      Whether the file closed correctly
  */
 function zip_close($open_zip_file)
 {
@@ -168,8 +168,8 @@ function zip_close($open_zip_file)
 /**
  * Reads the next entry in a zip file archive.
  *
- * @param  array			The zip file resource
- * @return ~array			A directory entry resource for later use with the m_zip_entry_...() functions (false: if there's no more entries to read).
+ * @param  array                        The zip file resource
+ * @return ~array                       A directory entry resource for later use with the m_zip_entry_...() functions (false: if there's no more entries to read).
  */
 function zip_read($open_zip_file)
 {
@@ -256,9 +256,9 @@ function zip_read($open_zip_file)
 /**
  * Make a path relative.
  *
- * @param  PATH			The base path (path to make relative to)
- * @param  PATH			The path to make relative
- * @return PATH			The relative path
+ * @param  PATH                         The base path (path to make relative to)
+ * @param  PATH                         The path to make relative
+ * @return PATH                         The relative path
  */
 function _m_zip_RelPath($base_path,$path)
 {
@@ -277,11 +277,11 @@ function _m_zip_RelPath($base_path,$path)
 /**
  * Opens a directory entry in a zip file for reading.
  *
- * @param  array			The zip file resource
- * @param  array			Directory entry resource returned by m_zip_read()
- * @param  string			The file access mode
+ * @param  array                        The zip file resource
+ * @param  array                        Directory entry resource returned by m_zip_read()
+ * @param  string                       The file access mode
  * @set    rb
- * @return boolean		Whether the operation was succesful
+ * @return boolean                      Whether the operation was succesful
  */
 function zip_entry_open($zip,$zip_entry,$mode = 'rb')
 {
@@ -298,8 +298,8 @@ function zip_entry_open($zip,$zip_entry,$mode = 'rb')
 /**
  * Closes a directory entry previously opened for reading.
  *
- * @param  array			Directory entry resource returned by m_zip_read()
- * @return boolean		Whether the operation was succesful
+ * @param  array                        Directory entry resource returned by m_zip_read()
+ * @return boolean                      Whether the operation was succesful
  */
 function zip_entry_close($zip_entry)
 {
@@ -317,8 +317,8 @@ function zip_entry_close($zip_entry)
 /**
  * Returns the name of the directory entry specified in the given entry.
  *
- * @param  array			Directory entry resource returned by m_zip_read()
- * @return string			The entry name
+ * @param  array                        Directory entry resource returned by m_zip_read()
+ * @return string                       The entry name
  */
 function zip_entry_name($zip_entry)
 {
@@ -328,8 +328,8 @@ function zip_entry_name($zip_entry)
 /**
  * Returns the filesize of the directory entry specified in the given entry.
  *
- * @param  array			Directory entry resource returned by m_zip_read()
- * @return integer		The file size
+ * @param  array                        Directory entry resource returned by m_zip_read()
+ * @return integer                      The file size
  */
 function zip_entry_filesize($zip_entry)
 {
@@ -340,9 +340,9 @@ function zip_entry_filesize($zip_entry)
 /**
  * Returns the file data of the directory entry specified in the given entry.
  *
- * @param  array				Directory entry resource returned by m_zip_read()
- * @param  integer			The maximum returned data size
- * @return ~string			The data (false: failure)
+ * @param  array                        Directory entry resource returned by m_zip_read()
+ * @param  integer                      The maximum returned data size
+ * @return ~string                      The data (false: failure)
  */
 function zip_entry_read($zip_entry,$zip_entry_file_size = 1024)
 {
@@ -375,7 +375,7 @@ function zip_entry_read($zip_entry,$zip_entry_file_size = 1024)
  * Delete a directory of files.
  * From "User Contributed Notes" at http://it.php.net/manual/en/function.rmdir.php. Thanks flexer at cutephp dot com
  *
- * @param  PATH			The path to the directory
+ * @param  PATH                         The path to the directory
  */
 function m_deldir($a_dir)
 {

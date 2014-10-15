@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		captcha
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    captcha
  */
 
 /**
@@ -40,9 +40,9 @@ function captcha_script()
         generate_captcha();
         $code_needed = $GLOBALS['SITE_DB']->query_select_value_if_there('captchas','si_code',array('si_session_id' => get_session_id()));
 
-        /*set_http_status_code('500');		This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
+        /*set_http_status_code('500');    This would actually be very slightly insecure, as it could be used to probe (binary) login state via rogue sites that check if CAPTCHAs had been generated
 
-		warn_exit(do_lang_tempcode('CAPTCHA_NO_SESSION'));*/
+        warn_exit(do_lang_tempcode('CAPTCHA_NO_SESSION'));*/
     }
     mt_srand($_code_needed); // Important: to stop averaging out of different attempts. This makes the distortion consistent for that particular code.
 
@@ -58,7 +58,7 @@ function captcha_script()
             return;
         }
 
-        //header('Content-Disposition: attachment; filename="securityvoice.wav"');	Useful for testing
+        //header('Content-Disposition: attachment; filename="securityvoice.wav"');  Useful for testing
         $data = '';
         for ($i = 0;$i<strlen($code_needed);$i++) {
             $char = strtolower($code_needed[$i]);
@@ -161,13 +161,13 @@ function captcha_script()
     // Output using CSS
     if (get_option('css_captcha') === '1') {
         echo '
-		<!DOCTYPE html>
-		<html xmlns="http://www.w3.org/1999/xhtml">
-		<head>
-			<title>' . do_lang('CONTACT_STAFF_TO_JOIN_IF_IMPAIRED') . '</title>
-		</head>
-		<body>
-		';
+        <!DOCTYPE html>
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <title>' . do_lang('CONTACT_STAFF_TO_JOIN_IF_IMPAIRED') . '</title>
+        </head>
+        <body>
+        ';
         echo '<div style="width: ' . strval($width) . 'px; font-size: 0; line-height: 0">';
         for ($j = 0;$j<$height;$j++) {
             for ($i = 0;$i<$width;$i++) {
@@ -177,9 +177,9 @@ function captcha_script()
         }
         echo '</div>';
         echo '
-		</body>
-		</html>
-		';
+        </body>
+        </html>
+        ';
         imagedestroy($img);
         exit();
     }
@@ -193,7 +193,7 @@ function captcha_script()
 /**
  * Get a captcha (aka security code) form field.
  *
- * @return tempcode		The field
+ * @return tempcode                     The field
  */
 function form_input_captcha()
 {
@@ -209,7 +209,7 @@ function form_input_captcha()
 /**
  * Find whether captcha (the security image) should be used if preferred (making this call assumes it is preferred).
  *
- * @return boolean		Whether captcha is used
+ * @return boolean                      Whether captcha is used
  */
 function use_captcha()
 {
@@ -244,7 +244,7 @@ function generate_captcha()
 /**
  * Calling this assumes captcha was needed. Checks that it was done correctly.
  *
- * @param  boolean		Whether to possibly regenerate upon error.
+ * @param  boolean                      Whether to possibly regenerate upon error.
  */
 function enforce_captcha($regenerate_on_error = true)
 {
@@ -261,9 +261,9 @@ function enforce_captcha($regenerate_on_error = true)
 /**
  * Checks a CAPTCHA.
  *
- * @param  string			CAPTCHA entered.
- * @param  boolean		Whether to possibly regenerate upon error.
- * @return boolean		Whether it is valid for the current session.
+ * @param  string                       CAPTCHA entered.
+ * @param  boolean                      Whether to possibly regenerate upon error.
+ * @return boolean                      Whether it is valid for the current session.
  */
 function check_captcha($code_entered,$regenerate_on_error = true)
 {
@@ -306,7 +306,7 @@ function check_captcha($code_entered,$regenerate_on_error = true)
 /**
  * Get code to do an AJAX check of the CAPTCHA.
  *
- * @return string			JavaScript code.
+ * @return string                       JavaScript code.
  */
 function captcha_ajax_check()
 {
@@ -317,22 +317,22 @@ function captcha_ajax_check()
     require_javascript('javascript_ajax');
     $script = find_script('snippet');
     return "
-		var form=document.getElementById('main_form');
-		if (!form) form=document.getElementById('posting_form');
-		form.old_submit_b=form.onsubmit;
-		form.onsubmit=function()
-			{
-				document.getElementById('submit_button').disabled=true;
-				var url='" . addslashes($script) . "?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
-				if (!do_ajax_field_test(url))
-				{
-					document.getElementById('captcha').src+='&'; // Force it to reload latest captcha
-					document.getElementById('submit_button').disabled=false;
-					return false;
-				}
-				document.getElementById('submit_button').disabled=false;
-				if (typeof form.old_submit_b!='undefined' && form.old_submit_b) return form.old_submit_b();
-				return true;
-			};
-	";
+        var form=document.getElementById('main_form');
+        if (!form) form=document.getElementById('posting_form');
+        form.old_submit_b=form.onsubmit;
+        form.onsubmit=function()
+            {
+                    document.getElementById('submit_button').disabled=true;
+                    var url='" . addslashes($script) . "?snippet=captcha_wrong&name='+window.encodeURIComponent(form.elements['captcha'].value);
+                    if (!do_ajax_field_test(url))
+                    {
+                            document.getElementById('captcha').src+='&'; // Force it to reload latest captcha
+                            document.getElementById('submit_button').disabled=false;
+                            return false;
+                    }
+                    document.getElementById('submit_button').disabled=false;
+                    if (typeof form.old_submit_b!='undefined' && form.old_submit_b) return form.old_submit_b();
+                    return true;
+            };
+    ";
 }

@@ -13,25 +13,25 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 class Hook_pointstore_gambling
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
     }
 
     /**
-	 * Standard pointstore item initialisation function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item initialisation function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -45,10 +45,10 @@ class Hook_pointstore_gambling
     }
 
     /**
-	 * Standard interface stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard interface stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -79,10 +79,10 @@ class Hook_pointstore_gambling
     }
 
     /**
-	 * Standard actualisation stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard actualisation stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action_done()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -113,7 +113,7 @@ class Hook_pointstore_gambling
         $maximum_gamble_multiplier = floatval(get_option('maximum_gamble_multiplier'))/100.0;
         $above_average = (mt_rand(0,10)<5);
         if ($above_average) {
-            //			$winnings=round($average_gamble_multiplier*$amount+mt_rand(0,round($maximum_gamble_multiplier*$amount-$average_gamble_multiplier*$amount)));	  Even distribution is NOT wise
+            //       $winnings=round($average_gamble_multiplier*$amount+mt_rand(0,round($maximum_gamble_multiplier*$amount-$average_gamble_multiplier*$amount)));   Even distribution is NOT wise
             $peak = $maximum_gamble_multiplier*$amount;
             $under = 0.0;
             $number = intval(round($average_gamble_multiplier*$amount+mt_rand(0,intval(round($maximum_gamble_multiplier*$amount-$average_gamble_multiplier*$amount)))));

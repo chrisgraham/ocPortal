@@ -100,7 +100,7 @@ echo $tpl->evaluate();
  * You should remember this function, and not substitute anything else for it, as that will likely make your code unstable.
  * It is key to source code modularity in ocPortal.
  *
- * @param  string         The codename for the source module to load
+ * @param  string                       The codename for the source module to load
  */
 function require_code($code)
 {
@@ -126,8 +126,8 @@ function require_code($code)
 /**
  * Make an object of the given class
  *
- * @param  string			The class name
- * @return object			The object
+ * @param  string                       The class name
+ * @return object                       The object
  */
 function object_factory($class)
 {

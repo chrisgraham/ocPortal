@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 class Block_main_multi_content
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -62,52 +62,52 @@ class Block_main_multi_content
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
         $info['cache_on'] = '
-			(addon_installed(\'content_privacy\') || preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)
-			?
-			NULL
-			:
-			array(
-				array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,
-				array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',
-				(array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array():$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),
-				array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',
-				((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),
-				get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),
-				get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),
-				((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),
-				((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'keep_\'.(array_key_exists(\'param\',$map)?$map[\'param\']:\'download\').\'_root\',NULL),
-				(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',
-				(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',
-				array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',
-				array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,
-				((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,
-				((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,
-				((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),
-				array_key_exists(\'title\',$map)?$map[\'title\']:\'\',
-				array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',
-				array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',
-				array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',
-				array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',
-				array_key_exists(\'sort\',$map)?$map[\'sort\']:\'recent\'
-			)';
+            (addon_installed(\'content_privacy\') || preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)
+            ?
+            NULL
+            :
+            array(
+                    array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,
+                    array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',
+                    (array_key_exists(\'efficient\',$map) && $map[\'efficient\']==\'1\')?array():$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),
+                    array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',
+                    ((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),
+                    get_param_integer($block_id.\'_max\',array_key_exists(\'max\',$map)?intval($map[\'max\']):30),
+                    get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),
+                    ((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),
+                    ((array_key_exists(\'root\',$map)) && ($map[\'root\']!=\'\'))?intval($map[\'root\']):get_param_integer(\'keep_\'.(array_key_exists(\'param\',$map)?$map[\'param\']:\'download\').\'_root\',NULL),
+                    (array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',
+                    (array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',
+                    array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',
+                    array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,
+                    ((array_key_exists(\'days\',$map)) && ($map[\'days\']!=\'\'))?intval($map[\'days\']):NULL,
+                    ((array_key_exists(\'lifetime\',$map)) && ($map[\'lifetime\']!=\'\'))?intval($map[\'lifetime\']):NULL,
+                    ((array_key_exists(\'pinned\',$map)) && ($map[\'pinned\']!=\'\'))?explode(\',\',$map[\'pinned\']):array(),
+                    array_key_exists(\'title\',$map)?$map[\'title\']:\'\',
+                    array_key_exists(\'param\',$map)?$map[\'param\']:\'download\',
+                    array_key_exists(\'filter\',$map)?$map[\'filter\']:\'\',
+                    array_key_exists(\'filter_b\',$map)?$map[\'filter_b\']:\'\',
+                    array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',
+                    array_key_exists(\'sort\',$map)?$map[\'sort\']:\'recent\'
+            )';
         $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:30;
         return $info;
     }
 
     /**
-	 * Install the block.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the block.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         $GLOBALS['SITE_DB']->create_table('feature_lifetime_monitor',array(
@@ -120,19 +120,19 @@ class Block_main_multi_content
     }
 
     /**
-	 * Uninstall the block.
-	 */
+     * Uninstall the block.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('feature_lifetime_monitor');
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         if (isset($map['param'])) {
@@ -671,13 +671,13 @@ class Block_main_multi_content
     }
 
     /**
-	 * Make a filter SQL fragment.
-	 *
-	 * @param  string		The filter string.
-	 * @param  array		Map of details of our content type.
-	 * @param  string		The field name of the category to filter against.
-	 * @return string		SQL fragment.
-	 */
+     * Make a filter SQL fragment.
+     *
+     * @param  string                   The filter string.
+     * @param  array                    Map of details of our content type.
+     * @param  string                   The field name of the category to filter against.
+     * @return string                   SQL fragment.
+     */
     public function build_filter($filter,$info,$category_field_filter)
     {
         $parent_spec__table_name = array_key_exists('parent_spec__table_name',$info)?$info['parent_spec__table_name']:$info['table'];

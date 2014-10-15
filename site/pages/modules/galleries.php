@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_galleries
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_galleries
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('galleries');
@@ -65,11 +65,11 @@ class Module_galleries
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         require_code('galleries');
@@ -220,14 +220,14 @@ class Module_galleries
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -251,10 +251,10 @@ class Module_galleries
     public $category_name;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -479,10 +479,10 @@ class Module_galleries
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('feedback');
@@ -505,10 +505,10 @@ class Module_galleries
     }
 
     /**
-	 * The UI to show a gallery.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a gallery.
+     *
+     * @return tempcode                 The UI
+     */
     public function do_gallery()
     {
         $cat = $this->cat;
@@ -634,27 +634,27 @@ class Module_galleries
     }
 
     /**
-	 * The UI for a "flow mode" gallery.
-	 *
-	 * @param  tempcode		Rating area
-	 * @param  tempcode		Commenting area
-	 * @param  ID_TEXT		Our gallery ID
-	 * @param  ID_TEXT		Virtual root gallery
-	 * @param  tempcode		The description of the gallery
-	 * @param  tempcode		The tempcode for our visible child galleries
-	 * @param  boolean		Whether may "download this gallery"
-	 * @param  tempcode		The URL to "edit this gallery"
-	 * @param  tempcode		The URL to "add a gallery"
-	 * @param  tempcode		The URL to "submit an image to this gallery"
-	 * @param  tempcode		The URL to "submit a video to this gallery"
-	 * @param  tempcode		The title of the page (our of get_screen_title)
-	 * @param  URLPATH		The representative image for the gallery
-	 * @param  integer		The start position we are in browsing through child galleries
-	 * @param  integer		The maximum number of child galleries we can display per page
-	 * @param  string			The gallery title
-	 * @param  tempcode		Sorting UI
-	 * @return tempcode		The UI
-	 */
+     * The UI for a "flow mode" gallery.
+     *
+     * @param  tempcode                 Rating area
+     * @param  tempcode                 Commenting area
+     * @param  ID_TEXT                  Our gallery ID
+     * @param  ID_TEXT                  Virtual root gallery
+     * @param  tempcode                 The description of the gallery
+     * @param  tempcode                 The tempcode for our visible child galleries
+     * @param  boolean                  Whether may "download this gallery"
+     * @param  tempcode                 The URL to "edit this gallery"
+     * @param  tempcode                 The URL to "add a gallery"
+     * @param  tempcode                 The URL to "submit an image to this gallery"
+     * @param  tempcode                 The URL to "submit a video to this gallery"
+     * @param  tempcode                 The title of the page (our of get_screen_title)
+     * @param  URLPATH                  The representative image for the gallery
+     * @param  integer                  The start position we are in browsing through child galleries
+     * @param  integer                  The maximum number of child galleries we can display per page
+     * @param  string                   The gallery title
+     * @param  tempcode                 Sorting UI
+     * @return tempcode                 The UI
+     */
     public function do_gallery_flow_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$rep_image,$start,$max,$fullname,$sorting)
     {
         list($sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos) = $this->get_sort_order();
@@ -1002,24 +1002,24 @@ class Module_galleries
     }
 
     /**
-	 * The UI for an "regular mode" gallery.
-	 *
-	 * @param  tempcode		Rating area
-	 * @param  tempcode		Commenting area
-	 * @param  ID_TEXT		Our gallery ID
-	 * @param  ID_TEXT		Virtual root gallery
-	 * @param  tempcode		The description of the gallery
-	 * @param  tempcode		The tempcode for our visible child galleries
-	 * @param  boolean		Whether may "download this gallery"
-	 * @param  tempcode		The URL to "edit this gallery"
-	 * @param  tempcode		The URL to "add a gallery"
-	 * @param  tempcode		The URL to "submit an image to this gallery"
-	 * @param  tempcode		The URL to "submit a video to this gallery"
-	 * @param  tempcode		The title of the page (our of get_screen_title)
-	 * @param  string			The gallery title
-	 * @param  tempcode		Sorting UI
-	 * @return tempcode		The UI
-	 */
+     * The UI for an "regular mode" gallery.
+     *
+     * @param  tempcode                 Rating area
+     * @param  tempcode                 Commenting area
+     * @param  ID_TEXT                  Our gallery ID
+     * @param  ID_TEXT                  Virtual root gallery
+     * @param  tempcode                 The description of the gallery
+     * @param  tempcode                 The tempcode for our visible child galleries
+     * @param  boolean                  Whether may "download this gallery"
+     * @param  tempcode                 The URL to "edit this gallery"
+     * @param  tempcode                 The URL to "add a gallery"
+     * @param  tempcode                 The URL to "submit an image to this gallery"
+     * @param  tempcode                 The URL to "submit a video to this gallery"
+     * @param  tempcode                 The title of the page (our of get_screen_title)
+     * @param  string                   The gallery title
+     * @param  tempcode                 Sorting UI
+     * @return tempcode                 The UI
+     */
     public function do_gallery_regular_mode($rating_details,$comment_details,$cat,$root,$description,$children,$may_download,$edit_url,$add_gallery_url,$submit_image_url,$submit_video_url,$title,$fullname,$sorting)
     {
         // Entries
@@ -1067,12 +1067,12 @@ class Module_galleries
     }
 
     /**
-	 * The UI to show an image.
-	 *
-	 * @param  ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
-	 * @param  ?tempcode		Breadcrumbs (NULL: derive in this function).
-	 * @return tempcode		The UI
-	 */
+     * The UI to show an image.
+     *
+     * @param  ?string                  Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
+     * @param  ?tempcode                Breadcrumbs (NULL: derive in this function).
+     * @return tempcode                 The UI
+     */
     public function show_image($category_name = null,$breadcrumbs = null)
     {
         $id = $this->id;
@@ -1185,12 +1185,12 @@ class Module_galleries
     }
 
     /**
-	 * The UI to show a video.
-	 *
-	 * @param  ?string		Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
-	 * @param  ?tempcode		Breadcrumbs (NULL: derive in this function).
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a video.
+     *
+     * @param  ?string                  Alternate category name to use (NULL: use standard one). This is useful if you are overriding this code to show images in virtual galleries.
+     * @param  ?tempcode                Breadcrumbs (NULL: derive in this function).
+     * @return tempcode                 The UI
+     */
     public function show_video($category_name = null,$breadcrumbs = null)
     {
         $id = $this->id;
@@ -1310,28 +1310,28 @@ class Module_galleries
     }
 
     /**
-	 * Sort out gallery back/next navigation.
-	 *
-	 * @param  string			Where clause for doing set query
-	 * @param  string			Join clause for doing set query
-	 * @param  tempcode		The actual title for the gallery we are using
-	 * @param  ?AUTO_LINK	The ID of the current entry of the type we are browsing in the gallery we are using (NULL: assume first)
-	 * @param  ID_TEXT		The root gallery (the gallery we are considering as an adhoc root, to allow gallery splitting-up)
-	 * @param  ?ID_TEXT		The current type being browsed (NULL: assume first)
-	 * @set image video
-	 * @param  BINARY			If in slideshow
-	 * @param  BINARY			If panels hidden
-	 * @param  integer		Start position when returning to category
-	 * @param  integer		Max to show when returning to category
-	 * @param  ID_TEXT		Category
-	 * @param  ID_TEXT		Sort order
-	 * @param  ID_TEXT		Sort order for reverse sorting
-	 * @param  string			Select clause query suffix for images
-	 * @param  string			Select clause query suffix for videos
-	 * @param  string			ocFilter for limiting images displayed
-	 * @param  string			ocFilter for limiting videos displayed
-	 * @return array			A tuple of the navigation bits
-	 */
+     * Sort out gallery back/next navigation.
+     *
+     * @param  string                   Where clause for doing set query
+     * @param  string                   Join clause for doing set query
+     * @param  tempcode                 The actual title for the gallery we are using
+     * @param  ?AUTO_LINK               The ID of the current entry of the type we are browsing in the gallery we are using (NULL: assume first)
+     * @param  ID_TEXT                  The root gallery (the gallery we are considering as an adhoc root, to allow gallery splitting-up)
+     * @param  ?ID_TEXT                 The current type being browsed (NULL: assume first)
+     * @set image video
+     * @param  BINARY                   If in slideshow
+     * @param  BINARY                   If panels hidden
+     * @param  integer                  Start position when returning to category
+     * @param  integer                  Max to show when returning to category
+     * @param  ID_TEXT                  Category
+     * @param  ID_TEXT                  Sort order
+     * @param  ID_TEXT                  Sort order for reverse sorting
+     * @param  string                   Select clause query suffix for images
+     * @param  string                   Select clause query suffix for videos
+     * @param  string                   ocFilter for limiting images displayed
+     * @param  string                   ocFilter for limiting videos displayed
+     * @return array                    A tuple of the navigation bits
+     */
     public function build_set_navigation($where,$join,$category_name,$current_id,$root,$current_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,$image_select,$video_select)
     {
         $sv = (has_privilege(get_member(),'see_unvalidated') && (addon_installed('unvalidated')));
@@ -1426,39 +1426,39 @@ class Module_galleries
     }
 
     /**
-	 * Show gallery navigation bits used when viewing images/videos.
-	 *
-	 * @param  tempcode		The actual title for the gallery we are using
-	 * @param  string			Where clause for doing set query
-	 * @param  string			Join clause for doing set query
-	 * @param  AUTO_LINK		The ID of the current entry of the type we are browsing in the gallery we are using
-	 * @param  AUTO_LINK		The ID of the first entry of the type we are browsing in the gallery we are using (NULL: no previous)
-	 * @param  ?AUTO_LINK	The ID of the previous entry of the type we are browsing in the gallery we are using (NULL: no previous)
-	 * @param  ?AUTO_LINK	As above, except next entry (NULL: no next)
-	 * @param  ID_TEXT		The root gallery (the gallery we are considering as an adhoc root, to allow gallery splitting-up)
-	 * @param  integer		Position in collection
-	 * @param  integer		Total in collection
-	 * @param  ID_TEXT		The first type being browsed
-	 * @set image video
-	 * @param  ID_TEXT		The current type being browsed
-	 * @set image video
-	 * @param  ID_TEXT		The type for the back link
-	 * @set image video
-	 * @param  ID_TEXT		The type for the next link
-	 * @set image video
-	 * @param  BINARY			If in slideshow
-	 * @param  BINARY			If panels hidden
-	 * @param  integer		Start position when returning to category
-	 * @param  integer		Max to show when returning to category
-	 * @param  ?ID_TEXT		Category (NULL: not in a category)
-	 * @param  ID_TEXT		Sort order
-	 * @param  ID_TEXT		Sort order for reverse sorting
-	 * @param  string			Select clause query suffix for images
-	 * @param  string			Select clause query suffix for videos
-	 * @param  string			ocFilter for limiting images displayed
-	 * @param  string			ocFilter for limiting videos displayed
-	 * @return tempcode		The navigation bits
-	 */
+     * Show gallery navigation bits used when viewing images/videos.
+     *
+     * @param  tempcode                 The actual title for the gallery we are using
+     * @param  string                   Where clause for doing set query
+     * @param  string                   Join clause for doing set query
+     * @param  AUTO_LINK                The ID of the current entry of the type we are browsing in the gallery we are using
+     * @param  AUTO_LINK                The ID of the first entry of the type we are browsing in the gallery we are using (NULL: no previous)
+     * @param  ?AUTO_LINK               The ID of the previous entry of the type we are browsing in the gallery we are using (NULL: no previous)
+     * @param  ?AUTO_LINK               As above, except next entry (NULL: no next)
+     * @param  ID_TEXT                  The root gallery (the gallery we are considering as an adhoc root, to allow gallery splitting-up)
+     * @param  integer                  Position in collection
+     * @param  integer                  Total in collection
+     * @param  ID_TEXT                  The first type being browsed
+     * @set image video
+     * @param  ID_TEXT                  The current type being browsed
+     * @set image video
+     * @param  ID_TEXT                  The type for the back link
+     * @set image video
+     * @param  ID_TEXT                  The type for the next link
+     * @set image video
+     * @param  BINARY                   If in slideshow
+     * @param  BINARY                   If panels hidden
+     * @param  integer                  Start position when returning to category
+     * @param  integer                  Max to show when returning to category
+     * @param  ?ID_TEXT                 Category (NULL: not in a category)
+     * @param  ID_TEXT                  Sort order
+     * @param  ID_TEXT                  Sort order for reverse sorting
+     * @param  string                   Select clause query suffix for images
+     * @param  string                   Select clause query suffix for videos
+     * @param  string                   ocFilter for limiting images displayed
+     * @param  string                   ocFilter for limiting videos displayed
+     * @return tempcode                 The navigation bits
+     */
     public function show_nav($category_name,$where,$join,$current_id,$first_id,$back_id,$next_id,$root,$x,$n,$current_type,$first_type,$back_type,$next_type,$slideshow,$wide_high,$start,$max,$cat,$sort,$sort_backwards,$sql_suffix_images,$sql_suffix_videos,$image_select,$video_select)
     {
         if (!is_null($back_id)) {
@@ -1503,10 +1503,10 @@ class Module_galleries
     }
 
     /**
-	 * Read in the sort order currently active, and a suffix to the select statement to allow it to work. Apply security.
-	 *
-	 * @return array			A quarter: The sort order, The sort order (for backwards sorting), SQL suffix for select statement for images, SQL suffix for select statement for videos
-	 */
+     * Read in the sort order currently active, and a suffix to the select statement to allow it to work. Apply security.
+     *
+     * @return array                    A quarter: The sort order, The sort order (for backwards sorting), SQL suffix for select statement for images, SQL suffix for select statement for videos
+     */
     public function get_sort_order()
     {
         $sort = get_param('sort',get_option('galleries_default_sort_order'));

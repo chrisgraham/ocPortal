@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Get list of staff contextual actions.
  *
- * @return string		The list
+ * @return string                       The list
  */
 function get_staff_actions_list()
 {
@@ -94,7 +94,7 @@ function get_staff_actions_list()
             $started_opt_group = true;
         }
         $staff_actions .= '<option' . (($staff_actions == '')?' disabled="disabled" class="label"':'') . ' ' . (($name == $special_page_type)?'selected="selected" ':'') . 'value="' . escape_html($name) . '">' . (is_object($text)?$text->evaluate():escape_html($text)) . '</option>'; // XHTMLXHTML
-        //$staff_actions.=static_evaluate_tempcode(form_input_list_entry($name,($name==$special_page_type),$text,false,$disabled));	Disabled 'proper' way for performance reasons
+        //$staff_actions.=static_evaluate_tempcode(form_input_list_entry($name,($name==$special_page_type),$text,false,$disabled)); Disabled 'proper' way for performance reasons
     }
     if ($started_opt_group) {
         $staff_actions .= '</optgroup>';
@@ -105,10 +105,10 @@ function get_staff_actions_list()
 /**
  * A page is not validated, so show a warning.
  *
- * @param  ID_TEXT		The zone the page is being loaded from
- * @param  ID_TEXT		The codename of the page
- * @param  tempcode		The edit URL (blank if no edit access)
- * @return tempcode		The warning
+ * @param  ID_TEXT                      The zone the page is being loaded from
+ * @param  ID_TEXT                      The codename of the page
+ * @param  tempcode                     The edit URL (blank if no edit access)
+ * @return tempcode                     The warning
  */
 function get_page_warning_details($zone,$codename,$edit_url)
 {
@@ -142,8 +142,8 @@ function get_page_warning_details($zone,$codename,$edit_url)
  *
  * @sets_output_state
  *
- * @param  mixed			Refresh to this URL (URLPATH or Tempcode URL)
- * @param  float			Take this many times longer than a 'standard ocPortal refresh'
+ * @param  mixed                        Refresh to this URL (URLPATH or Tempcode URL)
+ * @param  float                        Take this many times longer than a 'standard ocPortal refresh'
  */
 function assign_refresh($url,$multiplier = 0.0)
 {
@@ -210,7 +210,7 @@ function assign_refresh($url,$multiplier = 0.0)
  *
  * @sets_output_state
  *
- * @param  mixed			Refresh to this URL (URLPATH or Tempcode URL)
+ * @param  mixed                        Refresh to this URL (URLPATH or Tempcode URL)
  */
 function smart_redirect($url)
 {
@@ -258,9 +258,9 @@ function closed_site()
 /**
  * Render that the page wasn't found. Show alternate likely candidates based on misspellings.
  *
- * @param  ID_TEXT		The codename of the page to load
- * @param  ID_TEXT		The zone the page is being loaded in
- * @return tempcode		Message
+ * @param  ID_TEXT                      The codename of the page to load
+ * @param  ID_TEXT                      The zone the page is being loaded in
+ * @return tempcode                     Message
  */
 function page_not_found($codename,$zone)
 {
@@ -324,14 +324,14 @@ function page_not_found($codename,$zone)
 /**
  * Load Comcode page from disk, then cache it.
  *
- * @param  PATH			The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
- * @param  ID_TEXT		The zone the page is being loaded from
- * @param  ID_TEXT		The codename of the page
- * @param  PATH			The file base to load from
- * @param  ?array			Row from database (holds submitter etc) (NULL: no row, originated first from disk)
- * @param  array			New row for database, used if necessary (holds submitter etc)
- * @param  boolean		Whether the page is being included from another
- * @return array			A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
+ * @param  PATH                         The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+ * @param  ID_TEXT                      The zone the page is being loaded from
+ * @param  ID_TEXT                      The codename of the page
+ * @param  PATH                         The file base to load from
+ * @param  ?array                       Row from database (holds submitter etc) (NULL: no row, originated first from disk)
+ * @param  array                        New row for database, used if necessary (holds submitter etc)
+ * @param  boolean                      Whether the page is being included from another
+ * @return array                        A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
  */
 function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comcode_page_row,$new_comcode_page_row,$being_included = false)
 {
@@ -457,7 +457,7 @@ function _load_comcode_page_not_cached($string,$zone,$codename,$file_base,$comco
 /**
  * If any Comcode substitutions are configured, apply them.
  *
- * @param  string			The Comcode page contents
+ * @param  string                       The Comcode page contents
  */
 function apply_comcode_page_substitutions(&$comcode)
 {
@@ -472,13 +472,13 @@ function apply_comcode_page_substitutions(&$comcode)
 /**
  * Load Comcode page from disk.
  *
- * @param  PATH			The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
- * @param  ID_TEXT		The zone the page is being loaded from
- * @param  ID_TEXT		The codename of the page
- * @param  PATH			The file base to load from
- * @param  array			New row for database, used if nesessary (holds submitter etc)
- * @param  boolean		Whether the page is being included from another
- * @return array			A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
+ * @param  PATH                         The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+ * @param  ID_TEXT                      The zone the page is being loaded from
+ * @param  ID_TEXT                      The codename of the page
+ * @param  PATH                         The file base to load from
+ * @param  array                        New row for database, used if nesessary (holds submitter etc)
+ * @param  boolean                      Whether the page is being included from another
+ * @return array                        A tuple: The page HTML (as Tempcode), New Comcode page row, Title, Raw Comcode
  */
 function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_comcode_page_row,$being_included = false)
 {
@@ -527,8 +527,8 @@ function _load_comcode_page_cache_off($string,$zone,$codename,$file_base,$new_co
 /**
  * Turn an HTML title, which could be complex with images, into a nice simple string we can use in <title> and ;.
  *
- * @param  string			The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
- * @return string			Fixed
+ * @param  string                       The relative (to ocPortal's base directory) path to the page (e.g. pages/comcode/EN/start.txt)
+ * @return string                       Fixed
  */
 function clean_html_title($title)
 {

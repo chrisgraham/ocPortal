@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tickets
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tickets
  */
 
 class Hook_admin_import_types_tickets
 {
     /**
-	 * Get a map of valid import types.
-	 *
-	 * @return array		A map from codename to the language string that names them to the user.
-	 */
+     * Get a map of valid import types.
+     *
+     * @return array                    A map from codename to the language string that names them to the user.
+     */
     public function run()
     {
         return array(

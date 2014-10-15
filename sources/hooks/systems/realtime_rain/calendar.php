@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 class Hook_realtime_rain_calendar
 {
     /**
-	 * Run function for realtime-rain hooks.
-	 *
-	 * @param  TIME			Start of time range.
-	 * @param  TIME			End of time range.
-	 * @return array			A list of template parameter sets for rendering a 'drop'.
-	 */
+     * Run function for realtime-rain hooks.
+     *
+     * @param  TIME                     Start of time range.
+     * @param  TIME                     End of time range.
+     * @return array                    A list of template parameter sets for rendering a 'drop'.
+     */
     public function run($from,$to)
     {
         $drops = array();

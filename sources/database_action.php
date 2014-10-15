@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Returns a list of keywords for all databases we might some day support.
  *
- * @return array		List of pairs
+ * @return array                        List of pairs
  */
 function get_db_keywords()
 {
@@ -144,7 +144,7 @@ function get_db_keywords()
 /**
  * Returns a list of pairs, for which permissions are false by default for ordinary usergroups.
  *
- * @return array		List of pairs
+ * @return array                        List of pairs
  */
 function get_false_permissions()
 {
@@ -213,7 +213,7 @@ function get_false_permissions()
 /**
  * Returns a list of pairs, for which permissions are true by default for ordinary usergroups.
  *
- * @return array		List of pairs
+ * @return array                        List of pairs
  */
 function get_true_permissions()
 {
@@ -236,8 +236,8 @@ function get_true_permissions()
 /**
  * Check if a privilege exists.
  *
- * @param  ID_TEXT		The name of the option
- * @return boolean		Whether it exists
+ * @param  ID_TEXT                      The name of the option
+ * @return boolean                      Whether it exists
  */
 function permission_exists($name)
 {
@@ -248,10 +248,10 @@ function permission_exists($name)
 /**
  * Add a privilege, and apply it to every usergroup.
  *
- * @param  ID_TEXT		The section the privilege is filled under
- * @param  ID_TEXT		The codename for the privilege
- * @param  boolean		Whether this permission is granted to all usergroups by default
- * @param  boolean		Whether this permission is not granted to supermoderators by default (something very sensitive)
+ * @param  ID_TEXT                      The section the privilege is filled under
+ * @param  ID_TEXT                      The codename for the privilege
+ * @param  boolean                      Whether this permission is granted to all usergroups by default
+ * @param  boolean                      Whether this permission is not granted to supermoderators by default (something very sensitive)
  */
 function add_privilege($section,$name,$default = false,$not_even_mods = false)
 {
@@ -271,12 +271,12 @@ function add_privilege($section,$name,$default = false,$not_even_mods = false)
 /**
  * Sets the privilege of a usergroup
  *
- * @param  GROUP			The usergroup having the permission set
- * @param  ID_TEXT		The codename of the permission
- * @param  boolean		Whether the usergroup has the permission
- * @param  ?ID_TEXT		The ID code for the page being checked (NULL: current page)
- * @param  ?ID_TEXT		The category-type for the permission (NULL: none required)
- * @param  ?ID_TEXT		The category-name/value for the permission (NULL: none required)
+ * @param  GROUP                        The usergroup having the permission set
+ * @param  ID_TEXT                      The codename of the permission
+ * @param  boolean                      Whether the usergroup has the permission
+ * @param  ?ID_TEXT                     The ID code for the page being checked (NULL: current page)
+ * @param  ?ID_TEXT                     The category-type for the permission (NULL: none required)
+ * @param  ?ID_TEXT                     The category-name/value for the permission (NULL: none required)
  */
 function set_privilege($group_id,$permission,$value,$page = null,$category_type = null,$category_name = null)
 {
@@ -297,8 +297,8 @@ function set_privilege($group_id,$permission,$value,$page = null,$category_type 
 /**
  * Rename a privilege.
  *
- * @param  ID_TEXT		The old name
- * @param  ID_TEXT		The new name
+ * @param  ID_TEXT                      The old name
+ * @param  ID_TEXT                      The new name
  */
 function rename_privilege($old,$new)
 {
@@ -310,7 +310,7 @@ function rename_privilege($old,$new)
 /**
  * Delete a privilege, and every usergroup is then relaxed from the restrictions of this permission.
  *
- * @param  ID_TEXT		The codename of the permission
+ * @param  ID_TEXT                      The codename of the permission
  */
 function delete_privilege($name)
 {
@@ -321,8 +321,8 @@ function delete_privilege($name)
 /**
  * Delete attachments solely used by the specified hook.
  *
- * @param  ID_TEXT		The hook
- * @param  ?object		The database connection to use (NULL: standard site connection)
+ * @param  ID_TEXT                      The hook
+ * @param  ?object                      The database connection to use (NULL: standard site connection)
  */
 function delete_attachments($type,$connection = null)
 {
@@ -350,9 +350,9 @@ function delete_attachments($type,$connection = null)
 /**
  * Deletes all language codes linked to by the specified table and attribute identifiers, if they exist.
  *
- * @param  ID_TEXT		The table
- * @param  array			The attributes
- * @param  ?object		The database connection to use (NULL: standard site connection)
+ * @param  ID_TEXT                      The table
+ * @param  array                        The attributes
+ * @param  ?object                      The database connection to use (NULL: standard site connection)
  */
 function mass_delete_lang($table,$attrs,$connection)
 {

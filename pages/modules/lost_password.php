@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_lost_password
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -43,10 +43,10 @@ class Module_lost_password
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -74,10 +74,10 @@ class Module_lost_password
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         if (get_forum_type() != 'ocf') {
@@ -102,14 +102,14 @@ class Module_lost_password
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -125,10 +125,10 @@ class Module_lost_password
     }
 
     /**
-	 * The UI to ask for the username to get the lost password for.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to ask for the username to get the lost password for.
+     *
+     * @return tempcode                 The UI
+     */
     public function step1()
     {
         $fields = new ocp_tempcode();
@@ -154,10 +154,10 @@ class Module_lost_password
     }
 
     /**
-	 * The UI and actualisation for sending out the confirm email.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI and actualisation for sending out the confirm email.
+     *
+     * @return tempcode                 The UI
+     */
     public function step2()
     {
         $username = trim(post_param('username',''));
@@ -221,7 +221,7 @@ class Module_lost_password
             $_SERVER['SERVER_NAME'] = ocp_srv('SERVER_ADDR');
 
             $from_email = get_option('website_email');
-            //$from_email='noreply@'.$_SERVER['SERVER_ADDR'];	Won't work on most hosting
+            //$from_email='noreply@'.$_SERVER['SERVER_ADDR'];  Won't work on most hosting
             $from_name = do_lang('PASSWORD_RESET_ULTRA_FROM');
             $subject = do_lang('PASSWORD_RESET_ULTRA_SUBJECT',$code);
             $body = do_lang('PASSWORD_RESET_ULTRA_BODY',$code);
@@ -254,10 +254,10 @@ class Module_lost_password
     }
 
     /**
-	 * The UI and actualisation for: accepting code if it is correct (and not ''), and setting password to something random, emailing it
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI and actualisation for: accepting code if it is correct (and not ''), and setting password to something random, emailing it
+     *
+     * @return tempcode                 The UI
+     */
     public function step3()
     {
         $code = trim(get_param('code',''));

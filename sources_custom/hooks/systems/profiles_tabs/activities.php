@@ -8,33 +8,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		activity_feed
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    activity_feed
  */
 
 class Hook_Profiles_Tabs_activities
 {
     /**
-	 * Find whether this hook is active.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return boolean		Whether this hook is active
-	 */
+     * Find whether this hook is active.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @return boolean                  Whether this hook is active
+     */
     public function is_active($member_id_of,$member_id_viewing)
     {
         return true;
     }
 
     /**
-	 * Render function for profile tab hooks.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
-	 */
+     * Render function for profile tab hooks.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
+     */
     public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
     {
         // Need to declare these here as the Tempcode engine can't look as deep, into a loop (I think), as it would need to, to find the block declaring the dependency
@@ -73,12 +73,12 @@ class Hook_Profiles_Tabs_activities
                         $oauth_url = build_url($url_map,'_SELF',null,false,false,false,'tab__activities');
                         $ob->auth_set($member_id_of,$oauth_url);
                     } elseif ((running_script('index')) && (!$leave_to_ajax_if_possible) && ($ob->auth_is_set($member_id_of)) && (either_param('oauth_in_progress',null) === NULL) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
-                        /*	running_script('index') won't work currently due to execution contexts, and it is never non-AJAX, and it's probably not needed anyway
-						// Do a refresh to make sure the token is updated
-						$url_map=array('page'=>'_SELF','type'=>'view','id'=>$member_id_of,'oauth_in_progress'=>1);
-						$url_map['syndicate_start__'.$hook]=1;
-						$oauth_url=build_url($url_map,'_SELF',NULL,false,false,false,'tab__activities');
-						$ob->auth_set($member_id_of,$oauth_url);*/
+                        /* running_script('index') won't work currently due to execution contexts, and it is never non-AJAX, and it's probably not needed anyway
+                                        // Do a refresh to make sure the token is updated
+                                        $url_map=array('page'=>'_SELF','type'=>'view','id'=>$member_id_of,'oauth_in_progress'=>1);
+                                        $url_map['syndicate_start__'.$hook]=1;
+                                        $oauth_url=build_url($url_map,'_SELF',NULL,false,false,false,'tab__activities');
+                                        $ob->auth_set($member_id_of,$oauth_url);*/
                     }
 
                     $syndications[$hook] = array(

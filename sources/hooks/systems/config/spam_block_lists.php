@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_configuration
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_configuration
  */
 
 class Hook_config_spam_block_lists
 {
     /**
-	 * Gets the details relating to the config option.
-	 *
-	 * @return ?array		The details (NULL: disabled)
-	 */
+     * Gets the details relating to the config option.
+     *
+     * @return ?array                   The details (NULL: disabled)
+     */
     public function get_details()
     {
         return array(
@@ -42,10 +42,10 @@ class Hook_config_spam_block_lists
     }
 
     /**
-	 * Gets the default value for the config option.
-	 *
-	 * @return ?string		The default value (NULL: option is disabled)
-	 */
+     * Gets the default value for the config option.
+     *
+     * @return ?string                  The default value (NULL: option is disabled)
+     */
     public function get_default()
     {
         return ''; // Not listing "*.opm.tornevall.org" by default, because it keeps IPs for over 365 days, which is okay for blocking e-mail servers/proxies, but not for normal dynamic web IPs

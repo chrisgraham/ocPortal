@@ -13,23 +13,23 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 class Hook_block_ui_renderers_chat
 {
     /**
-	 * See if a particular block parameter's UI input can be rendered by this.
-	 *
-	 * @param  ID_TEXT		The block
-	 * @param  ID_TEXT		The parameter of the block
-	 * @param  boolean		Whether there is a default value for the field, due to this being an edit
-	 * @param  string			Default value for field
-	 * @param  tempcode		Field description
-	 * @return ?tempcode		Rendered field (NULL: not handled).
-	 */
+     * See if a particular block parameter's UI input can be rendered by this.
+     *
+     * @param  ID_TEXT                  The block
+     * @param  ID_TEXT                  The parameter of the block
+     * @param  boolean                  Whether there is a default value for the field, due to this being an edit
+     * @param  string                   Default value for field
+     * @param  tempcode                 Field description
+     * @return ?tempcode                Rendered field (NULL: not handled).
+     */
     public function render_block_ui($block,$parameter,$has_default,$default,$description)
     {
         if ($block . ':' . $parameter == 'side_shoutbox:param') { // special case for chat rooms

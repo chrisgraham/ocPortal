@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		points
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    points
  */
 
 /**
@@ -34,8 +34,8 @@ function init__points()
 /**
  * Get the price of the specified item for sale in the Point Store (only for tableless items).
  *
- * @param  ID_TEXT		The name of the item
- * @return integer		The price of the item
+ * @param  ID_TEXT                      The name of the item
+ * @return integer                      The price of the item
  */
 function get_price($item)
 {
@@ -45,9 +45,9 @@ function get_price($item)
 /**
  * Get the total points in the specified member's account; some of these will probably have been spent already
  *
- * @param  MEMBER			The member
- * @param  ?TIME			Time to get for (NULL: now)
- * @return integer		The number of points the member has
+ * @param  MEMBER                       The member
+ * @param  ?TIME                        Time to get for (NULL: now)
+ * @return integer                      The number of points the member has
  */
 function total_points($member,$timestamp = null)
 {
@@ -122,8 +122,8 @@ function total_points($member,$timestamp = null)
 /**
  * Get the total points the specified member has used (spent).
  *
- * @param  MEMBER			The member
- * @return integer		The number of points the member has spent
+ * @param  MEMBER                       The member
+ * @return integer                      The number of points the member has spent
  */
 function points_used($member)
 {
@@ -142,8 +142,8 @@ function points_used($member)
 /**
  * Get the total points the specified member has
  *
- * @param  MEMBER			The member
- * @return integer		The number of points the member has
+ * @param  MEMBER                       The member
+ * @return integer                      The number of points the member has
  */
 function available_points($member)
 {
@@ -157,8 +157,8 @@ function available_points($member)
 /**
  * Get all sorts of information about a specified member's point account.
  *
- * @param  MEMBER			The member the point info is of
- * @return array			The map containing the members point info (fields as enumerated in description)
+ * @param  MEMBER                       The member the point info is of
+ * @return array                        The map containing the members point info (fields as enumerated in description)
  */
 function point_info($member)
 {
@@ -188,8 +188,8 @@ function point_info($member)
 /**
  * Get the number of gift points used by the given member.
  *
- * @param  MEMBER			The member we want it for
- * @return integer		The number of gift points used by the member
+ * @param  MEMBER                       The member we want it for
+ * @return integer                      The number of gift points used by the member
  */
 function get_gift_points_used($member)
 {
@@ -202,8 +202,8 @@ function get_gift_points_used($member)
 /**
  * Get the number of gifts points to give that the given member has.
  *
- * @param  MEMBER			The member we want it for
- * @return integer		The number of gifts points to give that the given member has
+ * @param  MEMBER                       The member we want it for
+ * @return integer                      The number of gifts points to give that the given member has
  */
 function get_gift_points_to_give($member)
 {

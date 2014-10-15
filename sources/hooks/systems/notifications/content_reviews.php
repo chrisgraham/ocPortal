@@ -13,32 +13,32 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		content_reviews
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    content_reviews
  */
 
 class Hook_Notification_content_reviews extends Hook_Notification__Staff
 {
     /**
-	 * Find whether a handled notification code supports categories.
-	 * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
-	 *
-	 * @param  ID_TEXT		Notification code
-	 * @return boolean		Whether it does
-	 */
+     * Find whether a handled notification code supports categories.
+     * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
+     *
+     * @param  ID_TEXT                  Notification code
+     * @return boolean                  Whether it does
+     */
     public function supports_categories($notification_code)
     {
         return true;
     }
 
     /**
-	 * Standard function to create the standardised category tree
-	 *
-	 * @param  ID_TEXT		Notification code
-	 * @param  ?ID_TEXT		The ID of where we're looking under (NULL: N/A)
-	 * @return array 			Tree structure
-	 */
+     * Standard function to create the standardised category tree
+     *
+     * @param  ID_TEXT                  Notification code
+     * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
+     * @return array                    Tree structure
+     */
     public function create_category_tree($notification_code,$id)
     {
         $page_links = array();
@@ -72,11 +72,11 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
     }
 
     /**
-	 * Get a list of all the notification codes this hook can handle.
-	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
-	 *
-	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
-	 */
+     * Get a list of all the notification codes this hook can handle.
+     * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
+     *
+     * @return array                    List of codes (mapping between code names, and a pair: section and labelling for those codes)
+     */
     public function list_handled_codes()
     {
         $list = array();

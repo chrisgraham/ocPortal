@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 /**
@@ -34,16 +34,16 @@ function chat_poller()
         (($event_id != -1) && (file_exists(get_custom_file_base() . '/data_custom/modules/chat/chat_last_event.dat')) && (intval(file_get_contents(get_custom_file_base() . '/data_custom/modules/chat/chat_last_event.dat')) <= $event_id))
     ) {
         /*
-		We do let the main code to run this at CHAT_ACTIVITY_PRUNE intervals, so no need to run the commented code below
+        We do let the main code to run this at CHAT_ACTIVITY_PRUNE intervals, so no need to run the commented code below
 
-		require_code('zones'); // Zone is needed because zones are where all ocPortal pages reside
-		require_code('config'); // Config is needed for much active stuff
-		require_code('users'); // Users are important due to permissions
+        require_code('zones'); // Zone is needed because zones are where all ocPortal pages reside
+        require_code('config'); // Config is needed for much active stuff
+        require_code('users'); // Users are important due to permissions
 
-		$room_id=get_param_integer('room_id',-1);
-		require_code('chat');
-		chat_room_prune($room_id);
-		*/
+        $room_id=get_param_integer('room_id',-1);
+        require_code('chat');
+        chat_room_prune($room_id);
+        */
 
         prepare_for_known_ajax_response();
 

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -34,8 +34,8 @@ function init__antispam()
 /**
  * Should be called when an action happens that results in content submission. Does a spammer check.
  *
- * @param ?string		Check this particular username that has just been supplied (NULL: none)
- * @param ?string		Check this particular email address that has just been supplied (NULL: none)
+ * @param ?string    Check this particular username that has just been supplied (NULL: none)
+ * @param ?string    Check this particular email address that has just been supplied (NULL: none)
  */
 function inject_action_spamcheck($username = null,$email = null)
 {
@@ -50,8 +50,8 @@ function inject_action_spamcheck($username = null,$email = null)
 /**
  * Check RBLs to see if we need to block this user.
  *
- * @param boolean		Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
- * @param ?IP			IP address (NULL: current user's)
+ * @param boolean    Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
+ * @param ?IP        IP address (NULL: current user's)
  */
 function check_rbls($page_level = false,$user_ip = null)
 {
@@ -109,11 +109,11 @@ function check_rbls($page_level = false,$user_ip = null)
 /**
  * Do an RBL check on an IP address.
  *
- * @param  ID_TEXT	The RBL domain name/IP (HTTP:BL has a special syntax)
- * @param  IP			The IP address to lookup
- * @param  boolean	If true, then no RBL check will happen if the RBL has no scoring, because it can't provide a superior result to what is already known (performance)
- * @param boolean		Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
- * @return array		Pair: Listed for potential blocking as a ANTISPAM_RESPONSE_* constant, confidence level if attainable (0.0 to 1.0) (else NULL)
+ * @param  ID_TEXT                      The RBL domain name/IP (HTTP:BL has a special syntax)
+ * @param  IP                           The IP address to lookup
+ * @param  boolean                      If true, then no RBL check will happen if the RBL has no scoring, because it can't provide a superior result to what is already known (performance)
+ * @param boolean    Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
+ * @return array                        Pair: Listed for potential blocking as a ANTISPAM_RESPONSE_* constant, confidence level if attainable (0.0 to 1.0) (else NULL)
  */
 function check_rbl($rbl,$user_ip,$we_have_a_result_already = false,$page_level = false)
 {
@@ -276,10 +276,10 @@ function check_rbl($rbl,$user_ip,$we_have_a_result_already = false,$page_level =
 /**
  * Do an RBL lookup (low level, uninterpreted).
  *
- * @param  IP			The IP address to lookup
- * @param  ID_TEXT	The RBL domain
- * @param  boolean	Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
- * @return ?array		Return result (NULL: error)
+ * @param  IP                           The IP address to lookup
+ * @param  ID_TEXT                      The RBL domain
+ * @param  boolean                      Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
+ * @return ?array                       Return result (NULL: error)
  */
 function rbl_resolve($ip,$rbl_domain,$page_level)
 {
@@ -324,10 +324,10 @@ function rbl_resolve($ip,$rbl_domain,$page_level)
 /**
  * Deal with a perceived spammer.
  *
- * @param IP			IP address
- * @param float		Confidence level (0.0 to 1.0)
- * @param ID_TEXT		Identifier for whatever did the blocking
- * @param boolean		Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
+ * @param IP         IP address
+ * @param float      Confidence level (0.0 to 1.0)
+ * @param ID_TEXT    Identifier for whatever did the blocking
+ * @param boolean    Whether this is a page level check (i.e. we won't consider blocks or approval, just ban setting)
  */
 function handle_perceived_spammer_by_confidence($user_ip,$confidence_level,$blocked_by,$page_level)
 {
@@ -376,8 +376,8 @@ function handle_perceived_spammer_by_confidence($user_ip,$confidence_level,$bloc
 /**
  * Check the stopforumspam service to see if we need to block this user.
  *
- * @param ?string		Check this particular username that has just been supplied (NULL: none)
- * @param ?string		Check this particular email address that has just been supplied (NULL: none)
+ * @param ?string    Check this particular username that has just been supplied (NULL: none)
+ * @param ?string    Check this particular email address that has just been supplied (NULL: none)
  */
 function check_stopforumspam($username = null,$email = null)
 {
@@ -409,10 +409,10 @@ function check_stopforumspam($username = null,$email = null)
 /**
  * Check the stopforumspam service to see if we need to block this user (lower level, doesn't handle result).
  *
- * @param  string		Check this IP address
- * @param  ?string	Check this particular username that has just been supplied (NULL: none)
- * @param  ?string	Check this particular email address that has just been supplied (NULL: none)
- * @return array		Pair: Listed for potential blocking as a ANTISPAM_RESPONSE_* constant, confidence level if attainable (0.0 to 1.0) (else NULL)
+ * @param  string                       Check this IP address
+ * @param  ?string                      Check this particular username that has just been supplied (NULL: none)
+ * @param  ?string                      Check this particular email address that has just been supplied (NULL: none)
+ * @return array                        Pair: Listed for potential blocking as a ANTISPAM_RESPONSE_* constant, confidence level if attainable (0.0 to 1.0) (else NULL)
  */
 function _check_stopforumspam($user_ip,$username = null,$email = null)
 {

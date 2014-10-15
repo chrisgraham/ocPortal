@@ -8,16 +8,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		locations
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    locations
  */
 
 function state_code_to_state_name($code)
 {
     $map = array(
         'AL' => 'Alabama',
-        'AK' => 'Alaska	',
+        'AK' => 'Alaska ',
         'AZ' => 'Arizona',
         'AR' => 'Arkansas',
         'CA' => 'California',

@@ -8,8 +8,8 @@
 */
 
 /*
-	NB: Multi line do_template calls may be uglified. You can find those in your IDE using
-	do_template[^\n]*_GUID[^\n]*\n\t+'
+    NB: Multi line do_template calls may be uglified. You can find those in your IDE using
+    do_template[^\n]*_GUID[^\n]*\n\t+'
 */
 
 global $FOUND_GUID;

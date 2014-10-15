@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_notifications
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_notifications
  */
 
 class Hook_occle_fs_extended_config__notification_lockdown
 {
     /**
-	 * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
-	 *
-	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
-	 */
+     * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
+     *
+     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     */
     public function _get_edit_date()
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type','NOTIFICATIONS_LOCKDOWN');
@@ -32,14 +32,14 @@ class Hook_occle_fs_extended_config__notification_lockdown
     }
 
     /**
-	 * Standard occle_fs file reading function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return ~string	The file contents (false: failure)
-	 */
+     * Standard occle_fs file reading function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return ~string                  The file contents (false: failure)
+     */
     public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('notification_lockdown',array('*'),null,'ORDER BY l_notification_code');
@@ -47,15 +47,15 @@ class Hook_occle_fs_extended_config__notification_lockdown
     }
 
     /**
-	 * Standard occle_fs file writing function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  string		The new file contents
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs file writing function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  string                   The new file contents
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
     {
         $GLOBALS['SITE_DB']->query_delete('notification_lockdown');

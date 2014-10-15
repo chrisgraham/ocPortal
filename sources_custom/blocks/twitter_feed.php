@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	Jason L Verhagen (jlverhagen@tfo.net)
- * @package		twitter_feed
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  Jason L Verhagen (jlverhagen@tfo.net)
+ * @package    twitter_feed
  */
 
 /**
@@ -14,10 +14,10 @@
 class Block_twitter_feed
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -33,10 +33,10 @@ class Block_twitter_feed
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -46,11 +46,11 @@ class Block_twitter_feed
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -177,7 +177,7 @@ class Block_twitter_feed
 
             // Generate follow buttons
             // must have the following javascript code in the main template for these to fully work:
-            //	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            // <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
             $follow_button_normal = "<a href=\"https://twitter.com/" . $status['user']['screen_name'] . "\" class=\"twitter-follow-button\" data-show-count=\"false\" data-show-screen-name=\"false\">Follow @" . $status['user']['screen_name'] . "</a>";
             $follow_button_large = "<a href=\"https://twitter.com/" . $status['user']['screen_name'] . "\" class=\"twitter-follow-button\" data-show-count=\"false\" data-size=\"large\" data-show-screen-name=\"false\">Follow @" . $status['user']['screen_name'] . "</a>";
 
@@ -309,8 +309,8 @@ class Block_twitter_feed
 /**
  * Find the cache signature for the block.
  *
- * @param  array	The block parameters.
- * @return array	The cache signature.
+ * @param  array                        The block parameters.
+ * @return array                        The cache signature.
  */
 function block_twitter_feed__cache_on($map)
 {

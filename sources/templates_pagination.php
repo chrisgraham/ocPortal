@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_abstract_interfaces
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_abstract_interfaces
  */
 
 /**
@@ -30,17 +30,17 @@ function init__templates_pagination()
 /**
  * Get the tempcode for a results browser.
  *
- * @param  tempcode		The title/name of the resource we are browsing through
- * @param  integer		The current position in the browser
- * @param  ID_TEXT		The parameter name used to store our position in the results (usually, 'start')
- * @param  integer		The maximum number of rows to show per browser page
- * @param  ID_TEXT		The parameter name used to store the total number of results to show per-page (usually, 'max')
- * @param  integer		The maximum number of rows in the entire dataset
- * @param  boolean		Whether to keep post data when browsing through
- * @param  integer		The maximum number of quick-jump page-links to show
- * @param  ?array			List of per-page selectors to show (NULL: show hard-coded ones)
- * @param  ID_TEXT		Hash component to URL
- * @return tempcode		The results browser
+ * @param  tempcode                     The title/name of the resource we are browsing through
+ * @param  integer                      The current position in the browser
+ * @param  ID_TEXT                      The parameter name used to store our position in the results (usually, 'start')
+ * @param  integer                      The maximum number of rows to show per browser page
+ * @param  ID_TEXT                      The parameter name used to store the total number of results to show per-page (usually, 'max')
+ * @param  integer                      The maximum number of rows in the entire dataset
+ * @param  boolean                      Whether to keep post data when browsing through
+ * @param  integer                      The maximum number of quick-jump page-links to show
+ * @param  ?array                       List of per-page selectors to show (NULL: show hard-coded ones)
+ * @param  ID_TEXT                      Hash component to URL
+ * @return tempcode                     The results browser
  */
 function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_post = false,$max_page_links = 5,$_selectors = null,$hash = '')
 {
@@ -261,10 +261,10 @@ function pagination($title,$start,$start_name,$max,$max_name,$max_rows,$keep_pos
 /**
  * Helper function to work out a results browser URL.
  *
- * @param  array			Map of GET array segments to use (others will be added by this function)
- * @param  array			Map of POST array segments (relayed as GET) to use
- * @param  ID_TEXT		Hash component to URL
- * @return mixed			The URL
+ * @param  array                        Map of GET array segments to use (others will be added by this function)
+ * @param  array                        Map of POST array segments (relayed as GET) to use
+ * @param  ID_TEXT                      Hash component to URL
+ * @return mixed                        The URL
  */
 function _build_pagination_cat_url($url_array,$post_array,$hash)
 {

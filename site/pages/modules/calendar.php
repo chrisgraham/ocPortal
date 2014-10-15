@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 /*
@@ -31,10 +31,10 @@ To complicate matters further "user time" is not the timestamp that would exist 
 class Module_calendar
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -49,8 +49,8 @@ class Module_calendar
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('calendar_events');
@@ -72,11 +72,11 @@ class Module_calendar
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         require_lang('calendar');
@@ -231,14 +231,14 @@ class Module_calendar
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -258,10 +258,10 @@ class Module_calendar
     public $back_url;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -379,10 +379,10 @@ class Module_calendar
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_lang('dates');
@@ -421,11 +421,11 @@ class Module_calendar
     }
 
     /**
-	 * Gets the event filter, if there is one.
-	 *
-	 * @param  boolean		Whether to only show event types
-	 * @return array			The filter
-	 */
+     * Gets the event filter, if there is one.
+     *
+     * @param  boolean                  Whether to only show event types
+     * @return array                    The filter
+     */
     public function get_filter($only_event_types = false)
     {
         $filter = array();
@@ -462,11 +462,11 @@ class Module_calendar
     }
 
     /**
-	 * Gets the event filter in a simple list form.
-	 *
-	 * @param  boolean		Whether to only show event types
-	 * @return array			The filter
-	 */
+     * Gets the event filter in a simple list form.
+     *
+     * @param  boolean                  Whether to only show event types
+     * @return array                    The filter
+     */
     public function get_and_filter($only_event_types = false)
     {
         $and_filter = array();
@@ -480,10 +480,10 @@ class Module_calendar
     }
 
     /**
-	 * View the main calendar screen, with certain filter allowances.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * View the main calendar screen, with certain filter allowances.
+     *
+     * @return tempcode                 The UI
+     */
     public function view_calendar()
     {
         check_privilege('view_calendar');
@@ -721,15 +721,15 @@ class Module_calendar
     }
 
     /**
-	 * The calendar area view for viewing a single day.
-	 *
-	 * @param  string			The day we are viewing
-	 * @param  string			The day (Y-m-d) we are viewing
-	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing the calendar for
-	 * @param  ?array			The type filter (NULL: none)
-	 * @return tempcode		The UI
-	 */
+     * The calendar area view for viewing a single day.
+     *
+     * @param  string                   The day we are viewing
+     * @param  string                   The day (Y-m-d) we are viewing
+     * @param  array                    List of components of our viewed ID
+     * @param  MEMBER                   The member ID we are viewing the calendar for
+     * @param  ?array                   The type filter (NULL: none)
+     * @return tempcode                 The UI
+     */
     public function view_calendar_view_day($view_id,$day,$explode,$member_id,$filter)
     {
         $start_year = intval($explode[0]);
@@ -851,15 +851,15 @@ class Module_calendar
     }
 
     /**
-	 * The calendar area view for viewing a single week.
-	 *
-	 * @param  string			The week we are viewing
-	 * @param  string			The day (Y-m-d) we are viewing
-	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing the calendar for
-	 * @param  ?array			The type filter (NULL: none)
-	 * @return tempcode		The UI
-	 */
+     * The calendar area view for viewing a single week.
+     *
+     * @param  string                   The week we are viewing
+     * @param  string                   The day (Y-m-d) we are viewing
+     * @param  array                    List of components of our viewed ID
+     * @param  MEMBER                   The member ID we are viewing the calendar for
+     * @param  ?array                   The type filter (NULL: none)
+     * @return tempcode                 The UI
+     */
     public function view_calendar_view_week($view_id,$day,$explode,$member_id,$filter)
     {
         $start_year = intval($explode[0]);
@@ -1071,15 +1071,15 @@ class Module_calendar
     }
 
     /**
-	 * The calendar area view for viewing a single month.
-	 *
-	 * @param  string			The month we are viewing
-	 * @param  string			The day (Y-m-d) we are viewing
-	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing the calendar for
-	 * @param  ?array			The type filter (NULL: none)
-	 * @return tempcode		The UI
-	 */
+     * The calendar area view for viewing a single month.
+     *
+     * @param  string                   The month we are viewing
+     * @param  string                   The day (Y-m-d) we are viewing
+     * @param  array                    List of components of our viewed ID
+     * @param  MEMBER                   The member ID we are viewing the calendar for
+     * @param  ?array                   The type filter (NULL: none)
+     * @return tempcode                 The UI
+     */
     public function view_calendar_view_month($view_id,$day,$explode,$member_id,$filter)
     {
         $period_start = mktime(0,0,0,intval($explode[1]),1,intval($explode[0]));
@@ -1201,15 +1201,15 @@ class Module_calendar
     }
 
     /**
-	 * The calendar area view for viewing a single year.
-	 *
-	 * @param  string			The year we are viewing
-	 * @param  string			The day (Y-m-d) we are viewing
-	 * @param  array			List of components of our viewed ID
-	 * @param  MEMBER			The member ID we are viewing the calendar for
-	 * @param  ?array			The type filter (NULL: none)
-	 * @return tempcode		The UI
-	 */
+     * The calendar area view for viewing a single year.
+     *
+     * @param  string                   The year we are viewing
+     * @param  string                   The day (Y-m-d) we are viewing
+     * @param  array                    List of components of our viewed ID
+     * @param  MEMBER                   The member ID we are viewing the calendar for
+     * @param  ?array                   The type filter (NULL: none)
+     * @return tempcode                 The UI
+     */
     public function view_calendar_view_year($view_id,$day,$explode,$member_id,$filter)
     {
         $period_start = mktime(0,0,0,1,1,intval($explode[0]));
@@ -1379,10 +1379,10 @@ class Module_calendar
     }
 
     /**
-	 * View an event.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * View an event.
+     *
+     * @return tempcode                 The UI
+     */
     public function view_event()
     {
         $id = $this->id;
@@ -1557,10 +1557,10 @@ class Module_calendar
     }
 
     /**
-	 * Interface to subscribe for reminders to an event.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Interface to subscribe for reminders to an event.
+     *
+     * @return tempcode                 The UI
+     */
     public function subscribe_event()
     {
         $this->title = get_screen_title('SUBSCRIBE_EVENT');
@@ -1595,10 +1595,10 @@ class Module_calendar
     }
 
     /**
-	 * Subscribe for reminders to an event.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Subscribe for reminders to an event.
+     *
+     * @return tempcode                 The UI
+     */
     public function _subscribe_event()
     {
         $this->title = get_screen_title('SUBSCRIBE_EVENT');
@@ -1650,10 +1650,10 @@ class Module_calendar
     }
 
     /**
-	 * Unsubscribe for reminders to an event.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Unsubscribe for reminders to an event.
+     *
+     * @return tempcode                 The UI
+     */
     public function unsubscribe_event()
     {
         $this->title = get_screen_title('UNSUBSCRIBE_EVENT');
@@ -1670,10 +1670,10 @@ class Module_calendar
     }
 
     /**
-	 * Declare interests for event types.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Declare interests for event types.
+     *
+     * @return tempcode                 The UI
+     */
     public function interests()
     {
         $types = $GLOBALS['SITE_DB']->query_select('calendar_types',array('id'));
@@ -1692,10 +1692,10 @@ class Module_calendar
     }
 
     /**
-	 * Declare interest to an event type.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Declare interest to an event type.
+     *
+     * @return tempcode                 The UI
+     */
     public function declare_interest()
     {
         $this->title = get_screen_title('DECLARE_EVENT_INTEREST');
@@ -1707,10 +1707,10 @@ class Module_calendar
     }
 
     /**
-	 * Undeclare interest to an event type.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Undeclare interest to an event type.
+     *
+     * @return tempcode                 The UI
+     */
     public function undeclare_interest()
     {
         $this->title = get_screen_title('UNDECLARE_EVENT_INTEREST');

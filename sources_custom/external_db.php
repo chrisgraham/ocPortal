@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		external_db_login
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    external_db_login
  */
 
 /*
@@ -43,7 +43,7 @@ set_long_value('external_login_url','?'); // Optional
 /**
  * Get a connection to the external user database.
  *
- * @return object			Database driver.
+ * @return object                       Database driver.
  */
 function external_db()
 {
@@ -66,7 +66,7 @@ function external_db()
  * Find who is logged into the remote system.
  * THIS FUNCTION NEEDS CUSTOMISING. It is currently written for one particular ASP.net system.
  *
- * @param  ?array			User record for session (NULL: none).
+ * @param  ?array                       User record for session (NULL: none).
  */
 function external_db_user_from_session()
 {
@@ -102,8 +102,8 @@ function external_db_user_from_session()
 /**
  * Synchronise an external user.
  *
- * @param  MEMBER			Authorised member.
- * @param  array			User record to sync.
+ * @param  MEMBER                       Authorised member.
+ * @param  array                        User record to sync.
  */
 function external_db_user_sync($member,$record)
 {
@@ -143,8 +143,8 @@ function external_db_user_sync($member,$record)
 /**
  * Import an external user.
  *
- * @param  array			User record to import.
- * @return MEMBER			Authorised member.
+ * @param  array                        User record to import.
+ * @return MEMBER                       Authorised member.
  */
 function external_db_user_add($record)
 {

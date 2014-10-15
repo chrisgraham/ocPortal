@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		custom_comcode
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    custom_comcode
  */
 
 class Hook_exists_tag
 {
     /**
-	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
-	 *
-	 * @return tempcode  The snippet
-	 */
+     * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
+     *
+     * @return tempcode                 The snippet
+     */
     public function run()
     {
         $val = get_param('name');

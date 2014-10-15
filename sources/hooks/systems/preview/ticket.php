@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tickets
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tickets
  */
 
 class Hook_Preview_ticket
 {
     /**
-	 * Find whether this preview hook applies.
-	 *
-	 * @return array			Quartet: Whether it applies, the attachment ID type, whether the forum DB is used [optional], list of fields to limit to [optional]
-	 */
+     * Find whether this preview hook applies.
+     *
+     * @return array                    Quartet: Whether it applies, the attachment ID type, whether the forum DB is used [optional], list of fields to limit to [optional]
+     */
     public function applies()
     {
         $applies = (get_param('page','') == 'tickets');

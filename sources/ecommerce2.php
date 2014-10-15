@@ -13,29 +13,29 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 /**
  * Add a usergroup subscription.
  *
- * @param  SHORT_TEXT	The title
- * @param  LONG_TEXT		The description
- * @param  SHORT_TEXT	The cost
- * @param  integer		The length
- * @param  SHORT_TEXT	The units for the length
+ * @param  SHORT_TEXT                   The title
+ * @param  LONG_TEXT                    The description
+ * @param  SHORT_TEXT                   The cost
+ * @param  integer                      The length
+ * @param  SHORT_TEXT                   The units for the length
  * @set    y m d w
- * @param  BINARY			Auto-recur
- * @param  ?GROUP			The usergroup that purchasing gains membership to (NULL: super members)
- * @param  BINARY			Whether this is applied to primary usergroup membership
- * @param  BINARY			Whether this is currently enabled
- * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is start (NULL: default)
- * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is ended (NULL: default)
- * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (NULL: default)
- * @param  array			Other e-mails to send
- * @return AUTO_LINK		The ID
+ * @param  BINARY                       Auto-recur
+ * @param  ?GROUP                       The usergroup that purchasing gains membership to (NULL: super members)
+ * @param  BINARY                       Whether this is applied to primary usergroup membership
+ * @param  BINARY                       Whether this is currently enabled
+ * @param  ?LONG_TEXT                   The text of the e-mail to send out when a subscription is start (NULL: default)
+ * @param  ?LONG_TEXT                   The text of the e-mail to send out when a subscription is ended (NULL: default)
+ * @param  ?LONG_TEXT                   The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (NULL: default)
+ * @param  array                        Other e-mails to send
+ * @return AUTO_LINK                    The ID
  */
 function add_usergroup_subscription($title,$description,$cost,$length,$length_units,$auto_recur,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh,$mails)
 {
@@ -87,21 +87,21 @@ function add_usergroup_subscription($title,$description,$cost,$length,$length_un
 /**
  * Edit a usergroup subscription.
  *
- * @param  AUTO_LINK		The ID
- * @param  SHORT_TEXT	The title
- * @param  LONG_TEXT		The description
- * @param  SHORT_TEXT	The cost
- * @param  integer		The length
- * @param  SHORT_TEXT	The units for the length
+ * @param  AUTO_LINK                    The ID
+ * @param  SHORT_TEXT                   The title
+ * @param  LONG_TEXT                    The description
+ * @param  SHORT_TEXT                   The cost
+ * @param  integer                      The length
+ * @param  SHORT_TEXT                   The units for the length
  * @set    y m d w
- * @param  BINARY			Auto-recur
- * @param  ?GROUP			The usergroup that purchasing gains membership to (NULL: super members)
- * @param  BINARY			Whether this is applied to primary usergroup membership
- * @param  BINARY			Whether this is currently enabled
- * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is start (NULL: default)
- * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription is ended (NULL: default)
- * @param  ?LONG_TEXT	The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (NULL: default)
- * @param  ?array			Other e-mails to send (NULL: do not change)
+ * @param  BINARY                       Auto-recur
+ * @param  ?GROUP                       The usergroup that purchasing gains membership to (NULL: super members)
+ * @param  BINARY                       Whether this is applied to primary usergroup membership
+ * @param  BINARY                       Whether this is currently enabled
+ * @param  ?LONG_TEXT                   The text of the e-mail to send out when a subscription is start (NULL: default)
+ * @param  ?LONG_TEXT                   The text of the e-mail to send out when a subscription is ended (NULL: default)
+ * @param  ?LONG_TEXT                   The text of the e-mail to send out when a subscription cannot be renewed because the subproduct is gone (NULL: default)
+ * @param  ?array                       Other e-mails to send (NULL: do not change)
  */
 function edit_usergroup_subscription($id,$title,$description,$cost,$length,$length_units,$auto_recur,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh,$mails = null)
 {
@@ -202,8 +202,8 @@ function edit_usergroup_subscription($id,$title,$description,$cost,$length,$leng
 /**
  * Delete a usergroup subscription.
  *
- * @param  AUTO_LINK		The ID
- * @param  LONG_TEXT		The cancellation mail to send out (blank: none)
+ * @param  AUTO_LINK                    The ID
+ * @param  LONG_TEXT                    The cancellation mail to send out (blank: none)
  */
 function delete_usergroup_subscription($id,$uhoh_mail = '')
 {

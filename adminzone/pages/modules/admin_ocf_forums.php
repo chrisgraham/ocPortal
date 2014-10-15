@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 require_code('crud_module');
@@ -40,14 +40,14 @@ class Module_admin_ocf_forums extends standard_crud_module
     public $do_preview = null;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -79,12 +79,12 @@ class Module_admin_ocf_forums extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -105,11 +105,11 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         $this->add_one_label = do_lang_tempcode('ADD_FORUM');
@@ -143,10 +143,10 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         $menu_links = array(
@@ -174,23 +174,23 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a forum adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK	The ID of the forum being edited (NULL: adding, not editing)
-	 * @param  SHORT_TEXT	The name of the forum
-	 * @param  LONG_TEXT		The description of the forum
-	 * @param  ?AUTO_LINK	The ID of the forum grouping for the forum (NULL: first)
-	 * @param  ?AUTO_LINK	The parent forum (NULL: root)
-	 * @param  ?integer		The position (NULL: next)
-	 * @param  BINARY			Whether post counts are incremented in this forum
-	 * @param  BINARY			Whether subforums are ordered alphabetically (instead of manually)
-	 * @param  LONG_TEXT		Introductory question posed to all newcomers to the forum
-	 * @param  LONG_TEXT		Answer to the introductory question (or blank if it was just an 'ok')
-	 * @param  SHORT_TEXT	Redirection code (blank implies a normal forum, not a redirector)
-	 * @param  ID_TEXT		The order the topics are shown in, by default.
-	 * @param  BINARY			Whether the forum is threaded.
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a forum adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The ID of the forum being edited (NULL: adding, not editing)
+     * @param  SHORT_TEXT               The name of the forum
+     * @param  LONG_TEXT                The description of the forum
+     * @param  ?AUTO_LINK               The ID of the forum grouping for the forum (NULL: first)
+     * @param  ?AUTO_LINK               The parent forum (NULL: root)
+     * @param  ?integer                 The position (NULL: next)
+     * @param  BINARY                   Whether post counts are incremented in this forum
+     * @param  BINARY                   Whether subforums are ordered alphabetically (instead of manually)
+     * @param  LONG_TEXT                Introductory question posed to all newcomers to the forum
+     * @param  LONG_TEXT                Answer to the introductory question (or blank if it was just an 'ok')
+     * @param  SHORT_TEXT               Redirection code (blank implies a normal forum, not a redirector)
+     * @param  ID_TEXT                  The order the topics are shown in, by default.
+     * @param  BINARY                   Whether the forum is threaded.
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($id = null,$name = '',$description = '',$forum_grouping_id = null,$parent_forum = null,$position = null,$post_count_increment = 1,$order_sub_alpha = 0,$intro_question = '',$intro_answer = '',$redirection = '',$order = 'last_post',$is_threaded = 0)
     {
         if (is_null($forum_grouping_id)) {
@@ -247,18 +247,18 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Get a UI to choose a forum to edit.
-	 *
-	 * @param  AUTO_LINK		The ID of the forum we are generating the tree below (start recursion with db_get_first_id())
-	 * @param  SHORT_TEXT	The name of the forum $id
-	 * @param  array			A list of rows of all forums, or array() if the function is to get the list itself
-	 * @param  integer		The relative position of this forum wrt the others on the same level/branch in the UI
-	 * @param  integer		The number of forums in the parent forum grouping
-	 * @param  ?BINARY		Whether to order own subcategories alphabetically (NULL: ask the DB)
-	 * @param  ?BINARY		Whether to order subcategories alphabetically (NULL: ask the DB)
-	 * @param  boolean		Whether we are dealing with a huge forum structure
-	 * @return tempcode		The UI
-	 */
+     * Get a UI to choose a forum to edit.
+     *
+     * @param  AUTO_LINK                The ID of the forum we are generating the tree below (start recursion with db_get_first_id())
+     * @param  SHORT_TEXT               The name of the forum $id
+     * @param  array                    A list of rows of all forums, or array() if the function is to get the list itself
+     * @param  integer                  The relative position of this forum wrt the others on the same level/branch in the UI
+     * @param  integer                  The number of forums in the parent forum grouping
+     * @param  ?BINARY                  Whether to order own subcategories alphabetically (NULL: ask the DB)
+     * @param  ?BINARY                  Whether to order subcategories alphabetically (NULL: ask the DB)
+     * @param  boolean                  Whether we are dealing with a huge forum structure
+     * @return tempcode                 The UI
+     */
     public function get_forum_tree($id,$forum,&$all_forums,$position = 0,$sub_num_in_parent_forum_grouping = 1,$order_sub_alpha = null,$parent_order_sub_alpha = null,$huge = false)
     {
         $forum_groupings = new ocp_tempcode();
@@ -383,10 +383,10 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * The UI to choose a forum to edit (relies on get_forum_tree to do almost all the work).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a forum to edit (relies on get_forum_tree to do almost all the work).
+     *
+     * @return tempcode                 The UI
+     */
     public function ed()
     {
         $huge = ($GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>300);
@@ -404,10 +404,10 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * The actualiser to reorder forums.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to reorder forums.
+     *
+     * @return tempcode                 The UI
+     */
     public function reorder()
     {
         $all = $GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum','f_forum_grouping_id'));
@@ -447,11 +447,11 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($_id)
     {
         $id = intval($_id);
@@ -491,11 +491,11 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple: fields, hidden-fields, delete-fields, N/A, N/A, N/A, action fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A tuple: fields, hidden-fields, delete-fields, N/A, N/A, N/A, action fields
+     */
     public function fill_in_edit_form($id)
     {
         $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('group_privileges p JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g ON g.id=group_id','g.id',array('module_the_name' => 'forums','category_name' => $id,'the_value' => '1','g_is_private_club' => 1));
@@ -524,10 +524,10 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         require_code('ocf_forums_action2');
@@ -586,10 +586,10 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $meta_data = actual_meta_data_get_fields('forum',$id);
@@ -620,10 +620,10 @@ class Module_admin_ocf_forums extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         ocf_delete_forum(intval($id),post_param_integer('target_forum'),post_param_integer('delete_topics',0));

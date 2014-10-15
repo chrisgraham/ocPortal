@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		themewizard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    themewizard
  */
 
 class Hook_themewizard_equation
 {
     /**
-	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
-	 *
-	 * @return tempcode  The snippet
-	 */
+     * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
+     *
+     * @return tempcode                 The snippet
+     */
     public function run()
     {
         $theme = get_param('theme');

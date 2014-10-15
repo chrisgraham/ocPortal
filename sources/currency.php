@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 /**
  * Convert an IP address to a currency code.
  *
- * @param  ?IP			IP address (NULL: that of current member).
- * @return ID_TEXT	The currency code.
+ * @param  ?IP                          IP address (NULL: that of current member).
+ * @return ID_TEXT                      The currency code.
  */
 function ip_to_currency($ip = null)
 {
@@ -37,8 +37,8 @@ function ip_to_currency($ip = null)
 /**
  * Convert a country code to a currency code.
  *
- * @param  ID_TEXT	The country code.
- * @return ID_TEXT	The currency code.
+ * @param  ID_TEXT                      The country code.
+ * @return ID_TEXT                      The currency code.
  */
 function country_to_currency($country)
 {
@@ -56,11 +56,11 @@ function country_to_currency($country)
 /**
  * Perform a currency conversion.
  *
- * @param  mixed		The starting amount (integer or float).
- * @param  ID_TEXT	The start currency code.
- * @param  ?ID_TEXT  The end currency code (NULL: unknown, guess it).
- * @param  boolean	Whether to get as a string.
- * @return ?mixed		The new amount as float, or if $string then as a string (NULL: failed to do it).
+ * @param  mixed                        The starting amount (integer or float).
+ * @param  ID_TEXT                      The start currency code.
+ * @param  ?ID_TEXT                     The end currency code (NULL: unknown, guess it).
+ * @param  boolean                      Whether to get as a string.
+ * @return ?mixed                       The new amount as float, or if $string then as a string (NULL: failed to do it).
  */
 function currency_convert($amount,$from_currency,$to_currency = null,$string = false)
 {
@@ -164,7 +164,7 @@ function currency_convert($amount,$from_currency,$to_currency = null,$string = f
 /**
  * Get the currency map.
  *
- * @return array	The currency map, currency code, to an array of country codes.
+ * @return array                        The currency map, currency code, to an array of country codes.
  */
 function get_currency_map()
 {

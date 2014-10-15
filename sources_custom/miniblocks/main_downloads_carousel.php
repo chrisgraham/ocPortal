@@ -32,23 +32,23 @@ foreach ($all_rows as $d_row) {
 $carousel_id = strval(mt_rand(0,mt_getrandmax()));
 
 $content = '
-	<div id="carousel_' . $carousel_id . '" class="carousel" style="display: none">
-		<div class="move_left" onkeypress="this.onmousedown(event);" onmousedown="carousel_move(' . $carousel_id . ',-100); return false;"></div>
-		<div class="move_right" onkeypress="this.onmousedown(event);" onmousedown="carousel_move(' . $carousel_id . ',+100); return false;"></div>
+    <div id="carousel_' . $carousel_id . '" class="carousel" style="display: none">
+        <div class="move_left" onkeypress="this.onmousedown(event);" onmousedown="carousel_move(' . $carousel_id . ',-100); return false;"></div>
+        <div class="move_right" onkeypress="this.onmousedown(event);" onmousedown="carousel_move(' . $carousel_id . ',+100); return false;"></div>
 
-		<div class="main">
-		</div>
-	</div>
+        <div class="main">
+        </div>
+    </div>
 
-	<div class="carousel_temp" id="carousel_ns_' . $carousel_id . '">
-		' . $subdownloads->evaluate() . '
-	</div>
+    <div class="carousel_temp" id="carousel_ns_' . $carousel_id . '">
+        ' . $subdownloads->evaluate() . '
+    </div>
 
-	<script>// <![CDATA[
-		add_event_listener_abstract(window,\'load\',function() {
-			initialise_carousel(' . $carousel_id . ');
-		});
-	//]]></script>
+    <script>// <![CDATA[
+        add_event_listener_abstract(window,\'load\',function() {
+            initialise_carousel(' . $carousel_id . ');
+        });
+    //]]></script>
 ';
 
 $tpl = put_in_standard_box(make_string_tempcode($content),do_lang('RANDOM_20_DOWNLOADS'));

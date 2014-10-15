@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		import
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    import
  */
 
 /**
@@ -77,10 +77,10 @@ function ocf_over_msn()
 /**
  * Returns the NEW ID of an imported old ID, for the specified importation type. Whether it returns NULL or gives an error message depends on $fail_ok.
  *
- * @param  ID_TEXT		An importation type code, from those ocPortal has defined (E.g. 'download', 'news', ...)
- * @param  string			The source (old, original) ID of the mapping
- * @param  boolean		If it is okay to fail to find a mapping
- * @return ?AUTO_LINK	The new ID (NULL: not found)
+ * @param  ID_TEXT                      An importation type code, from those ocPortal has defined (E.g. 'download', 'news', ...)
+ * @param  string                       The source (old, original) ID of the mapping
+ * @param  boolean                      If it is okay to fail to find a mapping
+ * @return ?AUTO_LINK                   The new ID (NULL: not found)
  */
 function import_id_remap_get($type,$id_old,$fail_ok = false)
 {
@@ -103,9 +103,9 @@ function import_id_remap_get($type,$id_old,$fail_ok = false)
 /**
  * Check to see if the given ID of the given type has been imported (if it has a mapping).
  *
- * @param  ID_TEXT		An importation type code, from those ocPortal has defined
- * @param  string			The source (old, original) ID of the mapping
- * @return boolean		Whether it has been imported
+ * @param  ID_TEXT                      An importation type code, from those ocPortal has defined
+ * @param  string                       The source (old, original) ID of the mapping
+ * @return boolean                      Whether it has been imported
  */
 function import_check_if_imported($type,$id_old)
 {
@@ -116,9 +116,9 @@ function import_check_if_imported($type,$id_old)
 /**
  * Set the NEW ID for an imported old ID, which also tacitly indicates completion of importing an item of some type of content. This mapping (old ID to new ID) may be used later for importing related content that requires the new identifier. import_id_remap_get is the inverse of this function.
  *
- * @param  ID_TEXT		An importation type code, from those ocPortal has defined
- * @param  string			The source (old, original) ID of the mapping
- * @param  AUTO_LINK		The destination (new) ID of the mapping
+ * @param  ID_TEXT                      An importation type code, from those ocPortal has defined
+ * @param  string                       The source (old, original) ID of the mapping
+ * @param  AUTO_LINK                    The destination (new) ID of the mapping
  */
 function import_id_remap_put($type,$id_old,$id_new)
 {
@@ -128,9 +128,9 @@ function import_id_remap_put($type,$id_old,$id_new)
 /**
  * Add a word to the word-filter.
  *
- * @param  SHORT_TEXT	Word to add to the word-filter
- * @param  SHORT_TEXT	Replacement (blank: block entirely)
- * @param  BINARY			Whether to perform a substring match
+ * @param  SHORT_TEXT                   Word to add to the word-filter
+ * @param  SHORT_TEXT                   Replacement (blank: block entirely)
+ * @param  BINARY                       Whether to perform a substring match
  */
 function add_wordfilter_word($word,$replacement = '',$substr = 0)
 {
@@ -143,10 +143,10 @@ function add_wordfilter_word($word,$replacement = '',$substr = 0)
 /**
  * Find a similar but non conflicting filename to $file in the given directory.
  *
- * @param  PATH			Directory
- * @param  string			Preferred filename
- * @param  boolean		Whether GIF files are made as PNG fiels
- * @return string			Filename to use
+ * @param  PATH                         Directory
+ * @param  string                       Preferred filename
+ * @param  boolean                      Whether GIF files are made as PNG fiels
+ * @return string                       Filename to use
  */
 function find_derivative_filename($dir,$file,$shun_gif = false)
 {
@@ -195,7 +195,7 @@ function post_import_cleanup()
 /**
  * Turn index maintenance off to help speed import, or back on.
  *
- * @param  boolean		Whether index maintenance should be on.
+ * @param  boolean                      Whether index maintenance should be on.
  */
 function set_database_index_maintenance($on)
 {

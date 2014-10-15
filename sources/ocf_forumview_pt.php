@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 /**
  * Get a map of details relating to the Private Topics of a certain member.
  *
- * @param  integer	The start row for getting details of topics in the Private Topic forum (i.e. 0 is newest, higher is starting further back in time).
- * @param  ?integer	The maximum number of topics to get detail of (NULL: default).
- * @param  ?MEMBER	The member to get Private Topics of (NULL: current member).
- * @return array		The details.
+ * @param  integer                      The start row for getting details of topics in the Private Topic forum (i.e. 0 is newest, higher is starting further back in time).
+ * @param  ?integer                     The maximum number of topics to get detail of (NULL: default).
+ * @param  ?MEMBER                      The member to get Private Topics of (NULL: current member).
+ * @return array                        The details.
  */
 function ocf_get_private_topics($start = 0,$max = null,$member_id = null)
 {

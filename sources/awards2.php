@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		awards
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    awards
  */
 
 /**
  * Make an award type.
  *
- * @param  SHORT_TEXT	The title
- * @param  LONG_TEXT		The description
- * @param  integer		How many points are given to the awardee
- * @param  ID_TEXT		The content type the award type is for
- * @param  BINARY			Whether to not show the awardee when displaying this award
- * @param  integer		The approximate time in hours between awards (e.g. 168 for a week)
- * @return AUTO_LINK		The ID
+ * @param  SHORT_TEXT                   The title
+ * @param  LONG_TEXT                    The description
+ * @param  integer                      How many points are given to the awardee
+ * @param  ID_TEXT                      The content type the award type is for
+ * @param  BINARY                       Whether to not show the awardee when displaying this award
+ * @param  integer                      The approximate time in hours between awards (e.g. 168 for a week)
+ * @return AUTO_LINK                    The ID
  */
 function add_award_type($title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
@@ -57,13 +57,13 @@ function add_award_type($title,$description,$points,$content_type,$hide_awardee,
 /**
  * Edit an award type
  *
- * @param  AUTO_LINK		The ID
- * @param  SHORT_TEXT	The title
- * @param  LONG_TEXT		The description
- * @param  integer		How many points are given to the awardee
- * @param  ID_TEXT		The content type the award type is for
- * @param  BINARY			Whether to not show the awardee when displaying this award
- * @param  integer		The approximate time in hours between awards (e.g. 168 for a week)
+ * @param  AUTO_LINK                    The ID
+ * @param  SHORT_TEXT                   The title
+ * @param  LONG_TEXT                    The description
+ * @param  integer                      How many points are given to the awardee
+ * @param  ID_TEXT                      The content type the award type is for
+ * @param  BINARY                       Whether to not show the awardee when displaying this award
+ * @param  integer                      The approximate time in hours between awards (e.g. 168 for a week)
  */
 function edit_award_type($id,$title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
@@ -93,7 +93,7 @@ function edit_award_type($id,$title,$description,$points,$content_type,$hide_awa
 /**
  * Delete an award type.
  *
- * @param  AUTO_LINK		The ID
+ * @param  AUTO_LINK                    The ID
  */
 function delete_award_type($id)
 {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 /**
@@ -29,8 +29,8 @@ function init__comcode_from_html()
 /**
  * Used by semihtml_to_comcode to turn <img> to \[img\]. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _img_tag_fixup($matches)
 {
@@ -66,8 +66,8 @@ function _img_tag_fixup($matches)
 /**
  * Used by semihtml_to_comcode to turn fix URLs in <img> to be absolute. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _img_tag_fixup_raw($matches)
 {
@@ -90,8 +90,8 @@ function _img_tag_fixup_raw($matches)
 /**
  * Used by semihtml_to_comcode to fix <a> tag links. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _a_tag_link_fixup($matches)
 {
@@ -104,8 +104,8 @@ function _a_tag_link_fixup($matches)
 /**
  * Used by semihtml_to_comcode to fix CSS colours aways from RGB notation. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _css_color_fixup($matches)
 {
@@ -128,8 +128,8 @@ function _css_color_fixup($matches)
 /**
  * Used by semihtml_to_comcode to make it so inline CSS with quotes uses single quotes. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _css_quot_fixup($matches)
 {
@@ -139,8 +139,8 @@ function _css_quot_fixup($matches)
 /**
  * Apply temporary adhoc-escaping to a CDATA area (we'll reverse convert later). preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _cdata_protect($matches)
 {
@@ -157,8 +157,8 @@ function _cdata_protect($matches)
 /**
  * Apply temporary adhoc-escaping to a code tags (we'll reverse convert later). preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _codetag_protect($matches)
 {
@@ -171,8 +171,8 @@ function _codetag_protect($matches)
 /**
  * Apply temporary adhoc-escaping to a code tags (we'll reverse convert later). preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _codetag_unprotect($matches)
 {
@@ -185,8 +185,8 @@ function _codetag_unprotect($matches)
 /**
  * Reorder XHTML attributes alphabetically, so our regexp's match better. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _reorder_xhtml_attributes($matches)
 {
@@ -219,8 +219,8 @@ function _reorder_xhtml_attributes($matches)
 /**
  * Reorder style properties alphabetically, so our regexp's match better. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _reorder_css_properties($matches)
 {
@@ -243,8 +243,8 @@ function _reorder_css_properties($matches)
 /**
  * Convert Semi-HTML into comcode. Cleanup where possible. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function semihtml_to_comcode_wrap($matches)
 {
@@ -258,8 +258,8 @@ function semihtml_to_comcode_wrap($matches)
 /**
  * Extract underlying Comcode from an editor Comcode-management button. preg_replace_callback callback
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function debuttonise($matches)
 {
@@ -269,8 +269,8 @@ function debuttonise($matches)
 /**
  * Convert HTML headers to Comcode titles
  *
- * @param  string			Semi-HTML
- * @return string			Semi-HTML, with headers converted to titles
+ * @param  string                       Semi-HTML
+ * @return string                       Semi-HTML, with headers converted to titles
  */
 function convert_html_headers_to_titles($semihtml)
 {
@@ -296,8 +296,8 @@ function convert_html_headers_to_titles($semihtml)
 /**
  * Convert HTML-filled Comcode to cleaner Comcode.
  *
- * @param  LONG_TEXT		The messy Comcode.
- * @return LONG_TEXT		The cleaned Comcode.
+ * @param  LONG_TEXT                    The messy Comcode.
+ * @return LONG_TEXT                    The cleaned Comcode.
  */
 function force_clean_comcode($comcode)
 {
@@ -318,9 +318,9 @@ function force_clean_comcode($comcode)
 /**
  * Convert Semi-HTML into comcode. Cleanup where possible
  *
- * @param  LONG_TEXT		The Semi-HTML to converted
- * @param  boolean		Whether to force full conversion regardless of settings
- * @return LONG_TEXT		The equivalent Comcode
+ * @param  LONG_TEXT                    The Semi-HTML to converted
+ * @param  boolean                      Whether to force full conversion regardless of settings
+ * @return LONG_TEXT                    The equivalent Comcode
  */
 function semihtml_to_comcode($semihtml,$force = false)
 {
@@ -398,8 +398,8 @@ function semihtml_to_comcode($semihtml,$force = false)
     $semihtml = preg_replace_callback('#(<pre[^>]*>)(.*)(</pre>)#siU','_cdata_protect',$semihtml);
     $semihtml = preg_replace_callback('#(<![CDATA[)(.*)(]]>)#siU','_cdata_protect',$semihtml);
     // And use same method to protect our code tags
-/*	foreach (array_keys($GLOBALS['CODE_TAGS']) as $code_tag)
-		$semihtml=preg_replace_callback('#(\['.$code_tag.'[^\]]*\])(.*)(\[/'.$code_tag.'\])#siU','_codetag_protect',$semihtml);
+/* foreach (array_keys($GLOBALS['CODE_TAGS']) as $code_tag)
+        $semihtml=preg_replace_callback('#(\['.$code_tag.'[^\]]*\])(.*)(\[/'.$code_tag.'\])#siU','_codetag_protect',$semihtml);
 Actually no, we don't want this. These tags are typed potentially to show HTML and thus the entities must get decoded
 */
 
@@ -682,9 +682,9 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
     $semihtml = str_replace('</CDATA__amp>','&',$semihtml);
 
     // Tempcode escaping
-    /*$semihtml=str_replace('{+','\{+',$semihtml);	No - people should be able to type this if they want
-	$semihtml=str_replace('{$','\{$',$semihtml);
-	$semihtml=str_replace('{!','\{!',$semihtml);*/
+    /*$semihtml=str_replace('{+','\{+',$semihtml); No - people should be able to type this if they want
+    $semihtml=str_replace('{$','\{$',$semihtml);
+    $semihtml=str_replace('{!','\{!',$semihtml);*/
 
     $semihtml = str_replace('[ html','[html',$semihtml);
     $semihtml = str_replace('[ semihtml','[semihtml',$semihtml);
@@ -779,9 +779,9 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 
     // Then, if there is no HTML left, we can avoid the 'semihtml' tag
     if (strpos($semihtml2,'<') === false) {
-        //		$semihtml2=str_replace(array('&lt;','&gt;','&amp;'),array('___lt___','___gt___','___amp___'),$semihtml2);
+        //     $semihtml2=str_replace(array('&lt;','&gt;','&amp;'),array('___lt___','___gt___','___amp___'),$semihtml2);
         $semihtml2 = @html_entity_decode($semihtml2,ENT_QUOTES,get_charset());
-//		$semihtml2=str_replace(array('___lt___','___gt___','___amp___'),array('&lt;','&gt;','&amp;'),$semihtml2);
+//    $semihtml2=str_replace(array('___lt___','___gt___','___amp___'),array('&lt;','&gt;','&amp;'),$semihtml2);
         return $semihtml2;
     }
 
@@ -804,8 +804,8 @@ Actually no, we don't want this. These tags are typed potentially to show HTML a
 /**
  * preg_replace callback to strip HTML tags from inside a Comcode tag, except formatting ones that we'll convert to white-space.
  *
- * @param  array			Matches
- * @return string			Result
+ * @param  array                        Matches
+ * @return string                       Result
  */
 function comcode_strip_html_tags($matches)
 {
@@ -817,11 +817,11 @@ function comcode_strip_html_tags($matches)
  * This is a good test case:
  * exit(comcode_preg_replace('test','#\[test\](.*)\[/test\]#','>${1}<','[test]x[test a]y[/test]z[/test]'));
  *
- * @param  string			The element name to replace over
- * @param  string			Pattern
- * @param  mixed			Replacement (string or single element array specifying a function name)
- * @param  string			Haystack
- * @return string			Result
+ * @param  string                       The element name to replace over
+ * @param  string                       Pattern
+ * @param  mixed                        Replacement (string or single element array specifying a function name)
+ * @param  string                       Haystack
+ * @return string                       Result
  */
 function comcode_preg_replace($element,$pattern,$replacement,$semihtml)
 {
@@ -873,10 +873,10 @@ function comcode_preg_replace($element,$pattern,$replacement,$semihtml)
 /**
  * Do some regular expression matches, locked correctly to single HTML elements. This is necessary to make sure nesting is handled correctly, which regular expressions cannot do on their own.
  *
- * @param  string			The element name to replace over
- * @param  array			A list of pairs: Pattern, Replacement
- * @param  string			Haystack
- * @return string			Result
+ * @param  string                       The element name to replace over
+ * @param  array                        A list of pairs: Pattern, Replacement
+ * @param  string                       Haystack
+ * @return string                       Result
  */
 function array_html_preg_replace($element,$array,$semihtml)
 {

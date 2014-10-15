@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		stats
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    stats
  */
 
 /**
@@ -52,14 +52,14 @@ function init__svg()
 /**
  * Get the SVG markup for a segment of a circle. It is designed to be used in the construction of a pie chart
  *
- * @param  string			The hexadecimal-formatted colour for the shape
- * @param  integer		The angle of the segment
- * @param  integer		The radius of the segment
- * @param  integer		The X position of the start vertex
- * @param  integer		The Y position of the start vertex
- * @param  integer		The X position of the end vertex
- * @param  integer		The Y position of the end vertex
- * @return string			The SVG markup for the described segment
+ * @param  string                       The hexadecimal-formatted colour for the shape
+ * @param  integer                      The angle of the segment
+ * @param  integer                      The radius of the segment
+ * @param  integer                      The X position of the start vertex
+ * @param  integer                      The Y position of the start vertex
+ * @param  integer                      The X position of the end vertex
+ * @param  integer                      The Y position of the end vertex
+ * @return string                       The SVG markup for the described segment
 */
 function _draw_segment($colour,$angle,$radius,$start_x,$start_y,$end_x,$end_y)
 {
@@ -73,12 +73,12 @@ function _draw_segment($colour,$angle,$radius,$start_x,$start_y,$end_x,$end_y)
 /**
  * Get the SVG markup for a key for a chart, such as a pie chart, using the specified data
  *
- * @param	array				An array of the data to be keyed up
- * @param	string			The starting colour for the key
- * @param	integer			The starting X position
- * @param	integer			The starting Y position
- * @param	string			The units (e.g. %)
- * @return  string			The SVG markup for the described key
+ * @param   array          An array of the data to be keyed up
+ * @param   string         The starting colour for the key
+ * @param   integer        The starting X position
+ * @param   integer        The starting Y position
+ * @param   string         The units (e.g. %)
+ * @return  string         The SVG markup for the described key
 */
 function _draw_key($data,$start_colour,$start_x,$start_y,$units = '')
 {
@@ -119,8 +119,8 @@ function _draw_key($data,$start_colour,$start_x,$start_y,$units = '')
 /**
  * Get the next hexadecimal colour from the specified one, where each of the Red, Green or Blue columns can either be 00, 33, 66 or 99, to provide a viewable contrast between two adjacent colours
  *
- * @param	string			The hexadecimal-format colour to be incremented
- * @return  string			The incremented hexadecimal colour
+ * @param   string         The hexadecimal-format colour to be incremented
+ * @return  string         The incremented hexadecimal colour
 */
 function _get_next_colour($current_colour)
 {
@@ -137,7 +137,7 @@ function _get_next_colour($current_colour)
 /**
  * Get the markup required to start a new SVG document
  *
- * @return string			The markup
+ * @return string                       The markup
 */
 function _start_svg()
 {
@@ -165,23 +165,23 @@ function _start_svg()
 <script>// <![CDATA[
 if (typeof window.addEventListenerAbstract==\'undefined\') addEventListenerAbstract=function(element,the_event,command,capture)
 {
-	if(element)
-	{
-		if (typeof element.simulated_events==\'undefined\') element.simulated_events=[];
-		if (typeof element.simulated_events[the_event]==\'undefined\') element.simulated_events[the_event]=[];
-		element.simulated_events[the_event].push(command);
+    if(element)
+    {
+        if (typeof element.simulated_events==\'undefined\') element.simulated_events=[];
+        if (typeof element.simulated_events[the_event]==\'undefined\') element.simulated_events[the_event]=[];
+        element.simulated_events[the_event].push(command);
 
-		if(typeof element.addEventListener!=\'undefined\')
-		{
-			return element.addEventListener(the_event,command,capture);
-		}
-		else if(typeof element.attachEvent!=\'undefined\')
-		{
-			return element.attachEvent("on"+the_event,command);
-		}
-		else return false;
-	}
-	else return false;
+        if(typeof element.addEventListener!=\'undefined\')
+        {
+            return element.addEventListener(the_event,command,capture);
+        }
+        else if(typeof element.attachEvent!=\'undefined\')
+        {
+            return element.attachEvent("on"+the_event,command);
+        }
+        else return false;
+    }
+    else return false;
 };
 //]]></script>
 <script xlink:href="' . escape_html($js_file) . '" />' . "\n";
@@ -190,8 +190,8 @@ if (typeof window.addEventListenerAbstract==\'undefined\') addEventListenerAbstr
 /**
  * Get the markup required to finish an SVG document
  *
- * @param  string			The plot markup to insert first
- * @return string			The markup
+ * @param  string                       The plot markup to insert first
+ * @return string                       The markup
 */
 function _finish_svg($plot = '')
 {
@@ -201,8 +201,8 @@ function _finish_svg($plot = '')
 /**
  * Take the SVG and make all the styles inline. Disabled as not needed for native SVG implementations
  *
- * @param  string			The SVG
- * @return string			... made to have inline styles
+ * @param  string                       The SVG
+ * @return string                       ... made to have inline styles
 */
 function _filter_svg_css($plot)
 {
@@ -212,11 +212,11 @@ function _filter_svg_css($plot)
 /**
  * Get the markup for a standard pair of axes
  *
- * @param	float				Maximum Y value
- * @param	float				Y scale
- * @param	string			X axis label
- * @param	string			Y axis label
- * @return  string			The markup
+ * @param   float          Maximum Y value
+ * @param   float          Y scale
+ * @param   string         X axis label
+ * @param   string         Y axis label
+ * @return  string         The markup
 */
 function _draw_axes($max_y,$y_scale,$x_label = 'X axis',$y_label = 'Y axis')
 {
@@ -252,9 +252,9 @@ function _draw_axes($max_y,$y_scale,$x_label = 'X axis',$y_label = 'Y axis')
 /**
  * Get the markup for an average line
  *
- * @param  float			Average value
- * @param  float			Y scale
- * @return string			The markup
+ * @param  float                        Average value
+ * @param  float                        Y scale
+ * @return string                       The markup
 */
 function _draw_average($average,$y_scale)
 {
@@ -268,12 +268,12 @@ function _draw_average($average,$y_scale)
 /**
  * Create a bar chart from the specified data and return the SVG markup
  *
- * @param  array			The data to be used in the creation of the bar chart
- * @param  string			The X axis label
- * @param  string			The Y axis label
- * @param  string			The X axis units label
- * @param  string			The Y axis units label
- * @return string			The SVG markup for the described bar chart
+ * @param  array                        The data to be used in the creation of the bar chart
+ * @param  string                       The X axis label
+ * @param  string                       The Y axis label
+ * @param  string                       The X axis units label
+ * @param  string                       The Y axis units label
+ * @return string                       The SVG markup for the described bar chart
 */
 function create_bar_chart($data,$x_label = 'X axis',$y_label = 'Y axis',$x_units = '',$y_units = '')
 {
@@ -326,17 +326,17 @@ function create_bar_chart($data,$x_label = 'X axis',$y_label = 'Y axis',$x_units
         // Bar and label
         $plot .= '<rect id="' . float_to_raw_string($x) . float_to_raw_string($y) . '_bar" x="' . float_to_raw_string($x) . '" y="' . float_to_raw_string($y) . '" width="' . float_to_raw_string(BAR_WIDTH) . '" height="' . float_to_raw_string($height) . '" style="fill: #' . ($colour) . ';" class="bar_chart" />' . "\n";
         $labels .= '<text style="fill: ' . (($height == 0.0)?'black':'white') . '; font-weight: normal" id="' . float_to_raw_string($x) . float_to_raw_string($y) . '" transform="translate(' . float_to_raw_string($x+TEXT_HEIGHT-3) . ',' . float_to_raw_string(PLOT_HEIGHT+PLOT_HEIGHT_BIAS-TEXT_HEIGHT) . ') rotate(270)" class="bar_chart_text">' . escape_html($key) . '</text>
-		<script>
-		<![CDATA[
-			page_loaded=true;
-			addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"mouseover",function(event) { if (window.current_bar) window.current_bar.de_clarify(); window.current_bar=this; document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: red; background-color: black; z-index: 999999;"); },false);
-			document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").de_clarify=function(event) { document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: ' . (($height == 0.0)?'black':'white') . '"); };
-			addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"focus",function(event) { this.onmouseover(event); },false);
-			addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '_bar"),"mouseover",function(event) { if (window.current_bar) window.current_bar.de_clarify(); window.current_bar=this; document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: red; background-color: black; z-index: 999999;"); },false);
-			document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '_bar").de_clarify=function(event) { document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: ' . (($height == 0.0)?'black':'white') . '"); };
-			addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '_bar"),"focus",function(event) { this.onmouseover(event); },false);
-		]]>
-		</script>' . "\n";
+        <script>
+        <![CDATA[
+            page_loaded=true;
+            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"mouseover",function(event) { if (window.current_bar) window.current_bar.de_clarify(); window.current_bar=this; document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: red; background-color: black; z-index: 999999;"); },false);
+            document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").de_clarify=function(event) { document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: ' . (($height == 0.0)?'black':'white') . '"); };
+            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"focus",function(event) { this.onmouseover(event); },false);
+            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '_bar"),"mouseover",function(event) { if (window.current_bar) window.current_bar.de_clarify(); window.current_bar=this; document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: red; background-color: black; z-index: 999999;"); },false);
+            document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '_bar").de_clarify=function(event) { document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '").setAttribute("style","fill: ' . (($height == 0.0)?'black':'white') . '"); };
+            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '_bar"),"focus",function(event) { this.onmouseover(event); },false);
+        ]]>
+        </script>' . "\n";
 
         // Iterate
         $i++;
@@ -353,12 +353,12 @@ function create_bar_chart($data,$x_label = 'X axis',$y_label = 'Y axis',$x_units
 /**
  * Create a scatter graph using the data provided and return the SVG markup
  *
- * @param  array			The data to be used in the creation of the scatter graph
- * @param  string			The X axis label
- * @param  string			The Y axis label
- * @param  string			The X axis units label
- * @param  string			The Y axis units label
- * @return string			The SVG markup for the described scatter graph
+ * @param  array                        The data to be used in the creation of the scatter graph
+ * @param  string                       The X axis label
+ * @param  string                       The Y axis label
+ * @param  string                       The X axis units label
+ * @param  string                       The Y axis units label
+ * @return string                       The SVG markup for the described scatter graph
 */
 function create_scatter_graph($data,$x_label = 'X Axis',$y_label = 'Y Axis',$x_units = '',$y_units = '')
 {
@@ -445,15 +445,15 @@ function create_scatter_graph($data,$x_label = 'X Axis',$y_label = 'Y Axis',$x_u
             // The label
             if (($first) || (abs($x-$prev_x)>MIN_X_MARKER_DISTANCE)) {
                 $labels .= '<text id="' . float_to_raw_string($x) . float_to_raw_string($y) . '" transform="translate(' . float_to_raw_string($x+TEXT_HEIGHT/2) . ',' . float_to_raw_string(PLOT_HEIGHT+X_AXIS_HEIGHT+PLOT_HEIGHT_BIAS) . ') rotate(270)" class="scatter_graph_text">' . escape_html($value['key']) . '</text>
-				<script>
-				<![CDATA[
-					page_loaded=true;
-					addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"mouseover",function(event) { this.setAttribute("style","fill: red; stroke: red; background-color: black; z-index: 999999;"); },false);
-					addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"mouseout",function(event) { this.setAttribute("style",""); },false);
-					addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"focus",function(event) { this.onmouseover(event); },false);
-					addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"blur",function(event) { this.onmouseout(event); },false);
-				]]>
-				</script>' . "\n";
+                    <script>
+                    <![CDATA[
+                            page_loaded=true;
+                            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"mouseover",function(event) { this.setAttribute("style","fill: red; stroke: red; background-color: black; z-index: 999999;"); },false);
+                            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"mouseout",function(event) { this.setAttribute("style",""); },false);
+                            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"focus",function(event) { this.onmouseover(event); },false);
+                            addEventListenerAbstract(document.getElementById("' . float_to_raw_string($x) . float_to_raw_string($y) . '"),"blur",function(event) { this.onmouseout(event); },false);
+                    ]]>
+                    </script>' . "\n";
             }
         }
 
@@ -474,8 +474,8 @@ function create_scatter_graph($data,$x_label = 'X Axis',$y_label = 'Y Axis',$x_u
 /**
  * Draw a pie chart with the specified data and return the SVG markup
  *
- * @param  array	The data to be used in the creation of the pie chart
- * @return string	The SVG markup for the described pie chart
+ * @param  array                        The data to be used in the creation of the pie chart
+ * @return string                       The SVG markup for the described pie chart
 */
 function create_pie_chart($data)
 {

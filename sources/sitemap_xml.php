@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -80,8 +80,8 @@ function sitemap_xml_build()
 /**
  * Ping search engines with an updated sitemap.
  *
- * @param  URLPATH 	Sitemap URL.
- * @return string		HTTP result output
+ * @param  URLPATH                      Sitemap URL.
+ * @return string                       HTTP result output
  */
 function ping_sitemap_xml($url)
 {
@@ -110,7 +110,7 @@ function ping_sitemap_xml($url)
 /**
  * Initialise the writing to a Sitemap XML file. You can only call one of these functions per time as it uses global variables for tracking.
  *
- * @param  PATH  		Where we will save to.
+ * @param  PATH                         Where we will save to.
  */
 function _sitemap_xml_initialise($file_path)
 {
@@ -140,7 +140,7 @@ function _sitemap_xml_initialise($file_path)
     // Start of file
     $blob = '<' . '?xml version="1.0" encoding="' . get_charset() . '"?' . '>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	';
+    ';
     fwrite($SITEMAPS_OUT_FILE,$blob);
 }
 
@@ -154,7 +154,7 @@ function _sitemap_xml_finished()
     // End of file
     $blob = '
 </urlset>
-	';
+    ';
     fwrite($SITEMAPS_OUT_FILE,$blob);
 
     // Copy to final path / tidy up
@@ -168,7 +168,7 @@ function _sitemap_xml_finished()
 /**
  * Callback for writing a Sitemap node into the Sitemap XML file.
  *
- * @param  array		The Sitemap node.
+ * @param  array                        The Sitemap node.
  */
 function _sitemap_xml_serialize_sitemap_node($node)
 {
@@ -200,7 +200,7 @@ function _sitemap_xml_serialize_sitemap_node($node)
       ' . $lastmod_date . '
       <priority>' . float_to_raw_string($priority) . '</priority>
    </url>
-		';
+        ';
         fwrite($SITEMAPS_OUT_FILE,$url_blob);
     }
 }

@@ -20,9 +20,9 @@
 
 /*EXTRA FUNCTIONS: (pspell\_.+|shell_exec)*/
 
-/*	$x=fopen(get_custom_file_base().'/data_custom/spelling/write.log',GOOGLE_APPENGINE?'wb':'wt');
-	fwrite($x,serialize($_GET+$_POST));
-	fclose($x);*/
+/* $x=fopen(get_custom_file_base().'/data_custom/spelling/write.log',GOOGLE_APPENGINE?'wb':'wt');
+    fwrite($x,serialize($_GET+$_POST));
+    fclose($x);*/
 
 
 if (strpos($_SERVER['SCRIPT_NAME'],'spell-check-logic.php') !== false) {
@@ -32,7 +32,7 @@ if (strpos($_SERVER['SCRIPT_NAME'],'spell-check-logic.php') !== false) {
 /**
  * Get the file base for your installation of ocPortal
  *
- * @return PATH			The file base, without a trailing slash
+ * @return PATH                         The file base, without a trailing slash
  */
 function sl_get_file_base()
 {
@@ -54,7 +54,7 @@ function sl_get_file_base()
 /**
  * Find the path to where WYSIWYG data is stored.
  *
- * @return string			Relative path
+ * @return string                       Relative path
  */
 function sl_get_custom_file_base()
 {
@@ -69,8 +69,8 @@ function sl_get_custom_file_base()
 /**
  * This function is similar to filter_naughty, except it requires the parameter to be strictly alphanumeric. It is intended for use on text that will be put into an eval.
  *
- * @param  string			String to test
- * @return string			Same as input string
+ * @param  string                       String to test
+ * @return string                       Same as input string
  */
 function sl_filter_naughty_harsh($in)
 {
@@ -84,7 +84,7 @@ function sl_filter_naughty_harsh($in)
 /**
  * Assign this to explicitly declare that a variable may be of mixed type, and initialise to NULL.
  *
- * @return ?mixed	Of mixed type (NULL: default)
+ * @return ?mixed                       Of mixed type (NULL: default)
  */
 function sl_mixed()
 {
@@ -94,11 +94,11 @@ function sl_mixed()
 /**
  * Start the spellcheck process
  *
- * @param  ?string		The type of operation (NULL: look from params)
- * @param  ?string		The text to check (NULL: look from params)
- * @param  ?array			A list of words to skip checking of (NULL: none)
- * @param  boolean		Whether to return data, instead of output
- * @return array			A map, possibly mispelled words, to suggestions
+ * @param  ?string                      The type of operation (NULL: look from params)
+ * @param  ?string                      The text to check (NULL: look from params)
+ * @param  ?array                       A list of words to skip checking of (NULL: none)
+ * @param  boolean                      Whether to return data, instead of output
+ * @return array                        A map, possibly mispelled words, to suggestions
  */
 function spellchecklogic($type = null,$text = null,$words_skip = null,$ret = false)
 {
@@ -132,8 +132,8 @@ function spellchecklogic($type = null,$text = null,$words_skip = null,$ret = fal
 /**
  * Execute aSpell, via piping to an output log (Windows PHP doesn't seem to allow direct output getting).
  *
- * @param  string				The command line
- * @return ~string			The output (false: error)
+ * @param  string                       The command line
+ * @return ~string                      The output (false: error)
  */
 function wrap_exec($cmd)
 {
@@ -150,7 +150,7 @@ function wrap_exec($cmd)
 /**
  * Initialise our aSpell calling environment.
  *
- * @return array			A tuple of environmental details (dictionary list,aspell call command,temporary file name,language being used)
+ * @return array                        A tuple of environmental details (dictionary list,aspell call command,temporary file name,language being used)
  */
 function aspell_init()
 {
@@ -295,8 +295,8 @@ function aspell_init()
 /**
  * Finds the ASCII value of a utf-8 character (I think!)
  *
- * @param  string			Character
- * @return integer		ASCII value
+ * @param  string                       Character
+ * @return integer                      ASCII value
  */
 function utf8_ord($chr)
 {
@@ -330,8 +330,8 @@ function utf8_ord($chr)
 /**
  * preg_replace_callback callback to fix up unicode
  *
- * @param  array			Array of matches
- * @return string			Substituted text
+ * @param  array                        Array of matches
+ * @return string                       Substituted text
  */
 function _utf8_ord($matches)
 {
@@ -341,14 +341,14 @@ function _utf8_ord($matches)
 /**
  * Do aSpell spelling check
  *
- * @param  string			aSpell command to get dictionaries
- * @param  mixed			aSpell call command
- * @param  PATH			Temporary file name
- * @param  string			Language being used
- * @param  ?string		The text to check (NULL: look from params)
- * @param  ?array			Words to skip (NULL: none)
- * @param  boolean		Whether to return data, instead of output
- * @return array			A map, possibly mispelled words, to suggestions
+ * @param  string                       aSpell command to get dictionaries
+ * @param  mixed                        aSpell call command
+ * @param  PATH                         Temporary file name
+ * @param  string                       Language being used
+ * @param  ?string                      The text to check (NULL: look from params)
+ * @param  ?array                       Words to skip (NULL: none)
+ * @param  boolean                      Whether to return data, instead of output
+ * @return array                        A map, possibly mispelled words, to suggestions
  */
 function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$words_skip = null,$ret = false)
 {
@@ -364,10 +364,10 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
     if (!$ret) {
         header('Content-Type: text/html; charset=utf-8');
         echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-		<html>
-		<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" media="all" href="spell-check-style.css" />';
+        <html>
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" media="all" href="spell-check-style.css" />';
     }
 
     $results = array();
@@ -500,7 +500,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
         $infolines .= '"Language Used":"' . $lang . '",';
         $infolines .= '"Mispelled words":"' . strval($counter) . '",';
         $infolines .= '"Total words suggested":"' . strval($suggest_count) . '"';
-        //$infolines.=',"Total Lines Checked":"'.strval($returnlines).'"';	Who cares?
+        //$infolines.=',"Total Lines Checked":"'.strval($returnlines).'"'; Who cares?
         $infolines .= '};';
         $varlines = substr($varlines,0,strlen($varlines)-1);
         if (!$ret) {
@@ -509,7 +509,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
 
         if (!$ret) {
             echo '</head>
-			<body onload="window.parent.finishedSpellChecking();">';
+            <body onload="window.parent.finishedSpellChecking();">';
         }
 
         foreach ($textarray as $value) {
@@ -537,8 +537,8 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
 /**
  * Do aSpell dictionary save
  *
- * @param  mixed		aSpell call command
- * @param  PATH		Temporary file name
+ * @param  mixed                        aSpell call command
+ * @param  PATH                         Temporary file name
  */
 function aspell_save($aspellcommand,$tempnam)
 {
@@ -588,8 +588,8 @@ function aspell_save($aspellcommand,$tempnam)
 /**
  * Create file with unique file name, but works around compatibility issues between servers. Note that the file is NOT automatically deleted. You should also delete it using "@unlink", as some servers have problems with permissions.
  *
- * @param  string		The prefix of the temporary file name.
- * @return ~string	The name of the temporary file (false: error).
+ * @param  string                       The prefix of the temporary file name.
+ * @return ~string                      The name of the temporary file (false: error).
  */
 function sl_ocp_tempnam($prefix)
 {

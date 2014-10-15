@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		msn
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    msn
  */
 
 /**
  * Get a netlink block / direct to a netlink site.
  *
- * @param  URLPATH		The URL we grab our netlink from. If this is not blank, instead of getting a netlink block, we direct to a netlink site.
- * @return tempcode		The netlink block
+ * @param  URLPATH                      The URL we grab our netlink from. If this is not blank, instead of getting a netlink block, we direct to a netlink site.
+ * @return tempcode                     The netlink block
  */
 function do_netlink($redir_url = '')
 {

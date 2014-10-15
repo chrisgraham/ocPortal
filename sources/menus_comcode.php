@@ -13,19 +13,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_menus
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_menus
  */
 
 /**
  * Takes some Comcode, and return an XHTML menu created from it.
  *
- * @param  LONG_TEXT		The contents of the Comcode menu tag
- * @param  SHORT_TEXT	An identifier for this menu (will be used as a unique ID by menu javascript code)
- * @param  MEMBER			The member the menu is being built as
- * @param  ID_TEXT		The menu type (determines what templates get used)
- * @return tempcode		The generated tempcode of the menu
+ * @param  LONG_TEXT                    The contents of the Comcode menu tag
+ * @param  SHORT_TEXT                   An identifier for this menu (will be used as a unique ID by menu javascript code)
+ * @param  MEMBER                       The member the menu is being built as
+ * @param  ID_TEXT                      The menu type (determines what templates get used)
+ * @return tempcode                     The generated tempcode of the menu
  */
 function build_comcode_menu($comcode,$menu,$source_member,$type)
 {
@@ -107,7 +107,7 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
             $expander[$level] = -1;
         } else { // No (well maybe its not even expandable, maybe its a link)
             /*$expand_this=get_param_integer('keep_'.$menu.'_expand_'.$i,0);
-			$expanded=($expand_this==1); PROBLEMS WITH CACHE - SO WE'LL USE JAVASCRIPT FOR THIS  */
+            $expanded=($expand_this==1); PROBLEMS WITH CACHE - SO WE'LL USE JAVASCRIPT FOR THIS  */
             $expanded = false;
             $expander[$level] = $i;
         }
@@ -156,11 +156,11 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
                 $url = substr($url,1);
                 $modifiers['new_window'] = 1;
             }
-            /*elseif ($url[0]=='?')	  Cache says no-no
-			{
-				$url=substr($url,1);
-				$modifers['check_perms']=1;
-			}*/
+            /*elseif ($url[0]=='?')   Cache says no-no
+            {
+                    $url=substr($url,1);
+                    $modifers['check_perms']=1;
+            }*/
 
             $current_level['children'][] = array(
                 'title' => make_string_tempcode($caption),

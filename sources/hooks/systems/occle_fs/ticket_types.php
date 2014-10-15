@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		tickets
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    tickets
  */
 
 require_code('resource_fs');
@@ -25,23 +25,23 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
     public $file_resource_type = 'ticket_type';
 
     /**
-	 * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.
-	 *
-	 * @param  ID_TEXT		The resource type
-	 * @return integer		How many resources there are
-	 */
+     * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.
+     *
+     * @param  ID_TEXT                  The resource type
+     * @return integer                  How many resources there are
+     */
     public function get_resources_count($resource_type)
     {
         return $GLOBALS['SITE_DB']->query_select_value('ticket_types','COUNT(*)');
     }
 
     /**
-	 * Standard occle_fs function for searching for a resource by label.
-	 *
-	 * @param  ID_TEXT		The resource type
-	 * @param  LONG_TEXT		The resource label
-	 * @return array			A list of resource IDs
-	 */
+     * Standard occle_fs function for searching for a resource by label.
+     *
+     * @param  ID_TEXT                  The resource type
+     * @param  LONG_TEXT                The resource label
+     * @return array                    A list of resource IDs
+     */
     public function find_resource_by_label($resource_type,$label)
     {
         $_ret = $GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name'),array($GLOBALS['SITE_DB']->translate_field_ref('ticket_type_name') => $label));
@@ -53,10 +53,10 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs introspection function.
-	 *
-	 * @return array			The properties available for the resource type
-	 */
+     * Standard occle_fs introspection function.
+     *
+     * @return array                    The properties available for the resource type
+     */
     public function _enumerate_file_properties()
     {
         return array(
@@ -66,11 +66,11 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
-	 *
-	 * @param  array			Resource row (not full, but does contain the ID)
-	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
-	 */
+     * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
+     *
+     * @param  array                    Resource row (not full, but does contain the ID)
+     * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
+     */
     public function _get_file_edit_date($row)
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['ticket_type'])) . ' AND  (' . db_string_equal_to('the_type','ADD_TICKET_TYPE') . ' OR ' . db_string_equal_to('the_type','EDIT_TICKET_TYPE') . ')';
@@ -78,13 +78,13 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
-	 *
-	 * @param  LONG_TEXT		Filename OR Resource label
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
-	 */
+     * Standard occle_fs add function for resource-fs hooks. Adds some resource with the given label and properties.
+     *
+     * @param  LONG_TEXT                Filename OR Resource label
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
+     */
     public function file_add($filename,$path,$properties)
     {
         list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
@@ -99,12 +99,12 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
-	 *
-	 * @param  SHORT_TEXT	Filename
-	 * @param  string			The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
-	 * @return ~array			Details of the resource (false: error)
-	 */
+     * Standard occle_fs load function for resource-fs hooks. Finds the properties for some resource.
+     *
+     * @param  SHORT_TEXT               Filename
+     * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
+     * @return ~array                   Details of the resource (false: error)
+     */
     public function file_load($filename,$path)
     {
         list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
@@ -123,13 +123,13 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
-	 *
-	 * @param  ID_TEXT		The filename
-	 * @param  string			The path (blank: root / not applicable)
-	 * @param  array			Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
-	 * @return ~ID_TEXT		The resource ID (false: error, could not create via these properties / here)
-	 */
+     * Standard occle_fs edit function for resource-fs hooks. Edits the resource to the given properties.
+     *
+     * @param  ID_TEXT                  The filename
+     * @param  string                   The path (blank: root / not applicable)
+     * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
+     * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
+     */
     public function file_edit($filename,$path,$properties)
     {
         list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
@@ -147,12 +147,12 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
     }
 
     /**
-	 * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
-	 *
-	 * @param  ID_TEXT		The filename
-	 * @param  string			The path (blank: root / not applicable)
-	 * @return boolean		Success status
-	 */
+     * Standard occle_fs delete function for resource-fs hooks. Deletes the resource.
+     *
+     * @param  ID_TEXT                  The filename
+     * @param  string                   The path (blank: root / not applicable)
+     * @return boolean                  Success status
+     */
     public function file_delete($filename,$path)
     {
         list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);

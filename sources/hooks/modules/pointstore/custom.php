@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 class Hook_pointstore_custom
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
     }
 
     /**
-	 * Get fields for adding/editing one of these.
-	 *
-	 * @param  string			What to place onto the end of the field name
-	 * @param  SHORT_TEXT	Title
-	 * @param  LONG_TEXT		Description
-	 * @param  BINARY			Whether it is enabled
-	 * @param  ?integer		The cost in points (NULL: not set)
-	 * @param  BINARY			Whether it is restricted to one per member
-	 * @param  SHORT_TEXT	Confirmation mail subject
-	 * @param  LONG_TEXT		Confirmation mail body
-	 * @return tempcode		The fields
-	 */
+     * Get fields for adding/editing one of these.
+     *
+     * @param  string                   What to place onto the end of the field name
+     * @param  SHORT_TEXT               Title
+     * @param  LONG_TEXT                Description
+     * @param  BINARY                   Whether it is enabled
+     * @param  ?integer                 The cost in points (NULL: not set)
+     * @param  BINARY                   Whether it is restricted to one per member
+     * @param  SHORT_TEXT               Confirmation mail subject
+     * @param  LONG_TEXT                Confirmation mail body
+     * @return tempcode                 The fields
+     */
     public function get_fields($name_suffix = '',$title = '',$description = '',$enabled = 1,$cost = null,$one_per_member = 0,$mail_subject = '',$mail_body = '')
     {
         require_lang('points');
@@ -60,10 +60,10 @@ class Hook_pointstore_custom
     }
 
     /**
-	 * Standard pointstore item configuration function.
-	 *
-	 * @return ?array		A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
-	 */
+     * Standard pointstore item configuration function.
+     *
+     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
+     */
     public function config()
     {
         $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs',array('*'),null,'ORDER BY id');
@@ -82,8 +82,8 @@ class Hook_pointstore_custom
     }
 
     /**
-	 * Standard pointstore item configuration save function.
-	 */
+     * Standard pointstore item configuration save function.
+     */
     public function save_config()
     {
         $i = 0;
@@ -148,10 +148,10 @@ class Hook_pointstore_custom
     }
 
     /**
-	 * Standard pointstore item initialisation function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item initialisation function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -174,10 +174,10 @@ class Hook_pointstore_custom
     }
 
     /**
-	 * Standard interface stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard interface stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -204,10 +204,10 @@ class Hook_pointstore_custom
     }
 
     /**
-	 * Standard actualisation stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard actualisation stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action_done()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		newsletter
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    newsletter
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_newsletter
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_newsletter
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('newsletter');
@@ -60,11 +60,11 @@ class Module_newsletter
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
@@ -155,14 +155,14 @@ class Module_newsletter
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if ($GLOBALS['SITE_DB']->query_select_value('newsletters','COUNT(*)') == 0) {
@@ -176,10 +176,10 @@ class Module_newsletter
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -217,10 +217,10 @@ class Module_newsletter
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         $type = get_param('type','misc');
@@ -245,10 +245,10 @@ class Module_newsletter
     }
 
     /**
-	 * The UI to sign up to the newsletter (actually, generally manage subscription).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to sign up to the newsletter (actually, generally manage subscription).
+     *
+     * @return tempcode                 The UI
+     */
     public function newsletter_form()
     {
         $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
@@ -314,28 +314,28 @@ class Module_newsletter
         $text->attach(paragraph(do_lang_tempcode('CHANGE_SETTINGS_BY_RESUBSCRIBING')));
 
         $javascript = "
-			var form=document.getElementById('password').form;
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['password'].value))
-					{
-						window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
-						return false;
-					}
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-					return true;
-				};
-		";
+            var form=document.getElementById('password').form;
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            if ((form.elements['password_confirm']) && (form.elements['password_confirm'].value!=form.elements['password'].value))
+                            {
+                                        window.fauxmodal_alert('" . php_addslashes(do_lang('PASSWORD_MISMATCH')) . "');
+                                        return false;
+                            }
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            return true;
+                    };
+        ";
 
         return do_template('FORM_SCREEN',array('_GUID' => '24d7575465152f450c5a8e62650bf6c8','JAVASCRIPT' => $javascript,'HIDDEN' => '','FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'URL' => $post_url,'TITLE' => $this->title,'TEXT' => $text));
     }
 
     /**
-	 * The actualiser for newsletter subscription maintenance (adding, updating, deleting).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for newsletter subscription maintenance (adding, updating, deleting).
+     *
+     * @return tempcode                 The UI
+     */
     public function newsletter_maintenance()
     {
         require_code('type_validation');
@@ -435,10 +435,10 @@ class Module_newsletter
     }
 
     /**
-	 * The actualiser for resetting newsletter password.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for resetting newsletter password.
+     *
+     * @return tempcode                 The UI
+     */
     public function newsletter_password_reset()
     {
         require_code('crypt');
@@ -458,10 +458,10 @@ class Module_newsletter
     }
 
     /**
-	 * The actualiser for unsubscribing from the newsletter.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for unsubscribing from the newsletter.
+     *
+     * @return tempcode                 The UI
+     */
     public function newsletter_unsubscribe()
     {
         $id = get_param_integer('id');
@@ -486,14 +486,14 @@ class Module_newsletter
     }
 
     /**
-	 * Send a newsletter join confirmation.
-	 *
-	 * @param  SHORT_TEXT	The e-mail address
-	 * @param  SHORT_TEXT	The confirmation code
-	 * @param  ?SHORT_TEXT	The newsletter password (NULL: password may not be viewed, because it's been permanently hashed already)
-	 * @param  string				Subscribers forename
-	 * @param  string				Subscribers surname
-	 */
+     * Send a newsletter join confirmation.
+     *
+     * @param  SHORT_TEXT               The e-mail address
+     * @param  SHORT_TEXT               The confirmation code
+     * @param  ?SHORT_TEXT              The newsletter password (NULL: password may not be viewed, because it's been permanently hashed already)
+     * @param  string                   Subscribers forename
+     * @param  string                   Subscribers surname
+     */
     public function _send_confirmation($email,$code_confirm,$password,$forename,$surname)
     {
         if (is_null($password)) {
@@ -509,10 +509,10 @@ class Module_newsletter
     }
 
     /**
-	 * The UI for having confirmed an e-mail address onto the newsletter.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for having confirmed an e-mail address onto the newsletter.
+     *
+     * @return tempcode                 The UI
+     */
     public function newsletter_confirm_joining()
     {
         $code_confirm = get_param_integer('confirm');

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -54,8 +54,8 @@ function rescue_shortened_post_request()
 /**
  * Count how many elements in an array, recursively.
  *
- * @param 	array		The array
- * @return	integer	The count
+ * @param   array    The array
+ * @return  integer  The count
  */
 function array_count_recursive($arr)
 {
@@ -74,7 +74,7 @@ function array_count_recursive($arr)
  * Parse raw HTTP request data.
  * Based on https://gist.github.com/chlab/4283560
  *
- * @return	?array	Associative array of request data (NULL: could not rescue)
+ * @return  ?array   Associative array of request data (NULL: could not rescue)
  */
 function parse_raw_http_request()
 {

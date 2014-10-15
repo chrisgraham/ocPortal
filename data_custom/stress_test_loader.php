@@ -8,8 +8,8 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 /*EXTRA FUNCTIONS: gc_enable*/
@@ -123,11 +123,11 @@ function do_work()
     for ($i = $GLOBALS['SITE_DB']->query_select_value('comcode_pages','COUNT(*)');$i<$num_wanted;$i++) {
         $file = uniqid('',true);
         /*$path=get_custom_file_base().'/site/pages/comcode_custom/'.fallback_lang().'/'.$file.'.txt';
-		$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'wt');
-		fwrite($myfile,random_text());
-		fclose($myfile);
-		sync_file($path);
-		fix_permissions($path);*/
+        $myfile=fopen($path,GOOGLE_APPENGINE?'wb':'wt');
+        fwrite($myfile,random_text());
+        fclose($myfile);
+        sync_file($path);
+        fix_permissions($path);*/
         $GLOBALS['SITE_DB']->query_insert('comcode_pages',array(
             'the_zone' => 'site',
             'the_page' => $file,

@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * List all the multi moderations that may be used in a certain forum.
  *
- * @param  AUTO_LINK		The forum we are listing for.
- * @return array 			List of multi moderations.
+ * @param  AUTO_LINK                    The forum we are listing for.
+ * @return array                        List of multi moderations.
  */
 function ocf_list_multi_moderations($forum_id)
 {
@@ -62,9 +62,9 @@ function ocf_list_multi_moderations($forum_id)
 /**
  * Whether a certain member may perform multi moderations in a certain forum.
  *
- * @param  AUTO_LINK The forum.
- * @param  ?MEMBER	The member (NULL: current member).
- * @return boolean	Answer.
+ * @param  AUTO_LINK                    The forum.
+ * @param  ?MEMBER                      The member (NULL: current member).
+ * @return boolean                      Answer.
  */
 function ocf_may_perform_multi_moderation($forum_id,$member_id = null)
 {
@@ -82,8 +82,8 @@ function ocf_may_perform_multi_moderation($forum_id,$member_id = null)
 /**
  * Whether a certain member may give formal warnings to other members.
  *
- * @param  ?MEMBER	The member (NULL: current member).
- * @return boolean	Answer.
+ * @param  ?MEMBER                      The member (NULL: current member).
+ * @return boolean                      Answer.
  */
 function ocf_may_warn_members($member_id = null)
 {
@@ -97,8 +97,8 @@ function ocf_may_warn_members($member_id = null)
 /**
  * Get all the warning rows for a certain member.
  *
- * @param  MEMBER	The member.
- * @return array	The warning rows.
+ * @param  MEMBER                       The member.
+ * @return array                        The warning rows.
  */
 function ocf_get_warnings($member_id)
 {

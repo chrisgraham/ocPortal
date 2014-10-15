@@ -33,8 +33,8 @@ if ((strpos(ini_get('disallowed_functions'),'shell_exec') === false) && (strpos(
     $cmd .= ' > ' . $target_file;
     $msg = shell_exec($cmd);
     if (($msg != '') || (filesize($target_file) == 0)) {
-        /*echo 'Error';	For debugging
-		if ($msg!='') echo ' - '.$msg; */
+        /*echo 'Error'; For debugging
+        if ($msg!='') echo ' - '.$msg; */
     } else {
         require_code('site2');
         smart_redirect(get_custom_base_url() . '/' . $filename);

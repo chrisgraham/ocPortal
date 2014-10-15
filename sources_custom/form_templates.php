@@ -8,21 +8,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 /**
  * Get the tempcode for a checkbox input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  boolean		Whether this is ticked by default
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ID_TEXT		The value the checkbox passes when ticked
- * @param  ?boolean		Whether this box should be disabled (default: false)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  boolean                      Whether this is ticked by default
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ID_TEXT                      The value the checkbox passes when ticked
+ * @param  ?boolean                     Whether this box should be disabled (default: false)
+ * @return tempcode                     The input field
  */
 function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex = null,$value = '1',$disabled = false)
 {
@@ -37,14 +37,14 @@ function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex = nul
 /**
  * Get the tempcode for a bank of tick boxes.
  *
- * @param  array			A list of tuples: (prettyname, name, value, description)
- * @param  mixed			A description for this input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  mixed			A human intelligible name for this input field (blank: use default)
- * @param  boolean		Whether to place each tick on a new line
- * @param  ?ID_TEXT		Name for custom value to be entered to (NULL: no custom value allowed)
- * @param  ?string		Value for custom value (NULL: no custom value known)
- * @return tempcode		The input field
+ * @param  array                        A list of tuples: (prettyname, name, value, description)
+ * @param  mixed                        A description for this input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  mixed                        A human intelligible name for this input field (blank: use default)
+ * @param  boolean                      Whether to place each tick on a new line
+ * @param  ?ID_TEXT                     Name for custom value to be entered to (NULL: no custom value allowed)
+ * @param  ?string                      Value for custom value (NULL: no custom value known)
+ * @return tempcode                     The input field
  */
 function form_input_various_ticks($options,$description,$_tabindex = null,$_pretty_name = '',$simple_style = false,$custom_name = null,$custom_value = null)
 {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 require_code('crud_module');
@@ -26,10 +26,10 @@ require_code('crud_module');
 class Module_admin_ecommerce_logs
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -43,14 +43,14 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -74,10 +74,10 @@ class Module_admin_ecommerce_logs
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -143,10 +143,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('ecommerce');
@@ -192,10 +192,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * The do-next manager for before audit management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before audit management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -214,10 +214,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * The UI to view all point transactions ordered by date.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to view all point transactions ordered by date.
+     *
+     * @return tempcode                 The UI
+     */
     public function logs()
     {
         $start = get_param_integer('start',0);
@@ -317,10 +317,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * The UI to take details on a manually triggered transaction.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI to take details on a manually triggered transaction.
+     *
+     * @return tempcode                 The UI.
+     */
     public function trigger()
     {
         require_code('form_templates');
@@ -415,10 +415,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * The actualiser for a manually triggered transaction.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * The actualiser for a manually triggered transaction.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function _trigger()
     {
         $type_code = post_param('type_code');
@@ -503,11 +503,11 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * An interface for choosing between dates.
-	 *
-	 * @param  tempcode	The title to display.
-	 * @return tempcode	The result of execution.
-	 */
+     * An interface for choosing between dates.
+     *
+     * @param  tempcode                 The title to display.
+     * @return tempcode                 The result of execution.
+     */
     public function _get_between($title)
     {
         require_code('form_templates');
@@ -532,13 +532,13 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * Get transaction summaries.
-	 *
-	 * @param  TIME		Start of time range
-	 * @param  TIME		End of time range
-	 * @param  boolean	Whether to count unpaid invoices into this. This means any invoicing in transactions will be ignored, and instead invoicing will be read directly.
-	 * @return array		A template-ready list of maps of summary for multiple transaction types.
-	 */
+     * Get transaction summaries.
+     *
+     * @param  TIME                     Start of time range
+     * @param  TIME                     End of time range
+     * @param  boolean                  Whether to count unpaid invoices into this. This means any invoicing in transactions will be ignored, and instead invoicing will be read directly.
+     * @return array                    A template-ready list of maps of summary for multiple transaction types.
+     */
     public function get_types($from,$to,$unpaid_invoices_count = false)
     {
         $types = array(
@@ -638,10 +638,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * Show a cash flow diagram.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show a cash flow diagram.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function cash_flow()
     {
         $d = array(get_input_date('from',true),get_input_date('to',true));
@@ -657,10 +657,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * Show a profit/loss account.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show a profit/loss account.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function profit_loss()
     {
         $d = array(get_input_date('from',true),get_input_date('to',true));
@@ -677,19 +677,19 @@ class Module_admin_ecommerce_logs
     }
 
     /* *
-	 * Show a balance sheet. NOT REALLY FEASIBLE: REQUIRES HUMAN INTERPRETATION OF ASSETS, and recording of liabilities
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show a balance sheet. NOT REALLY FEASIBLE: REQUIRES HUMAN INTERPRETATION OF ASSETS, and recording of liabilities
+     *
+     * @return tempcode                 The result of execution.
+     */
     /*function balance_sheet()
-	{
-	}*/
+    {
+    }*/
     
     /**
-	 * Show manual subscriptions.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show manual subscriptions.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function view_manual_subscriptions()
     {
         disable_php_memory_limit();
@@ -742,10 +742,10 @@ class Module_admin_ecommerce_logs
     }
 
     /**
-	 * Cancel a manual subscription.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Cancel a manual subscription.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function cancel_subscription()
     {
         $id = get_param_integer('subscription_id');

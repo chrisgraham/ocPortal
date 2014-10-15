@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		webdav
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    webdav
  */
 
 use Sabre\DAV;
@@ -86,7 +86,7 @@ function webdav_script()
 /**
  * Log something to the WebDAV log.
  *
- * @param string	String to log
+ * @param string  String to log
  */
 function webdav_log($str)
 {

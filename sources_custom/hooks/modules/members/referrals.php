@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		referrals
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    referrals
  */
 
 class Hook_members_referrals
 {
     /**
-	 * Find member-related links to inject.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting link hooks for
-	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
-	 */
+     * Find member-related links to inject.
+     *
+     * @param  MEMBER                   The ID of the member we are getting link hooks for
+     * @return array                    List of lists of tuples for results (by link section). Each tuple is: type,title,url
+     */
     public function run($member_id)
     {
         if ((!has_zone_access(get_member(),'adminzone')) && ($member_id !== get_member())) {
@@ -70,11 +70,11 @@ class Hook_members_referrals
     }
 
     /**
-	 * Get sections to inject to about tab of the member profile.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting sections for
-	 * @return array		List of sections. Each tuple is Tempcode.
-	 */
+     * Get sections to inject to about tab of the member profile.
+     *
+     * @param  MEMBER                   The ID of the member we are getting sections for
+     * @return array                    List of sections. Each tuple is Tempcode.
+     */
     public function get_info_details($member_id)
     {
         if ((!has_zone_access(get_member(),'adminzone')) && ($member_id !== get_member())) {

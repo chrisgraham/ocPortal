@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		banners
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    banners
  */
 
 class Hook_sw_banners
 {
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @return array		Current settings.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @return array                    Current settings.
+     */
     public function get_current_settings()
     {
         $settings = array();
@@ -36,11 +36,11 @@ class Hook_sw_banners
     }
 
     /**
-	 * Run function for features in the setup wizard.
-	 *
-	 * @param  array		Default values for the fields, from the install-profile.
-	 * @return tempcode	An input field.
-	 */
+     * Run function for features in the setup wizard.
+     *
+     * @param  array                    Default values for the fields, from the install-profile.
+     * @return tempcode                 An input field.
+     */
     public function get_fields($field_defaults)
     {
         if (!addon_installed('banners')) {
@@ -62,8 +62,8 @@ class Hook_sw_banners
     }
 
     /**
-	 * Run function for setting features from the setup wizard.
-	 */
+     * Run function for setting features from the setup wizard.
+     */
     public function set_fields()
     {
         if (!addon_installed('banners')) {

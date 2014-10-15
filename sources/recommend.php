@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		recommend
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    recommend
  */
 
 /**
  * Sends out a recommendation e-mail.
  *
- * @param  string		Recommenders name
- * @param  mixed		Their e-mail address (string or array of alternates)
- * @param  string		The recommendation message
- * @param  boolean	Whether this is an invitation
- * @param  ?string	Email address of the recommender (NULL: current user's)
- * @param  ?string	The subject (NULL: default)
- * @param  ?array		List of names (NULL: use email addresses as names)
+ * @param  string                       Recommenders name
+ * @param  mixed                        Their e-mail address (string or array of alternates)
+ * @param  string                       The recommendation message
+ * @param  boolean                      Whether this is an invitation
+ * @param  ?string                      Email address of the recommender (NULL: current user's)
+ * @param  ?string                      The subject (NULL: default)
+ * @param  ?array                       List of names (NULL: use email addresses as names)
  */
 function send_recommendation_email($name,$email_address,$message,$is_invite = false,$recommender_email = null,$subject = null,$names = null)
 {
@@ -52,8 +52,8 @@ function send_recommendation_email($name,$email_address,$message,$is_invite = fa
 /**
  * Get number of invites available for member.
  *
- * @param  MEMBER		Member to look for
- * @return integer	Number of invites
+ * @param  MEMBER                       Member to look for
+ * @return integer                      Number of invites
  */
 function get_num_invites($member_id)
 {
@@ -69,7 +69,7 @@ function get_num_invites($member_id)
 /**
  * Whether the current member may use invites (doesn't check if they have any left though!)
  *
- * @return boolean	Whether they may
+ * @return boolean                      Whether they may
  */
 function may_use_invites()
 {

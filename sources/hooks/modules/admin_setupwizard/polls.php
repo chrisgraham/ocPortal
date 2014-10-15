@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		polls
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    polls
  */
 
 class Hook_sw_polls
 {
     /**
-	 * Run function for blocks in the setup wizard.
-	 *
-	 * @return array		Map of block names, to display types.
-	 */
+     * Run function for blocks in the setup wizard.
+     *
+     * @return array                    Map of block names, to display types.
+     */
     public function get_blocks()
     {
         if (!addon_installed('polls')) {

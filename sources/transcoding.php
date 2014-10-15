@@ -15,23 +15,23 @@
 /*EXTRA FUNCTIONS: shell_exec*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 /**
  * Transcode a video.
  *
- * @param  URLPATH		URL of the video to be transcoded
- * @param  ID_TEXT		The table we are saving into
- * @param  ?AUTO_LINK	The ID of the video being transcoded (NULL: don't save into DB)
- * @param  ?ID_TEXT		Name of the ID field in the table (NULL: don't save into DB)
- * @param  ID_TEXT		Name of the URL field in the table
- * @param  ?ID_TEXT		Name of the original filename field in the table (NULL: built into URL field)
- * @param  ?ID_TEXT		Name of the width field in the table (NULL: none)
- * @param  ?ID_TEXT		Name of the height field in the table (NULL: none)
- * @return URLPATH		Transcoded file (or original URL if no change was made)
+ * @param  URLPATH                      URL of the video to be transcoded
+ * @param  ID_TEXT                      The table we are saving into
+ * @param  ?AUTO_LINK                   The ID of the video being transcoded (NULL: don't save into DB)
+ * @param  ?ID_TEXT                     Name of the ID field in the table (NULL: don't save into DB)
+ * @param  ID_TEXT                      Name of the URL field in the table
+ * @param  ?ID_TEXT                     Name of the original filename field in the table (NULL: built into URL field)
+ * @param  ?ID_TEXT                     Name of the width field in the table (NULL: none)
+ * @param  ?ID_TEXT                     Name of the height field in the table (NULL: none)
+ * @return URLPATH                      Transcoded file (or original URL if no change was made)
  */
 function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_filename_field,$width_field,$height_field)
 {
@@ -49,10 +49,10 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
                 $notifications = '';
             } else {
                 $notifications = '
-					<notifications type="array">
-						<notification>' . find_script('zencoder_receive') . '</notification>
-					</notifications>
-				';
+                            <notifications type="array">
+                                        <notification>' . find_script('zencoder_receive') . '</notification>
+                            </notifications>
+                    ';
             }
 
             $test = false;
@@ -63,22 +63,22 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
             require_code('xml');
             $transcoded_filename = uniqid('transcoded',true) . '--' . rawurldecode(preg_replace('#\.\w+$#','',basename($url))) . '.' . $extension;
             $xml = '<' . '?xml version="1.0" encoding="UTF-8"?' . '>
-				<api-request>
-					<api_key>' . xmlentities(get_option('transcoding_zencoder_api_key')) . '</api_key>
-					<input>' . xmlentities(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url) . '</input>
-					<test>' . ($test?'1':'0') . '</test>
-					<outputs type="array">
-						<output>
-							<url>' . rtrim(get_option('transcoding_zencoder_ftp_path'),'/') . '/' . $transcoded_filename . '</url>
-							<width>' . xmlentities(get_option('video_width_setting')) . '</width>
-							<speed>2</speed>
-							<video_bitrate>' . xmlentities(get_option('video_bitrate')) . '</video_bitrate>
-							<audio_bitrate>' . xmlentities(get_option('audio_bitrate')) . '</audio_bitrate>
-							' . $notifications . '
-						</output>
-					</outputs>
-				</api-request>
-			';
+                    <api-request>
+                            <api_key>' . xmlentities(get_option('transcoding_zencoder_api_key')) . '</api_key>
+                            <input>' . xmlentities(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url) . '</input>
+                            <test>' . ($test?'1':'0') . '</test>
+                            <outputs type="array">
+                                        <output>
+                                                        <url>' . rtrim(get_option('transcoding_zencoder_ftp_path'),'/') . '/' . $transcoded_filename . '</url>
+                                                        <width>' . xmlentities(get_option('video_width_setting')) . '</width>
+                                                        <speed>2</speed>
+                                                        <video_bitrate>' . xmlentities(get_option('video_bitrate')) . '</video_bitrate>
+                                                        <audio_bitrate>' . xmlentities(get_option('audio_bitrate')) . '</audio_bitrate>
+                                                        ' . $notifications . '
+                                        </output>
+                            </outputs>
+                    </api-request>
+            ';
             $response = http_download_file('https://app.zencoder.com/api/jobs',null,true,false,'ocPortal',array($xml),null,null,null,null,null,null,null,12.0,true);
 
             $matches = array();
@@ -221,7 +221,7 @@ function zencoder_receive_script()
 /**
  * Note that a zencoder transcode has failed.
  *
- * @param  ID_TEXT		Transcoding ID
+ * @param  ID_TEXT                      Transcoding ID
  */
 function store_transcoding_failure($transcoder_id)
 {
@@ -232,8 +232,8 @@ function store_transcoding_failure($transcoder_id)
 /**
  * Handle that a transcode has worked.
  *
- * @param  ID_TEXT		Transcoding ID
- * @param  ?URLPATH		Transcoded URL (NULL: Discerned using t_output_filename field, which we assume is where transcoder has copied file to)
+ * @param  ID_TEXT                      Transcoding ID
+ * @param  ?URLPATH                     Transcoded URL (NULL: Discerned using t_output_filename field, which we assume is where transcoder has copied file to)
  */
 function store_transcoding_success($transcoder_id,$new_url = null)
 {

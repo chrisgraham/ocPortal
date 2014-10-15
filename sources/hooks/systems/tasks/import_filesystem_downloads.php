@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		downloads
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    downloads
  */
 
 class Hook_task_import_filesystem_downloads
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @param  AUTO_LINK		The category to import to
-	 * @param  PATH			The import path
-	 * @param  boolean		Whether to import subfolders
-	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @param  AUTO_LINK                The category to import to
+     * @param  PATH                     The import path
+     * @param  boolean                  Whether to import subfolders
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run($destination,$server_path,$subfolders)
     {
         require_code('downloads2');
@@ -45,16 +45,16 @@ class Hook_task_import_filesystem_downloads
 
         log_it('FILESYSTEM_DOWNLOADS');
 
-        /*	Needless because it's relative to ocPortal directory anyway
-		// Failsafe check
-		if ((file_exists($base_path.'/dev')) && (file_exists($base_path.'/etc')) && (file_exists($base_path.'/sbin')))
-		{
-			return array(NULL,do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
-		}
-		if ((file_exists($base_path.'/Program files')) && ((file_exists($base_path.'/Users')) || (file_exists($base_path.'/Documents and settings'))) && (file_exists($base_path.'/Windows')))
-		{
-			return array(NULL,do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
-		}*/
+        /*  Needless because it's relative to ocPortal directory anyway
+        // Failsafe check
+        if ((file_exists($base_path.'/dev')) && (file_exists($base_path.'/etc')) && (file_exists($base_path.'/sbin')))
+        {
+            return array(NULL,do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
+        }
+        if ((file_exists($base_path.'/Program files')) && ((file_exists($base_path.'/Users')) || (file_exists($base_path.'/Documents and settings'))) && (file_exists($base_path.'/Windows')))
+        {
+            return array(NULL,do_lang_tempcode('POINTS_TO_ROOT_SCARY',$server_path));
+        }*/
 
         // Actually start the scanning
         $num_added = $this->filesystem_recursive_downloads_scan($base_path,$base_url,$destination,$subfolders);
@@ -64,14 +64,14 @@ class Hook_task_import_filesystem_downloads
     }
 
     /**
-	 * Worker function to do a filesystem import.
-	 *
-	 * @param  PATH				Filesystem-based path from where we are reading files
-	 * @param  URLPATH			URL-based path from where we are reading files
-	 * @param  AUTO_LINK			The destination downloading category
-	 * @param  boolean			Whether we add hierarchically (as opposed to a flat category fill)
-	 * @return integer			Number of downloads added
-	 */
+     * Worker function to do a filesystem import.
+     *
+     * @param  PATH                     Filesystem-based path from where we are reading files
+     * @param  URLPATH                  URL-based path from where we are reading files
+     * @param  AUTO_LINK                The destination downloading category
+     * @param  boolean                  Whether we add hierarchically (as opposed to a flat category fill)
+     * @return integer                  Number of downloads added
+     */
     public function filesystem_recursive_downloads_scan($server_path,$server_url,$dest_cat,$make_subfolders)
     {
         $num_added = 0;

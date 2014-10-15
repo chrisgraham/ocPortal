@@ -8,15 +8,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 if (!function_exists('init__lang_compile')) {
     /**
-	 * Standard code module initialisation function.
-	 */
+     * Standard code module initialisation function.
+     */
     function init__lang_compile()
     {
         global $DECACHED_COMCODE_LANG_STRINGS;
@@ -26,16 +26,16 @@ if (!function_exists('init__lang_compile')) {
 
 if (!function_exists('require_lang_compile')) {
     /**
-	 * Load up a language file, compiling it (it's not cached yet).
-	 *
-	 * @param  ID_TEXT			The language file name
-	 * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
-	 * @param  ?string			The language type (lang_custom, or custom) (NULL: normal priorities are used)
-	 * @set    lang_custom custom
-	 * @param  PATH				Where we are cacheing too
-	 * @param  boolean			Whether to just return if there was a loading error
-	 * @return boolean			Whether we FAILED to load
-	 */
+     * Load up a language file, compiling it (it's not cached yet).
+     *
+     * @param  ID_TEXT                  The language file name
+     * @param  ?LANGUAGE_NAME           The language (NULL: uses the current language)
+     * @param  ?string                  The language type (lang_custom, or custom) (NULL: normal priorities are used)
+     * @set    lang_custom custom
+     * @param  PATH                     Where we are cacheing too
+     * @param  boolean                  Whether to just return if there was a loading error
+     * @return boolean                  Whether we FAILED to load
+     */
     function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors = false)
     {
         global $LANGUAGE_STRINGS_CACHE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;

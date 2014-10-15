@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		occle
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    occle
  */
 
 class Hook_occle_fs_database
 {
     /**
-	 * Standard occle_fs listing function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return ~array	 	The final directory listing (false: failure)
-	 */
+     * Standard occle_fs listing function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return ~array                   The final directory listing (false: failure)
+     */
     public function listing($meta_dir,$meta_root_node,&$occle_fs)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -121,14 +121,14 @@ class Hook_occle_fs_database
     }
 
     /**
-	 * Standard occle_fs directory creation function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The new directory name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs directory creation function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The new directory name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -162,14 +162,14 @@ class Hook_occle_fs_database
     }
 
     /**
-	 * Standard occle_fs directory removal function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The directory name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs directory removal function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The directory name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -189,14 +189,14 @@ class Hook_occle_fs_database
     }
 
     /**
-	 * Standard occle_fs file removal function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs file removal function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -224,14 +224,14 @@ class Hook_occle_fs_database
     }
 
     /**
-	 * Standard occle_fs file reading function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return ~string	The file contents (false: failure)
-	 */
+     * Standard occle_fs file reading function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return ~string                  The file contents (false: failure)
+     */
     public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -256,15 +256,15 @@ class Hook_occle_fs_database
     }
 
     /**
-	 * Standard occle_fs file writing function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  mixed		The new file contents (string or integer)
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs file writing function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  mixed                    The new file contents (string or integer)
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -303,12 +303,12 @@ class Hook_occle_fs_database
     }
 
     /**
-	 * Take a provided key-value map from the path and generate a DB query WHERE map array.
-	 *
-	 * @param  string		Database table name
-	 * @param  string		Key-value map ("key:value,key2:value2")
-	 * @return ~array		WHERE map array (false: if an invalid key was referenced)
-	 */
+     * Take a provided key-value map from the path and generate a DB query WHERE map array.
+     *
+     * @param  string                   Database table name
+     * @param  string                   Key-value map ("key:value,key2:value2")
+     * @return ~array                   WHERE map array (false: if an invalid key was referenced)
+     */
     public function _do_where($table_name,$keys)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -347,22 +347,22 @@ class Hook_occle_fs_database
     }
 
     /**
-	 * Escape a value for use in a filesystem path.
-	 *
-	 * @param  string		Value to escape (original value)
-	 * @return string		Escaped value
-	 */
+     * Escape a value for use in a filesystem path.
+     *
+     * @param  string                   Value to escape (original value)
+     * @return string                   Escaped value
+     */
     public function escape_name($in)
     {
         return str_replace(array(':',',','/'),array('!colon!','!comma!','!slash!'),$in);
     }
 
     /**
-	 * Unescape a value from a filesystem path back to the original.
-	 *
-	 * @param  string		Escaped value
-	 * @return string		Original value
-	 */
+     * Unescape a value from a filesystem path back to the original.
+     *
+     * @param  string                   Escaped value
+     * @return string                   Original value
+     */
     public function unescape_name($in)
     {
         return str_replace(array('!colon!','!comma!','!slash!'),array(':',',','/'),$in);

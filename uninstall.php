@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		uninstaller
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    uninstaller
  */
 
 // Find ocPortal base directory, and chdir into it
@@ -57,8 +57,8 @@ if (uninstall_check_master_password(post_param('given_password',''))) {
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
+ * @param  SHORT_TEXT                   Given master password
+ * @return boolean                      Whether it is valid
  */
 function uninstall_check_master_password($password_given)
 {

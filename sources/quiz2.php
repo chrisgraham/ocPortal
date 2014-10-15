@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		quizzes
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    quizzes
  */
 
 /**
  * Load the questions for a quiz into a single string.
  *
- * @param  AUTO_LINK		The quiz ID
- * @return string			The text string
+ * @param  AUTO_LINK                    The quiz ID
+ * @return string                       The text string
  */
 function load_quiz_questions_to_string($id)
 {
@@ -57,11 +57,11 @@ function load_quiz_questions_to_string($id)
 /**
  * Parse a quiz question line, to find the question options.
  *
- * @param  string			The quiz question line
- * @param  array			List of possible answers (used for validation purposes)
- * @param  string			The quiz question description
- * @param  boolean		Whether to perform validation / corrections
- * @return array			A tuple: Question, question type, required?, marked?, question extra text (description)
+ * @param  string                       The quiz question line
+ * @param  array                        List of possible answers (used for validation purposes)
+ * @param  string                       The quiz question description
+ * @param  boolean                      Whether to perform validation / corrections
+ * @return array                        A tuple: Question, question type, required?, marked?, question extra text (description)
  */
 function parse_quiz_question_line($question,$answers,$question_extra_text = '',$do_validation = true)
 {
@@ -109,9 +109,9 @@ function parse_quiz_question_line($question,$answers,$question_extra_text = '',$
 /**
  * Add the answers for a quiz.
  *
- * @param  AUTO_LINK		The quiz ID
- * @param  string			Text for questions
- * @param  ID_TEXT		The type
+ * @param  AUTO_LINK                    The quiz ID
+ * @param  string                       Text for questions
+ * @param  ID_TEXT                      The type
  * @set COMPETITION TEST SURVEY
  */
 function _save_available_quiz_answers($id,$text,$type)
@@ -309,31 +309,31 @@ function _save_available_quiz_answers($id,$text,$type)
 /**
  * Add a quiz.
  *
- * @param  SHORT_TEXT	The name of the quiz
- * @param  ?integer		The number of minutes allowed for completion (NULL: NA)
- * @param  LONG_TEXT		The text shown at the start of the quiz
- * @param  LONG_TEXT		The text shown at the end of the quiz
- * @param  LONG_TEXT		The text shown at the end of the quiz on failure
- * @param  LONG_TEXT		Notes
- * @param  integer		Percentage correctness required for competition
- * @param  ?TIME			The time the quiz is opened (NULL: now)
- * @param  ?TIME			The time the quiz is closed (NULL: never)
- * @param  integer		The number of winners for this if it is a competition
- * @param  integer		The minimum number of hours between attempts
- * @param  ID_TEXT		The type
+ * @param  SHORT_TEXT                   The name of the quiz
+ * @param  ?integer                     The number of minutes allowed for completion (NULL: NA)
+ * @param  LONG_TEXT                    The text shown at the start of the quiz
+ * @param  LONG_TEXT                    The text shown at the end of the quiz
+ * @param  LONG_TEXT                    The text shown at the end of the quiz on failure
+ * @param  LONG_TEXT                    Notes
+ * @param  integer                      Percentage correctness required for competition
+ * @param  ?TIME                        The time the quiz is opened (NULL: now)
+ * @param  ?TIME                        The time the quiz is closed (NULL: never)
+ * @param  integer                      The number of winners for this if it is a competition
+ * @param  integer                      The minimum number of hours between attempts
+ * @param  ID_TEXT                      The type
  * @set    SURVEY COMPETITION TEST
- * @param  BINARY			Whether this is validated
- * @param  string			Text for questions
- * @param  ?MEMBER		The member adding it (NULL: current member)
- * @param  integer		The number of points awarded for completing/passing the quiz/test
- * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
- * @param  BINARY			Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
- * @param  BINARY			Whether to shuffle questions, to make cheating a bit harder
- * @param  BINARY			Whether to shuffle multiple-choice answers, to make cheating a bit harder
- * @param  ?TIME			The add time (NULL: now)
- * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
- * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
- * @return AUTO_LINK		The ID
+ * @param  BINARY                       Whether this is validated
+ * @param  string                       Text for questions
+ * @param  ?MEMBER                      The member adding it (NULL: current member)
+ * @param  integer                      The number of points awarded for completing/passing the quiz/test
+ * @param  ?AUTO_LINK                   Newsletter for which a member must be on to enter (NULL: none)
+ * @param  BINARY                       Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
+ * @param  BINARY                       Whether to shuffle questions, to make cheating a bit harder
+ * @param  BINARY                       Whether to shuffle multiple-choice answers, to make cheating a bit harder
+ * @param  ?TIME                        The add time (NULL: now)
+ * @param  ?SHORT_TEXT                  Meta keywords for this resource (NULL: do not edit) (blank: implicit)
+ * @param  ?LONG_TEXT                   Meta description for this resource (NULL: do not edit) (blank: implicit)
+ * @return AUTO_LINK                    The ID
  */
 function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$submitter = null,$points_for_passing = 0,$tied_newsletter = null,$reveal_answers = 0,$shuffle_questions = 0,$shuffle_answers = 0,$add_time = null,$meta_keywords = '',$meta_description = '')
 {
@@ -396,32 +396,32 @@ function add_quiz($name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$pe
 /**
  * Edit a quiz.
  *
- * @param  AUTO_LINK		The ID
- * @param  SHORT_TEXT	The name of the quiz
- * @param  ?integer		The number of minutes allowed for completion (NULL: NA)
- * @param  LONG_TEXT		The text shown at the start of the quiz
- * @param  LONG_TEXT		The text shown at the end of the quiz
- * @param  LONG_TEXT		The text shown at the end of the quiz on failure
- * @param  LONG_TEXT		Notes
- * @param  integer		Percentage correctness required for competition
- * @param  ?TIME			The time the quiz is opened (NULL: now)
- * @param  ?TIME			The time the quiz is closed (NULL: never)
- * @param  integer		The number of winners for this if it is a competition
- * @param  integer		The minimum number of hours between attempts
- * @param  ID_TEXT		The type
+ * @param  AUTO_LINK                    The ID
+ * @param  SHORT_TEXT                   The name of the quiz
+ * @param  ?integer                     The number of minutes allowed for completion (NULL: NA)
+ * @param  LONG_TEXT                    The text shown at the start of the quiz
+ * @param  LONG_TEXT                    The text shown at the end of the quiz
+ * @param  LONG_TEXT                    The text shown at the end of the quiz on failure
+ * @param  LONG_TEXT                    Notes
+ * @param  integer                      Percentage correctness required for competition
+ * @param  ?TIME                        The time the quiz is opened (NULL: now)
+ * @param  ?TIME                        The time the quiz is closed (NULL: never)
+ * @param  integer                      The number of winners for this if it is a competition
+ * @param  integer                      The minimum number of hours between attempts
+ * @param  ID_TEXT                      The type
  * @set    SURVEY COMPETITION TEST
- * @param  BINARY			Whether this is validated
- * @param  string			Text for questions
- * @param  SHORT_TEXT	Meta keywords
- * @param  LONG_TEXT		Meta description
- * @param  integer		The number of points awarded for completing/passing the quiz/test
- * @param  ?AUTO_LINK	Newsletter for which a member must be on to enter (NULL: none)
- * @param  BINARY			Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
- * @param  BINARY			Whether to shuffle questions, to make cheating a bit harder
- * @param  BINARY			Whether to shuffle multiple-choice answers, to make cheating a bit harder
- * @param  ?TIME			Add time (NULL: do not change)
- * @param  ?MEMBER		Submitter (NULL: do not change)
- * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  BINARY                       Whether this is validated
+ * @param  string                       Text for questions
+ * @param  SHORT_TEXT                   Meta keywords
+ * @param  LONG_TEXT                    Meta description
+ * @param  integer                      The number of points awarded for completing/passing the quiz/test
+ * @param  ?AUTO_LINK                   Newsletter for which a member must be on to enter (NULL: none)
+ * @param  BINARY                       Whether to reveal correct answers after the quiz is complete, so that the answerer can learn from the experience
+ * @param  BINARY                       Whether to shuffle questions, to make cheating a bit harder
+ * @param  BINARY                       Whether to shuffle multiple-choice answers, to make cheating a bit harder
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$notes,$percentage,$open_time,$close_time,$num_winners,$redo_time,$type,$validated,$text,$meta_keywords,$meta_description,$points_for_passing = 0,$tied_newsletter = null,$reveal_answers = 0,$shuffle_questions = 0,$shuffle_answers = 0,$add_time = null,$submitter = null,$null_is_literal = false)
 {
@@ -495,7 +495,7 @@ function edit_quiz($id,$name,$timeout,$start_text,$end_text,$end_text_fail,$note
 /**
  * Delete a quiz.
  *
- * @param  AUTO_LINK		The ID
+ * @param  AUTO_LINK                    The ID
  */
 function delete_quiz($id)
 {

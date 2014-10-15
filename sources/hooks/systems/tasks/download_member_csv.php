@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_task_download_member_csv
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run()
     {
         $filename = 'members-' . date('Y-m-d') . '.csv';
@@ -147,17 +147,17 @@ class Hook_task_download_member_csv
     }
 
     /**
-	 * Get a CSV-outputtable row for a member.
-	 *
-	 * @param  array			A map of member CPF maps
-	 * @param  array			Member row
-	 * @param  array			Map of usergroup details
-	 * @param  array			List of headings to pull from the member row
-	 * @param  array			List of CPFS to pull
-	 * @param  array			List of member group membership records
-	 * @param  array			List of subscription types
-	 * @return array			The row
-	 */
+     * Get a CSV-outputtable row for a member.
+     *
+     * @param  array                    A map of member CPF maps
+     * @param  array                    Member row
+     * @param  array                    Map of usergroup details
+     * @param  array                    List of headings to pull from the member row
+     * @param  array                    List of CPFS to pull
+     * @param  array                    List of member group membership records
+     * @param  array                    List of subscription types
+     * @return array                    The row
+     */
     public function _get_csv_member_record($member_cpfs,$m,$groups,$headings,$cpfs,$member_groups,$subscription_types)
     {
         $at = mixed();

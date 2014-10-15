@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		custom_comcode
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    custom_comcode
  */
 
 class Hook_main_custom_gfx_text_overlay
 {
     /**
-	 * Standard graphic generator function. Creates custom graphics from parameters.
-	 *
-	 * @param  array		Map of hook parameters (relayed from block parameters map).
-	 * @param  object		The block itself (contains utility methods).
-	 * @return tempcode	HTML to output.
-	 */
+     * Standard graphic generator function. Creates custom graphics from parameters.
+     *
+     * @param  array                    Map of hook parameters (relayed from block parameters map).
+     * @param  object                   The block itself (contains utility methods).
+     * @return tempcode                 HTML to output.
+     */
     public function run($map,&$block)
     {
         if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (@imagettfbbox(26.0,0.0,get_file_base() . '/data/fonts/Vera.ttf','test') === false)) {

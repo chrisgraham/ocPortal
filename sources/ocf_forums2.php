@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Get a nice list for selection from the forum groupings.
  *
- * @param  ?AUTO_LINK	Category to avoid putting in the list (NULL: don't avoid any).
- * @param  ?AUTO_LINK	Category selected by default (NULL: no specific default).
- * @return tempcode		The list.
+ * @param  ?AUTO_LINK                   Category to avoid putting in the list (NULL: don't avoid any).
+ * @param  ?AUTO_LINK                   Category selected by default (NULL: no specific default).
+ * @return tempcode                     The list.
  */
 function ocf_create_selection_list_forum_groupings($avoid = null,$it = null)
 {
@@ -41,8 +41,8 @@ function ocf_create_selection_list_forum_groupings($avoid = null,$it = null)
 /**
  * Get a nice, formatted XHTML list of topics, in forum tree structure
  *
- * @param  ?AUTO_LINK	The currently selected topic (NULL: none selected)
- * @return tempcode		The list of topics
+ * @param  ?AUTO_LINK                   The currently selected topic (NULL: none selected)
+ * @return tempcode                     The list of topics
  */
 function ocf_create_selection_list_topic_tree($it = null)
 {
@@ -67,11 +67,11 @@ function ocf_create_selection_list_topic_tree($it = null)
 /**
  * Get a list of maps containing all the topics, and path information, under the specified forum - and those beneath it, recursively.
  *
- * @param  ?AUTO_LINK	The forum being at the root of our recursion (NULL: true root forum)
- * @param  ?string		The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
- * @param  ?ID_TEXT		The forum name of the $forum_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
- * @param  ?integer		The number of recursive levels to search (NULL: all)
- * @return array			A list of maps for all forums. Each map entry containins the fields 'id' (forum ID) and 'breadcrumbs' (path to the forum, including the forums own title), and more.
+ * @param  ?AUTO_LINK                   The forum being at the root of our recursion (NULL: true root forum)
+ * @param  ?string                      The breadcrumbs up to this point in the recursion (NULL: blank, as we are starting the recursion)
+ * @param  ?ID_TEXT                     The forum name of the $forum_id we are currently going through (NULL: look it up). This is here for efficiency reasons, as finding children IDs to recurse to also reveals the childs title
+ * @param  ?integer                     The number of recursive levels to search (NULL: all)
+ * @return array                        A list of maps for all forums. Each map entry containins the fields 'id' (forum ID) and 'breadcrumbs' (path to the forum, including the forums own title), and more.
  */
 function ocf_get_topic_tree($forum_id = null,$breadcrumbs = null,$title = null,$levels = null)
 {
@@ -133,17 +133,17 @@ function ocf_get_topic_tree($forum_id = null,$breadcrumbs = null,$title = null,$
 /**
  * Generate a tempcode tree based selection list (ala create_selection_list_*) for choosing a forum OR a map of details. Also capable of getting comma-separated ancester forum lists. Also capable of displaying topic lists in the tree. In other words... this function is incredibly powerful, and complex.
  *
- * @param  ?MEMBER		The member that the view privileges are done for (NULL: current member).
- * @param  ?AUTO_LINK	The forum we are starting from (NULL: capture the whole tree).
- * @param  boolean		Whether to get a tempcode list (as opposed to a list of maps).
- * @param  ?array			The forum(s) to select by default (NULL: no preference). Only applies if !$topics_too. An array of AUTO_LINK's (for IDs) or strings (for names).
- * @param  string			The breadcrumbs at this point of the recursion (blank for the start).
- * @param  ?AUTO_LINK	ID of a forum to skip display/recursion for (NULL: none).
- * @param  ?boolean		Whether the child forums are ordered alphabetically (NULL: find from DB).
- * @param  boolean		Whether to generate a compound list (a list of all the ancesters, for each point in the forum tree) as well as the tree.
- * @param  ?integer		The number of recursive levels to search (NULL: all)
- * @param  boolean		Whether to generate tree statistics.
- * @return mixed			Each tempcode of the tree if $field_format or else a list of maps, OR (if $use_compound_list) a pair of the tempcode and the compound list.
+ * @param  ?MEMBER                      The member that the view privileges are done for (NULL: current member).
+ * @param  ?AUTO_LINK                   The forum we are starting from (NULL: capture the whole tree).
+ * @param  boolean                      Whether to get a tempcode list (as opposed to a list of maps).
+ * @param  ?array                       The forum(s) to select by default (NULL: no preference). Only applies if !$topics_too. An array of AUTO_LINK's (for IDs) or strings (for names).
+ * @param  string                       The breadcrumbs at this point of the recursion (blank for the start).
+ * @param  ?AUTO_LINK                   ID of a forum to skip display/recursion for (NULL: none).
+ * @param  ?boolean                     Whether the child forums are ordered alphabetically (NULL: find from DB).
+ * @param  boolean                      Whether to generate a compound list (a list of all the ancesters, for each point in the forum tree) as well as the tree.
+ * @param  ?integer                     The number of recursive levels to search (NULL: all)
+ * @param  boolean                      Whether to generate tree statistics.
+ * @return mixed                        Each tempcode of the tree if $field_format or else a list of maps, OR (if $use_compound_list) a pair of the tempcode and the compound list.
  */
 function ocf_get_forum_tree_secure($member_id = null,$base_forum = null,$field_format = false,$selected_forum = null,$breadcrumbs = '',$skip = null,$order_sub_alpha = null,$use_compound_list = false,$levels = null,$do_stats = false)
 {

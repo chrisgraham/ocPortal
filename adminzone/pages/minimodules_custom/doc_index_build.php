@@ -80,17 +80,17 @@ while (($f = readdir($dh)) !== false) {
 
 $out = '
 <div class="wide_table_wrap"><table class="wide_table columned_table results_table autosized_table">
-	<thead>
-		<tr>
-			<th>Addon</th>
-			<th>Description</th>
-			<!--<th>Core (compulsary)</th>-->
-			<th>Dependencies</th>
-			<th>Tutorials</th>
-			<th>Synonyms</th>
-			<th>Feature suggestions</th>
-		</tr>
-	</thead>
+    <thead>
+        <tr>
+            <th>Addon</th>
+            <th>Description</th>
+            <!--<th>Core (compulsary)</th>-->
+            <th>Dependencies</th>
+            <th>Tutorials</th>
+            <th>Synonyms</th>
+            <th>Feature suggestions</th>
+        </tr>
+    </thead>
 ';
 
 foreach ($addons as $addon => $addon_details) {
@@ -111,16 +111,16 @@ foreach ($addons as $addon => $addon_details) {
     }
 
     $out .= '
-		<tr>
-			<td>' . $icon . escape_html($addon_details['pretty']) . '<br />(<kbd>' . escape_html($addon) . '</kbd>)</td>
-			<td>' . escape_html($addon_details['description']) . '</td>
-			<!--<td>' . escape_html($addon_details['core']?'Yes':'No') . '</td>-->
-			<td><kbd>' . implode('<br /><br />',array_map('escape_html',$addon_details['dependencies'])) . '</kbd></td>
-			<td>' . $tutorials . '</td>
-			<td>' . implode('<br /><br />',array_map('escape_html',$addon_details['synonyms'])) . '</td>
-			<td><a href="' . escape_html($addon_details['tracker_url']) . '">Link</a></td>
-		</tr>
-	';
+        <tr>
+            <td>' . $icon . escape_html($addon_details['pretty']) . '<br />(<kbd>' . escape_html($addon) . '</kbd>)</td>
+            <td>' . escape_html($addon_details['description']) . '</td>
+            <!--<td>' . escape_html($addon_details['core']?'Yes':'No') . '</td>-->
+            <td><kbd>' . implode('<br /><br />',array_map('escape_html',$addon_details['dependencies'])) . '</kbd></td>
+            <td>' . $tutorials . '</td>
+            <td>' . implode('<br /><br />',array_map('escape_html',$addon_details['synonyms'])) . '</td>
+            <td><a href="' . escape_html($addon_details['tracker_url']) . '">Link</a></td>
+        </tr>
+    ';
 }
 
 $out .= '

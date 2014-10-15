@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_comcode_pages
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_comcode_pages
  */
 
 class Hook_whats_news_comcode_pages
 {
     /**
-	 * Run function for newsletter hooks.
-	 *
-	 * @return array				Tuple of result details: HTML list of all types that can be choosed, title for selection list
-	 */
+     * Run function for newsletter hooks.
+     *
+     * @return array                    Tuple of result details: HTML list of all types that can be choosed, title for selection list
+     */
     public function choose_categories()
     {
         require_code('zones3');
@@ -32,13 +32,13 @@ class Hook_whats_news_comcode_pages
     }
 
     /**
-	 * Run function for newsletter hooks.
-	 *
-	 * @param  TIME				The time that the entries found must be newer than
-	 * @param  LANGUAGE_NAME	The language the entries found must be in
-	 * @param  string				Category filter to apply
-	 * @return array				Tuple of result details
-	 */
+     * Run function for newsletter hooks.
+     *
+     * @param  TIME                     The time that the entries found must be newer than
+     * @param  LANGUAGE_NAME            The language the entries found must be in
+     * @param  string                   Category filter to apply
+     * @return array                    Tuple of result details
+     */
     public function run($cutoff_time,$lang,$filter)
     {
         $max = intval(get_option('max_newsletter_whatsnew'));

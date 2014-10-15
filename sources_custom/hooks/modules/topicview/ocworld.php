@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocworld
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocworld
  */
 
 class Hook_ocworld
 {
     /**
-	 * Execute the module.
-	 *
-	 * @param  MEMBER		The ID of the member we are getting detail hooks for
-	 * @return ?tempcode	Results (NULL: no action)
-	 */
+     * Execute the module.
+     *
+     * @param  MEMBER                   The ID of the member we are getting detail hooks for
+     * @return ?tempcode                Results (NULL: no action)
+     */
     public function run($member_id)
     {
         global $OCWORLD_MEMBER_CACHE;

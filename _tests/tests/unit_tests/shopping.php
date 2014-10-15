@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		testing_platform
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    testing_platform
  */
 
 /**
@@ -54,7 +54,7 @@ class shopping_test_set extends ocp_test_case
         $this->category_id = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name' => $c_name));
 
         $fields = array(
-            //		Name							 Description			Type			  Defines order  Required  Visible  Searchable
+            //    Name                     Description         Type          Defines order  Required  Visible  Searchable
             array('ECOM_CAT_product_title','DESCRIPTION_TITLE','short_trans',1,1,1,1),
             array('ECOM_CAT_sku','ECOM_CATD_sku','random',0,1,1,1),
             array('ECOM_CAT_price_pre_tax','ECOM_CATD_price_pre_tax','float',0,1,1,1),
@@ -134,7 +134,7 @@ class shopping_test_set extends ocp_test_case
         $_POST['product_id'] = $this->product_id;
         $_GET['hook'] = 'catalogue_items';
         $this->shopping_cart->add_item_to_cart();
-        $_GET['page'] = 'shopping';    //	Static setting to indentify the module in payment form
+        $_GET['page'] = 'shopping';    // Static setting to indentify the module in payment form
         payment_form();
     }
 

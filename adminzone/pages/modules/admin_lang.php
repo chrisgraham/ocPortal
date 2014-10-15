@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_language_editing
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_language_editing
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_lang
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_lang
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -64,8 +64,8 @@ class Module_admin_lang
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         require_code('files');
@@ -80,10 +80,10 @@ class Module_admin_lang
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -135,10 +135,10 @@ class Module_admin_lang
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_javascript('javascript_translate');
@@ -176,16 +176,16 @@ class Module_admin_lang
     }
 
     /**
-	 * The UI to choose a language.
-	 *
-	 * @param  tempcode		The title to show when choosing a language
-	 * @param  boolean		Whether to also choose a language file
-	 * @param  boolean		Whether the user may add a language
-	 * @param  mixed			Text message to show (Tempcode or string)
-	 * @param  boolean		Whether to provide an N/A choice
-	 * @param  ID_TEXT		The name of the parameter for specifying language
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a language.
+     *
+     * @param  tempcode                 The title to show when choosing a language
+     * @param  boolean                  Whether to also choose a language file
+     * @param  boolean                  Whether the user may add a language
+     * @param  mixed                    Text message to show (Tempcode or string)
+     * @param  boolean                  Whether to provide an N/A choice
+     * @param  ID_TEXT                  The name of the parameter for specifying language
+     * @return tempcode                 The UI
+     */
     public function choose_lang($title,$choose_lang_file = false,$add_lang = false,$text = '',$provide_na = true,$param_name = 'lang')
     {
         require_code('form_templates');
@@ -245,12 +245,12 @@ class Module_admin_lang
     }
 
     /**
-	 * Finds equivalents for a given string, in a different language, by automatic searching of codes and content.
-	 *
-	 * @param  string				The language string we are searching for the equivalent of
-	 * @param  LANGUAGE_NAME	The language we want an equivalent in
-	 * @return string				The match (or blank if no match can be found)
-	 */
+     * Finds equivalents for a given string, in a different language, by automatic searching of codes and content.
+     *
+     * @param  string                   The language string we are searching for the equivalent of
+     * @param  LANGUAGE_NAME            The language we want an equivalent in
+     * @return string                   The match (or blank if no match can be found)
+     */
     public function find_lang_matches($old,$lang)
     {
         // Search for pretranslated content
@@ -279,10 +279,10 @@ class Module_admin_lang
     }
 
     /**
-	 * The UI to criticise a language pack.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to criticise a language pack.
+     *
+     * @return tempcode                 The UI
+     */
     public function criticise()
     {
         $lang = get_param('crit_lang','');
@@ -373,10 +373,10 @@ class Module_admin_lang
     }
 
     /**
-	 * The UI to translate content.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to translate content.
+     *
+     * @return tempcode                 The UI
+     */
     public function interface_content()
     {
         if (!multi_lang()) {
@@ -481,10 +481,10 @@ class Module_admin_lang
     }
 
     /**
-	 * The actualiser to translate content.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to translate content.
+     *
+     * @return tempcode                 The UI
+     */
     public function set_lang_content()
     {
         $lang = choose_language($this->title);
@@ -535,10 +535,10 @@ class Module_admin_lang
     }
 
     /**
-	 * The actualiser to create a .po TAR.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to create a .po TAR.
+     *
+     * @return tempcode                 The UI
+     */
     public function export_po()
     {
         $lang = filter_naughty(get_param('id'));
@@ -643,10 +643,10 @@ msgstr ""
     }
 
     /**
-	 * The UI to translate code.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to translate code.
+     *
+     * @return tempcode                 The UI
+     */
     public function interface_code()
     {
         $lang = filter_naughty_harsh(get_param('lang',''));
@@ -822,11 +822,11 @@ msgstr ""
     }
 
     /**
-	 * Convert a standard language code to a google code.
-	 *
-	 * @param  LANGUAGE_NAME	The code to convert
-	 * @return string				The converted code (or blank if none can be found)
-	 */
+     * Convert a standard language code to a google code.
+     *
+     * @param  LANGUAGE_NAME            The code to convert
+     * @return string                   The converted code (or blank if none can be found)
+     */
     public function get_google_code($in)
     {
         if ($in == fallback_lang()) {
@@ -836,10 +836,10 @@ msgstr ""
     }
 
     /**
-	 * The actualiser to translate code (called from this module).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to translate code (called from this module).
+     *
+     * @return tempcode                 The UI
+     */
     public function set_lang_code()
     {
         decache('side_language');
@@ -913,10 +913,10 @@ msgstr ""
     }
 
     /**
-	 * The actualiser to translate code (called externally, and may operate on many lang files).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to translate code (called externally, and may operate on many lang files).
+     *
+     * @return tempcode                 The UI
+     */
     public function set_lang_code_2()
     {
         $lang = post_param('lang');

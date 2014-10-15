@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    catalogues
  */
 
 class Hook_content_meta_aware_catalogue_entry
 {
     /**
-	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
-	 *
-	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
-	 * @param  ?ID_TEXT	Catalogue name for entry (NULL: unknown / N/A).
-	 * @return ?array		Map of award content-type info (NULL: disabled).
-	 */
+     * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
+     *
+     * @param  ?ID_TEXT                 The zone to link through to (NULL: autodetect).
+     * @param  ?ID_TEXT                 Catalogue name for entry (NULL: unknown / N/A).
+     * @return ?array                   Map of award content-type info (NULL: disabled).
+     */
     public function info($zone = null,$catalogue_name = null)
     {
         return array(
@@ -97,17 +97,17 @@ class Hook_content_meta_aware_catalogue_entry
     }
 
     /**
-	 * Run function for content hooks. Renders a content box for an award/randomisation.
-	 *
-	 * @param  array		The database row for the content
-	 * @param  ID_TEXT	The zone to display in
-	 * @param  boolean	Whether to include context (i.e. say WHAT this is, not just show the actual content)
-	 * @param  boolean	Whether to include breadcrumbs (if there are any)
-	 * @param  ?ID_TEXT	Virtual root to use (NULL: none)
-	 * @param  boolean	Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
-	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
-	 * @return tempcode	Results
-	 */
+     * Run function for content hooks. Renders a content box for an award/randomisation.
+     *
+     * @param  array                    The database row for the content
+     * @param  ID_TEXT                  The zone to display in
+     * @param  boolean                  Whether to include context (i.e. say WHAT this is, not just show the actual content)
+     * @param  boolean                  Whether to include breadcrumbs (if there are any)
+     * @param  ?ID_TEXT                 Virtual root to use (NULL: none)
+     * @param  boolean                  Whether to copy through any filter parameters in the URL, under the basis that they are associated with what this box is browsing
+     * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
+     * @return tempcode                 Results
+     */
     public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
     {
         require_code('catalogues');
@@ -119,9 +119,9 @@ class Hook_content_meta_aware_catalogue_entry
 /**
  * Find a catalogue entry title.
  *
- * @param  array		The URL parts to search from.
- * @param  boolean	Whether to get the field title using resource-fs style.
- * @return string 	The field title.
+ * @param  array                        The URL parts to search from.
+ * @param  boolean                      Whether to get the field title using resource-fs style.
+ * @return string                       The field title.
  */
 function generate_catalogue_entry_title($url_parts,$resourcefs_style = false)
 {
@@ -153,8 +153,8 @@ function generate_catalogue_entry_title($url_parts,$resourcefs_style = false)
 /**
  * Find a catalogue entry thumbnail.
  *
- * @param  array		The URL parts to search from.
- * @return string 	The field title.
+ * @param  array                        The URL parts to search from.
+ * @return string                       The field title.
  */
 function generate_catalogue_thumb_field($url_parts)
 {

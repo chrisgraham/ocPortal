@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 class Block_main_personal_galleries_list
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         if (get_forum_type() != 'ocf') {
@@ -43,11 +43,11 @@ class Block_main_personal_galleries_list
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         $block_id = get_block_id($map);
@@ -127,13 +127,13 @@ class Block_main_personal_galleries_list
     }
 
     /**
-	 * Show subgalleries belonging to member.
-	 *
-	 * @param  ID_TEXT		Gallery name
-	 * @param  tempcode		The output goes in here (passed by reference)
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 */
+     * Show subgalleries belonging to member.
+     *
+     * @param  ID_TEXT                  Gallery name
+     * @param  tempcode                 The output goes in here (passed by reference)
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     */
     public function attach_gallery_subgalleries($gallery_name,&$galleries,$member_id,$member_id_viewing)
     {
         // Not done via main_multi_content block due to need to custom query

@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 class Hook_media_rendering_image_websafe
 {
     /**
-	 * Get the label for this media rendering type.
-	 *
-	 * @return string		The label
-	 */
+     * Get the label for this media rendering type.
+     *
+     * @return string                   The label
+     */
     public function get_type_label()
     {
         require_lang('comcode');
@@ -32,21 +32,21 @@ class Hook_media_rendering_image_websafe
     }
 
     /**
-	 * Find the media types this hook serves.
-	 *
-	 * @return integer	The media type(s), as a bitmask
-	 */
+     * Find the media types this hook serves.
+     *
+     * @return integer                  The media type(s), as a bitmask
+     */
     public function get_media_type()
     {
         return MEDIA_TYPE_IMAGE;
     }
 
     /**
-	 * See if we can recognise this mime type.
-	 *
-	 * @param  ID_TEXT	The mime type
-	 * @return integer	Recognition precedence
-	 */
+     * See if we can recognise this mime type.
+     *
+     * @param  ID_TEXT                  The mime type
+     * @return integer                  Recognition precedence
+     */
     public function recognises_mime_type($mime_type)
     {
         if ($mime_type == 'image/png') {
@@ -62,27 +62,27 @@ class Hook_media_rendering_image_websafe
     }
 
     /**
-	 * See if we can recognise this URL pattern.
-	 *
-	 * @param  URLPATH	URL to pattern match
-	 * @return integer	Recognition precedence
-	 */
+     * See if we can recognise this URL pattern.
+     *
+     * @param  URLPATH                  URL to pattern match
+     * @return integer                  Recognition precedence
+     */
     public function recognises_url($url)
     {
         return MEDIA_RECOG_PRECEDENCE_NONE;
     }
 
     /**
-	 * Provide code to display what is at the URL, in the most appropriate way.
-	 *
-	 * @param  mixed		URL to render
-	 * @param  mixed		URL to render (no sessions etc)
-	 * @param  array		Attributes (e.g. width, height, length)
-	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
-	 * @param  ?MEMBER	Member to run as (NULL: current member)
-	 * @param  ?URLPATH	Direct URL (not via a script) (NULL: just use the normal URL)
-	 * @return tempcode	Rendered version
-	 */
+     * Provide code to display what is at the URL, in the most appropriate way.
+     *
+     * @param  mixed                    URL to render
+     * @param  mixed                    URL to render (no sessions etc)
+     * @param  array                    Attributes (e.g. width, height, length)
+     * @param  boolean                  Whether there are admin privileges, to render dangerous media types
+     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @param  ?URLPATH                 Direct URL (not via a script) (NULL: just use the normal URL)
+     * @return tempcode                 Rendered version
+     */
     public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null,$url_direct_filesystem = null)
     {
         $_url = is_object($url)?$url->evaluate():$url;

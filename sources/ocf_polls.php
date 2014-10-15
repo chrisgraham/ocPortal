@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Find whether a member can alter a poll owned by a certain member in a certain forum.
  *
- * @param  AUTO_LINK	The forum.
- * @param  MEMBER		The poll owner.
- * @param  ?MEMBER	The member we are checking for (NULL: current member).
- * @return boolean	The answer.
+ * @param  AUTO_LINK                    The forum.
+ * @param  MEMBER                       The poll owner.
+ * @param  ?MEMBER                      The member we are checking for (NULL: current member).
+ * @return boolean                      The answer.
  */
 function ocf_may_edit_poll_by($forum_id,$poll_owner,$member_id = null)
 {
@@ -46,12 +46,12 @@ function ocf_may_edit_poll_by($forum_id,$poll_owner,$member_id = null)
 /**
  * Find whether a member may attach a poll to a detailed topic.
  *
- * @param  AUTO_LINK The topic.
- * @param  ?MEMBER	The topic owner (NULL: ask the DB for it).
- * @param  ?boolean  Whether the topic already has a poll (NULL: ask the DB for it).
- * @param  ?MEMBER	The forum the topic is in (NULL: ask the DB for it).
- * @param  ?MEMBER	The member we are checking for (NULL: current member).
- * @return boolean	The answer.
+ * @param  AUTO_LINK                    The topic.
+ * @param  ?MEMBER                      The topic owner (NULL: ask the DB for it).
+ * @param  ?boolean                     Whether the topic already has a poll (NULL: ask the DB for it).
+ * @param  ?MEMBER                      The forum the topic is in (NULL: ask the DB for it).
+ * @param  ?MEMBER                      The member we are checking for (NULL: current member).
+ * @return boolean                      The answer.
  */
 function ocf_may_attach_poll($topic_id,$topic_owner = null,$has_poll_already = null,$forum_id = null,$member_id = null)
 {
@@ -85,10 +85,10 @@ function ocf_may_attach_poll($topic_id,$topic_owner = null,$has_poll_already = n
 /**
  * Find whether a member can delete a poll owned by a certain member in a certain forum.
  *
- * @param  AUTO_LINK The forum.
- * @param  MEMBER		The poll owner.
- * @param  ?MEMBER	The member we are checking for (NULL: current member).
- * @return boolean	The answer.
+ * @param  AUTO_LINK                    The forum.
+ * @param  MEMBER                       The poll owner.
+ * @param  ?MEMBER                      The member we are checking for (NULL: current member).
+ * @return boolean                      The answer.
  */
 function ocf_may_delete_poll_by($forum_id,$poll_owner,$member_id = null)
 {
@@ -110,9 +110,9 @@ function ocf_may_delete_poll_by($forum_id,$poll_owner,$member_id = null)
 /**
  * Find a map of results relating to a certain poll.
  *
- * @param  AUTO_LINK The poll.
- * @param  boolean	Whether we must record that the current member is requesting the results, blocking future voting for them.
- * @return array 		The map of results.
+ * @param  AUTO_LINK                    The poll.
+ * @param  boolean                      Whether we must record that the current member is requesting the results, blocking future voting for them.
+ * @return array                        The map of results.
  */
 function ocf_poll_get_results($poll_id,$request_results = true)
 {

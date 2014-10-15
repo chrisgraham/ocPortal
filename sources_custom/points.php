@@ -8,17 +8,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom_support_credits
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom_support_credits
  */
 
 /**
  * Get the total points in the specified member's account; some of these will probably have been spent already
  *
- * @param  MEMBER			The member
- * @param  TIME			Time to get for (NULL: now)
- * @return integer		The number of points the member has
+ * @param  MEMBER                       The member
+ * @param  TIME                         Time to get for (NULL: now)
+ * @return integer                      The number of points the member has
  */
 function total_points($member,$timestamp = null)
 {

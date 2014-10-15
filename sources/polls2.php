@@ -13,60 +13,60 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		polls
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    polls
  */
 
 /**
  * Add a new poll to the database, then return the ID of the new entry.
  *
- * @param  SHORT_TEXT		The question
- * @param  SHORT_TEXT		The first choice
+ * @param  SHORT_TEXT                   The question
+ * @param  SHORT_TEXT                   The first choice
  * @range  1 max
- * @param  SHORT_TEXT		The second choice
+ * @param  SHORT_TEXT                   The second choice
  * @range  1 max
- * @param  SHORT_TEXT		The third choice (blank means not a choice)
- * @param  SHORT_TEXT		The fourth choice (blank means not a choice)
- * @param  SHORT_TEXT		The fifth choice (blank means not a choice)
- * @param  SHORT_TEXT		The sixth choice (blank means not a choice)
- * @param  SHORT_TEXT		The seventh choice (blank means not a choice)
- * @param  SHORT_TEXT		The eighth choice (blank means not a choice)
- * @param  SHORT_TEXT		The ninth choice (blank means not a choice)
- * @param  SHORT_TEXT		The tenth choice (blank means not a choice)
- * @param  ?integer			The number of choices (NULL: calculate)
+ * @param  SHORT_TEXT                   The third choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The fourth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The fifth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The sixth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The seventh choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The eighth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The ninth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The tenth choice (blank means not a choice)
+ * @param  ?integer                     The number of choices (NULL: calculate)
  * @range  2 5
- * @param  BINARY				Whether the poll is the current poll
- * @param  BINARY				Whether to allow rating of this poll
- * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY				Whether to allow trackbacking on this poll
- * @param  LONG_TEXT			Notes about this poll
- * @param  ?TIME				The time the poll was submitted (NULL: now)
- * @param  ?MEMBER			The member who submitted (NULL: the current member)
- * @param  ?TIME				The time the poll was put to use (NULL: not put to use yet)
- * @param  integer			How many have voted for option 1
+ * @param  BINARY                       Whether the poll is the current poll
+ * @param  BINARY                       Whether to allow rating of this poll
+ * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       Whether to allow trackbacking on this poll
+ * @param  LONG_TEXT                    Notes about this poll
+ * @param  ?TIME                        The time the poll was submitted (NULL: now)
+ * @param  ?MEMBER                      The member who submitted (NULL: the current member)
+ * @param  ?TIME                        The time the poll was put to use (NULL: not put to use yet)
+ * @param  integer                      How many have voted for option 1
  * @range  0 max
- * @param  integer			How many have voted for option 2
+ * @param  integer                      How many have voted for option 2
  * @range  0 max
- * @param  integer			How many have voted for option 3
+ * @param  integer                      How many have voted for option 3
  * @range  0 max
- * @param  integer			How many have voted for option 4
+ * @param  integer                      How many have voted for option 4
  * @range  0 max
- * @param  integer			How many have voted for option 5
+ * @param  integer                      How many have voted for option 5
  * @range  0 max
- * @param  integer			How many have voted for option 6
+ * @param  integer                      How many have voted for option 6
  * @range  0 max
- * @param  integer			How many have voted for option 7
+ * @param  integer                      How many have voted for option 7
  * @range  0 max
- * @param  integer			How many have voted for option 8
+ * @param  integer                      How many have voted for option 8
  * @range  0 max
- * @param  integer			How many have voted for option 9
+ * @param  integer                      How many have voted for option 9
  * @range  0 max
- * @param  integer			How many have voted for option 10
+ * @param  integer                      How many have voted for option 10
  * @range  0 max
- * @param  integer			The number of views had
- * @param  ?TIME				The edit date (NULL: never)
- * @return AUTO_LINK			The poll ID of our new poll
+ * @param  integer                      The number of views had
+ * @param  ?TIME                        The edit date (NULL: never)
+ * @return AUTO_LINK                    The poll ID of our new poll
  */
 function add_poll($question,$a1,$a2,$a3 = '',$a4 = '',$a5 = '',$a6 = '',$a7 = '',$a8 = '',$a9 = '',$a10 = '',$num_options = null,$current = 0,$allow_rating = 1,$allow_comments = 1,$allow_trackbacks = 1,$notes = '',$time = null,$submitter = null,$use_time = null,$v1 = 0,$v2 = 0,$v3 = 0,$v4 = 0,$v5 = 0,$v6 = 0,$v7 = 0,$v8 = 0,$v9 = 0,$v10 = 0,$views = 0,$edit_date = null)
 {
@@ -165,30 +165,30 @@ function add_poll($question,$a1,$a2,$a3 = '',$a4 = '',$a5 = '',$a6 = '',$a7 = ''
 /**
  * Edit a poll.
  *
- * @param  AUTO_LINK			The ID of the poll to edit
- * @param  SHORT_TEXT		The question
- * @param  SHORT_TEXT		The first choice
+ * @param  AUTO_LINK                    The ID of the poll to edit
+ * @param  SHORT_TEXT                   The question
+ * @param  SHORT_TEXT                   The first choice
  * @range  1 max
- * @param  SHORT_TEXT		The second choice
+ * @param  SHORT_TEXT                   The second choice
  * @range  1 max
- * @param  SHORT_TEXT		The third choice (blank means not a choice)
- * @param  SHORT_TEXT		The fourth choice (blank means not a choice)
- * @param  SHORT_TEXT		The fifth choice (blank means not a choice)
- * @param  SHORT_TEXT		The sixth choice (blank means not a choice)
- * @param  SHORT_TEXT		The seventh choice (blank means not a choice)
- * @param  SHORT_TEXT		The eighth choice (blank means not a choice)
- * @param  SHORT_TEXT		The ninth choice (blank means not a choice)
- * @param  SHORT_TEXT		The tenth choice (blank means not a choice)
- * @param  integer			The number of choices
- * @param  BINARY				Whether to allow rating of this poll
- * @param  SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style)
- * @param  BINARY				Whether to allow trackbacking on this poll
- * @param  LONG_TEXT			Notes about this poll
- * @param  ?TIME				Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
- * @param  ?TIME				Add time (NULL: do not change)
- * @param  ?integer			Number of views (NULL: do not change)
- * @param  ?MEMBER			Submitter (NULL: do not change)
- * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
+ * @param  SHORT_TEXT                   The third choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The fourth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The fifth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The sixth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The seventh choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The eighth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The ninth choice (blank means not a choice)
+ * @param  SHORT_TEXT                   The tenth choice (blank means not a choice)
+ * @param  integer                      The number of choices
+ * @param  BINARY                       Whether to allow rating of this poll
+ * @param  SHORT_INTEGER                Whether comments are allowed (0=no, 1=yes, 2=review style)
+ * @param  BINARY                       Whether to allow trackbacking on this poll
+ * @param  LONG_TEXT                    Notes about this poll
+ * @param  ?TIME                        Edit time (NULL: either means current time, or if $null_is_literal, means reset to to NULL)
+ * @param  ?TIME                        Add time (NULL: do not change)
+ * @param  ?integer                     Number of views (NULL: do not change)
+ * @param  ?MEMBER                      Submitter (NULL: do not change)
+ * @param  boolean                      Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
 function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
@@ -268,7 +268,7 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
 /**
  * Delete a poll.
  *
- * @param  AUTO_LINK		The ID of the poll to delete
+ * @param  AUTO_LINK                    The ID of the poll to delete
  */
 function delete_poll($id)
 {
@@ -305,7 +305,7 @@ function delete_poll($id)
 /**
  * Set the poll.
  *
- * @param  AUTO_LINK		The poll ID to set
+ * @param  AUTO_LINK                    The poll ID to set
  */
 function set_poll($id)
 {

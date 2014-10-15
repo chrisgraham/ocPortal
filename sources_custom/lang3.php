@@ -9,17 +9,17 @@
 
 if (!function_exists('parse_translated_text')) {
     /**
-	 * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
-	 *
-	 * @param  ID_TEXT			The table name
-	 * @param  array				The database row
-	 * @param  ID_TEXT			The field name
-	 * @param  ?object			The database connection to use (NULL: standard site connection)
-	 * @param  ?LANGUAGE_NAME	The language (NULL: uses the current language)
-	 * @param  boolean			Whether to force it to the specified language
-	 * @param  boolean			Whether to force as_admin, even if the lang string isn't stored against an admin (designed for Comcode page cacheing)
-	 * @return ?tempcode			The parsed Comcode (NULL: the text couldn't be looked up)
-	 */
+     * get_translated_tempcode was asked for a lang entry that had not been parsed into Tempcode yet.
+     *
+     * @param  ID_TEXT                  The table name
+     * @param  array                    The database row
+     * @param  ID_TEXT                  The field name
+     * @param  ?object                  The database connection to use (NULL: standard site connection)
+     * @param  ?LANGUAGE_NAME           The language (NULL: uses the current language)
+     * @param  boolean                  Whether to force it to the specified language
+     * @param  boolean                  Whether to force as_admin, even if the lang string isn't stored against an admin (designed for Comcode page cacheing)
+     * @return ?tempcode                The parsed Comcode (NULL: the text couldn't be looked up)
+     */
     function parse_translated_text($table,&$row,$field_name,$connection,$lang,$force,$as_admin)
     {
         global $SEARCH__CONTENT_BITS;

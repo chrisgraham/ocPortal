@@ -13,36 +13,36 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_forum_drivers
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_forum_drivers
  */
 
 require_code('forum/shared/ipb');
 
 /**
  * Forum Driver.
- * @package		core_forum_drivers
+ * @package    core_forum_drivers
  */
 class forum_driver_ipb3 extends forum_driver_ipb_shared
 {
     /**
-	 * From a member row, get the member's name.
-	 *
-	 * @param  array			The profile-row
-	 * @return string			The member name
-	 */
+     * From a member row, get the member's name.
+     *
+     * @param  array                    The profile-row
+     * @return string                   The member name
+     */
     public function mrow_username($r)
     {
         return $this->ipb_unescape($r['name']);
     }
 
     /**
-	 * Get a member row for the member of the given name.
-	 *
-	 * @param  SHORT_TEXT	The member name
-	 * @return ?array			The profile-row (NULL: could not find)
-	 */
+     * Get a member row for the member of the given name.
+     *
+     * @param  SHORT_TEXT               The member name
+     * @return ?array                   The profile-row (NULL: could not find)
+     */
     public function get_mrow($name)
     {
         $rows = $this->connection->query_select('members',array('*'),array('name' => $this->ipb_escape($name)),'',1);
@@ -53,12 +53,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get the name relating to the specified member ID.
-	 * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return ?SHORT_TEXT	The member name (NULL: member deleted)
-	 */
+     * Get the name relating to the specified member ID.
+     * If this returns NULL, then the member has been deleted. Always take potential NULL output into account.
+     *
+     * @param  MEMBER                   The member ID
+     * @return ?SHORT_TEXT              The member name (NULL: member deleted)
+     */
     public function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
@@ -68,56 +68,56 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get the display name of a username.
-	 * If no display name generator is configured, this will be the same as the username.
-	 *
-	 * @param  ID_TEXT		The username
-	 * @return SHORT_TEXT	The display name
-	 */
+     * Get the display name of a username.
+     * If no display name generator is configured, this will be the same as the username.
+     *
+     * @param  ID_TEXT                  The username
+     * @return SHORT_TEXT               The display name
+     */
     public function get_displayname($username)
     {
         return $this->connection->query_select_value_if_there('members','members_display_name',array('name' => $username));
     }
 
     /**
-	 * From a member row, get the member's primary usergroup.
-	 *
-	 * @param  array			The profile-row
-	 * @return GROUP			The member's primary usergroup
-	 */
+     * From a member row, get the member's primary usergroup.
+     *
+     * @param  array                    The profile-row
+     * @return GROUP                    The member's primary usergroup
+     */
     public function mrow_group($r)
     {
         return $r['member_group_id'];
     }
 
     /**
-	 * From a member row, get the member's member ID.
-	 *
-	 * @param  array			The profile-row
-	 * @return MEMBER			The member ID
-	 */
+     * From a member row, get the member's member ID.
+     *
+     * @param  array                    The profile-row
+     * @return MEMBER                   The member ID
+     */
     public function mrow_id($r)
     {
         return $r['member_id'];
     }
 
     /**
-	 * Get the rows for the top given number of posters on the forum.
-	 *
-	 * @param  integer		The limit to the number of top posters to fetch
-	 * @return array			The rows for the given number of top posters in the forum
-	 */
+     * Get the rows for the top given number of posters on the forum.
+     *
+     * @param  integer                  The limit to the number of top posters to fetch
+     * @return array                    The rows for the given number of top posters in the forum
+     */
     public function get_top_posters($limit)
     {
         return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'members WHERE member_id<>' . strval($this->get_guest_id()) . ' ORDER BY posts DESC',$limit);
     }
 
     /**
-	 * This is the opposite of the get_next_member function.
-	 *
-	 * @param  MEMBER			The member ID to decrement
-	 * @return ?MEMBER		The previous member ID (NULL: no previous member)
-	 */
+     * This is the opposite of the get_next_member function.
+     *
+     * @param  MEMBER                   The member ID to decrement
+     * @return ?MEMBER                  The previous member ID (NULL: no previous member)
+     */
     public function get_previous_member($member)
     {
         $tempid = $this->connection->query_value_if_there('SELECT member_id FROM ' . $this->connection->get_table_prefix() . 'members WHERE member_id<' . strval($member) . ' AND member_id<>0 ORDER BY member_id DESC');
@@ -125,12 +125,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get the member ID of the next member after the given one, or NULL.
-	 * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
-	 *
-	 * @param  MEMBER			The member ID to increment
-	 * @return ?MEMBER		The next member ID (NULL: no next member)
-	 */
+     * Get the member ID of the next member after the given one, or NULL.
+     * It cannot be assumed there are no gaps in member IDs, as members may be deleted.
+     *
+     * @param  MEMBER                   The member ID to increment
+     * @return ?MEMBER                  The next member ID (NULL: no next member)
+     */
     public function get_next_member($member)
     {
         $tempid = $this->connection->query_value_if_there('SELECT member_id FROM ' . $this->connection->get_table_prefix() . 'members WHERE member_id>' . strval($member) . ' ORDER BY member_id');
@@ -138,11 +138,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Try to find a member with the given IP address
-	 *
-	 * @param  IP				The IP address
-	 * @return array			The distinct rows found
-	 */
+     * Try to find a member with the given IP address
+     *
+     * @param  IP                       The IP address
+     * @return array                    The distinct rows found
+     */
     public function probe_ip($ip)
     {
         $a = $this->connection->query_select('members',array('DISTINCT member_id'),array('ip_address' => $ip));
@@ -151,12 +151,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Find all members with a name matching the given SQL LIKE string.
-	 *
-	 * @param  string			The pattern
-	 * @param  ?integer		Maximum number to return (limits to the most recent active) (NULL: no limit)
-	 * @return ?array			The array of matched members (NULL: none found)
-	 */
+     * Find all members with a name matching the given SQL LIKE string.
+     *
+     * @param  string                   The pattern
+     * @param  ?integer                 Maximum number to return (limits to the most recent active) (NULL: no limit)
+     * @return ?array                   The array of matched members (NULL: none found)
+     */
     public function get_matching_members($pattern,$limit = null)
     {
         $query = 'SELECT * FROM ' . $this->connection->get_table_prefix() . 'members WHERE name LIKE \'' . db_encode_like($pattern) . '\' AND member_id<>' . strval($this->get_guest_id()) . ' ORDER BY last_post DESC';
@@ -166,21 +166,21 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get a member ID from the given member's username.
-	 *
-	 * @param  SHORT_TEXT	The member name
-	 * @return MEMBER			The member ID
-	 */
+     * Get a member ID from the given member's username.
+     *
+     * @param  SHORT_TEXT               The member name
+     * @return MEMBER                   The member ID
+     */
     public function get_member_from_username($name)
     {
         return $this->connection->query_select_value_if_there('members','member_id',array('name' => $name));
     }
 
     /**
-	 * Get a list of custom BBcode tags.
-	 *
-	 * @return array			The list of tags (each list entry being a map, containing various standard named parameters)
-	 */
+     * Get a list of custom BBcode tags.
+     *
+     * @return array                    The list of tags (each list entry being a map, containing various standard named parameters)
+     */
     public function get_custom_bbcode()
     {
         $tags = $this->connection->query_select('custom_bbcode',array('bbcode_replace','bbcode_tag'));
@@ -192,15 +192,15 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
-	 *
-	 * @param  string			The name of the new custom field
-	 * @param  integer		The length of the new custom field
-	 * @param  BINARY			Whether the field is locked
-	 * @param  BINARY			Whether the field is for viewing
-	 * @param  BINARY			Whether the field is for setting
-	 * @return boolean		Whether the custom field was created successfully
-	 */
+     * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
+     *
+     * @param  string                   The name of the new custom field
+     * @param  integer                  The length of the new custom field
+     * @param  BINARY                   Whether the field is locked
+     * @param  BINARY                   Whether the field is for viewing
+     * @param  BINARY                   Whether the field is for setting
+     * @return boolean                  Whether the custom field was created successfully
+     */
     public function install_create_custom_field($name,$length,$locked = 1,$viewable = 0,$settable = 0)
     {
         $name = 'ocp_' . $name;
@@ -213,12 +213,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Set a custom profile fields value. It should not be called directly.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @param  string			The field name
-	 * @param  string			The value
-	 */
+     * Set a custom profile fields value. It should not be called directly.
+     *
+     * @param  MEMBER                   The member ID
+     * @param  string                   The field name
+     * @param  string                   The value
+     */
     public function set_custom_field($member,$field,$value)
     {
         $id = $this->connection->query_select_value_if_there('pfields_data','pf_id',array('pf_title' => 'ocp_' . $field));
@@ -233,11 +233,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get custom profile fields values for all 'ocp_' prefixed keys.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return ?array			A map of the custom profile fields, key_suffix=>value (NULL: no fields)
-	 */
+     * Get custom profile fields values for all 'ocp_' prefixed keys.
+     *
+     * @param  MEMBER                   The member ID
+     * @return ?array                   A map of the custom profile fields, key_suffix=>value (NULL: no fields)
+     */
     public function get_custom_fields($member)
     {
         $rows = $this->connection->query('SELECT pf_id,pf_title FROM ' . $this->connection->get_table_prefix() . 'pfields_data WHERE pf_title LIKE \'' . db_encode_like('ocp_%') . '\'');
@@ -255,11 +255,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Searches for forum auto-config at this path.
-	 *
-	 * @param  PATH			The path in which to search
-	 * @return boolean		Whether the forum auto-config could be found
-	 */
+     * Searches for forum auto-config at this path.
+     *
+     * @param  PATH                     The path in which to search
+     * @return boolean                  Whether the forum auto-config could be found
+     */
     public function install_test_load_from($path)
     {
         global $PROBED_FORUM_CONFIG;
@@ -275,10 +275,10 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get an array of paths to search for config at.
-	 *
-	 * @return array			The paths in which to search for the forum config
-	 */
+     * Get an array of paths to search for config at.
+     *
+     * @return array                    The paths in which to search for the forum config
+     */
     public function install_get_path_search_list()
     {
         return array(
@@ -303,11 +303,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get the avatar URL for the specified member ID.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return URLPATH		The URL (blank: none)
-	 */
+     * Get the avatar URL for the specified member ID.
+     *
+     * @param  MEMBER                   The member ID
+     * @return URLPATH                  The URL (blank: none)
+     */
     public function get_member_avatar_url($member)
     {
         $member_extra_rows = $this->connection->query_select('profile_portal',array('avatar_location','avatar_type'),array('pp_member_id' => $member));
@@ -350,11 +350,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get the photo thumbnail URL for the specified member ID.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return URLPATH		The URL (blank: none)
-	 */
+     * Get the photo thumbnail URL for the specified member ID.
+     *
+     * @param  MEMBER                   The member ID
+     * @return URLPATH                  The URL (blank: none)
+     */
     public function get_member_photo_url($member)
     {
         $pic = $this->connection->query_select_value_if_there('profile_portal','pp_main_photo',array('pp_member_id' => $member));
@@ -368,27 +368,27 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
-	 * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
-	 *
-	 * @param  SHORT_TEXT	The forum name
-	 * @param  SHORT_TEXT	The topic identifier (usually <content-type>_<content-id>)
-	 * @param  MEMBER			The member ID
-	 * @param  LONG_TEXT		The post title
-	 * @param  LONG_TEXT		The post content in Comcode format
-	 * @param  string			The topic title; must be same as content title if this is for a comment topic
-	 * @param  string			This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
-	 * @param  ?URLPATH		URL to the content (NULL: do not make spacer post)
-	 * @param  ?TIME			The post time (NULL: use current time)
-	 * @param  ?IP				The post IP address (NULL: use current members IP address)
-	 * @param  ?BINARY		Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
-	 * @param  ?BINARY		Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
-	 * @param  boolean		Whether to skip post checks
-	 * @param  SHORT_TEXT	The name of the poster
-	 * @param  ?AUTO_LINK	ID of post being replied to (NULL: N/A)
-	 * @param  boolean		Whether the reply is only visible to staff
-	 * @return array			Topic ID (may be NULL), and whether a hidden post has been made
-	 */
+     * Makes a post in the specified forum, in the specified topic according to the given specifications. If the topic doesn't exist, it is created along with a spacer-post.
+     * Spacer posts exist in order to allow staff to delete the first true post in a topic. Without spacers, this would not be possible with most forum systems. They also serve to provide meta information on the topic that cannot be encoded in the title (such as a link to the content being commented upon).
+     *
+     * @param  SHORT_TEXT               The forum name
+     * @param  SHORT_TEXT               The topic identifier (usually <content-type>_<content-id>)
+     * @param  MEMBER                   The member ID
+     * @param  LONG_TEXT                The post title
+     * @param  LONG_TEXT                The post content in Comcode format
+     * @param  string                   The topic title; must be same as content title if this is for a comment topic
+     * @param  string                   This is put together with the topic identifier to make a more-human-readable topic title or topic description (hopefully the latter and a $content_title title, but only if the forum supports descriptions)
+     * @param  ?URLPATH                 URL to the content (NULL: do not make spacer post)
+     * @param  ?TIME                    The post time (NULL: use current time)
+     * @param  ?IP                      The post IP address (NULL: use current members IP address)
+     * @param  ?BINARY                  Whether the post is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  ?BINARY                  Whether the topic is validated (NULL: unknown, find whether it needs to be marked unvalidated initially). This only works with the OCF driver.
+     * @param  boolean                  Whether to skip post checks
+     * @param  SHORT_TEXT               The name of the poster
+     * @param  ?AUTO_LINK               ID of post being replied to (NULL: N/A)
+     * @param  boolean                  Whether the reply is only visible to staff
+     * @return array                    Topic ID (may be NULL), and whether a hidden post has been made
+     */
     public function make_post_forum_topic($forum_name,$topic_identifier,$member,$post_title,$_post,$content_title,$topic_identifier_encapsulation_prefix,$content_url = null,$time = null,$ip = null,$validated = null,$topic_validated = 1,$skip_post_checks = false,$poster_name_if_guest = '',$parent_id = null,$staff_only = false)
     {
         $__post = comcode_to_tempcode($_post);
@@ -443,16 +443,16 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get an array of maps for the topic in the given forum.
-	 *
-	 * @param  integer		The topic ID
-	 * @param  integer		The comment count will be returned here by reference
-	 * @param  integer		Maximum comments to returned
-	 * @param  integer		Comment to start at
-	 * @param  boolean		Whether to mark the topic read (ignored for this forum driver)
-	 * @param  boolean		Whether to show in reverse
-	 * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
-	 */
+     * Get an array of maps for the topic in the given forum.
+     *
+     * @param  integer                  The topic ID
+     * @param  integer                  The comment count will be returned here by reference
+     * @param  integer                  Maximum comments to returned
+     * @param  integer                  Comment to start at
+     * @param  boolean                  Whether to mark the topic read (ignored for this forum driver)
+     * @param  boolean                  Whether to show in reverse
+     * @return mixed                    The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
+     */
     public function get_forum_topic_posts($topic_id,&$count,$max = 100,$start = 0,$mark_read = true,$reverse = false)
     {
         if (is_null($topic_id)) {
@@ -482,27 +482,27 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get an array of topics in the given forum. Each topic is an array with the following attributes:
-	 * - id, the topic ID
-	 * - title, the topic title
-	 * - lastusername, the username of the last poster
-	 * - lasttime, the timestamp of the last reply
-	 * - closed, a Boolean for whether the topic is currently closed or not
-	 * - firsttitle, the title of the first post
-	 * - firstpost, the first post (only set if $show_first_posts was true)
-	 *
-	 * @param  mixed			The forum name or an array of forum IDs
-	 * @param  integer		The limit
-	 * @param  integer		The start position
-	 * @param  integer		The total rows (not a parameter: returns by reference)
-	 * @param  SHORT_TEXT	The topic title filter
-	 * @param  boolean		Whether to show the first posts
-	 * @param  string			The date key to sort by
-	 * @set    lasttime firsttime
-	 * @param  boolean		Whether to limit to hot topics
-	 * @param  SHORT_TEXT	The topic description filter
-	 * @return ?array			The array of topics (NULL: error)
-	 */
+     * Get an array of topics in the given forum. Each topic is an array with the following attributes:
+     * - id, the topic ID
+     * - title, the topic title
+     * - lastusername, the username of the last poster
+     * - lasttime, the timestamp of the last reply
+     * - closed, a Boolean for whether the topic is currently closed or not
+     * - firsttitle, the title of the first post
+     * - firstpost, the first post (only set if $show_first_posts was true)
+     *
+     * @param  mixed                    The forum name or an array of forum IDs
+     * @param  integer                  The limit
+     * @param  integer                  The start position
+     * @param  integer                  The total rows (not a parameter: returns by reference)
+     * @param  SHORT_TEXT               The topic title filter
+     * @param  boolean                  Whether to show the first posts
+     * @param  string                   The date key to sort by
+     * @set    lasttime firsttime
+     * @param  boolean                  Whether to limit to hot topics
+     * @param  SHORT_TEXT               The topic description filter
+     * @return ?array                   The array of topics (NULL: error)
+     */
     public function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title = '',$show_first_posts = false,$date_key = 'lasttime',$hot = false,$filter_topic_description = '')
     {
         require_code('xhtml');
@@ -628,10 +628,10 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Find the base URL to the emoticons.
-	 *
-	 * @return URLPATH		The base URL
-	 */
+     * Find the base URL to the emoticons.
+     *
+     * @return URLPATH                  The base URL
+     */
     public function get_emo_dir()
     {
         global $EMOTICON_SET_DIR;
@@ -645,10 +645,10 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
-	 *
-	 * @return array			The map
-	 */
+     * Get a map between smiley codes and templates representing the HTML-image-code for this smiley. The smilies present of course depend on the forum involved.
+     *
+     * @return array                    The map
+     */
     public function find_emoticons()
     {
         if (!is_null($this->EMOTICON_CACHE)) {
@@ -674,10 +674,10 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Find a list of all forum skins (aka themes).
-	 *
-	 * @return array			The list of skins
-	 */
+     * Find a list of all forum skins (aka themes).
+     *
+     * @return array                    The list of skins
+     */
     public function get_skin_list()
     {
         $table = 'skin_collections';
@@ -688,12 +688,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Try to find the theme that the logged-in/guest member is using, and map it to an ocPortal theme.
-	 * The themes/map.ini file functions to provide this mapping between forum themes, and ocPortal themes, and has a slightly different meaning for different forum drivers. For example, some drivers map the forum themes theme directory to the ocPortal theme name, whilst others made the humanly readeable name.
-	 *
-	 * @param  boolean		Whether to avoid member-specific lookup
-	 * @return ID_TEXT		The theme
-	 */
+     * Try to find the theme that the logged-in/guest member is using, and map it to an ocPortal theme.
+     * The themes/map.ini file functions to provide this mapping between forum themes, and ocPortal themes, and has a slightly different meaning for different forum drivers. For example, some drivers map the forum themes theme directory to the ocPortal theme name, whilst others made the humanly readeable name.
+     *
+     * @param  boolean                  Whether to avoid member-specific lookup
+     * @return ID_TEXT                  The theme
+     */
     public function _get_theme($skip_member_specific = false)
     {
         $def = '';
@@ -743,52 +743,52 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get a URL to the registration page (for people to create member accounts).
-	 *
-	 * @return URLPATH		The URL to the registration page
-	 */
+     * Get a URL to the registration page (for people to create member accounts).
+     *
+     * @return URLPATH                  The URL to the registration page
+     */
     public function _join_url()
     {
         return get_forum_base_url() . '/index.php?app=core&module=global&section=register';
     }
 
     /**
-	 * Get a URL to the specified member's home (control panel).
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return URLPATH		The URL to the members home
-	 */
+     * Get a URL to the specified member's home (control panel).
+     *
+     * @param  MEMBER                   The member ID
+     * @return URLPATH                  The URL to the members home
+     */
     public function member_home_url($id)
     {
         return get_forum_base_url() . '/index.php?app=core&module=usercp';
     }
 
     /**
-	 * Get a URL to the members-online page.
-	 *
-	 * @return URLPATH		The URL to the members-online page
-	 */
+     * Get a URL to the members-online page.
+     *
+     * @return URLPATH                  The URL to the members-online page
+     */
     public function _users_online_url()
     {
         return get_forum_base_url() . '/index.php?app=members&module=online&sort_order=desc';
     }
 
     /**
-	 * Get a URL to send a private/personal message to the given member.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return URLPATH		The URL to the private/personal message page
-	 */
+     * Get a URL to send a private/personal message to the given member.
+     *
+     * @param  MEMBER                   The member ID
+     * @return URLPATH                  The URL to the private/personal message page
+     */
     public function _member_pm_url($id)
     {
         return get_forum_base_url() . '/index.php?app=members&module=messaging&section=send&do=form&fromMemberID=' . strval($id);
     }
 
     /**
-	 * Get the number of members registered on the forum.
-	 *
-	 * @return integer		The number of members
-	 */
+     * Get the number of members registered on the forum.
+     *
+     * @return integer                  The number of members
+     */
     public function get_members()
     {
         $r = $this->connection->query('SELECT COUNT(*) AS a FROM ' . $this->connection->get_table_prefix() . 'members WHERE member_group_id<>1');
@@ -796,31 +796,31 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get the total topics ever made on the forum.
-	 *
-	 * @return integer		The number of topics
-	 */
+     * Get the total topics ever made on the forum.
+     *
+     * @return integer                  The number of topics
+     */
     public function get_topics()
     {
         return $this->connection->query_select_value('topics','COUNT(*)');
     }
 
     /**
-	 * Get the total posts ever made on the forum.
-	 *
-	 * @return integer		The number of posts
-	 */
+     * Get the total posts ever made on the forum.
+     *
+     * @return integer                  The number of posts
+     */
     public function get_num_forum_posts()
     {
         return $this->connection->query_select_value('posts','COUNT(*)');
     }
 
     /**
-	 * Get the forum usergroup relating to the specified member ID.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return array			The array of forum usergroups
-	 */
+     * Get the forum usergroup relating to the specified member ID.
+     *
+     * @param  MEMBER                   The member ID
+     * @return array                    The array of forum usergroups
+     */
     public function _get_members_groups($member)
     {
         $group = $this->get_member_row_field($member,'member_group_id');
@@ -833,13 +833,13 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Get an array of members who are in at least one of the given array of usergroups.
-	 *
-	 * @param  array			The array of usergroups
-	 * @param  ?integer		Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
-	 * @param  integer		Return primary members after this offset and secondary members after this offset
-	 * @return ?array			The array of members (NULL: no members)
-	 */
+     * Get an array of members who are in at least one of the given array of usergroups.
+     *
+     * @param  array                    The array of usergroups
+     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  integer                  Return primary members after this offset and secondary members after this offset
+     * @return ?array                   The array of members (NULL: no members)
+     */
     public function member_group_query($groups,$max = null,$start = 0)
     {
         $_groups = '';
@@ -853,11 +853,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Find if the specified member ID is marked as staff or not.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return boolean		Whether the member is staff
-	 */
+     * Find if the specified member ID is marked as staff or not.
+     *
+     * @param  MEMBER                   The member ID
+     * @return boolean                  Whether the member is staff
+     */
     public function _is_staff($member)
     {
         $usergroup = $this->get_member_row_field($member,'member_group_id');
@@ -868,11 +868,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Find if the specified member ID is marked as a super admin or not.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return boolean		Whether the member is a super admin
-	 */
+     * Find if the specified member ID is marked as a super admin or not.
+     *
+     * @param  MEMBER                   The member ID
+     * @return boolean                  Whether the member is a super admin
+     */
     public function _is_super_admin($member)
     {
         $usergroup = $this->get_member_row_field($member,'member_group_id');
@@ -883,12 +883,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Create a member login cookie.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @param  ?SHORT_TEXT	The username (NULL: lookup)
-	 * @param  string			The password
-	 */
+     * Create a member login cookie.
+     *
+     * @param  MEMBER                   The member ID
+     * @param  ?SHORT_TEXT              The username (NULL: lookup)
+     * @param  string                   The password
+     */
     public function forum_create_cookie($id,$name,$password)
     {
         // User
@@ -919,11 +919,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Find out if the given member ID is banned.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return boolean		Whether the member is banned
-	 */
+     * Find out if the given member ID is banned.
+     *
+     * @param  MEMBER                   The member ID
+     * @return boolean                  Whether the member is banned
+     */
     public function is_banned($member)
     {
         // Are they banned
@@ -935,17 +935,17 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Find if the given member ID and password is valid. If username is NULL, then the member ID is used instead.
-	 * All authorisation, cookies, and form-logins, are passed through this function.
-	 * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
-	 *
-	 * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
-	 * @param  MEMBER			The member ID
-	 * @param  MD5				The md5-hashed password
-	 * @param  string			The raw password
-	 * @param  boolean		Whether this is a cookie login
-	 * @return array			A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
-	 */
+     * Find if the given member ID and password is valid. If username is NULL, then the member ID is used instead.
+     * All authorisation, cookies, and form-logins, are passed through this function.
+     * Some forums do cookie logins differently, so a Boolean is passed in to indicate whether it is a cookie login.
+     *
+     * @param  ?SHORT_TEXT              The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  MEMBER                   The member ID
+     * @param  MD5                      The md5-hashed password
+     * @param  string                   The raw password
+     * @param  boolean                  Whether this is a cookie login
+     * @return array                    A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
+     */
     public function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login = false)
     {
         $out = array();
@@ -1011,12 +1011,12 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Do converge authentication.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @param  string			The password
-	 * @return boolean		Whether authentication succeeded
-	 */
+     * Do converge authentication.
+     *
+     * @param  MEMBER                   The member ID
+     * @param  string                   The password
+     * @return boolean                  Whether authentication succeeded
+     */
     public function _auth_hashed($id,$password)
     {
         $rows = $this->connection->query_select('members',array('members_pass_hash','members_pass_salt'),array('member_id' => $id),'',1);
@@ -1031,11 +1031,11 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
     }
 
     /**
-	 * Gets a whole member row from the database.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return ?array			The member row (NULL: no such member)
-	 */
+     * Gets a whole member row from the database.
+     *
+     * @param  MEMBER                   The member ID
+     * @return ?array                   The member row (NULL: no such member)
+     */
     public function get_member_row($member)
     {
         if (array_key_exists($member,$this->MEMBER_ROWS_CACHED)) {

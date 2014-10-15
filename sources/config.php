@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -59,7 +59,7 @@ function init__config()
 /**
  * Find whether to run in multi-lang mode.
  *
- * @return boolean		Whether to run in multi-lang mode.
+ * @return boolean                      Whether to run in multi-lang mode.
  */
 function multi_lang()
 {
@@ -122,9 +122,9 @@ function load_options()
 /**
  * Find the value of the specified configuration option.
  *
- * @param  ID_TEXT		The name of the option
- * @param  boolean		Where to accept a missing option (and return NULL)
- * @return ?SHORT_TEXT	The value (NULL: either null value, or no option found whilst $missing_ok set)
+ * @param  ID_TEXT                      The name of the option
+ * @param  boolean                      Where to accept a missing option (and return NULL)
+ * @return ?SHORT_TEXT                  The value (NULL: either null value, or no option found whilst $missing_ok set)
  */
 function get_option($name,$missing_ok = false)
 {
@@ -186,8 +186,8 @@ function get_option($name,$missing_ok = false)
 /**
  * Find a specified long value. Long values are either really long strings, or just ones you don't want on each page load (i.e. it takes a query to read them, because you don't always need them).
  *
- * @param  ID_TEXT		The name of the value
- * @return ?SHORT_TEXT	The value (NULL: value not found)
+ * @param  ID_TEXT                      The name of the value
+ * @return ?SHORT_TEXT                  The value (NULL: value not found)
  */
 function get_long_value($name)
 {
@@ -197,9 +197,9 @@ function get_long_value($name)
 /**
  * Find the specified configuration option if it is younger than a specified time.
  *
- * @param  ID_TEXT		The name of the value
- * @param  TIME			The cutoff time (an absolute time, not a relative "time ago")
- * @return ?SHORT_TEXT	The value (NULL: value newer than not found)
+ * @param  ID_TEXT                      The name of the value
+ * @param  TIME                         The cutoff time (an absolute time, not a relative "time ago")
+ * @return ?SHORT_TEXT                  The value (NULL: value newer than not found)
  */
 function get_long_value_newer_than($name,$cutoff)
 {
@@ -209,8 +209,8 @@ function get_long_value_newer_than($name,$cutoff)
 /**
  * Set the specified situational value to the specified long value. Long values are either really long strings, or just ones you don't want on each page load (i.e. it takes a query to read them, because you don't always need them).
  *
- * @param  ID_TEXT		The name of the value
- * @param  ?SHORT_TEXT	The value (NULL: delete it)
+ * @param  ID_TEXT                      The name of the value
+ * @param  ?SHORT_TEXT                  The value (NULL: delete it)
  */
 function set_long_value($name,$value)
 {
@@ -223,10 +223,10 @@ function set_long_value($name,$value)
 /**
  * Find a specified value.
  *
- * @param  ID_TEXT		The name of the value
- * @param  ?ID_TEXT		Value to return if value not found (NULL: return NULL)
- * @param  boolean		Whether to also check server environmental variables
- * @return ?SHORT_TEXT	The value (NULL: value not found and default is NULL)
+ * @param  ID_TEXT                      The name of the value
+ * @param  ?ID_TEXT                     Value to return if value not found (NULL: return NULL)
+ * @param  boolean                      Whether to also check server environmental variables
+ * @return ?SHORT_TEXT                  The value (NULL: value not found and default is NULL)
  */
 function get_value($name,$default = null,$env_also = false)
 {
@@ -252,9 +252,9 @@ function get_value($name,$default = null,$env_also = false)
 /**
  * Find the specified configuration option if it is younger than a specified time.
  *
- * @param  ID_TEXT		The name of the value
- * @param  TIME			The cutoff time (an absolute time, not a relative "time ago")
- * @return ?SHORT_TEXT	The value (NULL: value newer than not found)
+ * @param  ID_TEXT                      The name of the value
+ * @param  TIME                         The cutoff time (an absolute time, not a relative "time ago")
+ * @return ?SHORT_TEXT                  The value (NULL: value newer than not found)
  */
 function get_value_newer_than($name,$cutoff)
 {
@@ -270,8 +270,8 @@ function get_value_newer_than($name,$cutoff)
 /**
  * Set the specified situational value to the specified value.
  *
- * @param  ID_TEXT		The name of the value
- * @param  SHORT_TEXT	The value
+ * @param  ID_TEXT                      The name of the value
+ * @param  SHORT_TEXT                   The value
  */
 function set_value($name,$value)
 {
@@ -292,7 +292,7 @@ function set_value($name,$value)
 /**
  * Delete a situational value.
  *
- * @param  ID_TEXT		The name of the value
+ * @param  ID_TEXT                      The name of the value
  */
 function delete_value($name)
 {
@@ -307,8 +307,8 @@ function delete_value($name)
 /**
  * Increment the specified stored value, by the specified amount.
  *
- * @param  ID_TEXT		The codename for the stat
- * @param  integer		What to increment the statistic by
+ * @param  ID_TEXT                      The codename for the stat
+ * @param  integer                      What to increment the statistic by
  */
 function update_stat($stat,$increment)
 {
@@ -327,9 +327,9 @@ function update_stat($stat,$increment)
 /**
  * Very simple function to invert the meaning of an old hidden option. We often use this when we've promoted a hidden option into a new proper option but inverted the meaning in the process - we use this in the default value generation code, as an in-line aid to preserve existing hidden option settings.
  *
- * @param  ID_TEXT		The old value
+ * @param  ID_TEXT                      The old value
  * @set 0 1
- * @return ID_TEXT		The inverted value
+ * @return ID_TEXT                      The inverted value
  */
 function invert_value($old)
 {

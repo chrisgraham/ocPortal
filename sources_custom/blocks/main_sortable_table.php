@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		sortable_tables
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    sortable_tables
  */
 
 class Block_main_sortable_table
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -34,11 +34,11 @@ class Block_main_sortable_table
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -384,13 +384,13 @@ class Block_main_sortable_table
     }
 
     /**
-	 * Find a field type for a row index.
-	 *
-	 * @param  array		Rows.
-	 * @param  integer	Column offset.
-	 * @return string		Field type.
-	 * @set integer float date currency alphanumeric
-	 */
+     * Find a field type for a row index.
+     *
+     * @param  array                    Rows.
+     * @param  integer                  Column offset.
+     * @return string                   Field type.
+     * @set integer float date currency alphanumeric
+     */
     public function determine_field_type($_rows,$j)
     {
         $sortable_type = mixed();
@@ -456,13 +456,13 @@ class Block_main_sortable_table
     }
 
     /**
-	 * Apply formatting to a cell value.
-	 *
-	 * @param  string		Value to apply formatting to.
-	 * @param  ID_TEXT	Sortable type.
-	 * @set integer float date currency alphanumeric
-	 * @return string		Formatted value.
-	 */
+     * Apply formatting to a cell value.
+     *
+     * @param  string                   Value to apply formatting to.
+     * @param  ID_TEXT                  Sortable type.
+     * @set integer float date currency alphanumeric
+     * @return string                   Formatted value.
+     */
     public function apply_formatting($value,$sortable_type)
     {
         if (($sortable_type == 'integer') && (is_numeric($value))) {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		banners
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    banners
  */
 
 require_code('crud_module');
@@ -43,12 +43,12 @@ class Module_cms_banners extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $this->cat_crud_module = class_exists('Mx_cms_banners_cat')?new Mx_cms_banners_cat():new Module_cms_banners_cat();
@@ -76,11 +76,11 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         //if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
@@ -93,78 +93,78 @@ class Module_cms_banners extends standard_crud_module
         }
 
         $this->javascript = '
-			document.getElementById("importancemodulus").onkeyup=function()
-			{
-				var _im_here=document.getElementById("im_here");
-				if (_im_here)
-				{
-					var _im_total=document.getElementById("im_total");
-					var im_here=window.parseInt(document.getElementById("importancemodulus").value);
-					var im_total=window.parseInt(_im_total.className.replace("im_",""))+im_here;
-					set_inner_html(_im_here,im_here);
-					set_inner_html(document.getElementById("im_here_2"),im_here);
-					set_inner_html(_im_total,im_total);
-					set_inner_html(document.getElementById("im_total_2"),im_total);
-				}
-			}
-		';
+            document.getElementById("importancemodulus").onkeyup=function()
+            {
+                    var _im_here=document.getElementById("im_here");
+                    if (_im_here)
+                    {
+                            var _im_total=document.getElementById("im_total");
+                            var im_here=window.parseInt(document.getElementById("importancemodulus").value);
+                            var im_total=window.parseInt(_im_total.className.replace("im_",""))+im_here;
+                            set_inner_html(_im_here,im_here);
+                            set_inner_html(document.getElementById("im_here_2"),im_here);
+                            set_inner_html(_im_total,im_total);
+                            set_inner_html(document.getElementById("im_total_2"),im_total);
+                    }
+            }
+        ';
 
         if ($type == 'ad') {
             require_javascript('javascript_ajax');
             $script = find_script('snippet');
             $this->javascript .= "
-				var form=document.getElementById('main_form');
-				form.old_submit=form.onsubmit;
-				form.onsubmit=function()
-					{
-						document.getElementById('submit_button').disabled=true;
-						var url='" . addslashes($script) . "?snippet=exists_banner&name='+window.encodeURIComponent(form.elements['name'].value);
-						if (!do_ajax_field_test(url))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
-						document.getElementById('submit_button').disabled=false;
-						if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-						return true;
-					};
-			";
+                    var form=document.getElementById('main_form');
+                    form.old_submit=form.onsubmit;
+                    form.onsubmit=function()
+                            {
+                                        document.getElementById('submit_button').disabled=true;
+                                        var url='" . addslashes($script) . "?snippet=exists_banner&name='+window.encodeURIComponent(form.elements['name'].value);
+                                        if (!do_ajax_field_test(url))
+                                        {
+                                                        document.getElementById('submit_button').disabled=false;
+                                                        return false;
+                                        }
+                                        document.getElementById('submit_button').disabled=false;
+                                        if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                                        return true;
+                            };
+            ";
         }
 
         if ($type == 'ac') {
             require_javascript('javascript_ajax');
             $script = find_script('snippet');
             $this->cat_crud_module->javascript = "
-				var form=document.getElementById('main_form');
-				form.old_submit=form.onsubmit;
-				form.onsubmit=function()
-					{
-						document.getElementById('submit_button').disabled=true;
-						var url='" . addslashes($script) . "?snippet=exists_banner_type&name='+window.encodeURIComponent(form.elements['new_id'].value);
-						if (!do_ajax_field_test(url))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
-						document.getElementById('submit_button').disabled=false;
-						if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-						return true;
-					};
-			";
+                    var form=document.getElementById('main_form');
+                    form.old_submit=form.onsubmit;
+                    form.onsubmit=function()
+                            {
+                                        document.getElementById('submit_button').disabled=true;
+                                        var url='" . addslashes($script) . "?snippet=exists_banner_type&name='+window.encodeURIComponent(form.elements['new_id'].value);
+                                        if (!do_ajax_field_test(url))
+                                        {
+                                                        document.getElementById('submit_button').disabled=false;
+                                                        return false;
+                                        }
+                                        document.getElementById('submit_button').disabled=false;
+                                        if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                                        return true;
+                            };
+            ";
         }
 
         return new ocp_tempcode();
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -173,10 +173,10 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('banners');
@@ -184,10 +184,10 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -203,11 +203,11 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -250,7 +250,7 @@ class Module_cms_banners extends standard_crud_module
             do_lang_tempcode('CODENAME'),
             do_lang_tempcode('TYPE'),
             do_lang_tempcode('DEPLOYMENT_AGREEMENT'),
-            //do_lang_tempcode('HITS_ALLOCATED'),		Save space by not putting in
+            //do_lang_tempcode('HITS_ALLOCATED'),     Save space by not putting in
             do_lang_tempcode('_IMPORTANCE_MODULUS'),
         );
         if ($has_expiry_dates) {
@@ -305,10 +305,10 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_banners')?null:get_member();
@@ -316,27 +316,27 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Get the tempcode for the form to add a banner, with the information passed along to it via the parameters already added in.
-	 *
-	 * @param  ID_TEXT			The name of the banner (blank: new)
-	 * @param  URLPATH			The URL to the banner image
-	 * @param  URLPATH			The URL to the site the banner leads to
-	 * @param  SHORT_TEXT		The caption of the banner
-	 * @param  LONG_TEXT			Complete HTML/PHP for the banner
-	 * @param  LONG_TEXT			Any notes associated with the banner
-	 * @param  integer			The banners "importance modulus"
-	 * @range  1 max
-	 * @param  ?integer			The number of hits the banner may have (NULL: not applicable for this banner type)
-	 * @range  0 max
-	 * @param  SHORT_INTEGER	The type of banner (0=permanent, 1=campaign, 2=default)
-	 * @set    0 1 2
-	 * @param  ?TIME				The banner expiry date (NULL: never expires)
-	 * @param  ?MEMBER			The banners submitter (NULL: current member)
-	 * @param  BINARY				Whether the banner has been validated
-	 * @param  ID_TEXT			The banner type (can be anything, where blank means 'normal')
-	 * @param  SHORT_TEXT		The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
-	 * @return array				Bits
-	 */
+     * Get the tempcode for the form to add a banner, with the information passed along to it via the parameters already added in.
+     *
+     * @param  ID_TEXT                  The name of the banner (blank: new)
+     * @param  URLPATH                  The URL to the banner image
+     * @param  URLPATH                  The URL to the site the banner leads to
+     * @param  SHORT_TEXT               The caption of the banner
+     * @param  LONG_TEXT                Complete HTML/PHP for the banner
+     * @param  LONG_TEXT                Any notes associated with the banner
+     * @param  integer                  The banners "importance modulus"
+     * @range  1 max
+     * @param  ?integer                 The number of hits the banner may have (NULL: not applicable for this banner type)
+     * @range  0 max
+     * @param  SHORT_INTEGER            The type of banner (0=permanent, 1=campaign, 2=default)
+     * @set    0 1 2
+     * @param  ?TIME                    The banner expiry date (NULL: never expires)
+     * @param  ?MEMBER                  The banners submitter (NULL: current member)
+     * @param  BINARY                   Whether the banner has been validated
+     * @param  ID_TEXT                  The banner type (can be anything, where blank means 'normal')
+     * @param  SHORT_TEXT               The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
+     * @return array                    Bits
+     */
     public function get_form_fields($name = '',$image_url = '',$site_url = '',$caption = '',$direct_code = '',$notes = '',$importancemodulus = 3,$campaignremaining = 50,$the_type = 0,$expiry_date = null,$submitter = null,$validated = 1,$b_type = '',$title_text = '')
     {
         if ($b_type == '') {
@@ -366,11 +366,11 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('banners',array('submitter','add_date'),array('name' => $id),'',1);
@@ -381,11 +381,11 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			Bits
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    Bits
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('banners',array('*'),array('name' => $id),'',1);
@@ -398,10 +398,10 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return array			A pair: The entry added, Description about usage
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return array                    A pair: The entry added, Description about usage
+     */
     public function add_actualisation()
     {
         $name = post_param('name');
@@ -448,10 +448,10 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $orig_submitter = $GLOBALS['SITE_DB']->query_select_value_if_there('banners','submitter',array('name' => $id));
@@ -488,10 +488,10 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         $b_type = post_param('b_type');
@@ -501,13 +501,13 @@ class Module_cms_banners extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after banner content management (banners only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after banner content management (banners only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->cat_crud_module->_do_next_manager($title,$description,$id,$this->donext_type);
@@ -533,11 +533,11 @@ class Module_cms_banners_cat extends standard_crud_module
     public $no_blank_ids = false;
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -587,16 +587,16 @@ class Module_cms_banners_cat extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a post template adding/editing form.
-	 *
-	 * @param  ID_TEXT		The ID of the banner type (blank: new)
-	 * @param  BINARY			Whether this is a textual banner
-	 * @param  integer		The image width (ignored for textual banners)
-	 * @param  integer		The image height (ignored for textual banners)
-	 * @param  integer		The maximum file size for the banners (this is a string length for textual banners)
-	 * @param  BINARY			Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for a post template adding/editing form.
+     *
+     * @param  ID_TEXT                  The ID of the banner type (blank: new)
+     * @param  BINARY                   Whether this is a textual banner
+     * @param  integer                  The image width (ignored for textual banners)
+     * @param  integer                  The image height (ignored for textual banners)
+     * @param  integer                  The maximum file size for the banners (this is a string length for textual banners)
+     * @param  BINARY                   Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($id = '',$is_textual = 0,$image_width = 160,$image_height = 600,$max_file_size = 250,$comcode_inline = 0)
     {
         $fields = new ocp_tempcode();
@@ -622,11 +622,11 @@ class Module_cms_banners_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $m = $GLOBALS['SITE_DB']->query_select('banner_types',array('*'),array('id' => $id),'',1);
@@ -641,10 +641,10 @@ class Module_cms_banners_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return array			A pair: The entry added, description about usage
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return array                    A pair: The entry added, description about usage
+     */
     public function add_actualisation()
     {
         $id = post_param('new_id');
@@ -666,11 +666,11 @@ class Module_cms_banners_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return tempcode		Description about usage
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return tempcode                 Description about usage
+     */
     public function edit_actualisation($id)
     {
         $is_textual = post_param_integer('is_textual',0);
@@ -695,37 +695,37 @@ class Module_cms_banners_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         delete_banner_type($id);
     }
 
     /**
-	 * The do-next manager for after download content management (event types only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after download content management (event types only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->_do_next_manager($title,$description,null,$id);
     }
 
     /**
-	 * The do-next manager for after banner content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @param  ID_TEXT		The type ID we were working in (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after banner content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  ID_TEXT                  The type ID we were working in (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function _do_next_manager($title,$description,$id,$type)
     {
         require_code('templates_donext');
@@ -734,7 +734,7 @@ class Module_cms_banners_cat extends standard_crud_module
             return do_next_manager($title,$description,
                 null,
                 null,
-                /* TYPED-ORDERED LIST OF 'LINKS'	 */
+                /* TYPED-ORDERED LIST OF 'LINKS'    */
                 array('_SELF',array('type' => 'ad'),'_SELF',do_lang_tempcode('ADD_BANNER')), // Add one
                 NULL, // Edit this
                 has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type' => 'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):null, // Edit one
@@ -758,7 +758,7 @@ class Module_cms_banners_cat extends standard_crud_module
         return do_next_manager($title,$description,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             array('_SELF',array('type' => 'ad','b_type' => $type),'_SELF',do_lang_tempcode('ADD_BANNER')), // Add one
             (is_null($id) || (!has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')))?null:array('_SELF',array('type' => '_ed','id' => $id),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER')), // Edit this
             has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type' => 'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):null, // Edit one

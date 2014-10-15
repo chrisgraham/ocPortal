@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		calendar
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    calendar
  */
 
 class Block_side_calendar
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -39,10 +39,10 @@ class Block_side_calendar
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -52,11 +52,11 @@ class Block_side_calendar
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         require_code('calendar');
@@ -283,12 +283,12 @@ class Block_side_calendar
     }
 
     /**
-	 * Gets the type filter, if there is one.
-	 *
-	 * @param  array			What to filter according to block parameters
-	 * @param  ?BINARY		Whether to show private events (1) or public events (0) (NULL: both public and private)
-	 * @return array			The filter
-	 */
+     * Gets the type filter, if there is one.
+     *
+     * @param  array                    What to filter according to block parameters
+     * @param  ?BINARY                  Whether to show private events (1) or public events (0) (NULL: both public and private)
+     * @return array                    The filter
+     */
     public function get_filter($filter_map,$private_events)
     {
         $filter = array();

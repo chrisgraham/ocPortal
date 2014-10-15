@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_themeing
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_themeing
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_themes
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_admin_themes
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('theme_images');
@@ -59,11 +59,11 @@ class Module_admin_themes
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         require_code('themes2');
@@ -98,14 +98,14 @@ class Module_admin_themes
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -129,10 +129,10 @@ class Module_admin_themes
     public $file;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -348,10 +348,10 @@ class Module_admin_themes
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_lang('themes');
@@ -428,10 +428,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to manage themes.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to manage themes.
+     *
+     * @return tempcode                 The UI
+     */
     public function manage_themes()
     {
         $_themes = find_all_themes(true);
@@ -546,17 +546,17 @@ class Module_admin_themes
     }
 
     /**
-	 * Get standard form input fields for inputting a theme.
-	 *
-	 * @param  string			The name of the theme
-	 * @param  string			The theme title
-	 * @param  string			The theme description
-	 * @param  ?string		The theme author (NULL: current member)
-	 * @param  string			Comma-separated list mobile-supporting pages (blank: all do)
-	 * @param  BINARY			Whether the theme supports 'wide' screens
-	 * @param  boolean		Whether to use this theme on all zones
-	 * @return tempcode		The fields
-	 */
+     * Get standard form input fields for inputting a theme.
+     *
+     * @param  string                   The name of the theme
+     * @param  string                   The theme title
+     * @param  string                   The theme description
+     * @param  ?string                  The theme author (NULL: current member)
+     * @param  string                   Comma-separated list mobile-supporting pages (blank: all do)
+     * @param  BINARY                   Whether the theme supports 'wide' screens
+     * @param  boolean                  Whether to use this theme on all zones
+     * @return tempcode                 The fields
+     */
     public function get_theme_fields($name = '',$title = '',$description = '',$author = null,$mobile_pages = '',$supports_wide = 1,$use_on_all_zones = false)
     {
         if (is_null($author)) {
@@ -605,10 +605,10 @@ class Module_admin_themes
     }
 
     /**
-	 * Common theme change saving for adding and editing themes.
-	 *
-	 * @param  ID_TEXT			The name of the theme
-	 */
+     * Common theme change saving for adding and editing themes.
+     *
+     * @param  ID_TEXT                  The name of the theme
+     */
     public function save_theme_changes($theme)
     {
         if (!file_exists((($theme == 'default')?get_file_base():get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini')) {
@@ -686,10 +686,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to add a theme.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to add a theme.
+     *
+     * @return tempcode                 The UI
+     */
     public function add_theme()
     {
         $fields = $this->get_theme_fields();
@@ -707,39 +707,39 @@ class Module_admin_themes
         require_javascript('javascript_ajax');
         $script = find_script('snippet');
         $javascript = "
-			var title=document.getElementById('title');
-			title.onchange=function() {
-				var codename=document.getElementById('theme');
-				if (codename.value=='')
-				{
-					codename.value=title.value.replace(/[^a-zA-Z0-9]/g,'');
-				}
-			}
-			var form=document.getElementById('main_form');
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					document.getElementById('submit_button').disabled=true;
-					var url='" . addslashes($script) . "?snippet=exists_theme&name='+window.encodeURIComponent(form.elements['theme'].value);
-					if (!do_ajax_field_test(url))
-					{
-						document.getElementById('submit_button').disabled=false;
-						return false;
-					}
-					document.getElementById('submit_button').disabled=false;
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-					return true;
-				};
-		";
+            var title=document.getElementById('title');
+            title.onchange=function() {
+                    var codename=document.getElementById('theme');
+                    if (codename.value=='')
+                    {
+                            codename.value=title.value.replace(/[^a-zA-Z0-9]/g,'');
+                    }
+            }
+            var form=document.getElementById('main_form');
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            document.getElementById('submit_button').disabled=true;
+                            var url='" . addslashes($script) . "?snippet=exists_theme&name='+window.encodeURIComponent(form.elements['theme'].value);
+                            if (!do_ajax_field_test(url))
+                            {
+                                        document.getElementById('submit_button').disabled=false;
+                                        return false;
+                            }
+                            document.getElementById('submit_button').disabled=false;
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            return true;
+                    };
+        ";
 
         return do_template('FORM_SCREEN',array('_GUID' => '08b45be04f4035c7595458a719260bd9','HIDDEN' => '','JAVASCRIPT' => $javascript,'TITLE' => $this->title,'URL' => $post_url,'FIELDS' => $fields,'TEXT' => $text,'SUBMIT_ICON' => 'menu___generic_admin__add_one','SUBMIT_NAME' => $submit_name));
     }
 
     /**
-	 * The actualiser to add a theme.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to add a theme.
+     *
+     * @return tempcode                 The UI
+     */
     public function _add_theme()
     {
         $theme = post_param('theme');
@@ -756,10 +756,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to edit/rename a theme.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit/rename a theme.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_theme()
     {
         $theme = get_param('theme',false,true);
@@ -800,10 +800,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The actualiser to edit/rename a theme.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit/rename a theme.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_theme()
     {
         if (post_param_integer('delete',0) == 1) {
@@ -848,16 +848,16 @@ class Module_admin_themes
     }
 
     /**
-	 * The do-next manager for after download content management.
-	 *
-	 * @param  tempcode			The title (output of get_screen_title)
-	 * @param  tempcode			Some description to show, saying what happened
-	 * @param  ID_TEXT			The theme that was just handled
-	 * @param  ?LANGUAGE_NAME  The language we were working in (NULL: autodetect) (blank: autodetect)
-	 * @param  ID_TEXT			Code to determine what kind of links to show
-	 * @param  ID_TEXT			ID of file that an edit link should load (blank: N/A)
-	 * @return tempcode			The UI
-	 */
+     * The do-next manager for after download content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ID_TEXT                  The theme that was just handled
+     * @param  ?LANGUAGE_NAME           The language we were working in (NULL: autodetect) (blank: autodetect)
+     * @param  ID_TEXT                  Code to determine what kind of links to show
+     * @param  ID_TEXT                  ID of file that an edit link should load (blank: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$theme,$lang,$type,$file)
     {
         if (is_null($lang)) {
@@ -898,7 +898,7 @@ class Module_admin_themes
         return do_next_manager($title,$description,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             $add_one, // Add one
             $edit_this, // Edit this
             $edit_one, // Edit one
@@ -927,12 +927,12 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to choose a theme to work with.
-	 *
-	 * @param  tempcode		The title to show when choosing a theme
-	 * @param  boolean		Whether to also choose a language
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a theme to work with.
+     *
+     * @param  tempcode                 The title to show when choosing a theme
+     * @param  boolean                  Whether to also choose a language
+     * @return tempcode                 The UI
+     */
     public function choose_theme($title,$lang_too = false)
     {
         $themes = new ocp_tempcode();
@@ -954,10 +954,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to choose a CSS file to edit.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a CSS file to edit.
+     *
+     * @return tempcode                 The UI
+     */
     public function choose_css()
     {
         require_code('form_templates');
@@ -1014,27 +1014,27 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to edit a CSS file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a CSS file.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_css()
     {
         $file = $this->file;
 
         if (get_option('editarea') == '1') {
             attach_to_screen_footer(make_string_tempcode('
-				<script language="javascript" src="' . get_base_url() . '/data/editarea/edit_area_full.js"></script>
-				<script>// <![CDATA[
-				editAreaLoader.init({
-					id : "css"
-					,syntax: "css"
-					,start_highlight: true
-					,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
-					,allow_resize: true
-					,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
-				});
-				//]]></script>')); // XHTMLXHTML
+                    <script language="javascript" src="' . get_base_url() . '/data/editarea/edit_area_full.js"></script>
+                    <script>// <![CDATA[
+                    editAreaLoader.init({
+                            id : "css"
+                            ,syntax: "css"
+                            ,start_highlight: true
+                            ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
+                            ,allow_resize: true
+                            ,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
+                    });
+                    //]]></script>')); // XHTMLXHTML
         }
 
         require_javascript('javascript_ajax');
@@ -1172,10 +1172,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The actualiser to edit a CSS file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a CSS file.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_css()
     {
         $file = filter_naughty(get_param('file','global.css'));
@@ -1248,22 +1248,22 @@ class Module_admin_themes
 
         if (get_param_integer('save_and_stay',0) == 1) {
             return inform_screen($this->title,protect_from_escaping('
-				<script>// <![CDATA[
-					window.fauxmodal_alert(\'' . addslashes(do_lang('SUCCESS')) . '\');
-				//]]></script>
-			'));
+                    <script>// <![CDATA[
+                            window.fauxmodal_alert(\'' . addslashes(do_lang('SUCCESS')) . '\');
+                    //]]></script>
+            '));
         }
 
         return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$theme,'','css',$file);
     }
 
     /**
-	 * Get all the revisions for a CSS file in a certain theme.
-	 *
-	 * @param  ID_TEXT		The theme to find for
-	 * @param  string			The file to find revisions of
-	 * @return array			A map of the revisions (file=>timestamp)
-	 */
+     * Get all the revisions for a CSS file in a certain theme.
+     *
+     * @param  ID_TEXT                  The theme to find for
+     * @param  string                   The file to find revisions of
+     * @return array                    A map of the revisions (file=>timestamp)
+     */
     public function get_css_revisions($theme,$find_for)
     {
         $filesarray = array();
@@ -1286,13 +1286,13 @@ class Module_admin_themes
     }
 
     /**
-	 * Get all the templates for a theme (optionally, revisions of a single template).
-	 *
-	 * @param  ID_TEXT		The theme to search for
-	 * @param  string			The file to find revisions of (blank: we're not looking for revisions)
-	 * @param  boolean		Just for this theme
-	 * @return array			A map of the files (for revisions, file=>timestamp, generally, file=>path)
-	 */
+     * Get all the templates for a theme (optionally, revisions of a single template).
+     *
+     * @param  ID_TEXT                  The theme to search for
+     * @param  string                   The file to find revisions of (blank: we're not looking for revisions)
+     * @param  boolean                  Just for this theme
+     * @return array                    A map of the files (for revisions, file=>timestamp, generally, file=>path)
+     */
     public function get_template_files_array($theme,$find_for = '',$this_theme_only = false)
     {
         $out = array();
@@ -1314,13 +1314,13 @@ class Module_admin_themes
     }
 
     /**
-	 * Get all the template files / revisions for a template file, in a certain directory.
-	 *
-	 * @param  PATH			The path to search relative to
-	 * @param  PATH			The subdirectory to search
-	 * @param  string			The file to find revisions of
-	 * @return array			A map of the revisions (file=>timestamp)
-	 */
+     * Get all the template files / revisions for a template file, in a certain directory.
+     *
+     * @param  PATH                     The path to search relative to
+     * @param  PATH                     The subdirectory to search
+     * @param  string                   The file to find revisions of
+     * @return array                    A map of the revisions (file=>timestamp)
+     */
     public function _get_template_files_array($base_dir,$subdir,$find_for)
     {
         $_dir = @opendir($base_dir . '/themes/' . $subdir);
@@ -1350,10 +1350,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to choose a template to edit.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a template to edit.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_templates()
     {
         require_javascript('javascript_ajax');
@@ -1418,10 +1418,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to edit a template.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a template.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_templates()
     {
         $theme = get_param('theme');
@@ -1463,8 +1463,8 @@ class Module_admin_themes
 
         if (get_option('editarea') == '1') {
             attach_to_screen_footer(make_string_tempcode('
-				<script language="javascript" src="' . get_base_url() . '/data/editarea/edit_area_full.js"></script>
-			')); // XHTMLXHTML
+                    <script language="javascript" src="' . get_base_url() . '/data/editarea/edit_area_full.js"></script>
+            ')); // XHTMLXHTML
         }
 
         $count = 0;
@@ -1518,17 +1518,17 @@ class Module_admin_themes
 
             if (get_option('editarea') == '1') {
                 attach_to_screen_footer('
-					<script>// <![CDATA[
-					editAreaLoader.init({
-						id : "f' . $i . '_new"
-						,syntax: "' . $syntax . '"
-						,start_highlight: true
-						,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
-						,allow_resize: true
-						,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
-					});
-					//]]></script>
-				'); // XHTMLXHTML
+                            <script>// <![CDATA[
+                            editAreaLoader.init({
+                                        id : "f' . $i . '_new"
+                                        ,syntax: "' . $syntax . '"
+                                        ,start_highlight: true
+                                        ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
+                                        ,allow_resize: true
+                                        ,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
+                            });
+                            //]]></script>
+                    '); // XHTMLXHTML
             }
 
             // Support searching
@@ -1829,13 +1829,13 @@ class Module_admin_themes
     }
 
     /**
-	 * Helper function to get tempcode for insertion of symbols.
-	 *
-	 * @param  array			A list of pairs (symbol name,arity)
-	 * @param  string			The "stub" that determines what language codes to lookup for the given symbols, and generally, the collective naming strategy
-	 * @param  string			The ID of the actual template editor we are working with
-	 * @return tempcode		The tempcode
-	 */
+     * Helper function to get tempcode for insertion of symbols.
+     *
+     * @param  array                    A list of pairs (symbol name,arity)
+     * @param  string                   The "stub" that determines what language codes to lookup for the given symbols, and generally, the collective naming strategy
+     * @param  string                   The ID of the actual template editor we are working with
+     * @return tempcode                 The tempcode
+     */
     public function generate_from($array,$stub,$id)
     {
         $out = new ocp_tempcode();
@@ -1848,10 +1848,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The actualiser to edit a template. Always saves to the most overridden version.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a template. Always saves to the most overridden version.
+     *
+     * @return tempcode                 The UI
+     */
     public function __edit_templates()
     {
         $theme = $this->theme;
@@ -1948,24 +1948,24 @@ class Module_admin_themes
 
         if (get_param_integer('save_and_stay',0) == 1) {
             return inform_screen($this->title,protect_from_escaping('
-				<script>// <![CDATA[
-					window.fauxmodal_alert(\'' . addslashes(do_lang('SUCCESS')) . '\');
-				//]]></script>
-			'));
+                    <script>// <![CDATA[
+                            window.fauxmodal_alert(\'' . addslashes(do_lang('SUCCESS')) . '\');
+                    //]]></script>
+            '));
         }
 
         return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$theme,'','templates',$file);
     }
 
     /**
-	 * Get tempcode for a theme image adding/editing form.
-	 *
-	 * @param  ID_TEXT			The theme the theme image is in
-	 * @param  LANGUAGE_NAME	The language the theme image is for
-	 * @param  SHORT_TEXT		The theme image ID
-	 * @param  URLPATH			The URL to the theme image
-	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for a theme image adding/editing form.
+     *
+     * @param  ID_TEXT                  The theme the theme image is in
+     * @param  LANGUAGE_NAME            The language the theme image is for
+     * @param  SHORT_TEXT               The theme image ID
+     * @param  URLPATH                  The URL to the theme image
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_image_form_fields($theme,$lang,$id = '',$path = '')
     {
         $fields = new ocp_tempcode();
@@ -1975,13 +1975,13 @@ class Module_admin_themes
         $hidden->attach(form_input_hidden('lang',$lang));
         $fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_NAME'),'id',$id,true,null,null,'text','some/path/name'));
 
-        /*$list=combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images/',get_file_base().'/themes/'.filter_naughty($theme).'/images/');		Actually we don't want to allow selection from existing -- too weird, creating these cross-links
-		$list->attach(combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images_custom/',get_file_base().'/themes/'.filter_naughty($theme).'/images_custom/'));
-		if ($theme!='default')
-		{
-			$list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images/',get_file_base().'/themes/default/images/'));
-			$list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images_custom/',get_file_base().'/themes/default/images_custom/'));
-		}*/
+        /*$list=combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images/',get_file_base().'/themes/'.filter_naughty($theme).'/images/');    Actually we don't want to allow selection from existing -- too weird, creating these cross-links
+        $list->attach(combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images_custom/',get_file_base().'/themes/'.filter_naughty($theme).'/images_custom/'));
+        if ($theme!='default')
+        {
+            $list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images/',get_file_base().'/themes/default/images/'));
+            $list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images_custom/',get_file_base().'/themes/default/images_custom/'));
+        }*/
         handle_max_file_size($hidden,'image');
 
         $set_name = 'image';
@@ -1990,7 +1990,7 @@ class Module_admin_themes
         $field_set = alternate_fields_set__start($set_name);
 
         $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,null,null,true,str_replace(' ','',get_option('valid_images'))));
-        //	$fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),'',$list));
+        //  $fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),'',$list));
 
         $field_set->attach(form_input_url(do_lang_tempcode('URL'),'','path',$path,false));
 
@@ -2000,10 +2000,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to add a theme image.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to add a theme image.
+     *
+     * @return tempcode                 The UI
+     */
     public function add_image()
     {
         $theme = get_param('theme');
@@ -2031,10 +2031,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The actualiser to add a theme image.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to add a theme image.
+     *
+     * @return tempcode                 The UI
+     */
     public function _add_image()
     {
         require_code('uploads');
@@ -2078,10 +2078,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to select a theme image to edit.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to select a theme image to edit.
+     *
+     * @return tempcode                 The UI
+     */
     public function manage_images()
     {
         if (function_exists('set_time_limit')) {
@@ -2137,10 +2137,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to edit a theme image.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a theme image.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_image()
     {
         $lang = choose_language($this->title,true,true);
@@ -2206,10 +2206,10 @@ class Module_admin_themes
     }
 
     /**
-	 * The actualiser to edit a theme image.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a theme image.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_image()
     {
         require_code('uploads');
@@ -2246,10 +2246,10 @@ class Module_admin_themes
     }
 
     /**
-	 * Shows the list of templates
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Shows the list of templates
+     *
+     * @return tempcode                 The UI
+     */
     public function list_screen_previews()
     {
         if (function_exists('set_time_limit')) {
@@ -2348,10 +2348,10 @@ class Module_admin_themes
     }
 
     /**
-	 * Shows the preview of a screen
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Shows the preview of a screen
+     *
+     * @return tempcode                 The UI
+     */
     public function view_screen_preview()
     {
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
@@ -2369,27 +2369,27 @@ class Module_admin_themes
     }
 
     /**
-	 * The UI to run the Tempcode tester.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to run the Tempcode tester.
+     *
+     * @return tempcode                 The UI
+     */
     public function tempcode_tester()
     {
         require_javascript('javascript_ajax');
 
         if (get_option('editarea') == '1') {
             attach_to_screen_header(make_string_tempcode('
-				<script language="javascript" src="' . get_base_url() . '/data/editarea/edit_area_full.js"></script>
-				<script>// <![CDATA[
-				editAreaLoader.init({
-					id : "tempcode"
-					,syntax: "tempcode"
-					,start_highlight: true
-					,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
-					,allow_resize: true
-					,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
-				});
-				//]]></script>')); // XHTMLXHTML
+                    <script language="javascript" src="' . get_base_url() . '/data/editarea/edit_area_full.js"></script>
+                    <script>// <![CDATA[
+                    editAreaLoader.init({
+                            id : "tempcode"
+                            ,syntax: "tempcode"
+                            ,start_highlight: true
+                            ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
+                            ,allow_resize: true
+                            ,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
+                    });
+                    //]]></script>')); // XHTMLXHTML
         }
 
         return do_template('TEMPCODE_TESTER_SCREEN',array('_GUID' => 'b7ea146fffc0dfdcefcb8e8e0c0168a4','TITLE' => $this->title));

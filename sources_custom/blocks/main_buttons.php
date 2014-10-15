@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		banners
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    banners
  */
 
 class Block_main_buttons
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -34,10 +34,10 @@ class Block_main_buttons
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -47,11 +47,11 @@ class Block_main_buttons
     }
 
     /**
-	 * Install the block.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the block.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         // first ensure there is 'buttons' banners category, and if it doesn't exist create it
@@ -85,7 +85,7 @@ class Block_main_buttons
         add_banner_quiet('firefox','data_custom/causes/firefox.gif','Firefox','Firefox',0,'http://www.mozilla.com/firefox/',3,'',0,null,$submitter,1,'buttons',null,0,0,0,0,null);
         add_banner_quiet('w3cxhtml','data_custom/causes/w3c-xhtml.gif','W3C XHTML','W3C XHTML',0,'http://www.w3.org/MarkUp/',3,'',0,null,$submitter,1,'buttons',null,0,0,0,0,null);
         add_banner_quiet('w3ccss','data_custom/causes/w3c-css.gif','W3C CSS','W3C CSS',0,'http://www.w3.org/Style/CSS/',3,'',0,null,$submitter,1,'buttons',null,0,0,0,0,null);
-        //add_banner_quiet('w3cwcag','data_custom/causes/w3c-wcag.gif','W3C WCAG','W3C WCAG',0,'http://www.w3.org/TR/WCAG10/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL); 	//no banner image
+        //add_banner_quiet('w3cwcag','data_custom/causes/w3c-wcag.gif','W3C WCAG','W3C WCAG',0,'http://www.w3.org/TR/WCAG10/',3,'',0,NULL,$submitter,1,'buttons',NULL,0,0,0,0,NULL);   //no banner image
         add_banner_quiet('cancerresearch','data_custom/causes/cancerresearch.gif','Cancer Research','Cancer Research',0,'http://www.cancerresearchuk.org/',3,'',0,null,$submitter,1,'buttons',null,0,0,0,0,null);
         add_banner_quiet('rspca','data_custom/causes/rspca.gif','RSPCA','RSPCA',0,'http://www.rspca.org.uk/home',3,'',0,null,$submitter,1,'buttons',null,0,0,0,0,null);
         add_banner_quiet('peta','data_custom/causes/peta.gif','PETA','PETA',0,'http://www.peta.org',3,'',0,null,$submitter,1,'buttons',null,0,0,0,0,null);
@@ -103,11 +103,11 @@ class Block_main_buttons
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);

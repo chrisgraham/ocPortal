@@ -13,30 +13,30 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 class Hook_Notification_task_completed extends Hook_Notification
 {
     /**
-	 * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
-	 *
-	 * @param  ID_TEXT		Notification code
-	 * @return integer		Allowed settings
-	 */
+     * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
+     *
+     * @param  ID_TEXT                  Notification code
+     * @return integer                  Allowed settings
+     */
     public function allowed_settings($notification_code)
     {
         return A_INSTANT_EMAIL;
     }
 
     /**
-	 * Get a list of all the notification codes this hook can handle.
-	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
-	 *
-	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
-	 */
+     * Get a list of all the notification codes this hook can handle.
+     * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
+     *
+     * @return array                    List of codes (mapping between code names, and a pair: section and labelling for those codes)
+     */
     public function list_handled_codes()
     {
         $list = array();

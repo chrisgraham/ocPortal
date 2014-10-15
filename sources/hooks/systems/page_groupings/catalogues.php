@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		catalogues
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    catalogues
  */
 
 class Hook_page_groupings_catalogues
 {
     /**
-	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
-	 *
-	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
-	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
-	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
-	 */
+     * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
+     *
+     * @param  ?MEMBER                  Member ID to run as (NULL: current member)
+     * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
+     * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
+     */
     public function run($member_id = null,$extensive_docs = false)
     {
         if (!addon_installed('catalogues')) {
@@ -72,11 +72,11 @@ class Hook_page_groupings_catalogues
 
                         if ($row['c_is_tree'] == 0) {
                             $num_categories = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('c_name' => $row['c_name']));
-                            /*if ($num_categories==0)	Actually we should show an empty index - catalogue exists, show it does
-							{
-								continue;
-							}
-							else*/if ($num_categories == 1) {
+                            /*if ($num_categories==0) Actually we should show an empty index - catalogue exists, show it does
+                                                        {
+                                                                            continue;
+                                                        }
+                                                        else*/if ($num_categories == 1) {
                                 $only_category = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name' => $row['c_name']));
                                 $ret2[] = array($page_grouping,$menu_icon,array('catalogues',array('type' => 'misc','id' => strval($only_category)),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))),get_translated_tempcode('catalogues',$row,'c_description'));
                                 continue;
@@ -86,14 +86,14 @@ class Hook_page_groupings_catalogues
                         $ret2[] = array($page_grouping,$menu_icon,array('catalogues',array('type' => 'index','id' => $row['c_name']),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))),get_translated_tempcode('catalogues',$row,'c_description'));
                     }
                 }
-                //if (count($ret2)<20)	Why would people add 20+. Weird use case, and we can't make assumptions if they do, linking should still happen.
+                //if (count($ret2)<20) Why would people add 20+. Weird use case, and we can't make assumptions if they do, linking should still happen.
                 //{
                     $ret = array_merge($ret,$ret2);
                 //}
             }
         }
 
-        //$ret[]=array('rich_content','menu/rich_content/catalogues/catalogues',array('catalogues',array(),get_module_zone('catalogues')),do_lang_tempcode('catalogues:CATALOGUES'));	Lame
+        //$ret[]=array('rich_content','menu/rich_content/catalogues/catalogues',array('catalogues',array(),get_module_zone('catalogues')),do_lang_tempcode('catalogues:CATALOGUES'));  Lame
 
         return $ret;
     }

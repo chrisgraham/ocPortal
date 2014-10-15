@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_form_interfaces
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_form_interfaces
  */
 
 /**
  * Build up a preview based on what was submitted.
  *
- * @param  boolean	Whether to return additional data
- * @return mixed		Either tempcode for the preview, or a tuple of details
+ * @param  boolean                      Whether to return additional data
+ * @return mixed                        Either tempcode for the preview, or a tuple of details
  */
 function build_preview($multi_return = false)
 {

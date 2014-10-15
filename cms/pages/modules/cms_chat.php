@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_cms_chat
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_cms_chat
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -57,10 +57,10 @@ class Module_cms_chat
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('chat');
@@ -72,10 +72,10 @@ class Module_cms_chat
     public $message_id;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -178,10 +178,10 @@ class Module_cms_chat
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('chat');
@@ -222,10 +222,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The main user interface for choosing a chat room to moderate.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The main user interface for choosing a chat room to moderate.
+     *
+     * @return tempcode                 The UI.
+     */
     public function chat_choose_room()
     {
         $introtext = do_lang_tempcode('CHAT_MODERATION_INTRO');
@@ -284,12 +284,12 @@ class Module_cms_chat
     }
 
     /**
-	 * Sort chatroom rows (callback).
-	 *
-	 * @param  array		First row.
-	 * @param  array		Second row.
-	 * @return integer	Sorting code.
-	 */
+     * Sort chatroom rows (callback).
+     *
+     * @param  array                    First row.
+     * @param  array                    Second row.
+     * @return integer                  Sorting code.
+     */
     public function _sort_chat_browse_rows($a,$b)
     {
         $messages_a = $GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)',array('room_id' => $a['id']));
@@ -304,10 +304,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The main user interface for moderating a chat room.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The main user interface for moderating a chat room.
+     *
+     * @return tempcode                 The UI.
+     */
     public function moderate_chat_room()
     {
         $room_id = get_param_integer('id');
@@ -385,10 +385,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The actualiser for banning a chatter.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for banning a chatter.
+     *
+     * @return tempcode                 The UI.
+     */
     public function chat_ban()
     {
         $id = get_param_integer('id');
@@ -436,10 +436,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The actualiser for unbanning a chatter.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for unbanning a chatter.
+     *
+     * @return tempcode                 The UI.
+     */
     public function chat_unban()
     {
         $id = get_param_integer('id');
@@ -479,10 +479,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The UI for editing a message.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for editing a message.
+     *
+     * @return tempcode                 The UI.
+     */
     public function chat_edit_message()
     {
         $myrow = $this->myrow;
@@ -519,10 +519,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The actualiser for editing a message.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for editing a message.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _chat_edit_message()
     {
         $delete = post_param_integer('delete',0);
@@ -559,7 +559,7 @@ class Module_cms_chat
             return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
                 null,
                 null,
-                /* TYPED-ORDERED LIST OF 'LINKS'	 */
+                /* TYPED-ORDERED LIST OF 'LINKS'    */
                 NULL, // Add one
                 array('_SELF',array('type' => 'ed','id' => $message_id,'room_id' => $room_id),'_SELF'), // Edit this
                 array('_SELF',array('type' => 'room','id' => $room_id),'_SELF'), // Edit one
@@ -582,10 +582,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The actualiser for deleting a message.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for deleting a message.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _chat_delete_message()
     {
         $myrow = $this->myrow;
@@ -617,7 +617,7 @@ class Module_cms_chat
         return do_next_manager($this->title,do_lang_tempcode('SUCCESS'),
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             NULL, // Add one
             NULL, // Edit this
             array('_SELF',array('type' => 'room','id' => $room_id),'_SELF'), // Edit one
@@ -636,10 +636,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The UI for deleting all the messages in a room.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for deleting all the messages in a room.
+     *
+     * @return tempcode                 The UI.
+     */
     public function chat_delete_all_messages()
     {
         $id = get_param_integer('id');
@@ -666,10 +666,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The actualiser for deleting all the messages in a room.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for deleting all the messages in a room.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _chat_delete_all_messages()
     {
         $delete = post_param_integer('continue_delete',0);
@@ -703,10 +703,10 @@ class Module_cms_chat
     }
 
     /**
-	 * The actualiser for deleting all the ticked messages in a room.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for deleting all the ticked messages in a room.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _chat_delete_many_messages()
     {
         $room_id = get_param_integer('room_id');

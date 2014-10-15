@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		iotds
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    iotds
  */
 
 class Hook_checklist_iotds
 {
     /**
-	 * Find items to include on the staff checklist.
-	 *
-	 * @return array		An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
-	 */
+     * Find items to include on the staff checklist.
+     *
+     * @return array                    An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
+     */
     public function run()
     {
         if (!addon_installed('iotds')) {
@@ -58,10 +58,10 @@ class Hook_checklist_iotds
     }
 
     /**
-	 * Get the number of IOTDs in the queue.
-	 *
-	 * @return integer		Number in queue
-	 */
+     * Get the number of IOTDs in the queue.
+     *
+     * @return integer                  Number in queue
+     */
     public function get_num_iotd_queue()
     {
         $c = $GLOBALS['SITE_DB']->query_select_value_if_there('iotd','COUNT(*)',array('is_current' => 0,'used' => 0));

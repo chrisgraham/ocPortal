@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		bookmarks
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    bookmarks
  */
 
 /**
@@ -42,8 +42,8 @@ function bookmarks_script()
 
             $content = inform_screen($title,do_lang_tempcode('SUCCESS'));
             $content->attach('<script>// <![CDATA[
-				if (window.opener) window.close();
-			//]]></script>');
+                    if (window.opener) window.close();
+            //]]></script>');
             break;
         default:
             $url = find_script('bookmarks') . '?no_redirect=1&type=_ad';
@@ -60,8 +60,8 @@ function bookmarks_script()
 /**
  * Get the form to add a bookmark / set breadcrumbs.
  *
- * @param  mixed			Where the form should go to
- * @return tempcode		The form
+ * @param  mixed                        Where the form should go to
+ * @return tempcode                     The form
  */
 function add_bookmark_form($post_url)
 {
@@ -124,11 +124,11 @@ function add_bookmark_form($post_url)
 /**
  * Add a bookmark.
  *
- * @param  MEMBER			Member who it will belong to
- * @param  string			Folder (blank: root)
- * @param  string			Title/caption
- * @param  string			The page-link
- * @return AUTO_LINK		The ID
+ * @param  MEMBER                       Member who it will belong to
+ * @param  string                       Folder (blank: root)
+ * @param  string                       Title/caption
+ * @param  string                       The page-link
+ * @return AUTO_LINK                    The ID
  */
 function add_bookmark($member,$folder,$title,$page_link)
 {
@@ -147,10 +147,10 @@ function add_bookmark($member,$folder,$title,$page_link)
 /**
  * Edit a bookmark.
  *
- * @param  AUTO_LINK		The ID
- * @param  MEMBER			Member who it belongs to
- * @param  string			Title/caption
- * @param  string			The page-link
+ * @param  AUTO_LINK                    The ID
+ * @param  MEMBER                       Member who it belongs to
+ * @param  string                       Title/caption
+ * @param  string                       The page-link
  */
 function edit_bookmark($id,$member,$title,$page_link)
 {
@@ -162,8 +162,8 @@ function edit_bookmark($id,$member,$title,$page_link)
 /**
  * Delete a bookmark.
  *
- * @param  AUTO_LINK		The ID
- * @param  ?MEMBER		Member who it belongs to (NULL: do not check)
+ * @param  AUTO_LINK                    The ID
+ * @param  ?MEMBER                      Member who it belongs to (NULL: do not check)
  */
 function delete_bookmark($id,$member = null)
 {

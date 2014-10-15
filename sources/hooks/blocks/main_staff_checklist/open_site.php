@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_adminzone_dashboard
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_adminzone_dashboard
  */
 
 class Hook_checklist_open_site
 {
     /**
-	 * Find items to include on the staff checklist.
-	 *
-	 * @return array		An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
-	 */
+     * Find items to include on the staff checklist.
+     *
+     * @return array                    An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
+     */
     public function run()
     {
         $url = build_url(array('page' => 'admin_config','type' => 'category','id' => 'SITE'),'adminzone',null,false,false,false,'group_CLOSED_SITE');

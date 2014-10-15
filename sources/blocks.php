@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*
@@ -29,8 +29,8 @@ Post-AJAX the functions are used to confirm these permissions (the permission ID
 /**
  * Convert the parameters for a block, to a regexp pattern.
  *
- * @param  array			The parameters
- * @return array			The parameters, as a pattern
+ * @param  array                        The parameters
+ * @return array                        The parameters, as a pattern
  */
 function block_params_to_block_signature($map)
 {
@@ -43,9 +43,9 @@ function block_params_to_block_signature($map)
 /**
  * Check whether some block parameters are acceptable.
  *
- * @param  array			The acceptable parameter pattern
- * @param  array			The given parameters
- * @return boolean		Answer
+ * @param  array                        The acceptable parameter pattern
+ * @param  array                        The given parameters
+ * @return boolean                      Answer
  */
 function block_signature_check($allowed,$used)
 {

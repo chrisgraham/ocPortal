@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Test password strength.
  *
- * @param  string		The password to check
- * @param  string		The username that will go with the password
- * @return integer	Password strength (1-10)
+ * @param  string                       The password to check
+ * @param  string                       The username that will go with the password
+ * @return integer                      Password strength (1-10)
  */
 function test_password($password,$username = '')
 {

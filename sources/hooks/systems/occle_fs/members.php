@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_occle_fs_members
 {
     /**
-	 * Standard occle_fs listing function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return ~array		The final directory listing (false: failure)
-	 */
+     * Standard occle_fs listing function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return ~array                   The final directory listing (false: failure)
+     */
     public function listing($meta_dir,$meta_root_node,&$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
@@ -152,14 +152,14 @@ class Hook_occle_fs_members
     }
 
     /**
-	 * Standard occle_fs directory creation function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The new directory name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs directory creation function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The new directory name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
@@ -179,14 +179,14 @@ class Hook_occle_fs_members
     }
 
     /**
-	 * Standard occle_fs directory removal function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The directory name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs directory removal function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The directory name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
@@ -206,14 +206,14 @@ class Hook_occle_fs_members
     }
 
     /**
-	 * Standard occle_fs file removal function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs file removal function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
@@ -283,14 +283,14 @@ class Hook_occle_fs_members
     }
 
     /**
-	 * Standard occle_fs file reading function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return ~string	The file contents (false: failure)
-	 */
+     * Standard occle_fs file reading function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return ~string                  The file contents (false: failure)
+     */
     public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
@@ -357,15 +357,15 @@ class Hook_occle_fs_members
     }
 
     /**
-	 * Standard occle_fs file writing function for OcCLE FS hooks.
-	 *
-	 * @param  array		The current meta-directory path
-	 * @param  string		The root node of the current meta-directory
-	 * @param  string		The file name
-	 * @param  string		The new file contents
-	 * @param  object		A reference to the OcCLE filesystem object
-	 * @return boolean	Success?
-	 */
+     * Standard occle_fs file writing function for OcCLE FS hooks.
+     *
+     * @param  array                    The current meta-directory path
+     * @param  string                   The root node of the current meta-directory
+     * @param  string                   The file name
+     * @param  string                   The new file contents
+     * @param  object                   A reference to the OcCLE filesystem object
+     * @return boolean                  Success?
+     */
     public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
     {
         if (get_forum_type() != 'ocf') {

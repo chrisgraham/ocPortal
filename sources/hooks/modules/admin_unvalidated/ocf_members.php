@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_unvalidated_ocf_members
 {
     /**
-	 * Find details on the unvalidated hook.
-	 *
-	 * @return ?array	Map of hook info (NULL: hook is disabled).
-	 */
+     * Find details on the unvalidated hook.
+     *
+     * @return ?array                   Map of hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         if (get_forum_type() != 'ocf') {

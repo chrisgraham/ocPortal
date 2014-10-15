@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		testing_platform
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    testing_platform
  */
 
 function unit_testing_run()
@@ -100,21 +100,21 @@ function testset_do_header($title)
 {
     echo <<<END
 <!DOCTYPE html>
-	<html lang="EN">
-	<head>
-		<title>{$title}</title>
-		<link rel="icon" href="../themes/default/images/favicon.ico" type="image/x-icon" />
+    <html lang="EN">
+    <head>
+        <title>{$title}</title>
+        <link rel="icon" href="../themes/default/images/favicon.ico" type="image/x-icon" />
 
-		<style>
+        <style>
 END;
     @print(file_get_contents(css_enforce('global','default',false)));
     echo <<<END
-			.screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/icons/48x48/menu/_generic_admin/tool.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
-			a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-		</style>
-	</head>
-	<body class="website_body"><div class="global_middle">
-		<h1 class="screen_title">{$title}</h1>
+            .screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/icons/48x48/menu/_generic_admin/tool.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
+            a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
+        </style>
+    </head>
+    <body class="website_body"><div class="global_middle">
+        <h1 class="screen_title">{$title}</h1>
 END;
     if (@ob_end_flush() !== false) {
         @ob_start();
@@ -125,9 +125,9 @@ flush();
 function testset_do_footer()
 {
     echo <<<END
-		<hr />
-		<p>ocPortal test set tool, based on SimpleTest.</p>
-	</div></body>
+        <hr />
+        <p>ocPortal test set tool, based on SimpleTest.</p>
+    </div></body>
 </html>
 END;
 }

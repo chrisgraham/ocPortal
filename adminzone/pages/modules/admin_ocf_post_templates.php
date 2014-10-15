@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_post_templates
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_post_templates
  */
 
 require_code('crud_module');
@@ -36,14 +36,14 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     public $orderer = 't_title';
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -62,12 +62,12 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -94,11 +94,11 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         $this->add_one_label = do_lang_tempcode('ADD_POST_TEMPLATE');
@@ -126,10 +126,10 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -144,10 +144,10 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * The UI to import in bulk from an archive file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to import in bulk from an archive file.
+     *
+     * @return tempcode                 The UI
+     */
     public function import()
     {
         require_code('form_templates');
@@ -177,10 +177,10 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * The actualiser to import in bulk from an archive file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to import in bulk from an archive file.
+     *
+     * @return tempcode                 The UI
+     */
     public function _import()
     {
         require_code('uploads');
@@ -273,12 +273,12 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Import a stock response.
-	 *
-	 * @param  PATH			Path of the file (not on disk, just for reference as a title).
-	 * @param  string			Data.
-	 * @param  SHORT_TEXT	The forum multicode identifying where the multi-moderation is applicable
-	 */
+     * Import a stock response.
+     *
+     * @param  PATH                     Path of the file (not on disk, just for reference as a title).
+     * @param  string                   Data.
+     * @param  SHORT_TEXT               The forum multicode identifying where the multi-moderation is applicable
+     */
     public function _import_stock_response($path,$data,$target_forum)
     {
         require_code('ocf_general_action');
@@ -291,11 +291,11 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -334,14 +334,14 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a post template adding/editing form.
-	 *
-	 * @param  SHORT_TEXT	The title (name) of the post template
-	 * @param  LONG_TEXT		The actual post template text
-	 * @param  SHORT_TEXT	Multi-code identifying forums it is applicable to
-	 * @param  BINARY			Whether to use as the default post for applicable forums
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a post template adding/editing form.
+     *
+     * @param  SHORT_TEXT               The title (name) of the post template
+     * @param  LONG_TEXT                The actual post template text
+     * @param  SHORT_TEXT               Multi-code identifying forums it is applicable to
+     * @param  BINARY                   Whether to use as the default post for applicable forums
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($title = '',$text = '',$forum_multi_code = '',$use_default_forums = 0)
     {
         $fields = new ocp_tempcode();
@@ -354,11 +354,11 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $m = $GLOBALS['FORUM_DB']->query_select('f_post_templates',array('*'),array('id' => intval($id)),'',1);
@@ -371,10 +371,10 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         require_code('form_templates');
@@ -382,10 +382,10 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         require_code('form_templates');
@@ -393,10 +393,10 @@ class Module_admin_ocf_post_templates extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         ocf_delete_post_template(intval($id));

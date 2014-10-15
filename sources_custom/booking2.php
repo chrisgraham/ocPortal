@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		booking
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    booking
  */
 
 /*
@@ -20,7 +20,7 @@ This file deals specifically with maintaining the bookables, not specific bookin
 /**
  * Get a do-next manager for bookings.
  *
- * @return tempcode	Booking do-next manager.
+ * @return tempcode                     Booking do-next manager.
  */
 function booking_do_next()
 {
@@ -46,8 +46,8 @@ function booking_do_next()
 /**
  * For a member, find reconstituted booking request details for all bookings.
  *
- * @param  MEMBER		Member to find for.
- * @return array		Reconstituted booking details structure to check.
+ * @param  MEMBER                       Member to find for.
+ * @return array                        Reconstituted booking details structure to check.
  */
 function get_member_booking_request($member_id)
 {
@@ -58,8 +58,8 @@ function get_member_booking_request($member_id)
 /**
  * For a list of booking IDs (assumed to be from same member), reconstitute/simplify as much as possible, and return the booking details structure.
  *
- * @param  array		List of booking IDs.
- * @return array		Reconstituted booking details structure to check.
+ * @param  array                        List of booking IDs.
+ * @return array                        Reconstituted booking details structure to check.
  */
 function get_booking_request_from_db($booking_ids)
 {
@@ -100,8 +100,8 @@ function get_booking_request_from_db($booking_ids)
 /**
  * From single booking details, convert it into a reconstituted structure.
  *
- * @param  array		Booking details structure to check.
- * @return boolean	Whether any changes happened.
+ * @param  array                        Booking details structure to check.
+ * @return boolean                      Whether any changes happened.
  */
 function reconstitute_booking_requests(&$request)
 {
@@ -179,8 +179,8 @@ function reconstitute_booking_requests(&$request)
 /**
  * Find the future booking(s) IDs owned by a member.
  *
- * @param  ?MEMBER	Member ID (NULL: current user).
- * @return array		Booking IDs.
+ * @param  ?MEMBER                      Member ID (NULL: current user).
+ * @return array                        Booking IDs.
  */
 function get_future_member_booking_ids($member = null)
 {
@@ -199,7 +199,7 @@ function get_future_member_booking_ids($member = null)
 /**
  * Delete a specific booking. To edit a booking you need to delete then re-add.
  *
- * @param  AUTO_LINK	Booking ID.
+ * @param  AUTO_LINK                    Booking ID.
  */
 function delete_booking($id)
 {
@@ -210,7 +210,7 @@ function delete_booking($id)
 /**
  * Read bookable details from POST environment.
  *
- * @return array		Tuple:  bookable_details, blacked, codes, supplements.
+ * @return array                        Tuple:  bookable_details, blacked, codes, supplements.
  */
 function get_bookable_details_from_form()
 {
@@ -247,21 +247,21 @@ function get_bookable_details_from_form()
     );
 
     /*$blacked=array();
-	$supplements=array();
-	foreach (array_keys($_POST) as $key)
-	{
-		if (substr($key,0,8)=='blacked_')
-		{
-			if (post_param_integer($key,0)==1)
-				$blacked[]=intval(substr($key,8));
-		}
+    $supplements=array();
+    foreach (array_keys($_POST) as $key)
+    {
+        if (substr($key,0,8)=='blacked_')
+        {
+            if (post_param_integer($key,0)==1)
+                    $blacked[]=intval(substr($key,8));
+        }
 
-		if (substr($key,0,11)=='supplement_')
-		{
-			if (post_param_integer($key,0)==1)
-				$supplements[]=intval(substr($key,11));
-		}
-	}*/
+        if (substr($key,0,11)=='supplement_')
+        {
+            if (post_param_integer($key,0)==1)
+                    $supplements[]=intval(substr($key,11));
+        }
+    }*/
     if (!isset($_POST['blacked'])) {
         $_POST['blacked'] = array();
     }
@@ -282,8 +282,8 @@ function get_bookable_details_from_form()
 /**
  * Generate a new set of booking codes.
  *
- * @param  integer	How many codes to generate.
- * @return array		The generated codes.
+ * @param  integer                      How many codes to generate.
+ * @return array                        The generated codes.
  */
 function generate_random_booking_codes($num)
 {
@@ -297,7 +297,7 @@ function generate_random_booking_codes($num)
 /**
  * Read supplement details from POST environment.
  *
- * @return array		Tuple: Supplement details, list of bookables.
+ * @return array                        Tuple: Supplement details, list of bookables.
  */
 function get_bookable_supplement_details_from_form()
 {
@@ -320,7 +320,7 @@ function get_bookable_supplement_details_from_form()
 /**
  * Read blacked details from POST environment.
  *
- * @return array		Tuple: Blacked details, list of bookables.
+ * @return array                        Tuple: Blacked details, list of bookables.
  */
 function get_bookable_blacked_details_from_form()
 {
@@ -350,13 +350,13 @@ function get_bookable_blacked_details_from_form()
 /**
  * Add a bookable.
  *
- * @param  array		Bookable details.
- * @param  array		List of codes.
- * @param  ?array		List of black-outs (NULL: none).
- * @param  ?array		List of supplements (NULL: none).
- * @param  ?TIME		Add date (NULL: now).
- * @param  ?MEMBER	Submitting user (NULL: current user).
- * @return AUTO_LINK	Bookable ID.
+ * @param  array                        Bookable details.
+ * @param  array                        List of codes.
+ * @param  ?array                       List of black-outs (NULL: none).
+ * @param  ?array                       List of supplements (NULL: none).
+ * @param  ?TIME                        Add date (NULL: now).
+ * @param  ?MEMBER                      Submitting user (NULL: current user).
+ * @return AUTO_LINK                    Bookable ID.
  */
 function add_bookable($bookable_details,$codes,$blacked = null,$supplements = null,$add_date = null,$submitter = null)
 {
@@ -426,11 +426,11 @@ function add_bookable($bookable_details,$codes,$blacked = null,$supplements = nu
 /**
  * Edit a bookable.
  *
- * @param  AUTO_LINK	Bookable ID.
- * @param  array		Bookable details.
- * @param  array		List of codes.
- * @param  ?array		List of black-outs (NULL: no change).
- * @param  ?array		List of supplements (NULL: no change).
+ * @param  AUTO_LINK                    Bookable ID.
+ * @param  array                        Bookable details.
+ * @param  array                        List of codes.
+ * @param  ?array                       List of black-outs (NULL: no change).
+ * @param  ?array                       List of supplements (NULL: no change).
  */
 function edit_bookable($bookable_id,$bookable_details,$codes,$blacked = null,$supplements = null)
 {
@@ -492,7 +492,7 @@ function edit_bookable($bookable_id,$bookable_details,$codes,$blacked = null,$su
 /**
  * Delete a bookable.
  *
- * @param  AUTO_LINK	Bookable ID.
+ * @param  AUTO_LINK                    Bookable ID.
  */
 function delete_bookable($bookable_id)
 {
@@ -531,14 +531,14 @@ function delete_bookable($bookable_id)
 /**
  * Add a bookable supplement.
  *
- * @param  array		Supplement details.
- * @param  ?array		List of bookables to associate to (NULL: none).
- * @return AUTO_LINK	Supplement ID.
+ * @param  array                        Supplement details.
+ * @param  ?array                       List of bookables to associate to (NULL: none).
+ * @return AUTO_LINK                    Supplement ID.
  */
 function add_bookable_supplement($details,$bookables = null)
 {
-    /*require_code('global4');	$title is not actually unique enough to do this
-	prevent_double_submit('ADD_BOOKABLE_SUPPLEMENT',NULL,$title);*/
+    /*require_code('global4');   $title is not actually unique enough to do this
+    prevent_double_submit('ADD_BOOKABLE_SUPPLEMENT',NULL,$title);*/
 
     if (is_null($bookables)) {
         $bookables = array();
@@ -565,9 +565,9 @@ function add_bookable_supplement($details,$bookables = null)
 /**
  * Edit a bookable supplement.
  *
- * @param  AUTO_LINK	Supplement ID.
- * @param  array		Supplement details.
- * @param  ?array		List of bookables to associate to (NULL: no change).
+ * @param  AUTO_LINK                    Supplement ID.
+ * @param  array                        Supplement details.
+ * @param  ?array                       List of bookables to associate to (NULL: no change).
  */
 function edit_bookable_supplement($supplement_id,$details,$bookables = null)
 {
@@ -603,7 +603,7 @@ function edit_bookable_supplement($supplement_id,$details,$bookables = null)
 /**
  * Delete a bookable supplement.
  *
- * @param  AUTO_LINK	Supplement ID.
+ * @param  AUTO_LINK                    Supplement ID.
  */
 function delete_bookable_supplement($supplement_id)
 {
@@ -626,9 +626,9 @@ function delete_bookable_supplement($supplement_id)
 /**
  * Add a bookable blacked.
  *
- * @param  array		Blacked details.
- * @param  ?array		List of bookables to associate to (NULL: none).
- * @return AUTO_LINK	Blacked ID.
+ * @param  array                        Blacked details.
+ * @param  ?array                       List of bookables to associate to (NULL: none).
+ * @return AUTO_LINK                    Blacked ID.
  */
 function add_bookable_blacked($details,$bookables = null)
 {
@@ -657,9 +657,9 @@ function add_bookable_blacked($details,$bookables = null)
 /**
  * Edit a bookable blacked.
  *
- * @param  AUTO_LINK	Blacked ID.
- * @param  array		Blacked details.
- * @param  ?array		List of bookables to associate to (NULL: no change).
+ * @param  AUTO_LINK                    Blacked ID.
+ * @param  array                        Blacked details.
+ * @param  ?array                       List of bookables to associate to (NULL: no change).
  */
 function edit_bookable_blacked($blacked_id,$details,$bookables = null)
 {
@@ -691,7 +691,7 @@ function edit_bookable_blacked($blacked_id,$details,$bookables = null)
 /**
  * Delete a bookable blacked.
  *
- * @param  AUTO_LINK	Blacked ID.
+ * @param  AUTO_LINK                    Blacked ID.
  */
 function delete_bookable_blacked($blacked_id)
 {

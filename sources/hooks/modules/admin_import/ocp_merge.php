@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		import
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    import
  */
 
 class Hook_ocp_merge
 {
     /**
-	 * Standard importer hook info function.
-	 *
-	 * @return ?array	Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
-	 */
+     * Standard importer hook info function.
+     *
+     * @return ?array                   Importer handling details, including lists of all the import types covered (import types are not necessarily the same as actual tables) (NULL: importer is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -141,13 +141,13 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Do some tests, to make sure we're happy to continue importing.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 * @return ?tempcode		Error/warning UI (NULL: no error/warning)
-	 */
+     * Do some tests, to make sure we're happy to continue importing.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     * @return ?tempcode                Error/warning UI (NULL: no error/warning)
+     */
     public function pre_import_tests($db,$table_prefix,$file_base)
     {
         $title = get_screen_title('IMPORT');
@@ -212,11 +212,11 @@ class Hook_ocp_merge
     }
 
     /**
-	 * See if the importing site is on the same M.S.N. as the site being imported.
-	 *
-	 * @param  PATH			The path to the imported site
-	 * @return boolean		Answer
-	 */
+     * See if the importing site is on the same M.S.N. as the site being imported.
+     *
+     * @param  PATH                     The path to the imported site
+     * @return boolean                  Answer
+     */
     public function on_same_msn($file_base)
     {
         if (get_param_integer('keep_on_same_msn',null) === 0) {
@@ -240,12 +240,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Fetch and clean up a language string.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  integer		The string ID
-	 * @return string			The cleaned-up string
-	 */
+     * Fetch and clean up a language string.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  integer                  The string ID
+     * @return string                   The cleaned-up string
+     */
     public function get_lang_string($db,$id)
     {
         if (is_null($id)) {
@@ -268,12 +268,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_welcome_emails($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -297,12 +297,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_bookmarks($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'bookmarks',null,null,true);
@@ -322,12 +322,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_quizzes($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'quizzes ORDER BY id',null,null,true);
@@ -487,12 +487,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ecommerce($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'transactions',null,null,true);
@@ -585,12 +585,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_attachments($db,$table_prefix,$file_base)
     {
         $row_start = 0;
@@ -620,12 +620,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_attachment_references($db,$table_prefix,$file_base)
     {
         $row_start = 0;
@@ -648,12 +648,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_feedback($db,$table_prefix,$file_base)
     {
         $type_remap = array('downloads_category' => 'download_category','downloads_download' => 'download','downloads' => 'download');
@@ -719,12 +719,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_authors($db,$table_prefix,$file_base)
     {
         require_code('authors');
@@ -745,12 +745,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_banners($db,$table_prefix,$file_base)
     {
         require_code('banners2');
@@ -808,12 +808,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_points_gifts_and_charges($db,$table_prefix,$file_base)
     {
         require_code('points2');
@@ -871,12 +871,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_config($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'config');
@@ -897,12 +897,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_polls($db,$table_prefix,$file_base)
     {
         require_code('polls2');
@@ -986,12 +986,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_news_and_categories($db,$table_prefix,$file_base)
     {
         require_code('news2');
@@ -1063,12 +1063,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_newsletter_subscriptions($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'newsletters',null,null,true);
@@ -1145,12 +1145,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_pointstore($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'prices',null,null,true);
@@ -1180,12 +1180,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_downloads_and_categories($db,$table_prefix,$file_base)
     {
         require_code('downloads2');
@@ -1284,12 +1284,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_images_and_galleries($db,$table_prefix,$file_base)
     {
         require_code('galleries2');
@@ -1356,12 +1356,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_wiki($db,$table_prefix,$file_base)
     {
         if (!import_check_if_imported('wiki_page',strval(db_get_first_id()))) {
@@ -1474,12 +1474,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_custom_comcode($db,$table_prefix,$file_base)
     {
         require_code('custom_comcode');
@@ -1511,12 +1511,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_comcode_pages($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'comcode_pages',null,null,true);
@@ -1545,12 +1545,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import custom tasks.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Import custom tasks.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_customtasks($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'customtasks',null,null,true);
@@ -1568,12 +1568,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_wordfilter($db,$table_prefix,$file_base)
     {
         require_code('word_filter');
@@ -1589,12 +1589,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_calendar($db,$table_prefix,$file_base)
     {
         require_code('calendar2');
@@ -1712,12 +1712,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_redirects($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'redirects');
@@ -1728,12 +1728,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_stats($db,$table_prefix,$file_base)
     {
         $row_start = 0;
@@ -1757,12 +1757,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_themes($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'theme_images WHERE path LIKE \'' . db_encode_like('%/images_custom/%') . '\'');
@@ -1774,12 +1774,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_support_tickets($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'ticket_types',null,null,true);
@@ -1822,11 +1822,11 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import ticket extra access.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 */
+     * Import ticket extra access.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     */
     public function _import_ticket_extra_access($db,$table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'ticket_extra_access',null,null,true);
@@ -1846,11 +1846,11 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Imports ticket known emailers.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 */
+     * Imports ticket known emailers.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     */
     public function _import_ticket_known_emailers($db,$table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'ticket_known_emailers',null,null,true);
@@ -1870,12 +1870,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_useronline_tracking($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'usersonline_track');
@@ -1886,12 +1886,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ip_bans($db,$table_prefix,$file_base)
     {
         require_code('failure');
@@ -1914,12 +1914,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_zones($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'zones');
@@ -1937,12 +1937,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_catalogues($db,$table_prefix,$file_base)
     {
         require_code('catalogues2');
@@ -2090,12 +2090,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_chat_rooms($db,$table_prefix,$file_base)
     {
         require_code('chat2');
@@ -2198,12 +2198,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_awards($db,$table_prefix,$file_base)
     {
         $content_types = array();
@@ -2257,12 +2257,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_filedump($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'filedump',null,null,true);
@@ -2282,12 +2282,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_permissions($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'group_privileges');
@@ -2561,12 +2561,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_notifications($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'notifications_enabled',null,null,true);
@@ -2602,12 +2602,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_groups($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -2648,12 +2648,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_members($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -2782,12 +2782,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_custom_profile_fields($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -2832,11 +2832,11 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import cpf premissions.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 */
+     * Import cpf premissions.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     */
     public function _import_f_member_cpf_perms($db,$table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'f_member_cpf_perms',null,null,true);
@@ -2861,12 +2861,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_forum_groupings($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -2895,12 +2895,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_forums($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -2976,12 +2976,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_topics($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -3063,12 +3063,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_posts($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -3132,12 +3132,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_polls_and_votes($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -3191,12 +3191,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_emoticons($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -3214,11 +3214,11 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Pass a multi-code through a forum remap.
-	 *
-	 * @param  SHORT_TEXT	Multi code
-	 * @return SHORT_TEXT	New multi code
-	 */
+     * Pass a multi-code through a forum remap.
+     *
+     * @param  SHORT_TEXT               Multi code
+     * @return SHORT_TEXT               New multi code
+     */
     public function convert_multi_code($multi_code)
     {
         if ($multi_code == '*') {
@@ -3258,12 +3258,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_multi_moderations($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -3284,12 +3284,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_post_templates($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -3305,12 +3305,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_warnings($db,$table_prefix,$file_base)
     {
         if ($this->on_same_msn($file_base)) {
@@ -3349,12 +3349,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_aggregate_type_instances($db,$table_prefix,$file_base)
     {
         require_code('aggregate_types');
@@ -3377,13 +3377,13 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import privacy for a particular record.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  ID_TEXT		The content type
-	 * @param  ID_TEXT		The old ID
-	 * @param  ID_TEXT		The new ID
-	 */
+     * Import privacy for a particular record.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  ID_TEXT                  The content type
+     * @param  ID_TEXT                  The old ID
+     * @param  ID_TEXT                  The new ID
+     */
     public function _import_content_privacy($db,$content_type,$old_id,$id_new)
     {
         if (addon_installed('content_privacy')) {
@@ -3408,12 +3408,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_ocf_saved_warnings($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'f_saved_warnings',null,null,true);
@@ -3432,12 +3432,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_match_key_messages($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'match_key_messages',null,null,true);
@@ -3458,12 +3458,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Standard import function.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Standard import function.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_menu_items($db,$table_prefix,$file_base)
     {
         $parent_rows = $db->query('SELECT * FROM ' . get_table_prefix() . 'menu_items');
@@ -3492,11 +3492,11 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Imports custom products.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 */
+     * Imports custom products.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     */
     public function _import_pstore_customs($db,$table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'pstore_customs',null,null,true);
@@ -3514,11 +3514,11 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Imports product store permissions.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 */
+     * Imports product store permissions.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     */
     public function _import_pstore_permissions($db,$table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'pstore_permissions',null,null,true);
@@ -3536,12 +3536,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import saved searches.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Import saved searches.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_searches_saved($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'searches_saved',null,null,true);
@@ -3561,12 +3561,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Imports site-watch-list.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Imports site-watch-list.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_sitewatchlist($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'sitewatchlist',null,null,true);
@@ -3581,12 +3581,12 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Imports staff-links.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  PATH			The base directory we are importing from
-	 */
+     * Imports staff-links.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  PATH                     The base directory we are importing from
+     */
     public function import_stafflinks($db,$table_prefix,$file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'stafflinks',null,null,true);
@@ -3601,13 +3601,13 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import reviews.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  ID_TEXT		The rating type.
-	 * @param  ?ID_TEXT		The import type to get remapping from (NULL: no remapping).
-	 */
+     * Import reviews.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  ID_TEXT                  The rating type.
+     * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
+     */
     public function _import_review_supplement($db,$table_prefix,$rating_type,$import_type)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'review_supplement WHERE ' . db_string_equal_to('r_rating_type',$rating_type));
@@ -3637,13 +3637,13 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import content review schedules.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  ID_TEXT		The content type.
-	 * @param  ?ID_TEXT		The import type to get remapping from (NULL: no remapping).
-	 */
+     * Import content review schedules.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  ID_TEXT                  The content type.
+     * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
+     */
     public function _import_content_reviews($db,$table_prefix,$content_type,$import_type)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'content_reviews WHERE ' . db_string_equal_to('content_type',$content_type));
@@ -3664,13 +3664,13 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Import custom fields for a particular record.
-	 *
-	 * @param  object			The DB connection to import from
-	 * @param  string			The table prefix the target prefix is using
-	 * @param  ID_TEXT		The content type.
-	 * @param  ?ID_TEXT		The import type to get remapping from (NULL: no remapping).
-	 */
+     * Import custom fields for a particular record.
+     *
+     * @param  object                   The DB connection to import from
+     * @param  string                   The table prefix the target prefix is using
+     * @param  ID_TEXT                  The content type.
+     * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
+     */
     public function _import_catalogue_entry_linkage($db,$table_prefix,$content_type,$import_type)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'catalogue_entry_linkage WHERE ' . db_string_equal_to('content_type',$content_type));
@@ -3696,10 +3696,10 @@ class Hook_ocp_merge
     }
 
     /**
-	 * Re-map any Comcode ownership fields.
-	 *
-	 * @param  array			Rows with potential fields to fix
-	 */
+     * Re-map any Comcode ownership fields.
+     *
+     * @param  array                    Rows with potential fields to fix
+     */
     public function _fix_comcode_ownership(&$rows)
     {
         foreach ($rows as &$row) {

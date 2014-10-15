@@ -13,43 +13,43 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 class Hook_paypal
 {
     /**
-	 * Get the PayPal payment address.
-	 *
-	 * @return string			The answer.
-	 */
+     * Get the PayPal payment address.
+     *
+     * @return string                   The answer.
+     */
     public function _get_payment_address()
     {
         return trim(ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn'));
     }
 
     /**
-	 * Get the remote form URL.
-	 *
-	 * @return URLPATH		The remote form URL.
-	 */
+     * Get the remote form URL.
+     *
+     * @return URLPATH                  The remote form URL.
+     */
     public function _get_remote_form_url()
     {
         return 'https://secure.worldpay.com/wcc/purchase';
     }
 
     /**
-	 * Make a transaction (payment) button.
-	 *
-	 * @param  ID_TEXT		The product codename.
-	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  ID_TEXT		The purchase ID.
-	 * @param  float			A transaction amount.
-	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button.
-	 */
+     * Make a transaction (payment) button.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @param  SHORT_TEXT               The human-readable product title.
+     * @param  ID_TEXT                  The purchase ID.
+     * @param  float                    A transaction amount.
+     * @param  ID_TEXT                  The currency to use.
+     * @return tempcode                 The button.
+     */
     public function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
     {
         $payment_address = $this->_get_payment_address();
@@ -80,18 +80,18 @@ class Hook_paypal
     }
 
     /**
-	 * Make a subscription (payment) button.
-	 *
-	 * @param  ID_TEXT		The product codename.
-	 * @param  SHORT_TEXT	The human-readable product title.
-	 * @param  ID_TEXT		The purchase ID.
-	 * @param  float			A transaction amount.
-	 * @param  integer		The subscription length in the units.
-	 * @param  ID_TEXT		The length units.
-	 * @set    d w m y
-	 * @param  ID_TEXT		The currency to use.
-	 * @return tempcode		The button.
-	 */
+     * Make a subscription (payment) button.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @param  SHORT_TEXT               The human-readable product title.
+     * @param  ID_TEXT                  The purchase ID.
+     * @param  float                    A transaction amount.
+     * @param  integer                  The subscription length in the units.
+     * @param  ID_TEXT                  The length units.
+     * @set    d w m y
+     * @param  ID_TEXT                  The currency to use.
+     * @return tempcode                 The button.
+     */
     public function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
     {
         // NB: We don't support PayPal's "recur_times", but that's fine because it's really not that useful (we can just set a long non-recurring subscription to the same effect)
@@ -113,43 +113,43 @@ class Hook_paypal
     }
 
     /**
-	 * Make a subscription cancellation button.
-	 *
-	 * @param  ID_TEXT		The purchase ID.
-	 * @return tempcode		The button
-	 */
+     * Make a subscription cancellation button.
+     *
+     * @param  ID_TEXT                  The purchase ID.
+     * @return tempcode                 The button
+     */
     public function make_cancel_button($purchase_id)
     {
         return do_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL',array('_GUID' => '091d7449161eb5c4f6129cf89e5e8e7e','PURCHASE_ID' => $purchase_id));
     }
 
     /**
-	 * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
-	 *
-	 * @param  string		Transaction ID to cancel.
-	 * @return ?boolean	True: yes. False: no. (NULL: cancels via a user-URL-directioning)
-	 */
+     * Find whether the hook auto-cancels (if it does, auto cancel the given trans-ID).
+     *
+     * @param  string                   Transaction ID to cancel.
+     * @return ?boolean                 True: yes. False: no. (NULL: cancels via a user-URL-directioning)
+     */
     public function auto_cancel($trans_id)
     {
         return NULL;
     }
 
     /**
-	 * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
-	 *
-	 * @param  float	A transaction amount.
-	 * @return float	The fee
-	 */
+     * Find a transaction fee from a transaction amount. Regular fees aren't taken into account.
+     *
+     * @param  float                    A transaction amount.
+     * @return float                    The fee
+     */
     public function get_transaction_fee($amount)
     {
         return round(0.25+0.034*$amount,2);
     }
 
     /**
-	 * Handle IPN's. The function may produce output, which would be returned to the Payment Gateway. The function may do transaction verification.
-	 *
-	 * @return array	A long tuple of collected data.
-	 */
+     * Handle IPN's. The function may produce output, which would be returned to the Payment Gateway. The function may do transaction verification.
+     *
+     * @return array                    A long tuple of collected data.
+     */
     public function handle_transaction()
     {
         $purchase_id = post_param_integer('custom','-1');
@@ -173,8 +173,8 @@ class Hook_paypal
         if (($tax != '') && (intval($tax)>0) && ($mc_gross != '')) {
             $mc_gross = float_to_raw_string(floatval($mc_gross)-floatval($tax));
         }
-        /*$shipping=post_param('shipping','');	Actually, the hook will have added shipping to the overall product cost
-		if (($shipping!='') && (intval($shipping)>0) && ($mc_gross!='')) $mc_gross=float_to_raw_string(floatval($mc_gross)-floatval($shipping));*/
+        /*$shipping=post_param('shipping','');  Actually, the hook will have added shipping to the overall product cost
+        if (($shipping!='') && (intval($shipping)>0) && ($mc_gross!='')) $mc_gross=float_to_raw_string(floatval($mc_gross)-floatval($shipping));*/
         $mc_currency = post_param('mc_currency',''); // May be blank for subscription
 
         // More stuff that we might need
@@ -345,13 +345,13 @@ class Hook_paypal
     }
 
     /**
-	 * Make a transaction (payment) button for multiple shopping cart items.
-	 *
-	 * @param  array			Items array.
-	 * @param  tempcode		Currency symbol.
-	 * @param  AUTO_LINK		Order ID.
-	 * @return tempcode		The button.
-	 */
+     * Make a transaction (payment) button for multiple shopping cart items.
+     *
+     * @param  array                    Items array.
+     * @param  tempcode                 Currency symbol.
+     * @param  AUTO_LINK                Order ID.
+     * @return tempcode                 The button.
+     */
     public function make_cart_transaction_button($items,$currency,$order_id)
     {
         $payment_address = $this->_get_payment_address();
@@ -385,11 +385,11 @@ class Hook_paypal
     }
 
     /**
-	 * Store shipping address for orders.
-	 *
-	 * @param  AUTO_LINK		Order ID.
-	 * @return ?mixed			Address ID (NULL: No address record found).
-	 */
+     * Store shipping address for orders.
+     *
+     * @param  AUTO_LINK                Order ID.
+     * @return ?mixed                   Address ID (NULL: No address record found).
+     */
     public function store_shipping_address($order_id)
     {
         if (is_null(post_param('address_name',null))) {
@@ -417,10 +417,10 @@ class Hook_paypal
     }
 
     /**
-	 * Get the status message after a URL callback.
-	 *
-	 * @return ?string		Message (NULL: none).
-	 */
+     * Get the status message after a URL callback.
+     *
+     * @return ?string                  Message (NULL: none).
+     */
     public function get_callback_url_message()
     {
         return get_param('message',null,true);

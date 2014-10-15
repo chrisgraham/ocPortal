@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*EXTRA FUNCTIONS: apache\_.+*/
@@ -46,8 +46,8 @@ function init__users()
     global $IS_ACTUALLY;
     global $IS_ACTUALLY_ADMIN;
     /** Find whether ocPortal is running in SU mode, and therefore the real user is an admin
-	 * @global boolean $IS_ACTUALLY_ADMIN
-	 */
+     * @global boolean $IS_ACTUALLY_ADMIN
+     */
     $IS_ACTUALLY_ADMIN = false;
     $IS_ACTUALLY = null;
     global $IS_A_COOKIE_LOGIN;
@@ -123,9 +123,9 @@ function handle_logins()
 /**
  * Find whether the current member is a guest.
  *
- * @param  ?MEMBER		Member ID to check (NULL: current user)
- * @param  boolean		Whether to just do a quick check, don't establish new sessions
- * @return boolean		Whether the current member is a guest
+ * @param  ?MEMBER                      Member ID to check (NULL: current user)
+ * @param  boolean                      Whether to just do a quick check, don't establish new sessions
+ * @return boolean                      Whether the current member is a guest
  */
 function is_guest($member_id = null,$quick_only = false)
 {
@@ -142,8 +142,8 @@ function is_guest($member_id = null,$quick_only = false)
  * Get the ID of the currently active member.
  * It see's if the session exists / cookie is valid -- and gets the member ID accordingly
  *
- * @param  boolean		Whether to just do a quick check, don't establish new sessions
- * @return MEMBER			The member requesting this web page (possibly the guest member - which strictly speaking, is not a member)
+ * @param  boolean                      Whether to just do a quick check, don't establish new sessions
+ * @return MEMBER                       The member requesting this web page (possibly the guest member - which strictly speaking, is not a member)
  */
 function get_member($quick_only = false)
 {
@@ -345,7 +345,7 @@ function get_member($quick_only = false)
 /**
  * Make sure temporary passwords restrict you to the edit account page. May not return, if it needs to do a redirect.
  *
- * @param  MEMBER			The current member
+ * @param  MEMBER                       The current member
  */
 function enforce_temporary_passwords($member)
 {
@@ -359,8 +359,8 @@ function enforce_temporary_passwords($member)
  * Get the display name of a username.
  * If no display name generator is configured, this will be the same as the username.
  *
- * @param  ID_TEXT		The username
- * @return SHORT_TEXT	The display name
+ * @param  ID_TEXT                      The username
+ * @return SHORT_TEXT                   The display name
  */
 function get_displayname($username)
 {
@@ -386,9 +386,9 @@ function get_displayname($username)
  * Apply hashing to some input. To this date, all forum drivers use md5, but some use it differently.
  * This function will pass through the parameters to an equivalent forum_md5 function if it is defined.
  *
- * @param  string			The data to hash (the password in actuality)
- * @param  string			The string converted member-ID in actuality, although this function is more general
- * @return string			The hashed data
+ * @param  string                       The data to hash (the password in actuality)
+ * @param  string                       The string converted member-ID in actuality, although this function is more general
+ * @return string                       The hashed data
  */
 function apply_forum_driver_md5_variant($data,$key)
 {
@@ -401,7 +401,7 @@ function apply_forum_driver_md5_variant($data,$key)
 /**
  * Get the current session ID.
  *
- * @return ID_TEXT		The current session ID (blank: none)
+ * @return ID_TEXT                      The current session ID (blank: none)
  */
 function get_session_id()
 {
@@ -419,7 +419,7 @@ function get_session_id()
 /**
  * Find whether the current member is logged in via httpauth.
  *
- * @return boolean		Whether the current member is logged in via httpauth
+ * @return boolean                      Whether the current member is logged in via httpauth
  */
 function is_httpauth_login()
 {
@@ -438,8 +438,8 @@ function is_httpauth_login()
  * Make sure that the given URL contains a session if cookies are disabled.
  * NB: This is used for login redirection. It had to add the session ID into the redirect url.
  *
- * @param  URLPATH		The URL to enforce results in session persistence for the user
- * @return URLPATH		The fixed URL (potentially nothing was done, depending on cookies)
+ * @param  URLPATH                      The URL to enforce results in session persistence for the user
+ * @return URLPATH                      The fixed URL (potentially nothing was done, depending on cookies)
  */
 function enforce_sessioned_url($url)
 {
@@ -453,8 +453,8 @@ function enforce_sessioned_url($url)
 /**
  * Find what sessions are expired and delete them, and recover an existing one for $member if there is one.
  *
- * @param  ?MEMBER		User to get a current session for (NULL: do not try, which guarantees a return result of NULL also)
- * @return ?AUTO_LINK	The session ID we rebound to (NULL: did not rebind)
+ * @param  ?MEMBER                      User to get a current session for (NULL: do not try, which guarantees a return result of NULL also)
+ * @return ?AUTO_LINK                   The session ID we rebound to (NULL: did not rebind)
  */
 function delete_expired_sessions_or_recover($member = null)
 {
@@ -504,7 +504,7 @@ function delete_expired_sessions_or_recover($member = null)
 /**
  * Get the member cookie's name.
  *
- * @return string			The member username/ID (depending on forum driver) cookie's name
+ * @return string                       The member username/ID (depending on forum driver) cookie's name
  */
 function get_member_cookie()
 {
@@ -518,7 +518,7 @@ function get_member_cookie()
 /**
  * Get the session cookie's name.
  *
- * @return string			The session ID cookie's name
+ * @return string                       The session ID cookie's name
  */
 function get_session_cookie()
 {
@@ -532,7 +532,7 @@ function get_session_cookie()
 /**
  * Get the member password cookie's name.
  *
- * @return string			The member password cookie's name
+ * @return string                       The member password cookie's name
  */
 function get_pass_cookie()
 {
@@ -546,9 +546,9 @@ function get_pass_cookie()
 /**
  * Get a cookie value.
  *
- * @param  string			The name of the cookie
- * @param  ?string		The default value (NULL: just use the value NULL)
- * @return ?string		The value stored in the cookie (NULL: the default default)
+ * @param  string                       The name of the cookie
+ * @param  ?string                      The default value (NULL: just use the value NULL)
+ * @return ?string                      The value stored in the cookie (NULL: the default default)
  */
 function ocp_admirecookie($name,$default = null)
 {
@@ -565,9 +565,9 @@ function ocp_admirecookie($name,$default = null)
 /**
  * Get the value of a special 'ocp_' custom profile field. For OCF it can also do it for a pure field title, e.g. "Example Field".
  *
- * @param  ID_TEXT		The CPF name stem
- * @param  ?MEMBER		Member to lookup for (NULL: current member)
- * @return string			The value (blank: has a blank value, or does not exist)
+ * @param  ID_TEXT                      The CPF name stem
+ * @param  ?MEMBER                      Member to lookup for (NULL: current member)
+ * @return string                       The value (blank: has a blank value, or does not exist)
  */
 function get_ocp_cpf($cpf,$member = null)
 {
@@ -596,7 +596,7 @@ function get_ocp_cpf($cpf,$member = null)
 /**
  * Get the name of the default theme, assuming it exists. This is based on the site name.
  *
- * @return string			Theme name
+ * @return string                       Theme name
  */
 function get_default_theme_name()
 {

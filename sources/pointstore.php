@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 /**
  * Check to see if the specified e-mail address has already been purchased. If so, spawn an error message.
  *
- * @param  ID_TEXT		The prefix (mailbox name)
- * @param  ID_TEXT		The suffix (domain name)
+ * @param  ID_TEXT                      The prefix (mailbox name)
+ * @param  ID_TEXT                      The suffix (domain name)
  */
 function pointstore_handle_error_taken($prefix,$suffix)
 {
@@ -36,10 +36,10 @@ function pointstore_handle_error_taken($prefix,$suffix)
 /**
  * Get a tempcode list of the available mail domains.
  *
- * @param  ID_TEXT		The type of mail domain
+ * @param  ID_TEXT                      The type of mail domain
  * @set    pop3 forw
- * @param  integer		Description
- * @return tempcode		The tempcode list of available domains
+ * @param  integer                      Description
+ * @return tempcode                     The tempcode list of available domains
  */
 function get_mail_domains($type,$points_left)
 {
@@ -59,7 +59,7 @@ function get_mail_domains($type,$points_left)
 /**
  * Check to see if the member already has an account of this type. If so, an error message is shown, as you can only own of each type.
  *
- * @param  ID_TEXT		The type of mail domain
+ * @param  ID_TEXT                      The type of mail domain
  * @set    pop3 forw
  */
 function pointstore_handle_error_already_has($type)

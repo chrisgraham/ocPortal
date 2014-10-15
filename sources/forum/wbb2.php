@@ -13,24 +13,24 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_forum_drivers
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_forum_drivers
  */
 
 require_code('forum/shared/wbb');
 
 /**
  * Forum Driver.
- * @package		core_forum_drivers
+ * @package    core_forum_drivers
  */
 class forum_driver_wbb2 extends forum_driver_wbb_shared
 {
     /**
-	 * Get the ID of the usergroup that is for guests.
-	 *
-	 * @return GROUP			The guest usergroup
-	 */
+     * Get the ID of the usergroup that is for guests.
+     *
+     * @return GROUP                    The guest usergroup
+     */
     public function _get_guest_group()
     {
         $guest_group = $this->connection->query_select_value_if_there('groups','groupid',array('default_group' => 1));
@@ -41,24 +41,24 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
     }
 
     /**
-	 * From a member row, get the member's primary usergroup.
-	 *
-	 * @param  array			The profile-row
-	 * @return GROUP			The member's primary usergroup
-	 */
+     * From a member row, get the member's primary usergroup.
+     *
+     * @param  array                    The profile-row
+     * @return GROUP                    The member's primary usergroup
+     */
     public function mrow_group($r)
     {
         return $r['groupid'];
     }
 
     /**
-	 * Get an array of members who are in at least one of the given array of usergroups.
-	 *
-	 * @param  array			The array of usergroups
-	 * @param  ?integer		Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
-	 * @param  integer		Return primary members after this offset and secondary members after this offset
-	 * @return ?array			The array of members (NULL: no members)
-	 */
+     * Get an array of members who are in at least one of the given array of usergroups.
+     *
+     * @param  array                    The array of usergroups
+     * @param  ?integer                 Return up to this many entries for primary members and this many entries for secondary members (NULL: no limit, only use no limit if querying very restricted usergroups!)
+     * @param  integer                  Return primary members after this offset and secondary members after this offset
+     * @return ?array                   The array of members (NULL: no members)
+     */
     public function member_group_query($groups,$max = null,$start = 0)
     {
         $_groups = '';
@@ -72,11 +72,11 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
     }
 
     /**
-	 * Find out if the given member ID is banned.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return boolean		Whether the member is banned
-	 */
+     * Find out if the given member ID is banned.
+     *
+     * @param  MEMBER                   The member ID
+     * @return boolean                  Whether the member is banned
+     */
     public function is_banned($member)
     {
         // Are they banned
@@ -90,10 +90,10 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
     }
 
     /**
-	 * Find a list of all forum skins (aka themes).
-	 *
-	 * @return array			The list of skins
-	 */
+     * Find a list of all forum skins (aka themes).
+     *
+     * @return array                    The list of skins
+     */
     public function get_skin_list()
     {
         $table = 'styles';
@@ -104,12 +104,12 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
     }
 
     /**
-	 * Try to find the theme that the logged-in/guest member is using, and map it to an ocPortal theme.
-	 * The themes/map.ini file functions to provide this mapping between forum themes, and ocPortal themes, and has a slightly different meaning for different forum drivers. For example, some drivers map the forum themes theme directory to the ocPortal theme name, whilst others made the humanly readeable name.
-	 *
-	 * @param  boolean		Whether to avoid member-specific lookup
-	 * @return ID_TEXT		The theme
-	 */
+     * Try to find the theme that the logged-in/guest member is using, and map it to an ocPortal theme.
+     * The themes/map.ini file functions to provide this mapping between forum themes, and ocPortal themes, and has a slightly different meaning for different forum drivers. For example, some drivers map the forum themes theme directory to the ocPortal theme name, whilst others made the humanly readeable name.
+     *
+     * @param  boolean                  Whether to avoid member-specific lookup
+     * @return ID_TEXT                  The theme
+     */
     public function _get_theme($skip_member_specific = false)
     {
         $def = '';
@@ -157,11 +157,11 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
     }
 
     /**
-	 * Find if the specified member ID is marked as staff or not.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return boolean		Whether the member is staff
-	 */
+     * Find if the specified member ID is marked as staff or not.
+     *
+     * @param  MEMBER                   The member ID
+     * @return boolean                  Whether the member is staff
+     */
     public function _is_staff($member)
     {
         $usergroup = $this->get_member_row_field($member,'groupid');
@@ -172,11 +172,11 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
     }
 
     /**
-	 * Find if the specified member ID is marked as a super admin or not.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return boolean		Whether the member is a super admin
-	 */
+     * Find if the specified member ID is marked as a super admin or not.
+     *
+     * @param  MEMBER                   The member ID
+     * @return boolean                  Whether the member is a super admin
+     */
     public function _is_super_admin($member)
     {
         $usergroup = $this->get_member_row_field($member,'groupid');
@@ -187,42 +187,42 @@ class forum_driver_wbb2 extends forum_driver_wbb_shared
     }
 
     /**
-	 * Get the IDs of the admin usergroups.
-	 *
-	 * @return array			The admin usergroup IDs
-	 */
+     * Get the IDs of the admin usergroups.
+     *
+     * @return array                    The admin usergroup IDs
+     */
     public function _get_super_admin_groups()
     {
         return collapse_1d_complexity('groupid',$this->connection->query_select('groups',array('groupid'),array('canuseacp' => 1)));
     }
 
     /**
-	 * Get the IDs of the moderator usergroups.
-	 * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
-	 *
-	 * @return array			The moderator usergroup IDs
-	 */
+     * Get the IDs of the moderator usergroups.
+     * It should not be assumed that a member only has one usergroup - this depends upon the forum the driver works for. It also does not take the staff site filter into account.
+     *
+     * @return array                    The moderator usergroup IDs
+     */
     public function _get_moderator_groups()
     {
         return collapse_1d_complexity('groupid',$this->connection->query_select('groups',array('groupid'),array('canuseacp' => 0,'ismod' => 1)));
     }
 
     /**
-	 * Get the forum usergroup list.
-	 *
-	 * @return array			The usergroup list
-	 */
+     * Get the forum usergroup list.
+     *
+     * @return array                    The usergroup list
+     */
     public function _get_usergroup_list()
     {
         return collapse_2d_complexity('groupid','title',$this->connection->query_select('groups',array('groupid','title')));
     }
 
     /**
-	 * Get the forum usergroup relating to the specified member ID.
-	 *
-	 * @param  MEMBER			The member ID
-	 * @return array			The array of forum usergroups
-	 */
+     * Get the forum usergroup relating to the specified member ID.
+     *
+     * @param  MEMBER                   The member ID
+     * @return array                    The array of forum usergroups
+     */
     public function _get_members_groups($member)
     {
         $group = $this->get_member_row_field($member,'groupid');

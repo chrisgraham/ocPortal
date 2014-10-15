@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		search
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    search
  */
 
 /**
  * Generate a search block.
  *
- * @param  array			Search block parameters
- * @return array			Search block template parameters
+ * @param  array                        Search block parameters
+ * @return array                        Search block template parameters
  */
 function do_search_block($map)
 {

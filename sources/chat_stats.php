@@ -13,15 +13,15 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 /**
  * Get the number of people using the chat system at the moment. Note that this is intentionally different from 'users online' even if site wide IM is enabled- it has a 60 second timeout, so it really is active people.
  *
- * @return integer			The number of people on the chat system
+ * @return integer                      The number of people on the chat system
 */
 function get_num_chatters()
 {
@@ -35,7 +35,7 @@ function get_num_chatters()
 /**
  * Get the number of chatrooms in the database. By default, there is only one, but more may be added via the admin panel.
  *
- * @return	integer			The number of chatrooms in the database
+ * @return  integer        The number of chatrooms in the database
 */
 function get_num_chatrooms()
 {
@@ -45,7 +45,7 @@ function get_num_chatrooms()
 /**
  * Get the total number of chat posts in all the chatrooms.
  *
- * @return  integer			The number of chat posts in the database
+ * @return  integer        The number of chat posts in the database
 */
 function get_num_chatposts()
 {

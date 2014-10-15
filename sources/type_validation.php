@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -25,12 +25,12 @@ function init__type_validation()
 {
     if (!function_exists('is_alphanumeric')) {
         /**
-		 * Find whether the specified string is alphanumeric or not.
-		 *
-		 * @param  string			The string to test
-		 * @param  boolean		Whether to check stricter identifier-validity
-		 * @return boolean		Whether the string is alphanumeric or not
-		 */
+         * Find whether the specified string is alphanumeric or not.
+         *
+         * @param  string               The string to test
+         * @param  boolean              Whether to check stricter identifier-validity
+         * @return boolean              Whether the string is alphanumeric or not
+         */
         function is_alphanumeric($string,$strict = false)
         {
             if ($strict) {
@@ -49,8 +49,8 @@ function init__type_validation()
 /**
  * Find whether the specified address is a valid e-mail address or not.
  *
- * @param  string			The string to test (Note: This is typed string, not e-mail, because it has to function on failure + we could make an infinite loop)
- * @return boolean		Whether the string is an email address or not
+ * @param  string                       The string to test (Note: This is typed string, not e-mail, because it has to function on failure + we could make an infinite loop)
+ * @return boolean                      Whether the string is an email address or not
  */
 function is_valid_email_address($string)
 {

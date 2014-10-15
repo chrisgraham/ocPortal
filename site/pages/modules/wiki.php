@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		wiki
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    wiki
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_wiki
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,8 +42,8 @@ class Module_wiki
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('wiki_children');
@@ -68,11 +68,11 @@ class Module_wiki
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         require_lang('wiki');
@@ -209,14 +209,14 @@ class Module_wiki
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -237,10 +237,10 @@ class Module_wiki
     public $num_posts;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -382,10 +382,10 @@ class Module_wiki
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         $type = get_param('type','misc');
@@ -433,10 +433,10 @@ class Module_wiki
     }
 
     /**
-	 * Redirect to a random page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Redirect to a random page.
+     *
+     * @return tempcode                 The UI
+     */
     public function random()
     {
         attach_message(do_lang_tempcode('TAKEN_RANDOM_WIKI_PAGE'),'inform');
@@ -452,10 +452,10 @@ class Module_wiki
     }
 
     /**
-	 * The UI to show a page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show a page.
+     *
+     * @return tempcode                 The UI
+     */
     public function page()
     {
         $id = $this->id;
@@ -609,24 +609,24 @@ class Module_wiki
     }
 
     /**
-	 * Show the buttons on the Wiki+ page viewing page.
-	 *
-	 * @param  SHORT_TEXT	The ID chain being used to get to this page
-	 * @param  AUTO_LINK		The ID of the page we are showing the menu on
-	 * @param  boolean		Whether to include the expansion/contraction button
-	 * @param  boolean		Whether posting is generally allowed (may be passed false if too many posts)
-	 * @return tempcode		The button tempcode
-	 */
+     * Show the buttons on the Wiki+ page viewing page.
+     *
+     * @param  SHORT_TEXT               The ID chain being used to get to this page
+     * @param  AUTO_LINK                The ID of the page we are showing the menu on
+     * @param  boolean                  Whether to include the expansion/contraction button
+     * @param  boolean                  Whether posting is generally allowed (may be passed false if too many posts)
+     * @return tempcode                 The button tempcode
+     */
     public function _render_buttons($chain,$id,$include_expansion,$may_post = true)
     {
         $page_url = build_url(array('page' => '_SELF','type' => 'misc','id' => $chain),'_SELF');
         $pos = strpos($chain,'/');
         $id = intval(substr($chain,($pos === false)?0:($pos+1)));
         /*if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search'))) // Not enough space
-		{
-			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
-			$search_button=do_template('BUTTON_SCREEN',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
-		} else */$search_button = new ocp_tempcode();
+        {
+            $search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
+            $search_button=do_template('BUTTON_SCREEN',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
+        } else */$search_button = new ocp_tempcode();
         $changes_url = build_url(array('page' => '_SELF','type' => 'changes','id' => $chain),'_SELF');
         $changes_button = do_template('BUTTON_SCREEN',array('_GUID' => '99ad7faac817326510583a69ac719d58','IMMEDIATE' => false,'REL' => 'history','URL' => $changes_url,'TITLE' => do_lang_tempcode('WIKI_CHANGELOG'),'IMG' => 'buttons__changes'));
         if ((get_option('wiki_enable_children') == '1') && (has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki'))) {
@@ -658,10 +658,10 @@ class Module_wiki
     }
 
     /**
-	 * The UI to show changes.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to show changes.
+     *
+     * @return tempcode                 The UI
+     */
     public function changes()
     {
         $start = get_param_integer('changes_start',0);
@@ -720,10 +720,10 @@ class Module_wiki
     }
 
     /**
-	 * Get markers of posts from the POST/GET.
-	 *
-	 * @return array	A list of markers.
-	 */
+     * Get markers of posts from the POST/GET.
+     *
+     * @return array                    A list of markers.
+     */
     public function get_markers()
     {
         $markers = array();
@@ -736,10 +736,10 @@ class Module_wiki
     }
 
     /**
-	 * The UI for merging Wiki+ posts.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for merging Wiki+ posts.
+     *
+     * @return tempcode                 The UI.
+     */
     public function do_wiki_merge_interface()
     {
         $_redir_url = build_url(array('page' => '_SELF','type' => 'misc','id' => get_param('id',false,true)),'_SELF');
@@ -777,10 +777,10 @@ class Module_wiki
     }
 
     /**
-	 * The actualiser for merging Wiki+ posts.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for merging Wiki+ posts.
+     *
+     * @return tempcode                 The UI.
+     */
     public function do_wiki_merge()
     {
         check_edit_permission('low',null,array('wiki_page',get_param('id',false,true)),'cms_wiki');
@@ -830,10 +830,10 @@ class Module_wiki
     }
 
     /**
-	 * The UI for moving a Wiki+ post.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for moving a Wiki+ post.
+     *
+     * @return tempcode                 The UI.
+     */
     public function move()
     {
         $_id = get_param_wiki_chain('id');
@@ -872,10 +872,10 @@ class Module_wiki
     }
 
     /**
-	 * The actualiser for moving a Wiki+ post.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for moving a Wiki+ post.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _move()
     {
         $post_id = post_param_integer('source');
@@ -910,10 +910,10 @@ class Module_wiki
     }
 
     /**
-	 * The UI for making a Wiki+ post.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The UI for making a Wiki+ post.
+     *
+     * @return tempcode                 The UI.
+     */
     public function post()
     {
         $post_id = get_param_integer('post_id',null);
@@ -1057,10 +1057,10 @@ class Module_wiki
     }
 
     /**
-	 * The actualiser for making a Wiki+ post.
-	 *
-	 * @return tempcode	The UI.
-	 */
+     * The actualiser for making a Wiki+ post.
+     *
+     * @return tempcode                 The UI.
+     */
     public function _post()
     {
         if (addon_installed('captcha')) {

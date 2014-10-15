@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		content_privacy
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    content_privacy
  */
 
 /**
  * Get the SQL extension clauses for implementing privacy.
  *
- * @param  ID_TEXT	The content type
- * @param  ID_TEXT	The table alias in the main query
- * @param  ?MEMBER	Viewing member to check privacy against (NULL: current member)
- * @param  string		Additional OR clause for letting the user through
- * @param  ?MEMBER	Member owning the content (NULL: do dynamically in query via content hook). Usually pass as NULL
- * @return array		A tuple: extra JOIN clause, extra WHERE clause, table clause (rarely used), direct table WHERE clause (rarely used)
+ * @param  ID_TEXT                      The content type
+ * @param  ID_TEXT                      The table alias in the main query
+ * @param  ?MEMBER                      Viewing member to check privacy against (NULL: current member)
+ * @param  string                       Additional OR clause for letting the user through
+ * @param  ?MEMBER                      Member owning the content (NULL: do dynamically in query via content hook). Usually pass as NULL
+ * @return array                        A tuple: extra JOIN clause, extra WHERE clause, table clause (rarely used), direct table WHERE clause (rarely used)
  */
 function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id = null,$additional_or = '',$submitter = null)
 {
@@ -81,10 +81,10 @@ function get_privacy_where_clause($content_type,$table_alias,$viewing_member_id 
 /**
  * Check to see if some content may be viewed.
  *
- * @param  ID_TEXT	The content type
- * @param  ID_TEXT	The content ID
- * @param  ?MEMBER	Viewing member to check privacy against (NULL: current member)
- * @return boolean	Whether there is access
+ * @param  ID_TEXT                      The content type
+ * @param  ID_TEXT                      The content ID
+ * @param  ?MEMBER                      Viewing member to check privacy against (NULL: current member)
+ * @return boolean                      Whether there is access
  */
 function has_privacy_access($content_type,$content_id,$viewing_member_id = null)
 {
@@ -140,9 +140,9 @@ function has_privacy_access($content_type,$content_id,$viewing_member_id = null)
 /**
  * Check to see if some content may be viewed. Exit with an access denied if not.
  *
- * @param  ID_TEXT	The content type
- * @param  ID_TEXT	The content ID
- * @param  ?MEMBER	Viewing member to check privacy against (NULL: current member)
+ * @param  ID_TEXT                      The content type
+ * @param  ID_TEXT                      The content ID
+ * @param  ?MEMBER                      Viewing member to check privacy against (NULL: current member)
  */
 function check_privacy($content_type,$content_id,$viewing_member_id = null)
 {
@@ -155,10 +155,10 @@ function check_privacy($content_type,$content_id,$viewing_member_id = null)
 /**
  * Find list of members who may view some content.
  *
- * @param  ID_TEXT	The content type
- * @param  ID_TEXT	The content ID
- * @param  boolean	Whether to get a full list including friends even when there are over a thousand friends
- * @return ?array		A list of member IDs that have access (NULL: no restrictions)
+ * @param  ID_TEXT                      The content type
+ * @param  ID_TEXT                      The content ID
+ * @param  boolean                      Whether to get a full list including friends even when there are over a thousand friends
+ * @return ?array                       A list of member IDs that have access (NULL: no restrictions)
  */
 function privacy_limits_for($content_type,$content_id,$strict_all = false)
 {

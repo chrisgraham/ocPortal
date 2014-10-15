@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_pointstore
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_pointstore
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -65,10 +65,10 @@ class Module_admin_pointstore
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -99,10 +99,10 @@ class Module_admin_pointstore
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('form_templates');
@@ -127,10 +127,10 @@ class Module_admin_pointstore
     }
 
     /**
-	 * The UI to view Point Store logs.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to view Point Store logs.
+     *
+     * @return tempcode                 The UI
+     */
     public function pointstore_log_interface()
     {
         $max = get_param_integer('max',50);
@@ -203,10 +203,10 @@ class Module_admin_pointstore
     }
 
     /**
-	 * The actualiser to delete a purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete a purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_log_entry()
     {
         $this->_delete_log_entry(get_param_integer('date_and_time'),get_param_integer('memberid'));
@@ -217,21 +217,21 @@ class Module_admin_pointstore
     }
 
     /**
-	 * Delete a Point Store purchase.
-	 *
-	 * @param  integer		The time of the purchase
-	 * @param  MEMBER			The member that made the purchase
-	 */
+     * Delete a Point Store purchase.
+     *
+     * @param  integer                  The time of the purchase
+     * @param  MEMBER                   The member that made the purchase
+     */
     public function _delete_log_entry($date_and_time,$memberid)
     {
         $GLOBALS['SITE_DB']->query_delete('sales',array('date_and_time' => $date_and_time,'memberid' => $memberid),'',1);
     }
 
     /**
-	 * The UI to set Point Store prices.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to set Point Store prices.
+     *
+     * @return tempcode                 The UI
+     */
     public function interface_set_prices()
     {
         $field_groups = new ocp_tempcode();
@@ -306,10 +306,10 @@ class Module_admin_pointstore
     }
 
     /**
-	 * The actualiser to set Point Store prices.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to set Point Store prices.
+     *
+     * @return tempcode                 The UI
+     */
     public function set_prices()
     {
         // Save configuration for hooks

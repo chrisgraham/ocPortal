@@ -6,26 +6,26 @@
  * Attempt to send an e-mail to the specified recipient. The mail will be forwarding to the CC address specified in the options (if there is one, and if not specified not to cc).
  * The mail will be sent in dual HTML/text format, where the text is the unconverted Comcode source: if a member does not read HTML mail, they may wish to fallback to reading that.
  *
- * @param  string			The subject of the mail in plain text
- * @param  LONG_TEXT		The message, as Comcode
- * @param  ?array			The destination (recipient) e-mail addresses [array of strings] (NULL: site staff address)
- * @param  ?mixed			The recipient name. Array or string. (NULL: site name)
- * @param  EMAIL			The from address (blank: site staff address)
- * @param  string			The from name (blank: site name)
- * @param  integer		The message priority (1=urgent, 3=normal, 5=low)
+ * @param  string                       The subject of the mail in plain text
+ * @param  LONG_TEXT                    The message, as Comcode
+ * @param  ?array                       The destination (recipient) e-mail addresses [array of strings] (NULL: site staff address)
+ * @param  ?mixed                       The recipient name. Array or string. (NULL: site name)
+ * @param  EMAIL                        The from address (blank: site staff address)
+ * @param  string                       The from name (blank: site name)
+ * @param  integer                      The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
- * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
- * @param  boolean		Whether to NOT CC to the CC address
- * @param  ?MEMBER		Convert Comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (NULL: guest)
- * @param  boolean		Replace above with arbitrary admin
- * @param  boolean		HTML-only
- * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools
- * @param  ID_TEXT		The template used to show the email
- * @param  boolean		Whether to bypass queueing
- * @param  ?array			Extra CC addresses to use (NULL: none)
- * @param  ?array			Extra BCC addresses to use (NULL: none)
- * @param  ?TIME			Implement the Require-Recipient-Valid-Since header (NULL: no restriction)
- * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
+ * @param  ?array                       An list of attachments (each attachment being a map, path=>filename) (NULL: none)
+ * @param  boolean                      Whether to NOT CC to the CC address
+ * @param  ?MEMBER                      Convert Comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (NULL: guest)
+ * @param  boolean                      Replace above with arbitrary admin
+ * @param  boolean                      HTML-only
+ * @param  boolean                      Whether to bypass queueing, because this code is running as a part of the queue management tools
+ * @param  ID_TEXT                      The template used to show the email
+ * @param  boolean                      Whether to bypass queueing
+ * @param  ?array                       Extra CC addresses to use (NULL: none)
+ * @param  ?array                       Extra BCC addresses to use (NULL: none)
+ * @param  ?TIME                        Implement the Require-Recipient-Valid-Since header (NULL: no restriction)
+ * @return ?tempcode                    A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
 function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$from_email = '',$from_name = '',$priority = 3,$attachments = null,$no_cc = false,$as = null,$as_admin = false,$in_html = false,$coming_out_of_queue = false,$mail_template = 'MAIL',$bypass_queue = false,$extra_cc_addresses = null,$extra_bcc_addresses = null,$require_recipient_valid_since = null)
 {

@@ -13,24 +13,24 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		authors
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    authors
  */
 
 class Hook_rss_authors
 {
     /**
-	 * Run function for RSS hooks.
-	 *
-	 * @param  string			A list of categories we accept from
-	 * @param  TIME			Cutoff time, before which we do not show results from
-	 * @param  string			Prefix that represents the template set we use
-	 * @set    RSS_ ATOM_
-	 * @param  string			The standard format of date to use for the syndication type represented in the prefix
-	 * @param  integer		The maximum number of entries to return, ordering by date
-	 * @return ?array			A pair: The main syndication section, and a title (NULL: error)
-	 */
+     * Run function for RSS hooks.
+     *
+     * @param  string                   A list of categories we accept from
+     * @param  TIME                     Cutoff time, before which we do not show results from
+     * @param  string                   Prefix that represents the template set we use
+     * @set    RSS_ ATOM_
+     * @param  string                   The standard format of date to use for the syndication type represented in the prefix
+     * @param  integer                  The maximum number of entries to return, ordering by date
+     * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
+     */
     public function run($_filters,$cutoff,$prefix,$date_string,$max)
     {
         if (!addon_installed('authors')) {

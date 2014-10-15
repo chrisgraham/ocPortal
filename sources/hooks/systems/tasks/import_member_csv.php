@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 class Hook_task_import_member_csv
 {
     /**
-	 * Run the task hook.
-	 *
-	 * @param  string			The default password to use
-	 * @param  boolean		Whether to assign temporary passwords
-	 * @param  PATH			The path of the file to import
-	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
-	 */
+     * Run the task hook.
+     *
+     * @param  string                   The default password to use
+     * @param  boolean                  Whether to assign temporary passwords
+     * @param  PATH                     The path of the file to import
+     * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
+     */
     public function run($default_password,$use_temporary_passwords,$path)
     {
         require_lang('ocf');
@@ -310,7 +310,7 @@ class Hook_task_import_member_csv
                 } elseif (($cpf['cf_type'] == 'short_text') || ($cpf['cf_type'] == 'short_trans')) {
                     $custom_fields[$cpf['id']] = substr(str_replace("\n",', ',str_replace(',' . "\n","\n",$custom_fields[$cpf['id']])),0,255);
                 } elseif (($cpf['cf_type'] == 'long_text') || ($cpf['cf_type'] == 'long_trans')) {
-                    //$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];	Duh, no transform required
+                    //$custom_fields[$cpf['id']]=$custom_fields[$cpf['id']];  Duh, no transform required
                 } elseif ($cpf['cf_type'] == 'float') {
                     if (preg_match('#^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\n(\d\d\d\d)$#',$custom_fields[$cpf['id']]) != 0) { // Convert to float based date
                         $parts = explode("\n",$custom_fields[$cpf['id']],2);

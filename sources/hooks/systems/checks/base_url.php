@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 class Hook_check_base_url
 {
     /**
-	 * Check various input var restrictions.
-	 *
-	 * @return	array		List of warnings
-	 */
+     * Check various input var restrictions.
+     *
+     * @return array                    List of warnings
+     */
     public function run()
     {
         $warning = array();

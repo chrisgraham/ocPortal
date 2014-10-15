@@ -8,17 +8,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		workflows
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    workflows
  */
 
 /**
  * Returns whether the given user (default: current member) can choose the
  * workflow to apply to some content they're submitting/editing.
  *
- * @param  ?MEMBER		Member (NULL: current member)
- * @return boolean		Whether the user has permission or not
+ * @param  ?MEMBER                      Member (NULL: current member)
+ * @return boolean                      Whether the user has permission or not
  */
 function can_choose_workflow($member = null)
 {
@@ -36,9 +36,9 @@ function can_choose_workflow($member = null)
  * Returns a form field to choose the desired workflow (if there is more than
  * one in the system).
  *
- * @param  boolean		Whether to include an option for inheriting
- * @param  boolean		Whether to include an option for leaving it alone
- * @return tempcode		The UI for choosing a workflow (if needed)
+ * @param  boolean                      Whether to include an option for inheriting
+ * @param  boolean                      Whether to include an option for leaving it alone
+ * @return tempcode                     The UI for choosing a workflow (if needed)
  */
 function workflow_choose_ui($include_inherit = false,$include_current = false)
 {
@@ -85,7 +85,7 @@ function workflow_choose_ui($include_inherit = false,$include_current = false)
 /**
  * Returns all of the workflows which are currently defined.
  *
- * @return array		The workflows which are defined. Empty if none are defined.
+ * @return array                        The workflows which are defined. Empty if none are defined.
  */
 function get_all_workflows()
 {
@@ -102,7 +102,7 @@ function get_all_workflows()
  * will return it, otherwise (multiple with no default specified, or no
  * workflows at all) it will give NULL.
  *
- * @return ?AUTO_LINK		The ID of the default workflow. (NULL: if none set)
+ * @return ?AUTO_LINK                   The ID of the default workflow. (NULL: if none set)
  */
 function get_default_workflow()
 {
@@ -138,8 +138,8 @@ function get_default_workflow()
 /**
  * Find out who submitted a piece of content from a workflow.
  *
- * @param  AUTO_LINK		The workflow content ID
- * @return ?MEMBER		The submitter (NULL: if unknown)
+ * @param  AUTO_LINK                    The workflow content ID
+ * @return ?MEMBER                      The submitter (NULL: if unknown)
  */
 function get_submitter_of_workflow_content($content_id)
 {
@@ -160,8 +160,8 @@ function get_submitter_of_workflow_content($content_id)
 /**
  * Get the tempcode for viewing/editing the workflow status of the given content
  *
- * @param  AUTO_LINK	The ID of this content in the workflow_content table
- * @return tempcode	The form for this content
+ * @param  AUTO_LINK                    The ID of this content in the workflow_content table
+ * @return tempcode                     The form for this content
  */
 function get_workflow_form($workflow_content_id)
 {
@@ -465,7 +465,7 @@ function get_workflow_form($workflow_content_id)
 /**
  * Handler for workflow form submission.
  *
- * @return tempcode		Either an error page or a success message
+ * @return tempcode                     Either an error page or a success message
  */
 function workflow_update_handler()
 {
@@ -697,11 +697,11 @@ function workflow_update_handler()
  * Adds the specified content (image, video, gallery, etc.) to the
  * specified workflow.
  *
- * @param  ID_TEXT			The content-meta-aware name that applies to this content.
- * @param  ID_TEXT			The ID of this content. Must be a string. Integers will be extracted from the string if needed.
- * @param  ?AUTO_LINK		The ID of the desired workflow. (NULL: system default)
- * @param  boolean			Whether to remove any existing workflows from this content beforehand (current permissions must allow this)
- * @return ?AUTO_LINK		The content's ID in the workflow_content table. (NULL: if not added (eg. told to use default when there isn't one))
+ * @param  ID_TEXT                      The content-meta-aware name that applies to this content.
+ * @param  ID_TEXT                      The ID of this content. Must be a string. Integers will be extracted from the string if needed.
+ * @param  ?AUTO_LINK                   The ID of the desired workflow. (NULL: system default)
+ * @param  boolean                      Whether to remove any existing workflows from this content beforehand (current permissions must allow this)
+ * @return ?AUTO_LINK                   The content's ID in the workflow_content table. (NULL: if not added (eg. told to use default when there isn't one))
  */
 function add_content_to_workflow($content_type = '',$content_id = '',$workflow_id = null,$remove_existing = false)
 {
@@ -772,8 +772,8 @@ function add_content_to_workflow($content_type = '',$content_id = '',$workflow_i
  * Returns all of the approval point which are currently defined. Indices are
  * IDs, values are names.
  *
- * @param  AUTO_LINK		The workflow ID.
- * @return array			The approval points which are defined. Empty if none are defined.
+ * @param  AUTO_LINK                    The workflow ID.
+ * @return array                        The approval points which are defined. Empty if none are defined.
  */
 function get_all_approval_points($workflow_id)
 {
@@ -788,8 +788,8 @@ function get_all_approval_points($workflow_id)
 /**
  * Gets an array of the group IDs allowed to approve the given point
  *
- * @param  AUTO_LINK		The ID of the approval point
- * @return array			The IDs of the groups allowed to signoff on it
+ * @param  AUTO_LINK                    The ID of the approval point
+ * @return array                        The IDs of the groups allowed to signoff on it
  */
 function get_usergroups_for_approval_point($approval_id)
 {
@@ -807,8 +807,8 @@ function get_usergroups_for_approval_point($approval_id)
 /**
  * Gets the position of the given approval point in the given workflow.
  *
- * @param  AUTO_LINK		The ID of the approval point
- * @return ?integer		The position of the approval point in this case (NULL: if not found)
+ * @param  AUTO_LINK                    The ID of the approval point
+ * @return ?integer                     The position of the approval point in this case (NULL: if not found)
  */
 function get_approval_point_position($approval_point_id)
 {
@@ -822,9 +822,9 @@ function get_approval_point_position($approval_point_id)
 /**
  * Get the workflow content ID for the given piece of content.
  *
- * @param  string		The type of the content (eg. download, gallery, etc.)
- * @param  string		The ID of the specific piece of content (if numeric, pass as a string anyway)
- * @return AUTO_LINK	The workflow_content_id
+ * @param  string                       The type of the content (eg. download, gallery, etc.)
+ * @param  string                       The ID of the specific piece of content (if numeric, pass as a string anyway)
+ * @return AUTO_LINK                    The workflow_content_id
  */
 function get_workflow_content_id($content_type,$content_id)
 {
@@ -841,9 +841,9 @@ function get_workflow_content_id($content_type,$content_id)
  * a workflow on a container, like a gallery, and applying it to its contents,
  * like images.
  *
- * @param  string			The type of content (as specified when it was entered into the workflow system)
- * @param  string			The ID of the content (as specified when it was entered into the workflow system)
- * @return ?AUTO_LINK	The ID of the workflow that this content is in (NULL: not found)
+ * @param  string                       The type of content (as specified when it was entered into the workflow system)
+ * @param  string                       The ID of the content (as specified when it was entered into the workflow system)
+ * @return ?AUTO_LINK                   The ID of the workflow that this content is in (NULL: not found)
  */
 function get_workflow_of_content($type,$id)
 {
@@ -853,8 +853,8 @@ function get_workflow_of_content($type,$id)
 /**
  * Approves the given point for the given piece of content.
  *
- * @param  AUTO_LINK		The *workflow content* ID (NOT the gallery, category, etc. ID!)
- * @param  AUTO_LINK		The approval point ID
+ * @param  AUTO_LINK                    The *workflow content* ID (NOT the gallery, category, etc. ID!)
+ * @param  AUTO_LINK                    The approval point ID
  */
 function approve_content_for_point($workflow_content_id,$approval_point_id)
 {
@@ -866,8 +866,8 @@ function approve_content_for_point($workflow_content_id,$approval_point_id)
  * to call from content deletion functions. NOTE: This is not the same as
  * approving the content, since the validation will remain unchanged.
  *
- * @param  string		The type of the content, as defined in the workflow_content table
- * @param  string		The ID of the content, as defined in the workflow content table
+ * @param  string                       The type of the content, as defined in the workflow_content table
+ * @param  string                       The ID of the content, as defined in the workflow content table
  */
 function remove_content_from_workflows($type,$id)
 {

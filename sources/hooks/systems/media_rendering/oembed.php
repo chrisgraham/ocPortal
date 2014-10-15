@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 /*
@@ -27,10 +27,10 @@ Notes...
 class Hook_media_rendering_oembed
 {
     /**
-	 * Get the label for this media rendering type.
-	 *
-	 * @return string		The label
-	 */
+     * Get the label for this media rendering type.
+     *
+     * @return string                   The label
+     */
     public function get_type_label()
     {
         require_lang('comcode');
@@ -38,22 +38,22 @@ class Hook_media_rendering_oembed
     }
 
     /**
-	 * Find the media types this hook serves.
-	 *
-	 * @return integer	The media type(s), as a bitmask
-	 */
+     * Find the media types this hook serves.
+     *
+     * @return integer                  The media type(s), as a bitmask
+     */
     public function get_media_type()
     {
         return MEDIA_TYPE_ALL;
     }
 
     /**
-	 * See if we can recognise this mime type.
-	 *
-	 * @param  ID_TEXT	The mime type
-	 * @param  ?array		The media signature, so we can go on this on top of the mime-type (NULL: not known)
-	 * @return integer	Recognition precedence
-	 */
+     * See if we can recognise this mime type.
+     *
+     * @param  ID_TEXT                  The mime type
+     * @param  ?array                   The media signature, so we can go on this on top of the mime-type (NULL: not known)
+     * @return integer                  Recognition precedence
+     */
     public function recognises_mime_type($mime_type,$meta_details = null)
     {
         if ($mime_type == 'text/html' || $mime_type == 'application/xhtml+xml') {
@@ -67,11 +67,11 @@ class Hook_media_rendering_oembed
     }
 
     /**
-	 * See if we can recognise this URL pattern.
-	 *
-	 * @param  URLPATH	URL to pattern match
-	 * @return integer	Recognition precedence
-	 */
+     * See if we can recognise this URL pattern.
+     *
+     * @param  URLPATH                  URL to pattern match
+     * @return integer                  Recognition precedence
+     */
     public function recognises_url($url)
     {
         if ($this->_find_oembed_endpoint($url) !== NULL) {
@@ -81,11 +81,11 @@ class Hook_media_rendering_oembed
     }
 
     /**
-	 * If we can handle this URL, get the thumbnail URL.
-	 *
-	 * @param  URLPATH		Video URL
-	 * @return ?string		The thumbnail URL (NULL: no match).
-	 */
+     * If we can handle this URL, get the thumbnail URL.
+     *
+     * @param  URLPATH                  Video URL
+     * @return ?string                  The thumbnail URL (NULL: no match).
+     */
     public function get_video_thumbnail($src_url)
     {
         $data = $this->get_oembed_data_result($src_url,array());
@@ -96,12 +96,12 @@ class Hook_media_rendering_oembed
     }
 
     /**
-	 * Do an oEmbed lookup.
-	 *
-	 * @param  URLPATH	URL to render
-	 * @param  array		Attributes (e.g. width, height)
-	 * @return ?array		Fully parsed/validated oEmbed result (NULL: fail)
-	 */
+     * Do an oEmbed lookup.
+     *
+     * @param  URLPATH                  URL to render
+     * @param  array                    Attributes (e.g. width, height)
+     * @return ?array                   Fully parsed/validated oEmbed result (NULL: fail)
+     */
     public function get_oembed_data_result($url,$attributes)
     {
         $endpoint = $this->_find_oembed_endpoint($url);
@@ -214,9 +214,9 @@ class Hook_media_rendering_oembed
                 $url_details2 = parse_url($endpoint);
                 $whitelist = explode("\n",get_option('oembed_html_whitelist'));
                 if ((!in_array($url_details['host'],$whitelist)) && (!in_array($url_details2['host'],$whitelist)) && (!in_array(preg_replace('#^www\.#','',$url_details['host']),$whitelist))) {
-                    /*require_code('comcode_compiler');	We could do this but it's not perfect, it still has some level of trust
-					$len=strlen($data['html']);
-					filter_html(false,$GLOBALS['FORUM_DRIVER']->get_guest_id(),0,$len,$data['html'],true,false);*/
+                    /*require_code('comcode_compiler');  We could do this but it's not perfect, it still has some level of trust
+                            $len=strlen($data['html']);
+                            filter_html(false,$GLOBALS['FORUM_DRIVER']->get_guest_id(),0,$len,$data['html'],true,false);*/
                     $data['html'] = strip_tags($data['html']);
                 }
 
@@ -263,15 +263,15 @@ class Hook_media_rendering_oembed
     }
 
     /**
-	 * Provide code to display what is at the URL, in the most appropriate way.
-	 *
-	 * @param  mixed		URL to render
-	 * @param  mixed		URL to render (no sessions etc)
-	 * @param  array		Attributes (e.g. width, height, length)
-	 * @param  boolean	Whether there are admin privileges, to render dangerous media types
-	 * @param  ?MEMBER	Member to run as (NULL: current member)
-	 * @return tempcode	Rendered version
-	 */
+     * Provide code to display what is at the URL, in the most appropriate way.
+     *
+     * @param  mixed                    URL to render
+     * @param  mixed                    URL to render (no sessions etc)
+     * @param  array                    Attributes (e.g. width, height, length)
+     * @param  boolean                  Whether there are admin privileges, to render dangerous media types
+     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @return tempcode                 Rendered version
+     */
     public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
     {
         if (is_object($url)) {
@@ -289,18 +289,18 @@ class Hook_media_rendering_oembed
                 unset($attributes['height']);
                 $map = array('width' => $data['width'],'height' => $data['height'],'click_url' => $url);
                 $url = $data['url']; // NB: This will also have been constrained to the maxwidth/maxheight (at least it is for Flickr)
-                /*if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url'];	Cannot control the size, so we'll make our own inside image_websafe
-				if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
-				if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];*/
+                /*if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url']; Cannot control the size, so we'll make our own inside image_websafe
+                    if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
+                    if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];*/
                 if (array_key_exists('description',$data)) {
                     $map['description'] = $data['description'];
                 } // not official, but embed.ly has it
                 elseif (array_key_exists('title',$data)) {
                     $map['description'] = $data['title'];
                 }
-                /*require_code('mime_types');	$url should be the full image not to view the resource, so we don't need to trick the mime type
-				require_code('files');
-				$map['mime_type']=get_mime_type(get_file_extension($map['thumb_url']));*/
+                /*require_code('mime_types');   $url should be the full image not to view the resource, so we don't need to trick the mime type
+                    require_code('files');
+                    $map['mime_type']=get_mime_type(get_file_extension($map['thumb_url']));*/
                 require_code('media_renderer');
                 return render_media_url($url,$url_safe,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
 
@@ -335,14 +335,14 @@ class Hook_media_rendering_oembed
     }
 
     /**
-	 * Provide code to display what is at the URL, when we fail to render with oEmbed.
-	 *
-	 * @param  mixed		URL to render
-	 * @param  array		Attributes (e.g. width, height, length)
-	 * @param  ?MEMBER	Member to run as (NULL: current member)
-	 * @param  string		Text to show the link with
-	 * @return tempcode	Rendered version
-	 */
+     * Provide code to display what is at the URL, when we fail to render with oEmbed.
+     *
+     * @param  mixed                    URL to render
+     * @param  array                    Attributes (e.g. width, height, length)
+     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @param  string                   Text to show the link with
+     * @return tempcode                 Rendered version
+     */
     public function _fallback_render($url,$attributes,$source_member,$link_captions_title = '')
     {
         if ($link_captions_title == '') {
@@ -365,11 +365,11 @@ class Hook_media_rendering_oembed
     }
 
     /**
-	 * Find an oEmbed endpoint for a URL.
-	 *
-	 * @param  URLPATH	URL to find the oEmbed endpoint for
-	 * @return ?URLPATH	Endpoint UR (NULL: none found)
-	 */
+     * Find an oEmbed endpoint for a URL.
+     *
+     * @param  URLPATH                  URL to find the oEmbed endpoint for
+     * @return ?URLPATH                 Endpoint UR (NULL: none found)
+     */
     public function _find_oembed_endpoint($url)
     {
         // Hard-coded

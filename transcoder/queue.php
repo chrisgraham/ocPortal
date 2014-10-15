@@ -31,8 +31,8 @@ define('VIDEO_BITRATE',1500);
 /**
  * Find the mime type for the given file extension. It does not take into account whether the file type has been white-listed or not, and returns a binary download mime type for any unknown extensions.
  *
- * @param  string			The file extension (no dot)
- * @return string			The MIME type
+ * @param  string                       The file extension (no dot)
+ * @return string                       The MIME type
  */
 function tr_get_mime_type($extension)
 {
@@ -76,8 +76,8 @@ function tr_get_mime_type($extension)
 /**
  * Transcode a video.
  *
- * @param  PATH			Video to transcoded
- * @return PATH			Transcoded file (or original URL if no change was made)
+ * @param  PATH                         Video to transcoded
+ * @return PATH                         Transcoded file (or original URL if no change was made)
  */
 function transcode($path)
 {
@@ -139,19 +139,19 @@ function transcode($path)
             $output_path = str_replace('/queue/','/done/',$output_path);
 
             /* mencoder too buggy
-			if ($file_type=='m4v')
-			{
-				$shell_command='"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc x264 -oac mp3lame -x264encopts bitrate='.escapeshellcmd($video_bitrate).' -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
-				echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command."\n";
-				shell_exec($shell_command.' 2>&1 >> log.txt');
-			}
-			else // flv
-			{
-				$shell_command='"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc lavc -oac mp3lame -lavcopts vcodec=flv:vbitrate='.escapeshellcmd($video_bitrate).':autoaspect:acodec=libmp3lame -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
-				echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command."\n";
-				shell_exec($shell_command.' 2>&1 >> log.txt');
-			}
-			*/
+            if ($file_type=='m4v')
+            {
+                    $shell_command='"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc x264 -oac mp3lame -x264encopts bitrate='.escapeshellcmd($video_bitrate).' -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
+                    echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command."\n";
+                    shell_exec($shell_command.' 2>&1 >> log.txt');
+            }
+            else // flv
+            {
+                    $shell_command='"'.$mencoder_path.'mencoder" '.escapeshellarg($file_path).' -noskip -of lavf -ofps 24000/1001 -ni -o '.escapeshellarg($output_path).' -ovc lavc -oac mp3lame -lavcopts vcodec=flv:vbitrate='.escapeshellcmd($video_bitrate).':autoaspect:acodec=libmp3lame -lameopts abr:br='.escapeshellcmd($audio_bitrate).' -vf scale='.escapeshellcmd($video_width_setting.':'.$video_height_setting).' -srate 22050 -af lavcresample=22050';
+                    echo '['.date('d/m/Y h:i:s').'] DOING SHELL COMMAND: '.$shell_command."\n";
+                    shell_exec($shell_command.' 2>&1 >> log.txt');
+            }
+            */
 
             if ($file_type == 'm4v') {
                 $shell_command = '"' . $mencoder_path . 'ffmpeg" -i ' . escapeshellarg($file_path) . ' -y -f mp4 -vcodec libx264 -b ' . escapeshellcmd($video_bitrate) . 'K -ab ' . escapeshellcmd($audio_bitrate) . 'K -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -strict experimental -ar 22050 -ac 2 -aspect 16:9 -s ' . escapeshellcmd($video_width_setting . ':' . $video_height_setting) . ' ' . escapeshellarg($output_path);

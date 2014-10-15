@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /*
@@ -28,8 +28,8 @@ build_rewrite_rules.php is in git / the ocportal_release_build addon.
 /**
  * Find the list of URL remappings
  *
- * @param  ID_TEXT		The URL scheme to use
- * @return array			The list of URL remappings
+ * @param  ID_TEXT                      The URL scheme to use
+ * @return array                        The list of URL remappings
  */
 function get_remappings($url_scheme)
 {

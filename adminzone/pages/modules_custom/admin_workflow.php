@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		workflows
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    workflows
  */
 
 require_code('crud_module');
@@ -23,10 +23,10 @@ class Module_admin_workflow extends standard_crud_module
     public $appended_actions_already = true;
 
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,8 +41,8 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         // Remove database tables
@@ -54,11 +54,11 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         // Create required database structures
@@ -112,14 +112,14 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -131,12 +131,12 @@ class Module_admin_workflow extends standard_crud_module
     public $doing;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -173,11 +173,11 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         // TODO: Add pic & tutorial
@@ -195,16 +195,16 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
         return do_next_manager(get_screen_title('MANAGE_WORKFLOWS'),comcode_to_tempcode(do_lang('DOC_WORKFLOWS'),null,true),
                     array(
-                        /*	 type							  page	 params													 zone	  */
+                        /*  type                     page    params                                       zone   */
                         array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_WORKFLOW')),
                         array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_WORKFLOW')),
                     ),
@@ -213,21 +213,21 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A triple: fields, hidden-fields, delete-fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A triple: fields, hidden-fields, delete-fields
+     */
     public function fill_in_edit_form($id)
     {
         return $this->get_form_fields(intval($id));
     }
 
     /**
-	 * Get a list of point names specified.
-	 *
-	 * @return array			List of point names
-	 */
+     * Get a list of point names specified.
+     *
+     * @return array                    List of point names
+     */
     public function get_points_in_edited_workflow()
     {
         // Grab all of the requested points
@@ -242,11 +242,11 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a adding/editing form.
-	 *
-	 * @param  ?integer		The workflow being edited (NULL: adding, not editing)
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a adding/editing form.
+     *
+     * @param  ?integer                 The workflow being edited (NULL: adding, not editing)
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($id = null)
     {
         require_code('form_templates');
@@ -323,13 +323,13 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Tells us if more information is needed from the user. This is required
-	 * since the user may create a workflow out of predefined components, which
-	 * requires no further information, or they may want to define new approval
-	 * points, which requires more information.
-	 *
-	 * @return boolean		Whether more information is needed from the user.
-	 */
+     * Tells us if more information is needed from the user. This is required
+     * since the user may create a workflow out of predefined components, which
+     * requires no further information, or they may want to define new approval
+     * points, which requires more information.
+     *
+     * @return boolean                  Whether more information is needed from the user.
+     */
     public function need_second_screen()
     {
         if (post_param_integer('redefined',0) == 1) {
@@ -363,10 +363,10 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Renders a screen for setting permissions on approval points.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Renders a screen for setting permissions on approval points.
+     *
+     * @return tempcode                 The UI
+     */
     public function second_screen()
     {
         require_code('form_templates');
@@ -476,10 +476,10 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $fields = new ocp_tempcode();
@@ -492,11 +492,11 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($id)
     {
         // Workflows are optional, so we can always delete them
@@ -504,11 +504,11 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Read in data posted by an add/edit form
-	 *
-	 * @param  boolean	Whether to insert unknown workflows into the database. For adding this should be true, otherwise false (the default)
-	 * @return array		(workflow_id, workflow_name, array(approval point IDs=>names), default)
-	 */
+     * Read in data posted by an add/edit form
+     *
+     * @param  boolean                  Whether to insert unknown workflows into the database. For adding this should be true, otherwise false (the default)
+     * @return array                    (workflow_id, workflow_name, array(approval point IDs=>names), default)
+     */
     public function read_in_data($insert_if_needed = false)
     {
         $name = post_param('name');
@@ -570,10 +570,10 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI/actualiser to add an entry.
-	 *
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI/actualiser to add an entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function _ad()
     {
         // We override the add screen here so that we can provide multiple screens
@@ -604,10 +604,10 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         // Grab our data. We pass true so that it will create non-existant content
@@ -618,10 +618,10 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard CRUD-module UI/actualiser to edit an entry.
-	 *
-	 * @return tempcode	The UI
-	 */
+     * Standard CRUD-module UI/actualiser to edit an entry.
+     *
+     * @return tempcode                 The UI
+     */
     public function __ed()
     {
         // We override the standard CRUD edit actualiser in order to redirect to a
@@ -669,11 +669,11 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return ?tempcode		Confirm message (NULL: continue)
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return ?tempcode                Confirm message (NULL: continue)
+     */
     public function edit_actualisation($id)
     {
         list($workflow_id,$workflow_name,$approval_points,$is_default) = $this->read_in_data(false);
@@ -681,10 +681,10 @@ class Module_admin_workflow extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         delete_workflow(intval($id));

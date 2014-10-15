@@ -13,33 +13,33 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		pointstore
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    pointstore
  */
 
 class Hook_pointstore_forwarding
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
     }
 
     /**
-	 * Standard pointstore item "shop front" function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item "shop front" function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         return array();
     }
 
     /**
-	 * Standard pointstore item configuration save function.
-	 */
+     * Standard pointstore item configuration save function.
+     */
     public function save_config()
     {
         $forw = post_param_integer('forw',-1);
@@ -52,8 +52,8 @@ class Hook_pointstore_forwarding
     }
 
     /**
-	 * Update an e-mail address from what was chosen in an interface; update or delete each price/cost/item
-	 */
+     * Update an e-mail address from what was chosen in an interface; update or delete each price/cost/item
+     */
     public function _do_price_mail()
     {
         $i = 0;
@@ -72,10 +72,10 @@ class Hook_pointstore_forwarding
     }
 
     /**
-	 * Get fields for adding/editing one of these.
-	 *
-	 * @return tempcode		The fields
-	 */
+     * Get fields for adding/editing one of these.
+     *
+     * @return tempcode                 The fields
+     */
     public function get_fields()
     {
         $fields = new ocp_tempcode();
@@ -85,10 +85,10 @@ class Hook_pointstore_forwarding
     }
 
     /**
-	 * Standard pointstore item configuration function.
-	 *
-	 * @return ?array		A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
-	 */
+     * Standard pointstore item configuration function.
+     *
+     * @return ?array                   A tuple: list of [fields to shown, hidden fields], title for add form, add form (NULL: disabled)
+     */
     public function config()
     {
         $rows = $GLOBALS['SITE_DB']->query('SELECT price,name FROM ' . get_table_prefix() . 'prices WHERE name LIKE \'' . db_encode_like('forw_%') . '\'');
@@ -109,10 +109,10 @@ class Hook_pointstore_forwarding
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function newforwarding()
     {
         if (get_option('is_on_forw_buy') == '0') {
@@ -155,10 +155,10 @@ class Hook_pointstore_forwarding
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function _newforwarding()
     {
         if (get_option('is_on_forw_buy') == '0') {
@@ -223,10 +223,10 @@ class Hook_pointstore_forwarding
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function __newforwarding()
     {
         if (get_option('is_on_forw_buy') == '0') {

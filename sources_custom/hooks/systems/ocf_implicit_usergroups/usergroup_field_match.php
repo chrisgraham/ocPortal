@@ -8,8 +8,8 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 class Hook_implicit_usergroups_usergroup_field_match
@@ -49,21 +49,21 @@ class Hook_implicit_usergroups_usergroup_field_match
     }
 
     /**
-	 * Run function for implicit usergroup hooks. Finds the group IDs it is bound to.
-	 *
-	 * @return array		A list of usergroup IDs.
-	 */
+     * Run function for implicit usergroup hooks. Finds the group IDs it is bound to.
+     *
+     * @return array                    A list of usergroup IDs.
+     */
     public function get_bound_group_ids()
     {
         return array_keys($this->_get_structure());
     }
 
     /**
-	 * Run function for implicit usergroup hooks. Finds all members in the group.
-	 *
-	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
-	 * @return ?array		The list of members as a map between member ID and member row (NULL: unsupported by hook).
-	 */
+     * Run function for implicit usergroup hooks. Finds all members in the group.
+     *
+     * @param  GROUP                    The group ID to check (if only one group supported by the hook, can be ignored).
+     * @return ?array                   The list of members as a map between member ID and member row (NULL: unsupported by hook).
+     */
     public function get_member_list($group_id)
     {
         $out = array();
@@ -83,11 +83,11 @@ class Hook_implicit_usergroups_usergroup_field_match
     }
 
     /**
-	 * Run function for implicit usergroup hooks. Finds all members in the group.
-	 *
-	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
-	 * @return ?array		The list of members (NULL: unsupported by hook).
-	 */
+     * Run function for implicit usergroup hooks. Finds all members in the group.
+     *
+     * @param  GROUP                    The group ID to check (if only one group supported by the hook, can be ignored).
+     * @return ?array                   The list of members (NULL: unsupported by hook).
+     */
     public function get_member_list_count($group_id)
     {
         $structure = $this->_get_structure();
@@ -116,12 +116,12 @@ class Hook_implicit_usergroups_usergroup_field_match
     }
 
     /**
-	 * Run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
-	 *
-	 * @param  MEMBER		The member ID.
-	 * @param  GROUP		The group ID to check (if only one group supported by the hook, can be ignored).
-	 * @return boolean	Whether they are.
-	 */
+     * Run function for implicit usergroup hooks. Finds whether the member is within the implicit usergroup.
+     *
+     * @param  MEMBER                   The member ID.
+     * @param  GROUP                    The group ID to check (if only one group supported by the hook, can be ignored).
+     * @return boolean                  Whether they are.
+     */
     public function is_member_within($member_id,$group_id)
     {
         static $cache = array(); // So finding if member in each, is quick

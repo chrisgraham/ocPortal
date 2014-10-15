@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		classifieds
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    classifieds
  */
 
 class Hook_classifieds
 {
     /**
-	 * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
-	 *
-	 * @param  ID_TEXT		Product codename.
-	 * @return ?tempcode		Input field in standard Tempcode format for fields (NULL: no identifier).
-	 */
+     * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).
+     *
+     * @param  ID_TEXT                  Product codename.
+     * @return ?tempcode                Input field in standard Tempcode format for fields (NULL: no identifier).
+     */
     public function get_identifier_manual_field_inputter($type_code)
     {
         require_code('catalogues');
@@ -42,10 +42,10 @@ class Hook_classifieds
     }
 
     /**
-	 * Get the products handled by this eCommerce hook.
-	 *
-	 * @return array		A map of product name to list of product details.
-	 */
+     * Get the products handled by this eCommerce hook.
+     *
+     * @return array                    A map of product name to list of product details.
+     */
     public function get_products()
     {
         require_lang('classifieds');
@@ -68,21 +68,21 @@ class Hook_classifieds
     }
 
     /**
-	 * Whether this product is available.
-	 *
-	 * @return integer	The availability code (a ECOMMERCE_PRODUCT_* constant).
-	 */
+     * Whether this product is available.
+     *
+     * @return integer                  The availability code (a ECOMMERCE_PRODUCT_* constant).
+     */
     public function is_available()
     {
         return ECOMMERCE_PRODUCT_AVAILABLE;
     }
 
     /**
-	 * Throw out the ID we're buying.
-	 *
-	 * @param  ID_TEXT	The product chosen.
-	 * @return ID_TEXT	The purchase ID.
-	 */
+     * Throw out the ID we're buying.
+     *
+     * @param  ID_TEXT                  The product chosen.
+     * @return ID_TEXT                  The purchase ID.
+     */
     public function set_needed_fields($type_code)
     {
         $entry_id = get_param_integer('id',null);
@@ -113,9 +113,9 @@ class Hook_classifieds
 /**
  * Handling of a purchased classifieds advert.
  *
- * @param  ID_TEXT	The purchase ID.
- * @param  array		Details of the product.
- * @param  ID_TEXT	The product codename.
+ * @param  ID_TEXT                      The purchase ID.
+ * @param  array                        Details of the product.
+ * @param  ID_TEXT                      The product codename.
  */
 function handle_classifieds_advert($purchase_id,$details,$type_code)
 {

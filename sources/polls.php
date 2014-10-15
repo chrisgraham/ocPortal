@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		polls
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    polls
  */
 
 /**
  * Show an actual poll box.
  *
- * @param  boolean		Whether to show results (if we've already voted, this'll be overridden)
- * @param  array			The poll row
- * @param  ID_TEXT		The zone our poll module is in
- * @param  boolean		Whether to include extra management links (e.g. editing, choosing, archive, etc)
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		The box
+ * @param  boolean                      Whether to show results (if we've already voted, this'll be overridden)
+ * @param  array                        The poll row
+ * @param  ID_TEXT                      The zone our poll module is in
+ * @param  boolean                      Whether to include extra management links (e.g. editing, choosing, archive, etc)
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     The box
  */
 function render_poll_box($results,$myrow,$zone = '_SEARCH',$include_manage_links = false,$give_context = true,$guid = '')
 {
@@ -127,12 +127,12 @@ function render_poll_box($results,$myrow,$zone = '_SEARCH',$include_manage_links
 /**
  * Vote in a poll.
  *
- * @param  AUTO_LINK			The poll ID
- * @param  ?integer			Vote to cast (NULL: forfeit vote)
- * @param  ?array				Poll row (NULL: lookup from DB)
- * @param  ?MEMBER			Who to vote (NULL: current user)
- * @param  ?IP					The IP to vote (NULL: no IP check)
- * @return array				Amended poll row
+ * @param  AUTO_LINK                    The poll ID
+ * @param  ?integer                     Vote to cast (NULL: forfeit vote)
+ * @param  ?array                       Poll row (NULL: lookup from DB)
+ * @param  ?MEMBER                      Who to vote (NULL: current user)
+ * @param  ?IP                          The IP to vote (NULL: no IP check)
+ * @return array                        Amended poll row
  */
 function vote_in_poll($poll_id,$cast,$myrow = null,$member_id = null,$ip = null)
 {
@@ -191,10 +191,10 @@ function vote_in_poll($poll_id,$cast,$myrow = null,$member_id = null,$ip = null)
 /**
  * Find whether the current member may vote.
  *
- * @param  AUTO_LINK			The poll ID
- * @param  MEMBER				Who to check for
- * @param  ?IP					The IP to check for (NULL: no IP check)
- * @return boolean			Whether the current member may vote
+ * @param  AUTO_LINK                    The poll ID
+ * @param  MEMBER                       Who to check for
+ * @param  ?IP                          The IP to check for (NULL: no IP check)
+ * @return boolean                      Whether the current member may vote
  */
 function may_vote_in_poll($poll_id,$member_id,$ip)
 {
@@ -223,9 +223,9 @@ function may_vote_in_poll($poll_id,$member_id,$ip)
 /**
  * Get a list of polls.
  *
- * @param  ?AUTO_LINK	The ID of the poll to select by default (NULL: first)
- * @param  ?MEMBER		Only show polls owned by this member (NULL: no such restriction)
- * @return tempcode		The list
+ * @param  ?AUTO_LINK                   The ID of the poll to select by default (NULL: first)
+ * @param  ?MEMBER                      Only show polls owned by this member (NULL: no such restriction)
+ * @return tempcode                     The list
  */
 function create_selection_list_polls($it = null,$only_owned = null)
 {

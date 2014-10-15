@@ -15,9 +15,9 @@
 /*EXTRA FUNCTIONS: stream_context_set_default*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		google_appengine
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    google_appengine
  */
 
 /**
@@ -127,58 +127,58 @@ function init__google_appengine()
 
     //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
+    //   return NULL;
     //}
     //if (preg_match('#^s/([^\&\?]*)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
+    //   return NULL;
     //}
     //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
+    //   return NULL;
     //}
     //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
+    //   return NULL;
     //}
     //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'$1/index.php\?page=$2');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'$1/index.php\?page=$2');
+    //   return NULL;
     //}
     //if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');
+    //   return NULL;
     //}
     //if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'index.php\?page=$1&type=$2');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'index.php\?page=$1&type=$2');
+    //   return NULL;
     //}
     //if (preg_match('#^([^/\&\?]+)$#',$uri,$matches)!=0)
     //{
-    //	_roll_gae_redirect($matches,'index.php\?page=$1');
-    //	return NULL;
+    //   _roll_gae_redirect($matches,'index.php\?page=$1');
+    //   return NULL;
     //}
     // RULES END
 
-    /*if (isset($_GET['gae_stop']))	Useful for debugging crashes on live Google App Engine
-	{
-		declare(ticks=1);
-		register_tick_function('gae_debugger');
-	}*/
+    /*if (isset($_GET['gae_stop'])) Useful for debugging crashes on live Google App Engine
+    {
+        declare(ticks=1);
+        register_tick_function('gae_debugger');
+    }*/
 }
 
 /**
  * Find whether the current user is an admin, from the perspective of the Google Console.
  *
- * @param  array			URL segments matched
- * @param  string			Redirect pattern
+ * @param  array                        URL segments matched
+ * @param  string                       Redirect pattern
  */
 function _roll_gae_redirect($matches,$to)
 {
@@ -204,7 +204,7 @@ function _roll_gae_redirect($matches,$to)
 /**
  * Find whether the current user is an admin, from the perspective of the Google Console.
  *
- * @return boolean		Current user is admin
+ * @return boolean                      Current user is admin
  */
 function gae_is_admin()
 {
@@ -248,7 +248,7 @@ function gae_debugger()
  * Enable/Disable GAE optimistic cache, meaning it avoids need to check the Cloud Storage if a file is updated.
  * We only set this to enabled if we are sure the persistent cache would receive a flush if the referenced file changed state.
  *
- * @param  boolean		Whether the cache is enabled
+ * @param  boolean                      Whether the cache is enabled
  */
 function gae_optimistic_cache($enabled)
 {

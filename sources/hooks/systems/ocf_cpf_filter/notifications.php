@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_ocf_cpf_filter_notifications
 {
     /**
-	 * Find which special CPFs to enable.
-	 *
-	 * @return array			A list of CPFs to enable
-	 */
+     * Find which special CPFs to enable.
+     *
+     * @return array                    A list of CPFs to enable
+     */
     public function to_enable()
     {
         $cpf = array(/*'smart_topic_notification'=>1*/); // Actually, don't make this editable

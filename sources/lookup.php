@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		securitylogging
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    securitylogging
  */
 
 /**
@@ -29,11 +29,11 @@ function init__lookup()
 /**
  * Get information about the specified member.
  *
- * @param  mixed			The member for whom we are getting the page
- * @param  ?string		The member's name (by reference) (NULL: unknown)
- * @param  ?AUTO_LINK 	The member's ID (by reference) (NULL: unknown)
- * @param  ?string		The member's IP (by reference) (NULL: unknown)
- * @return array			The member's stats rows
+ * @param  mixed                        The member for whom we are getting the page
+ * @param  ?string                      The member's name (by reference) (NULL: unknown)
+ * @param  ?AUTO_LINK                   The member's ID (by reference) (NULL: unknown)
+ * @param  ?string                      The member's IP (by reference) (NULL: unknown)
+ * @return array                        The member's stats rows
  */
 function lookup_member_page($member,&$name,&$id,&$ip)
 {
@@ -99,14 +99,14 @@ function lookup_member_page($member,&$name,&$id,&$ip)
 /**
  * Get a results table showing info about the member's travels around the site.
  *
- * @param  MEMBER			The member we are getting travel stats for
- * @param  IP				The IP address of the member
- * @param  integer		The current position in the browser
- * @param  integer		The maximum number of rows to show per browser page
- * @param  ?ID_TEXT		The current sortable (NULL: none)
- * @param  ?ID_TEXT		The order we are sorting in (NULL: none)
+ * @param  MEMBER                       The member we are getting travel stats for
+ * @param  IP                           The IP address of the member
+ * @param  integer                      The current position in the browser
+ * @param  integer                      The maximum number of rows to show per browser page
+ * @param  ?ID_TEXT                     The current sortable (NULL: none)
+ * @param  ?ID_TEXT                     The order we are sorting in (NULL: none)
  * @set    ASC DESC
- * @return tempcode		The results table
+ * @return tempcode                     The results table
  */
 function get_stats_track($member,$ip,$start = 0,$max = 50,$sortable = 'date_and_time',$sort_order = 'DESC')
 {
@@ -166,8 +166,8 @@ function get_stats_track($member,$ip,$start = 0,$max = 50,$sortable = 'date_and_
 /**
  * Get a results table showing security alerts matching WHERE constraints.
  *
- * @param  ?array			WHERE constraints (NULL: none)
- * @return array			A pair: The results table, The number
+ * @param  ?array                       WHERE constraints (NULL: none)
+ * @return array                        A pair: The results table, The number
  */
 function find_security_alerts($where)
 {

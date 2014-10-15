@@ -8,17 +8,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom_support_credits
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom_support_credits
  */
 
 /**
  * Handling of adding support credits to a member's account.
  *
- * @param  ID_TEXT	The purchase ID.
- * @param  array		Details of the product.
- * @param  ID_TEXT	The product codename.
+ * @param  ID_TEXT                      The purchase ID.
+ * @param  array                        Details of the product.
+ * @param  ID_TEXT                      The product codename.
  */
 function handle_support_credits($purchase_id,$details,$type_code)
 {
@@ -53,10 +53,10 @@ function handle_support_credits($purchase_id,$details,$type_code)
 class Hook_support_credits
 {
     /**
-	 * Get the products handled by this eCommerce hook.
-	 *
-	 * @return array	A map of product name to list of product details.
-	 */
+     * Get the products handled by this eCommerce hook.
+     *
+     * @return array                    A map of product name to list of product details.
+     */
     public function get_products()
     {
         if (get_forum_type() != 'ocf') {
@@ -79,21 +79,21 @@ class Hook_support_credits
     }
 
     /**
-	 * Get the message for use in the purchase wizard.
-	 *
-	 * @param  string		The product in question.
-	 * @return tempcode	The message.
-	 */
+     * Get the message for use in the purchase wizard.
+     *
+     * @param  string                   The product in question.
+     * @return tempcode                 The message.
+     */
     public function get_message($type_code)
     {
         return do_lang('SUPPORT_CREDITS_PRODUCT_DESCRIPTION');
     }
 
     /**
-	 * Get the agreement for use in the purchase wizard.
-	 *
-	 * @return string		The message.
-	 */
+     * Get the agreement for use in the purchase wizard.
+     *
+     * @return string                   The message.
+     */
     public function get_agreement()
     {
         require_code('textfiles');
@@ -101,21 +101,21 @@ class Hook_support_credits
     }
 
     /**
-	 * Find the corresponding member to a given purchase ID.
-	 *
-	 * @param  ID_TEXT		The purchase ID.
-	 * @return ?MEMBER		The member (NULL: unknown / can't perform operation).
-	 */
+     * Find the corresponding member to a given purchase ID.
+     *
+     * @param  ID_TEXT                  The purchase ID.
+     * @return ?MEMBER                  The member (NULL: unknown / can't perform operation).
+     */
     public function member_for($purchase_id)
     {
         return $GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases','member_id',array('purchase_id' => intval($purchase_id)));
     }
 
     /**
-	 * Get fields that need to be filled in in the purchase wizard.
-	 *
-	 * @return ?array		The fields and message text (NULL: none).
-	 */
+     * Get fields that need to be filled in in the purchase wizard.
+     *
+     * @return ?array                   The fields and message text (NULL: none).
+     */
     public function get_needed_fields()
     {
         if (!has_actual_page_access(get_member(),'admin_ecommerce',get_module_zone('admin_ecommerce'))) {
@@ -130,11 +130,11 @@ class Hook_support_credits
     }
 
     /**
-	 * Get the filled in fields and do something with them.
-	 *
-	 * @param  ID_TEXT	The product codename.
-	 * @return ID_TEXT	The purchase ID.
-	 */
+     * Get the filled in fields and do something with them.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @return ID_TEXT                  The purchase ID.
+     */
     public function set_needed_fields($type_code)
     {
         $product_array = explode('_',$type_code,2);
@@ -164,12 +164,12 @@ class Hook_support_credits
     }
 
     /**
-	 * Check whether the product codename is available for purchase by the member.
-	 *
-	 * @param  ID_TEXT	The product codename.
-	 * @param  MEMBER		The member.
-	 * @return boolean	Whether it is.
-	 */
+     * Check whether the product codename is available for purchase by the member.
+     *
+     * @param  ID_TEXT                  The product codename.
+     * @param  MEMBER                   The member.
+     * @return boolean                  Whether it is.
+     */
     public function is_available($type_code,$member)
     {
         return ($member != $GLOBALS['FORUM_DRIVER']->get_guest_id())?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_NO_GUESTS;

@@ -8,17 +8,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
  */
 
 class Hook_stats_external
 {
     /**
-	 * Show a stats section.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Show a stats section.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         $bits = new ocp_tempcode();
@@ -73,11 +73,11 @@ function getAlexaRank($url)
 
     // we would like, but cannot get (without an API key)...
     /*
-		time on site
-		reach (as a percentage)
-		page views
-		audience (i.e. what country views the site most)
-	 */
+        time on site
+        reach (as a percentage)
+        page views
+        audience (i.e. what country views the site most)
+     */
 
     $ret = array($rank,$links,$speed);
 

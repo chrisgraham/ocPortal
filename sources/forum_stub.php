@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -30,7 +30,7 @@ function init__forum_stub()
 
 /**
  * Forum Driver base class.
- * @package		core
+ * @package    core
  */
 class forum_driver_base
 {
@@ -41,10 +41,10 @@ class forum_driver_base
     public $EMOTICON_CACHE = null;
 
     /**
-	 * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
-	 *
-	 * @param  string			The name of the new custom field
-	 */
+     * Add the specified custom field to the forum (some forums implemented this using proper custom profile fields, others through adding a new field).
+     *
+     * @param  string                   The name of the new custom field
+     */
     public function install_delete_custom_field($name)
     {
         if (method_exists($this,'_install_delete_custom_field')) {
@@ -53,23 +53,23 @@ class forum_driver_base
     }
 
     /**
-	 * Find the usergroup ID of the forum guest member.
-	 *
-	 * @return GROUP			The usergroup ID of the forum guest member
-	 */
+     * Find the usergroup ID of the forum guest member.
+     *
+     * @return GROUP                    The usergroup ID of the forum guest member
+     */
     public function get_guest_group()
     {
         return db_get_first_id();
     }
 
     /**
-	 * Get a URL to a forum member's member profile.
-	 *
-	 * @param  MEMBER			The forum member
-	 * @param  boolean		Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
-	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
-	 * @return mixed			The URL
-	 */
+     * Get a URL to a forum member's member profile.
+     *
+     * @param  MEMBER                   The forum member
+     * @param  boolean                  Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
+     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
+     * @return mixed                    The URL
+     */
     public function member_profile_url($id,$definitely_profile = false,$tempcode_okay = false)
     {
         $url = mixed();
@@ -99,14 +99,14 @@ class forum_driver_base
     }
 
     /**
-	 * Get a hyperlink (i.e. HTML link, not just a URL) to a forum member's member profile.
-	 *
-	 * @param  MEMBER			The forum member
-	 * @param  boolean		Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
-	 * @param  string			The username (blank: look it up)
-	 * @param  boolean		Whether to use the displayname rather than the username (if we have them)
-	 * @return tempcode		The hyperlink
-	 */
+     * Get a hyperlink (i.e. HTML link, not just a URL) to a forum member's member profile.
+     *
+     * @param  MEMBER                   The forum member
+     * @param  boolean                  Whether to be insistent that we go to the profile, rather than possibly starting an IM which can link to the profile
+     * @param  string                   The username (blank: look it up)
+     * @param  boolean                  Whether to use the displayname rather than the username (if we have them)
+     * @return tempcode                 The hyperlink
+     */
     public function member_profile_hyperlink($id,$definitely_profile = false,$_username = '',$use_displayname = true)
     {
         if (is_guest($id)) {
@@ -123,10 +123,10 @@ class forum_driver_base
     }
 
     /**
-	 * Get a URL to a forum join page.
-	 *
-	 * @return mixed			The URL
-	 */
+     * Get a URL to a forum join page.
+     *
+     * @return mixed                    The URL
+     */
     public function join_url()
     {
         $url = $this->_join_url();
@@ -137,11 +137,11 @@ class forum_driver_base
     }
 
     /**
-	 * Get a URL to a forum 'user online' list.
-	 *
-	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
-	 * @return mixed			The URL
-	 */
+     * Get a URL to a forum 'user online' list.
+     *
+     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @return mixed                    The URL
+     */
     public function users_online_url($tempcode_okay = false)
     {
         $url = $this->_users_online_url($tempcode_okay);
@@ -152,12 +152,12 @@ class forum_driver_base
     }
 
     /**
-	 * Get a URL to send a forum member a PM.
-	 *
-	 * @param  MEMBER			The forum member
-	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
-	 * @return mixed			The URL
-	 */
+     * Get a URL to send a forum member a PM.
+     *
+     * @param  MEMBER                   The forum member
+     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @return mixed                    The URL
+     */
     public function member_pm_url($id,$tempcode_okay = false)
     {
         $url = $this->_member_pm_url($id,$tempcode_okay);
@@ -168,12 +168,12 @@ class forum_driver_base
     }
 
     /**
-	 * Get a URL to a forum.
-	 *
-	 * @param  integer		The ID of the forum
-	 * @param  boolean		Whether it is okay to return the result using Tempcode (more efficient)
-	 * @return mixed			The URL
-	 */
+     * Get a URL to a forum.
+     *
+     * @param  integer                  The ID of the forum
+     * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
+     * @return mixed                    The URL
+     */
     public function forum_url($id,$tempcode_okay = false)
     {
         $url = $this->_forum_url($id,$tempcode_okay);
@@ -184,12 +184,12 @@ class forum_driver_base
     }
 
     /**
-	 * Get a member's username.
-	 *
-	 * @param  MEMBER			The member
-	 * @param  boolean		Whether to use the displayname rather than the username (if we have them)
-	 * @return ?SHORT_TEXT	The username (NULL: deleted member)
-	 */
+     * Get a member's username.
+     *
+     * @param  MEMBER                   The member
+     * @param  boolean                  Whether to use the displayname rather than the username (if we have them)
+     * @return ?SHORT_TEXT              The username (NULL: deleted member)
+     */
     public function get_username($id,$use_displayname = false)
     {
         if ($id == $this->get_guest_id()) {
@@ -225,11 +225,11 @@ class forum_driver_base
     }
 
     /**
-	 * Get a member's e-mail address.
-	 *
-	 * @param  MEMBER			The member
-	 * @return SHORT_TEXT	The e-mail address (blank: not known)
-	 */
+     * Get a member's e-mail address.
+     *
+     * @param  MEMBER                   The member
+     * @return SHORT_TEXT               The e-mail address (blank: not known)
+     */
     public function get_member_email_address($id)
     {
         global $MEMBER_EMAIL_CACHE;
@@ -243,12 +243,12 @@ class forum_driver_base
     }
 
     /**
-	 * Find whether a member is staff.
-	 *
-	 * @param  MEMBER			The member
-	 * @param  boolean		Whether to avoid checking the staff filter (i.e. ignore M.S.N.'s)
-	 * @return boolean		The answer
-	 */
+     * Find whether a member is staff.
+     *
+     * @param  MEMBER                   The member
+     * @param  boolean                  Whether to avoid checking the staff filter (i.e. ignore M.S.N.'s)
+     * @return boolean                  The answer
+     */
     public function is_staff($id,$skip_staff_filter = false)
     {
         if (is_guest($id)) {
@@ -277,10 +277,10 @@ class forum_driver_base
     }
 
     /**
-	 * If we can't get a list of admins via a usergroup query, we have to disable the staff filter - else the staff filtering can cause disaster at the point of being turned on (because it can't automatically sync).
-	 *
-	 * @return boolean		Whether the staff filter is disabled
-	 */
+     * If we can't get a list of admins via a usergroup query, we have to disable the staff filter - else the staff filtering can cause disaster at the point of being turned on (because it can't automatically sync).
+     *
+     * @return boolean                  Whether the staff filter is disabled
+     */
     public function disable_staff_filter()
     {
         if (method_exists($this,'_disable_staff_filter')) {
@@ -291,11 +291,11 @@ class forum_driver_base
     }
 
     /**
-	 * Find whether a member is a super administrator.
-	 *
-	 * @param  MEMBER			The member
-	 * @return boolean		The answer
-	 */
+     * Find whether a member is a super administrator.
+     *
+     * @param  MEMBER                   The member
+     * @return boolean                  The answer
+     */
     public function is_super_admin($id)
     {
         global $IS_SUPER_ADMIN_CACHE;
@@ -314,10 +314,10 @@ class forum_driver_base
     }
 
     /**
-	 * Get a list of the super admin usergroups.
-	 *
-	 * @return array			The list of usergroups
-	 */
+     * Get a list of the super admin usergroups.
+     *
+     * @return array                    The list of usergroups
+     */
     public function get_super_admin_groups()
     {
         global $ADMIN_GROUP_CACHE;
@@ -331,10 +331,10 @@ class forum_driver_base
     }
 
     /**
-	 * Get a list of the moderator usergroups.
-	 *
-	 * @return array			The list of usergroups
-	 */
+     * Get a list of the moderator usergroups.
+     *
+     * @return array                    The list of usergroups
+     */
     public function get_moderator_groups()
     {
         global $MODERATOR_GROUP_CACHE,$IN_MINIKERNEL_VERSION;
@@ -348,16 +348,16 @@ class forum_driver_base
     }
 
     /**
-	 * Get a map of forum usergroups (id=>name).
-	 *
-	 * @param  boolean		Whether to obscure the name of hidden usergroups
-	 * @param  boolean		Whether to only grab permissive usergroups
-	 * @param  boolean		Do not limit things even if there are huge numbers of usergroups
-	 * @param  ?array			Usergroups that must be included in the results (NULL: no extras must be)
-	 * @param  ?MEMBER		Always return usergroups of this member (NULL: current member)
-	 * @param  boolean		Whether to completely skip hidden usergroups
-	 * @return array			The map
-	 */
+     * Get a map of forum usergroups (id=>name).
+     *
+     * @param  boolean                  Whether to obscure the name of hidden usergroups
+     * @param  boolean                  Whether to only grab permissive usergroups
+     * @param  boolean                  Do not limit things even if there are huge numbers of usergroups
+     * @param  ?array                   Usergroups that must be included in the results (NULL: no extras must be)
+     * @param  ?MEMBER                  Always return usergroups of this member (NULL: current member)
+     * @param  boolean                  Whether to completely skip hidden usergroups
+     * @return array                    The map
+     */
     public function get_usergroup_list($hide_hidden = false,$only_permissive = false,$force_show_all = false,$force_find = null,$for_member = null,$skip_hidden = false)
     {
         global $USERGROUP_LIST_CACHE;
@@ -376,13 +376,13 @@ class forum_driver_base
     }
 
     /**
-	 * Get a list of usergroups a member is in.
-	 *
-	 * @param  MEMBER			The member
-	 * @param  boolean		Whether to skip looking at secret usergroups.
-	 * @param  boolean		Whether to take probation into account
-	 * @return array			The list of usergroups
-	 */
+     * Get a list of usergroups a member is in.
+     *
+     * @param  MEMBER                   The member
+     * @param  boolean                  Whether to skip looking at secret usergroups.
+     * @param  boolean                  Whether to take probation into account
+     * @return array                    The list of usergroups
+     */
     public function get_members_groups($id,$skip_secret = false,$handle_probation = true)
     {
         if ((is_guest($id)) && (get_forum_type() == 'ocf')) {
@@ -404,11 +404,11 @@ class forum_driver_base
     }
 
     /**
-	 * Get the current member's theme identifier.
-	 *
-	 * @param  ?ID_TEXT		The zone we are getting the theme for (NULL: current zone)
-	 * @return ID_TEXT		The theme identifier
-	 */
+     * Get the current member's theme identifier.
+     *
+     * @param  ?ID_TEXT                 The zone we are getting the theme for (NULL: current zone)
+     * @return ID_TEXT                  The theme identifier
+     */
     public function get_theme($zone_for = null)
     {
         global $SITE_INFO;
@@ -511,10 +511,10 @@ class forum_driver_base
     }
 
     /**
-	 * Get the number of new forum posts on the system in the last 24 hours.
-	 *
-	 * @return integer			Number of forum posts
-	 */
+     * Get the number of new forum posts on the system in the last 24 hours.
+     *
+     * @return integer                  Number of forum posts
+     */
     public function get_num_new_forum_posts()
     {
         $value = strval($this->_get_num_new_forum_posts());
@@ -522,23 +522,23 @@ class forum_driver_base
     }
 
     /**
-	 * Find whether a forum is threaded.
-	 *
-	 * @param  integer		The topic ID
-	 * @return boolean		Whether it is
-	 */
+     * Find whether a forum is threaded.
+     *
+     * @param  integer                  The topic ID
+     * @return boolean                  Whether it is
+     */
     public function topic_is_threaded($topic_id)
     {
         return false;
     }
 
     /**
-	 * Load extra details for a list of posts. Does not need to return anything if forum driver doesn't support partial post loading (which is only useful for threaded topic partial-display).
-	 *
-	 * @param  AUTO_LINK		Topic the posts come from
-	 * @param  array			List of post IDs
-	 * @return array			Extra details
-	 */
+     * Load extra details for a list of posts. Does not need to return anything if forum driver doesn't support partial post loading (which is only useful for threaded topic partial-display).
+     *
+     * @param  AUTO_LINK                Topic the posts come from
+     * @param  array                    List of post IDs
+     * @return array                    Extra details
+     */
     public function get_post_remaining_details($topic_id,$post_ids)
     {
         return array();

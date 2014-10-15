@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Find file meta information for adding to a zip file
  *
- * @param  PATH			The full path to the folder to add
- * @param  PATH			The subpath relative to the path (should be left as the default '', as this is used for the recursion to distinguish the adding base path from where it's currently looking)
- * @return array			A list of maps that stores time,full_path,name, for each file
+ * @param  PATH                         The full path to the folder to add
+ * @param  PATH                         The subpath relative to the path (should be left as the default '', as this is used for the recursion to distinguish the adding base path from where it's currently looking)
+ * @return array                        A list of maps that stores time,full_path,name, for each file
  */
 function zip_scan_folder($path,$subpath = '')
 {
@@ -60,8 +60,8 @@ function zip_scan_folder($path,$subpath = '')
 /**
  * Calculate CRC32 for a file. Based on a function in the PHP docs.
  *
- * @param  PATH			The file
- * @return ?integer		The CRC (NULL: error)
+ * @param  PATH                         The file
+ * @return ?integer                     The CRC (NULL: error)
  */
 function crc32_file($filename)
 {
@@ -92,11 +92,11 @@ function crc32_file($filename)
 /**
  * Create a zip file.
  *
- * @param  array			A list of maps (time,data/full_path,name) covering everything to zip up
- * @param  boolean		Whether to stream the output direct to the browser
- * @param  boolean		Whether to return the tuple
- * @param  ?PATH			File to spool into (NULL: none). $stream will be forced to false
- * @return mixed			The data for the zip file OR a tuple: data, offsets, sizes; will be blank if $stream is true or $outfile_path is not NULL
+ * @param  array                        A list of maps (time,data/full_path,name) covering everything to zip up
+ * @param  boolean                      Whether to stream the output direct to the browser
+ * @param  boolean                      Whether to return the tuple
+ * @param  ?PATH                        File to spool into (NULL: none). $stream will be forced to false
+ * @return mixed                        The data for the zip file OR a tuple: data, offsets, sizes; will be blank if $stream is true or $outfile_path is not NULL
  */
 function create_zip_file($file_array,$stream = false,$get_offsets = false,$outfile_path = null)
 {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -91,9 +91,9 @@ function init__tempcode_compiler()
 /**
  * Helper function or use getting line numbers.
  *
- * @param  array			Compiler tokens
- * @param  integer		How far we are through the token list
- * @return integer		The sum length of tokens passed
+ * @param  array                        Compiler tokens
+ * @param  integer                      How far we are through the token list
+ * @return integer                      The sum length of tokens passed
  */
 function _length_so_far($bits,$i)
 {
@@ -110,12 +110,12 @@ function _length_so_far($bits,$i)
 /**
  * Compile a template into a list of appendable outputs, for the closure-style Tempcode implementation.
  *
- * @param  string			The template file contents
- * @param  ID_TEXT		The name of the template
- * @param  ID_TEXT		The name of the theme
- * @param  ID_TEXT		The language it is for
- * @param  boolean		Whether to tolerate errors
- * @return array			A pair: array Compiled result structure, array preprocessable bits (special stuff needing attention that is referenced within the template)
+ * @param  string                       The template file contents
+ * @param  ID_TEXT                      The name of the template
+ * @param  ID_TEXT                      The name of the theme
+ * @param  ID_TEXT                      The language it is for
+ * @param  boolean                      Whether to tolerate errors
+ * @return array                        A pair: array Compiled result structure, array preprocessable bits (special stuff needing attention that is referenced within the template)
  */
 function compile_template($data,$template_name,$theme,$lang,$tolerate_errors = false)
 {
@@ -789,14 +789,14 @@ function compile_template($data,$template_name,$theme,$lang,$tolerate_errors = f
 /**
  * A template has not been structurally cached, so compile it and store in the cache.
  *
- * @param  ID_TEXT			The theme the template is in the context of
- * @param  PATH				The path to the template file
- * @param  ID_TEXT			The codename of the template (e.g. foo)
- * @param  ID_TEXT			The actual codename to use for the template (e.g. foo_mobile)
- * @param  LANGUAGE_NAME	The language the template is in the context of
- * @param  string				File type suffix of template file (e.g. .tpl)
- * @param  ?ID_TEXT			The theme to cache in (NULL: main theme)
- * @return tempcode			The compiled tempcode
+ * @param  ID_TEXT                      The theme the template is in the context of
+ * @param  PATH                         The path to the template file
+ * @param  ID_TEXT                      The codename of the template (e.g. foo)
+ * @param  ID_TEXT                      The actual codename to use for the template (e.g. foo_mobile)
+ * @param  LANGUAGE_NAME                The language the template is in the context of
+ * @param  string                       File type suffix of template file (e.g. .tpl)
+ * @param  ?ID_TEXT                     The theme to cache in (NULL: main theme)
+ * @return tempcode                     The compiled tempcode
  */
 function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_orig = null)
 {
@@ -893,14 +893,14 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
 /**
  * Convert template text into tempcode format.
  *
- * @param  string			The template text
- * @param  integer		The position we are looking at in the text
- * @param  boolean		Whether this text is infact a directive, about to be put in the context of a wider template
- * @param  ID_TEXT		The codename of the template (e.g. foo)
- * @param  ?ID_TEXT		The theme it is for (NULL: current theme)
- * @param  ?ID_TEXT		The language it is for (NULL: current language)
- * @param  boolean		Whether to tolerate errors
- * @return mixed			The converted/compiled template as tempcode, OR if a directive, encoded directive information
+ * @param  string                       The template text
+ * @param  integer                      The position we are looking at in the text
+ * @param  boolean                      Whether this text is infact a directive, about to be put in the context of a wider template
+ * @param  ID_TEXT                      The codename of the template (e.g. foo)
+ * @param  ?ID_TEXT                     The theme it is for (NULL: current theme)
+ * @param  ?ID_TEXT                     The language it is for (NULL: current language)
+ * @param  boolean                      Whether to tolerate errors
+ * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
 function template_to_tempcode(/*&*/$text,$symbol_pos = 0,$inside_directive = false,$codename = '',$theme = null,$lang = null,$tolerate_errors = false)
 {
@@ -952,9 +952,9 @@ function template_to_tempcode(/*&*/$text,$symbol_pos = 0,$inside_directive = fal
 /**
  * Build a closure function for a compiled template.
  *
- * @param  string			The function name
- * @param  array			An array of lines to be output, each one in PHP format
- * @return string			Finished PHP code
+ * @param  string                       The function name
+ * @param  array                        An array of lines to be output, each one in PHP format
+ * @return string                       Finished PHP code
  */
 function build_closure_function($myfunc,$parts)
 {
@@ -975,7 +975,7 @@ function build_closure_function($myfunc,$parts)
         $funcdef = "\$tpl_funcs['$myfunc']=\$KEEP_TPL_FUNCS['$myfunc']=recall_named_function('" . uniqid('',true) . "','\$parameters,\$cl',\"extract(\\\$parameters,EXTR_PREFIX_ALL,'bound'); echo " . php_addslashes($code) . ";\");";
     }
 
-    //	Eval version also works. Easier to debug. Less performant due to re-parse requirement each time it is called
+    //   Eval version also works. Easier to debug. Less performant due to re-parse requirement each time it is called
     if ($GLOBALS['DEV_MODE']) {
         $unset_code = '';
         if (strpos($code,'isset($bound') !== false) {// Horrible but efficient code needed to allow IF_PASSED/IF_NON_PASSED to keep working when templates are put adjacent to each other, where some have it, and don't. This is needed as eval does not set a scope block.

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -25,23 +25,23 @@ function init__templates()
 {
     global $SKIP_TITLING;
     /** Whether we actually don't want to show screen titles in our output -- put them out as empty.
-	 * @global boolean $SKIP_TITLING
-	 */
+     * @global boolean $SKIP_TITLING
+     */
     $SKIP_TITLING = false;
 }
 
 /**
  * Get the tempcode for a standard box (CSS driven), with the specified content entered. Please rarely use this function; it is not good to assume people want anythings in one of these boxes... use templates instead
  *
- * @param  tempcode		The content being put inside the box
- * @param  mixed			The title of the standard box, string or Tempcode (blank: titleless standard box)
- * @param  ID_TEXT		The type of the box. Refers to a template (STANDARDBOX_type)
- * @param  string			The CSS width
- * @param  string			'|' separated list of options (meaning dependant upon templates interpretation)
- * @param  string			'|' separated list of meta information (key|value|key|value|...)
- * @param  string			'|' separated list of link information (linkhtml|...)
- * @param  string			Link to be added to the header of the box
- * @return tempcode		The contents, put inside a standard box, according to the other parameters
+ * @param  tempcode                     The content being put inside the box
+ * @param  mixed                        The title of the standard box, string or Tempcode (blank: titleless standard box)
+ * @param  ID_TEXT                      The type of the box. Refers to a template (STANDARDBOX_type)
+ * @param  string                       The CSS width
+ * @param  string                       '|' separated list of options (meaning dependant upon templates interpretation)
+ * @param  string                       '|' separated list of meta information (key|value|key|value|...)
+ * @param  string                       '|' separated list of link information (linkhtml|...)
+ * @param  string                       Link to be added to the header of the box
+ * @return tempcode                     The contents, put inside a standard box, according to the other parameters
  */
 function put_in_standard_box($content,$title = '',$type = 'default',$width = '',$options = '',$meta = '',$links = '',$top_links = '')
 {
@@ -85,12 +85,12 @@ function put_in_standard_box($content,$title = '',$type = 'default',$width = '',
  *
  * @sets_output_state
  *
- * @param  mixed			The title to use (usually, a language string code, see below)
- * @param  boolean		Whether the given title is actually a language string code, and hence gets dereferenced
- * @param  ?array			Parameters sent to the language string (NULL: none)
- * @param  ?tempcode		Separate title to put into the 'currently viewing' data (NULL: use $title)
- * @param  ?array			Awards to say this has won (NULL: none)
- * @return tempcode		The title tempcode
+ * @param  mixed                        The title to use (usually, a language string code, see below)
+ * @param  boolean                      Whether the given title is actually a language string code, and hence gets dereferenced
+ * @param  ?array                       Parameters sent to the language string (NULL: none)
+ * @param  ?tempcode                    Separate title to put into the 'currently viewing' data (NULL: use $title)
+ * @param  ?array                       Awards to say this has won (NULL: none)
+ * @return tempcode                     The title tempcode
  */
 function get_screen_title($title,$dereference_lang = true,$params = null,$user_online_title = null,$awards = null)
 {
@@ -159,16 +159,16 @@ function get_screen_title($title,$dereference_lang = true,$params = null,$user_o
 /**
  * Get the tempcode for a hyperlink.
  *
- * @param  mixed			The URL to put in the hyperlink (URLPATH or tempcode)
- * @param  mixed			The hyperlinks caption (either tempcode or string)
- * @param  boolean		Whether the link is an external one (by default, the external template makes it open in a new window)
- * @param  boolean		Whether to escape the hyperlink caption (only applies if it is not passed as tempcode)
- * @param  mixed			Link title (either tempcode or string) (blank: none)
- * @param  ?string		The access key to use (NULL: none)
- * @param  ?tempcode		Data to post (NULL: an ordinary link)
- * @param  ?string		Rel (link type) (NULL: no special type)
- * @param  ?ID_TEXT		Open in overlay with the default link/form target being as follows (e.g. _top or _self) (NULL: an ordinary link)
- * @return tempcode		The generated hyperlink
+ * @param  mixed                        The URL to put in the hyperlink (URLPATH or tempcode)
+ * @param  mixed                        The hyperlinks caption (either tempcode or string)
+ * @param  boolean                      Whether the link is an external one (by default, the external template makes it open in a new window)
+ * @param  boolean                      Whether to escape the hyperlink caption (only applies if it is not passed as tempcode)
+ * @param  mixed                        Link title (either tempcode or string) (blank: none)
+ * @param  ?string                      The access key to use (NULL: none)
+ * @param  ?tempcode                    Data to post (NULL: an ordinary link)
+ * @param  ?string                      Rel (link type) (NULL: no special type)
+ * @param  ?ID_TEXT                     Open in overlay with the default link/form target being as follows (e.g. _top or _self) (NULL: an ordinary link)
+ * @return tempcode                     The generated hyperlink
  */
 function hyperlink($url,$caption,$external = false,$escape = false,$title = '',$accesskey = null,$post_data = null,$rel = null,$overlay = null)
 {
@@ -187,10 +187,10 @@ function hyperlink($url,$caption,$external = false,$escape = false,$title = '',$
 /**
  * Get the tempcode for a paragraph. This function should only be used with escaped text strings that need to be put into a paragraph, not with sections of HTML. Remember, paragraphs are literally that, and should only be used with templates that don't assume that they are going to put the given parameters into paragraphs themselves.
  *
- * @param  mixed			The text to put into the paragraph (string or tempcode)
- * @param  string			GUID for call
- * @param  ?string		CSS classname (NULL: none)
- * @return tempcode		The generated paragraph
+ * @param  mixed                        The text to put into the paragraph (string or tempcode)
+ * @param  string                       GUID for call
+ * @param  ?string                      CSS classname (NULL: none)
+ * @return tempcode                     The generated paragraph
  */
 function paragraph($text,$guid = '',$class = null)
 {
@@ -200,9 +200,9 @@ function paragraph($text,$guid = '',$class = null)
 /**
  * Get the tempcode for a div. Similar to paragraph, but may contain more formatting (such as <br />'s)
  *
- * @param  tempcode		The tempcode to put into a div
- * @param  string			GUID for call
- * @return tempcode		The generated div with contents
+ * @param  tempcode                     The tempcode to put into a div
+ * @param  string                       GUID for call
+ * @return tempcode                     The generated div with contents
  */
 function div($tempcode,$guid = '')
 {
@@ -212,10 +212,10 @@ function div($tempcode,$guid = '')
 /**
  * Get the tempcode for an info page.
  *
- * @param  tempcode		The title of the info page
- * @param  mixed			The text to put on the info page (string, or language-tempcode)
- * @param  boolean		Whether match key messages / redirects should be supported
- * @return tempcode		The info page
+ * @param  tempcode                     The title of the info page
+ * @param  mixed                        The text to put on the info page (string, or language-tempcode)
+ * @param  boolean                      Whether match key messages / redirects should be supported
+ * @return tempcode                     The info page
  */
 function inform_screen($title,$text,$support_match_key_messages = false)
 {
@@ -232,11 +232,11 @@ function inform_screen($title,$text,$support_match_key_messages = false)
 /**
  * Get the tempcode for a warn page.
  *
- * @param  tempcode		The title of the warn page
- * @param  mixed			The text to put on the warn page (either tempcode or string)
- * @param  boolean		Whether to provide a back button
- * @param  boolean		Whether match key messages / redirects should be supported
- * @return tempcode		The warn page
+ * @param  tempcode                     The title of the warn page
+ * @param  mixed                        The text to put on the warn page (either tempcode or string)
+ * @param  boolean                      Whether to provide a back button
+ * @param  boolean                      Whether match key messages / redirects should be supported
+ * @return tempcode                     The warn page
  */
 function warn_screen($title,$text,$provide_back = true,$support_match_key_messages = false)
 {
@@ -247,9 +247,9 @@ function warn_screen($title,$text,$provide_back = true,$support_match_key_messag
 /**
  * Get the tempcode for a hidden form element.
  *
- * @param  ID_TEXT		The name which this input field is for
- * @param  string			The value for this input field
- * @return tempcode		The input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  string                       The value for this input field
+ * @return tempcode                     The input field
  */
 function form_input_hidden($name,$value)
 {
@@ -259,9 +259,9 @@ function form_input_hidden($name,$value)
 /**
  * Get the tempcode for a group of list entry. May be attached directly to form_input_list_entry (i.e. this is a group node in a shared tree), and also fed into form_input_list.
  *
- * @param  mixed			The title for the group
- * @param  tempcode		List entries for group
- * @return tempcode		The group
+ * @param  mixed                        The title for the group
+ * @param  tempcode                     List entries for group
+ * @return tempcode                     The group
  */
 function form_input_list_group($title,$entries)
 {
@@ -278,12 +278,12 @@ function form_input_list_group($title,$entries)
 /**
  * Get the tempcode for a list entry. (You would gather together the outputs of several of these functions, then put them in as the $content in a form_input_list function call).
  *
- * @param  string			The value for this entry
- * @param  boolean		Whether this entry is selected by default or not (Note: if nothing else is selected and this is the first, it will be selected by default anyway)
- * @param  mixed			The text associated with this choice (blank: just use name for text)
- * @param  boolean		Whether this entry will be put as red (marking it as important somehow)
- * @param  boolean		Whether this list entry is disabled (like a header in a list)
- * @return tempcode		The input field
+ * @param  string                       The value for this entry
+ * @param  boolean                      Whether this entry is selected by default or not (Note: if nothing else is selected and this is the first, it will be selected by default anyway)
+ * @param  mixed                        The text associated with this choice (blank: just use name for text)
+ * @param  boolean                      Whether this entry will be put as red (marking it as important somehow)
+ * @param  boolean                      Whether this list entry is disabled (like a header in a list)
+ * @return tempcode                     The input field
  */
 function form_input_list_entry($value,$selected = false,$text = '',$red = false,$disabled = false)
 {
@@ -292,8 +292,8 @@ function form_input_list_entry($value,$selected = false,$text = '',$red = false,
     }
 
     /* Causes a small performance hit and very unlikely to be needed
-	if (function_exists('filter_form_field_default')) // Don't include just for this (may not be used on a full input form), preserve memory
-		$selected=(filter_form_field_default($value,$selected?'1':'')=='1');*/
+    if (function_exists('filter_form_field_default')) // Don't include just for this (may not be used on a full input form), preserve memory
+        $selected=(filter_form_field_default($value,$selected?'1':'')=='1');*/
 
     return do_template('FORM_SCREEN_INPUT_LIST_ENTRY',array('_GUID' => 'dd76a2685d0fba5f819ef160b0816d03','SELECTED' => $selected,'DISABLED' => $disabled,'CLASS' => $red?'criticalfield':'','NAME' => is_integer($value)?strval($value):$value,'TEXT' => $text));
 }
@@ -301,8 +301,8 @@ function form_input_list_entry($value,$selected = false,$text = '',$red = false,
 /**
  * Display some raw text so that it is repeated as raw visually in HTML.
  *
- * @param  string			Input
- * @return tempcode		Output
+ * @param  string                       Input
+ * @return tempcode                     Output
  */
 function with_whitespace($in)
 {
@@ -315,13 +315,13 @@ function with_whitespace($in)
 /**
  * Redirect the user - transparently, storing a message that will be shown on their destination page.
  *
- * @param  tempcode		Title to display on redirect page
- * @param  mixed			Destination URL (may be Tempcode)
- * @param  ?mixed			Message to show (may be Tempcode) (NULL: standard redirection message)
- * @param  boolean		For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
- * @param  ID_TEXT	Code of message type to show
+ * @param  tempcode                     Title to display on redirect page
+ * @param  mixed                        Destination URL (may be Tempcode)
+ * @param  ?mixed                       Message to show (may be Tempcode) (NULL: standard redirection message)
+ * @param  boolean                      For intermediary hops, don't mark so as to read status messages - save them up for the next hop (which will not be intermediary)
+ * @param  ID_TEXT                      Code of message type to show
  * @set    warn inform fatal
- * @return tempcode		Redirection message (likely to not actually be seen due to instant redirection)
+ * @return tempcode                     Redirection message (likely to not actually be seen due to instant redirection)
  */
 function redirect_screen($title,$url,$text = null,$intermediary_hop = false,$msg_type = 'inform')
 {

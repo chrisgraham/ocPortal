@@ -15,24 +15,24 @@
 /*NO_API_CHECK*/
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		import
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    import
  */
 
 class Hook_ocf_auth_wordpress
 {
     /**
-	 * Try and authenticate for our password compatibility scheme.
-	 *
-	 * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
-	 * @param  ?MEMBER		The member ID (NULL: use member name)
-	 * @param  MD5				The md5-hashed password
-	 * @param  string			The raw password
-	 * @param  boolean		Whether this is a cookie login
-	 * @param  array			Row of OCF account
-	 * @return ?tempcode		Error message (NULL: none)
-	 */
+     * Try and authenticate for our password compatibility scheme.
+     *
+     * @param  ?SHORT_TEXT              The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
+     * @param  ?MEMBER                  The member ID (NULL: use member name)
+     * @param  MD5                      The md5-hashed password
+     * @param  string                   The raw password
+     * @param  boolean                  Whether this is a cookie login
+     * @param  array                    Row of OCF account
+     * @return ?tempcode                Error message (NULL: none)
+     */
     public function auth($username,$userid,$password_hashed,$password_raw,$cookie_login,$row)
     {
         if (class_exists('PasswordHash')) { // 'if' just there for code quality checker

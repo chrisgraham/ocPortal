@@ -8,26 +8,26 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		oc_gifts
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    oc_gifts
  */
 
 class Hook_pointstore_ocgifts
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
         require_lang('ocgifts');
     }
 
     /**
-	 * Standard pointstore item initialisation function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item initialisation function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -37,10 +37,10 @@ class Hook_pointstore_ocgifts
     }
 
     /**
-	 * Standard interface stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard interface stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action()
     {
         require_code('database_action');
@@ -92,10 +92,10 @@ class Hook_pointstore_ocgifts
     }
 
     /**
-	 * Standard actualisation stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard actualisation stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action_done()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));
@@ -120,10 +120,10 @@ class Hook_pointstore_ocgifts
     }
 
     /**
-	 * Standard actualisation stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard actualisation stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function action_done2()
     {
         $class = str_replace('hook_pointstore_','',strtolower(get_class($this)));

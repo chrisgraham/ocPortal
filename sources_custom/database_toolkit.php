@@ -43,13 +43,13 @@ function xml_dump_script()
         $only = get_param('only',null);
 
         echo '
-		<!DOCTYPE html>
-		<html xmlns="http://www.w3.org/1999/xhtml">
-		<head>
-		<title>XML/MySQL DB syncher</title>
-		</head>
-		<body>
-		';
+        <!DOCTYPE html>
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+        <title>XML/MySQL DB syncher</title>
+        </head>
+        <body>
+        ';
 
         echo '<p>Select the tables to sync below. Tables have been auto-ticked based on what seems to need re-synching.</p>';
         echo '<form title="Choose tables" method="post" action="' . escape_html(get_self_url(true)) . '">';
@@ -88,26 +88,26 @@ function xml_dump_script()
             $needs_doing = $count_mismatch || $date_mismatch || $missing || $default_selected;
 
             echo '
-				<div style="width: 500px">
-					<span style="float: right; font-style: italic">
-					' . ($missing?'[table is missing]':'') . '
-					' . ($count_mismatch?'[different record-counts]':'') . '
-					' . ($date_mismatch?'[different last-modified-time]':'') . '
-					</span>
+                    <div style="width: 500px">
+                            <span style="float: right; font-style: italic">
+                            ' . ($missing?'[table is missing]':'') . '
+                            ' . ($count_mismatch?'[different record-counts]':'') . '
+                            ' . ($date_mismatch?'[different last-modified-time]':'') . '
+                            </span>
 
-					<input ' . (($needs_doing)?'checked="checked" ':'') . 'type="checkbox" name="table_' . htmlentities($table_name) . '" id="table_' . htmlentities($table_name) . '" value="1" />
-					<label for="table_' . htmlentities($table_name) . '">' . htmlentities($table_name) . '</label>
-				</div>
-			';
+                            <input ' . (($needs_doing)?'checked="checked" ':'') . 'type="checkbox" name="table_' . htmlentities($table_name) . '" id="table_' . htmlentities($table_name) . '" value="1" />
+                            <label for="table_' . htmlentities($table_name) . '">' . htmlentities($table_name) . '</label>
+                    </div>
+            ';
         }
 
         echo '<p><input class="menu___generic_admin__sync button_screen" type="submit" value="Sync" /> &nbsp;&nbsp;&nbsp;&nbsp; [<a href="#" onclick="var form=document.getElementsByTagName(\'form\')[0]; for (var i=0;i&lt;form.elements.length;i++) if (form.elements[i].checked) form.elements[i].checked=false; return false;">un-tick all</a>]</p>';
         echo '</form>';
 
         echo '
-		</body>
-		</html>
-		';
+        </body>
+        </html>
+        ';
 
         exit();
     }
@@ -149,8 +149,8 @@ function xml_dump_script()
 /**
  * Get a list of the defines tables.
  *
- * @param  object			Database connection to look in
- * @return array			The tables
+ * @param  object                       Database connection to look in
+ * @return array                        The tables
  */
 function find_all_tables($db)
 {
@@ -173,13 +173,13 @@ function find_all_tables($db)
 /**
  * Get MySQL SQL code for the currently loaded database.
  *
- * @param  boolean		Whether to include 'DROP' statements
- * @param  boolean		Whether to output status as we go
- * @param  ?ID_TEXT		Table to look from (NULL: first table)
- * @param  ?array			Array of table names to skip (NULL: none)
- * @param  ?array			Array of only table names to do (NULL: all)
- * @param  boolean		Whether to echo out
- * @return array			The SQL statements
+ * @param  boolean                      Whether to include 'DROP' statements
+ * @param  boolean                      Whether to output status as we go
+ * @param  ?ID_TEXT                     Table to look from (NULL: first table)
+ * @param  ?array                       Array of table names to skip (NULL: none)
+ * @param  ?array                       Array of only table names to do (NULL: all)
+ * @param  boolean                      Whether to echo out
+ * @return array                        The SQL statements
  */
 function get_sql_dump($include_drops = false,$output_statuses = false,$from = null,$skip = null,$only = null,$echo = false)
 {
@@ -299,7 +299,7 @@ function get_sql_dump($include_drops = false,$output_statuses = false,$from = nu
 /**
  * Get a map of ocPortal field types, to actual mySQL types.
  *
- * @return array			The map
+ * @return array                        The map
  */
 function db_get_type_remap()
 {
@@ -333,9 +333,9 @@ function db_get_type_remap()
 /**
  * Create a new table.
  *
- * @param  ID_TEXT		The table name
- * @param  array			A map of field names to ocPortal field types (with *#? encodings)
- * @return string			The SQL for it
+ * @param  ID_TEXT                      The table name
+ * @param  array                        A map of field names to ocPortal field types (with *#? encodings)
+ * @return string                       The SQL for it
  */
 function db_create_table($table_name,$fields)
 {
@@ -361,7 +361,7 @@ function db_create_table($table_name,$fields)
 
         $type = isset($type_remap[$type])?$type_remap[$type]:$type;
 
-        $_fields .= '	  ' . $name . ' ' . $type;
+        $_fields .= '     ' . $name . ' ' . $type;
         if (substr($name,-13) == '__text_parsed') {
             $_fields .= ' DEFAULT \'\'';
         } elseif (substr($name,-13) == '__source_user') {
@@ -372,7 +372,7 @@ function db_create_table($table_name,$fields)
 
     $query = 'CREATE TABLE ' . get_table_prefix() . $table_name . ' (
 ' . $_fields . '
-	  PRIMARY KEY (' . $keys . ')
-	) type=' . ('MyISAM') . ';';
+      PRIMARY KEY (' . $keys . ')
+    ) type=' . ('MyISAM') . ';';
     return $query;
 }

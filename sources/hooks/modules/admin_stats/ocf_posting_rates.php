@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 class Hook_admin_stats_ocf_posting_rates
 {
     /**
-	 * Define stats screens implemented in this hook.
-	 *
-	 * @return ?array	List of screens, each being a map written as do-next icon specification style (NULL: hook is disabled).
-	 */
+     * Define stats screens implemented in this hook.
+     *
+     * @return ?array                   List of screens, each being a map written as do-next icon specification style (NULL: hook is disabled).
+     */
     public function info()
     {
         if (get_forum_type() != 'ocf') {
@@ -41,12 +41,12 @@ class Hook_admin_stats_ocf_posting_rates
 
 
     /**
-	 * The UI to show OCF posting rates.
-	 *
-	 * @param  object			The stats module object
-	 * @param  string			The screen type
-	 * @return tempcode		The UI
-	 */
+     * The UI to show OCF posting rates.
+     *
+     * @param  object                   The stats module object
+     * @param  string                   The screen type
+     * @return tempcode                 The UI
+     */
     public function posting_rates($ob,$type)
     {
         require_lang('ocf');

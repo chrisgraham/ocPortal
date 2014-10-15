@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		custom_comcode
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    custom_comcode
  */
 
 require_code('crud_module');
@@ -32,50 +32,50 @@ class Module_admin_custom_comcode extends standard_crud_module
     public $non_integer_id = true;
     public $menu_label = 'CUSTOM_COMCODE';
     public $javascript = "
-		var update_func=function() {
-			var e=document.getElementById('example');
-			e.value='['+tag.value;
-			var i=0,param;
-			do
-			{
-				param=document.getElementById('parameters_'+i);
-				if ((param) && (param.value!=''))
-				{
-					e.value+=' '+param.value.replace('=','=\"')+'\"';
-				}
-				i++;
-			}
-			while (param!==null);
-			e.value+='][/'+tag.value+']';
-		};
+        var update_func=function() {
+            var e=document.getElementById('example');
+            e.value='['+tag.value;
+            var i=0,param;
+            do
+            {
+                    param=document.getElementById('parameters_'+i);
+                    if ((param) && (param.value!=''))
+                    {
+                            e.value+=' '+param.value.replace('=','=\"')+'\"';
+                    }
+                    i++;
+            }
+            while (param!==null);
+            e.value+='][/'+tag.value+']';
+        };
 
-		var tag=document.getElementById('tag');
-		var i=0,param;
-		do
-		{
-			param=document.getElementById('parameters_'+i);
-			if (param) param.onblur=update_func;
-			i++;
-		}
-		while (param!==null);
-		tag.onblur=function() {
-			update_func();
-			var title=document.getElementById('title');
-			if (title.value=='') title.value=tag.value.substr(0,1).toUpperCase()+tag.value.substring(1,tag.value.length).replace(/\_/g,' ');
-		}
-		";
+        var tag=document.getElementById('tag');
+        var i=0,param;
+        do
+        {
+            param=document.getElementById('parameters_'+i);
+            if (param) param.onblur=update_func;
+            i++;
+        }
+        while (param!==null);
+        tag.onblur=function() {
+            update_func();
+            var title=document.getElementById('title');
+            if (title.value=='') title.value=tag.value.substr(0,1).toUpperCase()+tag.value.substring(1,tag.value.length).replace(/\_/g,' ');
+        }
+        ";
     public $orderer = 'tag_title';
     public $title_is_multi_lang = true;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -84,10 +84,10 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -101,19 +101,19 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Uninstall the module.
-	 */
+     * Uninstall the module.
+     */
     public function uninstall()
     {
         $GLOBALS['SITE_DB']->drop_table_if_exists('custom_comcode');
     }
 
     /**
-	 * Install the module.
-	 *
-	 * @param  ?integer	What version we're upgrading from (NULL: new install)
-	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
-	 */
+     * Install the module.
+     *
+     * @param  ?integer                 What version we're upgrading from (NULL: new install)
+     * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
+     */
     public function install($upgrade_from = null,$upgrade_from_hack = null)
     {
         $GLOBALS['SITE_DB']->create_table('custom_comcode',array(
@@ -133,12 +133,12 @@ class Module_admin_custom_comcode extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -151,11 +151,11 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         require_code('custom_comcode');
@@ -168,22 +168,22 @@ class Module_admin_custom_comcode extends standard_crud_module
             require_javascript('javascript_ajax');
             $script = find_script('snippet');
             $this->javascript .= "
-				var form=document.getElementById('main_form');
-				form.old_submit=form.onsubmit;
-				form.onsubmit=function()
-					{
-						document.getElementById('submit_button').disabled=true;
-						var url='" . addslashes($script) . "?snippet=exists_tag&name='+window.encodeURIComponent(form.elements['tag'].value);
-						if (!do_ajax_field_test(url))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
-						document.getElementById('submit_button').disabled=false;
-						if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-						return true;
-					};
-			";
+                    var form=document.getElementById('main_form');
+                    form.old_submit=form.onsubmit;
+                    form.onsubmit=function()
+                            {
+                                        document.getElementById('submit_button').disabled=true;
+                                        var url='" . addslashes($script) . "?snippet=exists_tag&name='+window.encodeURIComponent(form.elements['tag'].value);
+                                        if (!do_ajax_field_test(url))
+                                        {
+                                                        document.getElementById('submit_button').disabled=false;
+                                                        return false;
+                                        }
+                                        document.getElementById('submit_button').disabled=false;
+                                        if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                                        return true;
+                            };
+            ";
         }
 
         if ($type == 'misc') {
@@ -193,10 +193,10 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -210,11 +210,11 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A pair: The choose table, Whether re-ordering is supported from this screen.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -260,20 +260,20 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a Custom Comcode tag adding/editing form.
-	 *
-	 * @param  SHORT_TEXT	The title (name) of the Custom Comcode tag
-	 * @param  LONG_TEXT		The description of the tag
-	 * @param  BINARY			Whether the tag is enabled
-	 * @param  ID_TEXT		The actual tag code
-	 * @param  LONG_TEXT		What to replace the tag with
-	 * @param  LONG_TEXT		Example usage
-	 * @param  SHORT_TEXT	Comma-separated list of accepted parameters
-	 * @param  BINARY			Whether it is a dangerous tag
-	 * @param  BINARY			Whether it is a block tag
-	 * @param  BINARY			Whether it is a textual tag
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a Custom Comcode tag adding/editing form.
+     *
+     * @param  SHORT_TEXT               The title (name) of the Custom Comcode tag
+     * @param  LONG_TEXT                The description of the tag
+     * @param  BINARY                   Whether the tag is enabled
+     * @param  ID_TEXT                  The actual tag code
+     * @param  LONG_TEXT                What to replace the tag with
+     * @param  LONG_TEXT                Example usage
+     * @param  SHORT_TEXT               Comma-separated list of accepted parameters
+     * @param  BINARY                   Whether it is a dangerous tag
+     * @param  BINARY                   Whether it is a block tag
+     * @param  BINARY                   Whether it is a textual tag
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($title = '',$description = '',$enabled = 1,$tag = 'this',$replace = '<span class="example" style="color: {color}">{content}</span>',$example = '[this color="red"]blah[/this]',$parameters = 'color=black',$dangerous_tag = 0,$block_tag = 0,$textual_tag = 1)
     {
         $fields = new ocp_tempcode();
@@ -293,11 +293,11 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $m = $GLOBALS['SITE_DB']->query_select('custom_comcode',array('*'),array('tag_tag' => $id),'',1);
@@ -310,10 +310,10 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $tag = post_param('tag');
@@ -347,10 +347,10 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $tag = post_param('tag');
@@ -384,10 +384,10 @@ class Module_admin_custom_comcode extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         delete_custom_comcode_tag($id);

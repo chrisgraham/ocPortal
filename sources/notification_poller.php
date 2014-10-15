@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_notifications
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_notifications
  */
 
 /**
@@ -37,7 +37,7 @@ function notification_script()
     switch ($type) {
         case 'mark_all_read':
             notification_mark_all_read_script();
-            //break;	Intentionally continue on
+            //break; Intentionally continue on
         case 'poller':
             notification_poller_script();
             break;
@@ -108,9 +108,9 @@ function notification_poller_script()
 ]>
 
 <response>
-	<result>
-		<time>' . strval(time()) . '</time>
-	';
+    <result>
+        <time>' . strval(time()) . '</time>
+    ';
 
     $time_barrier = get_param_integer('time_barrier',time()-NOTIFICATION_POLL_FREQUENCY-NOTIFICATION_POLL_SAFETY_LAG_SECS);
 
@@ -138,9 +138,9 @@ function notification_poller_script()
         if (!is_null($max)) {
             list($display,$unread) = get_web_notifications($max);
             $xml .= '
-				<display_web_notifications>' . $display->evaluate() . '</display_web_notifications>
-				<unread_web_notifications>' . strval($unread) . '</unread_web_notifications>
-			';
+                    <display_web_notifications>' . $display->evaluate() . '</display_web_notifications>
+                    <unread_web_notifications>' . strval($unread) . '</unread_web_notifications>
+            ';
         }
 
         // Only keep around for X days
@@ -167,16 +167,16 @@ function notification_poller_script()
                 if (!is_null($max)) {
                     list($display,$unread) = get_pts($max);
                     $xml .= '
-						<display_pts>' . $display->evaluate() . '</display_pts>
-						<unread_pts>' . strval($unread) . '</unread_pts>
-					';
+                                        <display_pts>' . $display->evaluate() . '</display_pts>
+                                        <unread_pts>' . strval($unread) . '</unread_pts>
+                            ';
                 }
             }
         }
     }
 
     $xml .= '
-	</result>
+    </result>
 </response>
 ';
     echo $xml;
@@ -185,9 +185,9 @@ function notification_poller_script()
 /**
  * Get web notification templating.
  *
- * @param  ?integer		Number of notifications to show (NULL: no limit)
- * @param  integer		Start offset
- * @return array			A pair: Templating, Max rows
+ * @param  ?integer                     Number of notifications to show (NULL: no limit)
+ * @param  integer                      Start offset
+ * @return array                        A pair: Templating, Max rows
  */
 function get_web_notifications($max = null,$start = 0)
 {
@@ -251,8 +251,8 @@ function get_web_notifications($max = null,$start = 0)
 /**
  * Get XML for sending a notification to the current user's web browser.
  *
- * @param  array			Notification row
- * @return string			The XML
+ * @param  array                        Notification row
+ * @return string                       The XML
  */
 function web_notification_to_xml($row)
 {
@@ -282,31 +282,31 @@ function web_notification_to_xml($row)
 
     //sound="'.(($row['d_priority']<3)?'on':'off').'"
     return '
-		<web_notification
-			id="' . strval($row['id']) . '"
-			subject="' . escape_html($row['d_subject']) . '"
-			rendered="' . escape_html($rendered->evaluate()) . '"
-			message="' . escape_html(static_evaluate_tempcode($_message)) . '"
-			from_username="' . escape_html($username) . '"
-			from_member_id="' . escape_html(strval($member_id)) . '"
-			from_url="' . escape_html($from_url) . '"
-			from_avatar_url="' . escape_html($avatar_url) . '"
-			priority="' . escape_html(strval($row['d_priority'])) . '"
-			date_timestamp="' . escape_html(strval($row['d_date_and_time'])) . '"
-			date_written_time="' . escape_html(get_timezoned_time($row['d_date_and_time'])) . '"
-			notification_code="' . escape_html($row['d_notification_code']) . '"
-			code_category="' . escape_html($row['d_code_category']) . '"
-			sound="on"
-		/>
-	';
+        <web_notification
+            id="' . strval($row['id']) . '"
+            subject="' . escape_html($row['d_subject']) . '"
+            rendered="' . escape_html($rendered->evaluate()) . '"
+            message="' . escape_html(static_evaluate_tempcode($_message)) . '"
+            from_username="' . escape_html($username) . '"
+            from_member_id="' . escape_html(strval($member_id)) . '"
+            from_url="' . escape_html($from_url) . '"
+            from_avatar_url="' . escape_html($avatar_url) . '"
+            priority="' . escape_html(strval($row['d_priority'])) . '"
+            date_timestamp="' . escape_html(strval($row['d_date_and_time'])) . '"
+            date_written_time="' . escape_html(get_timezoned_time($row['d_date_and_time'])) . '"
+            notification_code="' . escape_html($row['d_notification_code']) . '"
+            code_category="' . escape_html($row['d_code_category']) . '"
+            sound="on"
+        />
+    ';
 }
 
 /**
  * Get PTs templating.
  *
- * @param  ?integer		Number of PTs to show (NULL: no limit)
- * @param  integer		Start offset
- * @return array			A pair: Templating, Max rows
+ * @param  ?integer                     Number of PTs to show (NULL: no limit)
+ * @param  integer                      Start offset
+ * @return array                        A pair: Templating, Max rows
  */
 function get_pts($max = null,$start = 0)
 {
@@ -368,8 +368,8 @@ function get_pts($max = null,$start = 0)
 /**
  * Get XML for sending a PT alert to the current user's web browser.
  *
- * @param  array			Notification row
- * @return string			The XML
+ * @param  array                        Notification row
+ * @return string                       The XML
  */
 function pt_to_xml($row)
 {
@@ -392,18 +392,18 @@ function pt_to_xml($row)
     ));
 
     return '
-		<pt
-			id="' . strval($row['p_id']) . '"
-			subject="' . escape_html($row['t_cache_first_title']) . '"
-			rendered="' . escape_html($rendered->evaluate()) . '"
-			message="' . escape_html(static_evaluate_tempcode($_message)) . '"
-			from_username="' . escape_html($username) . '"
-			from_member_id="' . escape_html(strval($member_id)) . '"
-			url="' . escape_html($url) . '"
-			from_avatar_url="' . escape_html($avatar_url) . '"
-			date_timestamp="' . escape_html(strval($row['p_time'])) . '"
-			date_written_time="' . escape_html(get_timezoned_time($row['p_time'])) . '"
-			sound="on"
-		/>
-	';
+        <pt
+            id="' . strval($row['p_id']) . '"
+            subject="' . escape_html($row['t_cache_first_title']) . '"
+            rendered="' . escape_html($rendered->evaluate()) . '"
+            message="' . escape_html(static_evaluate_tempcode($_message)) . '"
+            from_username="' . escape_html($username) . '"
+            from_member_id="' . escape_html(strval($member_id)) . '"
+            url="' . escape_html($url) . '"
+            from_avatar_url="' . escape_html($avatar_url) . '"
+            date_timestamp="' . escape_html(strval($row['p_time'])) . '"
+            date_written_time="' . escape_html(get_timezoned_time($row['p_time'])) . '"
+            sound="on"
+        />
+    ';
 }

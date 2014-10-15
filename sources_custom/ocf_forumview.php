@@ -3,11 +3,11 @@
 /**
  * Render a topic row (i.e. a row in a forum or results view), from given details (from ocf_get_topic_array).
  *
- * @param  array		The details (array containing: last_post_id, id, modifiers, emoticon, first_member_id, first_username, first_post, num_posts, num_views).
- * @param  boolean	Whether the viewing member has the facility to mark off topics (send as false if there are no actions for them to perform).
- * @param  boolean	Whether the topic is a Private Topic.
- * @param  ?string	The forum name (NULL: do not show the forum name).
- * @return tempcode	The topic row.
+ * @param  array                        The details (array containing: last_post_id, id, modifiers, emoticon, first_member_id, first_username, first_post, num_posts, num_views).
+ * @param  boolean                      Whether the viewing member has the facility to mark off topics (send as false if there are no actions for them to perform).
+ * @param  boolean                      Whether the topic is a Private Topic.
+ * @param  ?string                      The forum name (NULL: do not show the forum name).
+ * @return tempcode                     The topic row.
  */
 function ocf_render_topic($topic,$has_topic_marking,$pt = false,$show_forum = null)
 {

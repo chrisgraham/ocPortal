@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		newsletter
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    newsletter
  */
 
 class Hook_cron_newsletter_periodic
 {
     /**
-	 * Run function for CRON hooks. Searches for tasks to perform.
-	 */
+     * Run function for CRON hooks. Searches for tasks to perform.
+     */
     public function run()
     {
         // This hook looks for a 'periodic newsletter', which is a 'new content'
@@ -40,11 +40,11 @@ class Hook_cron_newsletter_periodic
     }
 
     /**
-	 * Send a periodic newsletter.
-	 *
-	 * @param  array			Details of periodic newsletter
-	 * @return ?TIME			Time was sent (NULL: not sent)
-	 */
+     * Send a periodic newsletter.
+     *
+     * @param  array                    Details of periodic newsletter
+     * @return ?TIME                    Time was sent (NULL: not sent)
+     */
     public function newsletter_periodic_handle($periodic_row)
     {
         // If we're here then we have a periodic newsletter along with details of

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		banners
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    banners
  */
 
 /**
@@ -31,11 +31,11 @@ function init__banners()
 /**
  * Get tempcode for a banner 'feature box' for the given row
  *
- * @param  array			The database field row of it
- * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		A box for it, linking to the full page
+ * @param  array                        The database field row of it
+ * @param  ID_TEXT                      The zone to use
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     A box for it, linking to the full page
  */
 function render_banner_box($row,$zone = '_SEARCH',$give_context = true,$guid = '')
 {
@@ -65,11 +65,11 @@ function render_banner_box($row,$zone = '_SEARCH',$give_context = true,$guid = '
 /**
  * Get tempcode for a banner type 'feature box' for the given row
  *
- * @param  array			The database field row of it
- * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		A box for it, linking to the full page
+ * @param  array                        The database field row of it
+ * @param  ID_TEXT                      The zone to use
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     A box for it, linking to the full page
  */
 function render_banner_type_box($row,$zone = '_SEARCH',$give_context = true,$guid = '')
 {
@@ -99,13 +99,13 @@ function render_banner_type_box($row,$zone = '_SEARCH',$give_context = true,$gui
 /**
  * Show a banner according to GET parameter specification.
  *
- * @param  boolean		Whether to return a result rather than outputting
- * @param  ?string		Whether we are displaying or click-processing (NULL: get from URL param)
+ * @param  boolean                      Whether to return a result rather than outputting
+ * @param  ?string                      Whether we are displaying or click-processing (NULL: get from URL param)
  * @set    "click" ""
- * @param  ?string		Specific banner to display (NULL: get from URL param) (blank: randomise)
- * @param  ?string		Banner type to display (NULL: get from URL param)
- * @param  ?string		The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (NULL: get from URL param) (blank: our own site)
- * @return ?tempcode		Result (NULL: we weren't asked to return the result)
+ * @param  ?string                      Specific banner to display (NULL: get from URL param) (blank: randomise)
+ * @param  ?string                      Banner type to display (NULL: get from URL param)
+ * @param  ?string                      The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (NULL: get from URL param) (blank: our own site)
+ * @return ?tempcode                    Result (NULL: we weren't asked to return the result)
  */
 function banners_script($ret = false,$type = null,$dest = null,$b_type = null,$source = null)
 {
@@ -333,8 +333,8 @@ function banners_script($ret = false,$type = null,$dest = null,$b_type = null,$s
 /**
  * Get a nice, formatted XHTML list to select a banner type
  *
- * @param  ?ID_TEXT		The currently selected licence (NULL: none selected)
- * @return tempcode		The list of categories
+ * @param  ?ID_TEXT                     The currently selected licence (NULL: none selected)
+ * @return tempcode                     The list of categories
  */
 function create_selection_list_banner_types($it = null)
 {
@@ -357,16 +357,16 @@ function create_selection_list_banner_types($it = null)
 /**
  * Get the tempcode for the display of the defined banner.
  *
- * @param  ID_TEXT		The name of the banner
- * @param  SHORT_TEXT	The title text of the banner (displayed for a text banner only)
- * @param  tempcode		The caption of the banner
- * @param  LONG_TEXT		The full HTML/PHP for the banner
- * @param  URLPATH		The URL to the banner image
- * @param  ID_TEXT		The name of the banner for the site that will get the return-hit (blank: none)
- * @param  URLPATH		The URL to the banner's target
- * @param  ID_TEXT		The banner type
- * @param  MEMBER			The submitting user
- * @return tempcode		The rendered banner
+ * @param  ID_TEXT                      The name of the banner
+ * @param  SHORT_TEXT                   The title text of the banner (displayed for a text banner only)
+ * @param  tempcode                     The caption of the banner
+ * @param  LONG_TEXT                    The full HTML/PHP for the banner
+ * @param  URLPATH                      The URL to the banner image
+ * @param  ID_TEXT                      The name of the banner for the site that will get the return-hit (blank: none)
+ * @param  URLPATH                      The URL to the banner's target
+ * @param  ID_TEXT                      The banner type
+ * @param  MEMBER                       The submitting user
+ * @return tempcode                     The rendered banner
  */
 function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$url,$b_type,$submitter)
 {
@@ -465,9 +465,9 @@ function show_banner($name,$title_text,$caption,$direct_code,$img_url,$source,$u
 /**
  * Get a list of banners.
  *
- * @param  ?AUTO_LINK	The ID of the banner selected by default (NULL: no specific default)
- * @param  ?MEMBER		Only show banners owned by the member (NULL: no such restriction)
- * @return tempcode		The list
+ * @param  ?AUTO_LINK                   The ID of the banner selected by default (NULL: no specific default)
+ * @param  ?MEMBER                      Only show banners owned by the member (NULL: no such restriction)
+ * @return tempcode                     The list
  */
 function create_selection_list_banners($it = null,$only_owned = null)
 {

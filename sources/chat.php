@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 /**
@@ -39,11 +39,11 @@ function init__chat()
 /**
  * Get tempcode for a chat room 'feature box' for the given row
  *
- * @param  array			The database field row of it
- * @param  ID_TEXT		The zone to use
- * @param  boolean		Whether to include context (i.e. say WHAT this is, not just show the actual content)
- * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
- * @return tempcode		A box for it, linking to the full page
+ * @param  array                        The database field row of it
+ * @param  ID_TEXT                      The zone to use
+ * @param  boolean                      Whether to include context (i.e. say WHAT this is, not just show the actual content)
+ * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
+ * @return tempcode                     A box for it, linking to the full page
  */
 function render_chat_box($row,$zone = '_SEARCH',$give_context = true,$guid = '')
 {
@@ -85,7 +85,7 @@ function messages_script()
     }
 
     // Check we are allowed here
-    //if (!has_actual_page_access(get_member(),'chat')) access_denied('PAGE_ACCESS');	Actually we'll use room permissions for that; don't want to block the shoutbox
+    //if (!has_actual_page_access(get_member(),'chat')) access_denied('PAGE_ACCESS');  Actually we'll use room permissions for that; don't want to block the shoutbox
 
     // Check the action
     $action = get_param('action','new');
@@ -247,8 +247,8 @@ function messages_script()
 /**
  * Find if a member is befriended by the current member.
  *
- * @param  MEMBER				The member being checked
- * @return boolean			Whether the member is befriended
+ * @param  MEMBER                       The member being checked
+ * @return boolean                      Whether the member is befriended
  */
 function member_befriended($member_id)
 {
@@ -272,8 +272,8 @@ function member_befriended($member_id)
 /**
  * Filter an invite list to make sure people who are blocking don't get drawn in and hence their blocking unmasked.
  *
- * @param  string			Comma-separated people list
- * @return string			Filtered comma-separated people list
+ * @param  string                       Comma-separated people list
+ * @return string                       Filtered comma-separated people list
  */
 function filter_invites_for_blocking($people)
 {
@@ -295,7 +295,7 @@ function filter_invites_for_blocking($people)
 /**
  * Prune membership of chat room.
  *
- * @param  AUTO_LINK			Room ID (or -1 if all rooms)
+ * @param  AUTO_LINK                    Room ID (or -1 if all rooms)
  */
 function chat_room_prune($room_id)
 {
@@ -376,11 +376,11 @@ function chat_room_prune($room_id)
 /**
  * Output messages (in XML format) from up to five minutes ago (give somebody who's just joined the chatroom some chat backlog), or the messages posted since the last check.
  *
- * @param  AUTO_LINK			Room ID (or -1 to mean 'all' as used for IM global process, -2 to mean none)
- * @param  boolean			Output the backlog?
- * @param  ?AUTO_LINK		Latest received message ID (NULL: we're not getting latest messages)
- * @param  ?AUTO_LINK		Latest event ID (NULL: we're not getting events, but we do request a null event so we can use that as a future reference point)
- * @param  string				Events output to append
+ * @param  AUTO_LINK                    Room ID (or -1 to mean 'all' as used for IM global process, -2 to mean none)
+ * @param  boolean                      Output the backlog?
+ * @param  ?AUTO_LINK                   Latest received message ID (NULL: we're not getting latest messages)
+ * @param  ?AUTO_LINK                   Latest event ID (NULL: we're not getting events, but we do request a null event so we can use that as a future reference point)
+ * @param  string                       Events output to append
  */
 function _chat_messages_script_ajax($room_id,$backlog = false,$message_id = null,$event_id = null,$events_output = '')
 {
@@ -642,9 +642,9 @@ function _chat_messages_script_ajax($room_id,$backlog = false,$message_id = null
 ]>
 
 <response>
-	<result>
+    <result>
 ' . $tracking_output . $events_output . $invitations_output . $messages_output . '
-	</result>
+    </result>
 </response>';
     echo $output;
 }
@@ -652,9 +652,9 @@ function _chat_messages_script_ajax($room_id,$backlog = false,$message_id = null
 /**
  * Find whether a member is active in chat (i.e. not away).
  *
- * @param  MEMBER			Member ID
- * @param  ?AUTO_LINK	Room ID (NULL: lobby)
- * @return boolean		Whether the member is active
+ * @param  MEMBER                       Member ID
+ * @param  ?AUTO_LINK                   Room ID (NULL: lobby)
+ * @return boolean                      Whether the member is active
  */
 function chatter_active($member_id,$room_id = null)
 {
@@ -670,10 +670,10 @@ function chatter_active($member_id,$room_id = null)
 /**
  * Find whether a member is a moderator of a chat room.
  *
- * @param  MEMBER			Member ID
- * @param  AUTO_LINK		Room ID
- * @param  ?MEMBER		Room owner (NULL: none)
- * @return boolean		Whether the member is a moderator of the chat room
+ * @param  MEMBER                       Member ID
+ * @param  AUTO_LINK                    Room ID
+ * @param  ?MEMBER                      Room owner (NULL: none)
+ * @return boolean                      Whether the member is a moderator of the chat room
  */
 function is_chat_moderator($member_id,$room_id,$room_owner)
 {
@@ -683,11 +683,11 @@ function is_chat_moderator($member_id,$room_id,$room_owner)
 /**
  * Handle an AJAX message posting request.
  *
- * @param  AUTO_LINK		Room ID
- * @param  string			The message
- * @param  string			Font name
- * @param  string			Font colour
- * @param  BINARY			Whether this is the first message sent out to this room, since some change
+ * @param  AUTO_LINK                    Room ID
+ * @param  string                       The message
+ * @param  string                       Font name
+ * @param  string                       Font colour
+ * @param  BINARY                       Whether this is the first message sent out to this room, since some change
  */
 function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 {
@@ -749,9 +749,9 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 ]>
 
 <response>
-	<result>
-		' . $messages_output . '
-	</result>
+    <result>
+        ' . $messages_output . '
+    </result>
 </response>';
         echo $output;
 
@@ -815,11 +815,11 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
     }
 
     /*if ($return=='0') Flood control creates error, but we'd rather see it shown inline
-	{
-		prepare_for_known_ajax_response();
+    {
+        prepare_for_known_ajax_response();
 
-		header('Content-Type: application/xml');
-		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
+        header('Content-Type: application/xml');
+        $output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
 <!DOCTYPE xc:content [
 <!ENTITY euro "&#8364;">
 <!ENTITY ldquo "&#8220;">
@@ -847,10 +847,10 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 ]>
 
 <error />';
-			echo $output;
+            echo $output;
 
-		return;
-	}*/
+        return;
+    }*/
 
     // Send response of new messages, so we get instant result
     _chat_messages_script_ajax(($room_row['is_im'] == 1)?-1:$room_id,false,either_param_integer('message_id',0),either_param_integer('event_id',0));
@@ -859,12 +859,12 @@ function _chat_post_message_ajax($room_id,$message,$font,$colour,$first_message)
 /**
  * Enter a message into the database for the specified room, and with the specified parameters. The message is filtered for banned words, and is compressed into a tempcode storage format.
  *
- * @param  AUTO_LINK			The room ID for the message to be posted in
- * @param  LONG_TEXT			The message body
- * @param  SHORT_TEXT		The font name for the message
- * @param  SHORT_TEXT		The text colour for the message
- * @param  SHORT_INTEGER	The wrap position for the message
- * @return boolean			Whether the message was successfully posted or not
+ * @param  AUTO_LINK                    The room ID for the message to be posted in
+ * @param  LONG_TEXT                    The message body
+ * @param  SHORT_TEXT                   The font name for the message
+ * @param  SHORT_TEXT                   The text colour for the message
+ * @param  SHORT_INTEGER                The wrap position for the message
+ * @return boolean                      Whether the message was successfully posted or not
  */
 function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos = 60)
 {
@@ -1009,8 +1009,8 @@ function chat_post_message($room_id,$message,$font_name,$text_colour,$wrap_pos =
 /**
  * Get the people who have posted a message in the specified room within the last x minutes (defaults to five). Note that this function performs no pruning- the chat lobby will do that. It does do an activity time-range select though.
  *
- * @param	?AUTO_LINK		The room ID (NULL: lobby)
- * @return  array				A map of members in the room. User ID=>Username
+ * @param   ?AUTO_LINK     The room ID (NULL: lobby)
+ * @return  array          A map of members in the room. User ID=>Username
  */
 function get_chatters_in_room($room_id)
 {
@@ -1034,8 +1034,8 @@ function get_chatters_in_room($room_id)
 /**
  * Get some template code showing the number of chatters in a room.
  *
- * @param	array				A mapping (user=>username) of the chatters in the room
- * @return	tempcode			The Tempcode
+ * @param   array          A mapping (user=>username) of the chatters in the room
+ * @return  tempcode       The Tempcode
  */
 function get_chatters_in_room_tpl($users)
 {
@@ -1072,9 +1072,9 @@ function get_chatters_in_room_tpl($users)
 /**
  * Get the textual name of the specified chatroom, from its room ID.
  *
- * @param  AUTO_LINK		The room ID
- * @param  boolean		Allow the chatroom to not be found (i.e. don't die if it can't be)
- * @return ?SHORT_TEXT	The room name (NULL: not found)
+ * @param  AUTO_LINK                    The room ID
+ * @param  boolean                      Allow the chatroom to not be found (i.e. don't die if it can't be)
+ * @return ?SHORT_TEXT                  The room name (NULL: not found)
  */
 function get_chatroom_name($room_id,$allow_null = false)
 {
@@ -1087,9 +1087,9 @@ function get_chatroom_name($room_id,$allow_null = false)
 /**
  * Get the ID of the specified chatroom, from its room name.
  *
- * @param  SHORT_TEXT		The name of the chatroom
- * @param  boolean			Make sure the room is not an IM room. If it is an IM room, pretend it does not exist.
- * @return ?AUTO_LINK		The ID of the chatroom (NULL: no such chat room)
+ * @param  SHORT_TEXT                   The name of the chatroom
+ * @param  boolean                      Make sure the room is not an IM room. If it is an IM room, pretend it does not exist.
+ * @return ?AUTO_LINK                   The ID of the chatroom (NULL: no such chat room)
  */
 function get_chatroom_id($room_name,$must_not_be_im = false)
 {
@@ -1103,7 +1103,7 @@ function get_chatroom_id($room_name,$must_not_be_im = false)
 /**
  * Get an array of all the chatrooms.
  *
- * @return	array			An array of all the chatrooms
+ * @return  array       An array of all the chatrooms
  */
 function chat_get_all_rooms()
 {
@@ -1115,19 +1115,19 @@ function chat_get_all_rooms()
  * If you set the $dereference flag, all the messages will be dereferenced for you, and if you set the $downloading flag, the array is returned in a format appropriate for things like downloading the chat logs.
  * $start and $finish are used to cutoff the number of messages returned, based on their posting date and time, and the $uptoid variable is used to make the function only return the messages newer than the ID specified.
  *
- * @param  AUTO_LINK		The room ID (-1 for IM)
- * @param  array			Rooms database rows that we'll need
- * @param  ?integer		The maximum number of messages to be returned (NULL: no maximum)
- * @param  boolean		Whether to dereference the returned messages
- * @param  boolean		Whether to return the messages in a downloadeable format (using the templates for log downloading)
- * @param  ?integer		The datetime stamp to start gathering messages from (NULL: all)
- * @param  ?integer		The datetime stamp to stop gathering messages at (NULL: current time)
- * @param  ?integer		The lowest message ID to return (NULL: no special lowest number)
- * @param  ?ID_TEXT		The zone the chat module is in (NULL: find it)
- * @param  ?AUTO_LINK	The language ID for the "entering room" message (NULL: not entering the room)
- * @param  boolean		Return the current user's messages?
- * @param  boolean		Return system messages
- * @return array			An array of all the messages collected according to the search criteria
+ * @param  AUTO_LINK                    The room ID (-1 for IM)
+ * @param  array                        Rooms database rows that we'll need
+ * @param  ?integer                     The maximum number of messages to be returned (NULL: no maximum)
+ * @param  boolean                      Whether to dereference the returned messages
+ * @param  boolean                      Whether to return the messages in a downloadeable format (using the templates for log downloading)
+ * @param  ?integer                     The datetime stamp to start gathering messages from (NULL: all)
+ * @param  ?integer                     The datetime stamp to stop gathering messages at (NULL: current time)
+ * @param  ?integer                     The lowest message ID to return (NULL: no special lowest number)
+ * @param  ?ID_TEXT                     The zone the chat module is in (NULL: find it)
+ * @param  ?AUTO_LINK                   The language ID for the "entering room" message (NULL: not entering the room)
+ * @param  boolean                      Return the current user's messages?
+ * @param  boolean                      Return system messages
+ * @return array                        An array of all the messages collected according to the search criteria
  */
 function chat_get_room_content($room_id,$_rooms,$cutoff = null,$dereference = false,$downloading = false,$start = null,$finish = null,$uptoid = null,$zone = null,$entering_room = null,$return_my_messages = true,$return_system_messages = true)
 {
@@ -1299,16 +1299,16 @@ function chat_get_room_content($room_id,$_rooms,$cutoff = null,$dereference = fa
 /**
  * Parse chat code tags (called multiple times, for each tag).
  *
- * @param  string			The text we are using
- * @param  string			The tag name we are parsing
- * @param  string			1st param
- * @param  string			2nd param
- * @param  SHORT_TEXT	The username of who made this chatcode
- * @param  ?integer		The maximum number of messages to be returned (NULL: no maximum)
- * @param  ID_TEXT		The zone that our chat module is in
- * @param  AUTO_LINK		The room ID the message is in
- * @param  BINARY			Whether this is within a system message
- * @return array			A pair: whether the message was deleted, and the new text of the message
+ * @param  string                       The text we are using
+ * @param  string                       The tag name we are parsing
+ * @param  string                       1st param
+ * @param  string                       2nd param
+ * @param  SHORT_TEXT                   The username of who made this chatcode
+ * @param  ?integer                     The maximum number of messages to be returned (NULL: no maximum)
+ * @param  ID_TEXT                      The zone that our chat module is in
+ * @param  AUTO_LINK                    The room ID the message is in
+ * @param  BINARY                       Whether this is within a system message
+ * @return array                        A pair: whether the message was deleted, and the new text of the message
  */
 function _deal_with_chatcode_tags($text,$tag,$pm_user,$pm_message,$username,$cutoff,$zone,$room_id,$system_message)
 {
@@ -1326,13 +1326,13 @@ function _deal_with_chatcode_tags($text,$tag,$pm_user,$pm_message,$username,$cut
 /**
  * Parse private message chat code tag.
  *
- * @param  string			The member a private message should be sent to
- * @param  string			The private message
- * @param  SHORT_TEXT	The username of who made this chatcode
- * @param  string			The text we are using
- * @param  AUTO_LINK		The room ID the message is in
- * @param  BINARY			Whether this is within a system message
- * @return array			A pair: whether the message was deleted, and the new text of the message
+ * @param  string                       The member a private message should be sent to
+ * @param  string                       The private message
+ * @param  SHORT_TEXT                   The username of who made this chatcode
+ * @param  string                       The text we are using
+ * @param  AUTO_LINK                    The room ID the message is in
+ * @param  BINARY                       Whether this is within a system message
+ * @return array                        A pair: whether the message was deleted, and the new text of the message
  */
 function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_id,$system_message)
 {
@@ -1385,12 +1385,12 @@ function _deal_with_chatcode_private($pm_user,$pm_message,$username,$text,$room_
 /**
  * Parse invitation chat code tag.
  *
- * @param  string			Comma-separated list of members to invite
- * @param  string			The room name
- * @param  SHORT_TEXT	The username of who made this chatcode
- * @param  string			The text we are using
- * @param  ID_TEXT		The zone the chat module is in
- * @return array			A pair: whether the message was deleted, and the new text of the message
+ * @param  string                       Comma-separated list of members to invite
+ * @param  string                       The room name
+ * @param  SHORT_TEXT                   The username of who made this chatcode
+ * @param  string                       The text we are using
+ * @param  ID_TEXT                      The zone the chat module is in
+ * @return array                        A pair: whether the message was deleted, and the new text of the message
  */
 function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 {
@@ -1423,12 +1423,12 @@ function _deal_with_chatcode_invite($pm_user,$pm_message,$username,$text,$zone)
 /**
  * Parse room creation chat code tag.
  *
- * @param  string			The room name
- * @param  string			Comma-separated list of members to allow in
- * @param  SHORT_TEXT	The username of who made this chatcode
- * @param  string			The text we are using
- * @param  ?integer		The maximum number of messages to be returned (NULL: no maximum)
- * @return array			A pair: whether the message was deleted, and the new text of the message
+ * @param  string                       The room name
+ * @param  string                       Comma-separated list of members to allow in
+ * @param  SHORT_TEXT                   The username of who made this chatcode
+ * @param  string                       The text we are using
+ * @param  ?integer                     The maximum number of messages to be returned (NULL: no maximum)
+ * @return array                        A pair: whether the message was deleted, and the new text of the message
  */
 function _deal_with_chatcode_newroom($pm_user,$pm_message,$username,$text,$cutoff)
 {
@@ -1480,9 +1480,9 @@ function _deal_with_chatcode_newroom($pm_user,$pm_message,$username,$text,$cutof
 /**
  * Remove any messages from the list of messages that aren't mentioned in the list of message IDs.
  *
- * @param  array			Original list of messages
- * @param  array			List of message IDs to keep
- * @return array			A new list of messages
+ * @param  array                        Original list of messages
+ * @param  array                        List of message IDs to keep
+ * @return array                        A new list of messages
  */
 function _remove_empty_messages($messages,$message_ids)
 {
@@ -1498,8 +1498,8 @@ function _remove_empty_messages($messages,$message_ids)
 /**
  * Takes a comma-separated list of usernames, split it up, convert all the usernames to IDs, and put it all back together again.
  *
- * @param	string			A comma-separated list of usernames
- * @return  string			A comma-separated list of member IDs
+ * @param   string         A comma-separated list of usernames
+ * @return  string         A comma-separated list of member IDs
  */
 function parse_allow_list_input($_allow)
 {
@@ -1527,11 +1527,11 @@ function parse_allow_list_input($_allow)
 /**
  * Check whether a member has access to the chatroom.
  *
- * @param  mixed				The row of the chat room to check for access OR it's ID (AUTO_LINK)
- * @param  boolean			Whether to return false if there is no access (as opposed to bombing out)
- * @param  ?MEMBER			The member to check as (NULL: current member)
- * @param  boolean			Whether to also ensure for $member_id having explicit access
- * @return boolean			Whether the current member has access to the chatroom
+ * @param  mixed                        The row of the chat room to check for access OR it's ID (AUTO_LINK)
+ * @param  boolean                      Whether to return false if there is no access (as opposed to bombing out)
+ * @param  ?MEMBER                      The member to check as (NULL: current member)
+ * @param  boolean                      Whether to also ensure for $member_id having explicit access
+ * @return boolean                      Whether the current member has access to the chatroom
  */
 function check_chatroom_access($room,$ret = false,$member_id = null,$must_be_explicit = false)
 {
@@ -1622,7 +1622,7 @@ function check_chatroom_access($room,$ret = false,$member_id = null,$must_be_exp
 /**
  * Get a template that will set up the chat sound effects as for what this member needs.
  *
- * @return tempcode		Template to set up chat sound effects.
+ * @return tempcode                     Template to set up chat sound effects.
  */
 function get_chat_sound_tpl()
 {

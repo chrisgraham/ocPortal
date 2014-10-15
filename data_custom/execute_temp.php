@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 // Find ocPortal base directory, and chdir into it
@@ -53,7 +53,7 @@ if (!headers_sent()) {
 /**
  * Execute some temporary code put into this function.
  *
- * @return  mixed		Arbitrary result to output, if no text has already gone out
+ * @return  mixed    Arbitrary result to output, if no text has already gone out
  */
 function execute_temp()
 {

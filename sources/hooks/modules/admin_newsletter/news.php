@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		news
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    news
  */
 
 class Hook_whats_news_news
 {
     /**
-	 * Find selectable (filterable) categories.
-	 *
-	 * @return ?array				Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
-	 */
+     * Find selectable (filterable) categories.
+     *
+     * @return ?array                   Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
+     */
     public function choose_categories()
     {
         if (!addon_installed('news')) {
@@ -38,14 +38,14 @@ class Hook_whats_news_news
     }
 
     /**
-	 * Run function for newsletter hooks.
-	 *
-	 * @param  TIME				The time that the entries found must be newer than
-	 * @param  LANGUAGE_NAME	The language the entries found must be in
-	 * @param  string				Category filter to apply
-	 * @param  BINARY				Whether to use full article instead of summary
-	 * @return array				Tuple of result details
-	 */
+     * Run function for newsletter hooks.
+     *
+     * @param  TIME                     The time that the entries found must be newer than
+     * @param  LANGUAGE_NAME            The language the entries found must be in
+     * @param  string                   Category filter to apply
+     * @param  BINARY                   Whether to use full article instead of summary
+     * @return array                    Tuple of result details
+     */
     public function run($cutoff_time,$lang,$filter,$in_full = 1)
     {
         if (!addon_installed('news')) {

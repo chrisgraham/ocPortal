@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_clubs
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_clubs
  */
 
 require_code('crud_module');
@@ -36,14 +36,14 @@ class Module_cms_ocf_groups extends standard_crud_module
     public $orderer = 'g_name';
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -54,12 +54,12 @@ class Module_cms_ocf_groups extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -72,11 +72,11 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         if (get_forum_type() != 'ocf') {
@@ -100,10 +100,10 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -117,14 +117,14 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a adding/editing form.
-	 *
-	 * @param  ?GROUP			The usergroup being edited (NULL: adding, not editing, and let's choose the current member)
-	 * @param  SHORT_TEXT	The usergroup name
-	 * @param  ?ID_TEXT		The username of the usergroup leader (NULL: none picked yet)
-	 * @param  BINARY			Whether members may join this usergroup without requiring any special permission
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Get tempcode for a adding/editing form.
+     *
+     * @param  ?GROUP                   The usergroup being edited (NULL: adding, not editing, and let's choose the current member)
+     * @param  SHORT_TEXT               The usergroup name
+     * @param  ?ID_TEXT                 The username of the usergroup leader (NULL: none picked yet)
+     * @param  BINARY                   Whether members may join this usergroup without requiring any special permission
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function get_form_fields($id = null,$name = '',$group_leader = null,$open_membership = 1)
     {
         if (is_null($group_leader)) {
@@ -141,11 +141,11 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module table function.
-	 *
-	 * @param  array			Details to go to build_url for link to the next screen.
-	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
-	 */
+     * Standard crud_module table function.
+     *
+     * @param  array                    Details to go to build_url for link to the next screen.
+     * @return array                    A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
+     */
     public function create_selection_list_choose_table($url_map)
     {
         require_code('templates_results_table');
@@ -194,10 +194,10 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return tempcode		The selection list
-	 */
+     * Standard crud_module list function.
+     *
+     * @return tempcode                 The selection list
+     */
     public function create_selection_list_entries()
     {
         $fields = new ocp_tempcode();
@@ -225,22 +225,22 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($id)
     {
         return ((intval($id) != db_get_first_id()+0) && (intval($id) != db_get_first_id()+1) && (intval($id) != db_get_first_id()+8));
     }
 
     /**
-	 * Standard aed_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: The input fields, Hidden fields
-	 */
+     * Standard aed_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: The input fields, Hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id' => intval($id),'g_is_private_club' => 1));
@@ -257,10 +257,10 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         require_code('ocf_forums_action2');
@@ -318,11 +318,11 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Fix club's permissons (in case e.g. forum was recreated).
-	 *
-	 * @param  AUTO_LINK		Club (usergroup) ID
-	 * @param  AUTO_LINK		Forum ID
-	 */
+     * Fix club's permissons (in case e.g. forum was recreated).
+     *
+     * @param  AUTO_LINK                Club (usergroup) ID
+     * @param  AUTO_LINK                Forum ID
+     */
     public function _set_permissions($id,$forum_id)
     {
         // Cleanup
@@ -349,11 +349,11 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return ?tempcode		Confirm message (NULL: continue)
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return ?tempcode                Confirm message (NULL: continue)
+     */
     public function edit_actualisation($id)
     {
         $group_id = intval($id);
@@ -397,10 +397,10 @@ class Module_cms_ocf_groups extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         $group_id = intval($id);

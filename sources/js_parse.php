@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_validation
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_validation
  */
 
 /**
@@ -31,7 +31,7 @@ function init__js_parse()
 /**
  * Return parse info for parse type.
  *
- * @return ?map				Parse info (NULL: error)
+ * @return ?map                         Parse info (NULL: error)
  */
 function js_parse()
 {
@@ -46,7 +46,7 @@ function js_parse()
 /**
  * Return parse info for parse type.
  *
- * @return ?map			Parse info (NULL: error)
+ * @return ?map                         Parse info (NULL: error)
  */
 function _js_parse_js()
 {
@@ -95,7 +95,7 @@ function _js_parse_js()
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_command()
 {
@@ -147,7 +147,7 @@ function _js_parse_command()
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_command_actual()
 {
@@ -454,7 +454,7 @@ function _js_parse_command_actual()
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_if_rest()
 {
@@ -481,7 +481,7 @@ function _js_parse_if_rest()
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_cases()
 {
@@ -545,8 +545,8 @@ function _js_parse_cases()
 /**
  * Return parse info for parse type.
  *
- * @param  boolean		Whether this is an anonymous function
- * @return ?list			Parse info (NULL: error)
+ * @param  boolean                      Whether this is an anonymous function
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_function_dec($anonymous = false)
 {
@@ -582,7 +582,7 @@ function _js_parse_function_dec($anonymous = false)
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_expression()
 {
@@ -631,8 +631,8 @@ function _js_parse_expression()
 /**
  * Sort an unordered structure of operations into a precedence tree.
  *
- * @param  list			Ops in
- * @return list			Ops out
+ * @param  list                         Ops in
+ * @return list                         Ops out
  */
 function precedence_sort($op_list)
 {
@@ -678,7 +678,7 @@ function precedence_sort($op_list)
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_expression_inner()
 {
@@ -887,8 +887,8 @@ function _js_parse_expression_inner()
 /**
  * Return parse info for parse type.
  *
- * @param  list			The variable
- * @return ?list			Parse info (NULL: error)
+ * @param  list                         The variable
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_identify_chain($variable)
 {
@@ -914,7 +914,7 @@ function _js_parse_identify_chain($variable)
                 return NULL;
             }
             $expression = array('CALL',$variable,$parameters,$GLOBALS['JS_PARSE_POSITION']);
-            //log_special('functions',$next[1].'/'.count($parameters));	Useful for debugging
+            //log_special('functions',$next[1].'/'.count($parameters)); Useful for debugging
 
             // Now, it is possible we are actually part of a larger variable
             $next_2 = parser_peek();
@@ -961,7 +961,7 @@ function _js_parse_identify_chain($variable)
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_variable()
 {
@@ -984,7 +984,7 @@ function _js_parse_variable()
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_variable_actual()
 {
@@ -1052,7 +1052,7 @@ function _js_parse_variable_actual()
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_assignment_operator()
 {
@@ -1069,7 +1069,7 @@ function _js_parse_assignment_operator()
 /**
  * Return parse info for parse type.
  *
- * @return ?list			Parse info (NULL: error)
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_literal()
 {
@@ -1136,8 +1136,8 @@ function _js_parse_literal()
 /**
  * Return parse info for parse type.
  *
- * @param  boolean		Whether to allow blanks in the list
- * @return ?list			Parse info (NULL: error)
+ * @param  boolean                      Whether to allow blanks in the list
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_comma_expressions($allow_blanks = false)
 {
@@ -1175,8 +1175,8 @@ function _js_parse_comma_expressions($allow_blanks = false)
 /**
  * Return parse info for parse type.
  *
- * @param  boolean		Whether to allow blanks in the list
- * @return ?list			Parse info (NULL: error)
+ * @param  boolean                      Whether to allow blanks in the list
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_comma_variables($allow_blanks = false)
 {
@@ -1222,9 +1222,9 @@ function _js_parse_comma_variables($allow_blanks = false)
 /**
  * Return parse info for parse type.
  *
- * @param  boolean		Whether to allow expressions in this
- * @param  string			The token that sits as the 'separator' between name and value
- * @return ?list			Parse info (NULL: error)
+ * @param  boolean                      Whether to allow expressions in this
+ * @param  string                       The token that sits as the 'separator' between name and value
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_comma_parameters($allow_expressions = true,$separator = 'EQUAL')
 {
@@ -1257,9 +1257,9 @@ function _js_parse_comma_parameters($allow_expressions = true,$separator = 'EQUA
 /**
  * Return parse info for parse type.
  *
- * @param  boolean		Whether to allow expressions in this
- * @param  string			The token that sits as the 'separator' between name and value
- * @return ?list			Parse info (NULL: error)
+ * @param  boolean                      Whether to allow expressions in this
+ * @param  string                       The token that sits as the 'separator' between name and value
+ * @return ?list                        Parse info (NULL: error)
  */
 function _js_parse_parameter($allow_expressions = true,$separator = 'EQUAL')
 {
@@ -1289,8 +1289,8 @@ function _js_parse_parameter($allow_expressions = true,$separator = 'EQUAL')
 /**
  * Expect a token during parsing. Give error if not found. Else give token parameters.
  *
- * @param  string			The token we want
- * @return ?mixed			The token parameters (NULL: error)
+ * @param  string                       The token we want
+ * @return ?mixed                       The token parameters (NULL: error)
  */
 function parser_expect($token)
 {
@@ -1314,8 +1314,8 @@ function parser_expect($token)
 /**
  * Peek to find the next token.
  *
- * @param  boolean		Whether we want all the token parameters (as opposed to just the first)
- * @return ?mixed			All the token parameters, or just the first (NULL: error)
+ * @param  boolean                      Whether we want all the token parameters (as opposed to just the first)
+ * @return ?mixed                       All the token parameters, or just the first (NULL: error)
  */
 function parser_peek($all = false)
 {
@@ -1336,9 +1336,9 @@ function parser_peek($all = false)
 /**
  * Peek to find the next token after a distance.
  *
- * @param  integer		The distance
- * @param  ?integer		Whether to start looking from (NULL: current position in parse)
- * @return ?mixed			The first token parameter (NULL: error)
+ * @param  integer                      The distance
+ * @param  ?integer                     Whether to start looking from (NULL: current position in parse)
+ * @return ?mixed                       The first token parameter (NULL: error)
  */
 function parser_peek_dist($d,$p = null)
 {
@@ -1365,8 +1365,8 @@ function parser_peek_dist($d,$p = null)
 /**
  * Find the next token and move on.
  *
- * @param  boolean		Whether we want all the token parameters (as opposed to just the first)
- * @return ?mixed			All the token parameters, or just the first (NULL: error)
+ * @param  boolean                      Whether we want all the token parameters (as opposed to just the first)
+ * @return ?mixed                       All the token parameters, or just the first (NULL: error)
  */
 function parser_next($all = false)
 {
@@ -1388,8 +1388,8 @@ function parser_next($all = false)
 /**
  * Give a parse error.
  *
- * @param  string			The error
- * @return ?boolean		Always NULL (NULL: exit)
+ * @param  string                       The error
+ * @return ?boolean                     Always NULL (NULL: exit)
  */
 function js_parser_error($message)
 {

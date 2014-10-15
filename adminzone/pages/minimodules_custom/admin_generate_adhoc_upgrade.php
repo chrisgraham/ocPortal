@@ -17,8 +17,8 @@ if ($type != 'go') {
     $title->evaluate_echo();
 
     echo '
-		<p>This system will generate a TAR archive to upgrade a site to the files in this ocPortal installation. You choose which addons to include (both bundled and non-bundled are supported), and the date to get changed files from (both may be auto-detected from the install location).</p>
-	';
+        <p>This system will generate a TAR archive to upgrade a site to the files in this ocPortal installation. You choose which addons to include (both bundled and non-bundled are supported), and the date to get changed files from (both may be auto-detected from the install location).</p>
+    ';
 }
 
 $addons = get_addon_structure();
@@ -148,8 +148,8 @@ if ($type == 'auto_probe') {
         }
 
         echo '
-			<h2>Advice</h2>
-		';
+            <h2>Advice</h2>
+        ';
         foreach (
             array(
                 'maybe_delete' => 'The following files might need deleting',
@@ -157,10 +157,10 @@ if ($type == 'auto_probe') {
                 'install_diff' => 'The following install code changes have happened (diff) &ndash; isolate to <kbd>data_custom/execute_temp.php</kbd> to make an adhoc upgrader'
             ) as $d => $message) {
             echo '
-				<p>
-					' . $message . '&hellip;
-				</p>
-			';
+                    <p>
+                            ' . $message . '&hellip;
+                    </p>
+            ';
             if (count($manual_changes[$d]) != 0) {
                 echo '<ul>';
                 foreach ($manual_changes[$d] as $file => $caption) {
@@ -168,10 +168,10 @@ if ($type == 'auto_probe') {
                     echo '<kbd>' . escape_html($file) . '</kbd>';
                     if (!is_null($caption)) {
                         echo ':<br /><br />';
-                        /*require_code('geshi');	If you want to see it highlighted
-						$geshi=new GeSHi($caption,'diff');
-						$geshi->set_header_type(GESHI_HEADER_DIV);
-						echo $geshi->parse_code();*/
+                        /*require_code('geshi');   If you want to see it highlighted
+                                        $geshi=new GeSHi($caption,'diff');
+                                        $geshi->set_header_type(GESHI_HEADER_DIV);
+                                        echo $geshi->parse_code();*/
                         echo '<div style="overflow: auto; width: 100%; white-space: pre">' . ($caption) . '</div>';
                     }
                     echo '</li>';
@@ -179,10 +179,10 @@ if ($type == 'auto_probe') {
                 echo '</ul>';
             } else {
                 echo '
-					<p class="nothing_here">
-						None
-					</p>
-				';
+                            <p class="nothing_here">
+                                        None
+                            </p>
+                    ';
             }
         }
 
@@ -242,62 +242,62 @@ if ($type == 'go') {
 }
 
 echo '
-	<form action="' . escape_html(static_evaluate_tempcode(build_url(array('page' => '_SELF','type' => 'auto_probe'),'_SELF'))) . '" method="post">
-		<h2>Auto-probe upgrade TAR settings, and give specialised advice</h2>
+    <form action="' . escape_html(static_evaluate_tempcode(build_url(array('page' => '_SELF','type' => 'auto_probe'),'_SELF'))) . '" method="post">
+        <h2>Auto-probe upgrade TAR settings, and give specialised advice</h2>
 
-		<p>
-			<label for="probe_dir">
-				Directory
-				<input size="50" type="text" name="probe_dir" id="probe_dir" value="' . dirname(get_file_base()) . '/PROJECT_NAME' . '" />
-			</label>
-		</p>
+        <p>
+            <label for="probe_dir">
+                    Directory
+                    <input size="50" type="text" name="probe_dir" id="probe_dir" value="' . dirname(get_file_base()) . '/PROJECT_NAME' . '" />
+            </label>
+        </p>
 
-		<p class="associated_details">
-			Only run this on projects you trust - as _config.php will be executed so as to connect to the project\'s database.
-		</p>
+        <p class="associated_details">
+            Only run this on projects you trust - as _config.php will be executed so as to connect to the project\'s database.
+        </p>
 
-		<p class="proceed_button">
-			<input class="buttons__proceed button_screen" type="submit" value="Auto-probe" />
-		</p>
-	</form>
+        <p class="proceed_button">
+            <input class="buttons__proceed button_screen" type="submit" value="Auto-probe" />
+        </p>
+    </form>
 ';
 
 echo '
-	<form action="' . escape_html(static_evaluate_tempcode(build_url(array('page' => '_SELF','type' => 'go'),'_SELF'))) . '" method="post">
-		<h2>Manually customise upgrade TAR settings</h2>
+    <form action="' . escape_html(static_evaluate_tempcode(build_url(array('page' => '_SELF','type' => 'go'),'_SELF'))) . '" method="post">
+        <h2>Manually customise upgrade TAR settings</h2>
 
-		<p>
-			<label for="cutoff_days">
-				Files modified since (in days)
-				<input style="width: 4em" max="3000" type="number" name="cutoff_days" id="cutoff_days" value="' . strval($cutoff_days) . '" />
-			</label>
-		</p>
+        <p>
+            <label for="cutoff_days">
+                    Files modified since (in days)
+                    <input style="width: 4em" max="3000" type="number" name="cutoff_days" id="cutoff_days" value="' . strval($cutoff_days) . '" />
+            </label>
+        </p>
 ';
 
 if (post_param('probe_dir','') !== '') {
     echo '
-		<input type="hidden" name="probe_dir" value="' . escape_html(post_param('probe_dir','')) . '" />
-	';
+        <input type="hidden" name="probe_dir" value="' . escape_html(post_param('probe_dir','')) . '" />
+    ';
 }
 
 foreach (array_merge(array_keys($addons['bundled']),array_keys($addons['non_bundled'])) as $addon) {
     $checked = (substr($addon,0,5) == 'core_') || ($addon == 'core') || (in_array($addon,$auto_probe));
 
     echo '
-		<p>
-			<label for="addon_' . escape_html($addon) . '">
-				<input ' . ($checked?' checked="checked"':'') . 'type="checkbox" value="1" name="addon_' . escape_html($addon) . '" id="addon_' . escape_html($addon) . '" />
-				' . escape_html($addon) . '
-			</label>
-		</p>
-	';
+        <p>
+            <label for="addon_' . escape_html($addon) . '">
+                    <input ' . ($checked?' checked="checked"':'') . 'type="checkbox" value="1" name="addon_' . escape_html($addon) . '" id="addon_' . escape_html($addon) . '" />
+                    ' . escape_html($addon) . '
+            </label>
+        </p>
+    ';
 }
 
 echo '
-		<p class="proceed_button">
-			<input class="buttons__proceed button_screen" type="submit" value="Generate" />
-		</p>
-	</form>
+        <p class="proceed_button">
+            <input class="buttons__proceed button_screen" type="submit" value="Generate" />
+        </p>
+    </form>
 ';
 
 function get_addon_structure()

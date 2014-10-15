@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		realtime_rain
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    realtime_rain
  */
 
 /**
@@ -86,9 +86,9 @@ function realtime_rain_script()
 /**
  * Get all the events within a timestamp range.
  *
- * @param  TIME			From time (inclusive).
- * @param  TIME			To time (inclusive).
- * @return array			List of template parameter sets (perfect for use in a Tempcode LOOP).
+ * @param  TIME                         From time (inclusive).
+ * @param  TIME                         To time (inclusive).
+ * @return array                        List of template parameter sets (perfect for use in a Tempcode LOOP).
  */
 function get_realtime_events($from,$to)
 {
@@ -109,8 +109,8 @@ function get_realtime_events($from,$to)
 /**
  * Make a realtime event bubble's title fit in the available space.
  *
- * @param  string			Idealised title.
- * @return string			Cropped title, with tooltip for full title.
+ * @param  string                       Idealised title.
+ * @return string                       Cropped title, with tooltip for full title.
  */
 function rain_truncate_for_title($text)
 {
@@ -120,8 +120,8 @@ function rain_truncate_for_title($text)
 /**
  * Get a country flag image for an IP address.
  *
- * @param  IP				An IP address.
- * @return URLPATH		Country flag image (blank: could not find one).
+ * @param  IP                           An IP address.
+ * @return URLPATH                      Country flag image (blank: could not find one).
  */
 function rain_get_country_image($ip_address)
 {
@@ -141,11 +141,11 @@ function rain_get_country_image($ip_address)
 /**
  * Returns a map with an icon and multiplicity parameter (that may be NULL).
  *
- * @param  ?IP				An IP address (used to check against bots) (NULL: no IP).
- * @param  TIME			A timestamp (used to check for logged sent emails).
- * @param  ?string		A user agent (used to check against phones) (NULL: no user agent).
- * @param  ?string		News ticker news (NULL: no news ticker news).
- * @return array			Map with an icon and multiplicity parameter.
+ * @param  ?IP                          An IP address (used to check against bots) (NULL: no IP).
+ * @param  TIME                         A timestamp (used to check for logged sent emails).
+ * @param  ?string                      A user agent (used to check against phones) (NULL: no user agent).
+ * @param  ?string                      News ticker news (NULL: no news ticker news).
+ * @return array                        Map with an icon and multiplicity parameter.
  */
 function rain_get_special_icons($ip_address,$timestamp,$user_agent = null,$news = null)
 {

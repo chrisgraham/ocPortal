@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_rich_media
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_rich_media
  */
 
 /**
@@ -40,13 +40,13 @@ function init__media_renderer()
 /**
  * Find a media renderer hook for a URL.
  *
- * @param  URLPATH		The URL
- * @param  array			Attributes (e.g. width, height, length)
- * @param  boolean		Whether there are admin privileges, to render dangerous media types
- * @param  ?MEMBER		Member to run as (NULL: current member)
- * @param  integer		Bitmask of media that we will support
- * @param  ?ID_TEXT		Limit to a media rendering hook (NULL: no limit)
- * @return ?array			The hooks (NULL: cannot find one)
+ * @param  URLPATH                      The URL
+ * @param  array                        Attributes (e.g. width, height, length)
+ * @param  boolean                      Whether there are admin privileges, to render dangerous media types
+ * @param  ?MEMBER                      Member to run as (NULL: current member)
+ * @param  integer                      Bitmask of media that we will support
+ * @param  ?ID_TEXT                     Limit to a media rendering hook (NULL: no limit)
+ * @return ?array                       The hooks (NULL: cannot find one)
  */
 function find_media_renderers($url,$attributes,$as_admin,$source_member,$acceptable_media = 15,$limit_to = null)
 {
@@ -139,15 +139,15 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
 /**
  * Render a media URL in the best way we can.
  *
- * @param  mixed			The URL
- * @param  mixed			URL to render (no sessions etc)
- * @param  array			Attributes (e.g. width, height, length). IMPORTANT NOTE: Only pass in 'mime_type' from user data if you have verified privileges to do so, no verification is done within the media API.
- * @param  boolean		Whether there are admin privileges, to render dangerous media types
- * @param  ?MEMBER		Member to run as (NULL: current member)
- * @param  integer		Bitmask of media that we will support
- * @param  ?ID_TEXT		Limit to a media rendering hook (NULL: no limit)
- * @param  ?URLPATH		The URL to do media detection against (NULL: use $url)
- * @return ?tempcode		The rendered version (NULL: cannot render)
+ * @param  mixed                        The URL
+ * @param  mixed                        URL to render (no sessions etc)
+ * @param  array                        Attributes (e.g. width, height, length). IMPORTANT NOTE: Only pass in 'mime_type' from user data if you have verified privileges to do so, no verification is done within the media API.
+ * @param  boolean                      Whether there are admin privileges, to render dangerous media types
+ * @param  ?MEMBER                      Member to run as (NULL: current member)
+ * @param  integer                      Bitmask of media that we will support
+ * @param  ?ID_TEXT                     Limit to a media rendering hook (NULL: no limit)
+ * @param  ?URLPATH                     The URL to do media detection against (NULL: use $url)
+ * @return ?tempcode                    The rendered version (NULL: cannot render)
  */
 function render_media_url($url,$url_safe,$attributes,$as_admin = false,$source_member = null,$acceptable_media = 15,$limit_to = null,$url_to_scan_against = null)
 {
@@ -177,11 +177,11 @@ function render_media_url($url,$url_safe,$attributes,$as_admin = false,$source_m
 /**
  * Turn standardised media parameters into standardised media template parameters.
  *
- * @param  mixed			The URL
- * @param  array			Attributes (Any combination of: thumb_url, width, height, length, filename, mime_type, description, filesize, framed, wysiwyg_editable, num_downloads, click_url, thumb)
- * @param  boolean		Whether there are admin privileges, to render dangerous media types
- * @param  ?MEMBER		Member to run as (NULL: current member)
- * @return array			Template-ready parameters
+ * @param  mixed                        The URL
+ * @param  array                        Attributes (Any combination of: thumb_url, width, height, length, filename, mime_type, description, filesize, framed, wysiwyg_editable, num_downloads, click_url, thumb)
+ * @param  boolean                      Whether there are admin privileges, to render dangerous media types
+ * @param  ?MEMBER                      Member to run as (NULL: current member)
+ * @return array                        Template-ready parameters
  */
 function _create_media_template_parameters($url,$attributes,$as_admin = false,$source_member = null)
 {

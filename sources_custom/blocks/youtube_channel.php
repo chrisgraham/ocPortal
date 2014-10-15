@@ -12,10 +12,10 @@
 class Block_youtube_channel
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -31,10 +31,10 @@ class Block_youtube_channel
     }
 
     /**
-	 * Find cacheing details for the block.
-	 *
-	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
-	 */
+     * Find cacheing details for the block.
+     *
+     * @return ?array                   Map of cache details (cache_on and ttl) (NULL: block is disabled).
+     */
     public function cacheing_environment()
     {
         $info = array();
@@ -44,11 +44,11 @@ class Block_youtube_channel
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
@@ -269,12 +269,12 @@ class Block_youtube_channel
                 $videoplayer = "<iframe width=\"$channel_playerwidth\" height=\"$channel_playerheight\" src=\"$embedvideo\" frameborder=\"0\" allowfullscreen></iframe>";
 
                 // few different thumbnail image choice here:
-                //	0 => default image, low res - "default"
-                //	1 => default image, medium res - "mqdefault"
-                //	2 => default image, higher res - "hqdefault"
-                //	3 => beginning of vid, low res - "start"
-                //	4 => middle of vid, low res - "middle"
-                //	5 => end of vid, low res - "end"
+                //   0 => default image, low res - "default"
+                //   1 => default image, medium res - "mqdefault"
+                //   2 => default image, higher res - "hqdefault"
+                //   3 => beginning of vid, low res - "start"
+                //   4 => middle of vid, low res - "middle"
+                //   5 => end of vid, low res - "end"
                 $thumb_img = $thumbnails[$channel_thumbnail];
                 $thumb_img_0 = $thumbnails[0];
                 $thumb_img_1 = $thumbnails[1];
@@ -390,8 +390,8 @@ class Block_youtube_channel
 /**
  * Find the cache signature for the block.
  *
- * @param  array	The block parameters.
- * @return array	The cache signature.
+ * @param  array                        The block parameters.
+ * @return array                        The cache signature.
  */
 function block_youtube_channel__cache_on($map)
 {

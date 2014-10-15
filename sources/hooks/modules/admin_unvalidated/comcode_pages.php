@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_comcode_pages
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_comcode_pages
  */
 
 class Hook_unvalidated_comcode_pages
 {
     /**
-	 * Find details on the unvalidated hook.
-	 *
-	 * @return ?array	Map of hook info (NULL: hook is disabled).
-	 */
+     * Find details on the unvalidated hook.
+     *
+     * @return ?array                   Map of hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         require_lang('zones');

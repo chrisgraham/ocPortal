@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -33,8 +33,8 @@ function init__mail()
 /**
  * Replace an HTML img tag such that it is cid'd. Callback for preg_replace_callback.
  *
- * @param  array			Matches
- * @return string			Replacement
+ * @param  array                        Matches
+ * @return string                       Replacement
  */
 function _mail_img_rep_callback($matches)
 {
@@ -51,8 +51,8 @@ function _mail_img_rep_callback($matches)
 /**
  * Replace CSS image references such that it is cid'd. Callback for preg_replace_callback.
  *
- * @param  array			Matches
- * @return string			Replacement
+ * @param  array                        Matches
+ * @return string                       Replacement
  */
 function _mail_css_rep_callback($matches)
 {
@@ -68,8 +68,8 @@ function _mail_css_rep_callback($matches)
 /**
  * Indent text lines. Callback for preg_replace_callback.
  *
- * @param  array			Matches
- * @return string			Replacement
+ * @param  array                        Matches
+ * @return string                       Replacement
  */
 function _indent_callback($matches)
 {
@@ -79,8 +79,8 @@ function _indent_callback($matches)
 /**
  * Make titles readable. Callback for preg_replace_callback.
  *
- * @param  array			Matches
- * @return string			Replacement
+ * @param  array                        Matches
+ * @return string                       Replacement
  */
 function _title_callback($matches)
 {
@@ -94,8 +94,8 @@ function _title_callback($matches)
 /**
  * Make boxes readable. Callback for preg_replace_callback.
  *
- * @param  array			Matches
- * @return string			Replacement
+ * @param  array                        Matches
+ * @return string                       Replacement
  */
 function _box_callback($matches)
 {
@@ -105,9 +105,9 @@ function _box_callback($matches)
 /**
  * Make some Comcode more readable.
  *
- * @param  string			Comcode text to change
- * @param  boolean		Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
- * @return string			Clean text
+ * @param  string                       Comcode text to change
+ * @param  boolean                      Whether this is for generating an extract that does not need to be fully comprehended (i.e. favour brevity)
+ * @return string                       Clean text
  */
 function comcode_to_clean_text($message_plain,$for_extract = false)
 {
@@ -206,11 +206,11 @@ function comcode_to_clean_text($message_plain,$for_extract = false)
 /*
 What headers to use can easily confuse. Here is a guide...
 
-return-path		(aka envelope-from aka reverse-path)		SET BY SMTP SERVER, NOT HEADER
-from				Who actually sent, SMTP-wise (should be accurate, as may be checked by SPF)
-reply-to			Who replies go to
-sender			Not needed, not often used
-x-sender			As per sender, but might not be an email address
+return-path    (aka envelope-from aka reverse-path)      SET BY SMTP SERVER, NOT HEADER
+from           Who actually sent, SMTP-wise (should be accurate, as may be checked by SPF)
+reply-to       Who replies go to
+sender         Not needed, not often used
+x-sender       As per sender, but might not be an email address
 
 Full details:
 http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
@@ -220,26 +220,26 @@ http://people.dsv.su.se/~jpalme/ietf/ietf-mail-attributes.html
  * Attempt to send an e-mail to the specified recipient. The mail will be forwarding to the CC address specified in the options (if there is one, and if not specified not to cc).
  * The mail will be sent in dual HTML/text format, where the text is the unconverted Comcode source: if a member does not read HTML mail, they may wish to fallback to reading that.
  *
- * @param  string			The subject of the mail in plain text
- * @param  LONG_TEXT		The message, as Comcode
- * @param  ?array			The destination (recipient) e-mail addresses [array of strings] (NULL: site staff address)
- * @param  ?mixed			The recipient name. Array or string. (NULL: site name)
- * @param  EMAIL			The from address (blank: site staff address)
- * @param  string			The from name (blank: site name)
- * @param  integer		The message priority (1=urgent, 3=normal, 5=low)
+ * @param  string                       The subject of the mail in plain text
+ * @param  LONG_TEXT                    The message, as Comcode
+ * @param  ?array                       The destination (recipient) e-mail addresses [array of strings] (NULL: site staff address)
+ * @param  ?mixed                       The recipient name. Array or string. (NULL: site name)
+ * @param  EMAIL                        The from address (blank: site staff address)
+ * @param  string                       The from name (blank: site name)
+ * @param  integer                      The message priority (1=urgent, 3=normal, 5=low)
  * @range  1 5
- * @param  ?array			An list of attachments (each attachment being a map, path=>filename) (NULL: none)
- * @param  boolean		Whether to NOT CC to the CC address
- * @param  ?MEMBER		Convert Comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (NULL: guest)
- * @param  boolean		Replace above with arbitrary admin
- * @param  boolean		HTML-only
- * @param  boolean		Whether to bypass queueing, because this code is running as a part of the queue management tools
- * @param  ID_TEXT		The template used to show the email
- * @param  ?boolean		Whether to bypass queueing (NULL: auto-decide)
- * @param  ?array			Extra CC addresses to use (NULL: none)
- * @param  ?array			Extra BCC addresses to use (NULL: none)
- * @param  ?TIME			Implement the Require-Recipient-Valid-Since header (NULL: no restriction)
- * @return ?tempcode		A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
+ * @param  ?array                       An list of attachments (each attachment being a map, path=>filename) (NULL: none)
+ * @param  boolean                      Whether to NOT CC to the CC address
+ * @param  ?MEMBER                      Convert Comcode->tempcode as this member (a privilege thing: we don't want people being able to use admin rights by default!) (NULL: guest)
+ * @param  boolean                      Replace above with arbitrary admin
+ * @param  boolean                      HTML-only
+ * @param  boolean                      Whether to bypass queueing, because this code is running as a part of the queue management tools
+ * @param  ID_TEXT                      The template used to show the email
+ * @param  ?boolean                     Whether to bypass queueing (NULL: auto-decide)
+ * @param  ?array                       Extra CC addresses to use (NULL: none)
+ * @param  ?array                       Extra BCC addresses to use (NULL: none)
+ * @param  ?TIME                        Implement the Require-Recipient-Valid-Since header (NULL: no restriction)
+ * @return ?tempcode                    A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
 function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$from_email = '',$from_name = '',$priority = 3,$attachments = null,$no_cc = false,$as = null,$as_admin = false,$in_html = false,$coming_out_of_queue = false,$mail_template = 'MAIL',$bypass_queue = null,$extra_cc_addresses = null,$extra_bcc_addresses = null,$require_recipient_valid_since = null)
 {
@@ -380,16 +380,16 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
 
     // Line termination is fiddly. It is safer to rely on sendmail supporting \n than undetectable-qmail/postfix-masquerading-as-sendmail not supporting the correct \r\n
     /*$sendmail_path=ini_get('sendmail_path');
-	if ((strpos($sendmail_path,'qmail')!==false) || (strpos($sendmail_path,'sendmail')!==false))
-		$line_term="\n";
-	else
-		$line_term="\r\n";
-	*/
+    if ((strpos($sendmail_path,'qmail')!==false) || (strpos($sendmail_path,'sendmail')!==false))
+        $line_term="\n";
+    else
+        $line_term="\r\n";
+    */
     if ((strtoupper(substr(PHP_OS,0,3)) == 'WIN') || (get_option('smtp_sockets_use') == '1')) {
         $line_term = "\r\n";
     /*} elseif (strtoupper(substr(PHP_OS,0,3))=='MAC')
-	{
-		$line_term="\r";*/
+    {
+        $line_term="\r";*/
     } else {
         $line_term = "\n";
     }
@@ -608,7 +608,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
     // Plain version
     if (!$in_html) {
         $sending_message .= '--' . $boundary2 . $line_term;
-        $sending_message .= 'Content-Type: text/plain; charset=' . ((preg_match($regexp,$message_plain) == 0)?do_lang('charset',null,null,null,$lang):'us-ascii') . $line_term; // '; name="message.txt"'.	Outlook doesn't like: makes it think it's an attachment
+        $sending_message .= 'Content-Type: text/plain; charset=' . ((preg_match($regexp,$message_plain) == 0)?do_lang('charset',null,null,null,$lang):'us-ascii') . $line_term; // '; name="message.txt"'.  Outlook doesn't like: makes it think it's an attachment
         if ($base64_encode) {
             $sending_message .= 'Content-Transfer-Encoding: base64' . $line_term . $line_term;
             $sending_message .= chunk_split(base64_encode(unixify_line_format($message_plain)) . $line_term,76,$line_term);
@@ -622,7 +622,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
     $sending_message .= '--' . $boundary2 . $line_term;
     $sending_message .= 'Content-Type: multipart/related;' . "\n\t" . 'type="text/html";' . "\n\t" . 'boundary="' . $boundary3 . '"' . $line_term . $line_term . $line_term;
     $sending_message .= '--' . $boundary3 . $line_term;
-    $sending_message .= 'Content-Type: text/html; charset=' . ((preg_match($regexp,$html_evaluated) == 0)?do_lang('charset',null,null,null,$lang):'us-ascii') . $line_term; // .'; name="message.html"'.	Outlook doesn't like: makes it think it's an attachment
+    $sending_message .= 'Content-Type: text/html; charset=' . ((preg_match($regexp,$html_evaluated) == 0)?do_lang('charset',null,null,null,$lang):'us-ascii') . $line_term; // .'; name="message.html"'. Outlook doesn't like: makes it think it's an attachment
     if (get_option('allow_ext_images') != '1') {
         $html_evaluated = preg_replace_callback('#<img\s([^>]*)src="(http://[^"]*)"#U','_mail_img_rep_callback',$html_evaluated);
         $matches = array();
@@ -873,7 +873,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
             } else {
                 $to_line = '"' . $_to_name . '" <' . $to . '>';
             }
-            //if (function_exists('mb_language')) mb_language('en');	Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
+            //if (function_exists('mb_language')) mb_language('en'); Stop overridden mbstring mail function from messing and base64'ing stuff. Actually we don't need this as we make sure to pass through as headers with blank message, bypassing any filtering.
             $php_errormsg = mixed();
             if (get_value('manualproc_mail') === '1') {
                 require_code('mail2');
@@ -914,10 +914,10 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
  * Filter out any CSS selector blocks from the given CSS if they definitely do not affect the given (X)HTML.
  * Whilst this is a clever algorithm, it isn't so clever as to actually try and match each selector against a DOM tree. If any segment of a compound selector matches, match is assumed.
  *
- * @param  ID_TEXT		CSS file
- * @param  ID_TEXT		Theme
- * @param  string			(X)HTML context under which CSS is filtered
- * @return string			Filtered CSS
+ * @param  ID_TEXT                      CSS file
+ * @param  ID_TEXT                      Theme
+ * @param  string                       (X)HTML context under which CSS is filtered
+ * @return string                       Filtered CSS
  */
 function filter_css($c,$theme,$context)
 {
@@ -1071,12 +1071,12 @@ function form_to_email_entry_script()
 /**
  * Send the posted form over email to the staff address.
  *
- * @param  ?string	The subject of the email (NULL: from posted subject parameter).
- * @param  string		The intro text to the mail (blank: none).
- * @param  ?array		A map of fields to field titles to transmit. (NULL: all posted fields, except subject and email)
- * @param  ?string	Email address to send to (NULL: look from post environment / staff address).
- * @param  string		The outro text to the mail (blank: none).
- * @param  boolean	Whether $fields refers to some POSTed fields, as opposed to a direct field->value map.
+ * @param  ?string                      The subject of the email (NULL: from posted subject parameter).
+ * @param  string                       The intro text to the mail (blank: none).
+ * @param  ?array                       A map of fields to field titles to transmit. (NULL: all posted fields, except subject and email)
+ * @param  ?string                      Email address to send to (NULL: look from post environment / staff address).
+ * @param  string                       The outro text to the mail (blank: none).
+ * @param  boolean                      Whether $fields refers to some POSTed fields, as opposed to a direct field->value map.
  */
 function form_to_email($subject = null,$intro = '',$fields = null,$to_email = null,$outro = '',$is_via_post = true)
 {

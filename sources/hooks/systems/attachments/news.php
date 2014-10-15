@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		news
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    news
  */
 
 class Hook_attachments_news
 {
     /**
-	 * Run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
-	 *
-	 * @param  ID_TEXT		The ID
-	 * @param  object			The database connection to check on
-	 * @return boolean		Whether there is permission
-	 */
+     * Run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
+     *
+     * @param  ID_TEXT                  The ID
+     * @param  object                   The database connection to check on
+     * @return boolean                  Whether there is permission
+     */
     public function run($id,$connection)
     {
         if ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write) {

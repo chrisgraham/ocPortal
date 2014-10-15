@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_forum
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_forum
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_topics
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_topics
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
@@ -64,10 +64,10 @@ class Module_topics
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('ocf');
@@ -77,10 +77,10 @@ class Module_topics
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -113,10 +113,10 @@ class Module_topics
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         @ignore_user_abort(true); // Must keep going till completion
@@ -232,11 +232,11 @@ class Module_topics
     }
 
     /**
-	 * The UI for a trivial form page that just asks a reason before relaying the results to the same URL, but with an underscored type.
-	 *
-	 * @param  ID_TEXT		The language ID for the title to use in the page
-	 * @return tempcode		The UI
-	 */
+     * The UI for a trivial form page that just asks a reason before relaying the results to the same URL, but with an underscored type.
+     *
+     * @param  ID_TEXT                  The language ID for the title to use in the page
+     * @return tempcode                 The UI
+     */
     public function relay_with_reason($_title)
     {
         $title = get_screen_title($_title);
@@ -266,14 +266,14 @@ class Module_topics
     }
 
     /**
-	 * Do a redirection page to a certain topic/post (because we've just done an action and want to go back).
-	 *
-	 * @param  ID_TEXT		The language ID for the title to use in the page
-	 * @param  AUTO_LINK		The ID of the topic to redirect to
-	 * @param  ?mixed			What to output (Tempcode or string) (NULL: default)
-	 * @param  ?AUTO_LINK	The ID of the post to redirect to (NULL: redirect to topic instead)
-	 * @return tempcode		The UI
-	 */
+     * Do a redirection page to a certain topic/post (because we've just done an action and want to go back).
+     *
+     * @param  ID_TEXT                  The language ID for the title to use in the page
+     * @param  AUTO_LINK                The ID of the topic to redirect to
+     * @param  ?mixed                   What to output (Tempcode or string) (NULL: default)
+     * @param  ?AUTO_LINK               The ID of the post to redirect to (NULL: redirect to topic instead)
+     * @return tempcode                 The UI
+     */
     public function redirect_to($_title,$topic_id,$lang = null,$post_id = null)
     {
         require_code('ocf_topicview');
@@ -294,13 +294,13 @@ class Module_topics
     }
 
     /**
-	 * Do a redirection page to a certain forum (because we've just done an action and want to go back).
-	 *
-	 * @param  ID_TEXT		The language ID for the title to use in the page
-	 * @param  AUTO_LINK		The ID of the forum to redirect to
-	 * @param  ?mixed			What to output (Tempcode or string) (NULL: default)
-	 * @return tempcode		The UI
-	 */
+     * Do a redirection page to a certain forum (because we've just done an action and want to go back).
+     *
+     * @param  ID_TEXT                  The language ID for the title to use in the page
+     * @param  AUTO_LINK                The ID of the forum to redirect to
+     * @param  ?mixed                   What to output (Tempcode or string) (NULL: default)
+     * @return tempcode                 The UI
+     */
     public function redirect_to_forum($_title,$forum_id,$lang = null)
     {
         if (is_null($lang)) {
@@ -319,10 +319,10 @@ class Module_topics
     }
 
     /**
-	 * Extract marker IDs that were past through in the GET/POST.
-	 *
-	 * @return array		A list of markers
-	 */
+     * Extract marker IDs that were past through in the GET/POST.
+     *
+     * @return array                    A list of markers
+     */
     public function get_markers()
     {
         $markers = array();
@@ -335,10 +335,10 @@ class Module_topics
     }
 
     /**
-	 * Copy marker IDs that were past through in the GET/POST into hidden form fields, so they may be relayed.
-	 *
-	 * @return tempcode	Hidden fields facilitating the marker relaying
-	 */
+     * Copy marker IDs that were past through in the GET/POST into hidden form fields, so they may be relayed.
+     *
+     * @return tempcode                 Hidden fields facilitating the marker relaying
+     */
     public function keep_markers()
     {
         $markers = new ocp_tempcode();
@@ -354,10 +354,10 @@ class Module_topics
     // ===========
 
     /**
-	 * The actualiser to toggle notifications for a forum.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to toggle notifications for a forum.
+     *
+     * @return tempcode                 The UI
+     */
     public function toggle_notifications_forum() // Type
     {
         require_code('notifications2');
@@ -369,10 +369,10 @@ class Module_topics
     // =================
 
     /**
-	 * The actualiser to validate some posts.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to validate some posts.
+     *
+     * @return tempcode                 The UI
+     */
     public function validate_posts() // Type
     {
         $posts = $this->get_markers();
@@ -404,10 +404,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to delete some posts.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to delete some posts.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_posts() // Type
     {
         $posts = $this->get_markers();
@@ -429,10 +429,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to delete some posts.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete some posts.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete_posts() // Type
     {
         $posts = $this->get_markers();
@@ -458,10 +458,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to move some posts to an existing topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to move some posts to an existing topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function move_posts_a() // Type
     {
         $posts = $this->get_markers();
@@ -517,10 +517,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to move some posts to a new topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to move some posts to a new topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function move_posts_b() // Type
     {
         $posts = $this->get_markers();
@@ -569,10 +569,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to move some posts.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to move some posts.
+     *
+     * @return tempcode                 The UI
+     */
     public function _move_posts() // Type
     {
         $posts = $this->get_markers();
@@ -622,10 +622,10 @@ class Module_topics
     // ==================
 
     /**
-	 * The actualiser to mark topics as read.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to mark topics as read.
+     *
+     * @return tempcode                 The UI
+     */
     public function mark_topics_read() // Type
     {
         $topics = $this->get_markers();
@@ -659,11 +659,11 @@ class Module_topics
     }
 
     /**
-	 * Mark a topic as unread by the current member.
-	 *
-	 * @param  AUTO_LINK The ID of the topic to mark as unread.
-	 * @return boolean	Success status.
-	 */
+     * Mark a topic as unread by the current member.
+     *
+     * @param  AUTO_LINK                The ID of the topic to mark as unread.
+     * @return boolean                  Success status.
+     */
     public function ocf_ping_topic_unread($topic_id)
     {
         $last_time = $GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_last_time',array('id' => $topic_id));
@@ -678,10 +678,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to mark topics as unread.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to mark topics as unread.
+     *
+     * @return tempcode                 The UI
+     */
     public function mark_topics_unread() // Type
     {
         $topics = $this->get_markers();
@@ -713,10 +713,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to pin topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to pin topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function pin_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -739,10 +739,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to unpin topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to unpin topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function unpin_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -765,10 +765,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to pin topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to pin topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function sink_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -791,10 +791,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to unpin topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to unpin topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function unsink_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -817,10 +817,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to cascade topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to cascade topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function cascade_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -843,10 +843,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to uncascade topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to uncascade topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function uncascade_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -869,10 +869,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to open topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to open topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function open_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -895,10 +895,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to close topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to close topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function close_topics() // Type
     {
         require_code('ocf_topics_action');
@@ -921,10 +921,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to run multi-moderations.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to run multi-moderations.
+     *
+     * @return tempcode                 The UI
+     */
     public function mass_multimod() // Type
     {
         require_lang('ocf_multi_moderations');
@@ -1018,10 +1018,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to run multi moderations.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to run multi moderations.
+     *
+     * @return tempcode                 The UI
+     */
     public function _mass_multimod() // Type
     {
         require_lang('ocf_multi_moderations');
@@ -1047,10 +1047,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to move some topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to move some topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function move_topics() // Type
     {
         $topics = $this->get_markers();
@@ -1090,10 +1090,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to move some topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to move some topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function _move_topics() // Type
     {
         $topics = $this->get_markers();
@@ -1111,10 +1111,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to delete some topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to delete some topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_topics() // Type
     {
         $topics = $this->get_markers();
@@ -1133,10 +1133,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to delete some topics.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete some topics.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete_topics() // Type
     {
         $topics = $this->get_markers();
@@ -1152,10 +1152,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to delete some topics / posts.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to delete some topics / posts.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_topics_and_posts() // Type
     {
         if (is_guest()) {
@@ -1178,10 +1178,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to delete some topics / posts.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete some topics / posts.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete_topics_and_posts() // Type
     {
         if (is_guest()) {
@@ -1218,10 +1218,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to categorise some PTs.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to categorise some PTs.
+     *
+     * @return tempcode                 The UI
+     */
     public function categorise_pts() // Type
     {
         $topics = $this->get_markers();
@@ -1268,10 +1268,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to categorise some PTs.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to categorise some PTs.
+     *
+     * @return tempcode                 The UI
+     */
     public function _categorise_pts() // Type
     {
         $topics = $this->get_markers();
@@ -1310,10 +1310,10 @@ class Module_topics
     // ======================
 
     /**
-	 * The UI to choose between the two types of whisper.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose between the two types of whisper.
+     *
+     * @return tempcode                 The UI
+     */
     public function whisper()
     {
         $title = get_screen_title('WHISPER');
@@ -1337,11 +1337,11 @@ class Module_topics
     }
 
     /**
-	 * Choose an emoticon for a topic.
-	 *
-	 * @param  ID_TEXT		The currently selected emoticon
-	 * @return tempcode		The emoticon input field
-	 */
+     * Choose an emoticon for a topic.
+     *
+     * @param  ID_TEXT                  The currently selected emoticon
+     * @return tempcode                 The emoticon input field
+     */
     public function choose_topic_emoticon($selected_path = '')
     {
         $tabindex = get_form_field_tabindex(null);
@@ -1367,11 +1367,11 @@ class Module_topics
     }
 
     /**
-	 * Create a default post based on a template of quoting the given list of quotes.
-	 *
-	 * @param  array			A list of posts to quote
-	 * @return tempcode		The default post
-	 */
+     * Create a default post based on a template of quoting the given list of quotes.
+     *
+     * @param  array                    A list of posts to quote
+     * @return tempcode                 The default post
+     */
     public function attach_quotes($quotes)
     {
         $post = new ocp_tempcode();
@@ -1422,11 +1422,11 @@ class Module_topics
     }
 
     /**
-	 * The form element for choosing a post template.
-	 *
-	 * @param  AUTO_LINK		The forum ID we are looking for post templates active in
-	 * @return array			A pair: The form element (tempcode) and the default post to make
-	 */
+     * The form element for choosing a post template.
+     *
+     * @param  AUTO_LINK                The forum ID we are looking for post templates active in
+     * @return array                    A pair: The form element (tempcode) and the default post to make
+     */
     public function post_templates($forum_id)
     {
         if (!addon_installed('ocf_post_templates')) {
@@ -1460,14 +1460,14 @@ class Module_topics
     }
 
     /**
-	 * The UI to create a new topic.
-	 *
-	 * @param  boolean		Whether a new Private Topic is being created
-	 * @param  ?MEMBER		The member ID being whispered too (NULL: N/A)
-	 * @param  string			Theme image code
-	 * @param  ?tempcode		Text of screen (NULL: none)
-	 * @return tempcode		The UI
-	 */
+     * The UI to create a new topic.
+     *
+     * @param  boolean                  Whether a new Private Topic is being created
+     * @param  ?MEMBER                  The member ID being whispered too (NULL: N/A)
+     * @param  string                   Theme image code
+     * @param  ?tempcode                Text of screen (NULL: none)
+     * @return tempcode                 The UI
+     */
     public function new_topic($private_topic = false,$member_id = null,$img_path = '',$text = null) // Type
     {
         if (!$private_topic) {
@@ -1699,10 +1699,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to create a PT.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to create a PT.
+     *
+     * @return tempcode                 The UI
+     */
     public function new_pt() // Type
     {
         if (is_guest()) {
@@ -1733,13 +1733,13 @@ class Module_topics
     }
 
     /**
-	 * Sort out breadcrumbing for a forum/topic/additional combination.
-	 *
-	 * @param  AUTO_LINK		The forum for breadcrumbing
-	 * @param  AUTO_LINK		The topic for breadcrumbing
-	 * @param  string			The topic title
-	 * @param  string			The action currently being done
-	 */
+     * Sort out breadcrumbing for a forum/topic/additional combination.
+     *
+     * @param  AUTO_LINK                The forum for breadcrumbing
+     * @param  AUTO_LINK                The topic for breadcrumbing
+     * @param  string                   The topic title
+     * @param  string                   The action currently being done
+     */
     public function handle_topic_breadcrumbs($forum_id,$topic_id,$topic_title,$doing)
     {
         if (is_null($forum_id)) {
@@ -1751,10 +1751,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to make a post.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to make a post.
+     *
+     * @return tempcode                 The UI
+     */
     public function new_post()
     {
         require_code('ocf_posts2');
@@ -1837,7 +1837,7 @@ class Module_topics
             if (addon_installed('unvalidated')) {
                 $moderation_options[] = array(do_lang_tempcode('VALIDATED'),'validated',true,do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'));
             }
-            //if ($intended_solely_for==-1) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));		Too much to offer this too
+            //if ($intended_solely_for==-1) $moderation_options[]=array(do_lang_tempcode('CASCADING'),'cascading',false,do_lang_tempcode('DESCRIPTION_CASCADING'));     Too much to offer this too
         } else {
             $moderation_options = array();
             $hidden_fields->attach(form_input_hidden('validated','1'));
@@ -1985,10 +1985,10 @@ class Module_topics
     }
 
     /**
-	 * The UI to report a post.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to report a post.
+     *
+     * @return tempcode                 The UI
+     */
     public function report_post() // Type
     {
         $post_id = get_param_integer('id');
@@ -2074,10 +2074,10 @@ class Module_topics
     }
 
     /**
-	 * The actualiser to add a reply.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to add a reply.
+     *
+     * @return tempcode                 The UI
+     */
     public function _add_reply() // Type
     {
         if (addon_installed('captcha')) {
@@ -2444,10 +2444,10 @@ END;
     }
 
     /**
-	 * The actualiser to toggle notifications for a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to toggle notifications for a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function toggle_notifications_topic() // Type
     {
         require_code('notifications2');
@@ -2455,10 +2455,10 @@ END;
     }
 
     /**
-	 * The actualiser to mark a topic as read.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to mark a topic as read.
+     *
+     * @return tempcode                 The UI
+     */
     public function mark_read_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -2482,10 +2482,10 @@ END;
     }
 
     /**
-	 * The actualiser to mark a topic as unread.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to mark a topic as unread.
+     *
+     * @return tempcode                 The UI
+     */
     public function mark_unread_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -2501,10 +2501,10 @@ END;
     }
 
     /**
-	 * The UI to grab a reason for deleting a post.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to grab a reason for deleting a post.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_post() // Type
     {
         $post_id = get_param_integer('id');
@@ -2558,10 +2558,10 @@ END;
     }
 
     /**
-	 * The actualiser for deleting a post.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser for deleting a post.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete_post() // Type
     {
         $post_id = either_param_integer('id',null);
@@ -2657,10 +2657,10 @@ END;
     }
 
     /**
-	 * The actualiser to vote in a poll.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to vote in a poll.
+     *
+     * @return tempcode                 The UI
+     */
     public function vote_poll() // Type
     {
         $topic_id = get_param_integer('id'); // Yes, that's right -- we need to find the pollID from this, and will redirect back to given topic
@@ -2691,17 +2691,17 @@ END;
     }
 
     /**
-	 * Get tempcode for a poll adding/editing form.
-	 *
-	 * @param  SHORT_TEXT	The poll question
-	 * @param  ?array			A list of current answers for the poll (NULL: none yet)
-	 * @param  BINARY			Whether it is a private poll (blind poll, where the results aren't visible until made public)
-	 * @param  BINARY			Whether the poll is open for voting
-	 * @param  BINARY			Whether a reply to the poll topic is required before voting
-	 * @param  BINARY			The minimum number of selections for voters
-	 * @param  BINARY			The maximum number of selections for voters
-	 * @return tempcode		The tempcode for the fields
-	 */
+     * Get tempcode for a poll adding/editing form.
+     *
+     * @param  SHORT_TEXT               The poll question
+     * @param  ?array                   A list of current answers for the poll (NULL: none yet)
+     * @param  BINARY                   Whether it is a private poll (blind poll, where the results aren't visible until made public)
+     * @param  BINARY                   Whether the poll is open for voting
+     * @param  BINARY                   Whether a reply to the poll topic is required before voting
+     * @param  BINARY                   The minimum number of selections for voters
+     * @param  BINARY                   The maximum number of selections for voters
+     * @return tempcode                 The tempcode for the fields
+     */
     public function get_poll_form_fields($question = '',$answers = null,$is_private = 0,$is_open = 1,$requires_reply = 0,$minimum_selections = 1,$maximum_selections = 1)
     {
         require_lang('polls');
@@ -2729,11 +2729,11 @@ END;
     }
 
     /**
-	 * The UI to add a poll.
-	 *
-	 * @param  ?AUTO_LINK	The topic ID to add the poll to (NULL: it is instead gettable from a GET parameter named 'id')
-	 * @return tempcode		The UI
-	 */
+     * The UI to add a poll.
+     *
+     * @param  ?AUTO_LINK               The topic ID to add the poll to (NULL: it is instead gettable from a GET parameter named 'id')
+     * @return tempcode                 The UI
+     */
     public function add_poll($topic_id = null) // Type
     {
         if (is_null($topic_id)) {
@@ -2787,10 +2787,10 @@ END;
     }
 
     /**
-	 * The actualiser to add a poll.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to add a poll.
+     *
+     * @return tempcode                 The UI
+     */
     public function _add_poll() // Type
     {
         $topic_id = get_param_integer('id');
@@ -2868,10 +2868,10 @@ END;
     // ===============
 
     /**
-	 * The UI to edit a post.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a post.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_post() // Type
     {
         $post_id = get_param_integer('id');
@@ -3002,57 +3002,57 @@ END;
     }
 
     /**
-	 * Get JavaScript to restrict post lengths.
-	 *
-	 * @return string			The post JavaScript
-	 */
+     * Get JavaScript to restrict post lengths.
+     *
+     * @return string                   The post JavaScript
+     */
     public function _post_javascript()
     {
         $size = ocf_get_member_best_group_property(get_member(),'max_post_length_comcode');
 
         $javascript = "
-			var form=document.getElementById('post').form;
-			form.old_submit=form.onsubmit;
-			form.onsubmit=function()
-				{
-					var post=form.elements['post'];
-					if ((!post.value) && (post[1])) post=post[1];
-					if (post.value.length>" . strval($size) . ")
-					{
-						window.fauxmodal_alert('" . php_addslashes(do_lang('_POST_TOO_LONG')) . "');
-						return false;
-					}
-		";
+            var form=document.getElementById('post').form;
+            form.old_submit=form.onsubmit;
+            form.onsubmit=function()
+                    {
+                            var post=form.elements['post'];
+                            if ((!post.value) && (post[1])) post=post[1];
+                            if (post.value.length>" . strval($size) . ")
+                            {
+                                        window.fauxmodal_alert('" . php_addslashes(do_lang('_POST_TOO_LONG')) . "');
+                                        return false;
+                            }
+        ";
 
         $stub = unixify_line_format(either_param('stub',''));
         if ($stub != '') {
             $javascript .= "
-					var df='" . str_replace("\n",'\n',addslashes($stub)) . "';
+                            var df='" . str_replace("\n",'\n',addslashes($stub)) . "';
 
-					var pv=post.value;
-					if ((post) && (pv.substring(0,df.length)==df))
-					{
-						pv=pv.substring(df.length,pv.length);
-					}
-					post.value=pv;
-		";
+                            var pv=post.value;
+                            if ((post) && (pv.substring(0,df.length)==df))
+                            {
+                                        pv=pv.substring(df.length,pv.length);
+                            }
+                            post.value=pv;
+        ";
         }
 
         $javascript .= "
-					if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                            if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
 
-					return true;
-				};
-		";
+                            return true;
+                    };
+        ";
 
         return $javascript;
     }
 
     /**
-	 * The actualiser to edit a post.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a post.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_post() // Type
     {
         require_code('attachments2');
@@ -3121,10 +3121,10 @@ END;
     }
 
     /**
-	 * The actualiser to validate a post.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to validate a post.
+     *
+     * @return tempcode                 The UI
+     */
     public function validate_post() // Type
     {
         $post_id = get_param_integer('id');
@@ -3147,10 +3147,10 @@ END;
     // ================
 
     /**
-	 * Check there is at least some moderation access over the given topic.
-	 *
-	 * @param  AUTO_LINK		The topic ID
-	 */
+     * Check there is at least some moderation access over the given topic.
+     *
+     * @param  AUTO_LINK                The topic ID
+     */
     public function check_has_mod_access($topic_id) // This is here to prevent snooping into the details of things (the backend provides the true security)
     {
         $topic_info = $GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id' => $topic_id),'',1);
@@ -3172,10 +3172,10 @@ END;
     }
 
     /**
-	 * The UI to edit a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3269,10 +3269,10 @@ END;
     }
 
     /**
-	 * The actualiser to edit a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3310,10 +3310,10 @@ END;
     }
 
     /**
-	 * The UI to delete a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to delete a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3365,10 +3365,10 @@ END;
     }
 
     /**
-	 * The actualiser to delete a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3393,10 +3393,10 @@ END;
     }
 
     /**
-	 * The UI to invite a member to a PT.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to invite a member to a PT.
+     *
+     * @return tempcode                 The UI
+     */
     public function invite_member()
     {
         $topic_id = get_param_integer('id');
@@ -3427,10 +3427,10 @@ END;
     }
 
     /**
-	 * The actualiser to invite a member to a PT.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to invite a member to a PT.
+     *
+     * @return tempcode                 The UI
+     */
     public function _invite_member()
     {
         $username = trim(post_param('username'));
@@ -3450,10 +3450,10 @@ END;
     }
 
     /**
-	 * The UI to edit a poll.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to edit a poll.
+     *
+     * @return tempcode                 The UI
+     */
     public function edit_poll() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3510,10 +3510,10 @@ END;
     }
 
     /**
-	 * The actualiser to edit a poll.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to edit a poll.
+     *
+     * @return tempcode                 The UI
+     */
     public function _edit_poll() // Type
     {
         $poll_id = get_param_integer('id');
@@ -3560,10 +3560,10 @@ END;
     }
 
     /**
-	 * The UI to grab a reason for deleting a poll.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to grab a reason for deleting a poll.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete_poll() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3577,10 +3577,10 @@ END;
     }
 
     /**
-	 * The actualiser to delete a poll.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete a poll.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete_poll() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3595,10 +3595,10 @@ END;
     }
 
     /**
-	 * The UI to move a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to move a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function move_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3644,10 +3644,10 @@ END;
     }
 
     /**
-	 * The actualiser to move a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to move a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function _move_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3661,10 +3661,10 @@ END;
     }
 
     /**
-	 * The actualiser to pin a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to pin a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function pin_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3675,10 +3675,10 @@ END;
     }
 
     /**
-	 * The actualiser to unpin a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to unpin a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function unpin_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3689,10 +3689,10 @@ END;
     }
 
     /**
-	 * The actualiser to pin a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to pin a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function sink_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3703,10 +3703,10 @@ END;
     }
 
     /**
-	 * The actualiser to unpin a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to unpin a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function unsink_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3717,10 +3717,10 @@ END;
     }
 
     /**
-	 * The actualiser to cascade a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to cascade a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function cascade_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3731,10 +3731,10 @@ END;
     }
 
     /**
-	 * The actualiser to uncascade a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to uncascade a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function uncascade_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3745,10 +3745,10 @@ END;
     }
 
     /**
-	 * The actualiser to open a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to open a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function open_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3759,10 +3759,10 @@ END;
     }
 
     /**
-	 * The actualiser to close a topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to close a topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function close_topic() // Type
     {
         $topic_id = get_param_integer('id');
@@ -3773,10 +3773,10 @@ END;
     }
 
     /**
-	 * The UI to run a multi-moderation.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to run a multi-moderation.
+     *
+     * @return tempcode                 The UI
+     */
     public function multimod() // Type
     {
         require_lang('ocf_multi_moderations');
@@ -3863,10 +3863,10 @@ END;
     }
 
     /**
-	 * The actualiser to run a multi moderation.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to run a multi moderation.
+     *
+     * @return tempcode                 The UI
+     */
     public function _multimod() // Type
     {
         require_lang('ocf_multi_moderations');
@@ -3881,10 +3881,10 @@ END;
     }
 
     /**
-	 * A redirect for viewing post history: made like this so the history button can fit into the same URL architecture as the other post buttons.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * A redirect for viewing post history: made like this so the history button can fit into the same URL architecture as the other post buttons.
+     *
+     * @return tempcode                 The UI
+     */
     public function topic_history() // Type
     {
         $title = get_screen_title('POST_HISTORY');
@@ -3897,10 +3897,10 @@ END;
     }
 
     /**
-	 * The actualiser to mark a forum as read.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to mark a forum as read.
+     *
+     * @return tempcode                 The UI
+     */
     public function mark_read() // Type
     {
         $_forum_id = get_param('id');
@@ -3917,10 +3917,10 @@ END;
     }
 
     /**
-	 * The UI to make a normal topic a Private Topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to make a normal topic a Private Topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function make_private()
     {
         $topic_id = get_param_integer('id');
@@ -3958,10 +3958,10 @@ END;
     }
 
     /**
-	 * The actualiser to make a normal topic a Private Topic.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to make a normal topic a Private Topic.
+     *
+     * @return tempcode                 The UI
+     */
     public function _make_private()
     {
         $topic_id = post_param_integer('id');
@@ -3995,10 +3995,10 @@ END;
     }
 
     /**
-	 * Redirect to a screen suitable for celebrating a members birthday (existing topic, if possible).
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Redirect to a screen suitable for celebrating a members birthday (existing topic, if possible).
+     *
+     * @return tempcode                 The UI
+     */
     public function birthday()
     {
         $id = get_param('id');

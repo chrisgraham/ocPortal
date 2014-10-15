@@ -8,17 +8,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom_support_credits
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom_support_credits
  */
 
 /**
  * The UI for a points profile.
  *
- * @param  MEMBER			The ID of the member who is being viewed
- * @param  ?MEMBER		The ID of the member who is doing the viewing (NULL: current member)
- * @return tempcode		The UI
+ * @param  MEMBER                       The ID of the member who is being viewed
+ * @param  ?MEMBER                      The ID of the member who is doing the viewing (NULL: current member)
+ * @return tempcode                     The UI
  */
 function points_profile($member_id_of,$member_id_viewing)
 {

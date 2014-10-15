@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		galleries
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    galleries
  */
 
 require_code('crud_module');
@@ -42,14 +42,14 @@ class Module_cms_galleries extends standard_crud_module
     public $donext_type = null;
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -77,10 +77,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('galleries');
@@ -90,11 +90,11 @@ class Module_cms_galleries extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true)
     {
         $this->cat_crud_module = class_exists('Mx_cms_galleries_cat')?new Mx_cms_galleries_cat():new Module_cms_galleries_cat();
@@ -159,11 +159,11 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         require_code('galleries');
@@ -195,22 +195,22 @@ class Module_cms_galleries extends standard_crud_module
             require_javascript('javascript_ajax');
             $script = find_script('snippet');
             $this->cat_crud_module->javascript .= "
-				var form=document.getElementById('main_form');
-				form.old_submit=form.onsubmit;
-				form.onsubmit=function()
-					{
-						document.getElementById('submit_button').disabled=true;
-						var url='" . addslashes($script) . "?snippet=exists_gallery&name='+window.encodeURIComponent(form.elements['name'].value);
-						if (!do_ajax_field_test(url))
-						{
-							document.getElementById('submit_button').disabled=false;
-							return false;
-						}
-						document.getElementById('submit_button').disabled=false;
-						if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
-						return true;
-					};
-			";
+                    var form=document.getElementById('main_form');
+                    form.old_submit=form.onsubmit;
+                    form.onsubmit=function()
+                            {
+                                        document.getElementById('submit_button').disabled=true;
+                                        var url='" . addslashes($script) . "?snippet=exists_gallery&name='+window.encodeURIComponent(form.elements['name'].value);
+                                        if (!do_ajax_field_test(url))
+                                        {
+                                                        document.getElementById('submit_button').disabled=false;
+                                                        return false;
+                                        }
+                                        document.getElementById('submit_button').disabled=false;
+                                        if (typeof form.old_submit!='undefined' && form.old_submit) return form.old_submit();
+                                        return true;
+                            };
+            ";
         }
 
         // Decide what to do
@@ -240,10 +240,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         $allow_images = ($GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)',array('accept_images' => 1))>0);
@@ -266,10 +266,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The UI to choose a gallery to import into.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a gallery to import into.
+     *
+     * @return tempcode                 The UI
+     */
     public function gimp()
     {
         check_privilege('mass_import');
@@ -297,10 +297,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The UI to import into a gallery.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to import into a gallery.
+     *
+     * @return tempcode                 The UI
+     */
     public function _gimp()
     {
         $cat = get_param('name','root');
@@ -418,10 +418,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The actualiser to import a zip/tar into a gallery.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to import a zip/tar into a gallery.
+     *
+     * @return tempcode                 The UI
+     */
     public function __gimp()
     {
         $cat = get_param('cat');
@@ -590,10 +590,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Sort a directory of gallery media being imported.
-	 *
-	 * @param  array		The unsorted media, will be saved by reference
-	 */
+     * Sort a directory of gallery media being imported.
+     *
+     * @param  array                    The unsorted media, will be saved by reference
+     */
     public function _sort_media(&$directory)
     {
         // See if there is a numbering system to sort by
@@ -616,10 +616,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The actualiser to simple add/delete orphaned files in a gallery.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to simple add/delete orphaned files in a gallery.
+     *
+     * @return tempcode                 The UI
+     */
     public function ss()
     {
         $cat = post_param('ss_cat');
@@ -714,14 +714,14 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Take some data and write it to be a file in the gallery uploads directory, and add it to a gallery.
-	 *
-	 * @param  string			The filename
-	 * @param  PATH			Path to data file (will be copied from)
-	 * @param  ID_TEXT		The gallery to add to
-	 * @param  ?TIME			Timestamp to use (NULL: now)
-	 * @return ?array			A pair: The media type, The media ID (NULL: error)
-	 */
+     * Take some data and write it to be a file in the gallery uploads directory, and add it to a gallery.
+     *
+     * @param  string                   The filename
+     * @param  PATH                     Path to data file (will be copied from)
+     * @param  ID_TEXT                  The gallery to add to
+     * @param  ?TIME                    Timestamp to use (NULL: now)
+     * @return ?array                   A pair: The media type, The media ID (NULL: error)
+     */
     public function store_from_archive($file,&$in,$cat,$time = null)
     {
         // Find where to store on server
@@ -760,10 +760,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The actualiser to simple add an orphan file to a gallery.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to simple add an orphan file to a gallery.
+     *
+     * @return tempcode                 The UI
+     */
     public function sa()
     {
         $cat = post_param('cat');
@@ -801,11 +801,11 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * See if a gallery has any watermarks to use, or all galleries.
-	 *
-	 * @param  ?ID_TEXT	The gallery (NULL: all the current user has access to)
-	 * @return boolean	Whether watermarks are available
-	 */
+     * See if a gallery has any watermarks to use, or all galleries.
+     *
+     * @param  ?ID_TEXT                 The gallery (NULL: all the current user has access to)
+     * @return boolean                  Whether watermarks are available
+     */
     public function has_at_least_one_watermark($cat = null)
     {
         $where = '';
@@ -829,15 +829,15 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Take a file in the gallery uploads directory, and add it to a gallery.
-	 *
-	 * @param  URLPATH		The URL to the file
-	 * @param  URLPATH		The thumb URL to the file
-	 * @param  string			The filename
-	 * @param  ID_TEXT		The gallery to add to
-	 * @param  ?TIME			Timestamp to use (NULL: now)
-	 * @return ?array			A pair: The media type, The media ID (NULL: error)
-	 */
+     * Take a file in the gallery uploads directory, and add it to a gallery.
+     *
+     * @param  URLPATH                  The URL to the file
+     * @param  URLPATH                  The thumb URL to the file
+     * @param  string                   The filename
+     * @param  ID_TEXT                  The gallery to add to
+     * @param  ?TIME                    Timestamp to use (NULL: now)
+     * @return ?array                   A pair: The media type, The media ID (NULL: error)
+     */
     public function simple_add($url,$thumb_url,$file,$cat,$time = null)
     {
         require_code('exif');
@@ -935,10 +935,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The actualiser to simple delete an orphan file.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to simple delete an orphan file.
+     *
+     * @return tempcode                 The UI
+     */
     public function sd()
     {
         $cat = post_param('cat');
@@ -963,8 +963,8 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Filter any uploaded image such that it is watermarked.
-	 */
+     * Filter any uploaded image such that it is watermarked.
+     */
     public function handle_resizing_and_watermarking()
     {
         if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (array_key_exists('tmp_name',$_FILES['file'])) && (function_exists('imagetypes')))) {
@@ -979,12 +979,12 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Kills ocPortal if someone is trying to add an image to a gallery that does not support images.
-	 *
-	 * @param  ID_TEXT		The gallery
-	 * @param  boolean		Whether to tolerate the non-existance of the gallery
-	 * @return ?integer		Number allowed remaining (NULL: no limit)
-	 */
+     * Kills ocPortal if someone is trying to add an image to a gallery that does not support images.
+     *
+     * @param  ID_TEXT                  The gallery
+     * @param  boolean                  Whether to tolerate the non-existance of the gallery
+     * @return ?integer                 Number allowed remaining (NULL: no limit)
+     */
     public function check_images_allowed($cat,$tolerate_non_exist = false)
     {
         // Check this cat allows images
@@ -1018,10 +1018,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
-	 */
+     * Standard crud_module list function.
+     *
+     * @return array                    A triple: The tree field (tempcode), Search URL, Archive URL
+     */
     public function create_selection_list_ajax_tree()
     {
         if ($GLOBALS['SITE_DB']->query_select_value('images','COUNT(*)') == 0) {
@@ -1037,22 +1037,22 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for an image adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK		The ID of the image (NULL: new)
-	 * @param  SHORT_TEXT		The title
-	 * @param  ID_TEXT			The gallery
-	 * @param  LONG_TEXT			The image description
-	 * @param  URLPATH			URL to the image
-	 * @param  URLPATH			URL to the image thumbnail
-	 * @param  BINARY				Image validation status
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @param  LONG_TEXT			Notes for the image
-	 * @param  boolean			Whether this form will be used for adding a new image
-	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for an image adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The ID of the image (NULL: new)
+     * @param  SHORT_TEXT               The title
+     * @param  ID_TEXT                  The gallery
+     * @param  LONG_TEXT                The image description
+     * @param  URLPATH                  URL to the image
+     * @param  URLPATH                  URL to the image thumbnail
+     * @param  BINARY                   Image validation status
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  LONG_TEXT                Notes for the image
+     * @param  boolean                  Whether this form will be used for adding a new image
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($id = null,$title = '',$cat = '',$description = '',$url = '',$thumb_url = '',$validated = 1,$allow_rating = null,$allow_comments = null,$allow_trackbacks = null,$notes = '',$adding = true)
     {
         list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
@@ -1186,11 +1186,11 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  AUTO_LINK		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  AUTO_LINK                The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('images',array('submitter','add_date'),array('id' => intval($id)),'',1);
@@ -1201,11 +1201,11 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module cat getter.
-	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
-	 * @return mixed			The cat
-	 */
+     * Standard crud_module cat getter.
+     *
+     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @return mixed                    The cat
+     */
     public function get_cat($id)
     {
         $temp = $GLOBALS['SITE_DB']->query_select_value_if_there('images','cat',array('id' => $id));
@@ -1216,11 +1216,11 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple of lots of info
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A tuple of lots of info
+     */
     public function fill_in_edit_form($_id)
     {
         $id = intval($_id);
@@ -1259,10 +1259,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The ID of the entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The ID of the entry added
+     */
     public function add_actualisation()
     {
         $title = post_param('title','');
@@ -1335,10 +1335,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($_id)
     {
         $id = intval($_id);
@@ -1426,10 +1426,10 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($_id)
     {
         $id = intval($_id);
@@ -1450,13 +1450,13 @@ class Module_cms_galleries extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->cat_crud_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?null:intval($id));
@@ -1485,12 +1485,12 @@ class Module_cms_galleries_alt extends standard_crud_module
     public $donext_type = null;
 
     /**
-	 * Kills ocPortal if someone is trying to add a video to a gallery that does not support videos.
-	 *
-	 * @param  ID_TEXT		The gallery
-	 * @param  boolean		Whether to tolerate the non-existance of the gallery
-	 * @return ?integer		Number allowed remaining (NULL: no limit)
-	 */
+     * Kills ocPortal if someone is trying to add a video to a gallery that does not support videos.
+     *
+     * @param  ID_TEXT                  The gallery
+     * @param  boolean                  Whether to tolerate the non-existance of the gallery
+     * @return ?integer                 Number allowed remaining (NULL: no limit)
+     */
     public function check_videos_allowed($cat,$tolerate_non_exist = false)
     {
         // Check this cat allows images
@@ -1524,10 +1524,10 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Extract video meta info from any uploaded video.
-	 *
-	 * @return array		A triplet of 3 "?integer"'s: video width, video height, video length
-	 */
+     * Extract video meta info from any uploaded video.
+     *
+     * @return array                    A triplet of 3 "?integer"'s: video width, video height, video length
+     */
     public function get_special_video_info()
     {
         $video_length = post_param_integer('video_length',0);
@@ -1612,10 +1612,10 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
-	 */
+     * Standard crud_module list function.
+     *
+     * @return array                    A triple: The tree field (tempcode), Search URL, Archive URL
+     */
     public function create_selection_list_ajax_tree()
     {
         if ($GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)') == 0) {
@@ -1631,24 +1631,24 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a video adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK		The ID of the video (NULL: new)
- 	 * @param  SHORT_TEXT		The title
-	 * @param  ID_TEXT			The gallery
-	 * @param  LONG_TEXT			The video description
-	 * @param  URLPATH			The URL to the video file (blank: not yet added)
-	 * @param  URLPATH			The URL to the thumbnail
-	 * @param  BINARY				Video validation status
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @param  LONG_TEXT			Notes for the video
-	 * @param  ?integer			The length of the video (NULL: not yet added, so not yet known)
-	 * @param  ?integer			The width of the video (NULL: not yet added, so not yet known)
-	 * @param  ?integer			The height of the video (NULL: not yet added, so not yet known)
-	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for a video adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The ID of the video (NULL: new)
+     * @param  SHORT_TEXT               The title
+     * @param  ID_TEXT                  The gallery
+     * @param  LONG_TEXT                The video description
+     * @param  URLPATH                  The URL to the video file (blank: not yet added)
+     * @param  URLPATH                  The URL to the thumbnail
+     * @param  BINARY                   Video validation status
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  LONG_TEXT                Notes for the video
+     * @param  ?integer                 The length of the video (NULL: not yet added, so not yet known)
+     * @param  ?integer                 The width of the video (NULL: not yet added, so not yet known)
+     * @param  ?integer                 The height of the video (NULL: not yet added, so not yet known)
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($id = null,$title = '',$cat = '',$description = '',$url = '',$thumb_url = '',$validated = 1,$allow_rating = null,$allow_comments = null,$allow_trackbacks = null,$notes = '',$video_length = null,$video_width = null,$video_height = null)
     {
         list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
@@ -1732,7 +1732,7 @@ class Module_cms_galleries_alt extends standard_crud_module
         }
 
         $set_name = 'thumbnail';
-        $required = false;//(!$no_thumb_needed) && (get_option('allow_audio_videos')=='0') && (find_theme_image('video_thumb',true)=='');	Youtube won't require one for example
+        $required = false;//(!$no_thumb_needed) && (get_option('allow_audio_videos')=='0') && (find_theme_image('video_thumb',true)==''); Youtube won't require one for example
         $set_title = do_lang_tempcode('THUMBNAIL');
         $field_set = alternate_fields_set__start($set_name);
 
@@ -1784,11 +1784,11 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('videos',array('submitter','add_date'),array('id' => intval($id)),'',1);
@@ -1799,11 +1799,11 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module cat getter.
-	 *
-	 * @param  AUTO_LINK		The entry for which the cat is sought
-	 * @return mixed			The cat
-	 */
+     * Standard crud_module cat getter.
+     *
+     * @param  AUTO_LINK                The entry for which the cat is sought
+     * @return mixed                    The cat
+     */
     public function get_cat($id)
     {
         $temp = $GLOBALS['SITE_DB']->query_select_value_if_there('videos','cat',array('id' => $id));
@@ -1814,11 +1814,11 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A tuple of lots of info
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A tuple of lots of info
+     */
     public function fill_in_edit_form($_id)
     {
         $id = intval($_id);
@@ -1858,10 +1858,10 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The ID of the entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The ID of the entry added
+     */
     public function add_actualisation()
     {
         $title = post_param('title');
@@ -1935,10 +1935,10 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($_id)
     {
         $id = intval($_id);
@@ -2035,10 +2035,10 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($_id)
     {
         $id = intval($_id);
@@ -2059,13 +2059,13 @@ class Module_cms_galleries_alt extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for after content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $GLOBALS['MODULE_CMS_GALLERIES']->cat_crud_module->_do_next_manager($title,$description,$this->donext_type,is_null($id)?null:intval($id),true);
@@ -2090,10 +2090,10 @@ class Module_cms_galleries_cat extends standard_crud_module
     public $javascript = "var fn=document.getElementById('fullname'); if (fn) { var form=fn.form; fn.onchange=function() { if ((form.elements['name']) && (form.elements['name'].value=='')) form.elements['name'].value=fn.value.toLowerCase().replace(/[^\w\d\.\-]/g,'_').replace(/\_+\$/,''); }; }";
 
     /**
-	 * Standard crud_module list function.
-	 *
-	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
-	 */
+     * Standard crud_module list function.
+     *
+     * @return array                    A triple: The tree field (tempcode), Search URL, Archive URL
+     */
     public function create_selection_list_ajax_tree()
     {
         $purity = true;
@@ -2107,26 +2107,26 @@ class Module_cms_galleries_cat extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for a gallery adding/editing form.
-	 *
-	 * @param  ID_TEXT			The gallery codename (blank: new)
-	 * @param  SHORT_TEXT		The full human-readeable name of the gallery
-	 * @param  LONG_TEXT			The description of the gallery
-	 * @param  LONG_TEXT			Hidden notes associated with the gallery
-	 * @param  ID_TEXT			The parent gallery (blank: no parent)
-	 * @param  ?BINARY			Whether images may be put in this gallery (NULL: work out statistically)
-	 * @param  ?BINARY			Whether videos may be put in this gallery (NULL: work out statistically)
-	 * @param  BINARY				Whether the gallery serves as a container for automatically created member galleries
-	 * @param  ?BINARY			Whether the gallery uses the flow mode interface (NULL: pick statistically based on current usage of other galleries)
-	 * @param  ?URLPATH			The representative image of the gallery (NULL: none)
-	 * @param  ?URLPATH			Watermark (NULL: none)
-	 * @param  ?URLPATH			Watermark (NULL: none)
-	 * @param  ?URLPATH			Watermark (NULL: none)
-	 * @param  ?URLPATH			Watermark (NULL: none)
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for a gallery adding/editing form.
+     *
+     * @param  ID_TEXT                  The gallery codename (blank: new)
+     * @param  SHORT_TEXT               The full human-readeable name of the gallery
+     * @param  LONG_TEXT                The description of the gallery
+     * @param  LONG_TEXT                Hidden notes associated with the gallery
+     * @param  ID_TEXT                  The parent gallery (blank: no parent)
+     * @param  ?BINARY                  Whether images may be put in this gallery (NULL: work out statistically)
+     * @param  ?BINARY                  Whether videos may be put in this gallery (NULL: work out statistically)
+     * @param  BINARY                   Whether the gallery serves as a container for automatically created member galleries
+     * @param  ?BINARY                  Whether the gallery uses the flow mode interface (NULL: pick statistically based on current usage of other galleries)
+     * @param  ?URLPATH                 The representative image of the gallery (NULL: none)
+     * @param  ?URLPATH                 Watermark (NULL: none)
+     * @param  ?URLPATH                 Watermark (NULL: none)
+     * @param  ?URLPATH                 Watermark (NULL: none)
+     * @param  ?URLPATH                 Watermark (NULL: none)
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($name = '',$fullname = '',$description = '',$notes = '',$parent_id = '',$accept_images = null,$accept_videos = null,$is_member_synched = 0,$flow_mode_interface = null,$rep_image = null,$watermark_top_left = null,$watermark_top_right = null,$watermark_bottom_left = null,$watermark_bottom_right = null,$allow_rating = null,$allow_comments = null)
     {
         list($allow_rating,$allow_comments,) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,1);
@@ -2243,11 +2243,11 @@ class Module_cms_galleries_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('galleries',array('add_date','g_owner'),array('name' => $id),'',1);
@@ -2258,11 +2258,11 @@ class Module_cms_galleries_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name' => $id),'',1);
@@ -2275,10 +2275,10 @@ class Module_cms_galleries_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         $name = post_param('name','');
@@ -2319,10 +2319,10 @@ class Module_cms_galleries_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($id)
     {
         $name = post_param('name',fractional_edit()?$id:'');
@@ -2411,49 +2411,49 @@ class Module_cms_galleries_cat extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete possibility checker.
-	 *
-	 * @param  ID_TEXT		The entry being potentially deleted
-	 * @return boolean		Whether it may be deleted
-	 */
+     * Standard crud_module delete possibility checker.
+     *
+     * @param  ID_TEXT                  The entry being potentially deleted
+     * @return boolean                  Whether it may be deleted
+     */
     public function may_delete_this($id)
     {
         return $id != 'root';
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($id)
     {
         delete_gallery($id);
     }
 
     /**
-	 * The do-next manager for after download content management (event types only).
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?ID_TEXT		The ID of whatever was just handled (NULL: N/A)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after download content management (event types only).
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?ID_TEXT                 The ID of whatever was just handled (NULL: N/A)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$description,$id)
     {
         return $this->_do_next_manager($title,$description,is_null($id)?null:$id);
     }
 
     /**
-	 * The do-next manager for after image/video content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  tempcode		Some description to show, saying what happened
-	 * @param  ?ID_TEXT		The gallery we were working in (NULL: deleted)
-	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
-	 * @param  boolean		Whether we were working with a video
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after image/video content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  tempcode                 Some description to show, saying what happened
+     * @param  ?ID_TEXT                 The gallery we were working in (NULL: deleted)
+     * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
+     * @param  boolean                  Whether we were working with a video
+     * @return tempcode                 The UI
+     */
     public function _do_next_manager($title,$description,$cat = null,$id = null,$video = false)
     {
         $extra = array();
@@ -2475,7 +2475,7 @@ class Module_cms_galleries_cat extends standard_crud_module
             return do_next_manager($title,$description,
                 null,
                 null,
-                /* TYPED-ORDERED LIST OF 'LINKS'	 */
+                /* TYPED-ORDERED LIST OF 'LINKS'    */
                 NULL, // Add one
                 NULL, // Edit this
                 NULL, // Edit one
@@ -2519,7 +2519,7 @@ class Module_cms_galleries_cat extends standard_crud_module
         return do_next_manager($title,$description,
             null,
             null,
-            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            /* TYPED-ORDERED LIST OF 'LINKS'  */
             NULL, // Add one
             (is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_galleries',array('galleries',$cat))))?null:array('_SELF',array('type' => $video?'_ev':'_ed','id' => $id),'_SELF'), // Edit this
             NULL, // Edit one

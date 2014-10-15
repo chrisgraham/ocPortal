@@ -13,17 +13,17 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * XML escape the input string.
  *
- * @param  string			Input string
- * @param  integer		Quote style
- * @return string			Escaped version of input string
+ * @param  string                       Input string
+ * @param  integer                      Quote style
+ * @return string                       Escaped version of input string
  */
 function xmlentities($string,$quote_style = ENT_COMPAT)
 {
@@ -37,9 +37,9 @@ function xmlentities($string,$quote_style = ENT_COMPAT)
 /**
  * Convert HTML entities to plain characters for XML validity.
  *
- * @param  string			HTML to convert entities from
- * @param  string			The character set we are using for $data (both in and out)
- * @return string			Valid XHTML
+ * @param  string                       HTML to convert entities from
+ * @param  string                       The character set we are using for $data (both in and out)
+ * @return string                       Valid XHTML
  */
 function convert_bad_entities($data,$charset = 'ISO-8859-1')
 {
@@ -68,7 +68,7 @@ function convert_bad_entities($data,$charset = 'ISO-8859-1')
 
 /**
  * Simple XML reader.
- * @package		core
+ * @package    core
  */
 class ocp_simple_xml_reader
 {
@@ -78,10 +78,10 @@ class ocp_simple_xml_reader
     var $gleamed,$error;
 
     /**
-	 * Constructs the XML reader: parses the given data. Check $gleamed and $error after constructing.
-	 *
-	 * @param  string			The XML data
-	 */
+     * Constructs the XML reader: parses the given data. Check $gleamed and $error after constructing.
+     *
+     * @param  string                   The XML data
+     */
     public function ocp_simple_xml_reader($xml_data)
     {
         require_code('xml');
@@ -132,12 +132,12 @@ class ocp_simple_xml_reader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The name of the element found
-	 * @param  array			Array of attributes of the element
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The name of the element found
+     * @param  array                    Array of attributes of the element
+     */
     public function startElement($parser,$name,$attributes)
     {
         array_push($this->tag_stack,strtolower($name));
@@ -154,10 +154,10 @@ class ocp_simple_xml_reader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     */
     public function endElement($parser)
     {
         $this_tag = array_pop($this->tag_stack);
@@ -175,11 +175,11 @@ class ocp_simple_xml_reader
     }
 
     /**
-	 * Standard PHP XML parser function.
-	 *
-	 * @param  object			The parser object (same as 'this')
-	 * @param  string			The text
-	 */
+     * Standard PHP XML parser function.
+     *
+     * @param  object                   The parser object (same as 'this')
+     * @param  string                   The text
+     */
     public function startText($parser,$data)
     {
         $next_top_tags_text = array_pop($this->text_stack);
@@ -192,11 +192,11 @@ class ocp_simple_xml_reader
     }
 
     /**
-	 * Pull a portion of an XML tree structure back into textual XML.
-	 *
-	 * @param  array			Level of XML tree
-	 * @return string			The combined XML
-	 */
+     * Pull a portion of an XML tree structure back into textual XML.
+     *
+     * @param  array                    Level of XML tree
+     * @return string                   The combined XML
+     */
     public function pull_together($children)
     {
         $data = '';

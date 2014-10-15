@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_notifications
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_notifications
  */
 
 class Hook_startup_notification_poller_init
 {
     /**
-	 * Run startup code.
-	 */
+     * Run startup code.
+     */
     public function run()
     {
         if ((running_script('index')) && (!is_guest()) && (get_option('notification_poll_frequency') != '0')) {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -30,11 +30,11 @@ function init__ocf_posts()
 /**
  * Find whether a member may post in a certain topic.
  *
- * @param  AUTO_LINK 	The forum ID of the forum the topic is in.
- * @param  AUTO_LINK 	The topic ID is in.
- * @param  ?MEMBER		The last poster in the topic (NULL: do not check for double posting).
- * @param  ?MEMBER		The member (NULL: current member).
- * @return boolean		The answer.
+ * @param  AUTO_LINK                    The forum ID of the forum the topic is in.
+ * @param  AUTO_LINK                    The topic ID is in.
+ * @param  ?MEMBER                      The last poster in the topic (NULL: do not check for double posting).
+ * @param  ?MEMBER                      The member (NULL: current member).
+ * @return boolean                      The answer.
  */
 function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id = null,$member_id = null)
 {
@@ -65,11 +65,11 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id = null,$membe
 /**
  * Find whether a member may edit the detailed post.
  *
- * @param  MEMBER			The owner of the post.
- * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a Private Topic).
- * @param  ?MEMBER		The member (NULL: current member).
- * @param  ?boolean		Whether the topic the post is in is closed (NULL: don't consider this, maybe we're not considering any one specific case).
- * @return boolean		The answer.
+ * @param  MEMBER                       The owner of the post.
+ * @param  ?AUTO_LINK                   The forum the post is in (NULL: is a Private Topic).
+ * @param  ?MEMBER                      The member (NULL: current member).
+ * @param  ?boolean                     Whether the topic the post is in is closed (NULL: don't consider this, maybe we're not considering any one specific case).
+ * @return boolean                      The answer.
  */
 function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id = null,$topic_is_closed = null)
 {
@@ -106,10 +106,10 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id = null,$topic
 /**
  * Find whether a member may delete the detailed post.
  *
- * @param  MEMBER			The owner of the post.
- * @param  ?AUTO_LINK 	The forum the post is in (NULL: is a Private Topic).
- * @param  ?MEMBER		The member (NULL: current member).
- * @return boolean		The answer.
+ * @param  MEMBER                       The owner of the post.
+ * @param  ?AUTO_LINK                   The forum the post is in (NULL: is a Private Topic).
+ * @param  ?MEMBER                      The member (NULL: current member).
+ * @return boolean                      The answer.
  */
 function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id = null)
 {
@@ -140,9 +140,9 @@ function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id = null)
 /**
  * Try and make a spacer post look nicer on OCF than it automatically would.
  *
- * @param  ID_TEXT		Content type.
- * @param  ID_TEXT		Content ID.
- * @return array			A pair: better description (may be NULL), better post (may be NULL).
+ * @param  ID_TEXT                      Content type.
+ * @param  ID_TEXT                      Content ID.
+ * @return array                        A pair: better description (may be NULL), better post (may be NULL).
  */
 function ocf_display_spacer_post($linked_type,$linked_id)
 {

@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 class Hook_chat_bot_default
 {
     /**
-	 * Handle hooks supported bot commands. Note multiple bots may support the same commands, and all respond. It is recommended all bots support the command 'help'.
-	 *
-	 * @param  AUTO_LINK		The ID of the chat room
-	 * @param  string			The command used. This is just the chat message, so you can encode and recognise your own parameter scheme if you like.
-	 * @return ?string		Bot reply (NULL: bot does not handle the command)
-	 */
+     * Handle hooks supported bot commands. Note multiple bots may support the same commands, and all respond. It is recommended all bots support the command 'help'.
+     *
+     * @param  AUTO_LINK                The ID of the chat room
+     * @param  string                   The command used. This is just the chat message, so you can encode and recognise your own parameter scheme if you like.
+     * @return ?string                  Bot reply (NULL: bot does not handle the command)
+     */
     public function handle_commands($room_id,$command)
     {
         switch ($command) {

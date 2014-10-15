@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		occle
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    occle
  */
 
 /**
@@ -132,7 +132,7 @@ function occle_script()
 
 /**
  * OcCLE.
- * @package		occle
+ * @package    occle
  */
 class virtual_bash
 {
@@ -144,12 +144,12 @@ class virtual_bash
     public $fs;
 
     /**
-	 * Constructor function. Starts command parsing on the supplied command.
-	 *
-	 * @param  string	The inputted command, unparsed
-	 * @param  ?array	An array of prior output to be prepended (NULL: none)
-	 * @param  ?array	An array of prior parameters (NULL: none)
-	 */
+     * Constructor function. Starts command parsing on the supplied command.
+     *
+     * @param  string                   The inputted command, unparsed
+     * @param  ?array                   An array of prior output to be prepended (NULL: none)
+     * @param  ?array                   An array of prior parameters (NULL: none)
+     */
     public function virtual_bash($inputted_command,$prior_output = null,$parameters = null)
     {
         if (!defined('MODE_NORMAL')) {
@@ -200,10 +200,10 @@ class virtual_bash
     }
 
     /**
-	 * Returns the parse tree for the command just parsed.
-	 *
-	 * @return ~array			The parse tree (false: failure)
-	 */
+     * Returns the parse tree for the command just parsed.
+     *
+     * @return ~array                   The parse tree (false: failure)
+     */
     public function return_parse_tree()
     {
         if (count($this->parsed_input) >= 1) {
@@ -214,10 +214,10 @@ class virtual_bash
     }
 
     /**
-	 * Returns the output for the command just parsed.
-	 *
-	 * @return ~array			The output (false: failure)
-	 */
+     * Returns the output for the command just parsed.
+     *
+     * @return ~array                   The output (false: failure)
+     */
     public function return_output()
     {
         if (count($this->output) >= 1) {
@@ -228,10 +228,10 @@ class virtual_bash
     }
 
     /**
-	 * Output an XML-RPC packet (hopefully) to the AJAX in the frontend.
-	 *
-	 * @return boolean			Success?
-	 */
+     * Output an XML-RPC packet (hopefully) to the AJAX in the frontend.
+     *
+     * @return boolean                  Success?
+     */
     public function output_xml()
     {
         require_code('xml');
@@ -263,14 +263,14 @@ class virtual_bash
 
         $output = '<' . '?xml version="1.0" encoding="' . get_charset() . '" ?' . '>
 <response>
-	<result>
-		<command>' . xmlentities($this->current_input) . '</command>
-		<stdcommand>' . $this->output[STREAM_STDCOMMAND] . '</stdcommand>
-		<stdhtml><div xmlns="http://www.w3.org/1999/xhtml">' . $this->output[STREAM_STDHTML] . '</div></stdhtml>
-		<stdout>' . xmlentities($this->output[STREAM_STDOUT]) . '</stdout>
-		<stderr>' . xmlentities($this->output[STREAM_STDERR]) . '</stderr>
-		<stdnotifications>' . get_queued_messages() . '</stdnotifications>
-	</result>
+    <result>
+        <command>' . xmlentities($this->current_input) . '</command>
+        <stdcommand>' . $this->output[STREAM_STDCOMMAND] . '</stdcommand>
+        <stdhtml><div xmlns="http://www.w3.org/1999/xhtml">' . $this->output[STREAM_STDHTML] . '</div></stdhtml>
+        <stdout>' . xmlentities($this->output[STREAM_STDOUT]) . '</stdout>
+        <stderr>' . xmlentities($this->output[STREAM_STDERR]) . '</stderr>
+        <stdnotifications>' . get_queued_messages() . '</stdnotifications>
+    </result>
 </response>';
 
         if ($GLOBALS['XSS_DETECT']) {
@@ -286,11 +286,11 @@ class virtual_bash
     }
 
     /**
-	 * Return the HTML rendering of the parsed command's output.
-	 *
-	 * @param  boolean		  Whether it is okay to have blank output
-	 * @return ~tempcode		  The HTML (false: error)
-	 */
+     * Return the HTML rendering of the parsed command's output.
+     *
+     * @param  boolean                  Whether it is okay to have blank output
+     * @return ~tempcode                The HTML (false: error)
+     */
     public function output_html($blank_ok = false)
     {
         if (count($this->parsed_input)<1) {
@@ -330,8 +330,8 @@ class virtual_bash
     }
 
     /**
-	 * Extract the command name from the input.
-	 */
+     * Extract the command name from the input.
+     */
     public function _extract_command()
     {
         if ($this->current_input == '') {
@@ -381,8 +381,8 @@ class virtual_bash
     }
 
     /**
-	 * Extract options (switches) from the input.
-	 */
+     * Extract options (switches) from the input.
+     */
     public function _extract_options()
     {
         // Add each option to the options array...an option *should* be prefixed with a dash ('-'), and can *optionally* have a value, shown through the use of equals ('=') - this can be a quoted value
@@ -523,8 +523,8 @@ class virtual_bash
     }
 
     /**
-	 * Extract parameters from the input.
-	 */
+     * Extract parameters from the input.
+     */
     public function _extract_parameters()
     {
         // Add each parameter to the parameters array...a parameter *should not* have spaces unless it's a quoted value
@@ -639,8 +639,8 @@ class virtual_bash
     }
 
     /**
-	 * Extract extra tokens from the input.
-	 */
+     * Extract extra tokens from the input.
+     */
     public function _extract_extras()
     {
         // Add the extra instructions to the extras array
@@ -775,10 +775,10 @@ class virtual_bash
     }
 
     /**
-	 * Is the current block a valid redirection instruction?
-	 *
-	 * @return boolean			Redirection instruction?
-	 */
+     * Is the current block a valid redirection instruction?
+     *
+     * @return boolean                  Redirection instruction?
+     */
     public function _check_is_redirection()
     {
         // Take the current block (delimited by spaces (' ')), and check to see if it's a valid redirect instruction
@@ -800,26 +800,26 @@ class virtual_bash
     }
 
     /**
-	 * Parses input setup in constructor, and creates a parse tree.
-	 */
+     * Parses input setup in constructor, and creates a parse tree.
+     */
     public function parse_input()
     {
         /*We need to break the $this->parsed_input[SECTION_COMMAND] up into several distinct parts:
-			- Command
-			- Options
-			- Parameters
-			- Extras (e.g. I/O redirection / pipes)
-		i.e.
-			chmod	-R	777		./foobar	>> output.txt
-			COMMAND	OPTION	PARAMETER	PARAMETER	EXTRA
-		*/
+            - Command
+            - Options
+            - Parameters
+            - Extras (e.g. I/O redirection / pipes)
+        i.e.
+            chmod -R 777      ./foobar >> output.txt
+            COMMAND  OPTION   PARAMETER   PARAMETER   EXTRA
+        */
 
         /*Output redirection:
-			2&1> output.txt
+            2&1> output.txt
 
-			2&1			>		output.txt
-			STREAM_IDENTIFIER	ASSIGNMENT	REDIRECT_IDENTIFIER
-		*/
+            2&1         >     output.txt
+            STREAM_IDENTIFIER ASSIGNMENT  REDIRECT_IDENTIFIER
+        */
 
         $this->parse_runtime['command_length'] = strlen($this->current_input);
         $this->parse_runtime['parse_position'] = 0;
@@ -1025,12 +1025,12 @@ class virtual_bash
     }
 
     /**
-	 * Combine two streams regardless of their format.
-	 *
-	 * @param  array				Stream 1
-	 * @param  array				Stream 2
-	 * @return array				Combined streams
-	 */
+     * Combine two streams regardless of their format.
+     *
+     * @param  array                    Stream 1
+     * @param  array                    Stream 2
+     * @return array                    Combined streams
+     */
     public function _combine_streams($stream1,$stream2)
     {
         // Combine two streams, taking account of arrays, tempcode and other stuff
@@ -1075,11 +1075,11 @@ class virtual_bash
     }
 
     /**
-	 * Convert an array to tempcode for display.
-	 *
-	 * @param  array				Array to display
-	 * @return tempcode			Tempcode for array
-	 */
+     * Convert an array to tempcode for display.
+     *
+     * @param  array                    Array to display
+     * @return tempcode                 Tempcode for array
+     */
     public function _array_to_html($array)
     {
         // Convert an array to an HTML format
@@ -1095,12 +1095,12 @@ class virtual_bash
     }
 
     /**
-	 * Convert an array to text for display.
-	 *
-	 * @param  array				Array to display
-	 * @param  integer			Global indentation
-	 * @return string				Text representation of array
-	 */
+     * Convert an array to text for display.
+     *
+     * @param  array                    Array to display
+     * @param  integer                  Global indentation
+     * @return string                   Text representation of array
+     */
     public function _array_to_text($array,$indentation = 0)
     {
         // Convert an array to a text format
@@ -1117,11 +1117,11 @@ class virtual_bash
     }
 
     /**
-	 * Return a specified number of tabs.
-	 *
-	 * @param  integer			Number of tabs to return
-	 * @return string				Tabs
-	 */
+     * Return a specified number of tabs.
+     *
+     * @param  integer                  Number of tabs to return
+     * @return string                   Tabs
+     */
     public function _do_indentation($indentation)
     {
         // Return some tabs
@@ -1133,8 +1133,8 @@ class virtual_bash
     }
 
     /**
-	 * Handle a PHP command by executing it, dealing with variables from the class.
-	 */
+     * Handle a PHP command by executing it, dealing with variables from the class.
+     */
     public function _handle_php_command()
     {
         // NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
@@ -1247,12 +1247,12 @@ class virtual_bash
     }
 
     /**
-	 * Find a script file.
-	 *
-	 * @param  string					Script name
-	 * @param  ?string				Directory (NULL: OcCLE module data dir)
-	 * @return ~string				Path or failure (false: failure)
-	 */
+     * Find a script file.
+     *
+     * @param  string                   Script name
+     * @param  ?string                  Directory (NULL: OcCLE module data dir)
+     * @return ~string                  Path or failure (false: failure)
+     */
     public function _find_script_file($script_name,$dir = null)
     {
         require_code('files');
@@ -1282,8 +1282,8 @@ class virtual_bash
 /**
  * Returns a string containing the XML for any messages queued to be sent to the client.
  *
- * @param  boolean	Output as XML or tempcode?
- * @return string		The queued message XML
+ * @param  boolean                      Output as XML or tempcode?
+ * @return string                       The queued message XML
 */
 function get_queued_messages($xml = true)
 {
@@ -1326,10 +1326,10 @@ function get_queued_messages($xml = true)
 /**
  * Template for a command's help.
  *
- * @param  string			Command name
- * @param  array			Options
- * @param  array			Parameters (keys are the parameters, values are always set to true, i.e. it is an array of as many trues as there are parameters)
- * @return tempcode		Help template
+ * @param  string                       Command name
+ * @param  array                        Options
+ * @param  array                        Parameters (keys are the parameters, values are always set to true, i.e. it is an array of as many trues as there are parameters)
+ * @return tempcode                     Help template
 */
 function do_command_help($command,$options,$parameters)
 {
@@ -1370,8 +1370,8 @@ function do_command_help($command,$options,$parameters)
 /**
  * Put something non-OcCLE in a standard box so it looks OK.
  *
- * @param  mixed			HTML (string or Tempcode)
- * @return tempcode		Boxed HTML
+ * @param  mixed                        HTML (string or Tempcode)
+ * @return tempcode                     Boxed HTML
 */
 function occle_make_normal_html_visible($html)
 {

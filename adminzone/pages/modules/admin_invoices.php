@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ecommerce
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ecommerce
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_invoices
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -41,14 +41,14 @@ class Module_admin_invoices
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         if ($be_deferential) {
@@ -66,10 +66,10 @@ class Module_admin_invoices
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','ad');
@@ -130,10 +130,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('ecommerce');
@@ -165,10 +165,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * The do-next manager for before invoice management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before invoice management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -183,10 +183,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * UI to add an invoice.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * UI to add an invoice.
+     *
+     * @return tempcode                 The interface.
+     */
     public function ad()
     {
         require_code('form_templates');
@@ -221,10 +221,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * Actualiser to add an invoice.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Actualiser to add an invoice.
+     *
+     * @return tempcode                 The interface.
+     */
     public function _ad()
     {
         $type_code = post_param('type_code');
@@ -264,10 +264,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * Show outstanding invoices.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Show outstanding invoices.
+     *
+     * @return tempcode                 The interface.
+     */
     public function outstanding()
     {
         $invoices = array();
@@ -287,10 +287,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * Show undelivered invoices.
-	 *
-	 * @return tempcode	The interface.
-	 */
+     * Show undelivered invoices.
+     *
+     * @return tempcode                 The interface.
+     */
     public function undelivered()
     {
         $invoices = array();
@@ -310,10 +310,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * Actualiser to delete an invoice.
-	 *
-	 * @return tempcode	The result.
-	 */
+     * Actualiser to delete an invoice.
+     *
+     * @return tempcode                 The result.
+     */
     public function delete()
     {
         if (post_param_integer('confirmed',0) != 1) {
@@ -334,10 +334,10 @@ class Module_admin_invoices
     }
 
     /**
-	 * Actualiser to deliver an invoice.
-	 *
-	 * @return tempcode	The result.
-	 */
+     * Actualiser to deliver an invoice.
+     *
+     * @return tempcode                 The result.
+     */
     public function deliver()
     {
         $GLOBALS['SITE_DB']->query_update('invoices',array('i_state' => 'delivered'),array('id' => get_param_integer('id')),'',1);

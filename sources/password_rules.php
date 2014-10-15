@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
  * Find if a member's account has expired, due to inactivity.
  *
- * @param  MEMBER			The member this is for
- * @return boolean		Whether it is
+ * @param  MEMBER                       The member this is for
+ * @return boolean                      Whether it is
  */
 function member_password_expired($member_id)
 {
@@ -41,8 +41,8 @@ function member_password_expired($member_id)
 /**
  * Find if a member's password is too old.
  *
- * @param  MEMBER			The member this is for
- * @return boolean		Whether it is
+ * @param  MEMBER                       The member this is for
+ * @return boolean                      Whether it is
  */
 function member_password_too_old($member_id)
 {
@@ -63,10 +63,10 @@ function member_password_too_old($member_id)
 /**
  * Check the complexity of a password.
  *
- * @param  ID_TEXT		The username this is for
- * @param  string			New password
- * @param  boolean		Whether to return errors instead of dieing on them.
- * @return ?tempcode		Error (NULL: none).
+ * @param  ID_TEXT                      The username this is for
+ * @param  string                       New password
+ * @param  boolean                      Whether to return errors instead of dieing on them.
+ * @return ?tempcode                    Error (NULL: none).
  */
 function check_password_complexity($username,$password,$return_errors = false)
 {
@@ -108,12 +108,12 @@ function check_password_complexity($username,$password,$return_errors = false)
 /**
  * Store (a hash of) and validate a new password.
  *
- * @param  MEMBER			The member this is for
- * @param  string			New password
- * @param  string			Hashed password
- * @param  string			Password salt
- * @param  boolean		Whether to skip enforcement checks
- * @param  ?TIME			The time this is logged to be happening at (NULL: now)
+ * @param  MEMBER                       The member this is for
+ * @param  string                       New password
+ * @param  string                       Hashed password
+ * @param  string                       Password salt
+ * @param  boolean                      Whether to skip enforcement checks
+ * @param  ?TIME                        The time this is logged to be happening at (NULL: now)
  */
 function bump_password_change_date($member_id,$password,$password_salted,$salt,$skip_checks = false,$time = null)
 {

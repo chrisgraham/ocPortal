@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		custom_comcode
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    custom_comcode
  */
 
 class Block_main_custom_gfx
 {
     /**
-	 * Find details of the block.
-	 *
-	 * @return ?array	Map of block info (NULL: block is disabled).
-	 */
+     * Find details of the block.
+     *
+     * @return ?array                   Map of block info (NULL: block is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -39,11 +39,11 @@ class Block_main_custom_gfx
     }
 
     /**
-	 * Execute the block.
-	 *
-	 * @param  array		A map of parameters.
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the block.
+     *
+     * @param  array                    A map of parameters.
+     * @return tempcode                 The result of execution.
+     */
     public function run($map)
     {
         // Loads up correct hook and returns rendering
@@ -62,13 +62,13 @@ class Block_main_custom_gfx
     }
 
     /**
-	 * Utility method for writing text onto images.
-	 *
-	 * @param  ID_TEXT	ID.
-	 * @param  array		A map of parameters.
-	 * @param  URLPATH	The image path.
-	 * @return mixed		URL of completed image OR tempcode error.
-	 */
+     * Utility method for writing text onto images.
+     *
+     * @param  ID_TEXT                  ID.
+     * @param  array                    A map of parameters.
+     * @param  URLPATH                  The image path.
+     * @return mixed                    URL of completed image OR tempcode error.
+     */
     public function _do_image($cache_id,&$map,$img_path)
     {
         if (!array_key_exists('font_size',$map)) {

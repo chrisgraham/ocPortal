@@ -13,20 +13,20 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocf_cpfs
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocf_cpfs
  */
 
 class Hook_Profiles_Tabs_Edit_privacy
 {
     /**
-	 * Find whether this hook is active.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @return boolean		Whether this hook is active
-	 */
+     * Find whether this hook is active.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @return boolean                  Whether this hook is active
+     */
     public function is_active($member_id_of,$member_id_viewing)
     {
         if (get_option('enable_privacy_tab') == '0') {
@@ -37,13 +37,13 @@ class Hook_Profiles_Tabs_Edit_privacy
     }
 
     /**
-	 * Render function for profile tabs edit hooks.
-	 *
-	 * @param  MEMBER			The ID of the member who is being viewed
-	 * @param  MEMBER			The ID of the member who is doing the viewing
-	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
-	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
-	 */
+     * Render function for profile tabs edit hooks.
+     *
+     * @param  MEMBER                   The ID of the member who is being viewed
+     * @param  MEMBER                   The ID of the member who is doing the viewing
+     * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
+     * @return ?array                   A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
+     */
     public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
     {
         $title = do_lang_tempcode('PRIVACY');
@@ -174,7 +174,7 @@ class Hook_Profiles_Tabs_Edit_privacy
                 $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '00c9fa8c21c17b30dc06bd2e86518d6f','TITLE' => do_lang_tempcode('WHO_CAN_SEE_YOUR',escape_html($cpf_title)))));
 
                 $fields->attach(form_input_tick(do_lang_tempcode('GUESTS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_GUESTS'),'guests_' . strval($cpf_id),$view_by_guests));
-                //$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));	Same as 'all' in groups
+                //$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));  Same as 'all' in groups
                 $fields->attach(form_input_tick(do_lang_tempcode('FRIENDS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_FRIENDS'),'friends_' . strval($cpf_id),$view_by_friends));
 
                 $groups = new ocp_tempcode();

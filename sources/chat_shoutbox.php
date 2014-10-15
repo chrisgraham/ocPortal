@@ -13,18 +13,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		chat
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    chat
  */
 
 /**
  * Outputs the shoutbox iframe.
  *
- * @param  boolean			Whether to get the output instead of outputting it directly
- * @param  ?AUTO_LINK		Chat room ID (NULL: read from environment)
- * @param  ?integer			The maximum number of messages to show (NULL: read from environment)
- * @return ?object			Output (NULL: outputted it already)
+ * @param  boolean                      Whether to get the output instead of outputting it directly
+ * @param  ?AUTO_LINK                   Chat room ID (NULL: read from environment)
+ * @param  ?integer                     The maximum number of messages to show (NULL: read from environment)
+ * @return ?object                      Output (NULL: outputted it already)
  */
 function shoutbox_script($ret = false,$room_id = null,$num_messages = null)
 {
@@ -40,7 +40,7 @@ function shoutbox_script($ret = false,$room_id = null,$num_messages = null)
     require_code('chat');
     require_css('chat');
 
-//	if (is_guest()) return; // No guests
+// if (is_guest()) return; // No guests
 
     if (is_null($room_id)) {
         $room_id = $GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','MIN(id)',array('is_im' => 0/*,'room_language'=>user_lang()*/));

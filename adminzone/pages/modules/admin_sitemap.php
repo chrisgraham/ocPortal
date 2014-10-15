@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		page_management
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    page_management
  */
 
 /**
@@ -24,10 +24,10 @@
 class Module_admin_sitemap
 {
     /**
-	 * Find details of the module.
-	 *
-	 * @return ?array	Map of module info (NULL: module is disabled).
-	 */
+     * Find details of the module.
+     *
+     * @return ?array                   Map of module info (NULL: module is disabled).
+     */
     public function info()
     {
         $info = array();
@@ -42,14 +42,14 @@ class Module_admin_sitemap
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         $ret = array(
@@ -68,10 +68,10 @@ class Module_admin_sitemap
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run()
     {
         $type = get_param('type','misc');
@@ -136,10 +136,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * Execute the module.
-	 *
-	 * @return tempcode	The result of execution.
-	 */
+     * Execute the module.
+     *
+     * @return tempcode                 The result of execution.
+     */
     public function run()
     {
         require_code('zones2');
@@ -173,10 +173,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The do-next manager for before content management. This is intended for exceptional users who cannot use the sitemap editor
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management. This is intended for exceptional users who cannot use the sitemap editor
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -191,14 +191,14 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The do-next manager for after content management.
-	 *
-	 * @param  tempcode		The title (output of get_screen_title)
-	 * @param  ?ID_TEXT		The name of the page just handled (NULL: none)
-	 * @param  ID_TEXT		The name of the zone just handled (blank: none/welcome-zone)
-	 * @param  tempcode		The text to show (blank: default)
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for after content management.
+     *
+     * @param  tempcode                 The title (output of get_screen_title)
+     * @param  ?ID_TEXT                 The name of the page just handled (NULL: none)
+     * @param  ID_TEXT                  The name of the zone just handled (blank: none/welcome-zone)
+     * @param  tempcode                 The text to show (blank: default)
+     * @return tempcode                 The UI
+     */
     public function do_next_manager($title,$page,$zone,$completion_text)
     {
         require_code('zones2');
@@ -207,10 +207,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The UI for the sitemap editor.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI for the sitemap editor.
+     *
+     * @return tempcode                 The UI
+     */
     public function sitemap()
     {
         require_css('sitemap_editor');
@@ -236,12 +236,12 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The UI to choose a zone.
-	 *
-	 * @param  tempcode		The title for the "choose a zone" page
-	 * @param  ?string		Zone to not allow the selection of (NULL: none to filter out)
-	 * @return tempcode		The UI
-	 */
+     * The UI to choose a zone.
+     *
+     * @param  tempcode                 The title for the "choose a zone" page
+     * @param  ?string                  Zone to not allow the selection of (NULL: none to filter out)
+     * @return tempcode                 The UI
+     */
     public function _choose_zone($title,$no_go = null)
     {
         $fields = new ocp_tempcode();
@@ -258,10 +258,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The UI to delete a page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to delete a page.
+     *
+     * @return tempcode                 The UI
+     */
     public function delete()
     {
         if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {
@@ -311,10 +311,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The UI to confirm deletion of a page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to confirm deletion of a page.
+     *
+     * @return tempcode                 The UI
+     */
     public function _delete()
     {
         $hidden = new ocp_tempcode();
@@ -358,10 +358,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The actualiser to delete a page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to delete a page.
+     *
+     * @return tempcode                 The UI
+     */
     public function __delete()
     {
         $zone = post_param('zone',null);
@@ -410,10 +410,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The UI to move a page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to move a page.
+     *
+     * @return tempcode                 The UI
+     */
     public function move()
     {
         if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {
@@ -461,10 +461,10 @@ class Module_admin_sitemap
     }
 
     /**
-	 * The actualiser to move a page.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to move a page.
+     *
+     * @return tempcode                 The UI
+     */
     public function _move()
     {
         if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {

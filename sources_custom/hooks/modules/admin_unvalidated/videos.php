@@ -8,18 +8,18 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		workflows
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    workflows
  */
 
 class Hook_unvalidated_videos
 {
     /**
-	 * Find details on the unvalidated hook.
-	 *
-	 * @return ?array	Map of hook info (NULL: hook is disabled).
-	 */
+     * Find details on the unvalidated hook.
+     *
+     * @return ?array                   Map of hook info (NULL: hook is disabled).
+     */
     public function info()
     {
         if (!module_installed('galleries')) {

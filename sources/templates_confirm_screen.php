@@ -13,21 +13,21 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_abstract_interfaces
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_abstract_interfaces
  */
 
 /**
  * Get the tempcode for a confirmation page.
  *
- * @param  tempcode		The title for the confirmation page (out of get_screen_title)
- * @param  tempcode		The preview that's being confirmed for actualisation
- * @param  mixed			The URL type to confirm through to OR a full URL OR a full URL (if long, or if tempcode)
- * @param  ?mixed			The URL type if we click back OR a full URL (if long, or if tempcode) (NULL: none)
- * @param  ?array			A map of supplementary post data to get passed through upon confirmation (NULL: none)
- * @param  ?tempcode		Form fields to pass through as post data on confirmation (NULL: none)
- * @return tempcode		The confirmation page
+ * @param  tempcode                     The title for the confirmation page (out of get_screen_title)
+ * @param  tempcode                     The preview that's being confirmed for actualisation
+ * @param  mixed                        The URL type to confirm through to OR a full URL OR a full URL (if long, or if tempcode)
+ * @param  ?mixed                       The URL type if we click back OR a full URL (if long, or if tempcode) (NULL: none)
+ * @param  ?array                       A map of supplementary post data to get passed through upon confirmation (NULL: none)
+ * @param  ?tempcode                    Form fields to pass through as post data on confirmation (NULL: none)
+ * @return tempcode                     The confirmation page
  */
 function confirm_screen($title,$preview,$url_type,$back_url_type = null,$sup_post = null,$fields = null)
 {

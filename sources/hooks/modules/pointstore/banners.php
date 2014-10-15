@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		banners
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    banners
  */
 
 class Hook_pointstore_banners
 {
     /**
-	 * Standard pointstore item initialisation function.
-	 */
+     * Standard pointstore item initialisation function.
+     */
     public function init()
     {
         require_code('banners');
@@ -31,10 +31,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Standard pointstore item "shop front" function.
-	 *
-	 * @return array			The "shop fronts"
-	 */
+     * Standard pointstore item "shop front" function.
+     *
+     * @return array                    The "shop fronts"
+     */
     public function info()
     {
         if (!addon_installed('banners')) {
@@ -50,10 +50,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Standard pointstore introspection.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard pointstore introspection.
+     *
+     * @return tempcode                 The UI
+     */
     public function bannerinfo()
     {
         if (get_option('is_on_banner_buy') == '0') {
@@ -77,8 +77,8 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Checking to be sure we don't already have a banner.
-	 */
+     * Checking to be sure we don't already have a banner.
+     */
     public function handle_has_banner_already()
     {
         $member_id = get_member();
@@ -92,10 +92,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function newbanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
@@ -119,10 +119,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function _newbanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
@@ -174,8 +174,8 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Check that the implied transaction could be afforded.
-	 */
+     * Check that the implied transaction could be afforded.
+     */
     public function check_afford_banner()
     {
         $after_deduction = available_points(get_member())-intval(get_option('banner_setup'));
@@ -186,10 +186,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function __newbanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
@@ -239,10 +239,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Ensure the current member has a banner and return its row. If they do not have one, exit.
-	 *
-	 * @return array		The banner row the current member has
-	 */
+     * Ensure the current member has a banner and return its row. If they do not have one, exit.
+     *
+     * @return array                    The banner row the current member has
+     */
     public function handle_has_no_banner()
     {
         $member_id = get_member();
@@ -264,10 +264,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function upgradebanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
@@ -291,10 +291,10 @@ class Hook_pointstore_banners
     }
 
     /**
-	 * Standard stage of pointstore item purchase.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * Standard stage of pointstore item purchase.
+     *
+     * @return tempcode                 The UI
+     */
     public function _upgradebanner()
     {
         if (get_option('is_on_banner_buy') == '0') {

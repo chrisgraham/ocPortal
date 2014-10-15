@@ -13,16 +13,16 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
  * Function that tucks-under-the-carpet lumps of XHTML that knowingly won't validate.
  *
- * @param  tempcode		What to hide away
- * @return tempcode		Hidden away version
+ * @param  tempcode                     What to hide away
+ * @return tempcode                     Hidden away version
  */
 function hide_the_evidence($html)
 {
@@ -32,10 +32,10 @@ function hide_the_evidence($html)
 /**
  * Function that 'fixes' HTML (or bad XHTML) enough for it to pass most basic structural validation.
  *
- * @param  string			The XHTML string to convert to XHTML
- * @param  boolean		Whether to force a repair even if we aren't enforcing XHTML strictness
- * @param  boolean		Whether this is a partial snippet of HTML, embeddable in some unknown context
- * @return string			The converted string
+ * @param  string                       The XHTML string to convert to XHTML
+ * @param  boolean                      Whether to force a repair even if we aren't enforcing XHTML strictness
+ * @param  boolean                      Whether this is a partial snippet of HTML, embeddable in some unknown context
+ * @return string                       The converted string
  */
 function xhtmlise_html($html,$definitely_want = false,$snippet = false)
 {
@@ -228,8 +228,8 @@ function xhtmlise_html($html,$definitely_want = false,$snippet = false)
 /**
  * Turn a full HTML document into an HTML fragment.
  *
- * @param  string			The document
- * @return string			The fragment
+ * @param  string                       The document
+ * @return string                       The fragment
  */
 function extract_html_body($html)
 {
@@ -243,13 +243,13 @@ function extract_html_body($html)
 /**
  * XHTML-aware substring extraction. Note that it will strip images, linebreaks, rules, etc - it's intended really for inline XHTML.
  *
- * @param  string			The text to perform on.
- * @param  integer		The start position of the cut (HTML tags will be taken from before this though).
- * @param  ?integer		The length you want the concatenated text to be (NULL: go to end).
- * @param  boolean		Whether to do a substr based on literal position in XHTML, rather than based on number of visible characters.
- * @param  boolean		Whether to add ellipses.
- * @param  float			A fraction of the length we may exceed by in order to maintain grammar tolerance (finish sentences, finish paragraphs, finish the whole thing).
- * @return string			The result.
+ * @param  string                       The text to perform on.
+ * @param  integer                      The start position of the cut (HTML tags will be taken from before this though).
+ * @param  ?integer                     The length you want the concatenated text to be (NULL: go to end).
+ * @param  boolean                      Whether to do a substr based on literal position in XHTML, rather than based on number of visible characters.
+ * @param  boolean                      Whether to add ellipses.
+ * @param  float                        A fraction of the length we may exceed by in order to maintain grammar tolerance (finish sentences, finish paragraphs, finish the whole thing).
+ * @return string                       The result.
  */
 function xhtml_substr($html,$from,$length = null,$literal_pos = false,$ellipses = false,$grammar_completeness_tolerance = 0.0)
 {
@@ -530,12 +530,12 @@ function xhtml_substr($html,$from,$length = null,$literal_pos = false,$ellipses 
 /**
  * XHTML-aware helper function to try and get to a nice grammatical point to call our substring termius.
  *
- * @param  integer		The nieve position where we'd end on.
- * @param  float			A fraction of the length we may exceed by in order to maintain grammar tolerance (finish sentences, finish paragraphs, finish the whole thing).
- * @param  integer		Current offset in the text.
- * @param  string			The text to perform on.
- * @param  integer		Desired (nieve) substring length.
- * @return boolean		Whether to keep continuing.
+ * @param  integer                      The nieve position where we'd end on.
+ * @param  float                        A fraction of the length we may exceed by in order to maintain grammar tolerance (finish sentences, finish paragraphs, finish the whole thing).
+ * @param  integer                      Current offset in the text.
+ * @param  string                       The text to perform on.
+ * @param  integer                      Desired (nieve) substring length.
+ * @return boolean                      Whether to keep continuing.
  */
 function _smart_grammar_says_futile($nieve_end_pos,$grammar_completeness_tolerance,$real_offset,$html,$desired_length)
 {
@@ -582,13 +582,13 @@ function _smart_grammar_says_futile($nieve_end_pos,$grammar_completeness_toleran
 /**
  * XHTML-aware helper function to try and get to a nice grammatical point to call our substring termius.
  *
- * @param  integer		The nieve position where we'd end on.
- * @param  float			A fraction of the length we may exceed by in order to maintain grammar tolerance (finish sentences, finish paragraphs, finish the whole thing).
- * @param  integer		Current offset in the text.
- * @param  string			The text to perform on.
- * @param  integer		Desired (nieve) substring length.
- * @param  boolean		Whether this is a cursory look-ahead rather than a byte-by-byte callback (therefore skip fine-grained checks which would interfere with a cursory result).
- * @return boolean		Whether to keep continuing.
+ * @param  integer                      The nieve position where we'd end on.
+ * @param  float                        A fraction of the length we may exceed by in order to maintain grammar tolerance (finish sentences, finish paragraphs, finish the whole thing).
+ * @param  integer                      Current offset in the text.
+ * @param  string                       The text to perform on.
+ * @param  integer                      Desired (nieve) substring length.
+ * @param  boolean                      Whether this is a cursory look-ahead rather than a byte-by-byte callback (therefore skip fine-grained checks which would interfere with a cursory result).
+ * @return boolean                      Whether to keep continuing.
  */
 function _smart_grammar_says_continue($nieve_end_pos,$grammar_completeness_tolerance,$real_offset,$html,$desired_length,$testing_ahead = false)
 {

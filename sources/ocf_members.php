@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_ocf
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_ocf
  */
 
 /**
@@ -36,8 +36,8 @@ function init__ocf_members()
 /**
  * Find all the Private Topic filter categories employed by the current member.
  *
- * @param  boolean	Whether to only show ones that already have things in (i.e. not default ones)
- * @return array		List of filter categories
+ * @param  boolean                      Whether to only show ones that already have things in (i.e. not default ones)
+ * @return array                        List of filter categories
  */
 function ocf_get_filter_cats($only_exists_now = false)
 {
@@ -63,8 +63,8 @@ function ocf_get_filter_cats($only_exists_now = false)
 /**
  * Find whether a member of a certain username is bound to HTTP authentication (an exceptional situation, only for sites that use it).
  *
- * @param  string		The username.
- * @return ?integer	The member ID, if it is (NULL: not bound).
+ * @param  string                       The username.
+ * @return ?integer                     The member ID, if it is (NULL: not bound).
  */
 function ocf_authusername_is_bound_via_httpauth($authusername)
 {
@@ -78,8 +78,8 @@ function ocf_authusername_is_bound_via_httpauth($authusername)
 /**
  * Find whether a member is bound to HTTP LDAP (an exceptional situation, only for sites that use it).
  *
- * @param  MEMBER	The member.
- * @return boolean	The answer.
+ * @param  MEMBER                       The member.
+ * @return boolean                      The answer.
  */
 function ocf_is_ldap_member($member_id)
 {
@@ -95,8 +95,8 @@ function ocf_is_ldap_member($member_id)
 /**
  * Find whether a member is bound to HTTP authentication (an exceptional situation, only for sites that use it).
  *
- * @param  MEMBER	The member.
- * @return boolean	The answer.
+ * @param  MEMBER                       The member.
+ * @return boolean                      The answer.
  */
 function ocf_is_httpauth_member($member_id)
 {
@@ -107,16 +107,16 @@ function ocf_is_httpauth_member($member_id)
 /**
  * Gets all the system custom fields that match certain parameters.
  *
- * @param  ?array		That are applicable only to one of the usergroups in this list (empty: CPFs with no restriction) (NULL: disregard restriction).
- * @param  ?BINARY	That are publicly viewable (NULL: don't care).
- * @param  ?BINARY	That are owner viewable (NULL: don't care).
- * @param  ?BINARY	That are owner settable (NULL: don't care).
- * @param  ?BINARY	That are required (NULL: don't care).
- * @param  ?BINARY	That are to be shown in posts (NULL: don't care).
- * @param  ?BINARY	That are to be shown in post previews (NULL: don't care).
- * @param  BINARY		That start 'ocp_'
- * @param  ?boolean	That are to go on the join form (NULL: don't care).
- * @return array		A list of rows of such fields.
+ * @param  ?array                       That are applicable only to one of the usergroups in this list (empty: CPFs with no restriction) (NULL: disregard restriction).
+ * @param  ?BINARY                      That are publicly viewable (NULL: don't care).
+ * @param  ?BINARY                      That are owner viewable (NULL: don't care).
+ * @param  ?BINARY                      That are owner settable (NULL: don't care).
+ * @param  ?BINARY                      That are required (NULL: don't care).
+ * @param  ?BINARY                      That are to be shown in posts (NULL: don't care).
+ * @param  ?BINARY                      That are to be shown in post previews (NULL: don't care).
+ * @param  BINARY                       That start 'ocp_'
+ * @param  ?boolean                     That are to go on the join form (NULL: don't care).
+ * @return array                        A list of rows of such fields.
  */
 function ocf_get_all_custom_fields_match($groups = null,$public_view = null,$owner_view = null,$owner_set = null,$required = null,$show_in_posts = null,$show_in_post_previews = null,$special_start = 0,$show_on_join_form = null)
 {
@@ -200,17 +200,17 @@ function ocf_get_all_custom_fields_match($groups = null,$public_view = null,$own
 /**
  * Gets all a member's custom fields that match certain parameters.
  *
- * @param  MEMBER		The member.
- * @param  ?BINARY	That are publicly viewable (NULL: don't care).
- * @param  ?BINARY	That are owner viewable (NULL: don't care).
- * @param  ?BINARY	That are owner settable (NULL: don't care).
- * @param  ?BINARY	That are encrypted (NULL: don't care).
- * @param  ?BINARY	That are required (NULL: don't care).
- * @param  ?BINARY	That are to be shown in posts (NULL: don't care).
- * @param  ?BINARY	That are to be shown in post previews (NULL: don't care).
- * @param  BINARY		That start 'ocp_'
- * @param  ?boolean	That are to go on the join form (NULL: don't care).
- * @return array		A mapping of field title to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value, 'FIELD_ID' to the field ID, 'EDITABILITY' defining if fractional editing can work on this
+ * @param  MEMBER                       The member.
+ * @param  ?BINARY                      That are publicly viewable (NULL: don't care).
+ * @param  ?BINARY                      That are owner viewable (NULL: don't care).
+ * @param  ?BINARY                      That are owner settable (NULL: don't care).
+ * @param  ?BINARY                      That are encrypted (NULL: don't care).
+ * @param  ?BINARY                      That are required (NULL: don't care).
+ * @param  ?BINARY                      That are to be shown in posts (NULL: don't care).
+ * @param  ?BINARY                      That are to be shown in post previews (NULL: don't care).
+ * @param  BINARY                       That start 'ocp_'
+ * @param  ?boolean                     That are to go on the join form (NULL: don't care).
+ * @return array                        A mapping of field title to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value, 'FIELD_ID' to the field ID, 'EDITABILITY' defining if fractional editing can work on this
  */
 function ocf_get_all_custom_fields_match_member($member_id,$public_view = null,$owner_view = null,$owner_set = null,$encrypted = null,$required = null,$show_in_posts = null,$show_in_post_previews = null,$special_start = 0,$show_on_join_form = null)
 {
@@ -350,8 +350,8 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view = null,$
 /**
  * Get the ID for a CPF if we only know the title. Warning: Only use this with custom code, never core code! It assumes a single language and that fields aren't renamed.
  *
- * @param  SHORT_TEXT	The title.
- * @return ?AUTO_LINK	The ID (NULL: could not find).
+ * @param  SHORT_TEXT                   The title.
+ * @return ?AUTO_LINK                   The ID (NULL: could not find).
  */
 function find_cpf_field_id($title)
 {
@@ -367,8 +367,8 @@ function find_cpf_field_id($title)
 /**
  * Returns a list of all field values for user. Doesn't take translation into account. Doesn't take anything permissive into account.
  *
- * @param  MEMBER	The member.
- * @return array	The mapping, field_<id> to value.
+ * @param  MEMBER                       The member.
+ * @return array                        The mapping, field_<id> to value.
  */
 function ocf_get_custom_field_mappings($member_id)
 {
@@ -418,8 +418,8 @@ function ocf_get_custom_field_mappings($member_id)
 /**
  * Returns a mapping between field number and field value. Doesn't take translation into account. Doesn't take anything permissive into account.
  *
- * @param  MEMBER	The member.
- * @return array	The mapping.
+ * @param  MEMBER                       The member.
+ * @return array                        The mapping.
  */
 function ocf_get_custom_fields_member($member_id)
 {
@@ -436,8 +436,8 @@ function ocf_get_custom_fields_member($member_id)
 /**
  * Get the primary of a member (supports consulting of LDAP).
  *
- * @param  MEMBER	The member.
- * @return GROUP	The primary.
+ * @param  MEMBER                       The member.
+ * @return GROUP                        The primary.
  */
 function ocf_get_member_primary_group($member_id)
 {

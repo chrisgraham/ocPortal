@@ -8,90 +8,90 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		google_translate
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    google_translate
  */
 
 class Hook_addon_registry_google_translate
 {
     /**
-	 * Get a list of file permissions to set
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a list of file permissions to set
+     *
+     * @return array                    File permissions to set
+     */
     public function get_chmod_array()
     {
         return array();
     }
 
     /**
-	 * Get the version of ocPortal this addon is for
-	 *
-	 * @return float			Version number
-	 */
+     * Get the version of ocPortal this addon is for
+     *
+     * @return float                    Version number
+     */
     public function get_version()
     {
         return ocp_version_number();
     }
 
     /**
-	 * Get the addon category
-	 *
-	 * @return string			The category
-	 */
+     * Get the addon category
+     *
+     * @return string                   The category
+     */
     public function get_category()
     {
         return 'Translation';
     }
 
     /**
-	 * Get the addon author
-	 *
-	 * @return string			The author
-	 */
+     * Get the addon author
+     *
+     * @return string                   The author
+     */
     public function get_author()
     {
         return 'Chris Graham';
     }
 
     /**
-	 * Find other authors
-	 *
-	 * @return array			A list of co-authors that should be attributed
-	 */
+     * Find other authors
+     *
+     * @return array                    A list of co-authors that should be attributed
+     */
     public function get_copyright_attribution()
     {
         return array();
     }
 
     /**
-	 * Get the addon licence (one-line summary only)
-	 *
-	 * @return string			The licence
-	 */
+     * Get the addon licence (one-line summary only)
+     *
+     * @return string                   The licence
+     */
     public function get_licence()
     {
         return 'Licensed on the same terms as ocPortal';
     }
 
     /**
-	 * Get the description of the addon
-	 *
-	 * @return string			Description of the addon
-	 */
+     * Get the description of the addon
+     *
+     * @return string                   Description of the addon
+     */
     public function get_description()
     {
         return 'This is the ocPortal plugin for Google-based automated content translation. By adding [code=""Comcode""][block]side_language[/block][/code] to a side panel of your website, you will give your users the option to translate the content of your website into another language by using Google Translate. Note that Google Translate is a paid API, so you will need to set it up as such -- enable the API in the Google Developers console, add a key (API * auth, Credentials, Create New Key), set up quote/billing for it, and then go and configure in ocPortal (Admin Zone > Setup > Configuration > Feature options > Google Translate). At first things will be extremely slow while the gtranslate_cache table fills up with translations for all ocPortal\'s language strings (you should let it run, even if it takes half an hour), but then things will speed up. This addon is intended for users serious about translation, to give a bootstrap to getting it done.
 
-		If you merely want dynamic on-the-fly translation, it\'s best just to embed Google\'s standard Translate widget into your site somewhere.';
+        If you merely want dynamic on-the-fly translation, it\'s best just to embed Google\'s standard Translate widget into your site somewhere.';
     }
 
     /**
-	 * Get a list of tutorials that apply to this addon
-	 *
-	 * @return array			List of tutorials
-	 */
+     * Get a list of tutorials that apply to this addon
+     *
+     * @return array                    List of tutorials
+     */
     public function get_applicable_tutorials()
     {
         return array(
@@ -99,10 +99,10 @@ class Hook_addon_registry_google_translate
     }
 
     /**
-	 * Get a mapping of dependency types
-	 *
-	 * @return array			File permissions to set
-	 */
+     * Get a mapping of dependency types
+     *
+     * @return array                    File permissions to set
+     */
     public function get_dependencies()
     {
         return array(
@@ -116,20 +116,20 @@ class Hook_addon_registry_google_translate
     }
 
     /**
-	 * Explicitly say which icon should be used
-	 *
-	 * @return URLPATH		Icon
-	 */
+     * Explicitly say which icon should be used
+     *
+     * @return URLPATH                  Icon
+     */
     public function get_default_icon()
     {
         return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
     }
 
     /**
-	 * Get a list of files that belong to this addon
-	 *
-	 * @return array			List of files
-	 */
+     * Get a list of files that belong to this addon
+     *
+     * @return array                    List of files
+     */
     public function get_file_list()
     {
         return array(

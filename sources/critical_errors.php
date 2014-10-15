@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 $cli = ((function_exists('php_sapi_name')) && (strpos(@ini_get('disable_functions'),'php_sapi_name') === false) && (php_sapi_name() == 'cli') && (empty($_SERVER['REMOTE_ADDR'])) && (empty($_ENV['REMOTE_ADDR'])));
@@ -51,12 +51,12 @@ if (($cli) && (strpos($_SERVER['argv'][0],'critical_errors.php') !== false)) {
 
 if (!function_exists('critical_error')) {
     /**
-	 * Exit with a nicely formatted critical error.
-	 *
-	 * @param  string			The error message code
-	 * @param  ?string		Relayed additional details (NULL: nothing relayed)
-	 * @param  boolean		Whether to actually exit
-	 */
+     * Exit with a nicely formatted critical error.
+     *
+     * @param  string                   The error message code
+     * @param  ?string                  Relayed additional details (NULL: nothing relayed)
+     * @param  boolean                  Whether to actually exit
+     */
     function critical_error($code,$relay = null,$exit = true)
     {
         error_reporting(0);
@@ -192,8 +192,8 @@ if (!function_exists('critical_error')) {
             echo <<<END
 <html lang="EN">
 <head>
-	<title>Critical error</title>
-	<style><![CDATA[
+    <title>Critical error</title>
+    <style><![CDATA[
 END;
             if (strpos($error,'Allowed memory') === false) {
                 $file_contents = file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css');
@@ -203,10 +203,10 @@ END;
             $css = ((preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',$file_contents)))))));
             echo htmlentities($css);
             echo <<<END
-		.screen_title { text-decoration: underline; display: block; min-height: 42px; padding: 3px 0 0 0; }
-		.button_screen { padding: 0.5em 0.3em !important; }
-		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
-	]]></style>
+        .screen_title { text-decoration: underline; display: block; min-height: 42px; padding: 3px 0 0 0; }
+        .button_screen { padding: 0.5em 0.3em !important; }
+        a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
+    ]]></style>
 </head>
 <body><div class="global_middle">
 END;

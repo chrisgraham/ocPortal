@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		iotds
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    iotds
  */
 
 require_code('crud_module');
@@ -34,12 +34,12 @@ class Module_cms_iotds extends standard_crud_module
     public $title;
 
     /**
-	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
-	 *
-	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
-	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
-	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
-	 */
+     * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
+     *
+     * @param  boolean                  Whether this is running at the top level, prior to having sub-objects called.
+     * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
+     * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
+     */
     public function pre_run($top_level = true,$type = null)
     {
         $type = get_param('type','misc');
@@ -64,11 +64,11 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module run_start.
-	 *
-	 * @param  ID_TEXT		The type of module execution
-	 * @return tempcode		The output of the run
-	 */
+     * Standard crud_module run_start.
+     *
+     * @param  ID_TEXT                  The type of module execution
+     * @return tempcode                 The output of the run
+     */
     public function run_start($type)
     {
         require_code('iotds');
@@ -94,14 +94,14 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Find entry-points available within this module.
-	 *
-	 * @param  boolean	Whether to check permissions.
-	 * @param  ?MEMBER	The member to check permissions as (NULL: current user).
-	 * @param  boolean	Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
-	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
-	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
-	 */
+     * Find entry-points available within this module.
+     *
+     * @param  boolean                  Whether to check permissions.
+     * @param  ?MEMBER                  The member to check permissions as (NULL: current user).
+     * @param  boolean                  Whether to allow cross links to other modules (identifiable via a full-page-link rather than a screen-name).
+     * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
+     * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
+     */
     public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
     {
         return array(
@@ -110,10 +110,10 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Find privileges defined as overridable by this module.
-	 *
-	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
-	 */
+     * Find privileges defined as overridable by this module.
+     *
+     * @return array                    A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
+     */
     public function get_privilege_overrides()
     {
         require_lang('iotds');
@@ -121,10 +121,10 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * The do-next manager for before content management.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The do-next manager for before content management.
+     *
+     * @return tempcode                 The UI
+     */
     public function misc()
     {
         require_code('templates_donext');
@@ -138,20 +138,20 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Get tempcode for an IOTD adding/editing form.
-	 *
-	 * @param  ?AUTO_LINK		The IOTD ID (NULL: new)
-	 * @param  URLPATH			The URL to the image
-	 * @param  URLPATH			The URL to the thumbnail
-	 * @param  SHORT_TEXT		The title
-	 * @param  LONG_TEXT			The caption
-	 * @param  boolean			Whether the IOTD is/will-be currently active
-	 * @param  ?BINARY			Whether rating is allowed (NULL: decide statistically, based on existing choices)
-	 * @param  ?SHORT_INTEGER	Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
-	 * @param  ?BINARY			Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
-	 * @param  LONG_TEXT			Notes for the IOTD
-	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Get tempcode for an IOTD adding/editing form.
+     *
+     * @param  ?AUTO_LINK               The IOTD ID (NULL: new)
+     * @param  URLPATH                  The URL to the image
+     * @param  URLPATH                  The URL to the thumbnail
+     * @param  SHORT_TEXT               The title
+     * @param  LONG_TEXT                The caption
+     * @param  boolean                  Whether the IOTD is/will-be currently active
+     * @param  ?BINARY                  Whether rating is allowed (NULL: decide statistically, based on existing choices)
+     * @param  ?SHORT_INTEGER           Whether comments are allowed (0=no, 1=yes, 2=review style) (NULL: decide statistically, based on existing choices)
+     * @param  ?BINARY                  Whether trackbacks are allowed (NULL: decide statistically, based on existing choices)
+     * @param  LONG_TEXT                Notes for the IOTD
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function get_form_fields($id = null,$url = '',$thumb_url = '',$title = '',$caption = '',$current = false,$allow_rating = 1,$allow_comments = 1,$allow_trackbacks = 1,$notes = '')
     {
         list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
@@ -212,10 +212,10 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * The UI to manage the IOTD.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The UI to manage the IOTD.
+     *
+     * @return tempcode                 The UI
+     */
     public function ed()
     {
         $count = $GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)');
@@ -243,13 +243,13 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Get an interface for choosing an IOTD.
-	 *
-	 * @param  BINARY			Whether to show used IOTDs
-	 * @param  BINARY			Whether to show the current IOTD
-	 * @param  ?MEMBER		The member to only show iotds submitted-by (NULL: do not filter)
-	 * @return tempcode		The UI
-	 */
+     * Get an interface for choosing an IOTD.
+     *
+     * @param  BINARY                   Whether to show used IOTDs
+     * @param  BINARY                   Whether to show the current IOTD
+     * @param  ?MEMBER                  The member to only show iotds submitted-by (NULL: do not filter)
+     * @return tempcode                 The UI
+     */
     public function _get_iotd_boxes($used = 0,$current = 0,$submitter = null)
     {
         $where = array('used' => $used,'is_current' => $current);
@@ -273,11 +273,11 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module submitter getter.
-	 *
-	 * @param  ID_TEXT		The entry for which the submitter is sought
-	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
-	 */
+     * Standard crud_module submitter getter.
+     *
+     * @param  ID_TEXT                  The entry for which the submitter is sought
+     * @return array                    The submitter, and the time of submission (null submission time implies no known submission time)
+     */
     public function get_submitter($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('iotd',array('submitter','add_date'),array('id' => intval($id)),'',1);
@@ -288,11 +288,11 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit form filler.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
-	 */
+     * Standard crud_module edit form filler.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
+     */
     public function fill_in_edit_form($id)
     {
         $rows = $GLOBALS['SITE_DB']->query_select('iotd',array('*'),array('id' => intval($id)));
@@ -310,10 +310,10 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module add actualiser.
-	 *
-	 * @return ID_TEXT		The entry added
-	 */
+     * Standard crud_module add actualiser.
+     *
+     * @return ID_TEXT                  The entry added
+     */
     public function add_actualisation()
     {
         require_code('uploads');
@@ -367,10 +367,10 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module edit actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being edited
-	 */
+     * Standard crud_module edit actualiser.
+     *
+     * @param  ID_TEXT                  The entry being edited
+     */
     public function edit_actualisation($_id)
     {
         $id = intval($_id);
@@ -436,10 +436,10 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * The actualiser to set the IOTD.
-	 *
-	 * @return tempcode		The UI
-	 */
+     * The actualiser to set the IOTD.
+     *
+     * @return tempcode                 The UI
+     */
     public function set_iotd()
     {
         check_privilege('choose_iotd');
@@ -452,10 +452,10 @@ class Module_cms_iotds extends standard_crud_module
     }
 
     /**
-	 * Standard crud_module delete actualiser.
-	 *
-	 * @param  ID_TEXT		The entry being deleted
-	 */
+     * Standard crud_module delete actualiser.
+     *
+     * @param  ID_TEXT                  The entry being deleted
+     */
     public function delete_actualisation($_id)
     {
         $id = intval($_id);

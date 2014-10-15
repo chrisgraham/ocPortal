@@ -8,9 +8,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		ocportalcom
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    ocportalcom
  */
 
 /*EXTRA FUNCTIONS: shell_exec*/
@@ -259,7 +259,7 @@ function myocp_add_site_raw($server,$codename,$email_address,$password)
 /**
  * Get the relative path to the special directory that holds NFS links to servers, etc.
  *
- * @return string	  Server path.
+ * @return string                       Server path.
  */
 function special_myocp_dir()
 {
@@ -269,7 +269,7 @@ function special_myocp_dir()
 /**
  * Get a list of categories that sites may be in.
  *
- * @return tempcode	 The result of execution.
+ * @return tempcode                     The result of execution.
  */
 function get_site_categories()
 {
@@ -281,8 +281,8 @@ function get_site_categories()
 /**
  * Get a form field list of site categories.
  *
- * @param  string			The default selected item
- * @return tempcode		 List
+ * @param  string                       The default selected item
+ * @return tempcode                     List
  */
 function create_selection_list_site_categories($cat)
 {
@@ -297,8 +297,8 @@ function create_selection_list_site_categories($cat)
 /**
  * Get a form field list of servers.
  *
- * @param  string			The default selected item
- * @return tempcode		 List
+ * @param  string                       The default selected item
+ * @return tempcode                     List
  */
 function create_selection_list_servers($server)
 {
@@ -313,7 +313,7 @@ function create_selection_list_servers($server)
 /**
  * Find all the servers for our shared hosting.
  *
- * @return array	  A list of servers.
+ * @return array                        A list of servers.
  */
 function find_all_servers()
 {
@@ -335,7 +335,7 @@ function find_all_servers()
 /**
  * Cause the _config.php file to be rebuilt.
  *
- * @param  ID_TEXT	The server.
+ * @param  ID_TEXT                      The server.
  */
 function reset_base_config_file($server)
 {
@@ -348,7 +348,7 @@ function reset_base_config_file($server)
     $contents = "<" . "?php
 if (!isset(\$_SERVER['HTTP_HOST']))
 {
-	exit('Must be run from a web-request, for us to be able to identify the correct site.');
+    exit('Must be run from a web-request, for us to be able to identify the correct site.');
 }
 
 global \$SITE_INFO;
@@ -487,8 +487,8 @@ function reset_aliases()
 /**
  * Find the size of a directory.
  *
- * @param  PATH			  The pathname to the directory
- * @return integer		  The size in bytes
+ * @param  PATH                         The pathname to the directory
+ * @return integer                      The size in bytes
  */
 function find_dir_size($dir)
 {
@@ -516,14 +516,14 @@ function find_dir_size($dir)
 /**
  * Find the load of a server.
  *
- * @param  ID_TEXT	The server to check load for.
- * @return ?float	 The load (NULL: out of action).
+ * @param  ID_TEXT                      The server to check load for.
+ * @return ?float                       The load (NULL: out of action).
  */
 function find_server_load($server)
 {
     return 1; // Not currently supported, needs customising per-server
 
-    //	$stats=http_download_file('http://'.$server.'/data_custom/stats.php?html=1');
+    //   $stats=http_download_file('http://'.$server.'/data_custom/stats.php?html=1');
     $stats = shell_exec('php /home/myocp/public_html/data_custom/stats.php 1');
     $matches = array();
     preg_match('#Memory%: (.*)<br />Swap%: (.*)<br />15-min-load: load average: (.*)<br />5-min-load: (.*)<br />1-min-load: (.*)<br />CPU-user%: (.*)<br />CPU-idle%: (.*)<br />Free-space: (.*)#',$stats,$matches);
@@ -538,7 +538,7 @@ function find_server_load($server)
 /**
  * Find the best server.
  *
- * @return ID_TEXT	 The best server.
+ * @return ID_TEXT                      The best server.
  */
 function choose_available_server()
 {
@@ -655,9 +655,9 @@ function myocp_delete_old_sites()
 /**
  * Delete a site from myOCP.
  *
- * @param  ID_TEXT	The server to delete from.
- * @param  ID_TEXT	The site.
- * @param  boolean	Whether this is a bulk delete (in which case we don't want to do a config file reset each time).
+ * @param  ID_TEXT                      The server to delete from.
+ * @param  ID_TEXT                      The site.
+ * @param  boolean                      Whether this is a bulk delete (in which case we don't want to do a config file reset each time).
  */
 function myocp_delete_site($server,$codename,$bulk = false)
 {
@@ -666,7 +666,7 @@ function myocp_delete_site($server,$codename,$bulk = false)
     $master_conn->query('DROP DATABASE IF EXISTS `myocp_site_' . $codename . '`');
     $user = substr(md5('myocp_site_' . $codename),0,16);
     $master_conn->query('REVOKE ALL ON `myocp_site_' . $codename . '`.* FROM \'' . $user . '\'',null,null,true);
-//	$master_conn->query('DROP USER \'myocp_site_'.$codename.'\'');
+// $master_conn->query('DROP USER \'myocp_site_'.$codename.'\'');
 
     $GLOBALS['SITE_DB']->query_delete('sites_deletion_codes',array('s_codename' => $codename),'',1);
     $GLOBALS['SITE_DB']->query_update('sites_email',array('s_codename' => $codename . '__expired_' . strval(rand(0,100))),array('s_codename' => $codename),'',1,null,false,true);

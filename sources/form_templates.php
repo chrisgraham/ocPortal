@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core_form_interfaces
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core_form_interfaces
  */
 
 /**
@@ -54,8 +54,8 @@ function init__form_templates()
 /**
  * Read a multi code from a named parameter stub.
  *
- * @param  ID_TEXT	The parameter stub (stub of a series of POST parameters, made by ocf_get_forum_multi_code_field's field or similar).
- * @return SHORT_TEXT The multi code.
+ * @param  ID_TEXT                      The parameter stub (stub of a series of POST parameters, made by ocf_get_forum_multi_code_field's field or similar).
+ * @return SHORT_TEXT                   The multi code.
  */
 function read_multi_code($param)
 {
@@ -73,8 +73,8 @@ function read_multi_code($param)
 /**
  * Ensure Suhosin is not going to break a request due to number of request form fields. Call this each time a field is added to the output.
  *
- * @param  integer		How much to increment the counter by
- * @param  integer		The name length being checked
+ * @param  integer                      How much to increment the counter by
+ * @param  integer                      The name length being checked
  */
 function check_suhosin_request_quantity($inc = 1,$name_length = 0)
 {
@@ -106,7 +106,7 @@ function check_suhosin_request_quantity($inc = 1,$name_length = 0)
 /**
  * Ensure Suhosin is not going to break a request due to request size.
  *
- * @param  integer		Most determinitve size within wider request size (we'll assume we actually need 500 more bytes than this)
+ * @param  integer                      Most determinitve size within wider request size (we'll assume we actually need 500 more bytes than this)
  */
 function check_suhosin_request_size($size)
 {
@@ -138,11 +138,11 @@ function url_default_parameters__disable()
 /**
  * Find a default property, defaulting to the average of what is there already, or the given default if really necessary.
  *
- * @param  integer	The current setting (NULL: we have to work it out); if non-null, the function will immediately return
- * @param  ID_TEXT	The property
- * @param  ID_TEXT	The table to average within
- * @param  integer	The last-resort default
- * @return integer	The value
+ * @param  integer                      The current setting (NULL: we have to work it out); if non-null, the function will immediately return
+ * @param  ID_TEXT                      The property
+ * @param  ID_TEXT                      The table to average within
+ * @param  integer                      The last-resort default
+ * @return integer                      The value
  */
 function take_param_int_modeavg($setting,$db_property,$table,$default)
 {
@@ -176,8 +176,8 @@ function attach_wysiwyg()
 /**
  * Insert hidden data for the maximum file size of form fields.
  *
- * @param  tempcode			Hidden fields
- * @param  ID_TEXT			Code representing the media types we are using limits for
+ * @param  tempcode                     Hidden fields
+ * @param  ID_TEXT                      Code representing the media types we are using limits for
  * @set image file
  */
 function handle_max_file_size(&$hidden,$regular_max_size_type = 'file')
@@ -203,8 +203,8 @@ function handle_max_file_size(&$hidden,$regular_max_size_type = 'file')
 /**
  * Get what we need to get attachments in a form-field interface.
  *
- * @param  ID_TEXT		The name of the field attachments are for
- * @return array			A pair: the attachments UI (tempcode), the hidden attachment field
+ * @param  ID_TEXT                      The name of the field attachments are for
+ * @return array                        A pair: the attachments UI (tempcode), the hidden attachment field
  */
 function get_attachments($posting_field_name)
 {
@@ -278,22 +278,22 @@ function get_attachments($posting_field_name)
 /**
  * Creates a posting form, with attachment support.
  *
- * @param  mixed			The title of the form submission button
- * @param  ID_TEXT		The submit icon CSS class.
- * @param  LONG_TEXT		The default post to put in.
- * @param  mixed			Where the form is sent (URLPATH or Tempcode).
- * @param  tempcode		A form_input_hidden buildup of hidden fields (additional parameters sent to the target URL).
- * @param  tempcode		A buildup of leading extra fields, in a format compatible with the templates used by this function.
- * @param  ?mixed			The post comment (string or Tempcode). This gives information about how you should post. (NULL: no post comment)
- * @param  string			Extra info to put on the posting form
- * @param  ?tempcode		A buildup of trailing extra fields, in a format compatible with the templates used by this function. (NULL: none)
- * @param  ?tempcode		The parsed Comcode. (NULL: calculate)
- * @param  ?string		JavaScript code to include (NULL: none)
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether this is a required input field
- * @param  boolean		Whether the form supports previewing
- * @param  boolean		Whether to avoid WYSIWYG mode
- * @return tempcode		The posting form
+ * @param  mixed                        The title of the form submission button
+ * @param  ID_TEXT                      The submit icon CSS class.
+ * @param  LONG_TEXT                    The default post to put in.
+ * @param  mixed                        Where the form is sent (URLPATH or Tempcode).
+ * @param  tempcode                     A form_input_hidden buildup of hidden fields (additional parameters sent to the target URL).
+ * @param  tempcode                     A buildup of leading extra fields, in a format compatible with the templates used by this function.
+ * @param  ?mixed                       The post comment (string or Tempcode). This gives information about how you should post. (NULL: no post comment)
+ * @param  string                       Extra info to put on the posting form
+ * @param  ?tempcode                    A buildup of trailing extra fields, in a format compatible with the templates used by this function. (NULL: none)
+ * @param  ?tempcode                    The parsed Comcode. (NULL: calculate)
+ * @param  ?string                      JavaScript code to include (NULL: none)
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether this is a required input field
+ * @param  boolean                      Whether the form supports previewing
+ * @param  boolean                      Whether to avoid WYSIWYG mode
+ * @return tempcode                     The posting form
  */
 function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fields,$specialisation,$post_comment = null,$extra = '',$specialisation2 = null,$default_parsed = null,$javascript = null,$tabindex = null,$required = true,$has_preview = true,$avoid_wysiwyg = false)
 {
@@ -375,9 +375,9 @@ function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fiel
 /**
  * Creates a Comcode editor.
  *
- * @param  string			The name of the field the editor is working for
- * @param  boolean		Whether to make a cut-down version
- * @return tempcode		The Comcode editor
+ * @param  string                       The name of the field the editor is working for
+ * @param  boolean                      Whether to make a cut-down version
+ * @return tempcode                     The Comcode editor
  */
 function get_comcode_editor($field_name = 'post',$cut_down = false)
 {
@@ -405,7 +405,7 @@ function get_comcode_editor($field_name = 'post',$cut_down = false)
     if (has_zone_access(get_member(),'adminzone')) {
         $_buttons[] = 'page';
     }
-    //if (!$cut_down) $_buttons[]='email';	Not enough space any more
+    //if (!$cut_down) $_buttons[]='email';   Not enough space any more
 
     // Wrappers
     $_buttons[] = 'quote';
@@ -442,7 +442,7 @@ function get_comcode_editor($field_name = 'post',$cut_down = false)
 /**
  * Find whether WYSIWYG is currently on.
  *
- * @return boolean		Whether it is
+ * @return boolean                      Whether it is
  */
 function wysiwyg_on()
 {
@@ -452,11 +452,11 @@ function wysiwyg_on()
 /**
  * Get the value of a scoped field restriction property. Returns "first-found".
  *
- * @param  string			The name of the property
- * @param  string			The name of the field it's scoped for
- * @param  ?string		The page name scoped for (NULL: current page)
- * @param  ?string		The page type scoped for (NULL: current type)
- * @return ?string		The property (NULL: non-existent)
+ * @param  string                       The name of the property
+ * @param  string                       The name of the field it's scoped for
+ * @param  ?string                      The page name scoped for (NULL: current page)
+ * @param  ?string                      The page type scoped for (NULL: current type)
+ * @return ?string                      The property (NULL: non-existent)
  */
 function get_field_restrict_property($property,$field,$page = null,$type = null)
 {
@@ -487,16 +487,16 @@ function get_field_restrict_property($property,$field,$page = null,$type = null)
 /**
  * Get the tempcode for a codename input line.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ?integer		The maximum length of the field (NULL: default 80)
- * @param  ?array			List of extra characters to allow (NULL: none)
- * @param  ?string		The placeholder value for this input field (NULL: none)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ?integer                     The maximum length of the field (NULL: default 80)
+ * @param  ?array                       List of extra characters to allow (NULL: none)
+ * @param  ?string                      The placeholder value for this input field (NULL: none)
+ * @return tempcode                     The input field
  */
 function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex = null,$_maxlength = null,$extra_chars = null,$placeholder = null)
 {
@@ -524,18 +524,18 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
 /**
  * Get the tempcode for a text input line (an <input type="text" ... />).
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ?integer		The maximum length of the field (NULL: default 255)
- * @param  string			The input type
- * @param  ?string		The placeholder value for this input field (NULL: none)
- * @param  ?string		Custom regex pattern (NULL: none)
- * @param  ?string		Custom regex pattern validation error (NULL: none)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ?integer                     The maximum length of the field (NULL: default 255)
+ * @param  string                       The input type
+ * @param  ?string                      The placeholder value for this input field (NULL: none)
+ * @param  ?string                      Custom regex pattern (NULL: none)
+ * @param  ?string                      Custom regex pattern validation error (NULL: none)
+ * @return tempcode                     The input field
  */
 function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex = null,$_maxlength = null,$type = 'text',$placeholder = null,$pattern = null,$pattern_error = null)
 {
@@ -559,13 +559,13 @@ function form_input_line($pretty_name,$description,$name,$default,$required,$tab
 /**
  * Get the tempcode for a URL.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_url($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
@@ -585,14 +585,14 @@ function form_input_url($pretty_name,$description,$name,$default,$required,$tabi
 /**
  * Get the tempcode for a username input line.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  boolean		Whether it is required than a valid username is given
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  boolean                      Whether it is required than a valid username is given
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_username($pretty_name,$description,$name,$default,$required,$needs_match = true,$tabindex = null)
 {
@@ -615,13 +615,13 @@ function form_input_username($pretty_name,$description,$name,$default,$required,
 /**
  * Get the tempcode for a author/username input line.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_author($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
@@ -657,13 +657,13 @@ function form_input_author($pretty_name,$description,$name,$default,$required,$t
 /**
  * Get the tempcode for a email-address input line.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_email($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
@@ -683,13 +683,13 @@ function form_input_email($pretty_name,$description,$name,$default,$required,$ta
 /**
  * Get the tempcode for a colour input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_colour($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
@@ -712,16 +712,16 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
 /**
  * Get the tempcode for a page-link input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ?ID_TEXT		Page type to show (NULL: all)
- * @param  boolean		Whether to also get the title for the page
- * @param  boolean		Whether to get node titles in a website-friendly form, as opposed to a more technical explanation of what the nodes are
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ?ID_TEXT                     Page type to show (NULL: all)
+ * @param  boolean                      Whether to also get the title for the page
+ * @param  boolean                      Whether to get node titles in a website-friendly form, as opposed to a more technical explanation of what the nodes are
+ * @return tempcode                     The input field
  */
 function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex = null,$page_type = null,$get_title_too = false,$content_centric = false)
 {
@@ -743,13 +743,13 @@ function form_input_page_link($pretty_name,$description,$name,$default,$required
 /**
  * Get the tempcode for a Comcode-enabled text input line.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?string		The default value for this input field (NULL: blank)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?string                      The default value for this input field (NULL: blank)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_line_comcode($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
@@ -771,17 +771,17 @@ function form_input_line_comcode($pretty_name,$description,$name,$default,$requi
 /**
  * Get the tempcode for a DHTML input field that takes multiple lines. A new line is added when the prior one isn't blank.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The base parameter name which this input field is for (as this takes multiple parameters, they are named <name><x>). This name must end with '_'.
- * @param  array			An array of lines to use as default (at least this many lines, filled by this array, will be presented by default)
- * @param  integer		The minimum number of inputs allowed.
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  string			CSS class for input.
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The base parameter name which this input field is for (as this takes multiple parameters, they are named <name><x>). This name must end with '_'.
+ * @param  array                        An array of lines to use as default (at least this many lines, filled by this array, will be presented by default)
+ * @param  integer                      The minimum number of inputs allowed.
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  string                       CSS class for input.
  * @set    line email
- * @param  ?string		Custom regex pattern (NULL: none)
- * @param  ?string		Custom regex pattern validation error (NULL: none)
- * @return tempcode		The input field
+ * @param  ?string                      Custom regex pattern (NULL: none)
+ * @param  ?string                      Custom regex pattern validation error (NULL: none)
+ * @return tempcode                     The input field
  */
 function form_input_line_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex = null,$class = 'line',$pattern = null,$pattern_error = null)
 {
@@ -834,14 +834,14 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
 /**
  * Get the tempcode for a DHTML input field that takes multiple textareas. A new textarea is added when the prior one isn't blank.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The base parameter name which this input field is for (as this takes multiple parameters, they are named <name><x>). This name must end with '_'.
- * @param  array			An array of texts to use as default (at least this many textareas, filled by this array, will be presented by default)
- * @param  integer		The minimum number of textareas allowed.
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ?integer		The maximum length of the field (NULL: unlimited)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The base parameter name which this input field is for (as this takes multiple parameters, they are named <name><x>). This name must end with '_'.
+ * @param  array                        An array of texts to use as default (at least this many textareas, filled by this array, will be presented by default)
+ * @param  integer                      The minimum number of textareas allowed.
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ?integer                     The maximum length of the field (NULL: unlimited)
+ * @return tempcode                     The input field
  */
 function form_input_text_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex = null,$maxlength = null)
 {
@@ -874,14 +874,14 @@ function form_input_text_multi($pretty_name,$description,$name,$default_array,$n
 /**
  * Get the tempcode for a username input line.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The base parameter name which this input field is for (as this takes multiple parameters, they are named <name><x>). This name must end with '_'.
- * @param  array			An array of lines to use as default (at least this many lines, filled by this array, will be presented by default)
- * @param  integer		The minimum number of inputs allowed
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The base parameter name which this input field is for (as this takes multiple parameters, they are named <name><x>). This name must end with '_'.
+ * @param  array                        An array of lines to use as default (at least this many lines, filled by this array, will be presented by default)
+ * @param  integer                      The minimum number of inputs allowed
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_username_multi($pretty_name,$description,$name,$default_array,$num_required,$needs_match = true,$tabindex = null)
 {
@@ -927,15 +927,15 @@ function form_input_username_multi($pretty_name,$description,$name,$default_arra
 /**
  * Get the tempcode for a text input (textarea).
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  string			The default value for this input field
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether the field scrolls
- * @param  ?integer		The maximum length of the field (NULL: unlimited)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  string                       The default value for this input field
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether the field scrolls
+ * @param  ?integer                     The maximum length of the field (NULL: unlimited)
+ * @return tempcode                     The input field
  */
 function form_input_text($pretty_name,$description,$name,$default,$required,$tabindex = null,$scrolls = false,$maxlength = null)
 {
@@ -954,17 +954,17 @@ function form_input_text($pretty_name,$description,$name,$default,$required,$tab
 /**
  * Get the tempcode for a Comcode-enabled text input (textarea).
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  string			The default value for this input field
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Force non-WYSIWYG and non default-Comcode parsing
- * @param  mixed			A secondary side description for this input field
- * @param  ?tempcode		The parsed Comcode. (NULL: calculate)
- * @param  boolean		Whether the field scrolls
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  string                       The default value for this input field
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Force non-WYSIWYG and non default-Comcode parsing
+ * @param  mixed                        A secondary side description for this input field
+ * @param  ?tempcode                    The parsed Comcode. (NULL: calculate)
+ * @param  boolean                      Whether the field scrolls
+ * @return tempcode                     The input field
  */
 function form_input_text_comcode($pretty_name,$description,$name,$default,$required,$tabindex = null,$force_non_wysiwyg = false,$description_side = '',$default_parsed = null,$scrolls = false)
 {
@@ -1020,18 +1020,18 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
 /**
  * Get the tempcode for a huge comcode-enabled text input (textarea). These need extra space to fit. This function is also used as an automatic replacement for form_input_text_comcode if WYSIWYG is available (as WYSIWYG needs more space too)
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  string			The default value for this input field
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  integer		The number of rows to use
- * @param  mixed			A secondary side description for this input field
- * @param  ?tempcode		The parsed Comcode. (NULL: calculate)
- * @param  boolean		Whether the field scrolls
- * @param  boolean		Force non-WYSIWYG and non default-Comcode parsing
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  string                       The default value for this input field
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  integer                      The number of rows to use
+ * @param  mixed                        A secondary side description for this input field
+ * @param  ?tempcode                    The parsed Comcode. (NULL: calculate)
+ * @param  boolean                      Whether the field scrolls
+ * @param  boolean                      Force non-WYSIWYG and non default-Comcode parsing
+ * @return tempcode                     The input field
  */
 function form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex = null,$rows = 20,$description_side = '',$default_parsed = null,$scrolls = false,$force_non_wysiwyg = false)
 {
@@ -1089,16 +1089,16 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
 /**
  * Get the tempcode for a huge text input (textarea).
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  string			The default value for this input field
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  integer		The number of rows to use
- * @param  mixed			A secondary side description for this input field
- * @param  boolean		Whether the field scrolls
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  string                       The default value for this input field
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  integer                      The number of rows to use
+ * @param  mixed                        A secondary side description for this input field
+ * @param  boolean                      Whether the field scrolls
+ * @return tempcode                     The input field
  */
 function form_input_huge($pretty_name,$description,$name,$default,$required,$tabindex = null,$rows = 20,$description_side = '',$scrolls = false)
 {
@@ -1130,13 +1130,13 @@ function form_input_huge($pretty_name,$description,$name,$default,$required,$tab
 /**
  * Get the tempcode for a password input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  string			The default value for this input field
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  string                       The default value for this input field
+ * @return tempcode                     The input field
  */
 function form_input_password($pretty_name,$description,$name,$required,$tabindex = null,$default = '')
 {
@@ -1150,13 +1150,13 @@ function form_input_password($pretty_name,$description,$name,$required,$tabindex
 /**
  * Get the tempcode for a checkbox input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  boolean		Whether this is ticked by default
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ID_TEXT		The value the checkbox passes when ticked
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  boolean                      Whether this is ticked by default
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ID_TEXT                      The value the checkbox passes when ticked
+ * @return tempcode                     The input field
  */
 function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex = null,$value = '1')
 {
@@ -1171,14 +1171,14 @@ function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex = nul
 /**
  * Get the tempcode for a bank of tick boxes.
  *
- * @param  array			A list of tuples: (prettyname, name, value, description)
- * @param  mixed			A description for this input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  mixed			A human intelligible name for this input field (blank: use default)
- * @param  boolean		Whether to place each tick on a new line
- * @param  ?ID_TEXT		Name for custom value to be entered to (NULL: no custom value allowed)
- * @param  ?string		Value for custom value (NULL: no custom value known)
- * @return tempcode		The input field
+ * @param  array                        A list of tuples: (prettyname, name, value, description)
+ * @param  mixed                        A description for this input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  mixed                        A human intelligible name for this input field (blank: use default)
+ * @param  boolean                      Whether to place each tick on a new line
+ * @param  ?ID_TEXT                     Name for custom value to be entered to (NULL: no custom value allowed)
+ * @param  ?string                      Value for custom value (NULL: no custom value known)
+ * @return tempcode                     The input field
  */
 function form_input_various_ticks($options,$description,$_tabindex = null,$_pretty_name = '',$simple_style = false,$custom_name = null,$custom_value = null)
 {
@@ -1222,16 +1222,16 @@ function form_input_various_ticks($options,$description,$_tabindex = null,$_pret
 /**
  * Get the tempcode for a file upload input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  boolean		Whether this is a required input field. Set this to false if you are using this field on an edit form and already have an uploaded file -- therefore you'd know no new file would mean not to replace the existing file
- * @param  ?string		The default value for the field (NULL: none) (blank: none). Should only be passed if $required is false, because it creates a delete button for the existing file, implying that leaving it with no file is valid
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether plupload-style is preferred
- * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
- * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  boolean                      Whether this is a required input field. Set this to false if you are using this field on an edit form and already have an uploaded file -- therefore you'd know no new file would mean not to replace the existing file
+ * @param  ?string                      The default value for the field (NULL: none) (blank: none). Should only be passed if $required is false, because it creates a delete button for the existing file, implying that leaving it with no file is valid
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether plupload-style is preferred
+ * @param  string                       File-type filter to limit to, comma-separated file extensions (might not be supported)
+ * @param  ?string                      JSON structure of what uploader syndications there will be (NULL: none)
+ * @return tempcode                     The input field
  */
 function form_input_upload($pretty_name,$description,$name,$required,$default = null,$tabindex = null,$plupload = true,$filter = '',$syndication_json = null)
 {
@@ -1282,16 +1282,16 @@ function form_input_upload($pretty_name,$description,$name,$required,$default = 
 /**
  * Get the tempcode for a multiple file upload input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  string			The base name which this input field is for
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  ?array			The default value for the field (NULL: none)
- * @param  boolean		Whether plupload-style is preferred
- * @param  string			File-type filter to limit to, comma-separated file extensions (might not be supported)
- * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  string                       The base name which this input field is for
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  ?array                       The default value for the field (NULL: none)
+ * @param  boolean                      Whether plupload-style is preferred
+ * @param  string                       File-type filter to limit to, comma-separated file extensions (might not be supported)
+ * @param  ?string                      JSON structure of what uploader syndications there will be (NULL: none)
+ * @return tempcode                     The input field
  */
 function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex = null,$default = null,$plupload = true,$filter = '',$syndication_json = null)
 {
@@ -1336,14 +1336,14 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
 /**
  * Get the tempcode for a listbox.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  tempcode		The list entries for our list
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether this is an inline displayed list as opposed to a dropdown
- * @param  boolean		Whether this is required
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  tempcode                     The list entries for our list
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether this is an inline displayed list as opposed to a dropdown
+ * @param  boolean                      Whether this is required
+ * @return tempcode                     The input field
  */
 function form_input_list($pretty_name,$description,$name,$content,$tabindex = null,$inline_list = false,$required = true)
 {
@@ -1357,19 +1357,19 @@ function form_input_list($pretty_name,$description,$name,$content,$tabindex = nu
 /**
  * Get the tempcode for an AJAX-powered tree listbox.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?ID_TEXT		The ID to do under (NULL: root)
- * @param  string			The ajax tree-list hook that drives our data
- * @param  array			A map of special options
- * @param  boolean		Whether this is a required input field
- * @param  ?string		The default value for the field (NULL: none)
- * @param  boolean		Whether to use the server-ID in the list instead of the ID in the list
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether multiple selections are allowed
- * @param  ?string		Label for default value (NULL: just use the literal)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?ID_TEXT                     The ID to do under (NULL: root)
+ * @param  string                       The ajax tree-list hook that drives our data
+ * @param  array                        A map of special options
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?string                      The default value for the field (NULL: none)
+ * @param  boolean                      Whether to use the server-ID in the list instead of the ID in the list
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether multiple selections are allowed
+ * @param  ?string                      Label for default value (NULL: just use the literal)
+ * @return tempcode                     The input field
  */
 function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default = null,$use_server_id = false,$tabindex = null,$multi_select = false,$nice_label = null)
 {
@@ -1425,15 +1425,15 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
 /**
  * Get the tempcode for a huge listbox.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  tempcode		The list entries for our list
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether this is an inline displayed list as opposed to a dropdown
- * @param  boolean		Whether this is required
- * @param  ?integer		Size of list (NULL: default)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  tempcode                     The list entries for our list
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether this is an inline displayed list as opposed to a dropdown
+ * @param  boolean                      Whether this is required
+ * @param  ?integer                     Size of list (NULL: default)
+ * @return tempcode                     The input field
  */
 function form_input_huge_list($pretty_name,$description,$name,$content,$tabindex = null,$inline_list = false,$required = true,$size = null)
 {
@@ -1457,14 +1457,14 @@ function form_input_huge_list($pretty_name,$description,$name,$content,$tabindex
 /**
  * Get the tempcode for a listbox with multiple selections.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  tempcode		The list entries for our list
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  integer		How much space the list takes up
- * @param  boolean		Whether at least one must be selected
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  tempcode                     The list entries for our list
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  integer                      How much space the list takes up
+ * @param  boolean                      Whether at least one must be selected
+ * @return tempcode                     The input field
  */
 function form_input_multi_list($pretty_name,$description,$name,$content,$tabindex = null,$size = 5,$required = false)
 {
@@ -1477,14 +1477,14 @@ function form_input_multi_list($pretty_name,$description,$name,$content,$tabinde
 /**
  * Get the tempcode for a complex input that chooses partials from a list ('all', 'all-except-these', or 'these').
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  string			The base name which this input field is for
- * @param  tempcode		A list culmulation to select against
- * @param  string			The current type of partial selection
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  string                       The base name which this input field is for
+ * @param  tempcode                     A list culmulation to select against
+ * @param  string                       The current type of partial selection
  * @set    + - *
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_all_and_not($pretty_name,$description,$base,$list,$type = '+',$tabindex = null)
 {
@@ -1503,14 +1503,14 @@ function form_input_all_and_not($pretty_name,$description,$base,$list,$type = '+
 /**
  * Get the tempcode for a radio group.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  tempcode		The radio buttons for our radio group
- * @param  boolean		Whether a radio selection is required
- * @param  boolean		Whether this is a picture-based radio list
- * @param  string			Default value (only appropriate if has picture contents)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  tempcode                     The radio buttons for our radio group
+ * @param  boolean                      Whether a radio selection is required
+ * @param  boolean                      Whether this is a picture-based radio list
+ * @param  string                       Default value (only appropriate if has picture contents)
+ * @return tempcode                     The input field
  */
 function form_input_radio($pretty_name,$description,$name,$content,$required = false,$picture_contents = false,$selected_path = '')
 {
@@ -1525,13 +1525,13 @@ function form_input_radio($pretty_name,$description,$name,$content,$required = f
 /**
  * Get the tempcode for a radio input. (You would gather together the outputs of several of these functions, then put them in as the $content in a form_input_radio function call).
  *
- * @param  string			The name of the radio button group this will be put in (i.e. the name the value presented here will be possibly matched against)
- * @param  string			The value for this entry
- * @param  boolean		Whether this entry is selected by default or not
- * @param  mixed			The text associated with this choice (blank: just use name for text)
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  mixed			An additional long description (blank: no description)
- * @return tempcode		The input field
+ * @param  string                       The name of the radio button group this will be put in (i.e. the name the value presented here will be possibly matched against)
+ * @param  string                       The value for this entry
+ * @param  boolean                      Whether this entry is selected by default or not
+ * @param  mixed                        The text associated with this choice (blank: just use name for text)
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  mixed                        An additional long description (blank: no description)
+ * @return tempcode                     The input field
  */
 function form_input_radio_entry($name,$value,$selected = false,$text = '',$tabindex = null,$description = '')
 {
@@ -1549,20 +1549,20 @@ function form_input_radio_entry($name,$value,$selected = false,$text = '',$tabin
 /**
  * Get the tempcode to choose a picture from the given list of images in the theme image system, with sub-categorisation.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  array			A list of image IDs (codes) we can choose from
- * @param  ?URLPATH		The currently selected entry in our picture choosing, by URL (NULL: none)
- * @param  ?string		The currently selected entry in our picture choosing, by code (NULL: none)
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether to allow the selection of 'no' picture
- * @param  ?object		The database connection to the OCF install we are choosing images from (NULL: site db)
- * @param  ?ID_TEXT		Theme to use (NULL: current theme)
- * @param  ?ID_TEXT		Language to use (NULL: current language)
- * @param  boolean		Whether choices are presented in a list (as opposed to a grid); useful when sizes are irregular
- * @param  boolean		Whether to show direct codenames, rather than trying to prettify them into titles
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  array                        A list of image IDs (codes) we can choose from
+ * @param  ?URLPATH                     The currently selected entry in our picture choosing, by URL (NULL: none)
+ * @param  ?string                      The currently selected entry in our picture choosing, by code (NULL: none)
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether to allow the selection of 'no' picture
+ * @param  ?object                      The database connection to the OCF install we are choosing images from (NULL: site db)
+ * @param  ?ID_TEXT                     Theme to use (NULL: current theme)
+ * @param  ?ID_TEXT                     Language to use (NULL: current language)
+ * @param  boolean                      Whether choices are presented in a list (as opposed to a grid); useful when sizes are irregular
+ * @param  boolean                      Whether to show direct codenames, rather than trying to prettify them into titles
+ * @return tempcode                     The input field
  */
 function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_url = null,$selected_code = null,$tabindex = null,$allow_none = false,$db = null,$theme = null,$lang = null,$linear = false,$direct_titles = false)
 {
@@ -1695,17 +1695,17 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
 /**
  * Get the tempcode for a date input, or if cron is not on, return blank.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The parameter name for this input field
- * @param  boolean		Whether this is a required field
- * @param  boolean		Whether this field is empty by default
- * @param  boolean		Whether to input time for this field also
- * @param  ?mixed			The default timestamp to use (either TIME or array of time components) (NULL: now)
- * @param  integer		The number of years to allow selection from (all into the future, as this field type is not meant for inputting past dates)
- * @param  ?integer		The year to start from (NULL: this year)
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The parameter name for this input field
+ * @param  boolean                      Whether this is a required field
+ * @param  boolean                      Whether this field is empty by default
+ * @param  boolean                      Whether to input time for this field also
+ * @param  ?mixed                       The default timestamp to use (either TIME or array of time components) (NULL: now)
+ * @param  integer                      The number of years to allow selection from (all into the future, as this field type is not meant for inputting past dates)
+ * @param  ?integer                     The year to start from (NULL: this year)
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_date__scheduler($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time = null,$total_years_to_show = 10,$year_start = null,$tabindex = null)
 {
@@ -1718,20 +1718,20 @@ function form_input_date__scheduler($pretty_name,$description,$name,$required,$n
 /**
  * Get the tempcode for a date input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The parameter name for this input field
- * @param  boolean		Whether this is not a required field
- * @param  boolean		Whether this field is empty by default
- * @param  boolean		Whether to input time for this field also
- * @param  ?mixed			The default timestamp to use (either TIME or array of time components) (NULL: now)
- * @param  ?integer		The number of years to allow selection from (pass a negative number for selection of past years instead of future years) (NULL: no limit)
- * @param  ?integer		The year to start from (NULL: this year)
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether to input date for this field (if false, will just do time)
- * @param  ?ID_TEXT		Timezone to input in (NULL: current user's timezone)
- * @param  boolean		Convert $default_time to $timezone
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The parameter name for this input field
+ * @param  boolean                      Whether this is not a required field
+ * @param  boolean                      Whether this field is empty by default
+ * @param  boolean                      Whether to input time for this field also
+ * @param  ?mixed                       The default timestamp to use (either TIME or array of time components) (NULL: now)
+ * @param  ?integer                     The number of years to allow selection from (pass a negative number for selection of past years instead of future years) (NULL: no limit)
+ * @param  ?integer                     The year to start from (NULL: this year)
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether to input date for this field (if false, will just do time)
+ * @param  ?ID_TEXT                     Timezone to input in (NULL: current user's timezone)
+ * @param  boolean                      Convert $default_time to $timezone
+ * @return tempcode                     The input field
  */
 function form_input_date($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time = null,$total_years_to_show = 10,$year_start = null,$tabindex = null,$do_date = true,$timezone = null,$handle_timezone = true)
 {
@@ -1742,18 +1742,18 @@ function form_input_date($pretty_name,$description,$name,$required,$null_default
 /**
  * Get the tempcode for a date input, raw.
  *
- * @param  ID_TEXT		The parameter name for this input field
- * @param  boolean		Whether this is a required field
- * @param  boolean		Whether this field is empty by default
- * @param  boolean		Whether to input time for this field also
- * @param  ?mixed			The default timestamp to use (either TIME or array of time components) (NULL: now)
- * @param  ?integer		The number of years to allow selection from (pass a negative number for selection of past years instead of future years) (NULL: no limit)
- * @param  ?integer		The year to start from (NULL: this year)
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @param  boolean		Whether to input date for this field (if false, will just do time)
- * @param  ?ID_TEXT		Timezone to input in (NULL: current user's timezone)
- * @param  boolean		Convert $default_time to $timezone
- * @return tempcode		The input field
+ * @param  ID_TEXT                      The parameter name for this input field
+ * @param  boolean                      Whether this is a required field
+ * @param  boolean                      Whether this field is empty by default
+ * @param  boolean                      Whether to input time for this field also
+ * @param  ?mixed                       The default timestamp to use (either TIME or array of time components) (NULL: now)
+ * @param  ?integer                     The number of years to allow selection from (pass a negative number for selection of past years instead of future years) (NULL: no limit)
+ * @param  ?integer                     The year to start from (NULL: this year)
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @param  boolean                      Whether to input date for this field (if false, will just do time)
+ * @param  ?ID_TEXT                     Timezone to input in (NULL: current user's timezone)
+ * @param  boolean                      Convert $default_time to $timezone
+ * @return tempcode                     The input field
  */
 function _form_input_date($name,$required,$null_default,$do_time,$default_time = null,$total_years_to_show = 10,$year_start = null,$tabindex = null,$do_date = true,$timezone = null,$handle_timezone = true)
 {
@@ -1853,13 +1853,13 @@ function _form_input_date($name,$required,$null_default,$do_time,$default_time =
 /**
  * Get the tempcode for an integer-only input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?integer		The default value for this input field (NULL: no default)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?integer                     The default value for this input field (NULL: no default)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_integer($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
@@ -1876,15 +1876,15 @@ function form_input_integer($pretty_name,$description,$name,$default,$required,$
 /**
  * Get the tempcode for an width/height input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for: width part
- * @param  ID_TEXT		The name which this input field is for: height part
- * @param  ?integer		The default value for this input field: width part (NULL: no default)
- * @param  ?integer		The default value for this input field: height part (NULL: no default)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for: width part
+ * @param  ID_TEXT                      The name which this input field is for: height part
+ * @param  ?integer                     The default value for this input field: width part (NULL: no default)
+ * @param  ?integer                     The default value for this input field: height part (NULL: no default)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_dimensions($pretty_name,$description,$name_width,$name_height,$default_width,$default_height,$required,$tabindex = null)
 {
@@ -1910,13 +1910,13 @@ function form_input_dimensions($pretty_name,$description,$name_width,$name_heigh
 /**
  * Get the tempcode for a float-only input.
  *
- * @param  mixed			A human intelligible name for this input field
- * @param  mixed			A description for this input field
- * @param  ID_TEXT		The name which this input field is for
- * @param  ?float			The default value for this input field (NULL: no default)
- * @param  boolean		Whether this is a required input field
- * @param  ?integer		The tab index of the field (NULL: not specified)
- * @return tempcode		The input field
+ * @param  mixed                        A human intelligible name for this input field
+ * @param  mixed                        A description for this input field
+ * @param  ID_TEXT                      The name which this input field is for
+ * @param  ?float                       The default value for this input field (NULL: no default)
+ * @param  boolean                      Whether this is a required input field
+ * @param  ?integer                     The tab index of the field (NULL: not specified)
+ * @return tempcode                     The input field
  */
 function form_input_float($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
@@ -1935,8 +1935,8 @@ function form_input_float($pretty_name,$description,$name,$default,$required,$ta
  *
  * IMPORTANT: Note that this function uses global state -- any fields generated between alternate_fields_set__start and alternate_fields_set__end will be rendered using field set templating.
  *
- * @param  ID_TEXT		The codename for this field set
- * @return tempcode		Tempcode to start attaching the field set to
+ * @param  ID_TEXT                      The codename for this field set
+ * @return tempcode                     Tempcode to start attaching the field set to
  */
 function alternate_fields_set__start($set_name)
 {
@@ -1951,14 +1951,14 @@ function alternate_fields_set__start($set_name)
 /**
  * Show a field set that has just been finished off.
  *
- * @param  ID_TEXT		The codename for this field set (blank: just collect raw fields, no actual field set)
- * @param  mixed			The human-readable name for this field set
- * @param  mixed			The human-readable description for this field set
- * @param  tempcode		The field set tempcode
- * @param  boolean		Whether it is required that this field set be filled in
- * @param  ?URLPATH		Image URL to show, of the existing selection for this field (NULL: N/A) (blank: N/A)
- * @param  boolean		Whether we just want the raw set contents, without any wrapper field row
- * @return tempcode		The field set
+ * @param  ID_TEXT                      The codename for this field set (blank: just collect raw fields, no actual field set)
+ * @param  mixed                        The human-readable name for this field set
+ * @param  mixed                        The human-readable description for this field set
+ * @param  tempcode                     The field set tempcode
+ * @param  boolean                      Whether it is required that this field set be filled in
+ * @param  ?URLPATH                     Image URL to show, of the existing selection for this field (NULL: N/A) (blank: N/A)
+ * @param  boolean                      Whether we just want the raw set contents, without any wrapper field row
+ * @return tempcode                     The field set
  */
 function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required,$existing_image_preview_url = null,$raw = false)
 {
@@ -2008,9 +2008,9 @@ function single_field__end()
 /**
  * Used to create a NULL option for field sets.
  *
- * @param  mixed			The human-readable name for this field
- * @param  ?integer		The tab index (NULL: none specified)
- * @return tempcode		The field
+ * @param  mixed                        The human-readable name for this field
+ * @param  ?integer                     The tab index (NULL: none specified)
+ * @return tempcode                     The field
  */
 function form_input_na($pretty_name,$tabindex = null)
 {
@@ -2020,18 +2020,18 @@ function form_input_na($pretty_name,$tabindex = null)
 /**
  * Helper function to show an input field.
  *
- * @param  ID_TEXT		The codename for this field (blank: N/A)
- * @param  mixed			The human-readable name for this field
- * @param  mixed			The human-readable description for this field
- * @param  tempcode		The actual raw input field
- * @param  boolean		Whether it is required that this field be filled in
- * @param  boolean		Whether this field may contain Comcode
- * @param  ?integer		The tab index (NULL: none specified)
- * @param  boolean		Whether it is a textarea field
- * @param  boolean		Whether to skip displaying a label for the field
- * @param  mixed			A secondary side description for this input field
- * @param  ?string		Custom regex pattern validation error (NULL: none)
- * @return tempcode		The field
+ * @param  ID_TEXT                      The codename for this field (blank: N/A)
+ * @param  mixed                        The human-readable name for this field
+ * @param  mixed                        The human-readable description for this field
+ * @param  tempcode                     The actual raw input field
+ * @param  boolean                      Whether it is required that this field be filled in
+ * @param  boolean                      Whether this field may contain Comcode
+ * @param  ?integer                     The tab index (NULL: none specified)
+ * @param  boolean                      Whether it is a textarea field
+ * @param  boolean                      Whether to skip displaying a label for the field
+ * @param  mixed                        A secondary side description for this input field
+ * @param  ?string                      Custom regex pattern validation error (NULL: none)
+ * @return tempcode                     The field
  */
 function _form_input($name,$pretty_name,$description,$input,$required,$comcode = false,$tabindex = null,$w = false,$skip_label = false,$description_side = '',$pattern_error = null)
 {
@@ -2075,9 +2075,9 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode =
 /**
  * Look for editing conflicts, and setup editing pinging.
  *
- * @param  ?ID_TEXT		The ID we're editing (NULL: get from param, 'id')
- * @param  boolean		Whether to only care about staff conflicts
- * @return array			A pair: warning details, ping url
+ * @param  ?ID_TEXT                     The ID we're editing (NULL: get from param, 'id')
+ * @param  boolean                      Whether to only care about staff conflicts
+ * @return array                        A pair: warning details, ping url
  */
 function handle_conflict_resolution($id = null,$only_staff = false)
 {
@@ -2112,8 +2112,8 @@ function handle_conflict_resolution($id = null,$only_staff = false)
 /**
  * Helper function for tab-index linearisation (serves as a filter).
  *
- * @param  ?integer		Requested tab-index (NULL: no specific request)
- * @return integer		Used tab-index
+ * @param  ?integer                     Requested tab-index (NULL: no specific request)
+ * @return integer                      Used tab-index
  */
 function get_form_field_tabindex($tabindex = null)
 {

@@ -13,9 +13,9 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		core
+ * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright  ocProducts Ltd
+ * @package    core
  */
 
 /**
@@ -39,8 +39,8 @@ function init__uploads()
 /**
  * Find whether an plupload upload has just happened, and optionally simulate as if it were a normal upload (although 'is_uploaded_file'/'move_uploaded_file' would not work).
  *
- * @param  boolean		Simulate population of the $_FILES array.
- * @return boolean		Whether an plupload upload has just happened.
+ * @param  boolean                      Simulate population of the $_FILES array.
+ * @return boolean                      Whether an plupload upload has just happened.
  */
 function is_plupload($fake_prepopulation = false)
 {
@@ -135,24 +135,24 @@ function is_plupload($fake_prepopulation = false)
 /**
  * Get URLs generated according to the specified information. It can also generate a thumbnail if required. It first tries attached upload, then URL, then fails.
  *
- * @param  ID_TEXT		The name of the POST parameter storing the URL (if '', then no POST parameter). Parameter value may be blank.
- * @param  ID_TEXT		The name of the HTTP file parameter storing the upload (if '', then no HTTP file parameter). No file necessarily is uploaded under this.
- * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
- * @param  integer		Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well, 3=only obfuscate if we need to)
+ * @param  ID_TEXT                      The name of the POST parameter storing the URL (if '', then no POST parameter). Parameter value may be blank.
+ * @param  ID_TEXT                      The name of the HTTP file parameter storing the upload (if '', then no HTTP file parameter). No file necessarily is uploaded under this.
+ * @param  ID_TEXT                      The folder name in uploads/ where we will put this upload
+ * @param  integer                      Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well, 3=only obfuscate if we need to)
  * @set    0 1 2 3
- * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
- * @param  boolean		Make a thumbnail (this only makes sense, if it is an image)
- * @param  ID_TEXT		The name of the POST parameter storing the thumb URL. As before
- * @param  ID_TEXT		The name of the HTTP file parameter storing the thumb upload. As before
- * @param  boolean		Whether to copy a URL (if a URL) to the server, and return a local reference
- * @param  boolean		Whether to accept upload errors
- * @param  boolean		Whether to give a (deferred?) error if no file was given at all
- * @param  boolean		Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
- * @param  ?MEMBER		Member ID to run permissions with (NULL: current member)
- * @param  ?PATH			Full path to upload folder, in case it is not relative to the base directory (NULL: work out)
- * @param  ?PATH			Full path to thumb folder, in case it is not relative to the base directory (NULL: work out)
- * @param  ?string		Filename to use (NULL: choose one)
- * @return array			An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
+ * @param  integer                      The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
+ * @param  boolean                      Make a thumbnail (this only makes sense, if it is an image)
+ * @param  ID_TEXT                      The name of the POST parameter storing the thumb URL. As before
+ * @param  ID_TEXT                      The name of the HTTP file parameter storing the thumb upload. As before
+ * @param  boolean                      Whether to copy a URL (if a URL) to the server, and return a local reference
+ * @param  boolean                      Whether to accept upload errors
+ * @param  boolean                      Whether to give a (deferred?) error if no file was given at all
+ * @param  boolean                      Whether to apply a 'never make the image bigger' rule for thumbnail creation (would affect very small images)
+ * @param  ?MEMBER                      Member ID to run permissions with (NULL: current member)
+ * @param  ?PATH                        Full path to upload folder, in case it is not relative to the base directory (NULL: work out)
+ * @param  ?PATH                        Full path to thumb folder, in case it is not relative to the base directory (NULL: work out)
+ * @param  ?string                      Filename to use (NULL: choose one)
+ * @return array                        An array of 4 URL bits (URL, thumb URL, URL original filename, thumb original filename)
  */
 function get_url($specify_name,$attach_name,$upload_folder,$obfuscate = 0,$enforce_type = 15,$make_thumbnail = false,$thumb_specify_name = '',$thumb_attach_name = '',$copy_to_server = false,$accept_errors = false,$should_get_something = false,$only_make_smaller = false,$member_id = null,$upload_folder_full = null,$thumb_folder_full = null,$filename = null)
 {
@@ -488,12 +488,12 @@ function get_url($specify_name,$attach_name,$upload_folder,$obfuscate = 0,$enfor
 /**
  * Filters specified URLs to make sure we're really allowed to access them.
  *
- * @param  MEMBER			Member ID to check permissions with.
- * @param  ID_TEXT		The name of the POST parameter storing the URL (if '', then no POST parameter). Parameter value may be blank.
- * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
- * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
- * @param  boolean		Whether to accept upload errors
- * @return array			A pair: the URL and the filename
+ * @param  MEMBER                       Member ID to check permissions with.
+ * @param  ID_TEXT                      The name of the POST parameter storing the URL (if '', then no POST parameter). Parameter value may be blank.
+ * @param  ID_TEXT                      The folder name in uploads/ where we will put this upload
+ * @param  integer                      The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
+ * @param  boolean                      Whether to accept upload errors
+ * @return array                        A pair: the URL and the filename
  */
 function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type = 15,$accept_errors = false)
 {
@@ -577,11 +577,11 @@ function _get_specify_url($member_id,$specify_name,$upload_folder,$enforce_type 
 /**
  * Ensures a given filename is of the right file extension for the desired file type.
  *
- * @param  MEMBER			Member ID to check permissions with.
- * @param  string			The filename.
- * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
- * @param  boolean		Whether to accept upload errors
- * @return boolean		Success status
+ * @param  MEMBER                       Member ID to check permissions with.
+ * @param  string                       The filename.
+ * @param  integer                      The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
+ * @param  boolean                      Whether to accept upload errors
+ * @return boolean                      Success status
  */
 function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_errors = false)
 {
@@ -661,16 +661,16 @@ function _check_enforcement_of_type($member_id,$file,$enforce_type,$accept_error
 /**
  * Converts an uploaded file into a URL, by moving it to an appropriate place.
  *
- * @param  MEMBER			Member ID to check permissions with.
- * @param  ID_TEXT		The name of the HTTP file parameter storing the upload (if '', then no HTTP file parameter). No file necessarily is uploaded under this.
- * @param  ID_TEXT		The folder name in uploads/ where we will put this upload
- * @param  PATH			Full folder path
- * @param  integer		The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
- * @param  integer		Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well)
+ * @param  MEMBER                       Member ID to check permissions with.
+ * @param  ID_TEXT                      The name of the HTTP file parameter storing the upload (if '', then no HTTP file parameter). No file necessarily is uploaded under this.
+ * @param  ID_TEXT                      The folder name in uploads/ where we will put this upload
+ * @param  PATH                         Full folder path
+ * @param  integer                      The type of upload it is (bitmask, from OCP_UPLOAD_* constants)
+ * @param  integer                      Whether to obfuscate file names so the URLs can not be guessed/derived (0=do not, 1=do, 2=make extension .dat as well)
  * @set    0 1 2
- * @param  boolean		Whether to accept upload errors
- * @param  ?string		Filename to use (NULL: choose one)
- * @return array			A pair: the URL and the filename
+ * @param  boolean                      Whether to accept upload errors
+ * @param  ?string                      Filename to use (NULL: choose one)
+ * @return array                        A pair: the URL and the filename
  */
 function _get_upload_url($member_id,$attach_name,$upload_folder,$upload_folder_full,$enforce_type = 15,$obfuscate = 0,$accept_errors = false,$filename = null)
 {
